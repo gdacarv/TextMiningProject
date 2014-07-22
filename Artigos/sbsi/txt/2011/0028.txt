@@ -1,0 +1,509 @@
+﻿VII Simpósio Brasileiro de Sistemas de Informação
+Um Componente para Gerência de Processos de Negócio em
+Sistemas de Informação
+Juliano Lopes de Oliveira1, Luiz Fernando Batista Loja1, Sofia Larissa da Costa1           ,
+Valdemar Vicente Graciano Neto1
+1Instituto de Informática - Universidade Federal de Goiás (UFG)
+Caixa Postal 131 - Campus II - CEP 74001-970 - Goiânia - GO - Brasil
+Universidade Federal de Goiás - UFG
+{juliano,luizloja, sofiacosta, valdemarneto}@inf.ufg.br
+Resumo. Construir e manter software para gerenciar Processos de Negócio
+(PN) em Sistemas de Informação (SI) exige esforço e tempo consideráveis. Este
+artigo descreve um componente de software que utiliza uma abordagem de en-
+genharia dirigida por modelos para apoiar a gerência de PN no contexto de um
+framework para desenvolvimento e evolução de SI. O componente Gerenciador
+de Processos permite a definição de modelos de PN usando uma linguagem de
+alto nível. Modelos conceituais são integrados com os demais componentes do
+framework para gerar as aplicações de SI. Este componente apresenta melho-
+rias importantes com relação a outras ferramentas de Gerenciamento de PN,
+tais como o suporte à modelagem colaborativa e a capacidade de execução
+de processos empíricos e ad hoc. Além disso, a integração entre o componente
+Gerenciador de Processos e os demais componentes aumenta significativamente
+a produtividade no desenvolvimento e manutenção de SI.
+Abstract. Building and maintaining software to manage Business Processes
+(BP) in Information Systems (IS) requires considerable effort and time.  This
+paper describes a software component that uses a Model Driven Engineering
+(MDE) approach to support business processes management in IS into the con-
+text of an IS development and evolution application framework.  The Process
+Manager component allows the definition of BP models using a high-level lan-
+guage.  These conceptual models are integrated with other components of the
+framework to generate the IS applications. The implemented Process Manager
+component has important improvements comparing to other BP management
+tools, such as support for collaborative modeling and support for execution
+of empirical and ad hoc processes.  Furthermore, the integration of the Pro-
+cess Manager component and the other framework components significantly in-
+creases productivity in IS software development and maintenance.
+1.                                                                                         Introdução
+Sistemas de Informação (SI) são construídos para apoiar a troca de informações sobre o
+negócio de uma organização, provendo o conhecimento necessário para a operação e para
+a tomada de decisão sobre o negócio. Eles consistem de conjuntos de dados e de processos
+que coletam, armazenam, transformam e distribuem informações (principalmente) por
+meio de formulários [Sølvberg 2010].
+250
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+A construção de software para SI envolve, entre outros aspectos, a especificação e
+a modelagem de dados, funções, regras e processos de negócio, além de mecanismos que
+disponibilizem estas informações para interação dos usuários com o sistema.
+O Grupo de Pesquisa em Engenharia de Software do Instituto de Informática da
+Universidade Federal de Goiás (INF/UFG) tem pesquisado sobre a construção de com-
+ponentes para apoiar o desenvolvimento de software para SI contemplando estes as-
+pectos.  Neste sentido, um framework para criação de software específico de domínio
+foi construído para apoiar o desenvolvimento de SI baseado em modelos de alto-nível
+[Almeida et al. 2009].
+Esse framework dá suporte à geração automática e à manutenção de software de
+SI usando modelos conceituais.  Ele gera uma porção considerável do software de SI
+empregando metamodelos que descrevem conceitualmente aspectos de SI relacionados
+com os conceitos de negócio, com as regras de negócio e com as interfaces de usuário.
+Apesar do sucesso obtido na aplicação desse framework para a construção de SI
+voltado para o controle de agronegócio, foi identificada uma limitação que dificulta a gera-
+ção de uma parte significativa do software de SI, que é relacionada à definição e execução
+de processos de negócio (PN). Para superar esta limitação foi conduzida uma refatoração
+no framework [Graciano Neto et al. 2010], ocasionando a concepção de dois novos meta-
+modelos [Loja et al. 2010, da Costa et al. 2010] e a implementação de um componente de
+gerência de PN.
+Este artigo descreve os resultados do processo de refatoração que levaram ao de-
+senvolvimento do componente de gerência de PN para o framework.  Este componente
+é um software do tipo Business Process Management System (BPMS), que pode ser uti-
+lizado para gerenciar, modelar, e executar PN em SI.
+O restante deste documento descreve o componente desenvolvido e está organi-
+zado da seguinte forma.  A Seção 2 apresenta a motivação para a construção do com-
+ponente em termos de requisitos de software.  A Seção 3 descreve uma visão geral das
+principais características do componente desenvolvido. A Seção 4 apresenta um experi-
+mento empregando o componente desenvolvido. Finalmente, a Seção 5 traz as conclusões
+e indica direções para trabalhos futuros.
+2. Limitações das Ferramentas Atuais e Requisitos para Gerência de PN
+As ferramentas BPMS permitem modelar processos utilizando,  em geral,  a notação
+BPMN (Business Process Modeling Notation) [OMG 2009].  O processo é tipicamente
+modelado através de um editor gráfico. Uma máquina de execução responsabiliza-se por
+instanciar e executar os processos modelados, distribuindo as tarefas entre seus partici-
+pantes e interagindo com eles a fim de concluir a execução do processo.
+Das várias ferramentas BPMS disponíveis no mercado Bizagi [Bizagi 2010] e
+Bonita [Bonita 2010] podem ser citadas como exemplos do estado da prática nesse tipo
+de software.   Uma análise aprofundada desse estado da prática pode ser obtido em
+[Loja 2011].  Ambas as ferramentas apresentam características típicas de BPMS, mas
+apresentam algumas limitações importantes para esse tipo de ferramenta.
+Por exemplo, Bonita não permite a alteração de processos durante sua execução;
+não apoia a execução de processos ad hoc e empíricos; não permite a distribuição de
+251
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+responsabilidades durante a execução das atividades; e impõe várias restrições para o
+compartilhamento de processos.
+Bizagi também não apoia a execução de processos ad hoc, apesar de permitir sua
+modelagem.  Além disso, ela não permite a alteração do fluxo de um processo durante
+sua execução, dificultando a execução de processos empíricos. Bizagi ainda não apoia a
+distribuição de responsabilidades durante a execução de atividades de um processo.
+Ambas as ferramentas dificultam a modelagem colaborativa, uma vez que os res-
+ponsáveis pela definição de processos não conseguem constituir processos a partir (de
+componentes) de processos já definidos.  Assim, não é possível reutilizar definições de
+processos.  Além disso, diversos padrões de processo não são implementados por essas
+ferramentas, tais como processos ad hoc [Russell et al. 2006b].
+Além  das  ferramentas  citadas,  muitos  trabalhos  propõem  outras  abordagens
+de  gerenciamento  de  PN  com  base  em  BPMN  [Awad et al. 2009,  Tsai et al. 2007,
+List and Korherr 2006], mas estes também não implementam todos os padrões de pro-
+cesso, não apoiam a reutilização de elementos do processo e a definição de responsabili-
+dades, e não solucionam problemas conhecidos da notação BPMN, tais como a ambigui-
+dade de estruturas [Nuffel et al. 2009].
+Com base nas limitações identificadas nas ferramentas BPMS, os principais re-
+quisitos identificados para o gerenciador de PN do framework envolvem: 1) o suporte à
+modelagem colaborativa, que deve permitir reutilização e compartilhamento de compo-
+nentes para a modelagem colaborativa de PN; 2) a capacidade de alteração de processos
+durante a sua execução;  3) a distribuição de responsabilidades, com base nas caracte-
+rísticas dos participantes dos processos; e 4) a capacidade de definição e execução de
+diferentes tipos de processos.
+Modelagem e Interação Colaborativa.  Ferramentas BPMS têm o objetivo de
+auxiliar a modelagem e execução de processos, provendo, adicionalmente, um ambiente
+colaborativo [Loja and de Oliveira 2010]. Tal ambiente deveria proporcionar uma forma
+de modelar processos cooperativamente, facilitando o compartilhamento de processos e a
+reutilização de componentes previamente definidos. Porém, a estrutura dos metamodelos
+de processo adotados nas ferramentas existentes dificulta o compartilhamento, por exem-
+plo, de artefatos de processo. Em geral, estes artefatos são definidos dentro do contexto
+de um processo específico. Assim, o compartilhamento é feito apenas em nível de pro-
+cesso, limitando, por exemplo, a reutilização de partes de um processo para definir novos
+processos.
+Capacidade de Alteração de Processos em execução.  Como PN são flexíveis
+e mutáveis, sujeitos a rápidas e constantes mudanças, a possibilidade de alterar um pro-
+cesso durante sua execução é uma característica fundamental para ferramentas de BPMS,
+embora esta característica não seja disponibilizada nas ferramentas analisadas neste tra-
+balho.
+Definição e execução de diferentes tipos de processos. Outra característica im-
+portante para o contexto de modelagem de processos é o suporte a tipos específicos de
+processos:  processos empíricos, cuja especificação de tarefas é feita durante a própria
+execução do processo; processos definidos, cuja definição de tarefas é totalmente reali-
+zada antes da execução do processo; e processos ad hoc.
+252
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Para lidar com a incerteza inerente ao desenvolvimento de software, Scrum, por
+exemplo, utiliza processos empíricos para desenvolver produtos de software.  As ferra-
+mentas de BPMS analisadas oferecem suporte apenas para processos definidos e são ina-
+dequadas para processos empíricos.
+Processos ad hoc são formados por grupos de atividades que não possuem relações
+de sequência, ou seja, a ordem do fluxo de execução das atividades de um processo ad hoc
+é indefinida [OMG 2009]. Essa indefinição dificulta significativamente a implementação
+deste tipo de processo, pois não há um padrão predefinido para orientar a execução das
+atividades contidas no processo.
+Para  habilitar  o  tratamento  de  tais  tipos  de  processos,  foram  utilizados  re-
+quisitos fundamentais para representação de PN, chamados de padrões de processo
+[Russell et al. 2006a, van der Aalst et al. 2003]. Expressar tipos diferentes de processos
+demanda que tais padrões façam parte do poder de expressão de uma ferramenta BPMS.
+No entanto, as ferramentas analisadas não implementam todos esses padrões.
+Distribuição de tarefas de acordo com perfis. Uma das dificuldades que ocor-
+rem durante a execução de um processo de negócio é a alocação de responsabilidades
+[de Mello and Rocha 2009]. Na abordagem utilizada pelas ferramentas atuais, apenas um
+participante pode ser alocado para executar cada tarefa ou, no melhor caso, um grupo
+de participantes pode ser alocado, mas com o mesmo tipo de envolvimento na tarefa,
+que é o envolvimento de executor da tarefa. Essa abordagem não permite, por exemplo,
+representar as cadeias hierárquicas das corporações envolvidas nos PN.
+É importante que durante a execução das tarefas definidas no processo, os colabo-
+radores envolvidos possam cooperar. Um fator crítico para o sucesso dessa cooperação é
+a seleção e alocação de colaboradores com perfis apropriados, de forma a assegurar que as
+habilidades necessárias para a execução da tarefa estejam disponíveis na equipe alocada.
+Para tanto, as tarefas devem ser distribuídas de acordo com o perfil (conhecimentos, ex-
+periência, e habilidades) de cada participante, ressaltando-se que a participação em uma
+atividade não se limita à sua execução.
+O modelo COBIT (Control Objectives for Information and related Technology)
+[ITGI 2009], por exemplo, permite a interação entre diversos papéis, com diferentes tipos
+de envolvimento, na execução das tarefas de um processo.  COBIT propõe quatro tipos
+de perfis de interação: responsável (executor), aprovador, interessado e consultado. Os
+diferentes tipos de interação definem maneiras diferentes do participante se envolver com
+uma tarefa, representando de maneira mais fiel a realidade das organizações modernas.
+3. Visão Geral do Gerenciador de PN
+A arquitetura de software do componente gerenciador de PN é composta por três mó-
+dulos principais:  o metamodelo de processos; a máquina de execução de processos; e
+as interfaces que proporcionam a interação com o usuário.  O componente integrado ao
+framework de desenvolvimento de SI torna esses SI orientados a processos.
+O metamodelo de PN permite a reutilização e o compartilhamento dos Obje-
+tos de Fluxo dos processos, e apoia a modelagem de processos ad hoc e empíricos
+[Loja et al. 2010]. A máquina de execução provê suporte para todos os tipos de processos
+concebidos segundo aquele metamodelo.
+253
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+A Figura 1a ilustra a tela inicial da interface do componente.  No canto supe-
+rior da tela constam as funcionalidades relacionadas a modelagem e execução de proces-
+sos, e a participantes e permissões. Do lado esquerdo é possível visualizar os elementos
+disponíveis para navegação.
+A Figura 1b representa uma ampliação da imagem da barra de ferramentas asso-
+ciada à etapa de modelagem de processos e a Figura 1c representa uma visualização mais
+detalhada das funcionalidades associadas à execução de processos.
+(a) Tela inicial
+(b) Modelagem                                                                               (c) Execução
+Figura 1. Tela inicial do componente
+A utilização deste componente envolve um processo com três etapas principais:
+criação, modelagem, e execução de PN.
+As funcionalidades relacionadas à criação de processos incluem capacidades para
+definir processos, tarefas, eventos, portas, objetos de dados e conexões. Para fomentar a
+reutilização das partes constituintes de um processo na definição de outros processos, a
+primeira etapa envolve a elaboração das tarefas que farão parte do processo de negócio,
+bem como a definição de seus participantes, eventos e portas.
+Essa reutilização é possível porque, ao contrário da notação BPMN (na qual os ele-
+mentos do processo são criados em um determinado contexto de processo), os elementos
+de processo do componente são independentes de contexto. Isso possibilita a reutilização
+de elementos do processo em outros processos, e o compartilhamento de elementos de
+processo entre os participantes da execução do processo.
+A Figura 2 ilustra a tela de cadastro utilizada para criar um novo processo.  Há
+254
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+interfaces análogas para o cadastro de eventos, participantes, tarefas e portas.
+Figura 2. Tela de Cadastro de Processo
+O componente adota um subconjunto da notação BPMN para a modelagem de
+processo [Loja et al. 2010].  Este subconjunto elimina limitações conhecidas de BPMN
+[Nuffel et al. 2009]. Consequentemente, alguns artefatos de BPMN não estão disponíveis
+para modelagem, como a construção Text Annotation, que não possui significado equiva-
+lente no mundo real, além de baias e raias. No metamodelo proposto, o papel do partici-
+pante associado à tarefa determina com exatidão quem é o responsável pela tarefa.
+Após a etapa de criação do processo e de seus elementos constituintes, inicia-se a
+etapa de modelagem do processo. Todos os elementos definidos para o processo (na etapa
+de criação), assim como os elementos pertinentes a processos anteriormente registrados,
+encontram-se disponíveis para utilização na modelagem. O componente é dotado de um
+modelador gráfico que permite compor visualmente os elementos de um processo. Assim,
+é possível montar um processo ligando graficamente os seus elementos.
+Os objetos de fluxo formam um repositório de componentes de processo, que
+podem ser reutilizados para a concepção de novos processos.  A Figura 3 ilustra a tela
+de modelagem gráfica do processo com destaque para o repositório de objetos disponível
+para utilização do modelador.
+Uma vez modelado, o processo pode ser instanciado e executado. A máquina de
+execução de processos é responsável por instanciar e controlar a execução de qualquer
+tipo de processo definido de acordo com o metamodelo.  Uma característica notável da
+máquina é a possibilidade de alterar o fluxo do processo durante sua execução.  Isso é
+possível graças à abordagem baseada em tokens [Bendraou et al. 2009] que permite que
+o processo não seja realmente instanciado na memória da aplicação.
+Para executar um processo a máquina de execução lê e executa um passo por
+vez.  Isso significa que toda vez que um token é movido em decorrência de um evento
+no processo, a máquina de execução analisa o token e define qual o próximo passo na
+255
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Figura 3. Modelador Gráfico de Processos
+execução do processo.  Assim, modificações no processo podem ser instantaneamente
+refletidas em seu fluxo, permitindo a modelagem de processos empíricos.
+Os participantes são definidos no momento em que a instância do processo é cri-
+ada. As responsabilidades das tarefas são distribuídas entre esses participantes durante o
+fluxo de execução.
+3.1. Potenciais Aplicações do Gerenciador de PN
+Um contexto que pode se beneficiar das funcionalidades disponibilizadas pelo compo-
+nente gerenciador de PN é o de melhoria de processos de software (MPS). O suporte a
+processos ad hoc e empíricos é importante, por exemplo, para organizações que estão
+iniciando projetos de MPS, já que estas costumam trabalhar de modo ad hoc. Já as orga-
+nizações maduras, que buscam a otimização de processos por meio de experimentações,
+precisam dispor de processos empíricos para avaliar os custos e benefícios de variações
+introduzidas em um processo.
+O modelador gráfico e o suporte a processo ad hoc são essenciais para apoiar
+o amadurecimento pelo qual uma organização passa durante as primeiras iniciativas de
+MPS. A sequência de cenas da Figura 4 ilustra três possíveis momentos da transição de
+um processo ad hoc para um processo definido:  1) no momento inicial as tarefas são
+conhecidas (estão disponíveis na parte inferior da tela), mas sua ordem ainda é arbitrária;
+2) no momento intermediário são feitas ligações entre as tarefas, de modo a orientar a
+execução do processo; e 3) no momento final o processo definido especifica claramente
+como ele deve ser executado.
+Outro cenário de aplicação do componente contempla instituições que já possuem
+seus processos definidos, mas ainda são pouco adotados pelos colaboradores. Neste caso,
+o componente pode auxiliar por permitir a interação remota (via Web) de colaboradores,
+além de permitir que um colaborador veja as alterações feitas no processo nos momentos
+em que ele não estava acompanhando a execução do processo.  Isso viabiliza o acesso
+de todos os colaboradores à versão atual de um dado processo, compartilhando conheci-
+mento organizacional e permitindo maior acompanhamento e aderência à execução desse
+processo.
+256
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+(a) Processo ad hoc                                                                         (b) Processo parcialmente definido
+(c) Processo definido
+Figura 4. Passos na definição de um processo
+A resistência por parte das equipes de projeto para adotar ou modificar um pro-
+cesso de software está relacionada à mudança da cultura organizacional. Mudanças nessa
+cultura, principalmente nas atividades tradicionalmente executadas de forma ad hoc, são
+difíceis de serem aceitas pelos envolvidos em iniciativas de MPS. Por isso, na execução
+de projetos de MPS os servidores mais antigos costumam ser mais resistentes à adoção
+de novos processos.
+O componente descrito pode auxiliar na mudança organizacional por permitir que
+o gerente de projetos conduza as modificações no processo de forma suave e paulatina. O
+apoio à execução de processos ad hoc permite a evolução dos processos da organização,
+iniciando com um processo mais simples e incrementando-o ao longo do tempo do projeto
+de MPS.
+Os estágios de mudança descritos na Figura 4 amenizam os impactos das mu-
+danças na cultura organizacional, pois permitem estender o tempo de amadurecimento dos
+processos, possibilitando que colaboradores tenham mais oportunidades para absorver as
+mudanças, aceitar, implementar e institucionalizar as atividades de um processo, à medida
+que este evolui e se modifica.
+Processos evoluem como um resultado comum da dinâmica organizacional.  O
+componente gerenciador de PN também pode apoiar a evolução dos processos de soft-
+257
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+ware. A capacidade que o componente fornece para efetuar modificações em um processo
+durante a execução de suas instâncias possibilita evoluir a definição de um processo de
+modo a adaptá-lo à evolução da realidade da organização.
+4. Experimento realizado com o Gerenciador de PN
+Com o objetivo de avaliar a capacidade do componente gerenciador de PN foi conduzido
+um experimento que visou responder as seguintes questões:
+1.  O componente cumpre os objetivos propostos (requisitos previstos na Seção 2)?
+2.  O componente tem poder de expressão suficiente para as necessidades de uma
+ferramenta BPMS?
+Tanto para a avaliação das funcionalidades quanto para a avaliação do poder de
+expressão da ferramenta, foram definidos procedimentos de coleta de dados e o modo
+como os dados obtidos deveriam ser analisados.  Detalhes sobre esses procedimentos
+podem ser obtidos em [Loja 2011].
+A primeira parte do experimento foi a avaliação de cinco características rela-
+cionadas aos diferenciais do componente gerenciador de PN com relação às ferramentas
+BMPS atuais. Estas características são apresentadas na Tabela 1.
+O protocolo do experimento previa inicialmente a modelagem e execução de um
+processo definido. O processo foi descrito de forma textual para os participantes do ex-
+perimento e consistia de uma compra de mercadoria envolvendo clientes, atendentes e di-
+ferentes formas de pagamento. Durante o experimento, requisitou-se que o processo fosse
+alterado de diferentes formas, por exemplo, para contemplar uma mudança na forma de
+pagamento da compra.
+Para participar do experimento foram selecionados quatorze usuários que pos-
+suíam conhecimentos básicos sobre processo e modelagem de processo.  Além disso,
+todos eles eram profissionais de TI, com formação superior, e experiência de mais de dois
+anos em desenvolvimento de software e/ou gerência de pessoas e projetos.
+Dos participantes do experimento, quatro haviam participado de um projeto de
+implantação da norma ISO 9001 no setor de atendimento da instituição pública onde o
+experimento foi aplicado. Os usuários selecionados atuavam em diferentes papéis nessa
+instituição, incluindo: analistas de sistemas, desenvolvedores, e analistas de negócio.
+Para nivelar o conhecimento dos participantes do experimento foi ministrado um
+curso de três horas de duração sobre gerência e modelagem de processos de negócio, e
+sobre a utilização do componente de software gerenciador de PN.
+Para realizar os procedimentos com todos os participantes foram necessários três
+dias, com duração média de uma hora por participante. Portanto, foram gastas cerca de
+quatorze horas na realização dos procedimentos, além das três horas da realização do
+curso de nivelamento, totalizando dezessete horas de experimento.
+Através da análise da Tabela 1 é possível verificar que os participantes do experi-
+mento tiveram mais de 80% de aprovação em relação à presença e correto funcionamento
+das características avaliadas. Com base nessa análise conclui-se que as funcionalidades
+propostas foram, de fato, implementadas.  As categorias que não totalizaram 100% re-
+fletem o fato dos participantes não terem compreendido a pergunta, ou terem encontrado
+258
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Característica                                                                                Resultado
+Alterações no modelo do processo durante a execução                                           96,42%
+Modelagem e Execução de processos empíricos                                                   100%
+Modelagem e Execução de processos ad hoc                                                      85,71%
+Distribuição de responsabilidades aos participantes                                           85,71%
+Compartilhamento e Reutilização de Elementos do Processo                                      92,85%
+Tabela 1. Respostas por característica avaliada
+uma falha no funcionamento que não permitiu a operação da característica no compo-
+nente.
+Em relação ao poder de expressão, cada padrão de processo modelado foi execu-
+tado pela máquina de execução do componente e o resultado foi comparado com o com-
+portamento descrito em [van der Aalst et al. 2003].  A implementação de dezenove dos
+vinte padrões de [van der Aalst et al. 2003] garante que o metamodelo proposto é capaz
+de expressar uma grande variedade de situações pertinentes ao fluxo de processos.
+5. Conclusões e Trabalhos Futuros
+Este trabalho apresentou um componente de software para gerenciamento de proces-
+sos de negócio capaz de oferecer um ambiente colaborativo para modelagem e exe-
+cução de processos no contexto de um framework para síntese de SI utilizando uma
+abordagem dirigida por modelos.  O software apóia a execução de processos empíricos
+e ad hoc, implementando os principais padrões de processo identificados na literatura
+[van der Aalst et al. 2003] e superando diversas limitações no tocante ao aspecto de co-
+laboração na modelagem e execução de processos de negócio.
+O componente foi desenvolvido para acesso na Web.  A implementação foi feita
+na linguagem Ruby em conjunto com o framework Rails.  A interação com o usuário é
+baseada nos frameworks ExtJs e Flex.
+A máquina de execução de PN do componente é capaz de gerenciar a realização
+de qualquer tipo de processo aderente ao metamodelo de processos definido. Além disso,
+o mecanismo de execução apoia a interação de mais de um participante por atividade,
+permitindo até quatro tipos de interação diferentes, com base na definição de responsabi-
+lidades proposta no modelo COBIT.
+As propostas deste trabalho foram validadas através de um experimento envol-
+vendo quatorze usuários que utilizaram o componente para modelar e executar diversos
+processos de negócio. Além disso, o componente é capaz de implementar a maioria dos
+padrões de processo descritos na literatura.
+O framework do qual o componente gerenciador de PN faz parte vem sendo man-
+tido há seis anos pelo Grupo de Pesquisa em Engenharia de Software do INF/UFG. Ele
+foi refatorado a fim de adicionar características de gerência, definição e execução de pro-
+cessos de negócio, tanto em nível de utilização do framework quanto em nível de geração
+de código, criando SI orientados a processos.
+Melhorias  e  extensões  previstas  para  as  propostas  deste  trabalho  estão  rela-
+cionadas à máquina de execução, ao componente gerenciador de PN e à experimentação
+259
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+do componente em ambientes nos quais processos de negócio são críticos.
+Um aprimoramento já previsto para o componente envolve a possibilidade de al-
+terar o modelo do processo individualmente para cada instância. Apesar de a versão atual
+do componente permitir a alteração dos modelos dos processos enquanto são executados,
+se um modelo for alterado todas as instâncias que estão utilizando aquele modelo também
+o serão, o que pode causar efeitos indesejáveis em algumas instâncias.
+Além disso, o componente não impõe restrições para alteração dos modelos do
+processo. Em [Kowalkiewicz et al. 2008] é apresentada uma adaptação de linguagens de
+expressão de processo com a finalidade de prover suporte a restrição de alteração dos
+modelos do processo durante a execução. Utilizando essas ideias, seria possível criar um
+modelo de processo que fosse modificável apenas parcialmente. Por exemplo, a definição
+de pontos de alteração (ou adaptação) em um processo institucionalizado, contribuiria
+para a otimização e a extensão deste processo, que poderia ser utilizado como um modelo
+de referência para processos instanciados a partir dele.
+Outra extensão prevista para o componente gerenciador de PN envolve o controle
+de versão das alterações nos processos, guardando um histórico de alterações, permitindo
+o acompanhamento da evolução dos processos definidos e gerenciados pelo componente.
+Referências
+Almeida, A. C., Boff, G., and Oliveira, J. L. (2009). A Framework for Modeling, Building
+and Maintaining Enterprise Information Systems Software. In Anais do XXIII Simpósio
+Brasileiro de Engenharia de Software, pages 115-125. Fortaleza, CE, Brasil.
+Awad, A., Grosskopf, A., Meyer, A., and Weske, M. (2009). Enabling Resource Assign-
+ment Constraints in BPMN.  Technical report, Business Process Technology - Hasso
+Plattner Institute.
+Bendraou, R., Jezéquél, J.-M., and Fleurey, F. (2009).  Combining aspect and model-
+driven engineering approaches for software process modeling and execution. In Proc.
+of the International Conference on Software Process: Trustworthy Software Develop-
+ment Processes, ICSP ’09, pages 148-160, Berlin, Heidelberg. Springer-Verlag.
+Bizagi (2010). Bizagi - business agility. Disponível em: http://www.bizagi.com/. Acesso
+em: 06 ago. 2010.
+Bonita (2010). Bonita. Disponível em: http://www.bonitasoft.org/ . Acesso em: 06 ago.
+2010.
+da Costa, S. L., Graciano Neto, V. V., Loja, L. F. B., and de Oliveira, J. L. (2010).  A
+Metamodel for Automatic Generation of Enterprise Information Systems.  In Anais
+do I Congresso Brasileiro de Software: Teoria e Prática - I Workshop Brasileiro de
+Desenvolvimento de Software Dirigido por Modelos, volume 8, pages 45-52, Salvador,
+BA, Brasil. UFBA.
+de Mello, M. S. and Rocha, A. R. (2009). Gestão integrada da melhoria de processos em
+organizações de software. In Anais do V Workshop Anual do MPS (WAMPS), pages 34
+- 41. UNICAMP.
+Graciano Neto, V. V., da Costa, S. L., and Oliveira, J. L. (2010). Lições Aprendidas sobre
+Desenvolvimento Dirigido por Modelos a partir da refatoração de uma ferramenta. In
+260
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Anais do VIII Encontro Anual de Computação - ENACOMP, pages 68-75.  Catalão,
+GO, Brasil.
+ITGI  (2009).   Cobit:  Control objective management guidelines maturity model  4.1.
+http://www.itgi.org. IT Governance Institute.
+Kowalkiewicz, M., Lu, R., Baeuerle, S., Kruempelmann, M., and Lippe, S. (2008). Weak
+dependencies in business process models. pages 177-188.
+List, B. and Korherr, B. (2006). An evaluation of conceptual business process modelling
+languages. In SAC ’06: Proceedings of the 2006 ACM symposium on Applied comput-
+ing, pages 1532-1539, New York, NY, USA. ACM.
+Loja, L. F. B. (2011).  Sinfonia:  uma abordagem colaborativa e flexível para a mode-
+lagem e execução de processos de negócio. Master’s thesis, Instituto de Informática -
+Universidade Federal de Goiás.
+Loja, L. F. B. and de Oliveira, J. L. (2010). Um modelo de colaboração para execução e
+gerência de processos de negócio em organizações. In Anais do Workshop de Teses e
+Dissertações em Sistemas Colaborativos no Simpósio Brasileiro de Sistemas Colabo-
+rativos (SBSC’10), Belo Horizonte, MG, Brasil.
+Loja, L. F. B., Graciano Neto, V. V., da Costa, S. L., and de Oliveira, J. L. (2010). A busi-
+ness process metamodel for Enterprise Information Systems automatic generation. In
+Anais do I Congresso Brasileiro de Software: Teoria e Prática - I Workshop Brasileiro
+de Desenvolvimento de Software Dirigido por Modelos, volume 8, pages 37-44, Sal-
+vador, BA, Brasil. UFBA.
+Nuffel, D. V., Mulder, H., and Kervel, S. V. (2009).  Enhancing the formal foundations
+of bpmn by enterprise ontology.  Lecture Notes in Business Information Processing -
+1865-1348 (Print) - Volume 34 - Advances in Enterprise Engineering III.
+OMG (2009). Bpmn information home. Disponível em: http://www.bpmn.org.
+Russell, N., Hofstede, A. H. M. T., and Mulyar, N. (2006a).  Workflow ControlFlow
+Patterns: A Revised View. Technical report.
+Russell, N., van der Aalst, W. M., ter Hofstede, A. H., and Wohed, P. (2006b).  On
+the Suitability of UML 2.0 Activity Diagrams for Business Process Modelling.  In
+Third Asia-Pacific Conference on Conceptual Modelling (APCCM2006), volume 53 of
+CRPIT, pages 95-104. ACS.
+Sølvberg, A. (2010).  On Roles of Models in Information Systems.  In Nurcan, S., Sali-
+nesi, C., Souveyet, C., and Ralyt, J., editors, Intentional Perspectives on Information
+Systems Engineering, pages 17 - 38. Springer Publishing Company, Incorporated, 1
+edition.
+Tsai, C.-H., Luo, H.-J., and Wang, F.-J. (2007).  Constructing a BPM environment with
+BPMN. In Future Trends of Distributed Computing Systems, 2007. FTDCS ’07. 11th
+IEEE International Workshop on, pages 164 -172.
+van der Aalst, W., ter Hofstede, A., Kiepuszewski, B., and Barros, A. (2003). Workflow
+patterns. Distributed and Parallel Databases, 14(1):5-51.
+261
+
+
+
+
+

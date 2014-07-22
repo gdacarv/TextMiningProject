@@ -1,0 +1,500 @@
+﻿Performance Evaluation of BPEL4People
+Specifications Integrate Human Interactions Into
+Business Process
+Henrique Jorge A. Holanda1,2, José Javier Merseguer1, Giovanni Cordeiro
+Barroso3, A. B. Serra 4
+1Dpto. de Inf. e Ing. de Sistemas, UNIZAR, Zaragoza, Spain
+2Departamento de Informática UERN, Mossoró, Brazil
+3Universidade Federal do Ceará
+Campus do Pici, Fortaleza,- CE 60455 760 - Brasil
+4Instituto Federal de Educação Tecnológica do Ceará
+Av. 13 de Maio, 2081, Fátima,  Fortaleza - CE 60040-531 - Brasil
+henriqueholanda@uern.br, jmerse@unizar.es, gcb@ufc.br,
+prof.serra@gmail.com
+Abstract. WS-BPEL Extension for People (BPEL4People) introduces human
+activity  to  Web  Services  Business  Process  Execution  Language                           (WS-
+BPEL/BPEL). Some works have been done on the performance verification of
+WS-BPEL, but there aren't works on the performance verification of WS-
+or  the
+transformation   of   WS-BPEL4People/BPEL4People   into   Generalized
+Stochastic Petri Nets (GSPN) and this way evaluate its performance.   During
+the transformation, Petri Net is used to model BPEL activities and the human
+activity of a human task. Then, by validating  the generated model, some
+potential problems with performance of WS-BPEL4People can be detected.
+1. Introduction
+Living  in  a  competitive  world,  businesses  are  naturally  interested  in  information
+technology  supporting  them  for  competitive  advantage                                     [Holanda  et  al.   2009].  As
+cooperation becomes increasingly important for companies, new challenges arise for the
+support of business to business scenarios by information technology. While enterprises
+already proft from the use of traditional workfow management systems (WfMS) , theil
+business process execution language (BPEL) permits formal specifcation of processesi
+and enables companies to collaborate with each other by interacting business processes.
+BPEL  can  be  used  for  automated  processes  between  businesses  using  respective
+services. However, the obvious scenario of a business process that depends on a person
+to fulfl a certain human task as a kind of process activity, is not covered by BPELi
+[Agrawal et al. 2007].
+BPEL  (Business Process Execution Language) has become the standard for
+specifying and executing workfow specifcations for Web Service (WS) compositionli
+invocation. A major weakness of BPEL is the lack of so-called  “human workfow”l
+
+
+
+
+support. The BPEL4People specifcation tries to amend this by adding human taski
+support to BPEL.
+A weakness of BPEL is the lack of “human workfow” support. In long-runningl
+business processes, tasks that require human involvement exist widely. A process may
+wait for input from human participants or WS, and the input must be collected within a
+certain number of hours. When a timeout occurs, a user must be notifed to decide howi
+the process proceeds. As quoted from the whitepaper of BPEL4People [Dyer 2005]:
+“Human user interactions are currently not covered by WS-BPEL, which is primarily
+designed to support automated business processes based on WS. In practice, however,
+many business process scenarios require user interaction.” The introduction of human
+interaction also leads to other interesting concepts such as roles and permissions, which
+makes the design and verifcation of human workfows even harder. Because of theil
+importance, there were several attempts that try to add human support into BPEL
+[Martin 2007].
+To support and standardize human activities in BPEL, BPEL4People is proposed
+by IBM-SAP, which describes features for supporting People Activities within existing
+BPEL standards, and introduces the principle of manual tasks executed by human
+participants. Some newly aroused problems such as task authorization and escalation are
+also described in BPEL4People specifcation. Strictly speaking, BPEL4People includesi
+two specifcations: WS-BPEL Extension for People and WS-HumanTask. The formeri
+extends BPEL language with “people activity” and makes it as a normal Web service
+invocation. The latter defnes concepts such as human roles, tasks, and permissions usedi
+within people activities. The reason for the separation is mainly commercial: it allows
+vendors to create separate products and users to choose from different products. Since
+both of them must be used together to compose a human workfow, we refer to them asl
+a whole in this paper.
+As BPEL4People being used, formal models (as GSPN) of BPEL4People have
+been proposed [Zhao et al. 2006], that not only help people to better understand the
+specifcation,  but  also  provide  insight  to  the  subtle  but  important  issues  ofi
+BPEL4People.  Furthermore,  based  on  the  formal  model,  formal  analysis  such  as
+performance-model-checking  can  be  done  to  discover  potential  problems  in
+BPEL4People source codes.
+GSPN is a natural extension of the classical Petri Net.There are several reasons
+for selecting GSPN as the language for modeling work distribution in the context of
+BPEL4People. First of all, GSPN have formal semantics and allow for different types of
+analysis, e.g., state-space analysis and invariants [Henrique 2009]. Second, GSPN are
+executable and allow for rapid prototyping, gaming, and simulation. Third, GSPN are
+graphical and their notation is similar to existing workflow languages. Finally, the
+GSPN  language  is  supported  by  GREATSPN  Tool  [PE  group  2006]  a  graphical
+environment to model, enact and analyze GSPN.
+In this paper, we are motivated by issues related to the definition of a model
+method for the transformation of BPEL4People into GSPN and this way evaluate its
+performance.
+
+
+
+
+The  remainder  of  this  paper  is  structured  as  follows.  Section                        2  introduces
+background  of  BPEL  and  BPEL4People.  Section                                              3  provides  the  details  of
+transformation of WS-BPEL4People into GSPN. In section 4, we discuss one example
+of transformation of WS-BPEL4People into GSPN. Section 5 talks about related works.
+Section 6 gives a conclusion of this paper.
+2. BPEL and BPEL4People
+Business process management is designed to make business activity coordination easier
+and  more  cost  effective                                                                    [Bertino                           2006].  WS-BPEL  and  BPEL4People  extension
+together coordinate the WS and human activities within business process. With the
+development of globalisation organisations become more dynamic and the underlying
+business process are frequently optimising in today’s business world. Adapting business
+processes to market changes and automating business services on demand are main
+necessities to facilitate business collaboration among existing and potential partners.
+In  business  process  oriented  environment,  a  unified  process  specification
+language  is  significantly  crucial  in  term  of  collaboration.  WS-BPEL  is  one  such
+language  that  provides  the  syntax  and  notations  for  specifying  business  processes
+behaviour based on WS. Besides automatic WS, most business processes still require
+human interactions. BPEL4People addresses this important aspect to provide human
+actor support.
+2.1. BPEL
+WS have become widely accepted as the defacto standard for distributed business
+applications  [Martin  2007]. They bring maximum interoperability, use an open and
+flexible architecture, and the implementation and complexity of a WS can be hidden
+towards a service requestor. Layered on top of these services, BPEL, the de-facto
+standard for orchestration, formally describes processes.
+Web  service  composition  refers  to  the  creation  of  new  (Web)  services  by
+combination of functionality provided by existing ones. This paradigm has gained
+signifcant attention in the WS community and is seen as a pillar for building service-i
+oriented applications. A number of domain-specifc languages for service compositioni
+have been proposed with consensus being formed around a process-oriented language
+known as WS-BPEL (or BPEL). The kernel of BPEL consists of simple communication
+primitives that may be combined using control-fow constructs expressing sequence,l
+branching, parallelism, synchronisation, etc. As a result, BPEL process defnitions lendi
+themselves to static  ow-based analysis techniques. fl
+The  business  process  execution  language                                                   (BPEL)  is  an  XML  subset  for
+specifying and executing business processes. As interactions are realised with WS for
+maximum  interoperability  between  various  heterogeneous  systems,  BPEL  permits
+orchestration of WS.
+2.2. BPEL4People
+WS-BPEL focuses on business processes that orchestrate Web service interactions.
+However, in general, business processes are comprised of a broad spectrum of activities
+that most often require the participation of people to perform tasks, review or approve
+
+
+
+
+steps and enter data — for example, a credit approval scenario that may require approval
+on  certain  transaction  limits  or  activity levels.  These  human  interactions  are  now
+addressed in the new specifications [Agrawal et al. 2007].
+Human user interactions are currently not covered by the Web Services Business
+Processes Execution Language  (WS-BPEL), which is primarily designed to support
+automated  business  processes  based  on  WS.  In practice,  however,  many business
+process scenarios require user interaction.
+So far we've seen that user interaction  in business processes can get quite
+complex.  Although  BPEL specification  1.1  (and  the  upcoming  BPEL  2.0)  doesn't
+specifically  cover  user  interactions,  BPEL  is  appropriate  for  human  workflows.
+Workflow services that leverage the rich BPEL support for asynchronous services are
+created  today.  In  this  fashion,  people  and  manual  tasks  become  just  another
+asynchronous service from the perspective of the orchestrating process and the BPEL
+processes stay 100% standard.
+We now see the next generation of workflow specifications emerging around
+BPEL with the objective of standardizing the explicit inclusion of human tasks in BPEL
+processes. This proposal is called BPEL4People and was originally put forth by IBM
+and SAP in July 2005. Other companies, such as Oracle, have also indicated that they
+intend to participate in and support this effort.
+The most important extensions introduced in BPEL4People are people activities
+and people links. People activity is a new BPEL activity used to define user interactions;
+in other words, tasks that a user has to perform. For each people activity, the BPEL
+server must create work items and distribute them to users eligible to execute them.
+People activities can have input and output variables and can specify deadlines.
+To specify the implementation of people activities, BPEL4People introduced
+tasks. Tasks specify actions that users must perform. Tasks can have descriptions,
+priorities, deadlines, and other properties. To represent tasks to users, we need a client
+application that provides a user interface and interacts with tasks: it can query available
+tasks, claim and revoke them, and complete or fail them.
+To associate people activities and the related tasks with users or groups of users,
+BPEL4People introduced people links. People links are somewhat similar to partner
+links; they associate users with one or more people activities. People links are usually
+associated with generic human roles, such as process initiator, process stakeholders,
+owners, and administrators [Agrawal et al. 2007].
+BPEL4People extends the capabilities of WS-BPEL to support a broad range of
+human interaction  patterns, allowing for expanded modeling of business processes
+within the WS-BPEL language.
+BPEL4People is comprised of two specifications including:
+
+
+
+
+    WS-BPEL Extension for People which layers features on top of WS-BPEL
+to describe human tasks as activities that may be incorporated as first-class
+components in WS-BPEL process definitions.
+    Web Services Human Task introduces the definition of stand-alone human
+tasks, including the properties, behavior and operations used to manipulate
+them. Capabilities provided by Web Services Human Task may be utilized
+by Web services-based applications beyond WS-BPEL processes.
+3. Transformation from WS-BPEL4People into GSPN
+In this section, we introduce the transformation from BPEL4People into GSPN. Since a
+WS-BPEL4People includes both BPEL activities and new elements about human task,
+our work has two parts: transformation for BPEL activities and transformation for the
+authorization of human task.
+3.1  Transformation for BPEL Activities
+BPEL has structural activities and basic activities. Structural activities and links are
+used to construct the control flows in business processes. Petri Net is proven to be ap-
+propriate to model workflow or business process, especially to model their control flows
+[Holanda et al. 2009] .
+3.1.1 Transformation of Basic Activities
+The Basic Activities are those that describe the steps of an elementary activity. BPEL
+defines the following Basic Activities:                                                    <Process>,  <Invoke>,  <Receive>,  <Reply>,
+<Wait>, <Empty> and so on. The representation of the Basic Activities in GSPN is
+shown in Figure 1.
+Figure 1. Representation of Basic Activities in GSPN
+3.1.2 Transformation of Structure Ativities
+The Structured Activities prescribe the order in which a set of Basic Activities is
+executed.  To  enable  the  representation  of  complex  structures,  BPEL  defines  the
+following Structured Activities: <Sequence>, <Switch>, <While>, <Pick>, <Flow> and
+<Control Link>. Here we present their transformation into GSPN.
+o  Sequece Structure: this structure contains one or more activities that are carrie
+out consecutivety. Its representation is shown in Figure 2.
+o  Switch Structure: this structure supports conditional choices. Where only one of
+the  transitions                                                                           (t1  to  tn)  are  fired  when  the  arrival  of  a  token  on  p1.  Its
+representation is shown in Figure 2.
+o  While Structure: this structure allows one or a series of activities executives:
+none, one or more times. Figure 4 shows the representation of this structure. The
+
+
+
+
+transitions “t2” to “tn” can fire in a repetitive way, until the transition “t1” fires
+and shut down the cycle of repetitions.
+o  Pick Structure: the pick construct awaits the occurrence of one of a set of events
+and then performs the activity associated with the event that occurred. The
+representation of the pick structure is the same as the representation of the
+switch structure shown in Figure 2.
+o  Flow Structure: the BPEL flow lets specify one or more activities to be carried
+out simultaneously. This fact leads to the definition of Flow Structure which is
+shown in Figure 2. In this representation the weight of the arc output of the
+transition “t0“ is “n”, then the transitions “t1” to “tn” can fire simultaneously.
+o   Control  Link  Translation:  more  generally,  the  Flow  activities  allows  the
+dependence of synchronization between the activities that directly or indirectly
+are  nested  within  it.  The  Control  Link  structure  is  used  to  express  these
+dependencies  of  synchronization.  The  sequence  of  representation  of  this
+structure  is  shown  in  Figure                                                            2.  This  representation  shows  that  there  is  a
+synchronism between the transitions t2 and tn. The transition tn will fire after t2
+finishes its processing to be put a token in the place P5 and therefore make the
+transition tn enabled.
+Figure 2. Logic of Representation of Structure Activities in GSPN
+3.1.3 Attribution Time to GSPN
+In the transformation of BPEL codes into GSPN, the firing of transitions is immediate,
+except in the transitions that represent the Basic Activity <Invoke> that recive as Delay
+Time, the values of PDF of the response time of each of these Service Providers (SP),
+where services is executed [Holanda et al. 2009].
+To model the estocastic behavior of response time of Service Providers (SP´s),
+we will make use of PDF.
+
+
+
+
+As entries of the PDF, will be used the Average and Standard Deviation of the
+response time of Service Providers, while as the output is expected the value of Delay
+Time of the transition (λ).
+These response times of SP´s provide a sample with unknown distribution with
+Average (μ) and Standard Deviation (σ ).
+The Average (μ) is calculated as the arithmetic average of the response time of
+Service Providers and the Standard Deviation (σ) is calculated as shown in Figure 3.
+Depending on the value of CV, these response times are approximate to one of
+the distributions: Erlang, Hiperexponential or Hipoexponential. This makes it possible
+to represent the probability issue involved in approximation of these response times of
+Service Providers for a Delay Time (λ) of the transition that it model.
+If the Coefficient of Variation (CV) is greater than 1 (CV> 1) and at the same is
+an integer value, the sample must be empirical approximate with Erlang Distribution. In
+this case the Delay Time (λ) of the transition that shapes this Service Providers will be
+calculated as shown in Figure 3.
+If CV> 1 (CV is not a integer number), the distribution should be approximated
+with Hiperexponecial Distribution and the Delay Time (λ) of the transition that shapes
+this Service Providers will be calculated as shown in Figure 3.
+And if CV< 1, the distribution should be approximated with Hipoexponential
+Distribution and the Delay Time (λ) of the transition that shapes this Service Providers
+will be calculated as shown in Figure 3.
+Figure 3. Calculation of the σ, cv and λ
+3.2  Transformation for the Authorization of Human Task
+As a complement of BPEL, BPEL4People introduces new concepts to support human
+task. People links are used to bind a group of people to a business process similar to the
+manner that partner links are used to bind Web services to processes. When the business
+process engine encounters a people activity, it may suspend the business process until a
+
+
+
+
+person of the group completes the associated task. The details of a people activity, i.e.
+who can execute this activity, are defined in the specification of WS-HumanTask.
+To define a complete human business process, both specification must be used,
+where BPEL4People can be seen as a bridge between BPEL and WS-HumanTask.
+Terms “human task” and “people activity” are synonyms used by these two specifica-
+tions, while we will use “human task” uniformly in the paper. WS-HumanTask intro-
+duces also the idea of logical people groups. Each group includes a set of people, and
+each human task can only be executed by some specified groups. This can be viewed as
+a simple RBAC (Role Based Access Control) model, where logical people group is the
+synonym of   “role”. In the following, we will use the shorter term “role” instead of “log-
+ical people group”.
+<b4p:peopleActivity
+<htd:task name="votingTask">
+<htd:interface operation="vote"portType="el:votingPT"/>
+<htd:peopleAssignments>
+<htd:potentialOwners>
+<htd:user> NmUser1  </htd:user>
+<htd:user> NmUser2  </htd:user>
+</htd:potentialOwners>
+<htd:excludedOwners>
+<htd:user> NmUser3  </htd:user>
+</htd:excludedOwners>
+</htd:peopleAssignments>
+</htd:task>
+</b4p:peopleActivity>
+Figure 4. An Example of People Activity
+As shown in Figure 4, a people activity wraps a human  task as an activity that is
+similar to a normal service invocation in BPEL. The human task defines the permission
+of the task with the <potentialOwner>  element, which refers to some people link
+defined elsewhere. To resume the business process from a working human task, the per-
+son who executes the task (in BPEL4People terminology, the “actual owner” of the
+task) must notify the business process engine when the task is successfully/unsuccess-
+fully completed.
+3.2.1 Integrating Authorization Constraints
+BPEL4People support features to exclude some users from performing a task because of
+some tasks they had done before, or force some user to perform a sequence of tasks. We
+call such requirement as authorization constraint, as the term is widely used in access
+control literature. In this section we will use GSPN to express the authorization con-
+straints to facilitate formal analysis.
+Two kinds of authorization constraints, namely “4-eyes principle” and “chained
+execution”, are proposed in BPEL4People specification. The “4-eyes principle”, also
+known as “separation of duty”, is a common scenario in many application areas when a
+decision must be made by two or more people independently of one another, often for
+the security reasons, and “chained execution” refers a process fragment where a se-
+quence of steps must be executed by one person.
+3.2.1.1 Separation of duty
+
+
+
+
+The separation of duty (SoD) is a well-known principle in authorization to prevent fraud
+or error by requiring that at least two individuals are involved in some specific work.
+SoD is also useful when two persons have to co-operate in a work but none of them
+should know all the details.
+The basic form of SoD states that two given distinct tasks t1 and t2 must be per-
+formed by different individuals. This can be defined as states that person p0 cannot per-
+form both t1 and t2. We can define variations of this similarly, e.g., “task t1 and t2 must
+be performed by different roles”. We can also define SoD constraint for a specific per-
+son, e.g., “person A cannot invoke both task t1 and t2”.
+3.2.1.2 Binding of duty
+“Binding of duty” (BoD) is the dual of SoD, which states that some distinct tasks must
+be performed by one person. BoD is used to define the responsibility of a person, e.g.: It
+states that if p0 performs t1, then p0 must also perform t2, and vice versa.
+SoD and BoD may be combined to define more complex constraints
+3.2.2 Transformation of SoD and BoD into GSPN
+The representation of the transformation of each users of <potentialOwner> into GSPN
+is modeled by a transition “t”, by two places “p1” and “p2”, and two arcs linking each
+places to a transition, as shown in Figure 3. A token in place “p1” represents that the
+user modeled by the transition  “t” is able to execute the task. The place  “p2” will
+contain tokens after the firing of transition “t”, and this represent that user executed the
+task.
+In the Attribution Time to GSPN, the tansition t is not immediate, transition t
+should   recive as Delay Time,   the values of Probability Distribution Function (PDF) of
+the response time of each user, who executed the task.  To model the estochastic
+behavior of response time of users, we will make use of PDF as showed in section
+3.1.3.
+For each user presented in clause <excludedOwners> of a task, it should be
+eliminate the module that modeled that user in  those task in the model.
+To illustrate the transformation of WS-BPEL4People into GSPN, suppose that
+we have the following WS-BPEL4People code, as shown in Figure 5.
+4. Example of the Transformation of WS-BPEL4People into GSPN
+Now we show some further issues related to one example of transformation from
+BPEL4People into GSPN, and in general, to the modeling of human process.
+This example is a BPEL4People source code for a purchasing process “WS- Pur-
+chSys” that is showed in Figure 5. Four tasks are defined: manager approve, finance
+approve, notify staff, and purchase. The potential owners of each task are: manager ap-
+prove (Alan); finance approve (Ben); purchase (Ben, Cindy, Diana); notify staff (Diana,
+Edward). The excluded owner of purchase is the actual owner of finance approve. The
+excluded owner of notify staff is the actual owner of purchase.
+
+
+
+
+<process name="purchasing">
+<b4p:humanInteractions><htd:tasks>
+<htd:task name="manager_approve">
+<htd:peopleAssignments><htd:potentialOwners>
+<htd:user>Alan</htd:user></htd:potentialOwners>
+</htd:peopleAssignments></htd:task>
+<htd:task name="finance_approve">
+<htd:peopleAssignments><htd:potentialOwners>
+<htd:user>Ben</htd:user></htd:potentialOwners>
+</htd:peopleAssignments></htd:task>
+<htd:task name="purchase"><htd:peopleAssignments>
+<htd:potentialOwners>
+<htd:user>Ben</htd:user><htd:user>Cindy</htd:user><htd:user>Diana</htd:user> </htd:potentialOwners><htd:excludedOwners>
+<htd:getActualOwner("tns:finance_approve")
+</htd:excludedOwners>
+</htd:peopleAssignments></htd:task>
+<htd:task name="notify_staff"><htd:peopleAssignments>
+<htd:potentialOwners>
+<htd:user>Diana</htd:user><htd:user>Edward</htd:user></htd:potentialOwners>
+<htd:excludedOwners>
+<htd:getActualOwner("tns:purchase")
+</htd:excludedOwners>
+</htd:peopleAssignments></htd:task>
+</htd:tasks></b4p:humanInteractions>
+<sequence> <receive createInstance="yes"/>
+<extensionActivity>
+<b4p:peopleActivity name="manager_approve"
+outputVariable="result"/>
+<b4p:localTask reference="tns:manager_approve"/>
+</b4p:peopleActivity>
+</extensionActivity>
+<Switch>
+<case>
+<Invoque name “result"/>
+<case>
+<Invoque name “approved"/>
+</Switch>
+</sequence>
+</process>
+Fig. 5. BPEL4People Source Code for the “WS-PurchSys”
+4.1. GSPN Model
+Figure 6 shows the GSPN of the BPEL4People code for the “WS-PurchSys” presented in
+Figure 5, modeled inside the GREATSPN Tool [PE group 2006].
+Fig. 6. Model GSPN for BPEL4People Source Code for the “WS-PurchSys”
+
+
+
+
+4.2. Performance Analysis of Model
+With  the  GSPN  for  BPEL4People  Source  Code  for  the                                   “WS-PurchSys”  loaded  on
+GREATSPN  tool  it  begins  the  activities  of  the  performance  evaluation.  The
+performance analysis of the model is made from simulations with the same amount of
+requests made in the “WS-PurchSys”.
+These results shows that the response times of the model generated by our model
+method and the response times of the “WS-PurchSys” not differ by more than 6.7%,
+proving itself as the usability and validity of our model method in Performance Analysis
+of WS-BPEL4People.
+Figure 7 presents a comparison of response times of the model generated by our
+model method for “WS-PurchSys” and the response times of the “WS-PurchSys”.
+Figure 7. Our Model Method Efficiency
+5. Related Works
+The related work showed that there has been a lot of studied and researched in the
+performance of Web Services. However most of these studies and research promote the
+evaluation  of  the  performance  of  Web  Services  focussing  on  optimizing  their
+composition when orchestrations created using WS-BPEL. In our work we want to
+address  the  issue,  which  has  not  been  explored  yet,  concerning  the  performance
+evaluation of the WS-BPEL4People.
+Much work has been done on analyzing the interactions of BPEL processes, ap-
+plying the BPEL analysis, and workflow authorization modeling. In paper  [Bertino
+2006], the authors develop Petri Net semantics for BPEL which support the translation
+from BPEL into Petri Net and analysis of BPEL processes. In paper [Fu 2004] a frame-
+work is provided to analyze interactions of WS-BPEL. WS-BPEL are eventually trans-
+lated into PROMELA and LTL formulas, which are then checked with SPIN. Based on
+model Checker Bogor, Bianculli et al. [Bianculli et al. 2007] present an approach for the
+formal  verification  of  workflow-based  compositions  of  web  services,  described  in
+BPEL. The paper [Zhao et al. 2006] present a formal framework that integrates RBAC
+into BPEL and verifies BPEL workflows under authorization constraints with model
+Checker SAL.
+
+
+
+
+6.  Conclusion of this Paper and Future Works
+Service orchestrations enable complex applications to be put together in a variety of
+ways. Each possible service selection of services brings different levels of QoS. Thus,
+there is a need to devise fast and efficient mechanisms that can be used for performance
+analysis of WS-BPEL4People among a set of service providers. In this paper, we
+provide a model method for the transformation of BPEL4People into GSPN and this
+way evaluate its performance. This paper presented also such an efficient mechanism
+that, in all experiments reported, comes very close to the real response time of “WS-
+PurchSys” (less than 8% worse) after having compared with the time of the model
+generated by our model method.
+Our future work includes developing a complete translating tool  (from WS-
+BPEL4People to GSPN), and this way analyzing and classifying performance con-
+straints on WS-BPEL4People.
+References
+Holanda, Henrique Jorge A., Barroso, Giovanni Cordeiro, Serra, Antonio de Barros
+(2009) “Performance Analysis of Service Oriented Software“,  In: iSys - Revista
+Brasileira de Sistemas de  Informação, Volume II, ISSN eletrônico 1984-2902,
+2009.
+Henrique J. Holanda, G. Barroso and Antonio de B. Serra, “SOASPE: a Framework for
+the Performance Analysis of Service Oriented Software”, SBSI, pp.204-215, May
+2009, Brasilia.
+Dyer, S., Martin, J. and Zulauf, J. (2005) “Motion Capture White Paper”,
+http://reality.sgi.com/employees/jam_sb/mocap/MoCapWP_v2.0.html, December.
+Martin Vasko, VieBOP: Extending BPEL Engines with BPEL4People, 16th Euromicro
+Conference on Parallel, Distributed and Network-Based Processing Ta’id Holmes,
+Schahram Dustdar Distributed Systems Group, Institute of Information Systems
+Vienna University of Technology, 2007,Vienna, Austria.
+A. Agrawal, M. Amend, M. Das, M. Ford, C. Keller, M. Kloppmannand, D. Konig, F.
+Leymann,  R.  Muller,  G.  Pfau,  K.  Plosser,  R.  Rangaswamy,  A.  Rickayzen,  M.
+Rowley, P. Schmidt, I. Trickovic, A. Yiu, and M. Zeller, “Web Services Human Task
+(WS-HumanTask) “, 1st ed., Jun 2007.
+E. Bertino, J. Crampton, and F. Paci. “Access control andauthorization constraints for
+WS-BPEL“. In ICWS 2006.
+X. Zhao, A. Cerone, and P. Krishnan. “Verifying BPEL workflows under authorisation
+constraints“. In Proc. of BPM’06, volume 4102 of LNCS. Springer.
+PE group (2006) . “GreatSPN User’s Manual (version 2.0.2) “. University of Torino,
+Italy. http://www.di.whito.it/greatspn
+X. Fu, T. Bultan, and J. Su, “Analysis of interacting BPEL web services,” in Thirteenth
+International World Wide Web Conference Proceedings, WWW2004, May 2004, pp.
+621-630.
+D. Bianculli, C. Ghezzi, and P. Spoletini, “A model checking approach to verify
+BPEL4WS workflows,” in IEEE International Conference on Service-
+OrientedComputing and Applications, 2007, pp. 13-20.
+
+
+
+
+

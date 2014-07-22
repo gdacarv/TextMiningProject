@@ -1,0 +1,416 @@
+﻿Sistema de Previsão de Desempenho de Alunos para
+Auxilio a Aprendizagem e Avaliação de Disciplinas
+Rodrigo Filev Maia1, Eduardo Martins Spina2, Selma Shin Shimizu2
+1
+Departamento de Ciência da Computação   - Centro Universitário da FEI (FEI)- São
+Bernardo do Campo - SP - Brasil
+2Departamento de Computação e Sistemas Digitais
+Escola Politécnica da Universidade de São Paulo (EPUSP) - São Paulo, SP - Brasil
+rfilev@fei.edu.br,  {eduardo.spina,  selma.shimizu}@poli.usp.br
+Abstract. The current work presents software capable of simulating the results
+obtained by students enrolled in an undergraduate course through the results
+obtained previously in other subjects of the course. The students and subjects
+were modelled as nodes and links in a graph and the growing models used in
+complex networks simulations were applied. The created graph  represents
+similarity indexes between the students. The growing models were capable of
+predicting the evolution of the graph and, consequently, the grades obtained
+by  the  students  to  some  precision.  The  results  obtained  brought  a  good
+precision in the simulated grades, and they also made a discussion about the
+students and the course characteristics possible.
+Resumo. O presente trabalho apresenta um software capaz de simular os
+desempenhos  a  serem  obtidos  por  alunos  matriculados  em  um  curso  de
+graduação a partir de seus resultados passados nas disciplinas do curso. Os
+alunos e a disciplinas foram modelados como nós e arestas de grafos e os
+modelos de crescimento destes baseiam-se em simulações de redes complexas.
+O grafo criado representa índices de similaridade entre os alunos. A partir
+destas relações de similaridade,os modelos de crescimento foram capazes de
+prever  a  evolução  do  grafo  e,  conseqüentemente,  as  notas  obtidas  pelos
+alunos.Os resultados obtidos trouxeram uma boa precisão nas notas simulada
+e possibilitaram discussões sobre características do curso e seus alunos.
+1. Introdução
+Perrenoud  (2001)  aponta  em  seu  trabalho  uma  série  de  competências  consideradas
+cruciais para os educadores. Dentre elas, são colocados itens como: conceber e fazer
+com  que  os  dispositivos  de  diferenciação  evoluam,  elaborar  mecanismos  para  a
+progressão das aprendizagens, trabalhar em equipe, organizar e estimular situações de
+aprendizagem.  Este  trabalho  tem  como  foco  o  provimento  de  uma  ferramenta  que
+permita ao professor acompanhar os estudantes de forma diferenciada, de tal forma a
+apresentar relações entre o desempenho acadêmico e as disciplinas cursadas durante a
+graduação.
+O desenvolvimento dos itens como os propostos por Perrenoud  (2002) deve
+acarretar uma melhoria do ensino e sucesso na educação. Entre os índices de melhoria,
+
+
+
+
+encontra-se o índice de evasão de alunos, que deve ser diretamente melhorado com um
+acompanhamento individual e diferenciado, um dos itens propostos. A evasão pode ser
+diagnosticada como a desmotivação oriunda da dificuldade em acompanhar o curso.
+Uma ferramenta que auxilie a criar correlações e aproximar o perfil do aluno com os
+perfis obtidos pela a análise proposta neste trabalho, pode tornar a realização de um
+diagnóstico  possível,  orientando um trabalho no sentido de sanar as  dificuldades e
+aumentar a motivação durante as atividades acadêmicas realizadas pelo estudante. Para
+a criação de tal ferramenta, parte-se da teoria dos grafos para construção de um modelo
+do curso contemplando figuras como o aluno, as disciplinas e as relações entre eles. Em
+seguida, modelos de crescimento de grafos são aplicados para que situações futuras
+possam  ser  previstas.  Uma  estimativa  de  desempenho  de  alunos  pode  auxiliar  o
+professor na personalização do ensino e focar as atenções em problemas previstos pela
+ferramenta. Assim sendo, a ferramenta visa trazer estas informações ao educador para
+que elas possam ser utilizadas tal que, de um lado, ele realize uma auto- avaliação de
+seu trabalho e, de outro, possa diferenciar alunos possivelmente com dificuldades mais
+severas para serem tratados de maneira mais individualizada.
+No contexto deste trabalho, o termo desempenho será considerado medido como
+a  nota  obtida  nas  disciplinas  cursadas.  A  definição  de  modelo,  segundo  Gilbert  e
+Troitzsch (2005), pode ser entendida como uma simplificação (menor, menos detalhado,
+menos complexo) de um sistema ou estrutura real. Ainda segundo Gilbert e Troitzsch
+(2005),  uma simulação é um  modelo de funcionamento de um sistema que possui
+entradas e saídas observadas durante a execução da simulação.
+2. Modelagem e Crescimento de Grafo
+Embora os modelos baseados na teoria dos grafos sejam amplamente utilizados, até
+poucos anos, pouco se falou de como se apresentam os grafos que modelam as redes
+reais  da  sociedade,  redes  que,  em  geral,  possuem  um  grau  de  complexidade
+relativamente alto, contando com muitos nós e arestas e possuindo caráter dinâmico
+[Barabási  2002]. A rede real, a sociedade, é tratada em diversos estudos, como, por
+exemplo, o realizado por Milgram (1967). Neste experimento, realizado na década de
+60, Milgram chegou à conclusão que a distância média entre duas pessoas era de 5,5
+pessoas. Este número, mais tarde foi arredondado para seis, gerando a expressão “six
+degrees  of  separation”,  gerando  a  falsa  idéia  de  que  duas  pessoas  aleatoriamente
+escolhidas no mundo estariam a “seis apertos de mão de distância”, mas evidenciando
+que as pessoas em uma sociedade qualquer mantêm um grau de relação que pode ser
+explorado.
+Para  o  estudo  formal  de  problemas  envolvendo  redes  complexas,  como  a
+sociedade, é necessário estimar a topologia destas redes e, para isto, é interessante a
+análise  de  como  elas  são  criadas.  Observando  redes  complexas,  principalmente  a
+Internet, Barabási (1999) observou que nelas havia espaço para existirem poucos nós
+com uma quantidade muito grande de arestas, mas que a grande maioria dos nós possuía
+poucas arestas. Tentando criar um modelo que se adequasse a esta observação, Barabási
+propôs o modelo livre de escala. A idéia por trás deste modelo é o princípio: “Rico fica
+mais Rico”. Assim sendo, um nó com mais conexões terá uma probabilidade maior de
+receber novas conexões do que um nó com poucas conexões. A partir da Figura 1, pode-
+se verificar que, neste modelo, cada vez mais os nós iniciais ficam mais conectados,
+
+
+
+
+tornando-se hubs. A relação entre o número de nós com n conexões em função de n,
+gera um gráfico exponencial decrescente do tipo                                             , onde γ é um parâmetro
+dependente da rede, mas que, em geral, é entre 2 e 3 (gráfico representado na figura 1).
+Passo: 1                                                                                    Passo: 2                  Passo: 3   1.2
+1
+0.8
+0.6
+Passo: 4                                                                                    Passo: 5
+0.4
+0.2
+0
+Novo Nó
+Figura 1 - Exemplo de gráfico exibindo o número de nós com n conexões para
+o modelo de escala livre
+Como visto na Figura  1, o modelo proposto por Barabási  (2002) beneficia os nós
+iniciais os quais tem uma chance muito elevada de se tornarem hubs.
+Além da relação entre links das páginas web este modelo ainda se mostra coerente com
+diferentes redes existentes [Barabási 2002], como, por exemplo, a rede de aeroportos
+com arestas representando vôos; a ligação entre os roteadores que formam a Internet ou
+as redes sociais.
+2.1 Modelo de Barabási com pesos - Adaptabilidade
+Apesar do modelo de escala livre representar bem a topologia de redes reais, como a
+Internet, ele não representa com fidelidade a dinâmica destas redes. Alguns pontos
+importantes não são contemplados neste modelo, como, por exemplo, a exclusão de nós
+ou arestas, ou até mesmo a re-alocação de arestas. Barabási reconhece estes problemas e
+propõe um modelo que se adéqua melhor à realidade [Barabási, 2002]. A proposta deste
+modelo é resolver problemas que existiam no modelo de escala livre de maneira que, na
+realidade, nem sempre são os nós mais antigos que se tornam hubs. O exemplo citado
+pelo próprio Barabási, continuando ainda na relação de páginas web e os links entre
+elas, é o Google.
+Seguindo o modelo de escala livre, não existe uma maneira de explicar como
+uma página mais nova, como o Google.com, adquiriu mais links que hubs que existiam
+antes dele. Na realidade, seguindo o modelo de escala livre, as maiores hubs da Internet
+seriam as primeiras páginas criadas, entretanto, hoje elas nem são conhecidas. Para
+resolver  este  problema,  Barabási  criou  o  conceito  de  adaptabilidade.  Neste  novo
+modelo, quando uma nova página surge, a probabilidade com que ela se conectará com
+outra página pré-existente é proporcional ao número de links que a página pré-existente
+possui, mas é multiplicada por um índice de adaptabilidade desta página. Desta forma,
+existe espaço para que uma página melhor adaptada, porém tardia, receba uma grande
+quantidade de links rapidamente, tornando-se um hub.  O modelo Livre de Escala com e
+sem o fator de adaptabilidade são matematicamente formalizados, diferentemente das
+observações feitas por Milgram (1967). Estes modelos criados mais tarde por Barabási
+foram baseados em observações de redes reais e trazem características destas redes na
+
+
+
+
+estrutura do modelo. Assim sendo, os modelos de Barabási, em geral apresentam uma
+maior semelhança com problemas reais.
+3. Modelo Proposto
+Para o desenvolvimento do sistema, foi necessária a idealização de um modelo que ligue
+os alunos e as disciplinas cursadas. O objetivo buscado nesta sessão é um modelo o
+mais simples possível que traga as informações relevantes para análise do problema.
+Para buscar um padrão no comportamento dos alunos, utiliza-se um modelo de grafo e
+pretende-se estudar o seu modo de crescimento, através da aplicação de modelos de
+redes complexas.  Durante a fase de captação de dados, foram recuperados os dados
+referentes às freqüências dos alunos, entretanto, esta informação não pareceu de grande
+serventia para o trabalho, pois os valores de freqüência variavam muito pouco. Desta
+maneira, somente os valores das notas dos alunos foram considerados. Entretanto, é
+importante notar que outras informações sobre os alunos (socioeconômicas, informações
+sobre o ensino médio cursado, entre outras) poderiam ter sido levadas  em conta e
+poderiam aumentar a precisão do método.
+3.1 Modelo Inicial
+No problema estudado, existem dois tipos principais de nó: as disciplinas e os alunos.
+Neste  trabalho,  são  utilizadas,  para  modelagem  das  relações  entre  os  elementos
+identificados, as informações facilmente obtidas através de bancos de dados da escola:
+as  notas.  A  partir  desta  idéia,  um  primeiro  modelo  de  grafo  foi  construído,  como
+representado na figura 2.
+D1                                                                                              w1   A2
+w3
+D2
+w2                                                                                              w4
+w5
+A1                                                                                              w6   D3
+Figura 2 - Grafo proposto
+Neste grafo, os quadrados representam os alunos (A1 e A2) e os círculos representando
+as disciplinas  (D1, D2 e D3). Uma aresta criada entre um aluno e uma  disciplina
+representa a informação de que o aluno cursou a disciplina. Arestas entre nós do mesmo
+tipo (alunos ou disciplinas) são proibidos neste modelo. Os pesos de cada aresta (wi) são
+interpretados como notas obtidas.
+3.1.1 Modelo de Faixa de Valores
+Um  problema  do  modelo  inicial  é  que  a  teoria  de  redes  complexas  estuda
+principalmente a criação de nós e arestas e, neste modelo, o que diferencia os alunos (e
+as disciplinas) não é a existência das arestas em si, mas sim os pesos que eles portam.
+Para transferir-se a informação contida nos pesos para a simples existência (ou não) das
+arestas, chega-se a um segundo modelo representado na figura 3.
+
+
+
+
+0,0 - 2,5                                                                                        2,5 - 5,0
+D1                                                                                          A2   D1          A2
+D2                                                                                               D2
+A1                                                                                          D3   A1          D3
+5,0 - 7,5                                                                                        7,5 - 10
+D1                                                                                          A2   D1          A2
+D2                                                                                               D2
+A1                                                                                          D3   A1          D3
+Figura 3 - Grafos resultantes da transferência de informação das arestas
+Neste modelo foi possível a eliminação dos pesos dividindo cada grafo em certo número
+de grafos. Assim, o primeiro grafo contém arestas entre alunos e disciplinas quando o
+aluno tiver uma nota entre 0,0 e 2,5, o segundo entre 2,5 e 5,0 e assim por diante.
+3.1.2 Modelo com um único tipo de nó
+O modelo de faixa de valores consegue agregar informações simplesmente pelo fato da
+existência ou não das arestas. Entretanto, ainda existem problemas que dificultam a sua
+utilização. O fato de existirem arestas proibidas (entre nós do mesmo tipo) e tipos de nó
+diferentes torna o modelo desnecessariamente complexo. Desta maneira, cada grafo
+deste modelo é transformado em dois outros grafos, um trazendo informações sobre as
+disciplinas e outro sobre os alunos. O resultado para a faixa de 5,0 a 7,5 é mostrado na
+figura 4.
+5,0 - 7,5
+D1                                                                                          A2
+D2
+                                                                                            1
+1
+D3                                                                                          A1
+Figura 4 - Grafo com um único tipo de nó
+A partir do modelo de faixa de valores, cria-se um grafo para as disciplinas onde as
+arestas representam que no modelo de faixa de valores existia um caminho entre elas
+passando por um aluno. Se o caminho é observado através de diferentes alunos, criam-
+se  duas  arestas.  Isto  pode  ser  alternativamente  interpretado  como  um  peso
+correspondente  ao  número  de  alunos  que  possibilitam  o  caminho  entre  as  duas
+disciplinas. Esta mesma interpretação é realizada para os alunos, traçando arestas para
+alunos que possuíam notas semelhantes na mesma disciplina e, como anteriormente,
+adiciona-se o peso relativo à quantidade de disciplinas em comum. Neste modelo, as
+arestas (ou mais precisamente o peso delas) representam quanto um par de alunos ou um
+par de disciplinas são semelhantes do ponto de vista de notas.
+3.2 Combinações dos grafos e similaridade
+No modelo proposto no item anterior ainda é necessário extrair alguma informação
+simples  que  possa ser utilizada nos algoritmos de previsão que serão testados. No
+escopo deste trabalho, a análise entre as disciplinas foi descartada (devido à imprecisão
+
+
+
+
+atribuída pela instituição estudada) e somente a análise do ponto de vista do aluno foi
+feita, como anteriormente proposto. Desta maneira, o grafo que liga as disciplinas não
+foi  desenvolvido  além  deste  ponto.  Entretanto,  notam-se  as  grandes  similaridades
+existentes entre os dois grafos e, assim sendo, as informações tratadas sobre o grafo dos
+alunos poderiam, eventualmente, ser igualmente válidas para aquele das disciplinas.
+Então, os grafos a serem estudados a partir deste ponto são os que representam os alunos
+nas diferentes faixas de nota. Para que eles sejam transformados em um único grafo que
+traga uma única informação relevante ao estudo, propõe-se a seguinte manipulação:
+   Os pesos das arestas ligando dois alunos A e B em todos os grafos são somados;
+   Um novo grafo é formado de maneira que quaisquer nós A e B são ligados por
+uma aresta;
+   Neste novo grafo, é atribuído um peso, calculado pela divisão do valor da soma
+de  pesos  anteriormente  pela quantidade de disciplinas que ambos os alunos
+cursaram;
+Neste  grafo  final  obtido,  os  pesos  são  sempre  valores  no  intervalo  de            0  a   1
+correspondendo  à  porcentagem  das  disciplinas  em  que  os  alunos  tiveram  notas  na
+mesma faixa. Desta maneira, o valor dos pesos é considerado como uma medida de
+similaridade entre os alunos ligados pela aresta.
+3.3. Modelos Livre de Escala Local Restrito
+O modelo proposto considera que dois alunos muito semelhantes têm maior tendência
+de se tornarem mais semelhantes. Do ponto de vista do grafo, esta adaptação é vista em
+escala local e não global, ou seja, não depende diretamente da topologia geral do grafo,
+mas depende das ligações que o aluno simulado tem. Considerou-se neste modelo de
+crescimento que ao invés de todos os nós do grafo serem utilizados na média ponderada
+executada, apenas os nós com maiores coeficientes foram considerados. Assim sendo, a
+fórmula resultante é representada por:
+R
+                                                                                                                                  c   (   a   ,   i   )       N           (   i   ,   d   )
+N                                                                                                  (   a   ,   d   )         0
+                                                                                            s                                          R
+                                                                                                                                              c       (   a       ,   i   )
+                                                                                                                                          0
+Figura 5 - Grafo com um único tipo de nó
+Onde:
+Ns (i,j) é a nota simulada do aluno i, na disciplina j;
+N(i,j) é a nota real do aluno i, na disciplina j (para todos que cursaram j);
+c(i,j) é o coeficiente de semelhança entre o aluno i e o aluno j;
+R é o total de alunos considerados (aqueles com maior coeficiente c).
+A interpretação deste modelo do ponto de vista de Barabási (2002) é que as hubs do
+modelo livre de escala exercem grande influência sobre o nó em questão, de maneira
+que os outros nós, com coeficiente de similaridade (representado pela força da ligação)
+muito menor, podem ser desprezados.
+
+
+
+
+4.Análise dos Resultados
+A análise do Banco de Dados de alunos de um curso de graduação em engenharia da
+computação permitiu a criação do grafo segundo a modelagem proposta para os alunos e
+relação entre eles. Inicialmente a idéia do trabalho era também incluir uma clusterização
+dos alunos em grupos semelhantes. Entretanto, a partir do grafo obtido, percebeu-se que
+esta clusterização seria complicada, pois a topografia observada da inter-relação entre os
+estudantes  não  era  simples.  Como  o  grafo  obtido  possuía  arestas  com  pesos  que
+carregavam  informações  relevantes  das  ligações  entre  os  alunos                         (um  índice  de
+similaridade), para análise do grafo do ponto de vista de Barabási (2002), foram feitas
+algumas considerações. Do ponto de vista de Barabási, as arestas não possuem pesos.
+Para que o grafo obtido pudesse ser analisado desta forma, foram consideradas somente
+as arestas com índice superior a  80%, ou seja, as arestas menos importantes, foram
+eliminadas.
+Figura 6 - Grafo obtido pela aplicação do modelo proposto
+Ao mesmo tempo em que muitos nós se mostraram sem ligações, alguns nós foram
+evidenciados  com  um  número  bastante  expressivo  de  ligações                             (as  quatro  hubs
+representadas no grafo possuem um número de ligações superior a 12). Se analisar a
+quantidade de arestas que cada nó possui, como propõe Barabási  (2002), obtém-se o
+gráfico da Figura 7, que mostra a quantidade de nós em função da quantidade de arestas
+que elas possuem.
+Figura 7 - Número de nós por quantidade de arestas
+Este  gráfico  evidencia  o  caráter  do  modelo  Livre  de  Escala  do  problema  se
+assemelhando bastante com os gráficos típicos deste modelo. Desta maneira, justifica-se
+a  escolha  de  utilizar  modelos  baseados  nas  idéias  do  modelo  de  Barabási  (2002).
+Entretanto, se ao invés de serem consideradas apenas as arestas com mais de 80% de
+
+
+
+
+coeficiente, todas as arestas forem consideradas e, ao invés de manter-se o valor de 1
+por aresta atribuir-se o peso da aresta, o mesmo gráfico mostra um comportamento
+diferente (figura 8).
+Figura 8 - Número de nós por soma dos coeficientes das arestas
+O gráfico da figura 8 possui um comportamento muito diferente do anterior. Na
+realidade,  ele  se  assemelha  muito  mais  aos  gráficos  típicos  de  problemas  com
+características de variáveis aleatórias. Dependendo dos parâmetros escolhidos, percebe-
+se que o caráter do modelo livre de escala do problema não é absoluto e, portanto, deve
+ser utilizado com cautela durante as simulações. A adequação do modelo de escala livre
+restrita mostra que parece existir uma ligação preferencial no problema, pois claramente
+os alunos mais semelhantes possuem uma influência maior na nota simulada, mostrando
+a preferência da aresta ser criada ligando estes nós. No entanto, há uma dependência do
+parâmetro que determina a quantidade de alunos considerados na simulação. O resultado
+observado na simulação mostrou que o modelo é mais efetivo quando são considerados
+cerca de 10% dos alunos da base no cálculo da média, no caso, oito em uma base de 94
+alunos  (8,5% da base). Na figura  9, são mostrados os erros médios observados nos
+modelos estudados, incluindo diferentes parâmetros de número de nós considerados no
+modelo Livre de Escala Local Restrito.
+Figura 9 - Erro médio por simulação
+Na  realidade,  as  redes  propostas  por  Barabási                                              (2002)   possuem  outra
+característica que é igualmente importante para a criação de um grafo com a topologia
+exponencial típica: eles trazem uma seqüência de criação dos nós. Nos grafos típicos de
+redes complexas livres de escala, existem os nós que são criados inicialmente e que se
+tornam hubs por serem os nós mais antigos. No caso do problema estudado, o grafo
+modelado não possui a noção de seqüência, pois todos os nós são comparados e ligados
+com todos os outros ao mesmo tempo. Isso ocorre porque um aluno formado em um ano
+posterior que entra no grafo poderá se ligar com todos os outros nós, eliminando a
+relação  temporal.  Esta  diferença  pode  ser  a  causa  de,  apesar  de  existir  a  ligação
+
+
+
+
+preferencial, não serem observados gráficos de problemas livres de escala estudados em
+redes complexas. Ao truncar os valores dos coeficientes de similaridade de forma que
+todos os valores acima de 0,8 serem considerados como valor unitário e todas as outras
+arestas desconsideradas, obtém um grafo típico do modelo livre de escala.
+4.1 Resultado do ponto de vista das disciplinas
+Do ponto de vista das disciplinas, existe uma grande variação nos valores médios dos
+erros observados (variando de 3,6% a 100%). Entretanto, percebe-se que as disciplinas
+com valores de erro médio elevados foram observadas para situações com problemas
+pontuais que introduziram um erro elevado. Na realidade, tanto as disciplinas com erros
+muito  pequenos  quanto  as  disciplinas  com  erros  elevados                                 (com  erros  pontuais
+eliminados) podem ter problemas na atribuição das notas. Erros muito pequenos podem
+ter  sido  inseridos  por  uma  pequena  variação  nas  notas  atribuídas.  Se,  para  uma
+disciplina, todos os alunos tirassem a mesma nota sempre, não haveria problemas de
+previsão (a mesma nota seria facilmente prevista), de forma que o erro se aproxime do
+zero. Entretanto, do ponto de vista de avaliação, atribuir sempre a mesma nota a todos
+os alunos parece inadequado.
+Por outro lado, da maneira como são construídos os modelos, exceto os erros
+pontuais, um erro médio grande para uma dada disciplina deve significar que ela não
+possui  grande  relação  com  as  outras  disciplinas  do  currículo  ou  que  a  avaliação
+apresenta algum grau de discrepância com os resultados obtidos em outras disciplinas.
+4.2 Resultado do ponto de vista dos alunos
+Do ponto de vista de alunos percebe-se que há certa variação entre os erros obtidos nas
+simulações;  entretanto,  ao  se  considerar  as  razões  para  esta  variação,  chega-se  à
+conclusão de que ela não é tão elevada. O gráfico da figura 10 mostra os erros obtidos
+para  os  oito  alunos  simulados                                                              (os  alunos  são  identificados  por  seus  números  de
+identificação no sistema, de 94 a 101).
+Figura 10 - Erro médio encontrado por aluno simulado
+Os três primeiros eram alunos selecionados aleatoriamente entre as turmas que já
+faziam parte do banco de dados de alunos, os outros cinco são alunos que, no momento
+da redação deste documento, se encontram no quinto ano do curso e que não fazem
+parte das turmas presentes no banco de dados. Em uma análise inicial, imaginar-se-ia
+que os três primeiros alunos simulados deveriam ter uma taxa de erro menor. Seria
+natural, pois estes alunos fizeram os mesmos oferecimentos das disciplinas, resolveram
+as mesmas provas, com os mesmos professores que os alunos no banco de dados.
+Entretanto, analisando o gráfico obtido, nota-se que isto não ocorre. Os três primeiros
+alunos simulados apresentam erros na mesma faixa que os cinco demais. Esta é uma
+
+
+
+
+informação importante para o sistema, pois em uma utilização real, o caso seria mais
+próximo  aos  últimos  cinco  alunos  do  que  aos  primeiros  (já que  se  deseja  simular
+eventos que ainda não ocorreram). O fato de que o erro não varia significativamente, se
+considerarem alunos que cursam as disciplinas em anos subseqüentes, mostra que não
+há uma grande variação entre os oferecimentos das disciplinas em anos consecutivos.
+5. Considerações Finais
+O  trabalho  elaborou  quatro  modelos  que  foram  analisados  e  testados,  trazendo
+resultados interessantes em sua análise. O modelo com melhor resultado, o Livre de
+Escala  Local  Restrito,  mostrou  erros  na  faixa  de                                       10%  para  a  maior  parte  dos
+casos,obtendo uma média na faixa de  14% considerando os casos de erros pontuais.
+Acredita-se que este trabalho possa ser utilizado em instituições de ensino para prever
+problemas e ajudar a instituição a prover um ensino mais personalizado e de maior
+qualidade, segundo os conceitos apresentados por Perrenoud  (2002). Além  disso, o
+sistema criado pode prover certa medida de dedicação de um aluno em uma disciplina,
+pois, se o aluno excede consideravelmente a nota prevista, provavelmente, houve uma
+dedicação mais especial à disciplina.
+Durante  o  trabalho,  observou-se  também  as  limitações  do  modelo  ao  tentar
+prever um resultado complexo e dependente de muitas variáveis, através de um modelo
+relativamente  simples.  Em  casos  de  erros  de  maior  valor,  mostrou-se  que  alguns
+parâmetros, que não estavam contemplados no escopo do projeto, podem inserir uma
+grande variação nos resultados, mas que na maior parte dos casos, estes parâmetros
+podem ser ignorados para um erro razoavelmente pequeno na simulação.
+Por fim, apesar de não fazerem parte do escopo principal deste trabalho, algumas
+considerações foram feitas a respeito das disciplinas do curso, mostrando que o sistema
+desenvolvido pode ajudar a avaliar um curso superior, mostrando as características
+individuais e também as relações entre as disciplinas.
+Referências
+Perrenoud P.  (2001) Dez novas competências para uma nova profissão. Faculté de
+psychologie et des sciences de l’éducation. Université de Genève.
+Perrenoud,  P.  (2002)  Os  sistemas  educativos  face  às  desigualdades  e  ao  insucesso
+escolar: uma incapacidade mesclada de cansaço. Faculté de psychologie et des sciences
+de l’éducation. Université de Genève.
+Gilbert, N; Troitzch (2005) K. Simulation for the Social Scientist.
+Barabási, A.L. Linked (2002)- How Everything is Connected to Everything Else and
+What It Means for Business, Science and Everyday Life,.
+Milgram, S. (1967) The small world problem. Psychology Today 2, 60--70.
+
+
+
+
+

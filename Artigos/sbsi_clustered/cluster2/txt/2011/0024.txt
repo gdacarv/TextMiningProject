@@ -1,0 +1,476 @@
+﻿VII Simpósio Brasileiro de Sistemas de Informação
+Uma Abordagem de Integraç ão de Simulaç ão Baseada em
+Agentes e Mineraç ão de Processos
+Fernando Szimanski1, Célia G. Ralha1, Ricardo P. Jacobi1
+1Departamento de Ciência da Computação - Universidade de Brasília (UnB)
+Caixa Postal 4466 - 70.919-970 - Brasília - DF - Brasil
+fszimanski@gmail.com,  {ghedini,rjacobi}@cic.unb.br
+Abstract. The agent-based software simulation is able to promote the specifica-
+tion and the process behavior verification, having been applied in several areas
+such as Biology, Engineering, Economics and Social Sciences.  On the other
+hand, mining process provides the discovery of processes through automated
+systems event logs.  In this paper, we propose a study integration of these two
+different approaches, which present an interesting potential for being comple-
+mentary and allowing the improvement of processes in the organizational set-
+ting. At first, the two approaches can be properly integrated with focus on event
+handling. One possible way to of integration is to model the process preliminary
+and submit it with the simulation agents, and the events generated may be used
+to redefine the process model using several mining techniques. Through the sug-
+gested integration it will be possible to verify the existence of convergence in the
+process of defining and redefining organizational business processes.
+Resumo. A simulaç ão baseada em agentes de software é capaz de promover
+a especificaç ão e verificaç ão do comportamento de processos, tendo sido apli-
+cada nas mais diversas áreas, como Biologia, Engenharias, Economia e Socio-
+logia. Por outro lado, a mineraç ão de processos proporciona a descoberta dos
+processos através de logs de eventos de sistemas automatizados. Neste traba-
+lho, é proposto um estudo de integraç ão destas duas diferentes abordagens, as
+quais apresentam um potencial interessante por serem complementares e per-
+mitirem a melhoria de processos no cen ário organizacional.  A princípio, as
+duas abordagens podem ser adequadamente integradas com foco no tratamento
+de eventos. Uma possibilidade de integraç ão é modelar preliminarmente o pro-
+cesso e submetê-lo a simulaç ão com agentes, sendo que os eventos gerados
+poder ão ser utilizados para redefinir o modelo de processo utilizando diversas
+técnicas de mineraç ão. Através de modelos de integraç ão das duas abordagens
+ser á possível verificar a existência de convergência no processo de definiç ão e
+redescoberta de processos de neg ócio das organizaç ões.
+1.                                                                                              Introduç ão
+Como  é  o  caso  de  diversas  empresas  na  sociedade  moderna,  olhar  para  os              pro-
+cessos  nas  organizaç ões  globalizadas                                                        é  importante  para  facilitar  a  busca  dos   ob-
+jetivos  principais  da  organização  de  forma  mais  eficiente,  proporcionar  resposta
+mais  rápida  aos  clientes,  promover  a  utilização  mais  eficaz  dos  recursos  e  melho-
+rar a qualidade do trabalho [Georgakopoulos et al. 1995],  [Eriksson and Penker 2000],
+[Laguna and Marklund 2004].
+238
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Neste sentido, a análise cuidadosa da descrição de processos pode ajudar o exe-
+cutor de cada atividade a conhecer melhor seu trabalho e proporcionar a interação com
+outro executor de forma mais eficaz. Gestores podem utilizar a descrição dos processos
+para identificar gargalos, ineficiências, defeitos no processo e problemas na coordenação.
+Enfrentar estes problemas melhorando os processos que foram definidos, pode levar a
+organização a alcançar seus objetivos e também formar uma base para automaç ões em
+potencial e troca de e-Business por meio de sistemas de TI.
+A literatura pertinente a esta temática aponta como definiç ões clássicas que pro-
+cessos de neg ócio são uma estrutura, conjunto de atividades medidas especificamente
+para produzir uma saída com valor para o cliente ou mercado. Isso implica em uma forte
+ênfase sobre a forma como o trabalho é realizado dentro de uma organização, em con-
+traste a ênfase ao foco no produto, ou seja, um processo é uma determinada ordem de
+trabalhos durante um tempo e espaço, com um início e fim, e definição clara de entradas
+e saídas [Davenport 1993],[Hammer and Champy 2003].
+Levando em consideração que uma das melhores formas de gerar mais lucros
+para uma empresa é reduzir os custos do neg ócio, empresas vem gastando milh ões na
+construção de processos de neg ócio complexos para infra-estrutura já existentes através da
+integração de aplicaç ões heterogêneas. Neste sentido, a Business Process Modeling Initi-
+ative (BPMI) desenvolveu a norma padrão Business Process Modeling Notation (BPMN)
+[OMG 2008]. A BPMN tem como principal objetivo fornecer uma notação que seja fa-
+cilmente compreensível tanto por usuários do neg ócio como para analistas, que criam
+modelos iniciais dos processos, desenvolvedores técnicos que através do uso da tecnolo-
+gia são responsáveis por executar os processos e, finalmente, para pessoas de neg ócio que
+irão gerir esses processos.
+A simulação e o processamento de eventos são cada vez mais importantes na área
+de Business Process Modeling (BPM), comprovados pela crescente atenção em complex
+event processing (CEP) conforme citado em [Barros et al. 2007], [Eckert and Bry 2009].
+Baseado neste contexto, este artigo apresenta um estudo de integração de duas
+diferentes abordagens: simulação baseada em agentes e mineração de processos; as quais
+apresentam um potencial interessante por terem características complementares e per-
+mitirem a melhoria de processos no cenário organizacional com foco no tratamento de
+eventos.
+O restante deste artigo está organizado da seguinte forma: a Seção 2 fornece uma
+visão geral envolvendo processos de neg ócio com simulação baseada em agentes discu-
+tindo o Framework Agent Object Relationship (AOR), um ambiente de simulação baseado
+em agentes capaz de gerar eventos de processos; a Seção 3 apresenta uma visão geral so-
+bre mineração de processos; na Seção 4 é apresentada abordagens de de integração dos
+modelos utilizando as literaturas relacionadas; e na Seção 5 apresentamos as conclus ões
+e trabalhos futuros.
+2. Simulaç ão Baseada em Agentes
+Visto que a BPMN provê o suporte para projetar um processo de neg ócio, mas não propor-
+ciona um processo de melhoria no modelo da aplicação, pois não fornece uma semântica
+formal de comportamento, que é importante na especificação e verificação do compor-
+tamento dos processos.  Na literatura encontramos abordagens tradicionais para tentar
+239
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+resolver este problema: redes de petri, cadeia de processos dirigida por eventos, redes de
+fluxo de trabalho (Workflow) e a abordagem de simulação baseada em agentes (Agent-
+Based Simulation - ABS) [Pascalau et al. 2009].
+Considerando a abordagem de agentes, um agente de software é capaz de assu-
+mir uma ação independente em nome de seu usuário ou proprietário [Wooldridge 2009].
+Neste contexto, pelo menos semanticamente, um sistema de software genérico, na forma
+de um sistema de gestão de processos de neg ócios pode ser de fato um Sistema Multi-
+Agente (SMA).
+Segundo [Wagner 2003], a ABS é um novo paradigma que tem sido aplicado em
+problemas de simulação para diversas áreas: Ciências Biol ógicas, Engenharias, Ciências
+Econ ômicas e Ciências Sociais. Em ABS um cenário de agentes que interagem uns com
+os outros e com seu ambiente, está sendo modelado e simulado, como um SMA. Os agen-
+tes participantes (seres humanos, instituiç ões sociais, sistemas de software ou máquinas)
+podem executar aç ões, perceber seu ambiente e reagir a mudanças nele.  Eles também
+têm um estado mental que inclui componentes como conhecimento / opini ões, objeti-
+vos, lembranças e compromissos. Comparado com os métodos tradicionais de simulação
+(equaç ões matemáticas, simulação de eventos discretos, aut ômatos celulares e teoria de
+jogos), a ABS é menos abstrata e mais pr óxima a realidade.
+O  cerne  desta  seção  está  baseado  na  literatura  apresentada  nos  trabalhos
+[Wagner 2003],  [Pascalau et al. 2009],  [Wagner 2009],  [Wagner and Diaconescu 2009]
+e  [Diaconescu and Wagner 2009].  A proposta destes trabalhos  é um framework para
+simulação  de  processos  baseada  em  agentes  denominado  Agent-Object-Relationship
+(AOR), o qual utiliza mapeamento de modelos utilizando a notação BPMN. O AOR será
+apresentado na Seção 2.1.
+2.1. Agent-Object-Relationship (AOR)
+O trabalho [Wagner 2003] prop õe o framework de simulação AOR, que se destina a ser
+usado como um ambiente de simulação de processos para ciência, engenharia, educação
+e entretenimento. A maior parte do framework é open-source, licenciado sob a General
+Public License (GPL), sendo baseado em XML AOR Simulation Language (AORSL),
+que é usado para expressar em alto nível declarativo modelos de simulação de cenários,
+independentemente da linguagem de programação.  Conforme citado pelo autor, com
+o uso de AORSL, o AOR  é o primeiro framework de simulação baseado em agentes
+cognitivos.
+O  simulador  AOR  pode  ser  implementado  em  diferentes  linguagens  de
+programação, mas deve estar em conformidade com a arquitetura e modelo de execução
+do AOR, conforme foi definido em [Wagner 2003].  O AORJavaSim,  é um programa
+standalone desktop, com interface gráfica baseada em Java com visualização em 2D que
+permite observar simulação de execução quando vis ões adequadas foram definidas.
+Um arquivo de cenário de simulação  é  expresso na linguagem de simulação
+AORSL e, em seguida, primeiro traduzido para c ódigo fonte em Java antes de ser compi-
+lado para Java Byte Code e executado, conforme indicado na Figura 1.
+Um modelo de simulação consiste em um modelo de espaço opcional, conjunto de
+tipos de entidades e conjunto de regras de ambiente. Já um tipo de agente é definido por
+240
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Figura 1. From AORSL to Java byte code [Wagner and Diaconescu 2009].
+meio de um conjunto objetivo de propriedades, um conjunto subjetivo de propriedades,
+um conjunto subjetivo de tipos de entidade e um conjunto de regras do agente, que define
+o comportamento reativo do agente em resposta aos eventos.
+O alto nível de categorias ontol ógicas de simulação do AOR são mensagens, even-
+tos e objetos, que incluem os agentes, os objetos físicos e agentes físicos, como mostrado
+na Figura 2.
+Figura 2. Upper-level ontological categories [Wagner and Diaconescu 2009].
+Tanto o comportamento do ambiente como o dos agentes são modelados com a
+ajuda de regras, apoiando assim a modelagem do comportamento de alto nível declarativo.
+O ambiente de regras é um conjunto de variáveis do tipo 5-tuple (EvtT, Var, Cond,
+UpdExpr, ResEvtExpr), onde:
+• EvtT : denota o tipo de evento que dispara a regra;
+• Var: é um conjunto de declaraç ões de variáveis;
+• Cond: é uma f órmula de condição l ógica para variáveis;
+• UpdExpr: especifica uma atualização do estado do ambiente;
+• ResEvtExpr: é uma lista de resultado de eventos.
+O AOR tem o suporte para a distinção entre fatos e opini ões, incluindo a auto-
+opinião  (opinião do agente sobre si mesmo).   A linguagem de consulta baseada em
+SPARQL [Diaconescu and Wagner 2009] é usada para expressar consultas que um agente
+pode solicitar a outro agente sobre suas opini ões.
+Portanto, a arquitetura do simulador AOR consiste em: um simulador de ambi-
+ente, que cria a percepção de eventos e passa aos simuladores de agentes interessados;
+um conjunto possivelmente vazio de simuladores de agentes, que processam quaisquer
+percepç ões dos eventos recebidos e, em resposta, criam eventos de ação que são passados
+de volta para o simulador de ambiente.
+Ao executar uma simulação, o AOR cria um log em formato XML como base
+para geração de relat órios e análise estatística.  Utilizando o log de eventos e a engine
+241
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+open source de gráficos OGRE 3D, pode-se visualizar uma estrutura de animação em 3D
+através da Web. Tais logs podem também servir de base para mineração de processos que
+utilizam estas informaç ões dos eventos gerados para redescobrir modelos de processos de
+neg ócio.
+3. Mineraç ão de Processos
+Segundo [van der Aalst et al. 2003], o objetivo da mineração de processos é redescobrir
+o modelo de processo a partir da execução do comportamento de instâncias de processo,
+assumindo que é possível registrar eventos das tarefas que são executadas e identificar a
+instância do processo que produziu cada evento .
+O registro das tarefas executadas pode ser obtido através de log de eventos gerados
+a partir do fluxo de trabalho de aplicaç ões, onde são registrados as seq üencias de eventos
+executados. Esta função pode se tornar difícil devido ao suporte limitado de aplicaç ões
+existentes, complicando a recuperação de dados neste formato [van der Aalst et al. 2003].
+O  conte údo  desta  seção  está  baseado  na  literatura  apresentada  nos  tra-
+balhos  [Veiga and Ferreira 2009],                                                             [Ferreira et al. 2007],   [Walicki and Ferreira 2010]  e
+[Ferreira and Gillblad 2009].  Os trabalhos descrevem técnicas de mineração em log de
+eventos produzidos em instâncias de processos para descoberta de padr ões.
+3.1. Processos Estruturados
+Processos estruturados facilitam a identificação da tarefa que foi executada, pois as ati-
+vidades contidas no processo são rotuladas para que os logs dos eventos gerados sejam
+registrados com seq üencias de entradas rotuladas das instâncias do processo, conforme
+visto no processo de suporte técnico ilustrado na Figura 3
+Figura 3. Processo de Suporte t ´ecnico [Ferreira and Gillblad 2009].
+Segundo [Ferreira and Gillblad 2009] para facilitar a consulta, as atividades do
+fluxo de trabalho são rotuladas e na conclusão de cada atividade, um registro no log de
+242
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+eventos é incrementado com o símbolo correspondente ao seu r ótulo. Cada instância do
+processo vai gerar um registro, sendo que várias instâncias do processo podem ser inter-
+calados, pois, a qualquer momento, pode haver um n úmero de processos em execução
+simultaneamente de forma concorrente. A Figura 4 apresenta um arquivo de log de even-
+tos com 20 instâncias que foram registradas na execução do processo de suporte técnico,
+onde cada letra representa uma tarefa no processo (variando de A a F).
+Figura 4. Arquivo de log de eventos [Ferreira and Gillblad 2009].
+Como a seq ü ência de símbolos e a seq ü ência de origem são conhecidos, então
+pode-se obter o equivalente a um log de eventos, possibilitando assim descobrir o modelo
+do processo utilizando técnicas já existentes de mineração de processos.
+Para estimativas do modelo de processo a ser definido em uma organização, a par-
+tir das seq üencias geradas, pode-se utilizar uma abordagem probabilística com base nos
+modelos matemáticos da cadeia de Markov de primeira ordem, definindo uma matriz que
+apresenta as probabilidades condicionais para a transição entre as atividades do processo.
+Com  o  objetivo  de  estimar  processos  de  eventos,  outras  abordagens  para
+mineração também podem ser utilizadas para processos com atividades rotuladas, tais
+como α-algorithm [van der Aalst et al. 2004], heuristics miner [Weijters et al. 2006], ge-
+netic miner [Medeiros et al. 2007] e fuzzy miner [G ünther and van der Aalst 2007]. Em
+geral, todas estas técnicas exigem um log de eventos rotulados, conforme visto no trabalho
+de [Ferreira and Gillblad 2009].
+3.2. Processos N ão Estruturados
+O objetivo do processo de mineração  é descobrir os modelos de processo de logs de
+eventos, onde cada evento é conhecido por ter sido produzido por uma instância de um
+determinado processo. No entanto, para processos não estruturados com eventos que não
+243
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+são rotulados, as técnicas de mineração de processos existentes geram modelos altamente
+complexos que muitas vezes são difíceis de entender.
+Em aplicaç ões reais, com eventos rotulados, também pode-se encontrar grande
+quantidade de ruído e variação de comportamento em log de eventos, estes são chamados
+de spaghetti models, tais variaç ões tentou-se capturar com algoritmos de clustering no
+trabalho de [Veiga and Ferreira 2009].
+Técnicas de clusterização tem sido investigadas como um meio para lidar com a
+complexidade de spaghetti models, dividindo os casos em clusters, levando a modelos
+menos confusos. Esta abordagem foi implementada no ProM [van Dongen et al. 2005],
+que é um framework extensível para mineração processos que inclui muitas técnicas para
+enfrentar os desafios nesta área.
+Uma abordagem para mineração por clusterização já foi implementada no ProM, é
+conhecida como Disjunctive Workflow Schema (DWS). De acordo com esta metodologia,
+um log completo é examinado e um modelo é gerado utilizando HeuristicsMiner.  Se o
+modelo gerado é o melhor e sem nenhum excesso de generalização a mineração é encer-
+rada, caso contrário o registro é dividido em clusters utilizando o método de clusterização
+K-means.
+Trace clustering [Song et al. 2008] é outra técnica implementada no ProM, que
+tem como objetivo particionar o log agrupando por seq ü ências semelhantes.  Esta abor-
+dagem faz o uso de distance-based clustering com perfis, com a finalidade de reduzir a
+diversidade e a complexidade dos modelos através do baixo n úmero de casos analisados
+ao mesmo tempo.
+O campo da bioinformática tem sido a  área onde se encontra a maioria das
+implementaç ões de algoritmos de clusterização de seq ü ência, mas diversas pesquisas com
+este tipo de algoritmo têm sido realizada em outras áreas, como a análise de padr ões de
+navegação em um site, onde estes padr ões consistem na clusterização baseada nos ca-
+minhos de navegação em comum de usuários de um site. A clusterização de seq üencias
+também foi usada no campo de mineração de processos, onde pode-se observar um expe-
+rimento utilizando o log de eventos coletados manualmente nas atividades de uma equipe
+de desenvolvimento de software com o objetivo de descobrir a interação entre os mem-
+bros da equipe; e também outro experimento realizado através da mineração de rotinas
+comuns em um sistema de banco de dados.
+Embora o algoritmo de clusterização de seq üencias que foi descrito anteriormente
+seja robusto a interferências, todas as seq üencias devem ser atribuídas a um cluster. Caso
+uma seq üencia seja muito incomum e diferente de todas as outras, ela irá afetar o modelo
+probabilístico dificultando ao final a interpretação do modelo do cluster. Para evitar este
+problema, o pré-processamento deve ser realizado para as seq üencias de entrada antes da
+aplicação de clusterização de seq üencias. O objetivo deste pré-processamento é limpar o
+conjunto de eventos eliminando assim seq üencias indesejáveis, i.e, que raramente ocor-
+rem. Spaguetti models são muitas vezes repletos de eventos obscuros que s ó contribuem
+negativamente para a descoberta do modelo de processo.
+As etapas do pré-processamento são implementadas baseadas nas seguintes ca-
+racterísticas: tipo do evento; eventos de apoio; repetiç ões consecutivas; comprimento da
+seq üencia; seq üencias de apoio. Sendo que a ordem de aplicação destas etapas não podem
+244
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+ser alteradas, senão pode-se obter resultados diferentes.
+As  etapas  anteriores  de  pré-processamento  e  o  algoritmo  de  clustering  de
+seq ü ências foram implementadas e estão disponíveis como um novo plug-in para o fra-
+mework de processos de mineração ProM. A Figura 5 ilustra as entradas e saídas para
+este plug-in.
+Figura                                                                                     5.   ao  de  seq ¨uencias  do  framework  ProM
+[Veiga and Ferreira 2009].
+Levando em consideração que processos no mundo real geralmente envolvem uma
+significativa quantidade de comportamentos não estruturados e ad-hoc (Spaguetti models),
+técnicas de pré-processamento baseado no algoritmo de clusterização de seq üencias tem
+sido utilizada para resolver este problema, pois é uma técnica muito útil para descobrir
+padr ões de comportamento e visualizá-los.  Não obstante, os resultados do clustering
+de seq ü ências ainda vem sendo pesquisados para a comparação com outros métodos de
+clusterização.
+4. Abordagem de Integraç ão Proposta
+Para melhorar o ciclo evolutivo dos processos de uma organização, A partir dos eventos
+gerados através de simulação baseada em agentes serão desenvolvidas técnicas apropria-
+das de mineração que sejam capazes de analisar e construir novos modelos de processos.
+Considerando que a abordagem do framework de simulação AOR gera um log
+de eventos em formato Extensible Markup Language (XML), conforme apresentado na
+Figura 6, o mesmo pode servir como fonte de eventos como base para a mineração de
+processos.
+A proposta então considera realizar uma transformação eXtensible Stylesheet Lan-
+guage for Transformation (XSLT) no Log de eventos gerados pelo simulador AOR para
+245
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Figura 6. Exemplo do Log de eventos gerado pelo framework AOR.
+possibilitar o pré-processamento do log transformando-o em estruturas de dados adequa-
+das para aplicação de técnicas de mineração de processos, para descoberta e redefinição
+de processos. A Figura 7 ilustra a estratégia a ser utilizada para evolução dos processos.
+¸ ˜ao dos processos.
+Além das técnicas apresentadas na Seção 3, outras técnicas de mineração podem
+ser formuladas como hip óteses de trabalho no sentido de resolver os problemas anterior-
+mente citados. Neste contexto, sugere-se também utilizar CEP - que é uma técnica que
+objetiva analisar uma série de dados em tempo real e com base nisso, identificar padr ões
+e gerar eventos que podem ser tratados.
+Tais abordagens podem ser utilizadas para mineração tanto em log de eventos,
+como em registros em banco de dados, banco de conhecimento, documentação de siste-
+246
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+mas, especificação de requisitos entre outras fontes de informaç ões capazes de proporci-
+onar a registros de eventos de processos.
+A simulação baseada em agentes pode proporcionar a geração das informaç ões
+sem que empresas necessitem coletar as informaç ões que serão a base para a mineração
+em ambientes de produção,  podendo assim simular execuç ões de processos gerados
+através da integração entre os conceitos mencionados.
+5. Conclus ão
+Este trabalho apresentou uma revisão de abordagens de modelos de processos de neg ócio
+e de técnicas de simulação baseada em agentes e mineração de processos.
+Como técnicas que provêm suporte para projetar processos de neg ócio não for-
+necem uma semântica formal de comportamento, a utilização de técnicas de simulação
+baseada em agentes, através do uso do simulador AOR, pode ser uma abordagem interes-
+sante para proporcionar um processo de melhoria no modelo de aplicação, ainda mais se
+integrado a técnicas de mineração de processos.
+A mineração de processos através de diversas abordagens, tais como a abordagem
+probabilística com base nos modelos matemáticos da cadeia de Markov de primeira or-
+dem, α-algorithm, heuristics miner, genetic miner, fuzzy miner e clusterização de seq üen-
+cias, demonstrou que é possível redescobrir o modelo de processo a partir da execução de
+instâncias de processo registradas em log de eventos.
+Para as hip óteses de trabalho dos problemas apresentados, foi proposta a utilização
+do AOR como fonte de eventos para a mineração, i.e, cria-se o modelo de processo no
+AOR, realiza-se a simulação e depois são desenvolvidas técnicas que sejam capazes de
+analisar esses eventos e redefinir o modelo de processo.  Como neste caso já existe um
+modelo de partida, e o AOR possibilita a geração dos eventos, o objetivo é desenvolver
+técnicas de mineração apropriadas apropriadas e utilizar o modelo conhecido de partida
+para validação das técnicas utilizadas.
+Entendemos que uma abordagem integrada de simulação baseada em agentes com
+mineração de processos possibilite verificar a existência de convergência no processo de
+definição e redescoberta de processos de neg ócio nas organizaç ões. Os processos resul-
+tantes poderão auxiliar na busca dos objetivos principais da organização de forma mais
+eficiente, proporcionando respostas mais rápidas aos clientes, promovendo a utilização
+mais eficaz dos recursos e a conseq üente melhoria na qualidade do trabalho.
+Como trabalho futuros, utilizando a combinação de implementação destas abor-
+dagens, pode-se propor estratégias de melhorias em processos de software que utilizam
+modelos e padr ões de qualidade de software, (e.g, Capability Maturity Model Integration
+- CMMI [CMMI Product Team, Software Engineering Institute 2006], Internacional Or-
+ganization for Standardization - ISO Standards, entre outros) como guia na definição de
+seus processos.
+Ainda como trabalho futuro podemos citar o estudo mais aprofundado da proposta
+de integração de simulação baseada em agentes com diferentes técnicas de mineração de
+processos, realizando um estudo de caso real de um modelo de processo organizacional
+para auxilio na redescoberta dos processos.
+247
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Referências
+Barros, A., Decker, G., and Grosskopf, A. (2007). Complex events in business processes.
+Business Information Systems, pages 29-40.
+CMMI Product Team, Software Engineering Institute (2006).  CMMI for Development
+v1.2. Carnegie Mellon University.
+Davenport, T. H. (1993). Process Innovation - Reengineering Work through Information
+Technology. Harvard Business School Press.
+Diaconescu, I. M. and Wagner, G. (2009).  Agent-based simulations with beliefs and
+sparql-based ask-reply communication. In di Tosto, G. and Parunak, H. V. D., editors,
+MABS, volume 5683 of Lecture Notes in Computer Science, pages 86-97. Springer.
+Eckert, M. and Bry, F. (2009).  Complex event processing (cep).  Informatik-Spektrum,
+32(2):163-167.
+Eriksson, H. E. and Penker, M. (2000). Business Modeling With UML: Business Patterns
+at Work. Wiley, 1 edition.
+Ferreira, D. R. and Gillblad, D. (2009). Discovering process models from unlabelled event
+logs. In Dayal, U., Eder, J., Koehler, J., and Reijers, H. A., editors, Business Process
+Management, 7th International Conference, BPM 2009, Ulm, Germany, September
+2009. Proceedings, volume 5701 of Lecture Notes in Computer Science, pages 143-
+158. Springer.
+Ferreira, D. R., Zacarias, M., Malheiros, M., and Ferreira, P. (2007). Approaching process
+mining with sequence clustering: Experiments and findings. In Alonso, G., Dadam, P.,
+and Rosemann, M., editors, BPM, volume 4714 of Lecture Notes in Computer Science,
+pages 360-374. Springer.
+Georgakopoulos, D., Hornick, M. F., and Sheth, A. P. (1995). An overview of workflow
+management: From process modeling to workflow automation infrastructure.  Distri-
+buted and Parallel Databases, 3(2):119-153.
+G ünther, C. W. and van der Aalst, W. M. P. (2007).  Fuzzy mining - adaptive process
+simplification based on multi-perspective metrics. In Alonso, G., Dadam, P., and Ro-
+semann, M., editors, BPM, volume 4714 of Lecture Notes in Computer Science, pages
+328-343. Springer.
+Hammer, M. and Champy, J. (2003).  Reengineering the corporation.  HarperBusiness
+Essential. HarperBusiness, New York, NY, rev. and updated with a new authors’ note
+edition.
+Laguna, M. and Marklund, J. (2004). Business process modeling, simulation and design.
+Pearson-Prentice hall, Upper Saddle River, New Jersey.
+Medeiros, A. A., Weijters, A., and van der Aalst, W. (2007).  Genetic process mining:
+An experimental evaluation.   Journal of Data Mining and Knowledge Discovery,
+14(2):245-304.
+OMG (2008).  Business Process Model and Notation.  Object Management Group, v1.1
+edition.
+248
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Pascalau, E., Giurca, A., and Wagner, G. (2009).  Validating auction business processes
+using agent-based simulations. In Abramowicz, W., Maciaszek, L. A., Kowalczyk, R.,
+and Speck, A., editors, BPSC, volume 147 of LNI, pages 95-109. GI.
+Song, M., G ünther, C. W., and van der Aalst, W. M. P. (2008). Trace clustering in process
+mining.  In Ardagna, D., Mecella, M., and Yang, J., editors, Business Process Mana-
+gement Workshops, volume 17 of Lecture Notes in Business Information Processing,
+pages 109-120. Springer.
+van der Aalst, W., Hofstede, A. T., and Weske, M. (2003). Business process management:
+A survey. page 1019.
+van der Aalst, W. M. P., Weijters, T., and Maruster, L. (2004). Workflow mining: Disco-
+vering process models from event logs. IEEE Trans. Knowl. Data Eng., 16(9):1128-
+1142.
+van Dongen, B. F., Medeiros, A. K. A., Verbeek, H. M. W., Weijters, A. J. M. M., and
+van der Aalst, W. M. P. (2005). The prom framework: A new era in process mining tool
+support.  In Ciardo, G. and Darondeau, P., editors, ICATPN, volume 3536 of Lecture
+Notes in Computer Science, pages 444-454. Springer.
+Veiga, G. M. and Ferreira, D. R. (2009). Understanding spaghetti models with sequence
+clustering for prom. In Rinderle-Ma, S., Sadiq, S. W., and Leymann, F., editors, Busi-
+ness Process Management Workshops, volume 43 of Lecture Notes in Business Infor-
+mation Processing, pages 92-103. Springer.
+Wagner, G. (2003).  Aor modelling and simulation: Towards a general architecture for
+agent-based discrete event simulation. In Giorgini, P., Henderson-Sellers, B., and Wi-
+nikoff, M., editors, AOIS, volume 3030 of Lecture Notes in Computer Science, pages
+174-188. Springer.
+Wagner, G. (2009). business rules and agent-based business process simulation. Simp ósio
+Brasileiro de Sistemas de Informaç ões (SBSI) - Brasília-DF.
+Wagner, G. and Diaconescu, I. M. (2009).  Aor-simulation.org: cognitive agent simula-
+tion. In Sierra, C., Castelfranchi, C., Decker, K. S., and Sichman, J. S., editors, AAMAS
+(2), pages 1405-1406. IFAAMAS.
+Walicki, M. and Ferreira, D. R. (2010). Mining sequences for patterns with non-repeating
+symbols. In IEEE Congress on Evolutionary Computation, pages 1-8. IEEE.
+Weijters, A., van der Aalst, W., and de Medeiros, A. A. (2006). Process mining with the
+heuristicsminer algorithm. BETA Working Paper Series WP 166, Eindhoven University
+of Technology.
+Wooldridge, M. (2009). An Introduction to Multiagent Systems. Wiley, Chichester, UK,
+2. edition.
+249
+
+
+
+
+

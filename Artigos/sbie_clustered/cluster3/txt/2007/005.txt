@@ -1,0 +1,481 @@
+﻿Alteração no Modelo de Grupos do Moodle para Apoiar a
+Colaboração
+Leonardo N. dos Santos1, Alberto N. de Castro Jr1, Thaís H. Chaves de Castro1,2
+1Departamento de Ciência da Computação - Universidade Federal do Amazonas
+(DCC/UFAM) - Av. Gal. Rodrigo O.J. Ramos, 3000 - Manaus - AM - Brasil
+2Departamento de Informática - Pontifícia Universidade Católica do Rio de Janeiro
+(DI/PUC-RIO) - Av. Mq. de São Vicente, 225 RDC - Rio de Janeiro - RJ - Brasil
+{lns1,albertoc,thais}@dcc.ufam.edu.br, thais@les.inf.puc-rio.br
+Resumo.  Vários  ambientes  virtuais  de  apoio  a  aprendizagem  oferecem  o
+recurso de organização em grupos, embora poucos sejam de fato adequados à
+realização  colaborativa  de  atividades.  A  partir  de  um  conjunto  de
+características desejáveis a AVAs no suporte à colaboração, discutimos neste
+trabalho, as principais características do ambiente Moodle no que diz respeito
+à organização de  grupos  com tal propósito,  descrevendo um conjunto de
+alterações que buscaram melhor suas características nesse aspecto específico,
+sem interferir nem modificar a arquitetura atual do ambiente
+Abstract.  Vários  ambientes  virtuais  de  apoio  a  aprendizagem  oferecem  o
+recurso de organização em grupos, embora poucos sejam de fato adequados à
+realização  colaborativa  de  atividades.  A  partir  de  um  conjunto  de
+características desejáveis a AVAs no suporte à colaboração, discutimos neste
+trabalho, as principais características do ambiente Moodle no que diz respeito
+à organização de  grupos  com tal propósito,  descrevendo um conjunto de
+alterações que buscaram melhor suas características nesse aspecto específico,
+sem interferir nem modificar a arquitetura atual do ambiente.
+Palavras-chave: Grupos, Ambientes Virtuais para Aprendizagem Cooperativa, CSCL, Moodle.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                  123
+
+
+
+
+1.  Introdução
+Em  muitos  ambientes  virtuais  tem-se  utilizado  métodos  de  aprendizagem  que  são
+fortemente baseados na interação entre os participantes e na geração colaborativa de
+conteúdos. Porém, em muitos desses ambientes não é evidente a preocupação em prover
+as funcionalidades necessárias para facilitar a colaboração.
+Para que um ambiente de apoio à aprendizagem forneça o suporte adequado à
+colaboração,  é  necessário  que  utilize  como  unidade  referencial  de  trabalho  uma
+representação do que também acontece no ensino presencial, ou seja, a formação e
+organização de grupos.
+Na primeira seção deste artigo, serão discutidos os elementos necessários para a
+implementação de ambientes colaborativos de apoio à aprendizagem, que forneçam
+mecanismos de incorporação das diversas práticas pedagógicas de aprendizagem em
+grupo, segundo o levantamento descrito em [Dimitracopoulou 2005]. Em seguida, serão
+analisados  os  mecanismos  de  implementação  de  grupos  em  alguns  ambientes
+colaborativos, considerando os aspectos levantados na seção anterior, enfatizando o
+ambiente  Moodle,  foco  central  deste  trabalho,  desde  sua  concepção                     (objetivos  de
+projeto) ao estado atual. Na Seção 4 é descrita uma alteração na concepção de grupos do
+Moodle, que já foi implementada e está em uso.
+2.  Ambientes Virtuais de Apoio à Aprendizagem (AVAs) e os Grupos
+Neste trabalho, considera-se “grupo” um conjunto pequeno de pessoas reunidas para
+algum propósito, nesse caso, a aprendizagem. Já “comunidade” tem um contexto mais
+amplo, possuindo uma quantidade maior de pessoas, com propósito de compartilhar
+interesses e experiências.
+Segundo                                                                                       [Dimitracopoulou   2005],  ambientes  colaborativos  para  apoio  à
+aprendizagem podem ser classificados, de acordo com o enfoque e os tipos de grupos,
+em: (i) orientados à resolução de problemas, que trabalham com pequenos grupos; e (ii)
+de propósitos gerais, voltados a comunidades. Em ambos os casos é necessário fornecer
+suporte à colaboração. No entanto, em (i) estes mecanismos precisam ser mais refinados
+e  alinhados  a  métodos  colaborativos  específicos,  o  que  se  constituiu  no  foco  da
+concepção de grupos deste trabalho.
+No  levantamento  descrito  em  [Dimitracopoulou  2005]  ainda  são  apontadas
+tendências  na  pesquisa  de  requisitos  para  que  um  ambiente  computacional  possa
+efetivamente  fornecer  apoio  à  colaboração  no  contexto  de  aprendizagem.  Em  tal
+cenário, foram relacionadas cinco funções desejáveis em ambientes colaborativos de
+apoio à aprendizagem, conforme resumido na Tabela 1.
+Seguindo a seqüência apresentada na Tabela 1, descreveremos cada um dos itens
+apresentados,  relacionando-os  com  outros  trabalhos,  enfocando  a  visão  de  grupo
+utilizada aqui.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      124
+
+
+
+
+Tabela 1 - Quadro-resumo com as funções de um ambiente virtual em relação a
+grupos
+Ferramentas  de  comunicação  (síncrona  e  assíncrona),  interação,
+1                                                                                           Diálogo e Ação
+                                                                                                             construção e representação de conhecimento, produção de textos.
+                                                                                                             Espaço compartilhado
+                                                                                                             Saber o que os outros parceiros de grupo estão fazendo
+                                                                                            Percepção
+2
+(awareness)
+Saber o que os outros grupos estão fazendo
+Conhecimento do planejamento das atividades
+O  professor  forma  os  grupos  ou  eles  são  formados  pelos
+espontaneamente
+Os estudantes trocam de grupo ou não
+3                                                                                           Regras
+Hierarquia de grupos
+Determinação de papéis dentro do grupo
+Formação de grupos
+Auxílio ao
+4
+professor
+Atribuição de atividades aos grupos
+O grupo deve ser entendido como uma unidade
+Gerenciamento da
+5
+Visibilidade  do  conhecimento  produzido  em  um  grupo  pela
+comunidade
+comunidade
+2.1.   Os meios apropriados para diálogo e ação
+O elemento principal para a aprendizagem cooperativa é a comunicação. Entretanto,
+para   a   aprendizagem   cooperativa   através   de   ambientes   computacionais   em
+computadores,  são  necessárias  tanto  comunicação  de  caráter  síncrono,  quanto
+assíncrono, dada a natureza e a distância da comunicação. Logo, essa comunicação pode
+ocorrer em diversos níveis, podemdo ser uma comunicação entre duas pessoas, um
+grupo, ou uma comunidade.
+Para esta função, deve-se ter a preocupação de prover ferramentas que realizem
+a comunicação (nesses diversos níveis), que possibilitem a interação e a construção do
+conhecimento. Nesse ponto, muitos ambientes computacionais já dispõem de diversas
+ferramentas,  apesar  de  muitos  deles  não  as  utilizarem  como  instrumentos  de
+colaboração, ou seja, não fazem com que o uso das mesmas seja feito em grupo.
+2.2.   Funções de percepção do espaço de trabalho (awareness)
+Segundo  Mesquisa  [2003],  os  participantes  de  um  grupo  devem  “saber  o  que  já
+aconteceu, o que está acontecendo no momento e o que poderá vir a acontecer depois
+com os membros e com o ambiente, para que seja possível contextualizar suas próprias
+atividades dentro do progresso do grupo como um todo”. Este processo pode vir a
+acontecer por meio de blogs, agenda de atividades, relatórios estatísticos de atividades,
+ferramentas gráficas interpretadoras das interações ocorridas no ambiente, entre outros.
+Dessa maneira, deve-se ressaltar que “é preciso espaço compartilhado para se
+criar entendimento compartilhado”, uma vez que “a conversação é vital mas não é o
+bastante” [Schrage 1995 apud Fuks 2000]. Portanto, é necessário criar um meio cujos
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                    125
+
+
+
+
+participantes se sintam à vontade para interagirem, aprenderem e terem ciência de que
+não o estão fazendo sozinhos.
+2.3.   Funções de auto-regulação e regras para estudantes
+Neste aspecto deve ser observado como é o processo de formação de grupos. Uma
+opção seria o professor ser o formador e ao mesmo tempo atribuidor de participantes
+dos grupos, que pode ser feito de maneira manual ou aleatória; ou ainda os próprios
+participantes formarem seus grupos. Além disso, é preciso responder se os participantes
+podem trocar de grupo no decorrer do curso, ou se há momentos em que não existem
+grupos, apenas uma grande comunidade, pois o que determina isso é a forma do roteiro
+a ser seguido no método de aprendizagem cooperativa aplicado.
+Em ambientes orientados a resolução de problemas, muitas vezes se deseja que
+haja um líder em cada grupo, e que ele exerça o papel de coordenador das atividades.
+Por  isso  é  necessário  que  o  ambiente  forneça  o  suporte  adequado  a  esta  prática
+(atribuição de papéis de coordenação a membros do grupo).
+A hierarquia de grupos também é de especial importância, pois algumas vezes,
+se faz necessário subdividir o grupo a fim de que o trabalho seja melhor especializado e,
+ao final, o conhecimento produzido por cada subgrupo se torne pertencente ao grupo
+como um todo.
+Entende-se, portanto, que o ambiente deve fornecer suporte adequado a todas as
+necessidades levantadas nesta subseção e que seja adaptável a métodos colaborativos
+ainda não explorados. No entanto, os ambientes, em geral, não se preocupam com estes
+aspectos, tratando-os de uma forma muito restritiva, não oferecendo opções explícitas e
+flexíveis o suficiente para que se possa definir o processo de formação do curso da
+maneira mais produtiva para cada tipo de curso/comunidade.
+Por outro lado, o professor não deixa de usar sua metodologia preferida, sendo
+muitas  vezes obrigado a  fazer  adaptações  grosseiras  para que  o  planejado  obtenha
+sucesso. Por exemplo, quando é necessário que os participantes troquem de grupos,
+como ocorre no método da Controvérsia Acadêmica [Mendonça et al 2003], onde há
+dois grupos (um “pró” e outro “contra”) e os estudantes trocam de grupo e do respectivo
+ponto  de  vista,  defendendo  posições  opostas.  Em  tal  caso,  o  mediador  (professor)
+simplesmente troca-os de grupos, retirando-os do grupo antigo e incluindo-os nos novos
+grupos. Essa adaptação levanta as seguintes questões: como fica o processo de registro
+das atividades feitas por aqueles grupos? Como se saberá quem estava em determinado
+grupo quando foi feita certa atividade?
+2.4.   Ferramentas para auxílio ao professor
+O professor deve ser capaz de facilmente formar grupos e atribuir-lhes atividades e
+ferramentas, da mesma forma que o ambiente deve fornecer subsídios para que os
+integrantes dos cursos/comunidades se organizem espontaneamente.
+É preciso, ainda, que o professor tenha controle total do andamento do curso, do
+trabalho de cada grupo e das atividades de cada aluno.
+2.5.   Funções de gerenciamento em nível de comunidade
+Esta função refere-se à relação entre um grupo e o restante da comunidade, como são
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      126
+
+
+
+
+vistas as atividades e a produção de material dos grupos pelo restante das pessoas
+envolvidas.
+Em  [Dimitracopoulou  2005] é argumentado que os grupos devem ser vistos
+como unidades, não somente como um agrupamento de cada indivíduo componente do
+grupo. Ou seja, devemos entender um grupo como um agente em um ambiente virtual,
+assim  como  o  estudante,  o  professor  e  a  comunidade.  Em  [Stahl                    2005]  é  ainda
+ressaltado que existem conhecimentos inerentes ao grupo, não podendo estes existir sem
+pertencerem ao grupo como um todo.
+3.  Os Grupos em Ambientes Colaborativos de Apoio à Aprendizagem
+Há vários ambientes de apoio à aprendizagem que utilizam ferramentas de apoio à
+colaboração, mas que não são utilizáveis por pequenos grupos  (equipes de trabalho
+formados com um propósito específico) dentro de um curso on-line. Estes ambientes
+não foram analisados porque fogem ao escopo deste trabalho.
+Nas subseções seguintes ilustramos a concepção e uso de grupos em alguns
+ambientes colaborativos de apoio à aprendizagem. Foram selecionados três ambientes
+representando cada um,  uma  concepção  de projeto diferente  no que diz respeito à
+organização de indivíduos para o trabalho em grupo. No primeiro, a organização do
+trabalho se baseia totalmente nos grupos ou comunidades, no segundo e terceiro, a
+organização do trabalho se baseia nos cursos e os grupos são recursos vinculados a
+esses  cursos,  com  percepção  orientada  a  professores  e  alunos                       (no  segundo)  ou
+principalmente aos professores  (no terceiro). Como este trabalho visa interferir nas
+concepções de grupo do Moodle, o terceiro dos ambientes apresentados, maior destaque
+é dado à descrição dos mecanismos de implementação de grupos naquele ambiente.
+3.1 AmCorA
+No Ambiente Cooperativo de Aprendizagem  (AmCorA), proposto por Menezes et al
+[2000],  o  grupo  é  a  única  unidade  de  organização  das  pessoas.  Existem  apenas
+indivíduos e grupos. Os indivíduos podem possuir papéis diferentes em cada grupo. Os
+grupos  podem  possuir  ferramentas  próprias  e  ainda  subgrupos,  que  herdam  as
+configurações do grupo-pai, mas que possuem seus próprios coordenadores. Como o
+conceito de herança no paradigma de programação orientado a objetos, os indivíduos
+deverão pertencer ao grupo-pai para poderem pertencer ou criar subgrupos. A relação
+entre os grupos e subgrupos se dá de forma totalmente hierárquica. Logo, não há limite
+para níveis de hierarquia.
+A noção de espaço compartilhado é bem enfatizada, pois cada grupo possui seu
+próprio  espaço.  Em  cada  grupo,  podem-se  escolher  quais  ferramentas  se  deseja
+trabalhar, podendo haver para cada grupo seu(s) coordenador(es).
+A percepção no AmCorA foi tratada por [Mesquita et al 2003], em um texto no
+qual discute estratégias e ferramentas para que o ambiente incorpore adequadamente
+essa funcionalidade. O que foi implementado quanto à awareness foi a possibilidade de
+se verificar quem está presente no ambiente e em que área está (em que grupo ou em
+área particular).
+Nota-se porém que há dificuldades para as atividades de gestão por parte do
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   127
+
+
+
+
+professor.  Como  cada  grupo  é  tratado  como  uma  unidade  diferente  das  demais,  é
+preciso um grande esforço do professor para coordenar as atividades nos vários cursos
+que ministra ao mesmo tempo.
+3.2 TelEduc
+O TelEduc [Rocha 2003] é um software livre para suporte ao ensino-aprendizagem a
+distância. Sua concepção é de criação de cursos, que por sua vez podem ser divididos
+em grupos. No entanto, não há um espaço reservado para o grupo, apenas para o curso.
+Como  é  voltado  ao  suporte  de  cursos,  a  estrutura  das  avaliações  e  notas  é  bem
+desenvolvida.
+As ferramentas e atividades do ambiente foram pensadas para trabalhar com
+grupos, pois ao criar uma atividade ou ferramenta, ela torna-se válida para todos os
+grupos do curso. Em algumas ferramentas um grupo é realmente tratado como uma
+unidade, como por exemplo, ao atribuir-se uma nota para o grupo todo.
+Quanto ao planejamento do curso e dos grupos a ele associados, não há uma
+definição  clara  de  como  registrar  as  atividades,  especificando  a  seqüência  em  que
+devem ocorrer. Alem disso, ao se disponibilizar uma atividade no ambiente, não é
+facilmente percebido se a mesma é para resolução individual ou coletiva.
+Outro aspecto desfavorável é que o professor é a única pessoa que escolhe e
+forma os grupos, não sendo possível que os alunos o façam. Isto impede que os alunos
+se organizem no próprio espaço do curso em seus grupos de estudo.
+3.3 Moodle
+Segundo a descrição no repositório para documentação do projeto, o Moodle  “é um
+software para gestão da aprendizagem e de trabalho colaborativo, permitindo a criação
+de  cursos  on-line,  páginas  de  disciplinas,  grupos  de  trabalho  e  comunidades  de
+aprendizagem.  Está  em  desenvolvimento  constante,  tendo  como  filosofia  uma
+abordagem  social  construtivista  da  educação                                                (sic).  A  palavra  Moodle  referia-se
+originalmente   ao   acrônimo:                                                                 „Modular   Object-Oriented   Dynamic   Learning
+Environment‟, que é especialmente significativo para programadores e investigadores
+da área da educação” [MoodleDocs 2007-1].
+3.3.1 Os grupos no Moodle
+Em seu projeto original, o Moodle não possuía o recurso de grupos, trabalhava apenas
+com cursos como unidades de organização. As idéias iniciais sobre como deveriam ser
+os grupos no Moodle estão em [Dougiamas et al 2003], dando origem às soluções que
+estão implementadas ou em processo de desenvolvimento pela equipe daquele projeto.
+A seguir, enunciamos as principais idéias discutidas pelos desenvolvedores do projeto:
+  Um curso poderia existir com ou sem grupos. Com grupos, os mesmos poderiam ser
+visíveis ou separados. Ainda existiriam os grupos relacionados ao ambiente como um
+todo (site-wide groups).
+  Os estudantes poderiam escolher a qual grupo participar; ou o professor faria essa
+escolha, de maneira manual ou aleatória.
+  Os módulos seriam de dois tipos: destinados a grupos ou não. Os destinados a grupos
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       128
+
+
+
+
+teriam a opção de serem destinados ao curso como um todo (sem grupos), e ainda a
+grupos visíveis ou a grupos separados. Um módulo poderia ser ainda destinado
+apenas a um grupo específico.
+  Seria possível a um professor participar de um grupo. A ele seria atribuído a tarefa de
+coordenar as atividades do grupo, podendo a mesma tarefa ser realizada por qualquer
+outro  professor  do  curso,  pois  a  atribuição  anterior  teria  apenas  mero  efeito
+administrativo.
+  Haveria os groupings, que seriam conjuntos de grupos.
+  A idéia de hierarquia entre grupos chegou a ser proposta, uma vez que se desejava
+subdividir um grupo em outros para melhor organizar as pessoas e suas tarefas. As
+discussões sobre essa idéia não avançaram.
+3.3.2 O estado atual
+Nas distribuições correntes, um curso no Moodle pode existir com ou sem grupos. Se o
+curso admitir grupos ele pode fazê-lo de duas maneiras:
+  Grupos visíveis: os membros de um grupo podem ver as atividades desenvolvidas
+por membros de outros grupos;
+  Grupos separados: os membros de um grupo não podem acessar as atividades de
+outro grupo.
+Quando criada uma ferramenta, esta tem a possibilidade de ser destinada para
+uso com grupos ou não. Quando não destinada a grupos, esta seria uma ferramenta de
+atuação apenas em nível de comunidade, enquanto uma para grupos teria uma das
+maneiras citadas anteriormente. Além disso, se uma ferramenta for destinada para uso
+com  grupos,  então  haverá  uma  instância  dessa  ferramenta  para  cada  grupo.  Por
+exemplo, se fosse criado um fórum para grupos, cada grupo teria um espaço separado.
+Ou seja, as discussões iriam ocorrer somente entre os membros daquele grupo, e além
+dos membros do grupo, somente o professor poderia interferir na discussão. No caso de
+grupos visíveis, os membros de outros grupos poderiam apenas visualizar as conversas.
+Comportamento semelhante é atribuído a outras ferramentas presentes no Moodle.
+Para o professor, ou tutor, existe uma página destinada a gerenciar os grupos.
+Nela aparecem os grupos criados e os membros de cada grupo, possibilitando a criação,
+remoção e edição desses grupos. Há também o recurso de incluir membros nos grupos a
+partir dos estudantes do curso. Há disponíveis estatísticas e observações de atividades
+desenvolvidas separadas por grupo. Ou seja, o princípio é de que a organização do curso
+em grupos ajuda bastante o gerenciamento tanto do curso quanto dos alunos.
+Entretanto, o uso de grupos para apoiar a colaboração no ambiente é menos que
+satisfatório pois antes de ser um recurso para colaboração, um grupo no Moodle tem
+caráter principalmente organizacional. Na “visão do estudante”, estilo de interface mais
+frequentemente utilizado no ambiente, em muitos casos não é possível saber a que
+grupo um participante pertence, tampouco quem são os seus companheiros de grupo.
+Tal aspecto é ainda mais inadequado quando o estudante participa de mais de um grupo
+ao mesmo tempo, pois quando se está utilizando uma ferramenta de grupos, não se
+distingue que grupo a está utilizando.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     129
+
+
+
+
+3.3.3 As novas versões do Moodle
+A  principal  mudança  prevista  para  a  versão  1.9  do  Moodle  é  a  funcionalidade de
+grouping [MoodleDocs 2007-3]. Groupings são conjuntos de grupos. As ferramentas
+que funcionam com grupos no Moodle funcionam para todos os grupos, e cada curso
+tem  associado  um  único  conjunto  de  grupos.  A  proposta  dos  groupings  é  que  as
+ferramentas possam ser associadas a groupings, e um curso poderia contar com mais de
+um conjunto de grupos.
+Sem dúvida tal proposta aumenta o nível de flexibilidade para a organização do
+trabalho com grupos no Moodle, mas há ainda várias questões em aberto no que foi
+divulgado em [MoodleDocs 2007-2], como a percepção dos indivíduos enquanto parte
+de um ou vários grupos, além da possibilidade de re-organização em subgrupos.
+4  Interferindo na Concepção de Grupos do Moodle
+Observando as inadequações da concepção atualmente implementada no Moodle em
+relação à organização de grupos, e considerando que se trata de um software de código
+aberto, buscou-se o desenvolvimento de alterações que melhorassem suas características
+nesse aspecto específico, sem interferir nem modificar a arquitetura atual do ambiente.
+A versão base utilizada para proceder as alterações foi a versão 1.6.3 de 05 de maio de
+2006, disponível com o pacote Debian.
+As alterações realizadas estão representadas no diagrama mostrado na Figura 1.
+Essas implementações seguiram o mesmo esquema navegacional original do Moodle,
+onde conforme pode ser visto na figura, as setas representam os links para outras janelas
+(páginas). Desta forma, o item 1 representa a informação apresentada na página inicial
+do curso. Neste modelo navegacional, somente o item 5 já estava presente do Moodle
+antes de nossa interferência e foi reutilizado.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     130
+
+
+
+
+Figura 1. Esquema de navegação e conteúdo das páginas desenvolvidas
+Tomando como base os itens na Tabela  1, que descrevem os aspectos que um
+ambiente  colaborativo  de  apoio  à  aprendizagem  deveria  possuir,  as  modificações
+definidas e implementadas no ambiente podem ser descritas da seguinte forma:
+1.  Meios apropriados para diálogo e ação: como forma de melhorar o comportamento
+do ambiente com respeito a esse item, consideramos essencial a possibilidade de
+atribuir diferentes conjuntos de ferramentas aos grupos. Após um algumas etapas de
+levantamento e testes, verificou-se que a proposta descrita em Takemoto & Ryan
+[2006]  atendia  aos  nossos  propósitos.  Essa  modificação  foi  implementada  com
+algumas mudanças adicionais para se adaptar a versão do Moodle utilizada;
+2.  Funções de percepção do espaço de trabalho: de modo a possibilitar a visualização
+da hierarquia de grupos válida para um usuário, foi criado um bloco que, na página
+do curso, mostra o item “Meus grupos”, associado a ele está uma página listando
+todos os grupos, com acesso a uma lista de membros de cada grupo. Dessa maneira,
+um estudante pode saber a que grupos ele pertence e quem são seus parceiros
+naqueles grupos.
+3.  Funções  de  auto-regulação  e  regras  para  estudantes:  de  modo  a  flexibilizar  a
+utilização de grupos no ambiente, foram atribuídas algumas opções aos estudantes:
+criar  um  novo  grupo,  entrar  e  sair  de  qualquer  grupo,  limitadas  ao  perfil  do
+estudante. Idealmente essas opções deveriam ser configuráveis mais facilmente, o
+que já está em desenvolvimento.
+4.  Ferramentas para auxílio ao professor: sendo esse o objetivo principal do recurso
+de grupos no Moodle, não foram feitas alterações.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      131
+
+
+
+
+5.  Funções  de  gerenciamento  em  nível  de  comunidade:  todas  as  modificações
+analisadas para esse item, implicariam em alteração conceitual e estrutural de maior
+escala,  com  efeitos  diretos  na  arquitetura  do  Moodle,  não  tendo  portanto,  sido
+realizadas.  Os  resultados  de  tais  levantamentos  estão  sendo  organizados  como
+sugestões para novas versões do software.
+[a]
+[b]
+[c]
+Figura 2. Visualização dos grupos na versão implementada
+A  Figura  2  exibe  detalhes  de  páginas  com  informações  dos  grupos  no  ambiente
+implementado. Na página  “[a]” vê-se o item  “Meus Grupos”, e no detalhe do meio
+(chat), nota-se o  „hack‟ de Takemoto funcionando. Na página  “[c]” vê-se todos os
+grupos do curso. Em “[b]” vê-se a página do grupo com os parceiros daquele grupo, e
+no detalhe, a opção de deixar de participar do grupo.
+5  Considerações finais
+É freqüente que ambientes virtuais de apoio a aprendizagem não possibilitem que as
+pessoas se organizem espontaneamente em grupos de interesse para realizarem suas
+atividades  colaborativamente.  O  levantamento  de  requisitos  para  que  esse  tipo  de
+ambiente funcione de forma adequada com grupos, precisa considerar várias funções
+inerentes à colaboração.
+Neste trabalho, discutimos as principais características do ambiente Moodle no
+que diz respeito à organização de grupos com vistas à colaboração, situando-o frente a
+outros ambientes com diferentes concepções de projeto, registrando seus pressupostos
+originais, estado atual e propostas de desenvolvimento, com o propósito de desenvolver
+alterações que melhorassem suas características nesse aspecto específico, sem interferir
+nem modificar a arquitetura atual do ambiente.
+Partindo do pressuposto que é essencial que o grupo seja tratado como uma
+unidade, e não apenas como um agrupamento de pessoas, e que tal fato deve se refletir
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     132
+
+
+
+
+no funcionamento das ferramentas e no modo como um grupo é tratado em um curso,
+possibilitando  que  os  participantes  do  grupo  tenham  ciência  das  estratégias  de
+colaboração utilizadas, buscou-se uma transposição do modelo corrente de grupos no
+Moodle - de uma ferramenta de auxilio à gestão de atividades pelo professor - para um
+modelo refinado - de uma ferramenta de auxílio à colaboração.
+Se por um lado há ainda várias questões passíveis de melhoria, especialmente no
+que diz respeito ao suporte à hierarquia dos grupos nos moldes descritos em [Menezes
+et al 2000], ou a correspondência entre os papéis de administração em um curso e nos
+grupos,  acreditamos  que  as  alterações  aqui  descritas  apresentam  uma  melhoria
+significativa no que diz respeito ao suporte à colaboração pelo Moodle.
+Por fim, cabe mencionar que as alterações realizadas estão em funcionamento
+através do ambiente institucional de uma IES brasileira, atualmente sendo utilizada por
+turmas  de  alunos  de  graduação.  Apenas  após  completamente  validadas,  as  novas
+funcionalidades  de  grupo  serão  incorporadas  a  este  ambiente  possibilitando  que  se
+aprimore o apoio a métodos colaborativos específicos.
+Agradecimentos
+Esse   trabalho   foi   desenvolvido   com   recursos   do   Projeto   ColabWeb                         -
+Proc.553329/2005-7, Edital CNPq/CT-Amazônia n.27/2005.
+Referências
+Dimitracopoulou,  Angelique.                                                                            (2005)                                           “Designing  Collaborative  Learning  Systems:  Current
+Trends & Future Research Agenda”, em Proceedings of th  2005 conference on Computer
+support for collaborative learning (CSCL'05), pp. 115-124.
+Dougiamas, Martin; et al (2003) “Moodle.org Forum - Using Moodle: Groups Implementation”,
+diponível em: <http://moodle.org/mod/forum/discuss.php?d=1545>, acessado em: 9 jun 2007.
+Fuks,  H.  (2000).  “Aprendizagem  e  Trabalho  Cooperativo  no  Ambiente  AulaNet”.  Revista
+Brasileira de Informática na Educação, SBC, N6, pp 53-73, Abril 2000.
+Glass,  R. M.; Putnam,  J. A.  (1988)  “Cooperative Learning in Teacher Education: A Case
+Study”, em Action in teacher education, vol. X, no. 4, pp. 47-52.
+Kildare,  Robert;  Williams,  R.  N.;  Hartnett,  Jacky.                                                (2006)  “An  Online  Tool  for  Learning
+Collaboration and Learning While Collaborating”. Em 8o. Australian    Computing  Education
+Conference (ACE2006).
+McManus,  Margaret  M.                                                                                  (1997)                                           “Computer  supported  collaborative  learning”,  em  ACM
+                                                                                                        SIGGROUP Bulletin, vol. 18, edição 1, pp. 7-9.
+Mendonça, A.P. ; Castro Jr, A.N.; Souza, F.F.; Queiroz, S.J.B.; Batista, V.O. Um Ambiente
+Telemático para mediar a Controvérsia Acadêmica. In: Simpósio Brasileiro de Informática na
+Educação, 2003, Rio de Janeiro. Anais do XIV SBIE, 2003. v. 1. p. 365-374.
+Menezes,  C.  S.  ;  Cury,  D.  ;  Castro  Jr,  A.  N.  .  An  Architecture  of  an  Environment  for
+Cooperative Learning (AmCorA). In: Proceedings of ICECE 2000 - International Conference
+on Engineering and Computer Education, 2000, São Paulo.
+Menezes, C. S. ; Cury, D. ; Cristovão, H. M. ; Bazzarella, L. B. ; Gava, T. B. S. ; Castro Jr, A.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                133
+
+
+
+
+N. ; Tavares, O. L. ; Prata, C. L. ; Netto, J. F. M. ; Cardoso, E. P. . Formação de Recursos
+Humanos em Telemática para Educação - Uma experiência com EAD usando a Internet. In:
+Proceedings of 1st Latin American Web Congress, 2003, Santiago.
+Mesquita,  Luciana  F.;  et  al                                                                                                                                                 (2003)                                                                              “Percepção  em  Comunidades  Virtuais:  Mantendo-se
+                                                                                                                                                                                Antenado no AmCorA”, em XIV Simpósio Brasileiro de Informática na Educação.
+MoodleDocs  (2006)                                                                                     “Philosophy”,  disponível  em:                                                                                                                                                                                                 <http://docs.moodle.org/en/Philosophy>,
+acessado em: 19 maio 2007.
+MoodleDocs                                                                                             (2007-1)                                                                 “Sobre                                                                              o                                                                 Moodle”,                                  disponível   em:
+                                                                                                       <http://docs.moodle.org/pt/Sobre_o_Moodle>, acessado em: 20 maio 2007.
+MoodleDocs                                                                                             (2007-2)                                                                                                                                                     “Development:  How  groups  work  in  Moodle”,  disponível  em:
+                                                                                                                                                                                <http://docs.moodle.org/en/How_groups_work_in_Moodle>, acessado em: 20 maio 2007.
+MoodleDocs (2007-3) “Groups”, disponível em: <http://docs.moodle.org/en/Groups>, acessado
+em: 15 jun. 2007.
+Rocha,  H.V.  TelEduc:  Software  livre  para  educação  a  distância.  In:  Silva,  Marco.  (Org.).
+Educação On-line. 1ª. ed. São Paulo: Edições Loyola, 2003, v. , p. 377-396
+Schrage, M. (1995) “No more teams! Mastering the dynamics of creative collaboration”, em
+Currency Doubleday, Nova Iorque, EUA.
+Stahl, Gerry. (2005) “Group cognition in computer-assited collaborative learning”, em Journal
+of Computer Assisted Learning 21, pp. 79-90.
+Takemoto, Timothy; Ryan, John  (2006)  “Hack for really separate groups”, em  Moodle.org
+Forum:   Restricting   activities   and   resources   to   specific   groups,   disponível   em:
+http://moodle.org/mod/forum/discuss.php?d=15360, acessado em: 20 maio 2007.
+Teleduc.  “TelEduc  - Ambiente de Ensino à Distância  - Página do Projeto”, disponível em:
+<http://teleduc.nied.unicamp.br/pagina/>, acessado em: 10 maio 2007.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                               134
+
+
+
+
+

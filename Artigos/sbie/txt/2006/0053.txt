@@ -1,0 +1,424 @@
+﻿Cognitor: um Framework baseado na Linguagem de
+Padrões Cog-Learn
+Americo Talarico Neto, Junia Coutinho Anacleto, Vânia Almeida Neris, Muriel de
+Souza Godoi, Aparecido Fabiano Pinatti Carvalho
+Departamento de Computação - Universidade Federal de São Carlos (UFSCar)
+Caixa Postal 676 - CEP.13565-905 - São Carlos - SP - Brasil
+{americo, junia, vania, muriel_godoi, fabiano}@dc.ufscar.br
+Abstract. Designing instructional material is a difficult task for teachers who
+lack experience in  pedagogy and Web design.  In this paper we show  the
+Cognitor,  the  Cog-Learn  Pattern  Language  Framework  that  aims  to  help
+teachers  in  the  design  of  instructional  material.  The  purpose  is  better
+organizing the content seen by the student, facilitating his interaction and the
+learning process.
+Resumo. Projetar material instrucional para Web é uma tarefa difícil para
+professores  que  não  têm  experiência  em  pedagogia  e  projeto  Web.  Neste
+trabalho apresenta-se a ferramenta Cognitor, uma instância da Linguagem de
+Padrões  Cog-Learn,  para  o  apoio  aos  professores  durante  o  projeto  de
+material instrucional. O objetivo é melhor organizar o conteúdo na interface
+visualizada  pelo  aluno,  facilitando  a  sua  interação  e  o  seu  processo  de
+aprendizagem.
+1. Introdução
+Projetar material instrucional estruturado na forma de objetos de aprendizagem para
+Educação à Distância (EAD), em ambiente Web, pode ser uma tarefa difícil para os
+professores que têm pouca experiência em interação e projeto instrucional em ambiente
+computacional,  demandando  tempo  e  recursos  muitas  vezes  não  disponíveis,  e
+inviabilizando a proposta. Essa dificuldade acaba gerando uma produção de cursos com
+materiais  instrucionais  deficientes,  como  por  exemplo,  documentos  de  textos  com
+excessiva  quantidade  de  informação,  que  impedem  ou  dificultam  o  processo  de
+aprendizagem dos alunos [Kessler 1999].
+Este trabalho, apoiado pelo projeto TIDIA-Ae da FAPESP1, explora a questão do
+projeto de material instrucional Web para EAD e a edição de objetos de aprendizagem,
+considerando   as   diferentes   características   e   conhecimentos   de   uma   equipe
+multidisciplinar que possa interagir em tal projeto. O trabalho sintetiza propostas da
+ciência  cognitiva                                                                         [Gagné   1974,  Liebman   1998]  e  alguns  conceitos  amplamente
+utilizados durante projetos de interação em sistemas Web, tais como Design Universal,
+Design Participativo e Acessibilidade, documentando tais práticas em forma de padrões
+de projeto para apoio adequado ao projeto do material instrucional.
+1  Processo número 04/13991-6
+
+
+
+
+Tais  padrões  têm  como  finalidade  gerar  um  vocabulário  comum  para  ser
+utilizado pelos diversos participantes do projeto multidisciplinar de material instrucional
+para EAD, abstraindo qualidades comuns de projetos existentes, identificando soluções
+de sucesso e apresentando a relevância de tais soluções com o objetivo de melhor
+organizar o material e assim favorecer o aprendizado dos alunos que venham a utilizá-
+lo.
+Esses  padrões  estão  documentados  em  uma  Linguagem  de  Padrões                          (LP)
+chamada  Cog-Learn                                                                            [Talarico  Neto  et  al   2006]  e  foram  instanciados  em  uma
+ferramenta, o Cognitor, que funciona como um framework para facilitar a utilização
+dessa LP pelos professores. O Cognitor também oferece suporte para criação de objetos
+de aprendizagem no formato SCORM (Sharable Content Object Reference Model) com
+o objetivo de promover reuso, interoperabilidade e acessibilidade do material criado.
+2. O Padrão (Standard) SCORM
+O SCORM é um projeto lançado pelo Departamento de Defesa americano que criou a
+ADL (Advanced Distributed Learning) com o objetivo de desenvolver uma estratégia
+que prioriza o uso tecnologias baseadas em rede, facilita o desenvolvimento a baixo
+custo, além do estímulo do trabalho em conjunto com a indústria  [SCORM  2001].
+Sendo  um  dos  principais  utilizadores  da EAD  em  nível  mundial,  a  ADL pretende
+unificar  as  normas  para  a  criação  de  conteúdos  educativos  existentes.  Estas
+especificações possibilitam a reutilização de conteúdos pedagógicos baseados na Web,
+em múltiplos produtos. Atualmente, o SCORM consiste das seguintes seções:
+•   Uma representação da estrutura dos conteúdos desenvolvidos baseada em XML
+(Extensible  Markup  Language),  de  modo  que  esses  conteúdos  possam  ser
+implementados nos mais diversos tipos de servidores;
+•   Um conjunto de especificações para a definição do ambiente de execução (run-
+time environment), incluindo uma API (Aplication Program Interface);
+•   Um  modelo  de  dados  para  a  comunicação  entre  os  conteúdos  e  os  LMS's
+(Learning  Management  System),  bem  como  uma  definição  dos  métodos  de
+execução dos conteúdos;
+•   Uma especificação para a criação de metadados para cursos e conteúdos.
+O objetivo é criar uma biblioteca de conhecimento para o aprendizado, na qual
+os  objetos  de  aprendizado  podem  ser  armazenados  e  catalogados  para  uma  ampla
+distribuição, além da obtenção de um modelo de referência robusto e confiável e não a
+infra-estrutura tecnológica em si. Os principais conceitos inerentes ao SCORM são:
+1. Content Packaging. É um conjunto de arquivos denominado pacote que é
+constituído por:
+•   Resource - unidade mínima que pode ser referenciada no modelo de agregação
+de conteúdos. Pode ser de dois tipos: Assets  que  representam  as  mídias  que
+podem ser apresentadas em um navegador Web e SCO que é um tipo específico
+de Resource. Um SCO representa um conjunto de um ou mais Assets ou SCOs
+que permite a comunicação com o LMS utilizando o ambiente de execução
+SCORM.
+
+
+
+
+•   Content  Aggregation                                                                  -  É  um  mapeamento  de  SCO's  que  permite  agregar
+conteúdos  em  uma  estrutura funcional  coerente  (curso,  módulo,  lição).  Esta
+agregação e estruturação são feitas utilizando o modelo de Content Packaging
+do IMS Global Learning Consortium.
+•   Content Aggregation Package Application Profile - um documento de manifesto
+em  XML  e  que  acompanha  o  pacote.  Além  da  definição  dos  recursos,  é
+acompanhado de uma descrição da organização e estrutura do material.
+2. Metadados. Um metadado é baseado no modelo IMS, adaptando as estruturas
+definidas para descrever os diferentes tipos de componentes presentes no SCORM.
+3.  Run-time Environment. É composto de uma de API que permite ao SCO
+comunicar com o modelo de dados do SCORM. Deste modo garante-se a uniformização
+do acesso de comunicação com as bases de dados de um LMS.
+Uma das características do SCORM é a possibilidade de referenciar objetos
+externos  ao  pacote  a  que  o  manifesto  se  refere  (uma  URL  ou  mesmo  um  SCO),
+aumentando a flexibilidade dos conteúdos produzidos.  A  navegação  entre  diferentes
+SCO's é da responsabilidade do LMS, baseado no esquema de agregação definido no
+manifesto correspondente ao respectivo conteúdo.
+3. Linguagem de Padrões (Patterns) para EAD
+Padrões (patterns) foram utilizados primeiramente no domínio da arquitetura [Alexander
+1977]  para representar soluções  de sucesso para problemas  recorrentes  encontrados
+nesse contexto. Um padrão pode ser entendido como uma abordagem para capturar e
+apresentar  conhecimento  de  projeto  na  resolução  de  problemas,  atuando  como
+ferramenta de divulgação de conhecimento entre projetistas especialistas e novatos e de
+comunicação entre os elementos da equipe.
+Um  padrão  geralmente  existe  dentro  de  uma LP  (LP),  relacionando-se com
+outros padrões, os quais relatam soluções para outros problemas de projeto no mesmo
+domínio, tendo como objetivo envolver o usuário final em todos os estágios do ciclo de
+desenvolvimento de software [Borchers 2001].
+Uma LP para apoiar o projeto de material instrucional para EAD deve conter
+padrões que orientem os professores em como elaborar a estrutura de uma aula, bem
+como de seu conteúdo, ajudem na concepção de um projeto para elaborar a seqüência de
+ações do aluno, forneçam auxílio durante a realização do curso com estratégias de
+acesso e aborde questões de projeto de interação, como por exemplo, navegação e layout
+[PPP 2006, Talarico Neto et al 2005].
+4. Cog-Learn: Uma Linguagem de Padrões para EAD
+A  Cog-Learn  é uma LP  para EAD identificada e formalizada por especialistas  em
+Padrões de Projeto durante condução de três estudos de caso [Neris et al  2005] que
+propiciaram a verificação de que a utilização de um conjunto de estratégias cognitivas
+combinadas  com  padrões  de  IHC                                                         (Interação  Humano-Computador),  aumentam  a
+usabilidade de materiais instrucionais escritos na forma de hiperdocumentos para EAD,
+bem como contribuem para o aumento na satisfação de uso por parte do usuário de tais
+hiperdocumentos - os alunos [Talarico Neto et al 2006].
+
+
+
+
+O intuito da Cog-Learn é considerar as práticas e conhecimentos que já foram
+documentados em forma de padrões, e, portanto são soluções comprovadas escritas por
+pessoas experientes no domínio de EAD que já enfrentaram um problema várias vezes
+em seus projetos e tentar abranger e solucionar uma gama considerável de problemas
+que o professor pode se deparar durante o projeto de material instrucional para EAD.
+A  Cog-Learn  agrupa:  padrões  pedagógicos  [Bergin  2002,  Fricke  2000,  PPP
+2001], que abordam questões de planejamento e seqüência de curso e são baseados em
+práticas identificadas em aulas presenciais; padrões de IHC [Tidwell 2003, Welie 2003,
+Montero  2002],  obtidos  de  práticas  de  projetos  Web  e  que  abordam  questões  de
+interação e layout do material instrucional; e padrões híbridos de IHC e pedagógicos
+[Talarico Neto et al  2005], obtidos da prática da inserção de estratégias cognitivas
+[Liebman,  1998] no contexto de projeto de material instrucional Web e que foram
+chamados  de  híbridos,  pois  incluem  práticas  oriundas  da  pedagogia  que  quando
+organizadas melhoram a usabilidade do conteúdo exibido pelo material instrucional.
+Estruturação do Conhecimento  [Talarico Neto et al  2006] é um exemplo de
+padrão híbrido. Nele propõe-se o planejamento da aula utilizando um Mapa Conceitual
+e sua posterior utilização como indexador de conteúdos. A teoria de Mapa Conceitual
+tem bases pedagógicas, enquanto que a forma como o índice será apresentado e o
+planejamento da interação com esse índice são assuntos abordados pela IHC.
+A Cog-Learn foi construída a partir da teoria original de LP [Alexander 1977],
+que  relaciona  os  padrões  visualmente  na  forma  de  um  grafo.  Para  facilitar  o
+entendimento da LP, foi realizada a organização dos padrões identificados e dos padrões
+selecionados, de acordo com a simbologia utilizada em [Fricke 2000], com níveis de
+abstração, ordenação seqüencial, agrupamento e especialização. A Figura 1 apresenta a
+Cog-Learn  com  seus  3  grupos  de  padrões  (Planejamento,  Exibição  de  Conteúdo  e
+Interação), organizados em 2 níveis de abstração.
+Figura 1 - Cog-Learn, seus grupos e níveis de abstração
+Cabe  ressaltar  que  os  grupos  Planejamento  e  Interação  são  compostos,
+respectivamente, por padrões pedagógicos e de IHC, ambos selecionados da literatura.
+Já o grupo Exibição de Conteúdo é composto por padrões identificados neste trabalho
+(em  destaque)  e  por  padrões  pedagógicos  selecionados  da  literatura.  A  LP  agrupa
+padrões relacionados por setas preenchidas, o que representa uma especialização entre
+eles e por setas tracejadas, representando uma relação de seqüência entre eles.
+
+
+
+
+5. Cognitor
+Cognitor é uma ferramenta desenvolvida para auxiliar o professor na sua tarefa de
+projetar e editar material instrucional de qualidade para EAD. O material instrucional
+produzido pelo Cognitor pode ser reutilizado em outros contextos de aprendizagem,
+pois  é  projetado  seguindo  os  conceitos  de  objetos  de  aprendizagem,  e  pode  ser
+executado  em  diversas  plataformas  de  EAD,  pois  pode  ser  exportado  em  formato
+SCORM e HTML.
+Essas duas características propiciam vantagens para o aluno, e para o professor e
+são fundamentais para competição no mercado de produção de cursos à distância. A
+vantagem para o aluno é que quando os objetos de aprendizagem são bem escolhidos,
+podem ajudá-lo em seu processo de aprendizagem: relacionando novos conhecimentos
+com os que já sabiam [Ausubel 1968], fazendo e testando hipóteses, aplicando o que
+estão aprendendo, aprendendo novos conceitos, etc. O professor pode se beneficiar, pois
+tem à sua disposição uma grande quantidade de objetos de aprendizagem. Assim ele
+pode planejar suas aulas fazendo uso desses objetos, conseguindo maior flexibilidade
+para se adaptar ao ritmo e ao interesse dos alunos, mantendo seus objetivos de ensino.
+Além das vantagens relatadas anteriormente, o Cognitor também oferece auxílio
+por  meio  da  representação  computacional  da  LP  Cog-Learn,  como  funcionalidades
+disponibilizadas  ao  professor  pelo  Cognitor.  Essas  funcionalidades  expressam  a
+utilização dos Padrões que compõem a Cog-Learn, permitindo que o professor projete e
+elabore o seu material instrucional de maneira automatizada, utilizando as soluções de
+sucesso para problemas recorrentes que foram identificadas, amplamente utilizadas em
+projetos  reais  e  finalmente  documentadas  por  especialistas,  no  formato  de  uma
+linguagem comum de fácil acesso aos envolvidos no projeto de EAD.
+O diferencial do Cognitor, frente às ferramentas disponíveis no mercado, está no
+fato de que o material instrucional é obtido considerando-se as questões implícitas aos
+Padrões da Cog-Learn tais como: a elaboração da estrutura de uma aula, bem como de
+seu conteúdo; a concepção de um projeto para elaborar a seqüência de ações do aluno; o
+auxílio durante a realização do curso com o estímulo das estratégias cognitivas do
+aluno;  questões  de  projeto  de  interação                                                  (usabilidade,  acessibilidade,  navegação  e
+layout); e, finalmente, considerando questões de portabilidade, reutilização de conteúdo
+e  controle  de  desempenho  por  meio  do  desenvolvimento  de  conteúdos  segundo  o
+modelo SCORM.
+Os estudos de caso que avaliaram a qualidade obtida com a produção de material
+instrucional utilizando-se os Padrões da Cog-Learn [Talarico Neto et al 2005], por meio
+de  avaliações  de  usabilidade  nas  interfaces  produzidas,  permitem  concluir  que  tal
+material possui:
+•   Menor  número  de:  problemas  de  usabilidade  e  heurísticas  de  usabilidade
+violadas  e  a  Severidade  dos  problemas  encontrados  é  menor  no  material
+projetado com Padrões;
+•   Depoimentos favoráveis com indicações de satisfação dos alunos e elementos
+que facilitam a leitura, diminuindo assim a carga de esforço mental do aluno na
+busca por um determinado item da interface.
+
+
+
+
+Essas características proporcionaram a idéia de utilizar os padrões de projeto que
+compõem a LP Cog-Learn como um framework para apoiar o projeto e a edição de
+material instrucional para EAD, considerando tanto as questões pedagógicas quanto as
+questões relativas à interação do aluno com a interface.
+A idéia de expressar a Cog-Learn como um framework aconteceu naturalmente,
+assim  como percebe-se em outros  domínios como, por exemplo, na Engenharia de
+Software onde os Padrões de Projeto provaram ser tão úteis que muitos são incluídos
+como framework para gerar funcionalidades de ferramentas que apóiam a codificação
+em determinadas linguagens de programação, depois de terem ganhado destaque no
+arsenal de ferramentas e técnicas para desenvolvimento de software [Gamma, 1995].
+A ferramenta Cognitor oferece funcionalidades de produção e reutilização de
+objetos  de  aprendizagem  por  meio  de:  um  editor  de  hiperdocumentos  HTML,  um
+agregador de mídia e apoio dos Padrões pedagógicos e de IHC da LP Cog-Learn, que é
+foco principal deste trabalho. A interface principal da ferramenta Cognitor é mostrada
+na Figura 2 e é composta por seis áreas, descritas a seguir.
+Figura 2 - Interface principal da ferramenta Cognitor
+5.1. Área de planejamento e organização de material instrucional
+Usando as opções desta área os professores podem planejar e organizar seu material de
+duas maneiras. A primeira maneira é definir uma seqüência de páginas e grupos de
+páginas ou escolher uma organização definida previamente ou mesmo alterar uma já
+existente.Uma outra opção é a utilização do Padrão Estruturação do Conhecimento, que
+considera a teoria de Mapas Conceituais no planejamento e organização de um material.
+Caso o professor escolha essa funcionalidade ele será guiado por um wizard, no qual ele
+poderá  utilizar  as  funcionalidades  de:  criação,  remoção,  alteração  de  posição  de
+conceitos;  criar  e  nomear  relações  hierárquicas  entre  os  conceitos  estabelecidos;  e
+associar conceitos nomeando seus relacionamentos. Com a utilização desse padrão, o
+professor obtém o mapa conceitual de seu material e também a seqüência das páginas e
+grupos de páginas de acordo com os relacionamentos previamente estabelecidos entre os
+conceitos de seu material.
+O professor obtém como resultado da utilização dessa barra de ferramentas, um
+conjunto de páginas organizadas em tópicos, considerados objetos de aprendizagem
+
+
+
+
+pelo Cognitor e que são chamados de SCO’s no padrão SCORM. Um SCO é definido
+como  um  objeto  de  aprendizagem  projetado  para  ser  usado  na Web  que pode  ser
+incluído em um pacote instrucional para posteriormente ser exibido em um LMS.
+5.2. Área de planejamento da interação
+Nesta área o professor pode criar um modelo  (template) de página para aplicá-lo ao
+material como um todo. Essa idéia de configurar o ambiente inicial da aula corresponde
+às soluções para os problemas abordados pelo grupo de padrões da Cog-learn destinada
+a resolver problemas comumente encontrados no contexto de IHC. As   funcionalidades
+disponibilizadas nessa área são expressões dos seguintes padrões da Cog-Learn:
+Configure o Palco: Está instanciado como uma lista dos objetos de navegação
+que  o  professor  insere  em  um  determinado  material,  como  por  exemplo,  índice
+navegável, índice não navegável, barra de navegação horizontal, entre outros.
+Áreas Navegáveis: No momento que o professor insere em seu material um
+modelo de página, este padrão é instanciado, criando as respectivas áreas navegáveis.
+Painel de Controle: é instanciado como as ações de navegação entre as páginas
+em um material, bem como informações sobre seqüência das páginas na forma de índice
+e funcionalidades de voltar para o início da aula.
+Framework Repetido: quando instanciado, permite ao aluno navegar facilmente
+pela interface e rapidamente se tornar familiar a ela. No Cognitor, representa as áreas
+navegáveis que são replicadas de maneira idêntica por todo o material.
+Voltar para um Local Seguro: quando instanciado, mantém o aluno informado
+sobre onde ele está e, caso ele se sinta perdido, permite que ele volte para o início da
+aula, uma página que ele já conheceu e de onde ele pode recomeçar sua navegação.
+5.3. Barra de ferramentas de inserção de mídia e de publicação de conteúdo
+Os objetos de aprendizagem que compõem os materiais instrucionais são compostos por
+Assets que são representações eletrônicas de mídia como texto, imagens, sons, vídeos,
+animações,  etc,  e  podem  ser  apresentados  em  um  navegador  Web.  A  barra  de
+ferramentas de inserção de mídia permite a inserção desses Assets, além da manipulação
+de ações executadas (refazer, desfazer, cortar, colar, copiar, localizar, substituir). O
+professor também pode salvar e abrir seus materiais utilizando as funcionalidades dessa
+barra, além de poder exportá-los em formato SCORM ou HTML.
+5.4. Área de Edição de Página
+A Área de Edição de Página do Cognitor é a superfície central de trabalho do professor,
+na qual ele pode visualizar o material instrucional que ele está projetando e editando em
+tempo real. É nessa área que os Assets (mídias) são agrupados para formar os objetos de
+aprendizagem (SCO’s), de maneira transparente ao professor, por meio de um editor de
+HTML e de um agregador de mídia, ambos WYSIWYG (what you see is what you get).
+5.5. Área de Controle de Objetos
+Permite a visualização de quantas mídias (Assets) uma página (objeto de aprendizagem)
+possui e também habilita a mudança de propriedades  de cada mídia, bem como o
+
+
+
+
+preenchimento de metadados para cada mídia.   Os metadados são importantes para
+descrever as propriedades e o comportamento de cada mídia inserida em uma página e,
+por exemplo, permitir saber qual o objetivo da inserção de uma determinada figura em
+um objeto de aprendizagem, além de dados sobre o autor da figura.
+5.6. Propriedades da Mídia
+Permite definir e mudar as propriedades para cada tipo de mídia inserida na Área de
+Edição de Página.
+6. Integração entre os Padrões da Cog-Learn e o Padrão SCORM
+Durante a realização deste projeto foram utilizados dois conceitos diferentes para um
+mesmo termo: padrão. Isto se deve ao fato de que as palavras pattern e standard, são
+traduzidas como padrão na maioria dos trabalhos encontrados na literatura e na indústria
+de software, não necessariamente software educacional.
+A principal diferença entre os conceitos de padrão (pattern) e padrão (standard)
+está no fato de que o standard é considerado como sendo uma norma e o pattern é
+considerado como uma ferramenta que auxilia no reuso de soluções já identificadas e
+documentadas para problemas recorrentes em um determinado contexto. Se uma norma
+não  for  totalmente  respeitada  e  seguida  do  início  ao  fim  do  projeto,  este  estará
+comprometido. Por exemplo, se no decorrer de um projeto de material instrucional, a
+equipe  de  desenvolvimento  que  está  utilizando  SCORM  decidir  trocá-lo  por  outro
+standard, todo o trabalho realizado até então deverá ser refeito.
+Por outro lado, um pattern é considerado como uma ferramenta intelectual, de
+uso  opcional,  que  pode  ser  usado  pela  equipe  de  desenvolvimento,  facilitando
+principalmente  a  comunicação  entre  membros  de  um  projeto,  não  interferindo
+diretamente no produto obtido.
+Inevitavelmente,  verificou-se  que  existe  um  relacionamento  entre  esses  dois
+conceitos, pois os padrões da Cog-Learn foram instanciados na ferramenta Cognitor,
+para melhorar a qualidade do material instrucional, ao mesmo que o padrão SCORM foi
+utilizado para permitir reúso e difusão do material produzido. O   SCORM   oferece   a
+capacidade de armazenar toda a descrição e o conteúdo de um material instrucional,
+utilizando-se apenas de arquivos XML.
+Por essa razão, verificou-se que não havia a necessidade de utilizar-se um banco
+de dados convencional para armazenar os materiais criados, mas apenas inserir algumas
+novas regras no documento de definição (DTD) do SCORM para considerar a utilização
+dos padrões da Cog-Learn. A seguir será apresentado como foi realizada a integração
+entre o padrão Estruturação do Conhecimento da Cog-Learn com o padrão SCORM.
+6.1 O padrão Estruturação do Conhecimento escrito no formato SCORM
+O padrão Estruturação do Conhecimento tem como solução proposta utilizar Mapas
+Conceituais  como  ferramenta  para  a  indexação  dos  conteúdos  envolvidos  em  um
+ambiente virtual de aprendizagem.
+Os Mapas Conceituais são úteis por diversas razões: são um registro observável
+da compreensão de um indivíduo; forçam um indivíduo a pensar sobre seus próprios
+
+
+
+
+processos de pensamento e estruturação do conhecimento. Quando  o  professor  cria  a
+estrutura  de  seu  material  utilizando-se  da  funcionalidade  fornecida  pelo  padrão
+Estruturação do Conhecimento localizado na área de planejamento e organização, ele
+obtém  como  resultado  um  conjunto  de  páginas  organizadas  em  tópicos,  que  são
+chamados de SCO’s no padrão SCORM.
+A solução encontrada para o armazenamento da estrutura criada pelo professor
+foi utilizar os elementos <organization> e <itens> presentes no arquivo de manifesto do
+SCORM  para  representar  os  conceitos  e  a  hierarquia  entre  esses  elementos  para
+representar as relações e associações entre os conceitos.
+Foram definidos novos atributos na seção que descreve os recursos, <resources>,
+para representar o tipo de exibição do conteúdo. Os tipos de exibição definidos foram:
+mapa conceitual, índice com links entre as páginas, índice sem links entre as páginas e
+barra de navegação horizontal, como pode ser observado na Figura 3, a seguir.
+Figura 3 - Integração entre o padrão (pattern) Estruturação do Conhecimento e
+o padrão (standard) SCORM
+A inclusão desses novos atributos no manifesto do SCORM não afeta a exibição
+do conteúdo quando o professor decide exportá-lo para ser executado em plataformas
+que implementam o SCORM, pois nesse caso a própria plataforma  “decide” como
+exibir o conteúdo. Nesse caso os atributos são removidos do manifesto. Mas    caso    o
+professor  decida  exportar  o  material  para  ser  executado  em  navegadores  Web  os
+atributos são mantidos e a exibição do índice com links, por exemplo, é mantida.
+7. Considerações Finais
+Neste trabalho apresentou-se o Cognitor, um framework que instancia a LP Cog-Learn,
+para apoio ao professor em sua tarefa de projetar material instrucional composto por
+objetos de aprendizagem para EAD. Discutiu-se também a questão da integração entre
+os conceitos de padrões (patterns) e o padrão (standard) SCORM com um exemplo da
+implementação do padrão Estruturação do Conhecimento utilizando-se a estrutura de
+elementos e atributos disponibilizadas pelo SCORM.
+Como um trabalho futuro pretende-se aplicar avaliações de usabilidade e testes
+com usuários, na ferramenta Cognitor, com o objetivo de descobrir se ele pode ser usado
+com  sucesso  para  promover  uma  integração  rápida  e  eficiente  entre  os  diferentes
+profissionais envolvidos no processo de ensino e aprendizagem em ambientes de EAD.
+É importante que os pesquisadores e desenvolvedores envolvidos com EAD
+considerem que é necessário um apoio tanto pedagógico como tecnológico no projeto e
+
+
+
+
+edição dos materiais instrucionais e objetos de aprendizagem, em busca de melhoria de
+qualidade e usabilidade no material obtido, facilitando assim a interação do aluno com a
+interface. É esperado que este trabalho contribua para alcançar esses objetivos.
+Referências
+Alexander, C. et al. (1977) “A Pattern Language”. Oxford University Press, N.Y., 1977.
+Ausubel, D. P  (1968). Educational Psychology: A Cognitive View. New York: Holt,
+Rinehart and Winston, 1968.
+Bergin, J. (2002) A Pattern Language for Course Development in Computer Science.
+Pace University. Available from: http://csis.pace.edu/~bergin
+Borchers, J. “A Pattern Approach to Interaction Design”. John Wiley&Sons, 2001.
+Fricke, A.; Völter, M (2000). Seminars: A Pedagogical Pattern Language about teaching
+seminars effectively. Proceedings of EuroPLoP, Germany, 2000.
+Gagné, R. M. The Conditions of Learning. 3rd Editon. Holt, Rinehart e Winston, 1974.
+Gamma, E., Helm, R., Johnson, R. and Vlissides, J. (1995) “Design Patterns: Elements
+of Reusable Object-Oriented Software”, Addison-Wesley, 1995.
+Kessler, G.,  Rosenblad, K., and Shepard S.  (1999). The Web Can Be Suitable for
+Learning. Computer, 32(2), (pp. 114-115).
+Liebman, J (1998). Teaching Operations Research: Lessons from Cognitive Psychology.
+Interfaces, vol. 28, no. 2, April 1998, pp 104-110.
+Montero, F., Lozano, M., Gonzáles, P. and Ramos, I.  (2002)  “A First Approach To
+Design  Web  Sites  By Using  Patterns”,  Proceedings  of  VikingPLoP  Conference,
+2002.
+Neris,  V.P.A;  Silva,  J.C.A;  Talarico  Neto,  A.  Hyper  Documents  with  Quality  for
+Distance Learning: Cognitive Strategies to Help Teachers in the Navigational Project
+and  Content  Organization.  Proceedings  of  the                                            11th  Brazilian  Symposium  on
+Multimedia and the web. New York : ACM Press, 2005. v. 125. p. 1-7.
+PPP                                                                                          (Pedagogical                     Patterns                                                           Project)   2006,   disponível   em
+http://www.pedagogicalpatterns.org
+SCORM. Version 1.2. The Scorm Content Aggregation Model; Advanced Distributed
+Learning, 2001; disponível em (http://www.adlnet.org).
+Talarico Neto, A; Anacleto, J.C; Neris, V.A. Cog-Learn: uma Linguagem de Padrões
+para e-Learning.  Revista  Brasileira de Informática na Educação,  Rio de Janeiro,
+13(3), p. 33-50, 2006.
+Talarico  Neto,  A;  Silva,  J.C.A;  Neris,  V.A.  Linguagem  de  Padrões  para  Apoiar  o
+Projeto de Material Instrucional para e-learning. In: XVI Simpósio Brasileiro de
+Informática na Educação. Anais do SBIE 2005. Porto Alegre, RS. SBC, 2005. v.1.
+Tidwell,   J.                                                                                (2003)                           “User   Interface   Patterns   and   Techniques”.   http://time-
+                                                                                             tripper.com/uipatterns.
+Welie, M. van. (2003) “Patterns in Interaction Design”. http://www.welie.com.
+
+
+
+
+

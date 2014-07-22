@@ -1,0 +1,418 @@
+﻿Controle Inteligente de Tempo Livre em Tutoria Multissess ão:
+Concepç ão, Implementaç ão e Avaliaç ão Empírica
+Weber Martins1, Viviane M. Gomes2, Lauro G. Nalini3, Carolina M. de Carvalho3
+1
+Escola de Eng. Elétrica e de Computação - Universidade Federal de Goiás (UFG)
+Goiânia - GO - Brasil
+2Depto de Tecnologia da Informação - Instituto Federal de Goiás (IFGO)
+Inhumas - GO - Brasil
+3Depto de Psicologia - Pontifícia Universidade Cat ólica de Goiás (PUC-GO)
+Goiânia - GO - Brasil
+weber@eee.ufg.br,  viviane@inhumas.ifgo.edu.br,  legn@ucg.br
+Abstract. This research proposes the intelligent control of free time (break in-
+tervals) in multi-session tutoring. The teaching strategy presents the content in
+modules with video, exercise, practical suggestion, free time, and revision exer-
+cise. Based on the student performance in exercises, the proposed system uses
+Reinforcement Learning to control pause durations.  The experimental group
+(with intelligent control) has been compared to the control group (where de-
+cisions belong to the student).  Results have shown significant and equivalent
+gains in knowledge retention. However, students from experimental group have
+realized more accurately the role of free time as a component of the teaching
+strategy.
+Resumo. Esta pesquisa prop õe o controle inteligente de tempo livre (pausas)
+em tutoria multissess ão.   A estratégia de ensino apresenta o conte údo em
+m ódulos com vídeo-aula, exercício, sugest ão pr ática, tempo livre e exercício
+de revis ão.  Baseado no desempenho do aluno nos exercícios, o sistema pro-
+posto utiliza Aprendizagem por Reforço para controlar a duraç ão das pausas.
+O grupo experimental (com controle inteligente do tempo livre) foi comparado
+ao grupo controle (onde a decis ão pertence ao pr óprio estudante).  Resulta-
+dos mostram ganhos significativos e equivalentes na retenç ão de conhecimento.
+Contudo, alunos do grupo experimental perceberam melhor o tempo livre como
+componente da estratégia de ensino.
+1.                                                                                        Introduç ão
+Sistemas Tutores Inteligentes (STI) são programas computacionais concebidos para pro-
+ver instrução personalizada.  Tais sistemas agregam os benefícios do ensino individu-
+alizado, onde o aluno progride no seu pr óprio ritmo [Skinner 1972], aos recursos para
+tratar o aluno de forma única. A partir da interação homem-máquina, métodos de Inte-
+ligência Computacional adaptam dinamicamente o conte údo e/ou o estilo de ensino às
+características do aprendiz [Murray 1999].
+Historicamente, os Sistemas Tutores Inteligentes exp õem o material em etapas
+consecutivas de tutoria, sem pausas  [Martins et al. 2004]  [Leung and Li 2007].   Con-
+forme ponto de vista comportamental em Psicologia, a pausa influencia o tempo dedicado
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+ao estudo (sessão de tutoria), sendo a condição de liberdade apreciada pelo estudante
+[Osborne 1969] [Geiger 1996]. Portanto esta pesquisa introduz e busca controlar inteli-
+gentemente o tempo livre entre etapas da tutoria.
+O presente artigo apresenta a fundamentação te órica, seguida pela descrição do
+sistema proposto, o trabalho de experimentação e os resultados obtidos e analisados, en-
+cerrando com a seção de conclusão.
+2. Fundamentaç ão Te órica
+2.1. Aprendizagem por Reforço
+Segundo [Kaelbling et al. 1996], Aprendizagem por Reforço é uma técnica adequada ao
+problema enfrentado por agentes que devem aprender em ambientes dinâmicos através
+de interaç ões de tentativa e erro.  A estrutura (do Inglês, framework) da Aprendizagem
+por Reforço fundamenta-se na relação entre estado-ação-recompensa. Estado, denotado
+por s, é o contexto de interação entre ambiente e agente a cada momento, onde o agente
+executa uma ação (a) e, por consequência, recebe uma recompensa (r) do ambiente.
+Ap ós explorar as aç ões,  o agente aprende a selecionar boas aç ões  (ou pares
+estado-ação) para atingir seu objetivo:  maximizar o valor total das recompensas rece-
+bidas.  A cada passo, o agente escolhe alguma ação a partir da política, denotada por
+πt, ou seja, pela regra estocástica para seleção de aç ões como uma função de estados
+[Sutton and Barto 1998]. Em outras palavras, política é a distribuição de probabilidades
+das aç ões num estado. Matematicamente, πt(s, a) é a probabilidade de at  = a se st  = s.
+A probabilidade πt(s, a) resulta de uma função-valor combinada ao critério de
+seleção específico da política π.  Como características essenciais da Aprendizagem por
+Reforço, funç ões-valor fornecem o retorno esperado de cada estado (Rt) - a função de
+recompensas futuras que o agente busca maximizar, conforme mostra a Equação 1, onde
+T  é o passo final no tempo.
+Especificaç ões da interface dos passos definem tarefas, epis ódicas ou contínuas.
+Em tarefas contínuas, ao contrário das epis ódicas, agente e ambiente interagem indefini-
+damente (T  → ∞).  Nesse caso, o retorno apresenta recompensas descontadas, valores
+presentes de recompensas futuras.  A taxa de desconto γ (0  ≤ γ  ≤  1) minimiza a in-
+fluência de recompensas incertas, distantes do momento atual.  Para tarefas epis ódicas,
+γ = 1 e T  é o n úmero de passos.
+∑
+Rt  =                                                                                        γkrt+k+1   (1)
+k=0
+Se o sinal de estado do ambiente sintetiza de forma compacta o passado sem de-
+gradar a habilidade de predizer o futuro, diz-se que o ambiente satisfaz a Propriedade de
+Markov e, portanto, define um Processo de Decisão de Markov (do Inglês, Markov Deci-
+sion Process, MDP). Tal processo constitui prerrequisito essencial para o agente aprender
+a política  ótima, π∗, sendo a predição do estado futuro do agente baseada somente no
+estado atual e na ação escolhida [Saeb et al. 2009].  A política  ótima π∗  é resultado de
+funç ões-valor ótimas (de estado V ∗ e de ação Q∗), ou seja, com maior retorno esperado.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Métodos de seleção de ação definem πt(s, a) baseados no valor da ação Qt(s, a),
+tais como Greedy, ϵ-Greedy e Softmax. O método Softmax determina a política como uma
+distribuição ordenada de probabilidades a partir das estimativas de ação-valor.  Comu-
+mente utilizada no Softmax, a Distribuição de Gibbs (ver Equação 2) possui o parâmetro
+τ , temperatura, responsável pela diferenciação das aç ões. Temperaturas altas tornam as
+A me-
+dida que a temperatura diminui, as probabilidades das aç ões diferenciam-se até convergir
+(exploração intensiva ou exploitation), evidência da aprendizagem computacional.
+τ
+(2)
+∑n
+τ
+No paradigma da Aprendizagem por Reforço, a caracterização do problema con-
+tribui diretamente na escolha do método de solução: Programação Dinâmica, Monte Carlo
+e Aprendizagem por Diferença Temporal. A modelagem revela o nível de conhecimento,
+completo ou incompleto, do ambiente dinâmico. Métodos de Programação Dinâmica exi-
+gem completo e acurado modelo do ambiente. Ao contrário, métodos de Monte Carlo e
+de Aprendizagem por Diferença Temporal aprendem da experiência, mesmo em ambiente
+totalmente desconhecido [Sutton and Barto 1998].
+2.2. An álise Experimental do Comportamento
+A Análise Experimental do Comportamento (AEC) é uma disciplina científica surgida em
+1938, no contexto da Psicologia como ciência natural, com o objetivo geral de descrever
+e explicar as interaç ões entre o organismo/indivíduo e o ambiente [Catania 1999].
+Nos casos de comportamentos emitidos espontaneamente, as respostas agem ou
+“operam” sobre o ambiente.  Em AEC, recebem o nome de comportamento operante.
+Ao operar o ambiente, o comportamento sofre as consequências da ação: se a resposta
+for imediatamente seguida por evento reforçador, será emitida mais frequentemente em
+circuntâncias similares. Situaç ões de reforçamento aumentam a frequência do comporta-
+mento operante [Holland e Skinner 1975] [Skinner 2003].
+Premack, em experimentos com macacos Cebus e crianças, verificou que ativida-
+des com elevada frequência podem funcionar como reforçadores para atividades de baixa
+frequência. Tal constatação foi formulada como o princípio de Premack [Premack 1959].
+Baseado neste princípio, Osborne (1969) contingenciou tempo livre das atividades es-
+colares como consequência para a permanência nos assentos na sala de aula (resposta
+operante), numa turma de seis alunos surdos.  Como resultado, a frequência do com-
+portamento dos alunos de ficarem sentados aumentou, mesmo ap ós a suspensão da con-
+tingência (comportamento observado por seis semanas) [Osborne 1969].  Geiger (1996)
+aplicou o princípio de Premack em turmas de sétima e oitava séries. Caso o grupo/turma
+terminasse as atividades de 5 a 10 minutos antes do término da aula, era liberado para brin-
+car no playground. Evidenciou-se maior disciplina e maior aproveitamento escolar para
+o grupo experimental, comparado ao grupo controle (aula tradicional) [Geiger 1996].
+Frequentemente, crianças e adolescentes utilizam o computador como plataforma
+de entretenimento  [Subrahmanyam et al. 2001].   Baseado nesse cenário, aplicou-se o
+princípio de Premack como fundamento para o sistema proposto desta pesquisa.  No
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+presente estudo, tempo livre, quando o aprendiz podia ouvir m úsica ou jogar (ativida-
+des comumente mais frequentes), foi contingenciado como consequência às atividades de
+estudo no tutor (atividades comumente menos frequentes).
+3. Sistema Proposto
+A tutoria constitui a interação entre aluno e sistema tutor inteligente. Neste trabalho, a es-
+tratégia de ensino apresenta o conte údo em m ódulos, formados por vídeo-aula, exercício,
+sugestão prática, tempo livre e exercício de revisão.  Como fase especial do ensino, o
+tempo livre possibilita aprendizagem pela experimentação, afinal o aluno pode explorar
+novas habilidades durante a pausa.  A vídeo-aula, de pequena duração, exp õe o assunto
+do m ódulo através de esquemas, analogias e linguagem apropriada ao aprendiz.  Nos
+exercícios, o aluno prossegue somente ap ós acertar.  E, imediatamente antes do tempo
+livre, o STI prop õe uma sugestão prática (procedimento).
+Baseado no desempenho do aprendiz,  o sistema proposto controla a duração
+das pausas conforme decisão do agente inteligente.  No contexto da tutoria, os estados
+referem-se aos m ódulos do curso, as aç ões são as escolhas do controle (conjunto de aç ões
+A, {diminuir, manter, aumentar} a duração da pausa) e as recompensas resultam das
+notas (N 1 e N 2) nos exercícios.
+Em cada estado s, o agente 1) seleciona uma ação a a partir da política πt(s, a),
+2) determina r pela função-recompensa e 3) atualiza o valor da ação Q(s, a), de forma
+incremental, conforme mostra o algoritmo da Figura 1. A política π fornece, pelo método
+Softmax, as probabilidades de escolha de cada ação, como resultado da Distribuição de
+Gibbs (ver a Equação 2).
+Figura 1. Algoritmo do sistema proposto.
+Como o ajuste da temperatura é um ponto crucial para o processo de convergência,
+este trabalho adota caimento linear da temperatura com raz ões distintas, q1  e q2, para dois
+momentos da aprendizagem computacional: 1) exploração extensiva e 2) exploração in-
+tensiva. Simulaç ões definem as temperaturas inicial, intermediária e final, corresponden-
+tes aos estados inicial (referente ao primeiro m ódulo), intermediário e final (referente ao
+último m ódulo), respectivamente.  Como base dessas simulaç ões, a modelagem do pro-
+blema da Aprendizagem por Reforço pressup õe perfis distintos de aluno: te órico, equili-
+brado e pragmático. Acredita-se que quando o tempo livre diminui, aprendizes te óricos
+desempenham melhor.  Outros aprendizes, equilibrados, obtém mais benefícios quando
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+o tamanho da pausa é mantido.  Por fim, sup õe-se que os pragmáticos preferem pausas
+maiores.
+Para encontrar a melhor ação, o agente modifica a duração da pausa a partir do
+tempo livre inicial tl0. As aç ões executadas recebem recompensas do ambiente, definidas
+pela função-recompensa r  = f (N 1, N 2).  Tanto N 1 quanto N 2 são valores numéricos
+para o desempenho do aluno, entre 0 e 1 (de nenhum a total conhecimento da resposta).
+Devido à obrigatoriedade do acerto, N 1 e N 2 dependem da quantidade de tenta-
+tivas combinadas ao tipo de resposta (Correta, Semelhante à Correta, Incorreta). Os erros
+consistem em perdas no valor máximo da nota, como mostra a Equação 3, onde pi  é a
+perda por tentativa, pR , a perda de referência (valor da perda total no pior caso) e ta é a
+tentativa do acerto.
+∑ta
+i=1 pi
+Nota = 1 −                                                                                                  (3)
+pR
+Para cada tipo de resposta, existe um peso específico no cálculo da perda, definido
+pela função H (x). Por exemplo, se x for igual à resposta correta, então H (x) = 0, pois
+1
+não há perda neste caso. Calcula-se a perda pela equação pi  = H (x).                                       sendo T o
+T −i+1 ,
+total de alternativas (tentativas possíveis).                                                               A medida que o estudante erra, as alternativas
+escolhidas desaparecem da tela e a perda por tentativa aumenta.
+O sistema proposto estima o valor das aç ões como a média das recompensas ob-
+servadas.  A função-valor  é atualizada de forma incremental, pela equação Q(s, a)  ←
+Q(s, a) + α[r − Q(s, a)], onde o parâmetro α, conhecido como o tamanho do passo (do
+Inglês, step-size), é igual a 1
+k , para k-ésima recompensa recebida para ação a.
+4. Experimento
+Para testar o sistema proposto, desenvolveu-se o tema “Introdução à Microinformática no
+Linux”. As etapas da tutoria compreendem o conte údo acrescido de tempo livre. Basica-
+mente, a sessão de ensino contém um questionário ou um m ódulo do curso, como mostra
+a Figura 2.  Quanto ao tempo livre, sua duração é predefinida para as etapas gerais da
+tutoria e controlada durante o curso. Baseado em estimativa da duração total da atividade
+e na pesquisa-piloto, a pausa dura quatro minutos (tl0  = 4min) ap ós as Etapas 1 e 2 e um
+minuto (tl = 1min) ap ós as Etapas 4 e 5.
+No experimento,  os estados são caracterizados pelos m ódulos do curso.   A
+sequência de estados s1, s2, s3, ..., s15, referente aos m ódulos,                                          é fixa para o ambiente
+dinâmico.  Quanto às aç ões, o agente pode decidir por diminuir, manter ou aumentar a
+duração do tempo livre.  No casos de diminuição e aumento, a pausa varia em 25% (a
+menos ou a mais) do valor anterior.  Portanto, numericamente, o conjunto de aç ões  é:
+A  =  {0, 75; 1; 1, 25}.  Assim o controle inteligente escolhe a ação at  para cálculo do
+tempo livre, pela equação tlt  = at.tlt−1, com at ϵ A, onde tlt  é o tempo livre atual1, tlt−1
+é o tempo livre anterior.
+1 O tempo livre atual possui limites mínimo (1 min) e máximo, estimativa do tempo livre médio dis-
+ponível por m ódulo, tendo em vista o tempo livre total estimado (100 min) e o tempo gasto até o momento.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Figura 2. Etapas da tutoria.
+Para avaliar as aç ões  (escolhas),  o agente utiliza uma função-recompensa,  a
+média ponderada das notas N 1 e N 2 nos exercícios, ap ós vídeo-aula e ap ós tempo livre
+(exercício de revisão). Os pesos de N 1 e N 2 são constantes, com ênfase para o momento
+posterior à ação at executada, conforme mostra a equação rt  = N 1t +2N 2t
+3
+As notas N 1 e N 2 são calculadas a partir da mesma f órmula, apresentada na
+Equação 3.  Obtém-se o valor da perda por tentativa (pi) pela Equação 4, onde H (x) é
+a função que caracteriza o tipo de resposta, Correta (C), Semelhante  à Correta (SC) e
+Incorreta (I). Quando a perda total é zero, a nota no exercício é igual a 1 (nota máxima),
+e vice-versa.  Vale ressaltar que os valores de H (x) e pR  foram encontrados empirica-
+mente. Para quatro alternativas e três tipos de respostas, existem nove cenários distintos
+de tentativas até o acerto. O pior caso definiu o valor da perda de referência em 1, 792.
+
+                                                                                            0                                     se   x = C
+1
+pi  = H (x).                                                                                                                       0,5          se   x = SC   (4)
+                                                                                             T − i + 1 ,   sendo   que   H (x) =   
+                                                                                                                                   2            se   x = I
+A modelagem do problema da Aprendizagem por Reforço, conforme mostra a
+Tabela 1, possibilitou o ajuste da temperatura. A tabela apresenta as situaç ões de acerto
+para cada tipo de aluno a partir da ação realizada, ou seja, a sequência de respostas da-
+das nos exercícios como consequência da ação.  As simulaç ões (com 10.000 iteraç ões
+para cada caso) apontaram para o comportamento desejado da aprendizagem computaci-
+onal. Para temperatura inicial igual a 2, as aç ões são praticamente equiprováveis. Houve
+diferenciação satisfat ória da política π para os valores de τ menores que 0, 2.  Portanto
+a temperatura varia de 2 até 0, 2 do Estado 1 ao 8 (s1-s8) e de 0, 2 (temperatura inter-
+mediária) a 0, 1 (temperatura final) para os estados restantes, s8-s15, com as raz ões de
+caimento q1  = −0, 257 e q2  = −0, 014.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+                                                                                              Te órico      Equilibrado   Pragmático
+Diminuir Tempo Livre                                                                          C             SC-I-I-C      SC-I-I-C
+Manter Tempo Livre                                                                            SC-C ou I-C   C             SC-C ou I-C
+Aumentar Tempo Livre                                                                          SC-I-I-C      SC-I-I-C      C
+Tipos de resposta: C-Correta, SC-Semelhante à Correta e I-Incorreta
+O STI deste estudo foi implementado em Java e executado durante a coleta de
+dados em ambiente Linux, distribuição Ubuntu (ver Figura 3). Os participantes (amostra)
+são adolescentes entre 14 e 17 anos com pouco ou nenhum conhecimento sobre Microin-
+formática.  No experimento, a amostra foi dividida em dois grupos equivalentes de 32
+estudantes, diferenciados apenas pelo controle aplicado ao tempo livre: inteligente (de-
+cisão computacional), grupo experimental, e livre (decisão humana), grupo controle.
+Figura 3. Interface gr ´afica do STI na vídeo-aula sobre Linux.
+5. Resultados
+5.1. An álise Estatística Descritiva
+Em Sistemas Tutores Inteligentes, a retenção de conhecimento evidencia a capacidade de
+ensinar de tais sistemas. A Tabela 2 mostra as medidas das notas iniciais e finais, o ganho
+normalizado (ver Equação 5) e o tempo total da atividade (tutoria com tempo livre).
+GanhoNormalizado =   NotaF inal − NotaInicial                                                 (5)
+NotaMaxima − NotaInicial
+Tanto na amostra geral como nos grupos, a nota final apresentou valores maio-
+res que a inicial, sendo o ganho na retenção de conhecimento igual a 45,2%.  Os dois
+tipos de controle, inteligente e livre, possuem comportamentos semelhantes quanto ao
+desempenho e ao tempo total de tutoria (com tempo livre). Em média, a atividade durou
+2h31min no controle inteligente e 2h34min no controle livre.  O desvio padrão aponta
+para heterogeneidade na amostra, justificada pela dificuldades da pesquisa com humanos.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Tabela 2. Estatística descritiva do desempenho e do tempo total (em segundos).
+Estatísticas                                                                                                   Média                         Desvio Padrão
+Medida \ Amostra                                                                                 Inteligente   Livre   Geral   Inteligente   Livre           Geral
+Nota Inicial                                                                                     4,13          3,88    4,00    1,55          1,52            1,53
+Nota Final                                                                                       6,71          6,56    6,64    1,95          1,75            1,84
+Ganho Normalizado                                                                                45,2%         45,2%   45,2%   29,4%         23,4%           26,4%
+Tempo Total (s)                                                                                  9089          9235    9162    1529          1704            1608
+No questionário sobre a percepção da experiência, os alunos indicaram a vídeo-
+aula como etapa mais interessante do curso.  No controle inteligente, as outras etapas
+(exercício, sugestão prática, tempo livre e exercício de revisão) apresentaram distribuição
+mais uniforme que no controle livre (ver o gráfico da Figura 4).
+Figura 4. Etapa mais interessante do curso para o grupo (a) inteligente e (b) livre.
+A maioria dos alunos considerou o tempo livre suficiente, sendo apontado por
+65,6% dos estudantes no grupo experimental e  78%,  no grupo controle.   De forma
+unânime, os estudantes gostaram da atividade, sendo que as opç ões “Gostei.”  e “Gos-
+tei demais.” receberam 46,9% e 53,1% das respostas no controle inteligente, respectiva-
+mente, e 40,6% e 59,4%, no livre.
+5.2. An álise Estatística Inferencial
+A análise inferencial generaliza as conclus ões a partir de testes estatísticos e estimaç ões.
+Nesta seção, as provas de hip óteses verificam a presença de diferenças significativas entre
+as variáveis observadas nos grupos experimental e controle.
+O Teste t-Student pareado comparou a nota inicial com a nota final dos participan-
+tes. A hip ótese nula (H0) foi rejeitada (αefetivo  < 0, 01) tanto na amostra geral como nos
+grupos, ou seja, houve ganhos significativos na retenção de conhecimento, evidência de
+que os sistemas tutores realmente atingiram sua meta.
+Para analisar o desempenho e o tempo total entre os grupos, aplicou-se o Teste t
+com amostras independentes. Baseado nos valores do nível de significância efetivo (valor-
+p) da Tabela 3, a prova de hip ótese afirma equivalência entre os grupos, H0  verdadeira.
+Os valores observados sobre a percepção da experiência de tutoria foram insufi-
+cientes para a prova de Qui-Quadrado, pois observaram-se frequências inferiores ao ne-
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Tabela 3. Estatística inferencial do desempenho e do tempo total.
+Estatística \ Medida                                                                         Nota Inicial   Nota Final   Ganho Normalizado   Tempo Total
+α efetivo                                                                                    0,52           0,38         0,50                0,36
+cessário. Quanto ao gosto pela atividade, com dados suficientes, o teste de Qui-Quadrado
+evidenciou α efetivo igual a 0, 801, levando à não rejeição de H0.
+5.3. Discuss ão
+No grupo experimental, os estudantes perceberam melhor o tempo livre como compo-
+nente da estratégia de ensino, conforme observaç ões feitas durante a coleta dos dados
+e confirmadas pela análise descritiva.  O sistema tutor livre permitiu ao aluno controlar
+a duração da pausa, desviando, contudo, parte de sua atenção para o processo de esco-
+lha.  Assim, o grupo controle considerou o tempo livre e as etapas imediatamente antes
+(sugestão prática) e depois (exercício de revisão) apenas como entretenimento.
+Quanto  à  técnica de Aprendizagem por Reforço, a instabilidade do ambiente
+(interação do aluno) penalizou a aprendizagem computacional.  O aluno mudava brus-
+camente de opinião em relação à duração das pausas conforme a tutoria evoluiu. Apenas
+em dois casos, o sistema proposto convergiu (desvio padrão da política maior que 0, 4).
+No trabalho de [Martins et al. 2007], a Aprendizagem por Reforço foi empregada
+na seleção de conte údos “estáticos” para os aprendizes no cenário tradicional de uma
+única sessão, obtendo ganho normalizado médio de 52,61%. O presente trabalho aliou o
+uso de pequenas vídeo-aulas e a inserção de tempo livre, atingindo ganhos equivalentes
+não apenas para o sistema inteligente, mas inclusive para o tutor livre.
+6. Conclus ão
+Esta pesquisa introduz a inserção de pausas em Sistemas Tutores Inteligentes, ressaltando
+seu forte potencial como componente na estratégia de ensino, aliada ao uso de pequenas
+vídeo-aulas.  As condiç ões do delineamento foram insuficientes para comprovação da
+hip ótese experimental, ou seja, a possível influência do tipo de controle do tempo livre
+sobre o desempenho do aluno.
+Em trabalhos futuros, sugere-se a investigação sobre a eficácia do tempo livre
+na retenção de conhecimento, comparando STIs com e sem pausas.  Em relação aos
+m ódulos do curso, novos experimentos poderiam usar a sequência das etapas funda-
+mentada na Aprendizagem Baseada em Problema [Jacinto e de Oliveira 2007]. Sugest ões
+práticas seriam substituídas por problemas, verdadeiros pontos iniciais dos m ódulos. Para
+o controle inteligente do tempo livre, a Aprendizagem por Reforço poderia ser mode-
+lada com base em comportamento não-verbal, como ansiedade física e express ões faciais
+[Rodrigues e Carvalho 2005] [Sarrafzadeh et al. 2008].
+Referências
+Catania, A. C. (1999).  Aprendizagem:  Comportamento, Linguagem e Cogniç ão.  Ed.
+Artes Médicas Sul, Porto Alegre, 4a edição.
+Geiger, B. (1996).  A time to learn, a time to play: Premack’s principle applied in the
+classroom. American Secondary Education, 25:2-6.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Holland, J. G. e Skinner, B. F. (1975). A An álise do Comportamento. Ed. da Universidade
+de São Paulo, São Paulo.
+Jacinto, A. S. e de Oliveira, J. M. P. (2007). Uma investigação de STI que emprega a PBL
+de forma individual. Anais do XVIII Simp ósio Brasileiro de Inform ática na Educaç ão,
+páginas 432-440.
+Kaelbling, L. P., Littman, M. L., and Moore, A. W. (1996).  Reinforcement learning: A
+survey. Journal of Artificial Intelligence Research, 4:237-285.
+Leung, E. W. C. and Li, Q. (2007).  An experimental study of a personalized learning
+environment through open-source software tools.  IEEE Transactions on Education,
+50(4):331-337.
+Martins, W., Afonseca, U. R., Nalini, L. E. G., e Gomes, V. M. (2007). Tutoriais inteli-
+gentes baseados em aprendizado por reforço: Concepção, implementação e avaliação
+empírica.  Anais do XVIII Simp ósio Brasileiro de Inform ática na Educaç ão, páginas
+617-626.
+Martins, W., Meireles, V., de Melo, F. R., and Nalini, L. E. G. (2004).  A novel hybrid
+intelligent tutoring system and its use of psychological profiles and learning styles.
+Lecture Notes on Computer Science, 3220:830-832.
+Murray, T. (1999). Authoring intelligent tutoring systems: An analysis of the state of the
+art. International Journal of Artificial Intelligence in Education, 10:98-129.
+Osborne, J. G. (1969). Free-time as a reinforcer in the management of classroom behavior.
+Journal of Applied Behavior Analysis, 2(2):113-118.
+Premack, D. (1959). Toward empirical behavior laws: I. Positive reinforcement. Psycho-
+logical Review, 66:219-233.
+Rodrigues, L. M. L. e Carvalho, M. (2005). STI-I: Sistemas tutoriais inteligentes que inte-
+gram cognição, emoção e motivação. Revista Brasileira de Inform ática na Educaç ão,
+13(1):20-34.
+Saeb, S., Weber, C., and Triesch, J. (2009). Goal-directed learning of features and forward
+models. Neural Networks, 22:586-592.
+Sarrafzadeh, A., Alexander, S., Dadgostar, F., Fan, C., and Bigdeli, A. (2008).  “How do
+you know that I don’t understand?” A look at the future of intelligent tutoring systems.
+Computers in Human Behavior, 24:1342-1363.
+Skinner, B. F. (1972).  Tecnologia do Ensino.  Ed. da Universidade de São Paulo, São
+Paulo.
+Skinner, B. F. (2003).  Ciência e Comportamento Humano.  Martins Fontes, São Paulo,
+11a edição.
+Subrahmanyam, K., Greenfield, P., Kraut, R., and Gross, E. (2001). The impact of com-
+puter use on children’s and adolescents’ development.  Applied Developmental Psy-
+chology, 22:7-30.
+Sutton, R. S. and Barto, A. G. (1998).  Reinforcement Learning.  Bradford Book/MIT
+Press, Cambridge, Massachusetts and London, England.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+

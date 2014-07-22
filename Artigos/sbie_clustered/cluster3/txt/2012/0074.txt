@@ -1,0 +1,424 @@
+﻿Wagner L. Cambruzzi1, Rodrigo de Moraes1, Valderi R. Q. Leithardt1,2,
+Cassiano Mendes1, Cl áudio F. R. Geyer2, Cristiano A. da Costa1,
+Jorge L. V. Barbosa1, Sandro J. Rigo1
+1Programa Interdisciplinar de P ós-Graduação em Computação Aplicada (PIPCA)
+Universidade do Vale do Rio dos Sinos (UNISINOS) - São Leopoldo - RS - Brasil
+2
+Instituto de Informática - Universidade Federal do Rio Grande do Sul (UFRGS)
+Caixa Postal 15.064 - 91.501-970 - Porto Alegre - RS - Brazil
+{wcambruzzi,rmoraes,cmendes}@gvwise.com.br,
+{vrqleithardt,geyer}@inf.ufrgs.br,{cac,jbarbosa,rigo}@unisinos.br
+Abstract. Mobile computing allows the use of contexts and trails to foster some
+application aspects, such as content adaptation, analysis and personalization.
+A trail can be considered as a set of entity contexts.  This article presents a
+managing model for multiple trails, in which is addressed a gap in the previous
+approaches, regarding the number of trails treated. The MultiTrail model diffe-
+rential is the representation of each entity in several trails, thus allowing the
+multiple interesting entity aspects to be modeled and manipulated according to
+its use in different applications.  This flexibility advantages are demonstrated
+and analyzed in case studies applying this model.
+Resumo. A difus ão da computaç ão m óvel e de sistemas de localizaç ão via-
+biliza a utilizaç ão de contextos e trilhas em diversas aplicaç ões.  Uma trilha
+representa um conjunto de contextos visitados por um usu ário historicamente
+organizado.  Fundamentado nessas características, este artigo apresenta uma
+proposta para o gerenciamento de m últiplas trilhas em ambientes educacionais,
+tendo como principal contribuiç ão a representaç ão dos dados de cada entidade
+em diversas trilhas. Esta abordagem amplia a possibilidade de composiç ão do
+contexto das entidades, proporcionando maior flexibilidade e abrangência para
+sua utilizaç ão em sistemas de apoio à educaç ão.
+1.                                                                                                   Introduç ão
+                                                                                                     O     aprimoramento     e     a     precisão    de     Sistemas   de   Localização
+[Hightower and Borriello 2001]  vêm  estimulando  a  adoção  de  soluç ões  que  con-
+sideram  a  localização  dos  usuários  na  prestação  de  serviços                                  [Dey et al. 2010,
+Vaughan-Nichols 2009].   Com  este  aprimoramento,  informaç ões  de  contexto  foram
+incorporadas nas aplicaç ões e a computação se tornou ciente do contexto do usuário.
+Segundo Dey [Dey 2001], contexto é qualquer informação que possa ser utilizada para
+∗Este trabalho teve apoio do Concelho Nacional de Desenvolvimento Científico e Tecnol ógico (CNPQ)
+através do Edital MCT/CNPq No  75/2010  - RHAE Pesquisador na Empresa e da Unidade de Novos
+Neg ócios da GVDASA Informática LTDA.
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+caracterizar a situação de entidades (pessoa, lugar ou objeto) que sejam consideradas
+relevantes para interação entre um usuário e uma aplicação.  O registro hist órico dos
+contextos visitados e da atuação da entidade normalmente recebe a denominação de
+Trilha [Driver and Clarke 2008, Levene and Peterson 2002].
+Devido  às possibilidades geradas pela utilização destas informaç ões, diversos
+trabalhos estão sendo pesquisados a partir de um objetivo geral ligado                         à  aquisição
+e  utilização  dos  dados  referentes                                                          às  trilhas  de  entidades.   Porém,  estes  trabalhos
+apresentam focos distintos,  tais como:  o auxílio  à  navegação e acesso a conte údos
+[Gams and Reich 2002, Wang et al. 2008], o registro de experiências de aprendizagem
+[Levene and Peterson 2002, Silva et al. 2009], a anotação de localizaç ões e atividades
+[Smith 2008, Driver and Clarke 2008].
+Com  o  objetivo  de  ampliar  a  utilização  dos  dados  de  trilhas  em  ambi-
+ente  educacionais                                                                             é  proposto  neste  trabalho  a  extensão  do  modelo  apresentado  em
+[Cambruzzi et al. 2012] para gerenciamento de m últiplas trilhas denominado MultiTrail.
+Com base na proposta de gerenciamento e manipulação de trilhas desenvolvida no mo-
+delo UbiTrail [Silva et al. 2009], o modelo proposto atua no sentido de gerenciar os dados
+gerados pelas entidades que estão sendo acompanhadas e na disponibilização e aplicação
+para sistemas de apoio à Educação. Portanto, é proposto neste o modelo MultiTrail onde
+a interação de cada entidade será armazenada em diferentes trilhas, possuindo cada uma
+delas um objetivo específico. A forma de representação e armazenamento das trilhas uti-
+liza o conceito de rede de ontologias [Villaz ón-Terrazas et al. 2011], o que é adequado
+aos objetivos desta abordagem em proporcionar maior flexibilidade para as aplicaç ões
+que utilizam estes dados, bem como, fomentar o compartilhamento destes dados entre
+aplicaç ões.
+A natureza dinâmica observada atualmente em relação aos diferentes dispositivos
+e diferentes fontes de dados pode ser adequadamente representada com a abordagem de
+m últiplas trilhas. Assim, diferentes elementos de coleta e tratamento prévio dos dados, de
+cada uma destas diversas origens, podem ser integrados facilmente em uma aplicação. Em
+aplicaç ões distintas, suas necessidades específicas serão representadas com a recuperação
+dos diversos contextos das trilhas de interesse que representam a entidade.
+Na  versão  inicial  do  modelo                                                                [Cambruzzi et al. 2012]  foi  implementado  um
+prot ótipo  onde  m últiplas  aplicaç ões  podem  compartilhar  dados  com  finalidades  es-
+pecíficas.  Naquela versão dois estudos de caso foram realizados.  O primeiro  é con-
+textualizado no nível de Ensino Médio, voltado para acompanhamento individualizado de
+atividades e visualização de dados.  O segundo deu-se no contexto do Ensino Superior,
+voltado para a análise e visualização de interaç ões e relacionamento de dados. Neste ar-
+tigo o modelo é ampliado para permitir a realização do terceiro estudo de caso em que
+as trilhas foram utilizadas no registro de informaç ões de um grupo de estudantes da mo-
+dalidade EAD no Ensino Superior com o objetivo de predizer os alunos com tendência à
+evasão escolar ainda durante o andamento da disciplina.
+O artigo está organizado em seis seç ões. A segunda seção apresenta os trabalhos
+relacionados. A terceira seção apresenta a conceituação do modelo. A quarta seção des-
+creve a arquitetura proposta.  A quinta seção apresenta o estudo de caso realizado.  Por
+fim, na sexta seção são apresentadas as conclus ões e os trabalhos futuros.
+
+
+
+
+2. Trabalhos Relacionados
+Essa seção apresenta trabalhos relacionados com foco na representação e utilização de
+trilhas para aplicaç ões diversas.
+O projeto TrailTRECer [Gams and Reich 2002] é voltado ao auxílio na navegação
+e na busca de conte údo, possibilitando que um usuário acompanhe a trilha de navegação
+de outro usuário. Assim, facilitando a busca de informaç ões. O conceito de trilha adotado
+pelo projeto define esta como um conjunto de documentos digitais que um usuário acessou
+ao executar uma determinada atividade.
+No trabalho desenvolvido por [Levene and Peterson 2002], denominado projeto
+Trail Records, são utilizados dispositivos m óveis para registro de experiências de apren-
+dizagem usando diferentes mídias, tais como textos, vídeos e áudio, durante a visita em
+diferentes localizaç ões.  O conceito de trilha adotado pelo projeto define esta como a
+sequência dos registros vinculando conte údo com localização, sendo utilizada para re-
+compor a experiência do aprendiz no trajeto visitado.
+Em [Wang et al. 2008] o principal objetivo é a disponibilização de conte údo mul-
+timídia localizado chamado de Nidaros. O projeto considera uma trilha composta por um
+conjunto de registros que indicam os lugares onde cada dispositivo realizou acesso.
+Já no trabalho [Smith 2008] é proposto a anotação das localizaç ões percorridas por
+usuários de dispositivos m óveis, compondo uma trilha de locais visitados descrito como
+projeto Life Annotation. Além disso, esse modelo prevê que sejam registradas todas as
+informaç ões possíveis relacionadas com cada local. O objetivo é o registro das atividades
+de um usuário, permitindo consultas no futuro.
+O projeto Hermes [Levene and Peterson 2002] é voltado para o gerenciamento de
+atividades e considera que a trilha é uma coleção de atividades programadas de forma
+contextual.  Suas funcionalidades são direcionadas para a geração automática da ordem
+de execução das atividades levando em conta informaç ões de contexto.
+No projeto Startrack, descrito em [Ananthanarayanan et al. 2009], é proposto um
+conjunto de operaç ões para manipulação de trilhas. Seu conceito de trilha considera que
+esta representa uma rota contínua baseada em eventos discretos. Desta forma, cada trilha
+é uma coleção de lugares visitados ordenada no tempo. As trilhas são armazenadas em
+um servidor e o usuário proprietário da trilha pode compartilhar suas trilhas com outros
+usuários. Cada aplicação pode definir quais informaç ões vai guardar em cada trilha.
+[Silva et al. 2009] prop ôs um modelo denominado UbiTrail que possui como prin-
+cipal objetivo gerenciar informaç ões sobre a trilha de uma entidade. O conceito de trilha
+adotado pelo projeto define que trilha é uma representação digital do hist órico dos contex-
+tos visitados por uma entidade. Não apenas a localização é considerada, mas também o
+contexto, indicando o que ela está fazendo e o ambiente a seu redor. Todas as informaç ões
+relacionadas com o deslocamento de uma entidade são organizadas em uma trilha única e
+contínua.
+Embora os trabalhos estudados possuam suporte a trilhas, as características trata-
+das são diferentes de acordo com o foco específico de cada um deles. Todos eles registram
+suas informaç ões em uma única trilha.  Conforme evidenciado pela análise realizada, o
+conceito de m últiplas trilhas não é explorado nestes trabalhos. No modelo proposto, além
+
+
+
+
+do tratamento de m últiplas trilhas,  é possível a utilização dos dados armazenados com
+diferentes níveis de detalhamento, de acordo com as necessidades de cada aplicação.
+3. Modelo de Gerenciamento de M ´ultiplas Trilhas
+Inicialmente destacam-se alguns detalhes para os elementos básicos deste modelo.  O
+termo entidade deve ser entendido como a representação de um objeto computacional
+ou de um usuário. Com isso, as trilhas registram as diferentes informaç ões geradas por
+esta entidade. No modelo proposto cada entidade não é representada em uma única tri-
+lha, tal como observa-se em trabalhos relacionados [Silva et al. 2009].  Ao invés disso,
+cada entidade é representada em m últiplas trilhas, de acordo com as características das
+informaç ões, de modo que possam ser agrupadas ou diferenciadas, para os casos em que
+ocorrem diferentes necessidades de análise e uso.
+Sendo assim, este modelo proporciona duas vantagens que estão fortemente re-
+lacionadas com esta abordagem.  A primeira é a flexibilidade para a aquisição dos da-
+dos, tendo em vista que diferentes fontes e diferentes aplicaç ões podem ser integradas ao
+modelo como origem de dados de trilhas específicas.  A segunda é a flexibilidade para
+utilização dos dados, já que aplicaç ões com necessidades distintas podem ter apenas as
+trilhas de interesse consultadas. Um exemplo desta situação pode ser melhor entendido
+ao ser considerado o conjunto de registros de diversos aspectos da vida de uma pessoa,
+que poderiam envolver o seu hist órico educacional, atuaç ões profissionais, o registro das
+atividades realizadas em ambientes virtuais de aprendizagem, ou ainda, o registro de suas
+aç ões em comunidades virtuais de relacionamento.
+Na Figura 1 é destacada a representação de uma entidade interagindo em diversas
+destas situaç ões, sendo que cada uma delas pode estar representada em uma trilha, na qual
+serão armazenadas adequadamente as informaç ões pertinentes. Essa abordagem permite
+flexibilidade na utilização destes diversos aspectos da vida desta pessoa, possibilitando
+que sejam levados em conta para representar o contexto de suas interaç ões e atuaç ões.
+oes originando m ´ultiplas trilhas
+Para realizar o mapeamento e registro dos contextos que farão parte de cada trilha,
+são utilizados componentes de software específicos, sendo cada um deles responsável
+por registrar um conjunto de informaç ões em uma trilha ou em partes dela. No exemplo
+da Figura 1, diferentes componentes de software registram o contexto da forma mais
+detalhada e adequada possível para cada situação.
+Em geral, as aplicaç ões que utilizam trilhas fazem uso de seus dados em con-
+sultas com base em uma dimensão temporal, espaço de tempo.  No modelo proposto, é
+denominado contexto sistêmico a composição resultante do agrupamento de contextos de
+
+
+
+
+diversas trilhas (aquelas de interesse para a aplicação específica) em uma dimensão tem-
+poral. O esquema representado na Figura 2 ilustra o conceito de contexto sistêmico, onde
+pode-se visualizar diversas trilhas representadas de forma independente e relacionadas
+pela dimensão temporal. Na figura também estão exemplificadas trilhas para diversos as-
+pectos relacionados com um estudante. Os exemplos destacam a trilha ‘Educação formal’
+composta por registros de cursos de formação obrigat ória e cursos de ensino superior ou
+p ós-graduação.  A sequência é realizada pela trilha ‘Educação complementar’ que será
+composta por cursos de extensão realizados. Por fim, a trilha ‘Profissional’ foi utilizada
+para destacar as diferentes atividades profissionais realizadas.
+emico
+A flexibilidade de consulta aos dados mapeados nas diferentes trilhas é também
+estendida aos aspectos relacionados com a coleta de dados, que pode ser feita com base em
+diferentes dispositivos. Novas fontes e novos dispositivos podem ser incluídos e relacio-
+nados ao conjunto de trilhas existentes sem a necessidade de reorganização das aplicaç ões
+que estão em uso.
+Em particular, o detalhamento de cada trilha também é tratado neste modelo, tendo
+em vista que, muitas vezes, as aplicaç ões interessadas em dados de uma mesma trilha po-
+dem apresentar necessidades diversas relacionadas com a granularidade dos dados consul-
+tados. Isso pode ser necessário em casos de aplicaç ões que precisem verificar em detalhes
+a situação descrita em um contexto. A Figura 3a exibe um exemplo onde a trilha ‘Ensino
+Superior’ possui um contexto para a disciplina ‘Estrutura de Dados’, onde é exibida a nota
+final. Caso uma aplicação necessite, é possível o acesso a todos os detalhes dessa disci-
+plina, tal como exibido na Figura 3b, onde podem ser verificados os diversos elementos
+possíveis de recuperação e armazenamento em relação à esta disciplina.
+Deste modo, ilustra-se a flexibilidade para a montagem de vis ões diferenciadas
+do conjunto de dados armazenados de acordo com as necessidades de cada aplicação.
+Neste sentido, tanto a Figura 2 como a Figura 3 apresentam a composição de quadros
+de informaç ões que são obtidas em diversas fontes e com uso de diferentes componen-
+tes de software.  Portanto, todas estas informaç ões são pertinentes e contribuem para a
+composição de um contexto mais detalhado e completo para uma determinada entidade.
+Sendo assim, a flexibilidade de composição e coleta de dados  é uma vantagem para a
+implementação das aplicaç ões que irão utilizar estes dados. Essa flexibilidade está asso-
+ciada a mecanismos que facilitem a integração e interoperabilidade de cada trilha.
+
+
+
+
+(a)                                                                                            (b)
+Figura 3. Exemplo de (a) contexto sist ˆemico e (b) contexto da disciplina Estrutura
+de Dados.
+O uso das ontologias propicia a representação formal do conhecimento humano,
+de modo que este possa ser processado por entidades computacionais.  Definiç ões am-
+plamente utilizadas descrevem a ontologia como a especificação de “conceitualização ca-
+racterizada por propriedades formais (explícitas) e prop ósitos específicos”, segundo des-
+creve [Gruber 1995], considerando estes aspectos motivadores para sua adoção e apoio
+em abordagens envolvendo interoperabilidade e integração. Assim, o MultiTrail prevê a
+utilização de redes de ontologias como forma de padronizar as informaç ões registradas
+nas trilhas.
+4. Arquitetura MultiTrail
+A arquitetura MultiTrail, apresentada na Figura 4, está organizada em três camadas: ser-
+vidor (MultiTrail Server), cliente (MultiTrail Client) e dispositivos de coleta ou fontes de
+coleta (Client Devices).
+Figura 4. Arquitetura do MultiTrail
+O funcionamento ocorre a partir da interação dos usuários com os dispositivos e
+fontes de coleta e com componentes de software que registram suas atividades. Para cada
+dispositivo, existe um componente responsável pela coleta da interação correspondente
+implementando a arquitetura da camada MultriTrail Client.  Este componente interage
+
+
+
+
+através de solicitaç ões de registro com a camada MultiTrail Server, que é responsável por
+organizar e prover os serviços diversos necessários às aplicaç ões educacionais.
+A camada Client Devices possui o objetivo de implementar o suporte necessário
+para as atividades de interação e coleta de dados, com ampla flexibilidade para tipos de
+dispositivos e fontes de dados utilizadas. Assim, está prevista toda a interação do usuário
+e o sistema através dos dispositivos de coleta ou fontes de dados, sendo estes considerados
+inicialmente com base nas possibilidades atuais, mas não limitados a esta situação.
+Considera-se que a interação envolvendo os usuários e as aplicaç ões baseadas
+neste modelo acontece em duas situaç ões distintas,  sendo que para ambas ocorre a
+utilização dos componentes da camada MultiTrail Client.  A primeira delas, no caso
+em que o dispositivo é utilizado para registrar ocorrência em uma trilha, tratado através
+da implementação do componente Client Collector correspondente. A segunda situação
+ocorre quando o sistema apresenta resultados para o usuário, sendo que esse processo é
+tratado através da implementação do componente específico do Client Result.
+A camada denominada de MultiTrail Client está organizada em dois m ódulos.
+O m ódulo Client Collector é responsável pela captura de dados e pelo seu registro nas
+trilhas correspondentes e no formato adequado.  Esse m ódulo pode estar implementado
+em aplicaç ões localizadas nos dispositivos ou por componentes de software responsáveis
+pela interação com bases de dados externas. Já o m ódulo Client Result é o responsável
+pela interação com o usuário e pela adaptação do conte údo para o dispositivo do usuário.
+A camada denominada MultiTrail Server está organizada em quatro m ódulos de
+serviço e um reposit ório de dados.  O seu principal objetivo  é proporcionar o suporte
+necessário para o armazenamento dos dados obtidos das diversas fontes e dos m últiplos
+dispositivos, em conjunto com a integração necessária para o atendimento aos diversos
+serviços propostos como suporte para as aplicaç ões desenvolvidas.
+O m ódulo MultiTrail Data Manager é responsável por prover uma infraestrutura
+de manipulação e acesso aos dados para os outros m ódulos que comp õe o MultiTrail
+Server. Já o m ódulo Basic Services é responsável pelos serviços de autenticação e geren-
+ciamento da aplicação servidora e gerenciamento dos serviços.
+O m ódulo MultiTrail Services é responsável pelo gerenciamento e manipulação
+das diferentes trilhas da entidade.  Sempre que uma aplicação cliente desejar manipular
+dados de uma trilha, esse serviço será o responsável pela identificação e manutenção da
+mesma. O mesmo ocorre com as consultas em trilhas, sejam elas consultas específicas,
+ou consultas utilizando o contexto sistêmico. O MultiTrailService Controller é reponsável
+pela autenticação das entidades e identificação das trilhas. E o MultiTrailService Manager
+pelo gerenciamento das entidades, trilhas e contextos. Por fim, o m ódulo MultiTrailSer-
+vice Collection Manager é responsável pela recuperação de trilhas, contextos e contextos
+sistêmicos.
+O m ódulo Educational Services é responsável pelo gerenciamento do suporte de
+aç ões educacionais. O History Viewer é responsável pela visualização das m últiplas tri-
+lhas, Social Interaction pela visualização da interação dos estudantes no f órum, o EDM
+Reports pela aplicação e exibição de técnicas no m ódulo Data Mining Services.
+O Educational Services está dividido em ETL Service, onde os dados das m últiplas
+
+
+
+
+trilhas são processados para serem aplicadas as técnicas de Techniques Services.
+A implementação do modelo MultiTrail foi realizada com a linguagem ASP.NET
+C#  para  os  componentes  dedicados                                                          à  coleta,  manipulação  dos  dados,  m ódulo  de
+visualização de dados e de mineração. Para a persistência dos dados foi utilizado o banco
+de dados SQL Server 2008.  A ontologia utilizada foi descrita em linguagem OWL e
+editada inicialmente com a ferramenta Protege [Protégé 2012].
+5. Estudo de caso
+Para a validação do modelo proposto de gerenciamento de m últiplas trilhas foi reali-
+zado um estudo de caso objetivando a identificação de alunos com potencial risco de
+evasão escolar em cursos de Educação à Distância (EAD) com a utilização de técnicas de
+Mineração de Dados (MD).
+A aplicação de MD sobre dados educacionais, Mineração de Dados Educacio-
+nais (Educational Data Mining - EDM), vem sendo amplamente explorada no apoio à
+diversas atividades de gestão do ensino.  Dentre os t ópicos estudados na  área estão a
+identificação de perfis de aprendizagem de alunos, predição de desempenho e evasão es-
+colar, identificação de associaç ões de disciplinas e conte údos que propiciam o baixo de-
+sempenho e a identificação de intervenç ões de tutores e professores mais eficazes na me-
+lhoria do desempenho dos alunos. Mais detalhes e outros t ópicos da aplicação de MD so-
+bre dados educacionais podem ser consultados nos trabalhos [Romero and Ventura 2010,
+Romero and Ventura 2007] que sumarizam diversos trabalhos de EDM, ou ainda em
+[Manhaes et al. 2011] que analisa diversas técnicas de mineração de dados na previsão
+de estudantes com risco de evasão.
+Para este estudo de caso, foi realizada a coleta de trilhas de alunos de duas discipli-
+nas, Matemática para a Administração e Matemática para a Computação, da Universidade
+do Vale do Rio dos Sinos (UNISINOS). Se tratando de disciplinas de EAD, as trilhas co-
+letadas são formadas por registros de interação com a ferramenta Moodle e dados do ERP.
+Na coleta realizada foram obtidas trilhas de 693 alunos de 19 turmas em que as aulas se-
+mestrais ocorreram entre o período de 2011 à 2012.  A partir disso, essas trilhas foram
+modeladas de forma a considerar as interaç ões semanais com as diferentes ferramentas
+utilizadas para o ensino.
+Com a coleta e modelagem das informaç ões foi possível então a aplicação de
+técnicas de MD de forma que, ao final de cada semana foi gerado um relat ório indicando
+quais alunos foram classificados com risco de evasão. Ou seja, na modelagem utilizada,
+não há necessidade do término do semestre para a predição dos alunos com potencial de
+evasão, o que possibilita a intervenção de tutores e professores no decorrer do desenvolvi-
+mento da disciplina, aumentando as possibilidades de reversão destes possíveis quadros.
+Para a aplicação de técnicas de MD a técnica de Redes Neurais Artificias (RNAs)
+foi escolhida por ser clássica na área de mineração e apresentar um desempenho satis-
+fat ório em outros problemas de mineração de dados [Bishop 2007, Haykin 2001].  Por
+ser adotada uma técnica de aprendizado de máquina supervisionado [Alpaydin 2010], em
+que dados hist óricos são utilizados para o treinamento da técnica, os dados dos alunos
+pertencentes às turmas que ocorreram anteriormente ao período em que o estudo de caso
+foi realizado foram divididos em duas partes, a primeira para o treinamento das RNAs e
+o restante utilizado para a avaliação do modelo de mineração obtido.
+
+
+
+
+A aplicação das RNAs mostrou grande potencial para o objetivo do estudo de caso
+já que em média, considerando os resultados semanais da duas disciplinas, foi possível
+prever 83% dos alunos que realmente evadiram das disciplinas analisadas a partir da ter-
+ceira semana de aula. Já para a identificação dos dois grupos de alunos considerados para
+a mineração, alunos evadidos e alunos não evadidos, a média de previsão foi de 73,5%.
+Os resultados obtidos evidenciam que a aplicação de m últiplas trilhas associada à
+mineração de dados viabiliza o desenvolvimento de soluç ões de auxílio à retenção escolar
+capazes de gerar alertas para professores e tutores de cursos EAD, em que não há uma
+proximidade maior com os alunos.
+6. Conclus ão
+Este artigo apresentou uma proposta de gerenciamento de m últiplas trilhas para uma
+mesma entidade em ambientes educacionais.  A partir do estudo de trabalhos relacio-
+nados, destacou-se que o diferencial desse trabalho é a consideração das entidades inte-
+ragindo com um conjunto de trilhas ao longo de sua trajet ória e com a possibilidade de
+especificação de diferentes níveis para o tratamento dos dados destas trilhas.
+Buscou-se  demonstrar  que  esta  abordagem  amplia  as  possibilidades  de
+composição de contextos das entidades, já que diversos aspectos da trajet ória da entidade
+são registrados. Isso proporciona maior flexibilidade e abrangência para sua utilização.
+Com base nos estudos de caso realizados, as principais conclus ões estão rela-
+cionadas com a indicação da flexibilidade possível com o tratamento de m últiplas tri-
+lhas.  Em primeiro lugar, identifica-se a possibilidade de composição de m últiplas tri-
+lhas com conjuntos de dados obtidos de fontes diversas, tais como sistemas de gerencia-
+mento acadêmico e ambientes virtuais de aprendizagem. Em segundo lugar, ilustra-se a
+utilização de dados das m últiplas trilhas de acordo com os aspectos que são considerados
+importantes para diferentes aplicaç ões, em domínios específicos.
+De modo a ampliar as conclus ões e explorar aspectos complementares, está em an-
+damento uma continuidade do presente trabalho. Esta continuidade envolve a ampliação
+estudo de caso, em um ambiente composto por quatro disciplinas diferentes no qual as
+interaç ões previstas envolvem também a emissão de mensagens de acompanhamento de
+situaç ões juntamente com o mapeamento de seus resultados, compondo assim, uma trilha
+específica a ser também considerada na aplicação.  Este experimento será desenvolvido
+ao longo de dois semestres e contará com a participação de coordenadores pedag ógicos e
+tutores.
+Referências
+Alpaydin, E. (2010). Introduction to Machine Learning. The MIT Press, 2nd edition.
+Ananthanarayanan, G., Haridasan, M., Mohomed, I., Terry, D., and Thekkath, C. A.
+(2009). Startrack: a framework for enabling track-based applications. In Proceedings
+of the 7th international conference on Mobile systems, applications, and services, Mo-
+biSys ’09, pages 207-220, New York, NY, USA. ACM.
+Bishop, C. M. (2007).  Pattern Recognition and Machine Learning.  Springer,  2. ed.
+edition.
+
+
+
+
+Cambruzzi, W. L., Rigo, S. J., and Barbosa, J. L. V. (2012).  Uma proposta para Geren-
+ciamento de M últiplas Trilhas em Ambientes Educacionais. In Simp ósio Brasileiro de
+Sistemas Multimídia e Web (WebMedia), São Paulo.
+Dey, A., Hightower, J., de Lara, E., and Davies, N. (2010).  Location-based services.
+Pervasive Computing, IEEE, 9(1):11 -12.
+Dey, A. K. (2001). Understanding and Using Context. Personal and Ubiquitous Compu-
+ting, 5(1):4-7.
+Driver, C. and Clarke, S. (2008).  An application framework for mobile, context-aware
+trails. Pervasive Mob. Comput., 4(5):719-736.
+Gams, E. and Reich, S. (2002). The TrailTRECer Framework: Applying Open Hyperme-
+dia Concepts to Trails. 8(10):913-923.
+Gruber, T. R. (1995). Toward principles for the design of ontologies used for knowledge
+sharing? Int. J. Hum.-Comput. Stud., 43(5-6):907-928.
+Haykin, S. (2001).  Redes neurais: princípios e pr ática.  Bookman, Porto Alegre, 2. ed.
+edition.
+Hightower, J. and Borriello, G. (2001). Location systems for ubiquitous computing. IEEE
+Computer, 34(8):57-66.
+Levene, M. and Peterson, D. (2002).  Trail Records and Ampliative Learning.  Techni-
+cal report, School of Computer Science and Information Systems, Birkbeck College,
+University of London, Research Report BBKCS-02-10.
+Manhaes, L. M. B., Cruz, S. M. S. d., Costa, R. J. M., Zavaleta, J., and Zimbrão, G. (2011).
+Previsão de Estudantes com Risco de Evasão Utilizando Técnicas de Mineração de
+Dados. Anais do XXII SBIE - XVII WIE, pages 150-159.
+Protégé (2012). The Protégé Ontology Editor and Knowledge Acquisition System. Dis-
+ponível em http://protege.stanford.edu/.
+Romero, C. and Ventura, S. (2007).  Educational data mining:  A survey from 1995 to
+2005. Expert Syst. Appl., 33(1):135-146.
+Romero, C. and Ventura, S. (2010). Educational data mining: a review of the state of the
+art. Trans. Sys. Man Cyber Part C, 40(6):601-618.
+Silva, J., Rosa, J. a., Barbosa, J., Barbosa, D. N. F., and Palazzo, L. A. M.  (2009).
+Distribuição de Conte údo em Ambientes Cientes de Trilhas. WebMedia’09.
+Smith, A. D. (2008).  Who Controls the Past Controls the Future - Life Annotation in
+Principle and Practice. PhD thesis, University of Southampton.
+Vaughan-Nichols, S. J. (2009). Will Mobile Computing’s Future Be Location, Location,
+Location? Computer, 42(2):14-17.
+Villaz ón-Terrazas, B., Ramírez, J., del Carmen Suárez-Figueroa, M., and G ómez-Pérez,
+A. (2011). A network of ontology networks for building e-employment advanced sys-
+tems. Expert Syst. Appl., 38(11):13612-13624.
+Wang, A. I., fredrik Sørensen, C., Brede, S., Servold, H., and Gimre, S. (2008). Develop-
+ment of location-aware applications the nidaros framework.
+
+
+
+
+

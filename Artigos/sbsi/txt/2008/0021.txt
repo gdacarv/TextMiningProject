@@ -1,0 +1,384 @@
+﻿Sistema de Classificação Automática de Carcaças Bovinas
+Carmen Dalla Rosa Bittencourt1, Marcelo Ladeira1, Saul Fontoura da Silva2,
+Anderson Luis S. Bittencourt, Díbio Leandro Borges1
+1Departmento de Ciência da Computação - Universidade de Brasília
+2 Departamento de Medicina Veterinária Preventiva - Universidade Federal de Santa
+Maria (UFSM) - Santa Maria, RS - Brasil
+carmendr@terra.com.br, mladeira@unb.br, saul@smail.ufsm.br, abitten@bol.com.br, dibio@unb.br
+Abstract. The Brazilian bovine carcass classification process is regulated by
+the Brazilian Agriculture Ministry decree number 612 of December 05, 1989.
+Although the usual bovine carcass classification process is carried out by a
+qualified  technician  it  is  very  subjective  because  it  is  based  on  a  visual
+inspection of predefined carcass areas during the bovine abate. This paper
+introduces a novel approach to automate the classification of bovine carcass
+based on neural-network image segmentation to estimate the bovine carcass
+fatness amount.
+Resumo. No Brasil, a classificação do acabamento de gordura de carcaças
+bovinas  é  regulamentado  pela  Portaria  de  n.º                                             612  de   05/12/1989  do
+Ministério da Agricultura. Esse processo é realizado por meio da observação
+visual e subjetiva através da análise de regiões predefinidas, feita por um
+profissional  habilitado,  durante  o  processo  de  abate  nas  indústrias
+frigoríficas. Esse artigo propõe o uso de redes neurais artificiais para, de
+forma  automática,  segmentar  e  classificar  o  acabamento  de  gordura  de
+carcaças bovinas em imagens digitais.
+1. Introdução
+A tipificação de carcaças é um instrumento auxiliar na comercialização de gado e carne
+que deve ter surgido no fim do século 19 ou início do século 20, e que ainda hoje é
+comumente  utilizado  em  países,  como  Brasil,  Estados  Unidos,  Canadá,  Argentina,
+Uruguai, entre outros. A tipificação é formada de duas partes, sendo a primeira de
+classificação dos lotes por sexo, pela maturidade e pela faixa de peso do gado, de modo
+que  as  carcaças  são  agrupadas  por  categoria.  A  segunda  parte  é  a  tipificação
+propriamente dita, que consiste em alocar as carcaças das principais categorias, como
+novilho ou novilha, em tipos ordenados de melhor a pior, segundo outros indicadores
+tradicionalmente utilizados nos julgamentos de gado de corte em exposições, como a
+conformação e a quantidade de gordura (acabamento). Em tese as carcaças dos melhores
+tipos dariam carne de melhor qualidade [FELÍCIO, 2005].
+Desde  os  primeiros  estudos  sistemáticos  das  normas  de  classificação  e
+tipificação de carcaças no final da década de 60 há o interesse manifesto de se implantar
+um sistema de classificação prático, eficiente, dinâmico e universal, a ser utilizado pelos
+países  importadores  e  exportadores.  No  Brasil,  os  esforços  para  definir  uma
+metodologia  para  classificação  e  tipificação  de  carcaças  bovinas  resultaram  na
+
+
+
+
+publicação da Portaria Ministerial nº 612/89, do Ministério da Agricultura, Pecuária e
+Abastecimento (MAPA), que instituiu o Sistema Nacional de Tipificação de Carcaças
+Bovinas.  Essa  Portaria determina que a tipificação de carcaças deve se basear nos
+parâmetros  sexo-maturidade,  conformação,  acabamento  e  peso.  A  carcaça  bovina  é
+definida como sendo o animal abatido, sangrado, esfolado, eviscerado, desprovido de
+cabeça, patas, rabada, glândulas mamárias na fêmea, ou verga, exceto suas raízes, e
+testículos, no macho. Após a divisão em meia carcaça (Figura 1), retiram-se ainda os
+rins, gorduras perirrenal e inguinal, “ferida de sangria”, medula espinhal, diafragma e
+seus pilares.
+Figura   1 - Classificações de Acabamento de Gordura
+Como  o  objetivo  deste  artigo  é  apresentar  um  sistema  para  classificação
+automática do acabamento de gordura, somente este parâmetro será descrito de forma
+mais detalhada. A classificação de acabamento expressa a distribuição e a quantidade de
+gordura de cobertura da carcaça, sendo descrita através das categorias na Tabela 1.
+Tabela 1 - Categorias de acabamento de gordura
+Categoria                                                                                   Espessura de Gordura
+Magra (1)                                                                                   Gordura ausente
+Gordura escassa (2)                                                                         Gordura de 1mm a 3 mm de espessura
+Gordura mediana (3)                                                                         Gordura acima de 3mm e até 6mm de espessura
+Gordura uniforme (4)                                                                        Gordura acima de 6mm e até 10mm de espessura
+Gordura excessiva (5)                                                                       Gordura acima de 10mm de espessura
+Fonte: Portaria 612/89 do Ministério da Agricultura
+1.2 Descrição do problema
+A aferição da gordura é feita em três locais diferentes da carcaça, a saber: altura da 6ª
+costela, sobre o músculo grande dorsal (em sua parte dorsal), altura da 9ª costela, sobre
+
+
+
+
+o músculo grande dorsal (em sua parte ventral) e altura da 12ª costela, sobre o músculo
+serrátil dorsal caudal. Complementarmente proceder-se-á a verificação da gordura na
+região lombar e no coxão. A avaliação da carcaça e seu enquadramento dentro de um
+determinado tipo, é realizada a quente depois da pesagem e antes de entrar na câmara de
+resfriamento. Essa avaliação e a posteriormente classificação do acabamento é realizada
+através de observação visual da distribuição da gordura sobre a superfície da carcaça,
+por  um  técnico  habilitado  pelo  MAPA.  Embora  guiado  por  procedimentos  pré-
+determinados, por se tratar de um processo subjetivo  [FELÍCIO,  2005] não se pode
+garantir ausência de erros e nem mesmo padronização na classificação, isto é que os
+técnicos irão atribuir a mesma classificação para a mesma carcaça bovina.
+A literatura especializada mundial cita diversos sistemas de classificação de
+acabamento de gordura. Em sua grande maioria, a classificação é feita por um técnico
+habilitado,  por  meio  da  análise  visual  da  gordura  intramuscular                          (denominada
+marmorização), utilizando uma amostra da carcaça resfriada, geralmente retirada entre a
+6ª e a 7ª   ou entre a 12ª e 13ª costelas. Essa abordagem é utilizada na Austrália [SAINZ
+& ARAUJO, 2001], Estados Unidos [SAINZ & ARAUJO, 2001] Uruguai [BRITO, et
+al. 2006] e Argentina [BARCELO & PEREYRA, 2005]. Existe também um sistema de
+solução proprietária, que faz análise em imagem 3D de cada metade da carcaça, mas o
+que é analisado é o peso do animal abatido, e não o acabamento de gordura.
+Com  o  intuito  de  desenvolver  métodos  objetivos  de  tipificação,  capazes  de
+funcionar  com  alta  velocidade,  acurácia  e  precisão,  e  a  um  custo  acessível,  várias
+tecnologias tem sido estudadas. Estas se resumem nas que simulam a observação visual
+do avaliador, como é o caso desta pesquisa, e naquelas que medem alguma característica
+não observável visualmente. As primeiras incluem a ultra sonografia e a análise de
+imagens  de  vídeo  ou  foto  digital,  enquanto  que  a  segunda  categoria  inclui  a
+condutividade elétrica total e a impedância bioelétrica  [SAINZ & ARAUJO,  2001,
+p.21].
+Pelos motivos acima mencionados se faz necessária, na atual situação do Brasil
+de maior exportador (em volume) de carne bovina do mundo, uma classificação bastante
+precisa. A classificação deve fornecer aos frigoríficos informações sobre o rendimento
+da  carcaça,  ao  ponto  de  torná-los  aptos  a  empregarem  tabelas  de  pagamento
+diferenciados aos produtores de animais de mais alta qualidade e que apresentem um
+melhor rendimento (tipos 3, 4 e 5).
+2. Abordagem da Solução Proposta
+O método proposto se divide basicamente em duas etapas. A primeira delas compreende
+a criação de uma rede neural do tipo MLP (perceptron de múltiplas camadas) capaz de
+segmentar a área correspondente a gordura em imagens digitais de carcaças bovinas. A
+segunda etapa corresponde a tarefa de criação de uma rede neural, também do tipo MLP,
+capaz de classificar a imagem resultante da primeira etapa de acordo com os cinco
+padrões de acabamento de gordura descritos anteriormente.
+As imagens utilizadas foram obtidas durante o processo de abate, no padrão de
+cores RGB e gravadas no padrão de compressão JPG, com a resolução espacial de 1600
+x 600 pixels.
+
+
+
+
+2.1 Segmentação da área de gordura
+Nesta etapa foi utilizada uma rede neural do tipo MLP, capaz de identificar as regiões de
+gordura em uma imagem digital da carcaça bovina. Esta segmentação baseou-se no fato
+de que os pixels correspondentes a área de gordura possuem um padrão característico
+com relação a intensidade de cor nos elementos R, G e B da imagem digital colorida.
+Para uma maior efetividade e rapidez no treinamento, foi realizada a normalização de
+todos os dados de entrada, no intervalo de 0 a 1. Foram utilizados dois conjuntos de
+treinamento. O primeiro conjunto, denominado T1Cj1, foi composto de 6.668 amostras
+de pixels de gordura e 13.332 amostras de pixels de não-gordura, totalizando 20 mil
+amostras, formando uma matriz 3x20.000, onde as linhas corresponde ao padrão de cor
+RGB e as colunas correspondem às amostras disponíveis no conjunto de treinamento.
+Analogamente, o segundo conjunto, T1Cj2, foi composto de 13.336 amostras de pixels
+de gordura e 26.664 amostras de pixels de não-gordura, totalizando 40.000 amostras,
+formando uma matriz 3x40.000.
+Para cada um dos conjuntos de entrada acima foi criado um vetor de saída
+correspondente.  O  primeiro,  correspondendo  a                                            1x20.000  posições  e  o  segundo,
+correspondendo  a  1x40.000 posições. Ambos os conjuntos possuem valores  1 para
+pixels correspondentes a gordura e 0 para pixels classificados como não gordura nos
+conjuntos de treinamento.
+A  definição  da  rede  neural  mais  apropriada  a  determinado  problema  é
+essencialmente empírica [HAYKIN, 2001]. Para avaliar a capacidade de segmentação
+da área correspondente a gordura da imagem digital da carcaça bovina foram propostas
+quatro topologias de redes do tipo MLP descritas a seguir. Como função de ativação, foi
+utilizada a função logarítmica sigmóide em todas as redes propostas.
+Rede 1 (Net321LM): contém 3 neurônios na camada de entrada, 2 neurônios na
+camada intermediária e um neurônio na camada de saída.
+Rede 2 (Net371LM): contém 3 neurônios na camada de entrada, 7 neurônios na
+camada intermediária e um neurônio na camada de saída.
+Rede 3 (Net381LM): contém 3 neurônios na camada de entrada, 8 neurônios na
+camada intermediária e um neurônio na camada de saída.
+Rede 4 (Net391LM): contém 3 neurônios na camada de entrada, 9 neurônios na
+camada intermediária e um neurônio na camada de saída.
+Para realizar o treinamento das redes neurais descritas acima, foi utilizado o
+método de treinamento Levenberg-Marquardt [HAGAN & MENHAJ, 1994].
+O processo de treinamento de cada uma das redes ocorreu em duas etapas.
+Inicialmente a rede foi treinada utilizando-se o conjunto de treinamento T1Cj1 e seu
+respectivo vetor de saída. Em seguida, partindo da rede já treinada com o conjunto de
+treinamento T1Cj1, realizou-se novamente o treinamento utilizando-se o conjunto de
+treinamento T1Cj2 e seu respectivo vetor de saída.
+Exemplos do resultado do processo de segmentação das imagens, podem ser
+observados na Figura 2.
+
+
+
+
+Segmentação                                                                                 Rede 1: Net321LM    Rede 2: Net371LM  Rede 3: Net381LM   Rede 4: Net391LM
+Figura   2 - Segmentação de Carcaça Bovina: Exemplo
+2.2 Classificação de acabamento
+Nesta etapa foi utilizada uma rede neural do tipo MLP, capaz de classificar as regiões de
+gordura segmentadas da imagem digital, de acordo com as 5 categorias apresentadas na
+Tabela  1. Esta segmentação baseia-se na classificação do padrão de distribuição do
+acabamento de gordura da carcaça na imagem digital segmentada. Se essa classificação
+for executada diretamente a partir da imagem segmentada teremos 1600 x 600, ou seja
+960.000 neurônios na camada de entrada rede neural de classificação.
+Com o objetivo de reduzir o número de entradas na rede neural de classificação
+do acabamento da gordura da carcaça bovina, foi realizado um pré-processamento onde
+cada imagem foi transformada em uma matriz de 32x12. O valor de cada posição desta
+matriz é calculado com base na quantidade de pixels de gordura existente em uma
+máscara  de  50x50  pixels  da  imagem  segmentada.  Caso  a  quantidade  de  pixels  de
+gordura  na  máscara  da  imagem  segmentada  seja  maior  que  a  metade  dos  pixels
+existentes na mesma máscara, a posição da matriz recebe valor 1, caso contrário recebe
+valor 0. Cada posição desta nova matriz serve de entrada para a rede neural utilizada
+para realizar a classificação da distribuição da gordura de acabamento, totalizando 384
+entradas.
+A Figura 3 apresenta exemplos de acabamento de gordura, dos tipos 1 a 4, com
+suas respectivas imagens segmentadas, imagens após aplicação da máscara 50x50 pixels
+e as respectivas matrizes de entrada - para a rede de classificação - geradas.
+Para o treinamento da rede neural de classificação foi utilizado um conjunto de
+treinamento denominado T2Cj1 (Tabela 2). Tal conjunto de treinamento é composto de
+05 (cinco) imagens segmentadas do tipo 1, 26 (vinte e seis) imagens segmentadas do
+tipo  2,  123  (cento e vinte e três) imagens segmentadas do tipo 3 e 3 (três) imagens
+segmentadas do tipo  4, correspondendo a um total de  157 amostras. Essas quantias
+reproduzem a distribuição de tipos de carcaças bovinas no Brasil, segundo informação
+verbal do MAPA. Nenhuma imagem do tipo 5 foi coletada nos frigoríficos pesquisados,
+portanto, é oportuno ressaltar que não foram consideradas nessa pesquisa por ocorrerem
+
+
+
+
+com frequência muito baixa. Um dos fatores que explicam essa baixa ocorrência é o fato
+de ser   antieconômico para o produtor engordar em demasia o seu gado bovino.
+Acabamento   tipo 1                                                                          Acabamento   tipo 2
+Acabamento   tipo 3                                                                          Acabamento
+Figura 3 - Representação do Pré-processamento em Imagens de Tipos 1 a 4
+Cada  uma  das  imagens  utilizadas  foi  submetida  ao  pré-processamento  com
+máscara de 50x50 pixels, antes de ser incluída no conjunto de treinamento. O total de
+amostras  utilizados  no  conjunto  de  treinamento  é  representado  por  uma  matriz  de
+384x157 onde cada coluna representa informações relativas a uma imagem da amostra.
+Para essas variáveis de entrada corresponde a matriz de saída denominada T2Cj1A. Tal
+matriz possui dimensões 4x157 onde cada coluna possui o resultado esperado para cada
+amostra correspondente no conjunto de treinamento T2Cj1.
+
+
+
+
+Tabela 2 - Conjunto de Treinamento: Classificação do Acabamento de Gordura
+Conjunto                                                                                       Tipo 1                     Tipo 2                                       Tipo 3        Tipo 4   Total                       Saída
+T2Cj1                                                                                          5                          26                                           123           3        157                         T2Cj1A
+A rede neural para classificação utilizada era do tipo MLP com 384 neurônios na
+camada de entrada, 24 na camada escondida e 4 na camada de saída. Cada neurônio na
+camada de entrada, corresponde a uma posição da matriz gerada no pré-processamento
+da imagem segmentada e cada neurônio na camada de saída, corresponde a um tipo de
+classificação de acabamento de gordura possível. Como função de ativação, foi usada a
+função de transferência logarítmica sigmóide em todas as camadas da rede. A rede foi
+treinada com o método backpropagation [RUMELHART, McCLELLAND, 1986].
+O processo de treinamento da rede ocorreu em uma etapa. A rede foi treinada
+utilizando-se o conjunto de treinamento T2Cj1 e sua respectiva matriz de saída. Essa
+rede neural foi denotada Net384_24_4.
+3. Resultados Obtidos
+Para avaliação dos resultados obtidos pela rede treinada anteriormente, foram realizadas
+simulações  com  um  conjunto  de  teste.  Tal  conjunto,  denominado  T2Cj1T  contém
+informações referentes a 05 (cinco) imagens do tipo 1, 26 (vinte e seis) imagens do tipo
+2,                                                                                             123                        (cento  e  vinte  três)  imagens  do  tipo   3  e          3        (três)  imagens  do  tipo   4,
+correspondendo a um total de 157 amostras, como no caso do conjunto de treinamento.
+Por se tratar de classificadores, para a discriminação entre os modelos gerados
+foram  utilizados  índices  obtidos  através  da  matriz  de  confusão.  Para  classificação
+multiclasses, as classificações no conjunto de avaliação são apresentadas na forma de
+uma matriz bidimensional com uma linha e uma coluna para cada classe. Cada elemento
+desta matriz, chamada matriz de confusão, apresenta o número de casos avaliados na
+qual a classe real (R) é a linha e a classe predita (P) pelo classificador é a coluna. Bons
+resultados são caracterizados por valores altos na diagonal principal e valores nulos para
+elementos fora da diagonal principal. Suponha que um classificador está sendo utilizado
+para classificar uma instância que possui apenas duas classes, por exemplo,  “sim” e
+“não”. A Tabela 3 ilustra a nomenclatura utilizada para as classificações possíveis.
+Tabela 3. Matriz de Confusão com duas Classes
+R \ P                                                                                          sim                        não
+sim                                                                                            Verdadeiro Positivo (VP)   Falso Negativo (FN)
+não                                                                                            Falso Positivo (FP)        Verdadeiro Negativo (VN)
+Nessa análise foram utilizados os índices apresentados na Tabela 4. Todos eles
+assumem  valores  no  intervalo  [0,1]  e  podem  ser  calculados  a  partir  da  matriz  de
+confusão.
+Tabela 4. Índices para Discriminação entre Classificadores Dicotômicos
+Sensibilidade (S)                                                                              Especificidade (E)         Acurácia (Ac)                                F1
+S = VP / (VP+FN)                                                                               E = VN / (VN+FP)           Ac = (VP+VN) /                               F1 = 2*S *E
+                                                                                                                          (VP+FP+VN+FN)                                /(S+E)
+
+
+
+
+A sensibilidade é a taxa de verdadeiro positivo (TVp); a especificidade é a taxa
+de verdadeiro negativo (TVn) e a acurácia é a probabilidade de acerto do classificador.
+O melhor classificador é o que possui maior acurácia. F1 é uma média harmônica entre
+sensibilidade e especificidade. Por esse produto, o melhor classificador é aquele que
+maximiza a taxa de verdadeiro positivo e, simultaneamente, minimiza a taxa de falso
+positivo, ou seja o lixo associado aos casos selecionados como positivo. Note que o
+ponto de máximo para as métricas de acurácia e F1 ocorre quando VP e VN tendem para
+1.  A Tabela  5 apresenta o número de imagens corretamente classificadas pela rede
+neural  Net384_24_4.  Os  resultados  obtidos  com  segmentação  da  imagem  original
+realizada pela rede neural com 9 neurônios na camada escondida, Net391LM, foram os
+com melhor desempenho na classificação.
+Tabela 5 - Classificações Corretas Obtidas com a Rede Net384_24_4
+Categorias                                                                                1    2     3     4
+Imagens                                                                                   5    26    123   3
+Net321LM                                                                                  5    0     0     0
+Net371LM                                                                                  5    7     51    0
+Net381LM                                                                                  5    9     56    0
+Net391LM                                                                                  5    14    112   3
+A Tabela  6 apresenta a matriz de confusão obtida com a aplicação da rede
+Net391LM para segmentar as imagens originais e a rede Net384_24_4 para classificar o
+tipo da carcaça bovina. Os valores na diagonal principal representam as quantidades de
+carcaças que foram classificadas corretamente pela rede neural.
+Tabela 6 - Matriz de Confusão Obtida com as Redes Net391LM e Net384_24_4
+R\P                                                                                       1    2     3     4    Real
+1                                                                                         5    0     0     0    5
+2                                                                                         8    14    4     0    26
+3                                                                                         0    9     112   2    123
+4                                                                                         0    0     0     3    3
+Previsto                                                                                  13   23    116   5    157
+Os índices apresentados na Tabela 4 podem ser facilmente generalizados para
+classificadores n-classes a partir de uma análise de cada classe com a abordagem um-
+contra-todos. A Tabela 7 apresenta as matrizes de confusão geradas, a partir da Tabela
+6, com a abordagem de um-contra-todos.
+Tabela 7 - Matriz de Confusão por Tipo de Carcaça
+R/P                                                                                       1    1    R/P   2    2     R/P   3     3   R/P   4   4
+1                                                                                         5    0     2     14   12     3     112   11   4     3   0
+1                                                                                        8    144   2    9    122    3    4     30   4    2   152
+
+
+
+
+A Tabela 8 apresenta os índices de desempenho obtido para cada tipo de carcaça
+bovina  (valores de  1 a  4) e os índices médios na classificação obtida com as redes
+Net391LM e Net384_24_4.
+Tabela 8. Performance Obtida com as Redes Net391LM e Net384_24_4
+Categoria                                                                                      Sensibilidade   Especificidade   Acurácia   F1
+Magra (1)                                                                                      1               0.9474           0.9490     0.9630
+Gordura escassa (2)                                                                            0.5385          0.9313           0.8662     0.6824
+Gordura mediana (3)                                                                            0.9106          0.8824           0.9045     0.8962
+Gordura uniforme (4)                                                                           1               0.9870           0.9873     0.9936
+Média esperada                                                                                 0.8535          0.8945           0.9011     0.8651
+A acurácia da classificação de carcaça, com a abordagem proposta é de 90%, um valor
+animador mas que ainda precisa ser melhorado. Atualmente, essa pesquisa está na fase
+de desenvolvimento de equipamentos para permitir a coleta automática de imagens de
+carcaças  bovinas  durante  o  abate,  in  loco.  Até  o  momento  foram  coletadas  2000
+imagens,  a  maioria  das  categorias  2  e  3.  Com  o  aumento  do  número  de  imagens
+coletadas, espera-se poder treinar novas redes que apresentem desempenho superior ao
+obtido até o momento. Na análise apresentada, a classificação predita pelo sistema foi
+confrontada  com  a  classificação  realizada  por  um  especialista  humano,  técnico
+habilitado pelo MAPA.
+4. Conclusão
+Esse artigo apresenta uma nova proposta para a classificação automática de carcaças
+bovinas. O levantamento bibliográfico realizado evidenciou poucos artigos publicados,
+sendo a pesquisa para classificação automática de carne mais explorada nas indústrias
+frigoríficas internacionais. Uma possível explicação para esse fato é que os resultados
+obtidos são implementados na forma de sistemas automatizados na própria indústria e
+tratados  como  segredo  industrial.  Não  há,  no  Brasil,  nenhuma  indústria  frigorífica
+dotada de sistema de classificação automática de carne. Essas características dificultam
+a comparação da proposta apresentada com outras abordagens existentes.
+O tema abordado nesse artigo situa-se na fronteira do conhecimento O método
+ora proposto visa a implementação de um sistema, que irá disponibilizar, em tempo real,
+à indústria frigorífica a automatização do processo de classificação do acabamento de
+gordura. Este sistema avaliará de forma objetiva, o que o profissional do frigorífico hoje
+faz de forma subjetiva. Através desta automatização haverá uma maior transparência
+entre indústria frigorífica e pecuaristas, pois eliminará a subjetividade decorrente da
+análise visual humana, fornecendo ao pecuarista a certeza de que a carcaça de seu
+animal está sendo classificada por um sistema padronizado que não possui nenhuma
+subjetividade  na  análise.  Neste  contexto,  ganha  o  pecuarista  com  o  aumento  da
+qualidade da classificação realizada e do valor agregado de seu produto, e ganha a
+pecuária brasileira que oferecerá um produto mais padronizado para o mercado externo.
+Por ser um sistema, o mesmo   será passível de auditoria para comprovação da eficácia
+na classificação das carcaças.
+
+
+
+
+A maior limitação nesta pesquisa é que os resultados foram obtidos com um número
+pequeno de imagens, apenas 2000, sendo a maioria das categorias 2 e 3. O número de
+carcaças das categorias  1 e  4 coletadas em campo foi extremamente baixo. Não foi
+coletada nenhuma carcaça da categoria 5 (gordura excessiva). É provável que a baixa
+freqüência de carcaças 1, 4 e 5 esteja associada ao sistema de engorda de boi adotado no
+Brasil. Nesse contexto, a acurácia de classificação obtida foi de 90%, valor animador
+mas que ainda precisa ser melhorado. Com o aumento do número de imagens e a coleta
+de mais imagens das categorias menos freqüentes, espera-se poder treinar novas redes
+que apresentem desempenho superior ao obtido até o momento.
+Como trabalho futuro pretende-se utilizar técnicas de processamento de imagens através
+do uso de histograma de cores e análise de textura com a aplicação da autocorrelação da
+imagem.
+Referências
+Barceló, M.E., Pereyra, J. (2005) Recepción de Carne Vacuna: Reinspección y Registro.
+Dirección Nacional de Sanidad de las Fuerza Armadas. División Abastecimientos.
+Julio  de                                                                                  2005.  Disponível  em  www.compraestatales.gub.uy/noticias_especiales/
+archivos/Manual_recepcion_de_Carne_Vacuna.pdf (acesso em 25/10/2007)
+Brito, G., Lima, J.M.S. de, Julián, R.S. & Montossi, F. (2006) “Métodos para predecir el
+rendimiento carnicero de una canal vacuna”. Programa Nacional de Producción de
+Carne y  Lana. Revista INIA de Investigaciones Agronómicas, n.8, p.10-12.
+Felício,  P.E.  de                                                                         (2005)  Classificação  e  Tipificação  de  Carcaças  Bovinas.  Palestra
+proferida  no  Congresso  CBNA  de  17-18  de  maio  de  2005,  em  Goiânia,  Goiás.
+Disponível   em   http://www.fea.unicamp.br/deptos/dta/carnes/files/CTC_ITAL_06/
+Classificacao_e_Tipificacao.pdf (Acesso em 25/10/2007, 12p.)
+Hagan,  M.T.  &  Menhaj,  M.B.  (1994)  “Training  Feedforward  Networks  with  the
+Marquardt Algorithm”. IEEE Transactions on Neural Networks, v.5, n.6., p.989-993,
+Haykin, S.  (2001) Redes Neurais: Princípios e Prática (Trad. Paulo Martins Engel).
+Porto Alegre: Bookman.
+Rumelhart,  D.  E.  and  McClelland,  J.  L.                                               (1986).  Parallel  Distributed  Processing:
+Explorations in the Microstructure of Cognition, v.1. MIT Press, Cambridge, MA.
+Sainz, R.D. & Araujo, R.C. (2001) “Tipificação de Carcaças de Bovinos e Suinos”. In:
+Anais do I Congresso Brasileiro de Ciência e Tecnologia de Carne, p.4-6 São Pedro,
+São  Paulo.  Disponível  em  http://www.fmvz.unesp.br/andrejorge/SAINZ_2001_
+Tipificacao_Carcacas_Bovinos_Suinos.pdf (acesso em 26/10/2007)
+
+
+
+
+

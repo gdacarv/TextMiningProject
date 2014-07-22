@@ -1,0 +1,531 @@
+﻿V Simpósio Brasileiro de Sistemas de Informação
+Um Método de Modelagem de Processos para a
+Investigação de Problemas em Sistemas de Informação:
+Aplicação em uma Central de Regulação Médica
+Alan P. Souza, João V. V. B. Freitas, Amauri M. Cunha, Maria L. M. Campos
+Programa de Pós-Graduação em Informática (PPGI-IM/NCE) - Universidade Federal do
+Rio de Janeiro (UFRJ)
+Caixa Postal 2324 CEP: 20.001-970 - Rio de Janeiro - RJ - Brasil
+{alanpsouza,  jvfreitas.freitas}@gmail.com,
+{amauri,  mluiza}@nce.ufrj.br
+Abstract.  Emergency  services  for  pre-hospital  attendance  are  designed  to  provide
+quick mechanisms for medical care. These services, in general, have some kind of
+computational system to support the execution of its activities and to register realized
+tasks.  This  paper  presents  a  method  that  uses  process  modeling  for  identifying
+problems in an information system used in a medical regulation center of a large city.
+The results obtained in implementing the method show its applicability.
+Resumo.  Os  serviços  de  emergência  para  atendimento  pré-hospitalar  têm  como
+objetivo prover mecanismos ágeis de assistência médica. Estes serviços, em geral,
+possuem  algum  tipo  de  sistema  computacional  para  suporte  à  execução  das  suas
+atividades e ao registro dos atendimentos efetuados. Este artigo apresenta um método
+que utiliza a modelagem de processos para a identificação de problemas existentes no
+sistema de informação utilizado em uma central de regulação médica de uma metrópole
+nacional.  Os  resultados  obtidos  com  a  execução  do  método  mostram  a  sua
+aplicabilidade.
+1. Introdução
+Levantamentos  e  pesquisas  diversas  apontam  que  muitos  dos  óbitos  associados  a
+acidentes  ou  ocorrências  de  emergência  médica  poderiam  ser  evitados se houvesse
+algum atendimento médico logo nos primeiros instantes após a ocorrência do evento
+[Elliot                                                                                               2000].  O  tempo  de  atendimento  a  uma  vítima  é  um  fator  crítico  para  a
+sobrevivência, especialmente em situações traumáticas. Por esta razão, justifica-se a
+busca por mecanismos que acelerem o processo de atendimento. Para atender a estas
+necessidades, diversos serviços de atendimento pré-hospitalar já foram criados há algum
+tempo,  sendo  alguns  destes  modelos  reconhecidos  mundialmente1.  No  Brasil,  estes
+serviços para o atendimento a eventos de urgência e emergência foram instituídos mais
+1 Alguns destes serviços existem há décadas, com destaque para aqueles adotados na França  (Service
+d'Aide Medicale d'Urgence) e nos Estados Unidos (Emergency Medical Services Systems Act).
+216
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+recentemente2, quando o Ministério da Saúde decidiu implantar um componente pré-
+hospitalar móvel em municípios e regiões de todo o país [Ministério da Saúde 2006a].
+Este trabalho é fruto de um projeto que tem como objetivo propiciar melhorias
+aos atendimentos oferecidos por um serviço pré-hospitalar de uma metrópole nacional,
+através do desenvolvimento e implantação de soluções baseadas em tecnologias de
+informação.
+A abrangência deste projeto vai desde o tratamento das solicitações telefônicas, a
+fim  de  melhorar  a  produtividade  operacional  do  sistema,  passando  pelo  estudo  da
+cognição humana nos postos de trabalho em situações de urgência, até ao processo de
+gerenciamento dinâmico das ambulâncias e suas equipes de atendimento associadas.
+Entretanto,  o  escopo  deste  trabalho  se  concentra  em  minorar  a  dificuldade  de
+processamento das chamadas telefônicas, devido às possíveis problemas do sistema
+computacional de regulação médica implantado na central de atendimento, tendo como
+meta a redução no tempo de registro das informações provenientes de uma ocorrência
+no software de apoio às atividades do serviço pré-hospitalar.
+Existem descontentamentos naqueles que operam o sistema computacional de
+apoio à central de atendimento, havendo muitas reclamações de que o mesmo provoca
+atrasos no tratamento das solicitações telefônicas no atendimento de urgências médicas.
+Com o objetivo de identificar causas para os problemas apresentados, a equipe
+de projeto realizou um trabalho de campo para levantar o processo de trabalho dos
+operadores  da  central  de  regulação  médica,  incluindo  a  avaliação  dos  sistemas
+informacionais utilizados. O estudo exploratório de campo através de entrevistas com
+pessoas  específicas  envolvidas  no  serviço  utilizou  como  base  a  metodologia
+preconizada por Thiollent (2003).
+Seguindo as propostas de Cunha e Souza (2005, 2006), através da utilização do
+conceito de memória, buscou-se rastrear os recursos utilizados, de modo a adquirir uma
+ampla compreensão das atividades executadas. Com a análise dessas atividades espera-
+se identificar problemas na concepção e utilização do sistema computacional, assim
+como outros oriundos de procedimentos inadequados de trabalho humano.
+Este tipo de trabalho é voltado para o levantamento detalhado de processos
+envolvendo  as  pessoas  que  operam  a  central  de  regulação  médica,  utilizando  a
+suposição largamente aceita de que esta é uma forma adequada de estudar os sistemas
+informacionais de apoio ao trabalho humano [Sharp e McDermott 2001].
+As sucessivas visitas à central de regulação deste serviço de atendimento pré-
+hospitalar foram relevantes em razão da possibilidade de lidar com uma variedade de
+evidências, visto estar o serviço de emergência inserido dentro de um contexto amplo e
+complexo, que inviabilizava sua compreensão fora da conjuntura na qual ocorre.
+2  Os serviços de atendimento pré-hospitalar foram definidos através da portaria n°  1.864, de  29 de
+setembro de 2003.
+217
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Outro aspecto interessante é que esses encontros permitiram o estabelecimento
+de relações de confiança com os diferentes profissionais envolvidos no serviço3, o que
+foi  fundamental  para  maior  aceitação  no  desenvolvimento  do  estudo  investigativo.
+Apesar do ritmo das atividades na central de regulação ser intenso e desgastante para
+cada um dos profissionais envolvidos, essas características pouco afetaram o andamento
+do  estudo,  pois  a maior parte dos levantamentos foi realizada junto aos chefes de
+operação e equipes de apoio; os profissionais diretamente envolvidos no atendimento
+das ocorrências foram pouco exigidos.
+Para evitar o ceticismo por parte dos indivíduos que foram alvo da pesquisa com
+relação  às  teorias,  métodos  e  outros  elementos  valorizados  pelo  espírito  científico
+[Thiollent 2003], a cada passo dado no desenvolvimento do estudo, os profissionais do
+serviço foram sendo apresentados, de maneira gradual, às diversas técnicas que estavam
+sendo utilizadas.
+Este artigo inclui além desta introdução outras cinco seções descritas a seguir.
+Na seção 2 apresenta-se o contexto dos serviços de atendimento pré-hospitalar. A seção
+3 discute o referencial teórico, evidenciando como a modelagem de processos pode ser
+favorável no levantamento de requisitos dos sistemas de informação. Na seção  4, o
+método  utilizado  é  detalhado,  assim  como  os  resultados  obtidos  a  partir  de  sua
+aplicação. Finalmente, apresentam-se as conclusões na seção 5.
+2. Serviço de Atendimento Pré-Hospitalar (APH)
+O atendimento pré-hospitalar compreende qualquer assistência médica realizada fora do
+âmbito hospitalar, provendo assistência e transporte adequado até algum serviço de
+saúde, devendo este procedimento ser efetuado somente por profissionais especializados
+[Junior e Valente 2005].
+Lopes e Fernandes (1999) consideram APH como toda assistência realizada, de
+forma direta ou não, fora do âmbito hospitalar, através dos diversos meios e métodos
+disponíveis, com uma resposta adequada à solicitação de socorro, tendo como objetivo a
+manutenção da vida e/ou a minimização das seqüelas.
+Segundo o Conselho Federal de Medicina [apud Ministério da Saúde 2006b],
+uma Emergência é a constatação médica de condições de agravo à saúde que impliquem
+em risco iminente de vida ou sofrimento intenso exigindo, portanto, tratamento médico
+imediato. Urgência é a ocorrência imprevista de agravo à saúde com ou sem risco
+potencial de vida, cujo portador necessita de assistência médica imediata.
+Este  serviço  envolve  uma  equipe  de  profissionais  de  saúde  preparada  para
+atender  ao  paciente  da  melhor  maneira  possível,  contando  também  com  o  suporte
+especializado de tele-atendentes, operadores de frota, condutores de ambulância, etc. A
+Figura 1 apresenta o processo relacionado ao serviço de atendimento pré-hospitalar.
+3 Durante as visitas realizadas todos os membros da equipe do projeto estabeleceram diálogos com os
+mais  diferentes  papéis  associados  ao  serviço:  coordenadores,  administradores,  auxiliares  técnicos,
+supervisores, tele-atendentes, médicos reguladores, operadores de frota, etc.
+218
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Figura 1 - Fluxo de atividades simplificado relativo ao atendimento de uma ocorrência.
+O processo tem início com o recebimento de uma solicitação de socorro por
+telefone. Neste momento, uma tele-atendente realiza de maneira concomitante o registro
+de dados do evento e a triagem de possíveis ligações inadequadas (trotes, enganos, etc.).
+Sendo  a  ligação  definida  como  apropriada,  a  mesma  é  transferida  para  um
+médico regulador responsável por realizar a avaliação do cenário clínico. Nesta etapa, o
+médico vai realizar o diagnóstico do paciente, decidindo pelo envio ou não de uma
+ambulância para o local da ocorrência [Borsato et al 2006].
+O médico regulador pode dar um conselho, uma orientação, ou deslocar uma
+equipe com médico e enfermeiro e todos os equipamentos de uma UTI. A liberação de
+cada recurso será específica para a necessidade de cada ocorrência. Em caso positivo,
+um operador de frota é incumbido da alocação e despacho de uma ambulância específica
+(a depender da gravidade da ocorrência).
+A equipe de socorro enviada para o local da ocorrência vai submeter o paciente a
+condutas médicas, onde pode ser identificada ou não a necessidade de se transferir o
+paciente para uma unidade de saúde.
+Ao  término  do  atendimento,  a  equipe  da  ambulância  deve  comunicar  ao
+operador de frota a conclusão do mesmo. Este profissional deve liberar a ambulância
+associada ao atendimento, para que o médico regulador possa definir a ocorrência como
+encerrada.
+3. Modelagem de Processos para Elicitação de Requisitos
+Os requisitos de um software são definidos como as propriedades que um sistema deve
+possuir para satisfazer as necessidades do ambiente em que será utilizado.   Apesar da
+importância de existir um processo de elicitação de requisitos de qualidade, a maior
+parte dos sistemas é desenvolvida sem uma perfeita compreensão das necessidades do
+negócio, de modo que é possível vislumbrar um panorama onde a qualidade de software
+nos dias atuais é muito ruim [Pressman 2006].
+Na  literatura  não  foram  encontrados  trabalhos  relevantes  que  abordam  a
+utilização da modelagem de processos para a identificação de problemas em sistemas
+computacionais.  A  maioria  dos  estudos  envolve  a  utilização  da  modelagem  no
+levantamento de requisitos para a elaboração de casos de uso  [Jacobson, Ericsson e
+Jacobson 1994; Sharp e McDermott 2001].
+Dentro do contexto deste projeto de pesquisa, a modelagem de processos foi a
+metodologia utilizada tanto para a equipe de pesquisadores absorver conhecimentos
+sobre  os  procedimentos  adotados  na  central  de  regulação  médica,  como  forma  de
+219
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+identificar um conjunto de problemas existentes no sistema utilizado, assim como os
+requisitos realmente relevantes que o sistema de informação deve possuir para atender
+as suas exigências.
+Aliada à construção dos modelos de processos, outra técnica bastante valiosa é o
+destaque  dos  recursos  que  são  manipulados  ao  longo  do  fluxo  de  atividades,
+identificando os insumos necessários para a execução de uma determinada atividade e
+os  resultados  provenientes  do  cumprimento  desta.  A  relevância  desses  elementos
+informacionais,  identificados  como  memórias,  é  destacada  no  trabalho  de  Cunha  e
+Souza (2006) e visualizados neste artigo através da Figura 2.
+Figura 2 - Ênfase do conceito de memórias no modelo de processos de negócios identificando as
+atividades que terão apoio de TI, adaptado de [Cunha e Souza 2006].
+Uma  memória  representa  qualquer  informação  gerada e  armazenada em um
+meio persistente4 da organização para ser consultada ou atualizada posteriormente com
+algum objetivo pelas atividades do processo [Cunha e Souza 2006].
+Outra  vantagem  da  utilização  de  memórias  é  a  possibilidade  de  reconhecer
+informações desnecessárias. Isto ocorre quando a memória é criada por uma atividade e
+não é utilizada por nenhuma outra atividade dos processos existentes.
+O RUP (Rational Unified Process) apresenta os artefatos em sua estrutura, que
+são os elementos que mais se assemelham ao conceito de memória. Nesta metodologia,
+os  artefatos  representam  produtos  no  processo,  gerados  ou  consumidos  durante  a
+execução de uma atividade. O seu ponto negativo é o fato de desconsiderar como
+artefato os elementos informacionais que não estejam armazenados em algum tipo de
+relatório.  Assim,  comunicações  verbais  relevantes  para  o  processo  podem  não  ser
+levadas em conta [Rational Unified Process 2000].
+Com base neste referencial teórico a equipe de projeto promoveu a modelagem
+de processos, rastreando as informações utilizadas ao longo do fluxo de atividades, e
+identificando os recursos computacionais e humanos responsáveis pelo seu manuseio. A
+proposta  desenvolvida  neste  projeto  é  descrita  na  próxima  seção,  onde  o  método
+utilizado é apresentado com mais detalhes.
+4. Método Adotado
+Esta seção apresenta o levantamento realizado para identificar os problemas existentes
+nas  atividades  executadas  dentro  da  central  de  regulação  médica.  Como  evidência
+desses problemas, está o não cumprimento do tempo máximo desejado para um serviço
+de  atendimento  de  urgência                                                                          [Elliot   2000].  O  principal  desafio  foi  identificar  os
+4 Esses meios persistentes podem ser os bancos de dados da organização, arquivos em formato texto ou
+planilhas, além de documentos em papel, livros de anotações, etc.
+220
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+problemas existentes no sistema computacional utilizado, e para isso foi utilizado o
+seguinte método:
+1.  Coleta de Dados
+i.                                                                                                           Estudo da documentação existente, tendo como objetivo o entendimento do domínio de
+conhecimento da organização.
+ii.                                                                                                          Observação in loco da execução do processo de trabalho.
+iii.                                                                                                         Entrevistas com profissionais chaves para o processo de trabalho.
+2.  Análise de Dados
+i.                                                                                                                                                                                                Compreensão detalhada do Processo de Trabalho
+                                                                                                                                                                                                                                                                             a.   Papéis associados à execução das atividades do processo de trabalho.
+                                                                                                                                                                                                  b.   Insumos e produtos relacionados às atividades.
+                                                                                                                                                                                                                                                                             c.   Suporte computacional de apoio à execução das atividades.
+                                                                                                                                                                                                                                                                             d.   Recursos   utilizados   como   apoio   à   execução   do   processo              (Formulários
+                                                                                                                                                                                                                                                                             suplementares, planilhas em meio computacional, etc.)
+ii.                                                                                                          Elaboração do Glossário de Termos
+iii.                                                                                                                                                                                                                                                                         Análise inicial dos Problemas relacionados ao Suporte Computacional
+a.   Atividades que não possuem suporte computacional.
+b.   Atividades que possuem suporte computacional, mas com dependência de recursos
+suplementares.
+3.  Estruturação do conhecimento a respeito dos Processos de Trabalho
+i.                                                                                                           Modelagem do processo de trabalho
+a.   Eventos associados ao início e término do processo, além de eventos temporais
+inicializados durante a execução do mesmo.
+b.   Papéis responsáveis pela execução das atividades do processo de trabalho.
+c.   Atividades do processo de trabalho com seus respectivos insumos e resultados.
+I.  Incluindo atividades que representem repetições.
+                                                                                                                                                                                                  d.   Pontos de decisão presentes no processo de trabalho.
+ii.                                                                                                          Revisão do Glossário de Termos
+                                                                                                                                                                                                  4.  Modelagem Conceitual dos Dados baseada nas Memórias Organizacionais.
+i.                                                                                                                                                                                                                                                                                                                                                                 Especificação  das  memórias  organizacionais  presentes  no  processo  de  trabalho,
+                                                                                                             independentemente do meio que estejam persistidas.
+ii.                                                                                                                                                                                                                                                                                                                                                                Análise do relacionamento existente entre as memórias organizacionais identificadas no
+                                                                                                             processo de trabalho.
+iii.                                                                                                                                                                                                                                                                                                                                                               Revisão  do  Modelo  Conceitual  de  Dados  a  partir  das  Memórias  Organizacionais
+                                                                                                             especificadas e seus relacionamentos.
+                                                                                                                                                                                                                                                                             5.  Repetir os passos de 1 a 4 para cada um dos processos de trabalho identificados
+                                                                                                                                                                                                                                                                                                                                                                   6.  Estudo dos Problemas relacionados ao Suporte Computacional nas atividades de cada um
+dos processos de trabalho
+i.                                                                                                                                                                                                                                                                                                                                                                 Atividades que consomem ou produzem memórias organizacionais, mas não possuem
+                                                                                                             suporte computacional.
+ii.                                                                                                                                                                                                                                                                                                                                                                Atividades  que  possuem  suporte  computacional,  mas  as  memórias  organizacionais
+                                                                                                             consumidas ou produzidas não são contempladas.
+iii.                                                                                                                                                                                                                                                                                                                                                               Atividades com suporte computacional inadequado, onde as memórias organizacionais
+                                                                                                             não são contempladas de forma apropriada.
+4.1. Detalhamento
+Como  resultados  das  atividades  de  campo  foram  gerados  diferentes  tipos  de
+documentos para cobrir necessidades de diferentes etapas do projeto5. Dessa forma, a
+5 Em suas diferentes etapas, o método aplicado gerou diversos tipos de documentos, entre eles: diagramas
+de  processos  com  insumos  e  resultados  das  atividades,  mapas  conceituais,  glossários  de  termos,
+dicionários e modelos de dados, etc.
+221
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+equipe de trabalho ficou mais capacitada para formular hipóteses de melhorias ou ao
+menos  fazer  progredir  a  consciência  quanto  à  existência  de  obstáculos  para  o
+funcionamento satisfatório do serviço.
+Inicialmente   foram   realizados   encontros   da   equipe   do   projeto   com
+coordenadores  e  profissionais  envolvidos  nas  atividades  do  serviço,  tendo  como
+objetivo a aquisição de um conhecimento básico sobre o fluxo de atividades do processo
+completo de regulação médica, nos próprios locais onde as atividades são executadas.
+A partir daí, de maneira gradual, através da análise das entrevistas gravadas, do
+estudo  das  apostilas  de  treinamento  do  sistema  computacional  e  da  avaliação  dos
+formulários manuais preenchidos, os pesquisadores passaram a elaborar vários modelos
+de processos, juntamente com novas versões de todos os documentos utilizados.
+A cada semana, novas reuniões eram agendadas na central de regulação com os
+profissionais  apropriados  de  modo  que  estes  pudessem  validar  as  documentações
+produzidas.  As  discussões  que  surgiam  agregavam  sempre  novos  conhecimentos,
+correções e sugestões para os documentos e relatórios do projeto.
+Na modelagem de processo, os papéis atuantes em cada uma das atividades
+foram discriminados visualmente através do uso de piscinas e raias, além disso, para
+cada  uma  das  atividades,  os  insumos  e  resultados6  associados  foram  evidenciados
+através do conceito de memória  [Cunha e Souza  2006]. Os diagramas de processos
+construídos ressaltavam ainda, através de códigos identificadores, em qual tipo de meios
+persistentes   essas   memórias   se   encontravam                                                           (por   exemplo,   se   em   sistema
+computacional, formulário em papel, etc.).
+A  comunicação  entre  os  profissionais,  as  decisões,  os  processos  temporais,
+enfim,  todos  os  aspectos  que  foram  classificados  como  relevantes  para  a  futura
+identificação dos problemas e as suas causas foram de alguma forma registrados nos
+modelos. A Figura  3 mostra uma pequena parte de um dos modelos de processos,
+evidenciando estes aspectos.
+Responsável
+Atividade
+Evento temporal
+Insumo                                                                                                       Produto
+Figura 3 - Parte de um modelo do processo de atendimento do serviço de atendimento pré-
+hospitalar adotado na Central de Regulação Médica.
+6 Insumo é tudo aquilo que uma atividade precisa obter de seu exterior para ser completamente realizada e
+gerar  suas  saídas.  Resultado  é  tudo  aquilo  que a atividade emite para o  seu exterior durante a sua
+execução [Cunha e Souza 2006].
+222
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Em  paralelo,  foram gerados mapas conceituais7  e glossários de informações
+refletindo aquilo que era representado nos modelos, visando representar o conhecimento
+obtido. Toda a documentação elaborada passou por reuniões de aprovação até se atingir
+um detalhamento definido como satisfatório para as atividades do projeto.
+4.2. Resultados Obtidos
+Os resultados obtidos neste estudo estão baseados nas orientações contidas nos modelos
+de processos de trabalho do domínio de atendimento pré-hospitalar e transferência inter-
+hospitalar, detalhados através da proposta de caracterização de atividades definida em
+Cunha  e  Souza  (2006),  o  que  possibilitou  a  representação  de  todos  os  insumos  e
+produtos dos mesmos, sendo estes informacionais, materiais ou verbais.
+Através deste detalhamento foi possível iniciar uma análise das inadequações do
+sistema de informação e dos problemas de utilização do mesmo, listados a seguir:
+O emprego de recursos suplementares
+Um dos primeiros resultados obtidos através desta análise foi à identificação do
+uso excessivo de papel em atividades já suportadas pelo sistema de informação, como a
+utilização  em  paralelo  de  formulários  em  papel  na  persistência  de  informações
+necessárias à execução do processo, provocando uma redundância de dados.
+Este fato ocorre devido à desconfiança quanto ao desempenho do sistema de
+informação,  principalmente  em  relação  aos  seus  requisitos  não  funcionais  de
+confiabilidade e desempenho  [Sommerville  2003]. Esta prevenção é justificada pelas
+constantes interrupções e falhas apresentadas pelo sistema, tendo como conseqüência
+um  maior  esforço  das  pessoas  e  maior  utilização  de  recursos  materiais  durante  a
+execução das atividades.
+A utilização destes formulários resultou no desenvolvimento de base de dados
+que tentam  “espelhar” a estrutura de dados contida nos mesmos, sendo povoadas a
+posteriori por uma equipe de digitadores. A necessidade deste registro subseqüente
+representa um acréscimo nos custos associados à execução do processo, além de trazer
+problemas como a replicação e inconsistência dos dados registrados nestas diversas
+bases, já que elas não são integradas e possuem diferentes representações dos conceitos
+do domínio da aplicação.
+A identificação de atividades não suportadas pelo sistema de informação
+A  modelagem  do  processo  de  trabalho  possibilitou  o  reconhecimento  de
+atividades não apoiadas pelo sistema de informação. Um exemplo desta situação é o
+controle  realizado  de  forma  manual  pelos  operadores  de  frota  (OF)  em  relação  à
+disponibilidade das ambulâncias e à disposição das mesmas nas bases geográficas de
+estacionamento, devido à inexistência dessas funcionalidades no sistema de informação.
+Como  forma  de  suprir  essa  deficiência,  outro  conjunto  complementar  de
+documentos  em  papel  foi  elaborado  e  passou a ser utilizado, tendo como objetivo
+registrar  o  conjunto  de  ambulâncias  disponíveis.  Esses  formulários  são  atualizados
+7  Mapa  conceitual  é  um  diagrama                                                              (ou  grafo  direcionado)  que  possui  nós  e  associações.  Os  nós
+representam conceitos do domínio, onde cada conceito pode ser expresso por uma palavra, algumas
+palavras ou até mesmo símbolos. Os conceitos são relacionados através das associações.
+223
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+diariamente por recursos especialmente alocados para tal fim, tendo como resultado um
+maior  esforço na execução destas atividades e insegurança quanto à utilização dos
+dados,  uma  vez  que  eles  são  disponibilizados  em  papel,  com  dificuldades  para
+manutenção.
+Inadequações do sistema de informação
+O levantamento dos processos de trabalho também possibilitou a identificação
+de atividades onde as funcionalidades do sistema de informação representavam algum
+tipo de “gargalo” para a execução do processo. Esta situação foi percebida quando da
+necessidade de se encerrar um atendimento realizado com o auxílio de uma ambulância.
+Idealmente, o responsável pela comunicação na ambulância deveria informar ao
+operador de frota sobre a conclusão do atendimento, permitindo ao mesmo liberar a
+ambulância no sistema, retornando-a para a lista de ambulâncias livres, e comunicar ao
+médico regulador responsável a possibilidade de encerrar o atendimento no sistema de
+informação.  Contudo,  o  médico  regulador  não  possui  permissão  para  encerrar  um
+atendimento que ainda possua uma ambulância associada e se vê impossibilitado de
+proceder  tal  tarefa  enquanto  o  término  das  comunicações  entre  a  ambulância  e  o
+operador de frota não forem formalizadas no sistema computacional.
+Além disso, devido ao fato de o sistema de informação não oferecer uma forma
+automática  de  comunicação  quando  da  liberação  das  ambulâncias,  o  número  de
+atendimentos  aguardando  fechamento,  mas  já  terminados  na  prática,  passam  a
+representar  boa  parte  dos  atendimentos  em  execução,  trazendo  sobrecarga  ao
+funcionamento do sistema de informação. Esta situação contribui para agravar as suas
+constantes interrupções e falhas.
+Análise de Modelo de Dados
+Outro resultado obtido com a aplicação da proposta de processo de trabalho está
+relacionado  à  análise  do  modelo  conceitual  de  dados.  Como  citado  anteriormente,
+informações refletindo aquilo que era representado nos processos de trabalho foram
+documentadas em glossários e mapas conceituais, de modo a gerar relatórios de suporte
+para uma maior compreensão do conhecimento sendo elaborado.
+Todos  os  termos  representados  nos  modelos  de  processos  de  trabalhos  e
+documentados no glossário e mapas conceituais apresentam descrições bastante ricas.
+Desta forma, a partir destes elementos, foi possível desenvolver modelos conceituais de
+dados que detalham o conjunto de dados pertencentes ao domínio, assim como os seus
+relacionamentos. As memórias utilizadas em várias atividades, independente do meio
+em que eram persistidas ou por quais papéis eram manipuladas, representam conceitos
+de maior importância dentro do domínio relacionado ao processo de trabalho. Desta
+forma, estes elementos informacionais devem ser mapeados como uma entidade do
+modelo conceitual de dados, pois estes estão ou pelo menos deveriam estar associados a
+alguma funcionalidade do sistema computacional que suporta o processo de trabalho.
+Sendo assim, o estudo integrado desses modelos permite uma análise detalhada
+dos requisitos do sistema, auxiliando o reconhecimento das funcionalidades relevantes,
+inadequadas ou desnecessárias. A Figura 4 apresenta um exemplo do mapeamento de
+uma memória identificada no processo de trabalho, com sua definição especificada no
+glossário de termos do domínio, para uma entidade do modelo conceitual de dados.
+224
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Figura 4 - Mapeamento entre os diferentes dispositivos de tratamento de dados.
+A partir destes modelos de dados, segue a construção de um Operational Data
+Store (ODS), com a eliminação das devidas inconsistências, através da realização dos
+procedimentos de extração, carga e transformação dos dados. Os primeiros data marts
+possibilitarão o desenvolvimento de ambientes amigáveis de visualização dos dados e
+geração flexível dos relatórios gerenciais.
+5. Conclusões
+A identificação de inadequações e problemas de utilização de um sistema de informação
+não é uma atividade trivial, pois envolve a análise de aspectos técnicos, humanos e
+organizações,  além  da  relação  entre  os  mesmos.  No  domínio  relacionado  ao
+atendimento pré-hospitalar esta análise torna-se ainda mais complexa, dado o stress
+envolvido na sua execução.
+Neste  sentido,  foi  possível  observar  que  o  método  apresentado  na  seção  4
+mostrou-se adequado na identificação de impropriedades e problemas de utilização do
+sistema de informação apontados na seção 4.2 deste artigo.
+Outro aspecto a ser ressaltado foi a utilização do conceito de memória como
+forma de caracterização dos processos de trabalho e de suas respectivas atividades, pois
+através  deste  conceito  foi  possível  identificar  todos  os  elementos  informacionais  e
+materiais associados aos processos. Além disso, através do conceito de memória foi
+possível identificar atividades que apresentavam duplicação de informações, como o
+emprego de recursos suplementares, informações relacionadas ao domínio, mas não
+suportada  pelo sistema de informação, assim como inadequações apresentadas pelo
+mesmo.
+Além destes resultados de âmbito mais técnico, foi possível observar que os
+modelos  de  processos  de  trabalho  podem  apoiar  a  realização  de  treinamentos  dos
+funcionários envolvidos nas atividades da central de regulação médica. A aquisição do
+conhecimento seria facilitada, pois os modelos de processo além de representarem de
+maneira correta como as atividades devem ser executadas, possuem ainda um forte
+aspecto visual, que confere destaque às responsabilidades que cada papel possui dentro
+do  fluxo  de  atividades,  assim  como  os  recursos  informacionais  associados  a  cada
+atividade.
+225
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+O projeto encontra-se em andamento, estando na fase de análise de dados e
+definição de protótipos em laboratório, sendo que os modelos resultantes da aplicação
+do método estão servindo de base para ambas.
+As próximas etapas do projeto incluem o desenvolvimento de um banco de
+dados integrado, baseado nos modelos de dados elaborados na etapa anterior, que possa
+receber dados de todos os registros hoje utilizados. Este banco será utilizado como
+alicerce de um ambiente de suporte a aplicações analíticas que permitirão a geração
+sistemática  de  relatórios  gerenciais,  capazes  de  prover  periodicamente  informações
+sobre os serviços prestados.
+A expectativa é que este ambiente analítico auxilie a produção de estatísticas
+mais  confiáveis  em  relação  aos  atendimentos  existentes,  especialmente  aquelas
+associadas às medidas de duração de atividades, de modo a apoiar futuras tomadas de
+decisões.
+Durante o trabalho realizado foram identificadas limitações como, por exemplo:
+  Alto custo de aplicação do método, em razão das muitas interações para se gerar
+e validar sucessivas versões de documentos;
+  Dificuldade de reunir as pessoas mais adequadas em cada um dos encontros
+realizados e a geração de extensos volumes de gravações em áudio;
+  Profissionais da central de regulação médica gastaram um tempo considerável na
+familiarização e compreensão das técnicas e ferramentas adotadas;
+  Falta de garantia se todas as impropriedades do sistema foram identificadas;
+  Falta  de  um  sistema  computacional  para  apoiar  as  atividades  do  método
+utilizado.
+E, por fim, algumas necessidades percebidas ou aspectos não contemplados por
+este  trabalho  surgem  como  sugestões  para  trabalhos  futuros,  entre  eles:  a  análise
+detalhada de todas as interfaces do sistema de informação; a identificação de problemas
+oriundos de procedimentos de trabalho humano; o desenvolvimento de um ambiente
+integrado para suportar as etapas do método utilizado; e validação do método em outros
+tipos de sistemas.
+Referências Bibliográficas
+Borsato, G.B., Scalabrin E.E., Dias J.S. e Enembreck, F. (2006). “Sistema de Apoio à
+Tomada de Decisão para Atendimento Pré-Hospitalar”, In: CBIS'2006 - X Congresso
+Brasileiro de Informática em Saúde. Florianópolis.
+Cunha, A. M. e Souza, G. Q. (2005). “Especificando Requisitos a Partir do Conceito de
+Processo de Trabalho”, In: VII SIMPROS - Simpósio Internacional de Melhoria de
+Processo de Software, São Paulo.
+Cunha, A. M. e Souza, G. Q.  (2006).  “O Conceito de Memória na Modelagem de
+Processos de Negócios para Gerar Requisitos de Sistemas de Informação”, In: III
+SBSI - Simpósio Brasileiro de Sistemas de Informação, Curitiba.
+226
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Destri,  J.                                                                             (2005).                          “Sistema  de  Apoio  à  Decisão  Espacial  Aplicado  ao  Serviço  de
+                                                                                                                         Atendimento Móvel de Urgência em Vias de Trânsito”, Universidade Federal de
+                                                                                        Santa Catarina, Florianópolis.
+Elliot, P.                                                                                                               (2000).  “An Approach to Integrated Rescue”. QMC  - Queensland Mining
+                                                                                        Council: Osborne Mines.
+Goguen, J. (1992). “The Dry And The Wet In Information Systems Concepts: Improving
+The Understanding”, In: Proceedings IFIP WG 8.1 Conference, Elsevier Holland.
+Jacobson. I., Ericsson, M and Jacobson, A. (1994). “The Object Advantage, Business
+Process  Reengineering  With  Object  Technology”.  Addison-Wesley  Publishing
+Company, ACM Press.
+Junior, J. e Valente, A.  (2005).  “A Logística no Serviço de Atendimento Móvel de
+Urgência  (SAMU)”, XXV Encontro Nacional de Engenharia de Produção, Porto
+Alegre.
+Lopes, S. e Fernandes, R. (1999). “Uma Breve Revisão do Atendimento Médico Pré-
+Hospitalar”, Medicina, Ribeirão Preto, 32: 381-387, outubro/dezembro.
+Ministério da Saúde  (2006a).  “Política Nacional de Atenção às Urgências”, Série E,
+Legislação de Saúde, Brasília.
+Ministério da Saúde (2006b). “Regulação Médica das Urgências”, Série A, Normas e
+Manuais Técnicos, Brasília.
+Pressman, R. (2006). “Engenharia de Software”, Sexta Edição. McGraw-Hill.
+Rational Unified Process (2000), Rational Software, Cupertino, Califórnia. Disponível
+em: http://www.rational.com/rup/. Acessado em: 16 de março de 2009.
+Santos, A. (2005). “Modelagem de Processos de Negócios como Base para a Elicitação
+de Requisitos de Software”, Universidade Federal da Bahia.
+Sharp, A. and McDermott, P. (2001). “Workflow Modeling”, Artech House Inc.
+Sommerville, I. (2003). “Engenharia de Software”, Editora Pearson Addison Wesley,
+São Paulo.
+Tani, V.  (2003).  “SAD baseado em Caminhos Mínimos e Georeferenciamento: uma
+Ferramenta de Apoio ao Serviço de Regulação Médica”, Universidade Federal de
+Santa Catarina, Florianópolis.
+Thiollent, M. (2003). “Metodologia da Pesquisa-Ação”, Cortez Editora.
+227
+
+
+
+
+

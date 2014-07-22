@@ -1,0 +1,455 @@
+﻿Otimizando a anotação de Objetos de Aprendizagem
+através da Semântica In Loco
+André Santanchè1
+1NUPPEAD - Núcleo de Pesquisa e Projetos em Educação a Distância
+NUPERC - Núcleo de Pesquisa Interdepartamental em Redes de Computadores
+Universidade Salvador - UNIFACS
+Av Cardeal da Silva, 747 - Salvador - BA - Brasil
+santanche@unifacs.br
+Abstract. In spite of increasing interest concerning Learning Objects  (LO),
+our experience in building a LO repository has showed the difficult task found
+in the further annotation process of the produced material. This work presents
+how we conceived a methodology - named “in place semantics” - in which
+the production and annotation tasks are part of the same process and adopt
+the same metaphors and tools.
+Resumo. A despeito do crescente interesse pelos Objetos de Aprendizagem
+(OA),  nossa  experiência  na  construção  de  um  repositório  de  OAs  tem
+demonstrado a dificuldade encontrada pelos autores no processo posterior de
+anotação  do  material  criado.  Este  trabalho  apresenta  o  modo  como
+concebemos uma metodologia - denominada “semântica in loco” - na qual
+produção e anotação fazem parte do mesmo processo e usam as mesmas
+ferramentas e metáforas.
+1. Introdução
+Objetos  de  Aprendizagem têm sido  tema  de  crescente  interesse na comunidade         de
+Educação e Informática. Em um primeiro momento, a simples noção de um objeto
+capaz de encapsular unidades reutilizáveis de conteúdo para aprendizagem, suscitada
+pela definição lançada pelo Learning Technology Standards Committee (LTSC) [IEEE
+L.T.S.C.  2002] do IEEE, motivou o desenvolvimento de uma série de pesquisas em
+torno do tema. Dentre elas, destacam-se pesquisas para a definição de um padrão para
+metadados  educacionais,  definido  pelo  próprio  LTSC  -  Learning  Object  Metadata
+(LOM)  [IEEE  L.T.S.C.                                                                   2002]   -,  um  formato  para  empacotamento  de  conteúdo
+educacional - IMS Content Packaging [Smythe and Jackl 2004] -, e um padrão que
+integra os demais - Sharable Content Object Reference Model (SCORM) [ADL 2004].
+Hoje em dia, pode-se considerar que estes padrões já adquiriram um grau de
+estabilidade que permite seu uso pela comunidade. Isso motivou o início de um projeto
+no nosso núcleo de educação a distância, com o intuito de criar um repositório de
+conteúdo didático na forma de objetos de aprendizagem. O propósito de tal repositório
+é, dentre outras coisas, de promover o reuso de conteúdo digital. A necessidade do
+reuso surgiu a partir da observação de que grande parte do conteúdo produzido em um
+curso pode ser reusado integralmente, parcialmente ou com modificações, em outros
+cursos. No entanto, dado o grande volume de material produzido, torna-se necessária a
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                 452
+
+
+
+
+sistematização da forma como este material é armazenado e, principalmente, o registro
+de metadados associados a cada objeto.
+A  importância  dada  aos  metadados  pode  ser  compreendida  a  partir  de  um
+princípio observado por Krueger em que “Para que uma técnica de reuso seja efetiva,
+tem  que  ser  mais  fácil  reusar  os  artefatos  do  que  desenvolvê-los  da  estaca  zero”
+[Krueger 1992]. Nossa experiência no núcleo demonstrou que um dos fatores chave que
+dificultam o reuso dos objetos é a dificuldade em encontrá-los.
+Dentre as estratégias de busca de objetos, a de mais simples implementação
+consiste  na  busca  da  ocorrência  de  strings  dentro  do  conteúdo.  Esta  técnica  pode
+produzir resultados interessantes quando o conteúdo buscado é formado essencialmente
+de texto, mas tem duas limitações relevantes: não se aplica a conteúdo que não contém
+texto                                                                                           (e.g.,  áudio  e  vídeo),  e  tem  expressividade  limitada.  No  que  diz  respeito  à
+expressividade limitada, a busca de strings é limitada no tratamento de ambigüidades
+entre  termos,  no  estabelecimento  de  um  domínio  para  os  termos  procurados,  e  na
+capacidade de relacionar estes termos.
+Uma  segunda  solução  que  resulta  em  melhores  resultados,  é  a  busca  de
+metadados  associados  aos  objetos,  segundo  o  padrão  LOM.  Esta  técnica  tem  a
+vantagem de lidar com um esquema conhecido e um vocabulário controlado, ambos
+orientados ao domínio da Educação. Atualmente, o LOM conta com uma representação
+XML  [IEEE  L.T.S.C.  2005]  para  seus  metadados.  Apesar  de  sua  característica  de
+proporcionar interoperabilidade sintática, o XML tem limitações do ponto de vista de
+interoperabilidade semântica, o que limita o poder das buscas e sua integração com
+ontologias. Um avanço em direção à interoperabilidade semântica pode ser alcançado
+com  o  uso  do  padrão  RDF  [Manola  and  Miller  2004]  associado  ao  padrão  LOM
+[Nilsson et al. 2003].
+O RDF é parte da iniciativa da Web Semântica, que motivou a formação de uma
+rica comunidade de desenvolvedores e, conseqüentemente, de ferramentas e aplicações
+das mais variadas. Dentre as ferramentas estão aquelas usadas para registrar metadados
+(anotações) associados a artefatos de conteúdo digital. Dois grandes problemas práticos
+que encontramos ao adotarmos tais ferramentas de anotação estão relacionados com: (i)
+a segregação da atividade de anotação relativa ao próprio processo de elaboração do
+conteúdo, e  (ii) as interfaces e metáforas adotadas pelas ferramentas de anotação se
+distanciam das interfaces e metáforas das ferramentas de produção do conteúdo, as
+quais os usuários estão habituados. Essas observações nos conduziram à pesquisa que é
+o tema central deste artigo. Ela se baseia em uma metodologia de produção e anotação
+de conteúdo digital que denominamos  “semântica in loco” na qual o autor anota o
+conteúdo no mesmo ambiente que o produz e durante o próprio processo de produção.
+Por  intermédio  dos                                                                            “padrões  de  anotações”,  foi  possível  extrair  automaticamente
+anotações, semanticamente ricas e associadas a ontologias, diretamente de dentro do
+conteúdo.
+O  presente  trabalho  está  organizado  da  seguinte  maneira:  na  Seção                      2
+apresentamos atividades de pesquisa relacionadas a metadados educacionais e padrões
+da Web Semântica; na Seção 3 conceituamos “padrões de anotação” e “semântica in
+loco”, e também mostramos como eles foram implementados e aplicados no nosso
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                        453
+
+
+
+
+núcleo de educação a distância. Na Seção 4 apresentamos as considerações finais sobre
+nossa investigação.
+2. Trabalhos Relacionados
+2.1. LOM - Learning Object Metadata
+Do ponto de vista educacional, observa-se que a integração proporcionada pela Web
+entre padrões de representação de documentos, animação, multimídia, programas de
+computador etc. tem possibilitado a construção de material pedagógico que combina
+diferentes recursos, com grande potencial de reuso e adaptação, conforme necessidades
+e estratégias locais.
+Nesse contexto, o conceito de software educacional adquire uma nova dimensão.
+Peças de software (imagens, animações, simulações, etc.) que antes estavam atadas a
+um único programa de computador, agora podem ser “recortadas” e recombinadas. A
+partir desta perspectiva se configurou o conceito de “objeto de aprendizagem” sobre o
+qual  tem  trabalhado  o  IEEE  Learning  Technology  Standards  Committee                    (LTSC)
+(http://www.ieeeltsc.org).  Com uma vasta e crescente quantidade de objetos de
+aprendizagem disponíveis na Web, a questão passa a ser como classificar e documentar
+tais objetos, de maneira que se possam projetar ferramentas aptas a encontrá-los e
+utilizá-los. Com este objetivo, o LTSC desenvolveu o padrão LOM - Learning Object
+Metadata [IEEE L.T.S.C. 2002].
+No padrão LOM, os objetos de aprendizagem são descritos por meio de um
+conjunto de propriedades às quais são dados valores que caracterizam o objeto. O
+padrão define um esquema que relaciona hierarquicamente as propriedades aceitas, o
+domínio  dos  valores  que  elas  podem  receber,  bem  como  sua  cardinalidade.  Este
+esquema,   denominado   BaseScheme                                                            (esquema   básico),   reúne   as   propriedades
+consideradas fundamentais para a descrição dos objetos. Ele pode ser estendido para
+outros esquemas derivados, de acordo com necessidades específicas.
+Recentemente, o IEEE LTSC mapeou o esquema do LOM para XML  [IEEE
+L.T.S.C.  2005]  e  o  trabalho  foi  baseado  em  um  padrão  anterior  encabeçado  pelo
+consórcio  IMS  [Thropp  and  McKell  2001].  Apesar  das  evidentes  vantagens  deste
+mapeamento, o XML foi concebido como um padrão para definir uma estrutura e um
+formato  universais  de  representação  de  dados,  ou  seja,  trata-se  de  um  padrão  de
+interoperabilidade  sintática.  O  padrão  RDF  atua  de  forma  complementar  ao  XML,
+proporcionando interoperabilidade na forma como estes dados são interpretados pelas
+aplicações (interoperabilidade semântica).
+O grupo de trabalho 12 (WG12) do LTSC indica a necessidade de uma futura
+compatibilidade do LOM com os padrões da Web Semântica, como está registrado na
+seção                                                                                         “LOM    Next”    do    grupo                                  (http://www.ieeeltsc.org/working-
+groups/wg12LOM/LOMnext). Adicionalmente, Nilsson [Nilsson et al. 2003] apresenta
+uma proposta de mapeamento do LOM para RDF, que foi adotada para este trabalho.
+Como  os  objetos  de  aprendizagem  são  usualmente  formados  de  uma  rede
+complexa de artefatos interdependentes, foi criado um padrão associado ao LOM, para
+empacotamento e distribuição destes artefatos, chamado IMS Content Packaging (IMS
+CP)  [Smythe  and  Jackl                                                                      2004].  Através  do  IMS  CP  torna-se  possível  empacotar
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      454
+
+
+
+
+conjuntos de artefatos digitais, representando as interdependências de seus recursos,
+bem como sua estrutura de organização interna. Esta estrutura de organização é definida
+na forma de um índice de tópicos hierárquicos, no qual cada tópico está associado a um
+recurso.  Ambientes  virtuais  de  aprendizagem  podem  utilizar  esta  estrutura  para
+apresentar um índice em que cada item remete a uma parte do conteúdo. Atualmente,
+isso já pode ser feito em um AVA denominado Moodle (http://www.moodle.org).
+2.2. RDF e OWL
+RDF - Resource Description Framework - define um modelo e uma linguagem para a
+representação  homogênea  de  informações  associadas  a  recursos  que  podem  ser
+identificados por meio da Web  [Manola and Miller  2004]. Apesar de o modelo e a
+representação RDF serem temas discutidos há muito tempo, optamos por apresentar
+aqui um resumo de conceitos de RDF que são fundamentais para o entendimento dos
+padrões de anotação.
+O mecanismo-mestre para a representação de informações em RDF se baseia na
+associação de descrições a recursos. Conforme a Figura  1, uma descrição pode ser
+visualizada  como  uma  ficha,  na  qual  o  recurso                                       (livro        “Vida  dos  dinossauros”)
+representa o elemento que está sendo fichado. O corpo da descrição é formado por uma
+relação de propriedades (autor, editora e data de publicação) e respectivos valores (Sr.
+Horácio, Edissauros, 17/05/2001).
+livro “Vida dos dinossauros”
+Autor                                                                                      Sr. Horácio
+Editora                                                                                    Edissauros
+data de publicação                                                                         17/05/2001
+Figura 1. Ficha representando descrição RDF.
+Uma descrição é formada por unidades menores: as declarações (statements).
+Cada declaração estabelece um valor para uma propriedade associada a um recurso.
+Uma declaração RDF é freqüentemente expressa na forma de um Grafo Direcionado e
+Rotulado (Directed Labelled Graph - DLG), em que o recurso e o valor da propriedade
+são vértices rotulados, enquanto a propriedade é uma aresta rotulada que aponta na
+direção do valor da propriedade.
+A Figura 2 ilustra um DLG em duas perspectivas. Na parte superior um DLG foi
+construído diretamente a partir de uma das propriedades ilustrada na Figura  1. Esta
+parte da figura omite detalhes de implementação RDF. Na parte de baixo da figura é
+apresentado o mesmo grafo com todos os detalhes, como é usual em RDF. Note-se que
+tanto o recurso descrito  (http://paleo.org/dinos.html) quanto a propriedade
+(http://purl.org/dc/elements/1.1/creator) são URIs. No primeiro caso, a
+URI se refere à localização do recurso descrito, já no segundo caso, a URI aponta para
+um elemento descrito em um vocabulário. O valor da propriedade pode ser tanto um
+literal - tal como está representado na figura - ou também pode ser uma URI, caso se
+refira a outro recurso. Usualmente, os literais são representados como retângulos. O uso
+de URIs é um conceito chave do RDF, ele permite que os elementos representados
+sejam mais do que simples cadeias de caracteres. Através das URIs cada elemento RDF
+recebe uma identificação única na Web, possibilitando a construção de uma rede de
+conceitos e a sua interligação com ontologias diversas.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   455
+
+
+
+
+livro                                                                                       autor
+Sr. Horácio
+"Vida dos dinossauros"
+http://purl.org/dc/elements/1.1/creator
+http://www.paleo.org/dinos.html                                                             Sr. Horácio
+Figura 2. Associação recurso-propriedade-valor representada como um DLG.
+As  URIs  podem  fazer  referência  a  propriedades  descritas  em  vocabulários
+externos por meio dos quais as comunidades estabelecem padrões para a descrição de
+seus recursos. O Dublin Core (http://www.dublincore.org), por exemplo, define
+um  conjunto  genérico  de  elementos  para  a  descrição  de  recursos,  e  utiliza  um
+vocabulário  RDF  para  caracterizá-los  na  forma  de  propriedades.  Dentre  estas
+propriedades, está a que caracteriza o autor (criador) de um recurso, que está associada
+à URI “http://purl.org/dc/elements/1.1/creator” da Figura 2.
+A tripla (recurso, propriedade, valor) define uma declaração RDF, que é bloco
+fundamental para qualquer construção nesta linguagem. Deste modo, o grafo da Figura
+2 também pode ser representado como:
+(http://paleo.org/dinos.html,  http://purl.org/dc/elements/1.1/creator,  ”Sr.  Horácio”)
+O  RDF  é  um padrão  que  pode  ser  usado  como  base  para  a  construção  de
+ontologias.  Atualmente,  o  termo  ontologia  tem  sido  definido  em  computação  de
+diversas maneiras; ele tem origem na filosofia, quando Aristóteles tentou estabelecer
+um sistema de classificação para as  “coisas” no mundo. A computação importou e
+adaptou este termo a seu contexto.  De certa forma, o termo ontologia em computação
+mantém uma estreita relação com suas origens, por definir um sistema de classificação
+de  conceitos.  Adicionalmente,  para  fins  computacionais,  as  ontologias  devem estar
+especificadas formalmente, de tal modo que permitam o compartilhamento de uma
+conceitualização sobre determinado domínio [Gruber 1993].
+As ontologias podem ser expressas mediante diversos formalismos. Um deles foi
+projetado especificamente sobre o RDF para ser utilizado na Web Semântica; trata-se
+do OWL - Web Ontology Language [Smith et al. 2004]. OWL é um vocabulário RDF
+que estende suas capacidades para a definição de relações comumente utilizadas por
+formalismos voltados à definição de ontologias.
+2.3. Ferramentas de Anotação
+Ferramentas para realizar anotações são um aspecto importante quando se trata de
+associar  metadados  a  recursos.  Entre  as  ferramentas  para  o  padrão  LOM  XML
+destacam-se   aquelas   do   Reload   Project                                               (http://www.reload.ac.uk).  Estas
+ferramentas definem um processo simplificado e direcionado de anotação, por meio do
+preenchimento de um formulário em que os campos são valores de propriedades.
+No contexto de RDF e OWL parece não haver ferramentas especializadas em
+LOM, dado que o mapeamento LOM RDF ainda não possui uma padronização definida
+pelo LTSC. Dentre as ferramentas genéricas de RDF/OWL, destacam-se o Protégé
+(http://protege.stanford.edu)   e   o   OilEd                                               (http://oiled.man.ac.uk).
+Como analisaremos adiante, o problema de ambas as ferramentas para um autor de
+conteúdo - que em geral não é iniciado nos domínios de representação de conhecimento
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                    456
+
+
+
+
+e ontologias - é que as metáforas adotadas por estas ferramentas lhe são estranhas e
+difíceis de usar.
+De  uma  forma  geral,  as  ferramentas  de  anotação  não  estão  integradas  ao
+ambiente de produção de conteúdo, e exigem que o usuário execute duas tarefas: a
+produção e a anotação. Além disso, o ambiente de anotação, seus modelos, metáforas e
+ferramentas são dissociados daqueles que são familiares ao autor do conteúdo. Nossa
+experiência  demonstra  que,  como  conseqüência,  a  tarefa  de  anotação  acaba  sendo
+relegada a segundo plano e, em grande parte dos casos, não acontece.
+3. Semântica In Loco e Padrões de Anotação
+Grosso modo, hoje em dia é seguro dizer que estamos em uma transição da questão
+“Como vamos implementar a Web Semântica?” para a questão “O que vamos fazer com
+a Web Semântica?” De fato, se por um lado existe uma rica infra-estrutura disponível,
+dotada de ferramentas e bibliotecas das mais diversas, por outro lado, o desafio passa a
+ser como tornar efetivo o uso de tal infra-estrutura no processo de anotação de conteúdo
+digital, de modo que se possa efetivamente tirar vantagem dos padrões e ferramentas
+propostos.
+Nossa experiência prática no projeto para a implantação de um repositório de
+objetos de aprendizagem demonstrou a dificuldade prática em se anotarem os mesmos.
+Atribuímos esta dificuldade principalmente a três fatores:
+(i) As metáforas adotadas pelos padrões de anotação (principalmente aqueles ligados à
+Web Semântica), e seguidos pelas respectivas ferramentas, estão distantes das metáforas
+usadas pelas ferramentas de produção de conteúdo, às quais os autores estão habituados.
+(ii)  A  tarefa  de  anotação  se  apresenta  como  uma  etapa  adicional  no  processo  de
+produção  de  conteúdo,  usualmente  desconexa  com a  produção  em si,  o que  exige
+geralmente um esforço adicional.
+(iii) O usuário pode ser poupado de muitas anotações as quais o sistema pode inferir
+automaticamente.
+Estas  observações  nos  conduziram  a  uma  pesquisa  que  resultou  em  uma
+metodologia para anotações de conteúdo que denominamos Semântica In Loco.
+3.1. Semântica In Loco
+Semântica In Loco pode ser definida como uma estratégia para a produção de anotações
+associadas a recursos digitais com semântica interoperável, que seguem os seguintes
+princípios:
+(i) Anotação In Loco: o processo de anotação acontece concomitantemente à produção
+de conteúdo (in loco).
+(ii) Integração de Metáforas: as metáforas e modelos utilizados para anotação do
+conteúdo estão alinhadas com aquelas utilizadas para a produção do mesmo.
+(iii) Interoperabilidade: as estratégias de anotação in loco são projetadas de modo que
+estas anotações possam ser automaticamente extraídas do conteúdo e convertidas para
+padrões abertos de representação de metadados da Web Semântica.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      457
+
+
+
+
+Uma  premissa  fundamental  da  anotação  in  loco  é  a  compreensão  de  que
+qualquer  conteúdo  digital  produzido  tem  necessariamente  uma  semântica  a  ele
+associada. Os padrões utilizados para representar as anotações tal como o OWL não têm
+o  propósito  de  acrescentar  semântica  onde  não  havia,  mas  apenas  representar  tais
+anotações com uma semântica padronizada, interoperável e extensível.
+A implantação da estratégia de semântica in loco acontece nas seguintes etapas:
+1. Seleção dos metadados que serão utilizados para anotar o conteúdo digital.
+2.  Definição  de  um  padrão  para  anotação  do  conteúdo  à  medida  que  é
+produzido, para que possa ser identificado automaticamente por uma ferramenta de
+extração.
+3. Construção de uma ferramenta de extração e conversão.
+3.2. Reconhecendo Padrões de Anotação
+Ainda que existam muitos formatos para a representação de metadados, a maior parte
+deles pode ser analisada sob uma perspectiva de associação de propriedades e seus
+respectivos valores a recursos. Como foi apresentado anteriormente, a tripla (recurso,
+propriedade, valor) é a base do modelo RDF.
+A nossa estratégia se baseia na criação de padrões para anotação em ferramentas
+de produção de conteúdo, de tal forma que se possam caracterizar triplas  (recurso,
+propriedade, valor) nas mesmas. Os padrões de anotação permitem que uma ferramenta
+de extração os reconheça automaticamente dentro do conteúdo.
+Figura 3. Associação de formatos de texto a estilos.
+A Figura  3 ilustra um padrão adotado para realizar anotações em conteúdo
+produzido em processadores de texto. Como pode ser observado, o texto da figura está
+dividido em duas regiões, a do título, formatada como {Freestyle Script, 32, negrito,
+centralizado}  e  a  do  corpo  do  texto,  formatada  como                                   {VAGRounded-Light,  12,
+esquerda}.  Aqui, o padrão de anotação consiste em substituir a formatação baseada em
+detalhes  de  apresentação                                                                    (fonte  de  letra,  tamanho,  alinhamento)  pela  formatação
+baseada  em  estilos  previamente  definidos.  Deste  modo,  o  título                        “Células”,  que
+originalmente seria formatado como {Freestyle Script, 32, negrito, centralizado}, passa
+a ser formatado pelo estilo {Título}. Como acontece nos processadores de texto mais
+populares (e.g., Microsoft Word e Open Office), o estilo encapsula o registro completo
+do formato e se torna uma forma versátil de padronizar a formatação do texto. Mas os
+estilos cumprem aqui uma função adicional de acrescentar semântica ao conteúdo, e
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      458
+
+
+
+
+serão a base para a extração de anotações. Em outras palavras, quando o autor marca um
+trecho do texto e o formata com um estilo {Título}, por exemplo, ele não apenas associa
+àquele trecho todo o formato que está encapsulado neste estilo, mas também faz uma
+indicação explícita de que aquele é o título do texto.
+A Figura 4 ilustra o processo de extração das anotações do texto. Cada trecho
+formatado com um estilo é convertido em uma tripla RDF de acordo com a seguinte
+lógica: o endereço do documento em que está o trecho torna-se o recurso, o estilo
+torna-se a propriedade, e o conteúdo do trecho formatado com o estilo torna-se o
+valor. A Figura  4 apresenta um DLG da tripla extraída do título do texto  “Célula”
+formatado  com  o  estilo  {Título}.  Tal  como  na  Figura  2,  foram  apresentadas  duas
+versões do DLG, das quais a segunda especifica as URLs. Note-se que o estilo {Título}
+foi  associado  à  propriedade  RDF http://purl.org/dc/elements/1.1/title,
+que é definida no vocabulário Dublin Core.
+Figura 4. Transformação de documento+estilo+conteúdo em tripla RDF.
+A aplicação dos padrões de anotação é precedida pela definição dos estilos que
+estarão disponíveis para o autor durante a criação do conteúdo. O autor parte de um
+arquivo template no qual estão reunidos os estilos. Cada estilo está associado a uma
+propriedade definida em um vocabulário ou ontologia. Usando esta técnica, é possível
+se extraírem dados como título, autor, assunto abordado, data de publicação e palavras-
+chave, entre outros. A formatação por estilos é explorada não apenas para a extração de
+metadados. Com ela, também é possível extrair-se a estrutura completa do documento,
+incluindo  títulos,  subtítulos,  comentários  e  referências.  Estes  dados  têm  múltiplas
+aplicações, entre elas: o suporte à conversão para outros formatos  (e.g., HTML), a
+produção automática da estrutura de organização para armazenamento em pacote IMS
+CP  (tal como foi descrito na Subseção  2.1), e a produção automática de um índice
+sumário para uso no AVA. Desse modo, o processo de anotação torna-se integrado com
+o  processo  de  produção  de  conteúdo.  Os  padrões  para  anotação  permitem  que  a
+ferramenta de extração faça inferências, reduzindo o esforço do autor na anotação.
+3.3. Implementação da Semântica In Loco
+Foram  aplicados  padrões  de  anotação  por  autores  do  nosso  núcleo  de  educação  a
+distância, para a produção de material didático. Observamos que a estratégia exigiu um
+esforço  inicial  dos  autores,  dado  que  estes  estavam  habituados  a  técnicas  menos
+estruturadas de formatação do conteúdo. Relatos de autores que se habituaram ao uso
+dos  estilos  na  produção  do  conteúdo  indicam  que,  a  longo  prazo,  pode  haver  um
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       459
+
+
+
+
+aumento de produtividade, por ser a seleção do estilo mais simples que a escolha de
+combinações de formato.
+Essa  aplicação  também  demonstrou  a  necessidade  de  se  estabelecer  uma
+estratégia  eficiente  de  expansão  dos  padrões  de  estilos  e  respectivas  anotações.  O
+feedback  dos  autores  envolvidos  na  produção  é  importante  para  o  crescimento  do
+vocabulário de estilos/anotações, que vai sendo refinado sucessivamente.
+4. Considerações Finais
+A estratégia da semântica in loco - que resumimos em três princípios: (i) anotação in
+loco  concomitantemente  à  produção;                                                           (ii)  integração  de  metáforas  e  modelos  de
+produção  e  anotação;                                                                          (iii)  possibilidade  de  extração  e  conversão  automática  para
+padrões abertos e interoperáveis  - pode ser compreendida como um movimento em
+direção  ao  usuário.  In  loco  indica  o                                                      “habitat”  natural  do  autor,  englobando  suas
+ferramentas e metáforas.
+Os padrões de anotação são um aspecto-chave da semântica in loco, constituindo
+a cola do processo de anotação com o processo de produção de conteúdo. Eles permitem
+a redução de esforços na tarefa de anotação e a tornam mais natural para o autor. Neste
+artigo foi apresentado um exemplo da sua aplicação na produção de textos mas, por ser
+uma estratégia independente de implementação, estamos trabalhando para estendê-la a
+outros tipos de conteúdo, tais como vídeo e slides.
+O conjunto de metadados apresentado já é suficiente para tornar a busca por
+objetos de aprendizagem mais efetiva. Entretanto, projeta-se uma quantidade bem maior
+de metadados a serem extraídos pelo mesmo processo.
+Dentre  as  pesquisas  futuras,  estamos  explorando  maneiras  de  interpretar  a
+estrutura dos documentos, com o objetivo de potencializar a extração dos metadados.
+Duas das estruturas pesquisadas são: as tabelas e a estrutura hierárquica  (tópicos e
+subtópicos)  dos  documentos.  Tabelas  de  duas  colunas  podem  usualmente  ser
+interpretadas como a associação de propriedades  (primeira coluna) com seus valores
+(segunda coluna). Usando esta estratégia, podem ser concebidas fichas com metadados
+que não são usualmente colocados no corpo do texto; um estilo de formatação associado
+à tabela pode indicar o seu propósito.
+A estrutura hierárquica de tópicos de um documento permite a extração de
+anotações  localizadas,  associadas  a  tópicos  específicos.  Deste  modo,  será  possível
+reconhecer-se não apenas o autor do documento completo, mas também autores de
+capítulos  dentro do documento, quando  o mesmo for criado por  vários autores.  O
+padrão de empacotamento IMS CP já está preparado para o registro de metadados LOM
+associados a itens em qualquer nível da organização.
+Como foi demonstrado, atualmente é possível associar-se automaticamente um
+estilo de formatação a uma propriedade relacionada com um vocabulário RDF ou uma
+ontologia OWL, já que os estilos também são um vocabulário controlado. O valor da
+propriedade, no entanto, que é o trecho do documento formatado pelo estilo, consiste
+em  uma  string.  Em  muitos  casos,  seria  desejável  também  associar  este  valor  da
+propriedade  a  uma  ontologia.  Por  exemplo,  seria  interessante  associar  o  valor  das
+propriedades  „assunto‟  e  „palavras-chave‟  a  ontologias,  de  forma  a  potencializar  a
+classificação e busca do conteúdo. Buscas com o suporte de ontologias permitem: a
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                        460
+
+
+
+
+localização de sinônimos, a classificação por ordem de similaridade [Resnik 1995], e
+assim por diante.
+Dentre as pesquisas que estamos realizando atualmente, estamos procurando
+meios de associar automaticamente trechos do texto que são valores de propriedades a
+elementos de ontologias;  para isto, utilizamos também dados de contexto. Um dos
+possíveis caminhos deriva de técnicas de integração de dados baseadas em ontologias
+[Wache  et  al.                                                                                2001,  Noy                                                                   2004].  Outro  desafio,  neste  caso,  é  como  expandir
+automaticamente a ontologia, no caso de termos que não estão disponíveis na mesma.
+5. Agradecimentos
+Este trabalho foi parcialmente financiado pelos projetos LabMultflex (FAPESB-Infra
+2006), MediaBank (HP Digital Publishing) e WebMaps II (CNPq).
+Referências
+ADL (2004). Sharable Content Object Reference Model (SCORM) 2004 - 2nd Ed.
+Gruber,  T.  R.                                                                                (1993).  A  translation  approach  to  portable  ontology  specifications.
+Knowledge Acquisition, 5:199-220.
+IEEE L.T.S.C. (2002). Draft Standard for Learning Object Metadata - IEEE 1484.12.1-
+2002.
+IEEE  L.T.S.C.  (2005).  IEEE  P1484.12.3,  Draft  8  -  Extensible  Markup  Language
+(XML) Schema Definition Language Binding for Learning Object Metadata.
+Krueger, C. W. (1992). Software reuse. ACM Comput. Surv., 24(2):131-183.
+Manola, F. and Miller, E. (2004). RDF Primer - W3C Recommendation 10 Feb. 2004.
+www.w3.org/TR/2004/REC-rdf-primer-20040210/, accessed on 08/2007.
+Nilsson, M., Palmér, M., and Brase, J. (2003). The lom rdf binding - principles and
+implementation. In Proc. of the Third Annual ARIADNE conference.
+Noy,  N.  F.  (2004).  Semantic  integration:  a  survey  of  ontology-based  approaches.
+SIGMOD Record, 33(4):65-70.
+Resnik,  P.  (1995).  Using  information  content  to  evaluate  semantic  similarity  in  a
+taxonomy. In Mellish, C. S., editor, Proc. of the Fourteenth International Joint Conf.
+On Artificial Intelligence, pages 448-453.
+Smith,  M.  K.,  Welty,  C.,  and  McGuinness,  D.  L.                                                                                                                                                                                 (2004).  OWL  Web  Ontology
+Language     Guide                                                                             -     W3C     Recommendation                                                 10                                                         February                      2004.
+www.w3.org/TR/2004/REC-owl-guide-20040210/, accessed on 08/2007.
+Smythe, C. and Jackl, A. (2004). IMS Content Packaging Information Model - Version
+1.1.4 Final Specification. Specification, IMS Global Learning Consortium, Inc.
+Thropp, S. and McKell, M. (2001). IMS Learning Resource Meta-Data XML Binding
+Specification.
+Wache, H., Vögele, T., Visser, U., Stuckenschmidt, H., Schuster, G., Neumann, H., and
+Hübner, S. (2001). Ontology-based integration of information - A survey of existing
+approaches. In Proc. of the IJCAI-01, pages 108-117.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       461
+
+
+
+
+

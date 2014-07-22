@@ -1,0 +1,440 @@
+﻿Um Assistente de Predição de Evasão aplicado a uma
+disciplina Introdutória do curso de Ciência da Computação
+Luis Carlos Martins1, 2, Diogo Altoé Lopes1, André Raabe1, 2, 3
+1Bacharelado em Ciência da Computação
+2Mestrado em Computação Aplicada
+3Programa de Pós Graduação em Educação
+Universidade do Vale do Itajaí (UNIVALI)
+{luca, raabe}@univali.br, diogoaltoe@gmail.com
+Abstract. This paper presents two studies carried out for student dropout
+probability detection. The first was based on a specialist knowledge (subject
+teacher) to model a Bayesian Network profile of dropouts in a discipline of
+algorithms and programming, of the first year of undergraduate in Computer
+Science. The Dropout Prediction Assistent (DPA) has been incorporated into
+an Intelligent Tutoring System (ITS), called Alice, aiming to alert the teacher
+about potential student dropouts. In the second study, we sought to enhance the
+DPA through the use o KDD (Knowledge Discovery in Database) techniques,
+adding new variables to the data obtained from ITS Alice and other sources.
+The article presents the models created, the experiments and discusses the
+results.
+Resumo. Este artigo relata duas pesquisas realizadas para detecção de alunos
+candidatos a evasão. Utilizou-se na primeira o conhecimento do especialista
+(professor da disciplina) para modelar uma Rede Bayesiana do perfil dos
+alunos  desistentes  em  uma  disciplina  de  algoritmos  e  programação,  do
+primeiro semestre de um curso de graduação em Ciência da Computação. O
+Assistente de Predição da Evasão (APE) foi incorporado a um Sistema Tutor
+Inteligente (STI) chamado Alice, passando a alertar o professor sobre alunos
+potenciais desistentes. Na segunda pesquisa, buscou-se aprimorar o APE por
+meio da aplicação do processo KDD  (Knowledge Discovery in Database),
+acrescentando novas variáveis obtidas com os dados do STI Alice e de outras
+fontes. O artigo apresenta os modelos criados, os experimentos realizados e
+discute os resultados obtidos.
+1 INTRODUÇÃO
+Um grave problema enfrentado pelas instituições de ensino superior brasileiras é a alta
+evasão  dos  alunos.  Cursos  de  graduação  das  áreas  de  Ciências,  Matemática  e
+Computação apresentaram índice médio de  28% de evasão entre os anos de  2001 a
+2005, sendo que os cursos de Ciência da Computação atingiram 32%, segundo dados do
+Instituto  Nacional  de  Estudos  e  Pesquisas  Educacionais  Anísio  Teixeira            -  INEP
+(SILVA FILHO, et. al. 2007).
+A democratização do ensino superior evidenciou novos fatores de preocupação
+nos índices de evasão, como a formação de grupos heterogêneos de alunos em termos
+de diferenças no desempenho no ensino médio, nas condições sócioeconômicas, no
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+background cultural, os quais as instituições não têm ainda meios de atender em suas
+demandas específicas (RIBEIRO, 2005).
+Nesse contexto, entende-se ser importante o desenvolvimento de ferramentas
+que  permitam  auxiliar  na  identificação  de  alunos  que  apresentam  tendências  a
+abandonar  os  estudos  nas  disciplinas,  possibilitando  ao  professor  e  a  instituição
+educacional tomarem as devidas providências para reduzir a evasão desses alunos.
+Com  esse  intuito,  em  2005  foi  desenvolvido  um  projeto  que  utilizou-se  de
+técnicas  de  raciocínio  probabilístico,  mais  especificamente  Redes  Bayesianas,  para
+identificar potenciais alunos desistentes.   Uma Rede Bayesiana é um modelo gráfico
+que representa as relações de causalidade entre variáveis de um sistema possibilitando
+modelar  o  conhecimento  (RUSSEL  e  NORVIG,  2004).  A  rede  recebe  evidências
+(variáveis de entrada) e retorna a possibilidade de ocorrência de determinados eventos
+(variáveis de saída).
+Buscava-se identificar os alunos com maior propensão a abandonar a disciplina
+de  Algoritmos  e  Programação  do  primeiro  semestre  do  curso  de  Ciência  da
+Computação. Baseado no conhecimento de um especialista, professor da disciplina, foi
+desenvolvido um modelo do perfil do aluno desistente, que pôde ser incorporado ao
+Sistema Tutor Inteligente (STI) denominado Alice (RAABE e SILVA, 2005), tornando-
+se um Assistente de Predição da Evasão (APE).
+Em 2008 foi desenvolvido outro trabalho a fim de criar um novo modelo para o
+perfil do aluno desistente, utilizando o processo de KDD  (Knowledge Discovery in
+Database). Buscou-se evidenciar novos padrões ou correlações nos dados registrados no
+STI Alice, ocultos ao professor, possibilitando uma melhoria nos resultados da predição
+do assistente.
+O objetivo deste artigo é apresentar esses dois trabalhos realizados, procurando
+evidenciar  pontos  positivos  e  negativos  em  ambas  as  abordagens.  O  artigo  está
+organizado da seguinte forma: a seção 2 apresenta o modelo de predição baseado em
+redes bayesianas e no conhecimento do especialista; a seção 3 apresenta a abordagem de
+descoberta de conhecimento utilizando data mining educacional. A seção 4 discute os
+resultados obtidos apontando direções futuras da pesquisa.
+2 MODELO DE PREDIÇÃO BASEADO EM REDES BAYESIANAS
+2.1 Redes Bayesianas
+Segundo Russel e Norvig  (2004), uma Rede Bayesiana é uma descrição concisa de
+distribuições de probabilidade. É definida como um grafo acíclico, tendo os nodos
+representando variáveis aleatórias, e cada variável tem uma matriz das probabilidades
+condicionadas, a sua probabilidade específica, dado a combinação de cada uma das
+possibilidades das variáveis ‘pais’, sendo essas, as únicas variáveis das quais a variável
+aleatória depende diretamente.
+Nassar et. al. (2004) afirma que, as Redes Bayesianas podem ser definidas como
+um  Grafo  Acíclico  e  Orientado  (DAG  -  Directed  Aciclic  Graph),  onde  os  nodos
+representam  as  variáveis  de  interesse  e  as  ligações  entre  os  nodos  representam  a
+dependência causal entre as variáveis. A força desta dependência é representada pela
+probabilidade condicional.
+
+
+
+
+Uma  vez  que  a  topologia  da  Rede  Bayesiana  tenha  sido  definida,  basta
+especificar as probabilidades condicionais para os nodos que possuem dependências
+diretas e usá-las para calcular qualquer outro valor de probabilidade. O cálculo das
+probabilidades  condicionais  é  realizado  de  acordo  com  o  conhecimento  prévio  de
+informações obtidas a partir dos dados de análise utilizados  (RUSSEL e NORVIG,
+2004).
+Segundo Luna (2004), para construir uma representação probabilística através
+do modelo de Redes Bayesianas, uma das tarefas consiste em obter estimativas de
+probabilidades de eventos relacionados aos dados, à medida que novas informações ou
+evidências  sejam  conhecidas.  Esse  processo  é  denominado  inferência  em  Redes
+Bayesianas.
+A probabilidade condicional indica a probabilidade de um evento (nodo) tal que
+outro evento ocorreu. Através da relação (ligação) entre os nodos é possivel criar um
+modelo preditivo, que calcula o grau de relação entre os eventos como também permite
+passar  novas  evidências.  À  medida  que  as  evidências  vão  sendo  fornecidas,  a
+propagação destas na rede permite inferir a probabilidade de ocorrência de qualquer
+nodo da rede (NASSAR et. al,. 2004).
+2.2 Modelo de Predição da Evasão
+Em  2005, surgiu a proposta de desenvolver um sistema que pudesse identificar os
+alunos com maior propensão ao abandono da disciplina de Algoritmos e Programação
+do primeiro semestre do curso de Ciência da Computação da Universidade do Vale do
+Itajaí                                                                                     -  UNIVALI.  Foi  desenvolvido  um  Assistente  de  Predição  da  Evasão  (APE),
+incorporado  ao  STI  Alice                                                                (RAABE,  2006),  permitindo  que  a  partir  dos  dados
+registrados no ambiente se identificassem quais alunos tinham o perfil de um aluno
+desistente.
+Para desenvolver o APE foi necessária a criação de duas aplicações, o cliente
+(escrito na linguagem de programação PHP e utilizando a biblioteca NuSOAP) e o
+servidor (escrito na linguagem de programação Java e utilizando a API do ambiente de
+desenvolvimento  Hugin).  Para  que  fosse  possível  a  comunicação  entre  o  cliente-
+servidor, e que pudesse ser feito via web, fez-se necessário a criação de um servidor
+(Linux) utilizado o Apache Tomcat e os protocolos Axis. A comunicação entre as
+aplicações foi realizada por meio de uma String (texto) de entrada e saída, sendo que
+essas Strings foram definidas segundo gramática na notação BNF (Backus-Naur Form).
+Objetivando gerar o modelo de evidências que detectasse os possíveis alunos
+desistentes da disciplina, utilizou-se os dados existentes na base do STI Alice, sendo
+que todos esses dados foram inseridos ou pelo professor da disciplina, ou pelos alunos
+durante a interação com as seções do ambiente. A partir desses dados foi possível gerar
+as variáveis que foram utilizadas para a construção do modelo:
+   nt_exerc: Média das notas do aluno em exercícios realizados em sala de aula
+até o presente momento;
+   nt_avaliacao: Média das notas do aluno em avaliações realizadas em sala de
+aula até o presente momento;
+   fl_programa:   Flag   especificando   se   o   aluno   tem   experiência   em
+
+
+
+
+programação (0 - Não, 1 - Sim, null - Não informou);
+   fl_repetente: Flag especificando se o aluno é repetente (0 - Não, 1 - Sim,
+null - Não informou);
+   qtd_exercicio: Quantidade de exercícios realizados em sala de aula até o
+presente momento por um determinado aluno;
+   fl_trab20h:  Flag  especificando  se  o  aluno  trabalha  mais  de                     20  horas
+semanais (0 - Não, 1 - Sim, null - Não informou);
+   qtd_presenca: Quantidade de presença no diário de aula da disciplina até o
+presente momento, de um determinado aluno;
+   fl_conversa: Flag especificando se o aluno conversa durante as explicações
+(0 - Não, 1 - Sim, null - Não informou); e
+   fl_sai_sala: Flag especificando se o aluno costuma sair de sala durante a
+aula (0 - Não, 1 - Sim, null - Não informou).
+Optou-se   classificar   e   agrupar   as   variáveis   por   características              (e.g.,
+DESEMPENHO,  EXPERIÊNCIA,  ESFORÇO  e  COMPORTAMENTO),  pois  caso
+todas  as  variáveis  de  entrada  fossem  ligadas  diretamente  a  variável  de  saída
+(desistência, por exemplo), faria com que a tabela de probabilidade condicional da
+variável ficasse complexa de trabalhar, logo, decidiu-se agrupar as variáveis de entrada
+conforme sugerido pelo especialista. A partir das variáveis e seus respectivos grupos
+definidos, foi possível modelar a Rede Bayesiana que representa o perfil do aluno
+desistente  baseado  no  conhecimento  do  especialista                                    (que  também  definiu  as
+probabilidades condicionais variáveis de entrada) conforme apresenta a Figura 1.
+Figura 1. Rede Bayesiana de desistência proposta pelo especialista.
+2.3 Resultados
+Para definir os resultados encontrados com os experimentos utilizou-se termos
+como: (i) Verdadeiro Positivo (VP), utilizado quando o assistente consegue identificar
+um aluno que realmente é desistente; (ii) Verdadeiro Negativo (VN),   utilizado quando
+o assistente identifica um aluno como desistente, mas que não é; e (iii) Falso Positivo
+
+
+
+
+(FP), utilizado quando o assistente deixa de identificar um aluno desistente.
+Foram realizados experimentos com o modelo utilizando como amostras duas
+turmas do segundo semestre de 2005, turmas (A e B) ambas contendo 30 alunos, com
+intuito de calibrar os pesos das variáveis de entrada e definir o valor do Índice de
+Predição da Evasão (IPE). Este índice é a probabilidade resultante do nodo desistência.
+A definição do valor limítrofe deste índice foi um processo crucial, uma vez que ao
+aplicar a rede, todos os alunos tinham alguma probabilidade de desistirem, e tornou-se
+necessário definir qual a probabilidade que seria considerada como sendo uma alta
+chance de desistência.
+O processo acabou sendo realizado  com base  nos dados existentes testando
+diferentes  possibilidades.  Por  exemplo,  usando  o  IPE  com  valor                    0,4                                         (40%  de
+probabilidade de desistência) na turma A, onde dos 30 alunos sete abandonaram, teve-se
+a  identificação  de  apenas  quatro  desistentes                                         (VP),  ou  seja,  o  modelo  deixou  de
+identificar três alunos (FP). Como o valor do IPE sendo 0,45, observou-se que na turma
+A nove alunos foram identificados como desistentes, sendo que desses, seis realmente
+eram desistentes (VP), três não deveriam ser identificados como desistentes (VN) e um
+aluno não foi identificado como desistente  (FP). A partir dos resultados observados,
+pode-se gerar a Tabela 1, apresentada a seguir.
+Tabela 1. Resultados dos experimentos.
+                                                                                          Turma A                                                Turma B
+Total de alunos                                                                           30                                                     30
+Desistentes                                                                               7                                                      10
+Reprovados                                                                                1                                                      3 (identificou-se 2)
+Índice de Desistência                                                                     0,4                                         0,45       0,4                    0,45
+Verdadeiro Positivo                                                                       4                                           6          7                      7
+Verdadeiro Negativo                                                                       0                                           3          9                      13
+Falso Positivo                                                                            3                                           1          3                      3
+Tendo como objetivo avaliar os resultados e escolher o melhor valor para o IPE,
+tendo em vista que em ambos os experimentos, os valores dos VP foram bem próximos,
+resolveu-se utilizar como critério decisivo a menor quantidade de FP (i.e., o que menos
+errasse em deixar de identificar o aluno desistente). Decidiu-se por utilizar então o
+índice de desistência de 0,45.
+Devido  ao  insuficiente  suporte  de  algumas  variáveis  no  banco  de  dados  e
+buscando  melhorias  nos  resultados  da  ferramenta,  no  trabalho  realizado  em        2005
+buscou-se responder a seguinte pergunta: Com a utilização de um maior número de
+dados e de outras técnicas de inteligência artificial, é possível descobrir padrões e
+relacionamentos ocultos ao especialista que ajudariam a modelar o perfil do aluno
+desistente? A seção a seguir apresenta os procedimentos realizados e os resultados
+alcançados.
+3 MODELO DE PREDIÇÃO UTILIZANDO DATA MINING
+3.1 Descoberta de Conhecimento em Bases de Dados
+Para  Fayyad,  Piatetsky-Shapiro  e  Smyth                                                (1996),  em  um  nível  abstrato,  o  KDD
+(Knowledge Discovery in Database) é direcionado para o desenvolvimento de métodos
+
+
+
+
+e técnicas que dê sentido aos dados. O problema básico do processo de KDD é o
+mapeamento de baixo nível dos dados  (que são tipicamente muito volumosos para
+entendê-los  e  digeri-los  facilmente)  em  outra  forma  que  seja  mais  compacta  (e.g.,
+pequenos relatórios), mais abstrata  (e.g., uma aproximação descritiva ou modelo do
+processo que produziu os dados), ou mais útil (e.g., um modelo preditivo para estimar o
+valor em casos futuros). No centro do processo está a aplicação de métodos específicos
+de mineração de dados para o descobrimento e extração de padrões.
+Dias (2002), define que o termo KDD refere-se a todo o processo de descoberta
+de conhecimento útil dos dados. A mineração de dados é um passo em particular nesse
+processo, onde se utiliza de algoritmos específicos para a extração de padrões  (i.e.,
+modelos) dos dados. Os demais passos no processo de KDD, como preparação, seleção
+e  limpeza  dos  dados,  utilização  apropriada  do  conhecimento  prévio  e  a  correta
+interpretação  dos  resultados  da  mineração,  são  necessários  para  garantirem  que  o
+conhecimento  útil  seja  derivado  dos  dados.  O  objetivo  é  extrair  o  alto  nível  de
+conhecimento do baixo nível dos dados no contexto de um grande conjunto de dados.
+Em  contextos  similares  ao  problema  abordado  nesta  pesquisa  encontra-se  o
+trabalho de Nilakant (2004), que a partir do uso de técnicas de mineração de dados,
+buscou desenvolver um framework com base na análise das interações entre um STI e o
+estudante, identificando os problemas específicos da interface do STI que afetam os
+estudantes, usando essas informações para determinar as causas do problema auxiliando
+o desenvolvedor do STI a melhorar a forma de interação.
+Já o trabalho de Superby e Vandamme  (2007) buscou por meio de amostras
+baseadas num questionário entregue a  533 estudantes de universidades da Bélgica e
+utilizando técnicas de mineração de dados, classificar os estudantes em três grupos:
+estudantes  de                                                                                 “baixo-risco”                                                               (i.e.,  grande  probabilidade  de  sucesso);  estudantes  de
+“médio-risco”                                                                                  (i.e.,  sucesso  dependente  das  ações  tomadas  pela  universidade);  e
+estudantes de “alto-risco” (i.e., grande probabilidade de reprovarem ou desistirem).
+Rovaris Neto  (2002) buscou a partir da base de dados de uma instituição de
+ensino e de um questionário aplicado aos alunos desta instituição, aplicar técnicas de
+mineração de dados e utilizar o conhecimento em redes bayesianas para simular um
+Sistema Especialista Probabilístico (SEP) que avalie e estime a probabilidade da evasão
+dos alunos de um curso de graduação dessa instituição.
+O trabalho detalhado no presente artigo assemelha-se a abordagem de Nilakant
+(2004) ao usar dados provenientes de um STI, porém agrega outras informações de
+ordem  acadêmica  como  notas  e  faltas.  Assemelha-se  ao  trabalho  de  Sperby  e
+Vandamme (2007) e de Rovaris Neto (2002) por buscar identificar a probabilidade de
+evasão dos estudantes, no entanto, avalia mais de uma técnica para obtenção mais
+acurada de um Índice de Predição da Evasão.
+3.2 Modelo de Predição da Evasão e Experimentos
+Buscando evidenciar o grau de predição do assistente  (APE) sobre novas amostras,
+utilizou-se nos experimentos os dados das turmas de 2005, 2006 e primeiro semestre de
+2007 como amostras base e teste.
+Como  a  mineração  de  dados  trabalha  com  a  identificação  de  padrões  e
+correlações nos dados, definiu-se por utilizar as mesmas variáveis do modelo construído
+
+
+
+
+com Redes Bayesianas (e.g., fl_programa, fl_trab20h, fl_repetente) e utilizar novas
+variáveis a partir dos dados do STI Alice e de outras fontes dentro do contexto do
+problema:
+                                                                                     ranking:  é  a  soma  da  pontuação  obtida  com  os  acessos  no  STI  Alice,
+levando em consideração as seções acessadas e dependendo da seção, quanto
+tempo o aluno permaneceu na mesma;
+                                                                                     nt_discursiva:  é  o  somatório  das  notas  das  questões  discursivas  dos
+exercícios realizados pelo aluno;
+                                                                                     nt_media_discursiva: é a média  das notas das  questões discursivas dos
+exercícios realizados pelo aluno;
+                                                                                     qtd_discursiva: é a quantidade de questões discursivas dos exercícios foram
+realizadas pelo aluno;
+                                                                                     nt_opcao: é o somatório das notas das questões objetivas dos exercícios que
+foram realizados pelo aluno;
+                                                                                     nt_media_opcao: é a média das notas das questões objetivas dos exercícios
+realizados pelo aluno;
+                                                                                     qtd_opcao: é a quantidade de questões objetivas dos exercícios que foram
+realizadas pelo aluno;
+                                                                                     nt_aluno_exercicio:  é  o  somatório  das  notas  dos  exercícios  que  foram
+realizados pelo aluno;
+                                                                                     nt_media_aluno_exercicio: é a média das notas dos exercícios realizados
+pelo aluno;
+                                                                                     qnt_aluno_exercicio: é a quantidade de exercícios que foram realizados
+pelo aluno;
+                                                                                     m1_aa1,  m1_aa2:  são  as  avaliações  propostas  pelo  professor  e  que
+compõem a primeira média do semestre (m1);
+                                                                                     m1 e m2: são as médias das avaliações realizadas pelo aluno durante a
+primeira e segunda etapa do semestre (média 1 e média 2), respectivamente;
+                                                                                     m1_faltas e m2_faltas: são a quantidade de faltas na primeira e segunda
+média, respectivamente;
+                                                                                     m2_aa1  e  m2_aa2:  são  as  avaliações  propostas  pelo  professor  e  que
+                                                                                      compõem a segunda média do semestre (m2);
+                                                                                     desistente:  classifica  o  aluno  quanto  a  sua  situação  final  na  disciplina,
+discretizando-o  em  três  grupos:                                                    (0)  Reprovado;                                                                       (1)  Desistente;  e   (2)
+Aprovado.
+Para realizar os experimentos com esse modelo, foram necessárias alterações nos
+valores das Tabelas de Probabilidades Condicionais (TPC) das variáveis de entrada e
+dos   agrupamentos                                                                    (e.g.,   DESEMPENHO,   ESFORÇO,   COMPORTAMENTO,
+EXPERIÊNCIA). Os experimentos foram divididos em três grupos:
+
+
+
+
+  Grupo 1: utilizou como amostra base e amostra teste os dados das turmas de
+2005 e 2006;
+  Grupo  2: utilizou como amostra base as turmas de  2005 e  2006 e como
+amostra teste a turma de A do primeiro período de 2007; e
+  Grupo  3: utilizou como amostra base as turmas de  2005 e  2006 e como
+amostra teste a turma de B do primeiro período de 2007.
+Foi necessária uma fase exploratória para definição dos melhores parâmetros e
+escolha  dos  algoritmos  de  aprendizagem  de  máquina  com  melhores  resultados  de
+predição. Nesta fase foram avaliados: (i) a melhor forma de representação de alguns
+dados (i.e., variáveis com valores discretos ou contínuos); (ii) o grau de homogeneidade
+das amostras; (iii) o nível de predição dos algoritmos.
+O resultado desta etapa  (que foi apoiada pela ferramenta Weka) apontou um
+melhor  resultado  nas  predições  com  os  algoritmos  OneR,  se  utilizado  com  dados
+referentes apenas ao primeiro bimestre da disciplina, e o NNge, se utilizado para a
+disciplina como um todo.
+Em cada grupo foram realizados experimentos utilizando diferentes valores para
+o Índice de Predição da Evasão (IPE) e o algoritmo NNge, conforme mostra a Tabela 2.
+Tabela 2. Resultados dos experimentos dos grupos 1, 2 e 3.
+A partir dos resultados obtidos, e utilizando como critério decisivo o menor
+valor de FP pôde-se observar que:
+   Nos experimentos com a turma de  2005 e  2006, utilizando o IPE a  0,6
+identificam-se corretamente quarenta e um alunos como desistentes  (VP),
+cento e quarenta são identificados como desistentes incorretamente (VN) e
+deixou-se de identificar nove alunos desistentes (FP). De 228 alunos, 140
+foram identificados incorretamente como desistentes, ou seja,  61,40% de
+VN. VP representam 17,98% do total. Juntos VN e VP somam 79,38%, os
+outros 20,62% dos alunos realmente não eram desistentes;
+   Nos experimentos com a turma A do primeiro período de 2007, nota-se que
+utilizando  a  IPE  a                                                                      0,4  identificam-se  corretamente  dez  alunos  como
+desistentes  (VP), vinte são identificados como desistentes incorretamente
+(VN) e não houve aluno desistente sem ser identificado (FP). De 31 alunos,
+20 foram identificados incorretamente como desistentes, ou seja, 64,51% de
+
+
+
+
+VN. VP representam 32,25% do total. Juntos VN e VP somam 96,76%, os
+outros 3,24% dos alunos realmente não eram desistentes; e
+   Nos experimentos com a turma B do primeiro período de 2007, observa-se
+que utilizando a IPE a  0,5 identificam-se corretamente oito alunos como
+desistentes  (VP), vinte são identificados como desistentes incorretamente
+(VN) e não houve aluno desistente sem ser identificado (FP).
+A partir da análise dos experimentos com as turmas de 2005 e 2006, conclui-se
+que o total de alunos que foram identificados corretamente (38,60) pelo total dos que
+foram identificados incorretamente (61,40), indica uma baixa probabilidade de predição,
+a  qual  poderia  ser  interpretada  da  seguinte  forma:  para  cada  aluno  identificado
+corretamente, aproximadamente dois são identificados incorretamente (0,62). Seguindo
+o  mesmo  raciocínio,  nos  outros  dois  grupos  de  experimentos  há  uma  redução  na
+probabilidade de predição (0,55).
+4 DISCUSSÃO DOS RESULTADOS
+A fim de confrontar os resultados dos experimentos do modelo baseado no
+conhecimento do especialista com o do processo de KDD, utilizou-se em ambos, a
+mesma base de dados, e apesar de serem duas abordagens diferentes, buscou-se aplicar
+os mesmos critérios de avaliação.
+Buscando aproximar a forma de avaliação dos resultados dos experimentos (com
+os modelos baseados no conhecimento do especialista e com o processo de KDD),
+definiu-se utilizar como critério de avaliação a quantidade de acerto na predição da
+situação final do aluno. Apesar do modelo baseado no processo de KDD ser capaz de
+predizer qual classe o aluno pertence, o mesmo não acontece com o modelo baseado no
+conhecimento do especialista, que apenas indica a probabilidade do aluno desistir, ou
+seja, o modelo apenas calcula a probabilidade do aluno ser ou não ser um desistente,
+enquanto o outro modelo (processo de KDD) classifica o aluno em um dos possíveis
+perfis (e.g., reprovado, desistente, aprovado).
+Observou-se  que  o  modelo  baseado  no  processo  de  KDD  resultou  em  uma
+melhor identificação e maior precisão nos resultados. Decidiu-se então, por utilizar no
+Assistente de Predição da Evasão  (APE), o modelo baseado no processo de KDD,
+utilizando o algoritmo OneR se utilizado com dados referentes apenas ao primeiro
+bimestre da disciplina, e o NNge se utilizado para a disciplina como um todo. Esta
+distinção se fez importante uma vez que o assistente de predição deve emitir avisos
+desde o início da disciplina.
+Acredita-se que utilizando mais dados como, por exemplo, condição financeira
+do aluno (considera-se que apesar de boas notas, bom comportamento e empenho nas
+atividades, o aluno passa por dificuldades financeiras e se vê obrigado a desistir da
+disciplina ou do curso), histórico escolar (o aluno já tem um histórico de desistência de
+disciplinas, podendo talvez, aumentar a possibilidade de ele ser um desistente), dados
+emocionais (o aluno passa por uma crise familiar, onde essa acaba por levar o aluno a
+desistir  da  disciplina)  e  outros,  se  poderiam  obter  resultados  mais  precisos.  Esta
+perspectiva é o principal foco para continuidade desta pesquisa.
+5 REFERÊNCIAS
+
+
+
+
+DIAS, Cristiano Araújo. Descoberta de conhecimento em banco de dados para apoio a
+tomada de decisão. 2002. 63 f. Monografia (Especialização em Informática Empresarial) -
+UNESP, São Paulo, 2002.
+FAYYAD,  Usama;  PIATETSKY-SHAPIRO,  Gregory;  SMYTH,  Padhraic.  From  Data
+Mining    to    Knowledge    Discovery    in    Databases.                                      1996.                      Disponível    em:
+<www.aaai.org/AITopics/assets/PDF/AIMag17-03-2-article.pdf> Acesso em: abr. 2007.
+LUNA, José Eduardo Ochoa. Algoritmos EM para aprendizagem de redes bayesianas a
+partir de dados incompletos. 2004. 120 f. Dissertação (Mestrado em Inteligência Artificial) -
+Departamento de Computação e Estatística, Universidade Federal de Mato Grosso do Sul,
+Campo Grande, 2004.
+NASSAR, Silvia M.; ROVARIS NETO, Eugênio; CATAPAN, Araci Hack; PIRES, Maria
+Marlene  de  Souza.  Inteligência  computacional  aplicada  à  gestão  universitária:  evasão
+discente. In: IV Colóquio Internacional sobre Gestão Universitária na América do Sul,
+2004, Florianópolis. Anais… Florianópolis, 2004. v. 1. p. 1-5.
+NILAKANT, K. Applications of Data Mining in Constraint-Based Intelligent Tutoring
+Systems,                                                                                        2004.   Disponível   em:   <http://www.cosc.canterbury.ac.nz/research/reports/
+HonsReps/2004/hons_0408.pdf>. Acesso em 15 set. 2007.
+RAABE, A. L. A.; SILVA, J. M. C.. Um ambiente para atendimento as dificuldades de
+aprendizagem de algoritmos. In: XIII Workshop de Educação em Computação - SBC2005,
+2005, São Leopoldo. Anais do XXV Congresso da Sociedade Brasileira de Computação,
+2005. p. 2326-2335.
+RAABE, André Luís Alice; GIRAFFA, Lúcia Maria Martins. Uma Arquitetura de Tutor
+para Promover Experiências de Aprendizagem Mediadas. In: XVII Simpósio Brasileiro de
+Informática  na Educação  -  SBIE2006,  2006,  Brasília  -  DF.  Anais  do  XVII  Simpósio
+Brasileiro de Informática na Educação, 2006. v. 1. p. 589-598.
+RIBEIRO, Marcelo Afonso. O projeto profissional familiar como determinante da evasão
+Universitária: um estudo preliminar. Universidade de São Paulo. Revista Brasileira de
+Orientação Profissional, 2005.
+ROVARIS NETO, Eugênio. E-BAYES - Sistema Especialista para a Análise da Evasão
+Discente de Cursos de Graduação no Ensino Superior. Dissertação (Mestrado em Programa
+de Pós-graduação em Ciências da Computação) - Universidade Federal de Santa Catarina,
+Florianópolis, 2002.
+RUSSEL, Stuart J.; NORVIG, Peter. Inteligência artificial. Rio de Janeiro: Campus, 2004.
+SILVA FILHO, Roberto Leal Lobo; MOTEJUNAS, Paulo Roberto; HIPÓLITO, Oscar;
+LOBO,  Maria  Beatriz  de  Carvalho  Melo.  Instituto  Lobo  para  o  Desenvolvimento  da
+Educação, da Ciência e da Tecnologia. A evasão no ensino superior brasileiro. Cadernos de
+Pesquisa, v. 37, n. 132, set./dez. 2007.
+SUPERBY,  J.  F.;  VANDAMME,  J.  P.  Determination  of  factors  influencing  the
+achievement of the first-year university students using data mining methods. In: Workshop
+de Mineração de Dados Educacional: 8th International Conference on Intelligent Tutoring
+Systems (ITS 2006). Taiwan: Jhongli, 2006.
+
+
+
+
+

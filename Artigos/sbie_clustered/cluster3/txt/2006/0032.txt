@@ -1,0 +1,419 @@
+﻿UFVBeerGame: intermediando o aprendizado em cadeias de
+fornecimento com simulação e jogos empresariais
+Bernardo Giori Ambrósio1, José Luis Braga1, Mariane de Oliveira Pereira1
+1Departamento de Informática, Universidade Federal de Viçosa (UFV)
+Campus da UFV - 36570-000 - Viçosa - MG - Brasil
+{bgiori, zeluis, mari}@dpi.ufv.br
+Resumo. Apresenta-se nesse trabalho uma implementação do BeerGame, um
+jogo de empresas desenvolvido no Massachusetts Institute of Technology com
+o objetivo de ser uma ferramenta de apoio ao ensino na área de cadeias de
+fornecimento,  permitindo  o  desenvolvimento  do  pensamento  sistêmico.  O
+UFVBeerGame estende o jogo original, adotando um modelo de cadeia de
+produção  e  distribuição  mais  realista,  contendo  os  papéis  Fábrica,
+Distribuidor, Atacadista e Varejista. Cada sessão pode ser acompanhada pelo
+instrutor via o módulo de gerenciamento, que exibe gráficos comparativos em
+cada instante do jogo. O sistema foi testado em sala de aula com turmas de
+diferentes cursos, e está disponível para uso como software livre.
+Palavras-chave:  Jogos  empresariais,  dinâmica  de  sistemas,  pensamento
+sistêmico, cadeias de abastecimento.
+Abstract. We present an implementation of BeerGame, that is a management
+game developed at Massachusetts Institute of Techonology, aiming at being a
+supply chain teaching support tool. The UFVBeerGame extends the original
+game to allow the simulation of supply chains more adherent to actual supply
+chains.  The  roles  Factory,  Distributor,  Wholesaler  and  Retailer  are
+hierarchically organized as a tree of roles. Each game run can be monitored
+by the instructor by visualizing graphics that show the status of each role and
+the whole status of all roles together. The system was tested in the classroom
+by students of different courses, and is available for download and free use
+under a free software license.
+Keywords: Management games,  system dynamics,  systems  thinking,  supply
+chains.
+1. Introdução
+No contexto atual do mundo dos negócios, decisões se tornam cada vez mais complexas
+e baseadas em múltiplas variáveis inter-relacionadas. Impactos e efeitos das decisões,
+em grande parte das vezes, somente poderão ser verificados muito tempo depois de a
+decisão  ter  sido  tomada.  Problemas  causados  por  decisões  tomadas  com  base  nas
+premissas  erradas,  derivadas  de  análises  incompletas  dos  dados  e  sem  considerar
+alguma interação entre as variáveis principais, surgem com mais frequência.
+O pensamento sistêmico, elevado a conhecimento de primeira classe para os
+tomadores de decisão por Peter Senge [Senge 1990], é um pré-requisito para a aplicação
+das modernas técnicas de Dinâmica de Sistemas (System Dynamics), popularizadas por
+
+
+
+
+Jay Forrester [Forrester 1994], a problemas que exibem propriedades dinâmicas. Ambas
+são ferramentas conceituais indispensáveis para lidar com os novos desafios impostos
+aos  tomadores  de  decisão,  e  a  sua  utilização  permite  a  análise  e  compreensão  de
+problemas e situações de maneira integrada e interconectada.
+Na área de gestão de cadeias produtivas, que apresenta problemas de decisão
+complexos,  com  muitas  variáveis  interconectadas,  algumas  com  características
+dinâmicas, a aplicação de técnicas de dinâmica de sistemas e pensamento sistêmico é de
+extrema  valia.  Essas  cadeias  são  redes  de  organizações,  divididas  em  setores,  que
+trabalham juntas para produzir produtos e distribui-los, levando-os ao consumidor final.
+Jogos  de  empresas  foram  criados  para  exercitar  as  habilidades  de  gestão
+estratégica  de  negócios,  utilizando  ambientes  artificiais.  O  BeerGame,  ou  Jogo  da
+Cerveja [Sterman 1992], é um jogo de empresas que simula uma cadeia de produção e
+distribuição simplificada constituída por uma fábrica, um distribuidor, um atacadista e
+um varejista. O sucesso da administração dos setores da cadeia requer uma análise
+estratégica e a utilização de pensamento sistêmico por parte dos participantes.
+Este  trabalho  descreve  a  implementação  do  UFVBeerGame  [UFVBeerGame
+2006],  uma ferramenta de software para jogar o BeerGame.  Esse software permite
+simular  uma  cadeia  de  produção  e  distribuição,  constituída  por  diversas  funções
+dispersas  geograficamente,  tais  como  fábricas,  centros  de  distribuição,  armazéns
+atacadistas  e  pontos  varejistas.  E  possibilita  também  uma  ampla  variação  dos
+parâmetros do jogo, não presentes na sua especificação original.
+Na  seção  2  deste  trabalho  são  apresentados  conceitos  sobre  dinâmica  de
+sistemas, pensamento sistêmico, simulação e jogos empresariais. A seção 3 apresenta o
+BeerGame e o software UFVBeerGame desenvolvido. Na seção  4  são apresentados
+cenários de utilização do UFVBeerGame. E a seção 5 apresenta as conclusões obtidas.
+2. Contexto
+2.1. Pensamento sistêmico e dinâmica de sistemas
+A falta de uma visão integradora ou holista leva executivos a tomarem decisões reativas,
+considerando apenas o problema presente, sem relacioná-lo com o seu ambiente, suas
+variáveis  e  demais  problemas  correlacionados.  Essa  deficiência  de  embasamento
+conceitual foi apresentada e discutida por Peter Senge [Senge 1990], que deixou claro
+que a capacidade de enxergar o sistema como um todo é fundamental nas decisões
+modernas.
+Uma ferramenta conceitual indispensável para compreender a estrutura causal
+ou  relacional  dos  problemas  são  os  diagramas  de  influência                             [Senge  1990].  Esses
+diagramas apresentam as ligações causais entre as variáveis chave do problema, de
+modo que os gerentes possam localizar possíveis laços de realimentação e atrasos nos
+efeitos resultantes das interações entre essas variáveis [Braga e outros, 2004]. Na Figura
+1 apresenta-se um exemplo de um diagrama de influência. As ligações rotuladas com
+“+” indicam que as variáveis variam na mesma direção (quando uma aumenta/diminui a
+outra aumenta/diminui) e as rotuladas com “-“ indicam variação em direções opostas
+(quando uma aumenta/diminui a outra diminui/aumenta). Uma ligação entre variáveis
+marcada com o termo “delay” indica que o efeito de uma variável sobre a outra só é
+observável com uma defasagem de tempo.
+
+
+
+
+_
+Pagamento
+                                                                                               Investimento em
+de Extras
+                                                                                               Treinamento /
++
+_                                                                                              +
+                                                                                               Aperfeiçoamento   delay
++
+Horas Extras                                                                                   Efetividade
+Problemas
++                                                                                              _                 Produção /
+Entrega
+delay
+Distribuição
+Fonte: [Goodman, 1997]
+Figura 1. Diagrama de influência
+A Figura 1 apresenta um diagrama de influência para uma situação que segundo
+[Goodman 1997], ocorre freqüentemente nas organizações. Esse diagrama mostra que
+há um problema na entrega de produtos aos clientes e a organização emprega uma
+solução  paliativa  de  efeito  imediato  que  é  utilizar  horas  extras  dos  empregados,
+enquanto  que  a  solução  fundamental  e  duradoura  seria  aperfeiçoar  o  sistema  de
+produção e distribuição. A solução fundamental, por não ter efeito visível imediato,
+acaba sendo descartada e a solução paliativa agrava o problema com o passar do tempo,
+pois as despesas com horas extras consomem recursos que poderiam ser investidos em
+aperfeiçoamentos. Isso causa um laço de realimentação positivo, denominado nesse
+caso de círculo vicioso, que pode levar todo o sistema a entrar em colapso.
+Uma vez que a estrutura do problema esteja modelada em um diagrama de
+influência, deve-se planejar a intervenção que irá alterar o curso dos acontecimentos e
+ajustar as variáveis para que o sistema entre em equilíbrio e forneça os resultados
+desejados.  Ao  planejar  uma  intervenção  sistêmica,  é  importante  analisar  os  efeitos
+colaterais que podem ocorrer, para que não surjam novos problemas no futuro.
+A Dinâmica de Sistemas é uma técnica descritiva para modelagem e simulação
+de sistemas [Braga e outros, 2004], baseada na análise sistêmica e na teoria matemática
+dos  Sistemas  Dinâmicos                                                                       [Sterman          2000]  que  permite  levar  em  consideração  as
+variações  dinâmicas  dos  problemas.  Sua  grande  utilidade  decorre  de  permitir  a
+compreensão de como políticas adotadas, ou a própria estrutura do sistema, afetam ou
+determinam o seu comportamento dinâmico [Sterman 2000], antecipando colapsos.
+2.2. Simulação e Jogos Empresariais
+Simuladores têm sido utilizados como ferramentas auxiliares tanto para a análise de
+decisões  quanto  para  o  aprendizado  sobre  elas.  Os  simuladores  proporcionam  um
+ambiente artificial, eliminando os riscos presentes nos sistemas reais e permitindo aos
+profissionais  analisar  as  conseqüências  de  suas  ações  no  longo  prazo.  Difundida
+inicialmente  no  meio  acadêmico,  a  simulação  passou  a  ser  empregada também  no
+ambiente empresarial, pois agiliza a modelagem e permite o planejamento e a tomada de
+decisões em situações similares à situação real, evitando riscos e custos desnecessários.
+Nesse contexto, destacam-se os jogos empresariais. Estes consistem em uma
+ferramenta eficiente e de baixo custo intermediando o aprendizado de conceitos do
+domínio empresarial. São utilizados também para aprimorar habilidades em tomada de
+decisões e para lidar com situações que envolvem decisões interdependentes. Um jogo
+empresarial   famoso   é   o   BeerGame                                                        [Sterman          1992],   desenvolvido   no   MIT
+(Massachusetts Institute of Technology) na década de  60. Este jogo é um simulador
+
+
+
+
+gerencial de tomada de decisões, desenvolvido para ensinar princípios das ciências
+gerenciais, conceitos e ferramentas de dinâmica de sistemas e pensamento sistêmico.
+3. O UFVBeerGame
+3.1. Simulação e cadeias produtivas: princípios básicos do BeerGame
+Cadeias produtivas são redes de organizações que desempenham atividades associadas,
+visando a produzir e distribuir um produto até o consumidor final. Segundo  [Kumar
+2001], estratégias de gerenciamento tradicionais focavam na competição entre setores
+de  diferentes  cadeias,  o  que  não  é  adequado  ao  mundo  globalizado,  em  que  a
+cooperação  entre  os  setores  presentes  nas  cadeias  produtivas  passa  a  ser  o  ponto
+principal. O gerenciamento de cadeias produtivas em um ambiente dinâmico requer o
+uso  de  tecnologias  de  informação  e  comunicação  para  permitir  a  integração  e
+compartilhamento de informações e de processos entre os setores.
+O BeerGame original [Sterman 1992] é um jogo de empresas que simula o fluxo
+de informações numa cadeia simplificada de produção e distribuição de um produto, a
+cerveja, desde a sua produção pela fábrica até sua aquisição pelo consumidor final. O
+jogo mostra como a estrutura da cadeia produtiva influencia o comportamento dos
+gerentes de cada setor. O objetivo do jogo é induzir os participantes a descobrirem,
+através das situações criadas pela dinâmica do jogo, que a ausência de uma abordagem
+sistêmica e de uma visão integrada dos dados gerenciais torna impossível gerenciar de
+modo eficiente cada setor da cadeia e o sistema como um todo. Os papéis a serem
+desempenhados  pelos  participantes  são  o  de  Fábrica,  Distribuidor,  Atacadista  e
+Varejista, e a unidade comercializada do produto (no caso, cerveja), é a “caixa”.
+Uma sessão do jogo é composta por quatro equipes, cada uma desempenhando o
+papel de um setor da cadeia, excetuando o Consumidor, que é simulado por um gerador
+aleatório de pedidos. As equipes não têm acesso às informações das demais equipes e
+não dispõem de informações gerenciais globais para a tomada de decisões, permitindo
+reproduzir no contexto do jogo a situação real para a maioria dos casos. As decisões são
+tomadas a partir do pedido realizado pelo cliente imediato na cadeia.
+O jogo é desenvolvido em semanas (rodadas) de modo que em cada semana o
+Varejista,  o  Atacadista,  o  Distribuidor  e  a  Fábrica  realizam  pedidos  para  os  seus
+respectivos fornecedores e tentam atender à demanda de seus clientes. Os pedidos não
+atendidos  devido  à  insuficiência  de  estoque  não  são  ignorados  e  os  mesmos  são
+anotados como backorders (pedidos atrasados) e serão entregues quando houver estoque
+disponível. No entanto, a entrega da mercadoria não é imediata, pois há o order delay,
+que é um intervalo de tempo de uma semana necessário para que a requisição do pedido
+seja transmitida ao longo da cadeia. Outro parâmetro do jogo é o lead time, que é um
+intervalo de tempo de duas semanas transcorrido entre o momento em que o pedido é
+atendido pelo fornecedor e o momento em que o mesmo é entregue no estoque do
+cliente. Durante o lead time, as caixas de cerveja estão sendo transportadas até o seu
+destino. O Varejista atende ao Consumidor final e não há lead time entre os mesmos. A
+Fábrica tem capacidade ilimitada de produção de cerveja. Portanto, não há order delay
+entre a Fábrica e sua linha de produção.
+Cada papel na cadeia é proprietário de um estoque local e de um estoque em
+trânsito, ambos com capacidade ilimitada de armazenamento. O estoque local consiste
+
+
+
+
+nas caixas de cerveja disponíveis para atender à demanda dos clientes. O estoque em
+trânsito consiste nas caixas de cerveja que no momento estão sendo transportadas até os
+clientes. Cada papel tem um custo associado que se segmenta em três partes: custo do
+estoque local, custo do estoque em trânsito e custo dos backorders. No começo do jogo,
+esses custos são $0.00 e a cada semana eles são incrementados de um valor calculado
+separadamente  para  cada  papel.  O  cálculo  do  acréscimo  nos  custos  é  realizado
+atribuindo  uma  unidade  monetária  (consideramos  $1.00  de acordo  com  a  regra  do
+BeerGame original) por unidade de caixa de cerveja registrada no backorder, e meia
+unidade monetária (consideramos $0.50 de acordo com a regra do BeerGame original)
+por unidade de caixa de cerveja registrada no estoque local ou no estoque em trânsito.
+O objetivo de cada papel é minimizar o seu custo total durante o jogo, de forma
+que o custo total de toda a cadeia seja também minimizado, otimizando assim o custo de
+toda a operação.
+3.2. UFVBeerGame: elementos do jogo
+Foram desenvolvidos diversos softwares para jogar o BeerGame, dentre os quais têm-
+se: The MIT Beer Game  [Sterman  1992], TheBeerGame  [Powersim  2006] e o Near
+Beer Game  [Forio  2006].  Alguns softwares possuem opções que permitem simular
+várias situações como redução no lead time, total compartilhamento de informações
+dentro da cadeia e outros. Entretanto, esses softwares apresentam algumas limitações:
+oferecem  poucas  variações  em  relação  ao  jogo  original  e  são  limitados  por
+simularem uma cadeia linear com apenas um componente em cada setor da cadeia;
+não  permitem  que  o  jogo  seja  controlado  e  monitorado  por  um  usuário  que
+desempenha o papel de Gerente ou Fiscalizador do jogo. A ausência de um gerente
+torna a análise do resultado do jogo obscura para participantes inexperientes;
+a  maioria  dos  softwares  desenvolvidos  não  aborda  grande  parte  dos  conceitos
+gerenciais envolvidos no jogo.
+O  UFVBeerGame                                                                              [UFVBeerGame   2006]  estende  o  BeerGame  original
+[Sterman 1992] permitindo simular uma cadeia de produção e distribuição de cerveja
+com  vários  Varejistas,  Atacadistas,  Distribuidores  e  Fábricas,  possibilitando  uma
+simulação mais próxima de uma cadeia real de produção e distribuição. Cada papel na
+cadeia tem associadas quatro variáveis de controle ou de decisão, cujos valores são
+apresentados por meio de gráficos apenas ao jogador que representa o respectivo papel.
+Essas variáveis são:
+Pedidos: corresponde à quantidade semanal de cerveja pedida ao seu fornecedor
+imediato;
+Atrasados: é o total de pedidos atrasados de cada papel, ou seja, pedidos ainda não
+atendidos devido à insuficiência de estoque nos demais elos da cadeia;
+Estoque: corresponde a quantidade de caixas de cerveja registradas no estoque
+local ou no estoque em trânsito;
+Custos: o custo de cada papel se segmenta em três partes. O custo do estoque local
+corresponde ao custo do estoque de manutenção, disponível para atender à demanda
+dos clientes. O custo do estoque em trânsito corresponde ao custo do transporte do
+
+
+
+
+produto até os clientes. E o custo dos backorders corresponde ao custo dos pedidos
+atrasados, ou custo da falta de mercadoria.
+Tanto  o  order  delay  quanto  o  lead  time  são  considerados  parâmetros  no
+UFVBeerGame, e podem ser definidos pelo instrutor. O UFVBeerGame permite que o
+lead time seja configurado com um valor entre uma e quatro semanas. O mesmo pode
+ser feito com o order delay, que pode ter um valor entre zero e duas semanas. O valor
+de ambos os custos unitários: custo do estoque local, custo do estoque em trânsito e
+custo dos backorders, apresentados na seção anterior, pode ser definido pelo instrutor
+no UFVBeerGame. Um outro recurso é a possibilidade de configurar o tamanho dos
+lotes  de  cerveja  fornecidos  pelos  setores  da  cadeia.  Por  exemplo,  se  o  Atacadista
+distribui cerveja em lotes de 144 caixas, então as quantidades de cerveja solicitada pelo
+Varejista e entregue pelo Atacadista devem ser múltiplos de 144 caixas.
+O software permite gerar um relatório do jogo. Esse relatório é um arquivo texto
+que armazena todas as informações de uma sessão do jogo, incluindo as configurações
+utilizadas:  número de semanas  do jogo,  o valor  do lead time e do order delay,  o
+tamanho dos lotes de cerveja fornecidos por cada setor, o custo unitário do estoque
+local, do estoque em trânsito e do backorder, a hierarquia e organização da cadeia
+produtiva, o valor das variáveis de decisão de cada papel em cada semana do jogo, os
+gráficos e o fluxo de cerveja ao longo da cadeia em cada semana do jogo.
+3.3. Requisitos do problema
+Para apresentar os requisitos do software UFVBeerGame foi utilizado o diagrama de
+casos de uso,  um  dos diagramas  da UML  (Unified Modeling Language)  [Eriksson
+2000]. A UML é uma linguagem para especificação, modelagem e documentação de
+sistemas  e seus diagramas  permitem  visualizar sistemas  de software  sob diferentes
+perspectivas. Outros diagramas, não apresentados aqui por problemas de espaço, foram
+utilizados na especificação, seguindo os passos de um processo de desenvolvimento da
+engenharia de software.
+Fonte: produzido pelos autores
+Figura 2. Diagrama de Casos de Uso
+
+
+
+
+O diagrama de casos de uso é utilizado para representar os requisitos funcionais
+do software. Esses diagramas associam as funcionalidades aos respectivos atores, que
+representam grupos de usuários do sistema. A Figura 2 acima apresenta o diagrama de
+casos de uso para os dois atores que interagem com o UFVBeerGame: o Jogador e o
+Gerente do Jogo. O ator Jogador representa os usuários que irão desempenhar um dos
+papéis Varejista, Atacadista, Distribuidor ou Fábrica em uma sessão do jogo. O ator
+Gerente do Jogo representa o usuário responsável pela aplicação do jogo.
+3.4. Aspectos da implementação
+O UFVBeerGame foi implementado em Java e é constituído por quatro módulos: Beer
+Game Server - BGS, Beer Game Web Service - BGWS, Beer Game Manager - BGM e
+Beer Game Player - BGP. Na implementação do software foi utilizada uma arquitetura
+de três camadas: interface, controle e persistência, baseada no modelo MVC-Model,
+View, Controller [Rumbaugh 1994].
+A  camada  de  interface  consiste  dos  módulos  BGP  e  BGM,  utilizados
+respectivamente pelo Jogador e pelo Gerente do Jogo para interagirem com o software.
+Essa camada apresenta as informações sobre as sessões dos jogos, como gráficos com o
+valor das variáveis de decisão dos papéis na cadeia produtiva, os parâmetros e variáveis
+do jogo, as informações necessárias para que os representantes de cada papel tomem as
+decisões semanais e o fluxo de caixas de cerveja ao longo da cadeia.
+A implementação das camadas de controle e de persistência consiste no módulo
+BGS que é o servidor do jogo. A camada de controle é responsável por gerenciar o jogo,
+sincronizar as  jogadas e  implementar  as  regras  de  negócio  do jogo.  A  camada  de
+persistência é responsável por intermediar o armazenamento dos dados das sessões dos
+jogos, o estado do jogo e o valor dos parâmetros do jogo e das variáveis dos papéis em
+cada semana.
+Para que o UFVBeerGame possa ser utilizado, os computadores em que os
+módulos serão executados devem estar conectados em rede, de modo que o BGS possa
+se comunicar com os  módulos  BGM e  BGP.  A Figura  3  mostra um  diagrama  de
+implantação da UML que apresenta o fluxo de comunicação entre os módulos.
+A comunicação entre os módulos não precisa necessariamente ocorrer via uma
+intranet, pois o software foi projetado para ser utilizado também via web utilizando a
+tecnologia de serviços web. Desse modo, basta executar o BGS em um computador
+qualquer e permitir que os módulos BGP e BGM realizem a comunicação com o BGS.
+Para permitir que a comunicação entre os módulos ocorra de forma transparente, foi
+implementado o módulo auxiliar BGWS que utiliza a tecnologia de serviços web para
+informar ao BGP e ao BGM os parâmetros para a comunicação com o BGS.
+Fonte: produzido pelos autores
+Figura 3. Diagrama de implantação do UFVBeerGame
+
+
+
+
+4. Exemplo de utilização
+O  UFVBeerGame  foi  utilizado  inicialmente  por  alunos  do  curso  de  Ciência  da
+Computação  da  Universidade  Federal  de  Viçosa  na  disciplina  de  Sistemas  de
+Informação.  Posteriormente,  o  software  foi  utilizado  na  disciplina  Simulação  da
+Produção que atende aos cursos de Engenharia de Produção e Tecnologia de Alimentos.
+A  Figura  4  apresenta  um  gráfico  gerado  pelo  software  em  uma  de  suas
+utilizações. Nessa sessão do jogo, o lead time foi configurado com duas semanas e o
+order delay, com uma semana. Como pode ser observado, apenas os pedidos realizados
+pelo Varejista se mantém próximos à demanda do Consumidor que foi de quatro caixas
+até a terceira semana, e então passou a ser de oito caixas até o fim do jogo.
+Fonte: produzido pelos autores
+Figura 4. Pedidos realizados em cada semana
+O atraso na distribuição dos produtos ou na produção motiva os participantes
+inexperientes a aumentarem as quantidades pedidas sem considerar os que ainda estão
+por vir, elevando a quantidade de produtos em estoque e conseqüentemente os custos.
+Essas decisões são denominadas “reativas”, baseadas apenas na situação presente, sem
+visão sistêmica. A Fábrica irá produzir mais do que deveria para atender a esse excesso
+artificial de  pedidos  causando uma elevação da  quantidade  de produtos  em  toda a
+cadeia. Apenas os Varejistas, por conhecerem a demanda real do Consumidor, podem
+estar imunes a esse problema.
+O comportamento observado foi uma elevação brusca nos pedidos causada por
+uma demanda crescente que não estava sendo suprida. Inicialmente, o Varejista, com
+estoque baixo, eleva os pedidos feitos ao Atacadista que também aumenta drasticamente
+os pedidos propagando esse efeito por todo o sistema. Em seguida, ocorre uma queda
+brusca dos pedidos quando os pedidos pendentes começam a ser entregues, pois a
+
+
+
+
+tendência  é  a  quantidade  estocada  exceder  a  necessária  para  atender  à  demanda.
+Ocorrem elevações e quedas nos pedidos, cuja amplitude da variação aumenta à medida
+que se afasta do Consumidor. Esse fenômeno é chamado de Efeito Chicote [Lee 1997].
+A tendência é de estabilização dos estoques na medida em que a simulação avança no
+tempo, correspondendo à estabilização da curva de aprendizado dos participantes.
+Na Figura 5, observa-se a tela principal do módulo de gerência que permite aos
+instrutores estabelecer valores dos parâmetros em cada rodada do jogo.
+Fonte: produzido pelos autores
+Figura 5. Tela principal do módulo de gerência
+5. Análise de resultados e conclusões
+Algumas  simplificações  feitas  no  UFVBeerGame,  tais  como  o  conhecimento  da
+demanda real apenas pelo Varejista, o não estabelecimento de limites para a capacidade
+de armazenamento de cada papel e para a capacidade de produção da Fábrica não
+reproduzem  fielmente  uma  cadeia  de  suprimentos  real.  Essas  simplificações  não
+interferem no objetivo do jogo que é permitir aos participantes verificar as oscilações
+dos pedidos, estoques e custos ao longo do tempo e perceber a importância de adotar
+estratégias tais como acesso à informação de todos os participantes, e os conceitos de
+pensamento sistêmico.
+O UFVBeerGame adota um modelo de cadeia mais realista, permitindo modelar
+diversas situações. O software apresenta importantes lições quanto ao gerenciamento de
+cadeias,  dentre  as  quais  destaca-se  a  percepção  da  importância  do  pensamento
+sistêmico. O resultado final de cada sessão do jogo torna isso claro para todos os
+participantes e esse aspecto tem que ser enfatizado e discutido pelos instrutores que irão
+utilizar o jogo como uma introdução ao gerenciamento de cadeias.
+
+
+
+
+O UFVBeerGame pode ser utilizado em disciplinas das áreas de Administração,
+Sistemas de Informação, Logística e outras, permitindo desenvolver a capacidade de
+utilizar uma abordagem integrada para gerenciar uma cadeia de distribuição. Desse
+modo, os participantes percebem mais facilmente que seu campo de influência não se
+restringe apenas ao seu componente, mas a todo o sistema.
+Apesar dos benefícios potenciais do UFVBeerGame, ainda não foi realizada
+nenhuma avaliação documentada com o objetivo de mensurar sua eficácia em termos de
+suporte à aprendizagem. O trabalho está em desenvolvimento e será realizada uma
+avaliação  junto  a  professores  e  alunos  visando  a  identificar  os  impactos  na
+aprendizagem obtidos através do uso do software.
+O  software  UFVBeerGame  e  o  manual  do  usuário  estão  disponíveis  para
+download  no  sítio  The Source  for  Java  Technology  Collaboration  [UFVBeerGame
+2006] e podem ser utilizados livremente, sob licença Sun Public License (SPL).
+6. Bibliografia
+Braga, J. L.; Silva, C. A. B.; Wiazowski, B. A.; Avellar, S. O. C. (2004) “Modelagem
+com  dinâmica  de  sistemas”.  In:  Santos,  M.  L.,  Vieira,  W.,  eds.:  Métodos
+Quantitativos em Economia. Viçosa, UFV, 2004. p. 411-434.
+Eriksson, H. et al (2000) “Business Modeling With UML: Business Patterns at Work”.
+ISBN 0-471-29551-5. New York: John Wiley & Sons 1st edition. Janeiro, 2000.
+Forio (2006): “Near Beer Game”, http://www.forio.com/nearbeer.htm, Julho.
+Forrester, Jay W. (1994) “Learning through System Dynamics as Preparation for the
+21st  Century”, In: Systems Thinking and Dynamic Modeling Conference for K-12
+Education at Concord Academy. Concord, MA, EUA. Junho, 1994.
+Goodman,  Michael  et  al.                                                                    (1997)                                                                           “Designing  a  Systems  Thinking  Intervention”.
+                                                                                              Waltham, MA. In: Systems Thinker Newsletter by Pegasus Communications.
+                                                                                              Kumar, Kuldeep (2001) “Technology for Supporting Supply Chain Management”. In:
+                                                                                              Communications of the ACM. Volume 44, No 6, p. 58-61. Junho, 2001.
+Lee,  Hau  L.  et  al.                                                                        (1997)                                                                           “The  Bullwhip  Effect  In  Supply  Chains”.  In:  Sloan
+                                                                                              Management Review, Volume 38, Número 3, p. 93-102.
+Powersim  (2006):  “TheBeerGame”, http://solutions.powersimsolutions.com/beergame,
+Julho.
+Rumbaugh, J. (1994) "Modeling models and viewing views: A look at the model-view-
+controller framework". In: Journal of Object-Oriented Programming. Maio, 1994.
+Senge,  Peter  (1990)  “The  Fifth  Discipline:  The  Art  and  Practice  of  the  Learning
+Organization”. ISBN 0-385-26095-4, Nova Iorque, Currency Doubleday, 1990.
+Sterman, J. D. (1992) “Flight Simulators for Management Education: The BeerGame”.
+In: Sloan School of Management, Massachusetts Institute of Technology.
+Sterman, John D.  (2000)  “Business dynamics: systems thinking and modeling for a
+complex world”. Boston: Irwin McGraw-Hill, 2000. 982 p.
+UFVBeerGame (2006): “UFVBeerGame”, https://ufvbeergame.dev.java.net, Setembro.
+
+
+
+
+

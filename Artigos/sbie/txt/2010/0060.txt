@@ -1,0 +1,341 @@
+﻿OS Simulator: Um Simulador de Sistema de Arquivos para
+Apoiar o Ensino/Aprendizagem de Sistemas Operacionais
+Renê N. S. Gadelha2, Ryan Ribeiro de Azevedo1,3, Hilário T. A. de Oliveira2, Tiago
+D. Neves2, Cleyton C. Souza2, Edilson Leite da Silva2
+1Centro de Informática - Universidade Federal de Pernambuco (CIN-UFPE)
+Caixa Postal 50740.540 - Recife - PE - Brasil
+2Departamento de Ciência da Computação - Centro Universitário de João Pessoa
+João Pessoa, PB - Brasil.
+3Coordenação de Sistemas de Informação
+Universidade Federal do Piauí (CSHNB-UFPI) - Picos, PI - Brasil
+{renegadelha,hilariotomaz,edilson.leite,cleyton.caetano.souza,tiagodvn
+eves}@gmail.com, rra2@cin.ufpe.br
+Abstract. This paper presents an architecture, development, features and an
+evaluation of the OS Simulator, a simulator file system that aims to support
+the teaching/learning courses in operating systems. In academic circle, there
+are many difficulties in learning topics related to this subjects, therefore this
+paper helps to overcome such difficulties. Their evaluation are presented by a
+series of experiments and the results obtained through the use of the simulator
+in the classroom with students of Computer Science.
+Resumo.   Apresentamos   neste   artigo   a   arquitetura,   desenvolvimento,
+funcionalidades, avaliação e resultados do OS Simulator, um simulador de
+sistema   de   arquivos   que   tem   como   principal   objetivo   apoiar   o
+ensino/aprendizagem  de  disciplinas  de  Sistemas  Operacionais.  No  meio
+acadêmico,  existem  inúmeras  dificuldades  no  aprendizado  de  tópicos
+relacionados a esta disciplina, portanto, este trabalho contribui para superar
+tais dificuldades. São apresentadas sua avaliação por uma série de experimentos
+e os resultados obtidos com uso da proposta em sala de aula com alunos do curso de
+Ciência da Computação.
+1. Introdução
+Lecionar disciplinas da área de Sistemas Operacionais (SOs) é um desafio em virtude
+das características e peculiaridades das informações a serem repassadas. Aos estudantes
+devem  ser  apresentados,  de  forma  sistematizada,  conceitos,  técnicas  e  ferramentas
+utilizadas tanto para operar, assim como para entender o funcionamento conjunto do
+hardware, software e aplicativos.
+As disciplinas que envolvem SOs se caracterizam por possuírem uma alta carga
+de conteúdo teórico somados a conceitos, em sua maioria, abstratos e interdependentes.
+[Perez-Davilla 1995] enfatiza que o ensino de SOs exige a interligação entre conceitos
+abstratos e tarefas práticas, necessitando de um componente prático significativamente
+bem elaborado, devido o grau de dificuldade encontrado pelos alunos em integrar e
+aplicar tais conceitos.
+
+
+
+
+Este trabalho apresenta o OS Simulator, um simulador desenvolvido para apoiar
+o ensino/aprendizagem da disciplina de SO, especificamente de temas relacionados a
+sistema de arquivos, expondo de maneira prática os conceitos apresentados na teoria. O
+simulador  fornece  também  uma  base  teórica  do  conteúdo  através  das  definições
+relacionadas a sistema de arquivos, que aproxima o aluno dos conceitos que envolvem o
+gerenciamento de SOs.
+A eficácia da utilização do computador como ferramenta educacional é unânime,
+sendo considerada até como fator preponderante no processo de aprendizagem em todas
+as áreas de conhecimento. Grande parte disso é decorrente da facilidade imposta por
+estas ferramentas, entre elas os simuladores, que por meio de interação visual, permitem
+ao aluno absorver melhor o conteúdo sem agregar a habitual desmotivação imposta pelo
+método tradicional de ensino [Jones e Newman 2001].
+O restante deste artigo está organizado da seguinte forma: na Seção  2 são
+apresentados os trabalhos relacionados. Na Seção 3 é exposto um referencial teórico a
+respeito  da  teoria  envolvida,  especificamente  sistema  de  arquivos,  que  ajudará  a
+compreender o trabalho proposto. Já na Seção 4 descrevemos as funcionalidades da
+proposta                                                                                     (OS  Simulator),  enquanto  na  Seção   5  são  apresentados  e  discutidos  os
+resultados obtidos nos experimentos realizados com o uso do OS Simulator. Por fim, as
+conclusões e os trabalhos futuros são delineados na Seção 6.
+2. Trabalhos Relacionados
+Nos últimos anos surgiram diversas propostas de simuladores aplicados ao processo de
+ensino/aprendizagem de disciplinas referentes a SOs, abordando de maneira prática todo
+o assunto teórico debatido em sala de aula, com o intuito de aumentar o nível de
+entendimento  dos  alunos.  Desta  forma  podemos  mencionar  alguns  trabalhos,  que
+embora tenham diferentes focos e níveis de detalhamento, ajudaram no amadurecimento
+da ferramenta proposta neste trabalho. Dentre estes destacam-se:
+   TCB-SO/WEB  [Reis  2009]: consiste em um software educativo que
+objetiva contribuir no ensino de políticas de escalonamento de processos
+e alocação de memória, sendo desenvolvido com uma interface para a
+web. No entanto este trabalho não apresenta resultados, não garantindo a
+sua utilidade prática no processo de ensino/aprendizagem.
+   wxProc [Rocha 2004]: é um simulador de políticas de escalonamento
+multiplataforma. Ao utilizar uma biblioteca específica do SO Windows,
+este simulador só pode ser utilizado neste respectivo SO (Windows).
+Outra restrição é o domínio abrangido pelo wxProc, sendo este bastante
+restrito, pois escalonamento multiplataforma é uma subárea de gerência
+de processos, não tendo grande aplicabilidade no ensino de SOs.
+   SOsim  [MAIA  2001]:  é  um  simulador  standalone  para  ensino  de
+gerência de processos e  de memória.  Durante pesquisa e aplicação,
+foram encontrados diversos erros técnicos ao ser utilizado em sala de
+aula, sendo este o principal empecilho para adoção do mesmo.
+O  OS  Simulator,  trabalho  aqui  proposto  e  apresentado  na  Seção  4,  é  um
+simulador  diferenciado  dos  encontrados  durante  toda  pesquisa.  Isso  se  deve
+primeiramente  por  sua  usabilidade  ter  sido  avaliada,  aprimorada  e  validada  em
+
+
+
+
+interações com alunos e professores. Além disto, este simulador (OS Simulator) aborda
+o conteúdo de sistema de arquivos, em que, durante toda pesquisa, não foi encontrado
+ferramenta didática e aplicável em sala de aula que acoberte esta área, sendo este o fator
+de maior distinção entre este e os demais simuladores encontrados.
+3. Sistema de Arquivos: um Componente Crítico em Sistemas Operacionais
+Os SOs tem como principal objetivo servir como camada de interface entre usuários do
+sistema e os dispositivos de hardware, abstraindo sua complexidade e tornando a sua
+utilização  simples,  rápida  e  segura.  Este  complexo  sistema  também  atua  como
+gerenciador dos recursos, que, usados em conjunto, realizam  o processamento das
+atividades.
+Enquanto gerenciador, os SOs controlam a utilização dos recursos fornecidos pelo
+hardware  e  sua  distribuição  entre  os  diversos  programas/aplicativos  que  os
+compartilham,  possuindo  assim  uma  divisão  central  em  relação  aos  processos  de
+gerenciamento. Esta divisão acontece da seguinte forma: gerenciamento de processos,
+gerenciamento de memória, sistema de arquivos e entrada e saída de dados. No entanto,
+abordaremos nesta seção apenas o conteúdo referente a sistema de arquivos, por ser o
+foco do simulador aqui proposto.
+O gerenciamento de arquivo, também conhecido como sistema de arquivo, é o
+componente responsável pela gerência e manutenção dos arquivos, estabelecendo como
+os mesmos são organizados e protegidos, além de definir quais operações podem ser
+realizadas sobre eles. De acordo com [Tanenbaum 2003], através do sistema de arquivos
+os usuários terão uma interface para armazenamento e recuperação de seus dados de
+forma a abstrair os detalhes da implementação e organização destes arquivos. Por serem
+atividades comumente utilizadas pelos usuários, o sistema de arquivos tornou-se a parte
+mais  visível  dos  SOs.  Nas  sub-seções  a  seguir  serão  detalhados  alguns  conceitos
+importantes existentes dentro de sistema de arquivos, como arquivos e diretórios, e
+também  a  maneira  como  o  espaço  livre  na  memória  é  gerenciado,  sendo  estes
+fundamentais para compreender o funcionamento do OS Simulator.
+3.1 Arquivos e Diretórios
+O sistema de arquivos é constituído de duas partes logicamente distintas, arquivos e
+diretórios. O arquivo permite o armazenamento e leitura de informações, abstraindo
+para o usuário como estes processos acontecem. Havendo a necessidade de organizar os
+arquivos, criou-se estruturas de dados denominadas diretórios que associam a cada
+arquivo atributos como localização física, nome, tipo, entre outros [Machado 2007].
+Desta forma, o SO ao receber uma solicitação de leitura de informações, procura sua
+entrada na estrutura de diretórios, que pode conter referências ao determinado arquivo
+ou a outro diretório que o possua.
+3.2 Gerência de Alocação de Espaço em Disco
+Para melhor organizar o espaço onde são armazenados novos arquivos, bem como, para
+facilitar o acesso e posterior recuperação deles, os SOs gerenciam tanto os espaços
+livres (a gerência de espaço livre em disco), como os já ocupados (gerência de alocação
+de espaço em disco). O controle das áreas ou blocos no disco que estão livres é
+realizado seguindo alguma estrutura de dados que armazena informações possibilitando
+
+
+
+
+ao sistema de arquivo gerenciar o espaço livre em disco, identificando blocos livres que
+poderão ser alocados a um novo arquivo.
+Caso seja alocado um novo arquivo o espaço é removido da estrutura para que
+outros arquivos não possam reutilizar esse espaço. Quando um arquivo é removido,
+todos os seus blocos são liberados para a lista de espaço livres liberando memória. As
+três formas pelas quais esse processo é realizado são: mapa de bits, lista encadeada e
+tabela de blocos livres. Sendo essas três formas contempladas pelo OS Simulator. A
+gerência de alocação  de  espaço em  disco é  uma  das  principais preocupações dos
+projetistas do SO, bastante semelhante no gerenciamento de memória, porém em vez de
+priorizar o tempo de acesso, otimiza o espaço utilizado. As principais técnicas de
+alocação em disco são: contígua, encadeada e indexada.
+Alocação contígua consiste em uma técnica bastante simples, onde armazenam-se
+os arquivos em disco de forma seqüencial, porém, existe um problema na alocação de
+novos arquivos em disco. Para alocar um arquivo, é necessário que exista a quantidade
+suficiente de blocos contíguos livres em disco para realizar a alocação, podendo existir
+mais de um segmento livre adequado ao tamanho exigido pelo arquivo. Com isso é
+necessário adotar algumas técnicas de alocação para selecionar qual o segmento na lista
+de blocos deve ser escolhido [Tanenbaum 2003].
+As principais estratégias de alocação contígua são: First-fit (Seleciona o primeiro
+segmento livre, com tamanho suficiente para alocar o arquivo é selecionado); Best-fit
+(Seleciona o menor segmento livre com tamanho suficiente para armazenar o arquivo)
+e; Worst-fit (Seleciona o maior segmento livre em disco para ser alocado, essa busca é
+feita  em  toda  lista)                                                                     [Tanenbaum  2003].  Por  utilizar  tal  forma  de  alocação,  estas
+estratégias apresentam um problema chamado fragmentação de espaços livres, devido a
+criação e eliminação constantes de arquivos. Para corrigir tal falha, faz-se necessário o
+uso das alocações: Encadeada e Indexada, sendo estas detalhadas a seguir.
+Na alocação Encadeada o arquivo esta organizado em um conjunto de blocos
+ligados logicamente no disco, independente de sua localização física. Cada bloco do
+arquivo possui um ponteiro ligando ao próximo arquivo. Com isso foi possível supera o
+problema da fragmentação dos espaços livres em disco, pois os blocos livres alocados
+para um arquivo não precisam necessariamente esta em seqüencia na memória física.   A
+estratégia utilizada na alocação indexada é manter os ponteiros de todos os blocos do
+arquivo em uma única estrutura denominada bloco de índice. Desta forma, o acesso aos
+blocos  de  arquivos  é  realizado  diretamente  ao  respectivo  arquivo,  dispensando
+estruturas de controle de dados.
+4. Proposta
+O  OS  Simulator  é  um  simulador  desenvolvido  com  o  objetivo  de  apresentar  os
+conceitos teóricos de sistemas de arquivo de maneira visual e dinâmica, oferecendo aos
+professores  um  meio  de  expor  o  conteúdo  da  disciplina  de  forma  mais  prática,
+resultando em um aumento satisfatório no aprendizado dos alunos. O OS Simulator foi
+desenvolvido em JEE1 como uma aplicação web, podendo ser acessado através do site
+da aplicação (http://dci.ccsa.ufpb.br:8080/SimuladorSO/).
+1Plataforma de programação para servidores na linguagem JAVA
+
+
+
+
+O projeto OS Simulat                 or tem como foco simular sistema de arquivos                                                           , apontado
+como um dos assuntos mais á          rduos encontrado no processo de aprendizagem                                                           por parte
+dos alunos durante o andam           ento da disciplina de SO. Através da propost                                                           a, o aluno
+insere e remove arquivos, a          nalisando como as diferentes estratégias de a                                                          locação se
+comportam e absorvendo de m          aneira prática o funcionamento de cada estraté                                                         gia vista na
+teoria apresentada em sala de        aula e discutida na Seção 3.
+A tela inicial do simul              ador com suas funcionalidades é apresentada n                                                          a Figura 1,
+onde é possível que usuário c        onfigure o simulador informando a quantidade                                                           de slots2, o
+tamanho de cada slot, a unida        de computacional envolvida (byte, kilobyte, m                                                          egabyte ou
+gigabyte) e o diretório princ        ipal, chamado comumente de raiz. É possív                                                              el também
+escolher  a  estratégia  de  alo     cação  a  ser  simulada                            (First  Fit,  Best  Fit,                            Worst  Fit,
+Encadeada  e  Indexada),  sen        do  apresentado  posteriormente  ao  usuário  in                                                       formações
+relativas a estratégia escolhida
+                                     Fig                                                ura 1: Tela inicial do simulador
+                                     A página principal da                              estratégia de alocação, ilustrada na Figura 2,      permite ao
+usuário  adicionar  e  remove                                                           r  arquivos  e  pastas,  sendo  estas  ações  rep   resentadas
+visualmente pelo simulador,                                                             que irá representar a alocação na memória se        cundária -
+responsável por armazenar os                                                            dados permanentes.
+2 No simulador, é a menor fração e   m que a memória secundária pode ser dividida.
+
+
+
+
+                                                           Figura 2: T                                           ela principal da estratégia de alocação
+                                  A tela principal da es                                                                                                     tratégia de alocação do OS Simulator está d                                        ividida em
+quatro áreas. Na área 1 (um)                                                                                                                                 , o sistema apresenta a estrutura de arquivos e                                    pastas de
+forma hierárquica, em que o                                                                                                                                  usuário terá uma visão geral de todos os arquiv                                    os e pastas
+presentes atualmente  na  me                                                                                                                                 mória  secundária,  sendo  possível  inseri-lo  ut                                 ilizando  o
+formulário presente na área 3                                                                                                                                (três). Esta inserção ocorre no diretório que                                      está sendo
+visualizado pelo usuário na á                                                                                                                                rea 2 (dois), que apresentará este novo conte                                      údo e suas
+respectivas informações,  tais                                                                                                                               como unidade computacional,  data de inse                                          rção,  entre
+outros. Ainda na área  2  (do                                                                                                                                is), o usuário poderá remover os arquivos e                                        pastas do
+diretório atual e  navegar en                                                                                                                                tre as pastas que foram criadas dentro deste                                       diretório,
+reproduzindo um real ambient                                                      e presente nos SOs modernos.
+                                  O caminho completo                                                                                                         do diretório atual é mostrado na parte superior                                    da área 2
+(dois), sendo possível alterar                                                                                                                               o diretório atual especificando outro caminho                                      válido, ou
+ainda,  voltando  ao  diretório                                                   de  nível  superior                                                                                                             “pai”  ao  atual,  acionand   o  o  botão
+localizado à esquerda nesta á                                                                                                                                rea. A área 4 (quatro) apresenta os slots e in                                     formações
+relativas ao estado corrente da                                                                                                                              memória secundária. Estas informações são at                                       ualizadas à
+medida que arquivos são in                                                                                                                                   seridos e removidos, tendo os slots vazios e                                       ocupados
+mostrados em cores diferentes                                                                                    para facilitar o entendimento do usuário.
+                                  A forma com que os                                                                                                         slots são ocupados com informações de um                                           arquivo é
+determinada pela estratégia                                                                                                                                  de alocação escolhida pelo usuário. O simul                                        ador ainda
+permite ao usuário obter infor                                                                                                                               mações de cada slot contido na memória, com                                        o a taxa de
+uso e a situação (ocupada ou                                                                                                                                 vazio). Se o slot estiver ocupado serão exibido                                    s ainda os
+atributos do arquivo que o sl                                                                                                                                ot está armazenando. Para cada estratégia esco                                     lhida pelo
+usuário, são adicionadas ness                                                                                                                                a área informações específicas de alocação ta                                      is como a
+fragmentação interna e extern                                                                                                                                a, além da necessidade de desfragmentar o siste                                    ma ou não,
+sendo isto calculado pelo próp                                                    rio simulador.
+                                  Já  na  área             4             (quatr                                                                              o)  da  estratégia  de  alocação,  algumas  pala                                   vras  estão
+destacadas, possibilitando ao                                                                                                                                usuário obter sua definição ao clicá-las. Desta                                    maneira, o
+simulador  de  sistema  de  ar                                                                                                                               quivos  proporciona  um  ambiente  que  conce                                      ntra  tanto
+aspectos práticos quanto teóri                                                    cos das disciplinas de SO.
+
+
+
+
+5. Experimentos e Resultados
+Nesta seção, apresentamos os experimentos realizados para avaliar o trabalho proposto,
+bem como os resultados obtidos mediante a avaliação do seu uso em sala de aula. O
+objetivo aqui é demonstrar a utilização do OS Simulator como ferramenta de auxílio no
+processo de ensino/aprendizagem de sistema de arquivos nas disciplinas de SOs.
+Nos experimentos realizados, 2 (dois) professores do curso de bacharelado em
+Ciências                                                                                    da                   Computação     da    instituição   de   ensino   UNIPÊ   -
+http://unipe.br/graduacao/computacao/,  utilizaram  o  OS  Simulator  em  suas  devidas
+aulas  de  SOs-I,  como  ferramenta  auxiliar  expondo  de  forma  prática  os  conceitos
+expostos sobre sistema de arquivos. Após utilização do OS Simulator os 27 (vinte e
+sete) alunos presentes preencheram um questionário de avaliação de uso, relatando
+também sugestões de melhorias que deveriam ser aplicadas, a fim de aumentar o nível
+de compreensão do conteúdo. O questionário utilizado contém perguntas de múltipla
+escolha, que avaliam três aspectos gerais, são eles: (1) A usabilidade da ferramenta; (2)
+O auxílio no processo de ensino/aprendizagem e (3) A plena abordagem do conteúdo
+programático. É apresentado na Tabela 1 os valores das médias dos 3 (três) critérios
+avaliados, transformados em porcentagem para facilitar a compreensão.
+Tabela 1: Resultado dos Questionários Aplicados.
+Critério Analisado                                                                          Avaliação Positiva   Avaliação Negativa
+(1) Fácil Usabilidade do                                                                    90%                  10%
+Simulador
+(2) Auxílio no processo                                                                     88%                  12%
+de aprendizagem
+(3) Plena abordagem                                                                         89%                  11%
+dos conceitos de
+Sistema de Arquivos
+Analisando os resultados dos questionários apresentados na Tabela 1, é possível
+observar que o OS Simulador obteve uma avaliação positiva, obtendo média superior a
+88% (oitenta e oito por cento) nos três critérios avaliados. Isso demonstra que o mesmo
+atendeu positivamente às expectativas dos alunos e professores que o consideraram útil
+para auxiliá-los no processo de ensino/aprendizagem tanto em sala de aula como fora
+dela, já que o mesmo está disponível na web.
+Através das respostas dos questionários analisados, foi possível observar que na
+experiência de utilização do OS Simulator, os alunos tiverem a plena demonstração
+prática  da  teoria  apresentada  pelo  professor  sobre  o  tema  proposto                 (sistema  de
+arquivos), de forma didática e visual, implicando assim em uma visualização da teoria
+abordada. Já no relato dos professores, foi possível identificar que utilizando o OS
+Simulator, foi mais fácil apresentar aos alunos os conceitos sobre as estratégias de
+alocação (First Fit, Best Fit, Worst Fit, Encadeada e Indexada), simulando cada uma
+das estratégias citadas de forma  gráfica,  dispensando a  realização  dos  tradicionais
+desenhos em quadro/lousa branco/negro que serviam  para exemplificar o conteúdo
+abordado, algo que na maioria das vezes é uma tarefa difícil. Outro ponto positivo
+
+
+
+
+identificado com a utilização do OS Simulator foi que o mesmo proporcionava uma
+discussão mais rica sobre assuntos abordados em sala de aula, tanto entre os próprios
+alunos como entre o professor e os alunos.
+O questionário ainda possuía diversas sugestões de melhorias futuras feitas pelos
+alunos,  sendo  possível  identificar  algumas  melhorias  a  serem  realizadas  no  OS
+Simulator para torná-lo mais didático. Dentre estas sugestões, algumas também se
+referiam à usabilidade da ferramenta, que, após aplicadas, tornaram a utilização do
+simulador mais simples, possibilitando assim um melhor entendimento dos alunos e
+professores.
+O OS Simulator, no seu estado atual, apresenta o módulo de gerencia de arquivos,
+possibilitando simular a gerencia de espaço livre em disco através das estratégias de
+mapa de bits, lista encadeada e tabela de blocos livres e gerencia de alocação de espaço
+em disco através da alocação contígua que usa as estratégias First-fit, Best-fit e Worst-
+fit, além das alocações encadeadas e indexadas.
+6. Conclusões e Trabalhos Futuros
+Neste artigo, foi apresentado o desenvolvimento, arquitetura, aplicação e avaliação do
+OS Simulator, as avaliações e resultados indicaram que a arquitetura proposta cumpre o
+papel ao qual se propõe, constituindo-se de uma ferramenta computacional que pode ser
+utilizada  em  contextos  educacionais,  permitindo  aos alunos  obterem  conhecimento
+prático e específico a respeito das teorias ministradas pelos docentes das disciplinas de
+SOs. Os objetivos do projeto foram contemplados possibilitando aos envolvidos no
+processo de ensino/aprendizagem um ganho de conhecimento por meio de aplicações
+práticas da teoria ministrada em sala de aula. Como pesquisa futura propomos e estamos
+trabalhando no desenvolvimento da expansão do OS Simulator para atender outras sub-
+áreas dos SOs, tais como gerência de processos, gerencia de memória e entrada e saída
+de dados.
+Referências
+Jones,  D. and Newman, A.  2001.  “RCOS.java: a simulated operating system with
+animations”. Proceedings of the Computer-Based Learning in Science  Conference,
+Brno, Rep. Tcheca.
+Machado, F. B. 2007 "Arquitetura de sistemas operacionais". Rio de Janeiro: LTC.
+Maia,  L.  P.(2001)                                                                         “SOsim:     Simulador     para     o     Ensino     de     Sistemas
+operacionais”.Dissertação de Mestrado, Núcleo de Computação Eletrônica,
+UFRJ, Rio de Janeiro.
+Perez-da Villa, A. 1995. “OS-bridge between academia and reality”. ACM SIGCSE
+Bulletin,27(1):146-148.
+Reis,  F.  P.;  Costa,  H. A.  X.  C.                                                       (2009)  “TBC-SO/WEB:  Software  Educativo  para
+Aprendizagem  de  Políoticas  de  Escalonamento  de  Processos  e  de  Alocação  de
+Memória em Sistemas Operacionais”.SBIE, UFSC, Florianópolis.
+
+
+
+
+Rocha, A. R.; et al. 2004. WxProc - Um Simulador de                                     Políticas  de  Escalonamento
+Multiplataforma. INFOCOMP - jornal of Computer science. Vol. 3, N. 1: p.43-47.
+Tanenbaum,  A.  S.  2003.  Sistemas Operacionais  Modernos,  2ª.  Edição,  São Paulo:
+Prentice. Hall.
+
+
+
+
+

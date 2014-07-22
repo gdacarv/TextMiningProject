@@ -1,0 +1,469 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Redes sociais do SBSI e o corte de vértices como base para
+identificar atores importantes na coes ão de grupos de pesquisa
+Edvaldo Artmann de Oliveira1, V ânia Maria Félix Dias1
+1Centro de Ciências Exatas e Tecnologia
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+Av. Pasteur 458, Urca, 22290-240, Rio de Janeiro, RJ, Brasil
+{edvaldo.oliveira,vania}@uniriotec.br
+Abstract. Using data from the Annals of SBSI, were created collaborative
+networks of researchers and collaborative networks of institutions for each of
+the symposiums.   In this paper we present some concepts related to social
+networks and also some results obtained with two measures based on vertex
+cut.
+Resumo. Utilizando os dados dos Anais do SBSI, foram criadas redes de
+colaboraç ão entre pesquisadores e redes de colaboraç ão entre instituiç ões para
+cada um dos simp ósios.  Neste artigo s ão apresentados alguns conceitos re-
+lativos a redes sociais e também alguns resultados obtidos com duas medidas
+baseadas em corte de vértices.
+1. Introduç ão
+As redes sociais são usadas para diversas finalidades desde a análise da influência so-
+cial, um fen ômeno em que as aç ões de um usuário podem induzir seus amigos a se
+comportar de maneira similar [Wang et al. 2011], associação entre criminosos e crimes
+[Wang and Lin 2011], chegando até mesmo a medição de semelhanças entre grupos de
+terroristas [Ozgul et al. 2011] e sua evolução [Nizamani and Memon 2011].  Outro im-
+portante foco das redes sociais é a análise da colaboração entre pesquisadores, através
+de redes sociais de co-autoria [Reijers et al. 2009] [Newman 2004b] [Newman 2004a].
+Neste artigo abordaremos o Simp ósio Brasileiro de Sistemas de Informação (SBSI), que
+é um evento para a apresentação de trabalhos científicos e discussão de temas relevantes
+na área, aproximando estudantes, pesquisadores e empresários da comunidade de Siste-
+mas de Informação. As diversas ediç ões deste evento serão foco de análise deste artigo
+sob o ponto de vista de análise da colaboração entre pesquisadores individuais e também
+da colaboração entre os institutos aos quais estes pesquisadores estão afiliados. Também
+será apresentada uma proposta baseada em corte de vértices que visa identificar grupos
+de pesquisadores importantes para a preservação de comunidades de pesquisa identifica-
+das na rede.  Para o prop ósito do estudo várias redes sociais foram geradas com várias
+métricas apresentadas mais adiante.
+Este artigo está dividido da seguinte forma. A primeira seção apresenta definiç ões
+e métricas utilizadas na análise das redes, a segunda seção caracteriza a criação das redes,
+na sequência  é apresentada a análise das redes geradas e por fim são apresentadas as
+consideraç ões finais.
+174
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+2. Definiç ões e métricas
+Uma rede social é um conjunto de pessoas (ou organizaç ões ou outras entidades sociais)
+conectadas por um conjunto de relaç ões sociais, tais como amizade, co-trabalho ou troca
+de informaç ões [Jamali and Abolhassani 2006].
+A análise de redes sociais foca na análise de padr ões de relacionamentos entre as
+entidades sociais, também chamadas de atores, e conta com uma série de medidas que
+visam quantificar as características da rede.
+Existem várias formas de se representar as redes sociais, porém uma forma bas-
+tante comum e difundida é através dos grafos.
+2.1. Conceitos b ásicos de grafos
+Um grafo G = (V, E) é constituído por dois conjuntos, onde V  é um conjunto de elemen-
+tos denominados vértices ou n ós, e E é um conjunto de pares de vértices de V , os elemen-
+tos de E são chamados de arestas.  ´E comum utilizar as letras n e m para indicar o n úmero
+de vértices e arestas, respectivamente, ou seja, |V | = n e |E| = m. Uma sequência de
+vértices v1, ..., vk  tal que (vj , vj+1) ∈ E, 1 ≤ j < |k − 1| é denominado caminho de v1  a
+vk . Um caminho de k vértices é formado por k − 1 arestas (v1, v2), (v2, v3), ..., (vk−1, vk ).
+O valor k − 1 corresponde ao comprimento do caminho. Denomina-se dist ância d(v, w)
+entre dois vértices v, w de um grafo ao comprimento do menor caminho entre v e w.
+Usando como exemplo o grafo da figura 1, um possível caminho do vértice 1 ao 6 poderia
+ser (1, 2), (2, 3), (3, 4), (4, 6), este caminho tem tamanho 4, porém a distância d(1, 6) é 3.
+O grau de um vértice é igual ao total de arestas incidentes a ele, normalmente utiliza-se a
+notação d(v) para indicar o grau de um vértice v. Um grafo é dito completo quando todo
+par de vértices é ligado por uma aresta. A quantidade de arestas de um grafo completo
+com n vértices é n(n−1)                                                                           . Um grafo é denominado conexo quando existe um caminho a par-
+2
+tir de qualquer vértice para qualquer outro vértice do grafo. Para uma visão aprofundada
+sobre grafos ver [Bondy 1976], [Berge 1962] e [Harary 1994].
+2.2. Atores
+No vocabulário usual em redes sociais, vértices são chamados de atores e arestas de
+relaç ões. A centralidade de grau de um vértice v, denotada por Cd(v), é obtida através
+do total de contatos diretos mantidos pelo ator na rede, ou seja, Cd(v) = d(v).
+2.3. Redes
+A densidade da rede mede, de forma geral, a ligação entre os vértices do grafo.  A
+densidade de uma rede  é dada pela razão entre a quantidade de arestas do grafo e a
+quantidade de arestas de um grafo completo com a mesma quantidade de vértices, ou
+m
+seja, D  =                                                                                        Teoricamente, em um grafo mais denso a disseminação de uma
+((n(n−1))/2) .
+informação ocorreria de forma mais rápida. A faixa de valores da densidade é 0 ≤ D ≤ 1,
+sendo que o valor 0 ocorre em um grafo sem arestas e o valor 1 ocorre quando o grafo é
+completo.  O di âmetro da rede, é dado pela maior distância encontrada no grafo.  A in-
+clus ão (Inclusiveness) representa uma medida de conectividade entre os vértices na rede.
+´E definida da seguinte forma I = n−ni                                                            ∗ 100 onde ni denota o n úmero de vértices isola-
+n
+dos1.
+1 Os vértices isolados são aqueles com grau igual a 0
+175
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+ao gr ´afica de um grafo
+3. Caracterizaç ão das redes
+3.1. Geraç ão das redes
+A partir dos anais dos eventos foi criada uma base de dados relacional com as informaç ões
+dos artigos, autores e instituiç ões, bem como suas relaç ões. Algoritmos foram aplicados
+aos dados para gerar as informaç ões aqui apresentadas. Neste artigo os nomes dos autores
+foram substituídos por identificadores numéricos.  A seguir as redes deste estudo são
+caracterizadas.
+3.2. Rede de autores
+Em uma rede de co-autoria, cada n ó representa um autor e existe uma aresta entre dois n ós
+caso eles tenham escrito um artigo em conjunto. O peso de uma aresta representa o total
+de artigos publicados pelos autores extremos da aresta, em parceria. Um pesquisador que
+publicou um trabalho sem nenhum co-autor é representado por um n ó isolado na rede.
+A figura 2A apresenta um exemplo onde o Autor1 e o Autor2 publicaram 1 artigo em
+conjunto, o Autor3 e o Autor4 publicaram 2 artigos em conjunto, o Autor8 publicou um
+artigo sem nenhuma colaboração e os autores 5, 6 e 7 publicaram um artigo em conjunto.
+oes
+3.3. Rede de instituiç ões
+Na rede das instituiç ões, cada n ó representa uma instituição e existe uma aresta entre
+duas instituiç ões caso haja colaboração entre pesquisadores destas instituiç ões em algum
+evento do SBSI. A figura 2B apresenta como é feita a derivação das redes.
+No exemplo da figura 2B, o autor 1 é filiado a instituição A e publicou um artigo
+em conjunto com o autor 2, que  é filiado a instituição B. A rede de instituiç ões deste
+cenário é composta por 2 n ós, representando as instituiç ões A e B, e uma aresta entre elas,
+representando esta colaboração. Caso existissem mais dois autores no exemplo da figura
+2B, também filiados cada um a uma das instituiç ões, e tais autores tivessem publicado um
+artigo em parceria, o peso da aresta entre as instituiç ões A e B seria 2. Neste tipo de rede
+é comum encontrar laços, que são arestas com as duas extremidades incidentes ao mesmo
+vértice. Isto ocorre quando dois ou mais autores de uma mesma instituição colaboram na
+elaboração de um mesmo artigo.  Este tipo especial de aresta não é considerado para o
+cálculo da densidade da rede.
+176
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+4. An álise das redes
+Abaixo serão apresentados alguns dados básicos das redes do SBSI, em seguida é apre-
+sentada uma análise da evolução de alguns autores com destaque em dois critérios, centra-
+lidade de grau e participaç ões nos eventos, por fim, são apresentadas duas novas medidas,
+usando corte de vértices, para identificar atores importantes na coesão de grupos de pes-
+quisa dentro das redes.
+Para verificar a evolução de autores, ocorrida ao longo das ediç ões do SBSI, fo-
+ram selecionados alguns critérios, e então foram criadas e analisadas as redes dos autores
+com destaque nestes critérios, verificando o que ocorreu nos diversos momentos em que
+participaram do SBSI. O primeiro critério foi autores com maior destaque em relação a
+centralidade de grau. Foram identificados os autores com maior centralidade de grau em
+cada edição do evento e então foram analisadas as suas participaç ões em todas as ediç ões
+do evento, a fim de verificar o que ocorre com tais autores, se mantém posição de desta-
+que, progridem ou regridem em relação ao critério em questão. O segundo critério foi a
+quantidade de participaç ões no SBSI. Foram identificados os autores que participaram da
+maior quantidade de ediç ões do evento e a rede formada por cada um foi analisada.  A
+seguir são apresentados os dados obtidos.
+4.1. Critério 1 - Autores com centralidade de grau elevada
+Uma questão importante na ARS é identificar e até mesmo prever a evolução das relaç ões
+dos atores das redes [Getoor and Diehl 2005].  Nesta seção serão observados os atores
+que apresentaram centralidade de grau elevada nas ediç ões do SBSI e o que ocorreu com
+tais autores nas outras ediç ões do evento.  Para isso foram criadas redes com todos os
+atores que possuíam algum caminho até o autor em questão, estes atores foram agrupados
+pelo ano do evento que participaram e atores que apareceram em mais de um ano foram
+destacados com a cor cinza.
+Figura 3. Rede dos autores com maior grau em 2006 e 2008.
+Na edição de 2006 do SBSI o ator com maior centralidade de grau foi o autor 280,
+com grau 8.  Ap ós esta edição este autor voltou a aparecer somente na edição de 2009,
+desta vez com grau 4. A figura 3A exibe a rede do autor 280, onde é possível observar
+os grupos formados em 2006 e 2009, com destaque para a relação com os autores 282 e
+283, que se mantiveram nas duas ediç ões. Na edição de 2008, 7 autores aparecem com o
+grau mais elevado da rede, porém todos estes autores fazem parte de um único grupo de
+pesquisa que contribuiu com um único artigo apenas nesta edição do evento. Excepcio-
+nalmente, nesta edição do evento, observamos os pr óximos atores com grau elevado, 136
+e 137. Estes autores participaram do mesmo grupo em 2008 e 2009. A figura 3B exibe a
+rede do autor 136, porém a rede do autor 137 seria idêntica, somente trocando de posição
+com o autor 136.
+177
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 4. Rede do autor com maior grau em 2009.
+oes do SBSI. Co-autores que aparecem
+ao s ˜ao destacados em cinza.
+Em 2009, um único autor figura com a maior centralidade de grau da rede. Com
+grau 9 o autor 97 faz sua primeira aparição em 2009, retornando em 2010 com grau 5
+(figura 4). O autor com maior centralidade de grau na edição de 2010 foi o autor 9 (ver
+figura 5). Este autor estreou na edição de 2008 com grau 2, em 2009 foi o segundo autor
+com maior centralidade de grau e sua rede de colaboradores aumentou para 11, sendo
+8 diretamente ligados a ele.  Em 2010 obteve seu maior índice, com 10 colaboradores
+diretos mais 6 indiretos, sendo o autor com maior centralidade de grau, com o valor 11.
+Finalizando, em 2011, sua rede sofreu uma redução, e envolveu 9 pesquisadores, quatro
+deles de forma direta.  Em 2011 três autores obtiveram a maior centralidade de grau da
+rede, autores 388, 389 e 170, com grau 10, porém somente o autor 170 apareceu em outra
+edição do evento. A figura 6 exibe a rede formada pelo ator 170. Observa-se também que
+os outros dois autores com destaque, 388 e 389, fazem parte da rede do autor 170.
+Dentre os autores com destaque em cada edição do evento, foi observado que 3
+deles apareceram em eventos posteriores com grau mais baixo (atores selecionados nas
+ediç ões de 2006, 2008 e 2009). O ator 9, destaque em 2010, apareceu pela primeira vez
+em 2008, com grau 2, em 2009 evoluiu para grau 8, atingiu seu ápice em 2010 com grau
+11 e na última edição, 2011, teve uma redução para grau 4. O autor 170, selecionado em
+2011, teve apenas outra aparição em 2008 com grau 3. Como pode ser visto, a maioria
+178
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 6. Rede do autor com maior grau em 2011.
+dos autores, selecionados pelo critério de grau, em alguma das ediç ões aparece apenas
+mais uma vez e não mantém o destaque em outras ediç ões. A exceção fica por conta do
+autor 9 que também teve grau elevado em outra edição do evento.
+4.2. Critério 2 - Quantidade de participaç ões
+As cinco ediç ões do SBSI em estudo, 2006, 2008, 2009, 2010 e 2011, são compostas por
+447 autores distintos. Neste universo foram identificados 56 autores que apareceram em
+mais de uma edição do SBSI. Destes 56 autores, 47 participaram de apenas 2 eventos, 6
+autores participaram de 3 eventos, 3 autores participaram em 4 eventos e nenhum autor
+participou em todos os cinco eventos deste estudo. Estes 3 autores que participaram da
+maior quantidade de eventos foram avaliados a fim de verificar suas trajet órias durante os
+eventos.  De forma semelhante ao estudo apresentado em 4.1, foram criadas redes com
+base nos autores com destaque em cada uma das ediç ões do evento, apresentando suas
+relaç ões nas outras ediç ões.
+oes do SBSI. Co-autores que
+ao s ˜ao destacados em cinza.
+Um dos autores que participou de 4 ediç ões do SBSI foi o autor 88.  Este autor
+não apresentou uma centralidade de grau de destaque em nenhuma edição do SBSI. Seu
+maior grau foi 2, nas ediç ões de 2008 e 2009, em 2006 publicou um artigo sem co-autores
+e em 2010 seu grau foi 1. Também é possível verificar observando a figura 7B que no ano
+de 2009, apesar de possuir grau 2, o autor 88 participava de um grupo com outros 5
+pesquisadores, sendo que 3 deles são alcançados através do autor 235. Outro autor que
+apareceu em 4 ediç ões do SBSI foi o autor 9. A rede deste autor já foi apresentada (ver
+figura 5), pois também obteve destaque em relação a centralidade de grau (ver 4.1). Este
+autor foi o único que se enquadrou nos dois critérios selecionados.
+179
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+O terceiro autor que participou de quatro ediç ões do SBSI foi o 58. Ele é seme-
+lhante ao autor 88, não se destacou em nenhuma das ediç ões do evento quando observadas
+de forma isolada, mas sob o ponto de vista de participaç ões nos eventos figurou entre os
+3 principais. A figura 7A exibe sua trajet ória, com destaque para a parceria com o pesqui-
+sador 60 durante 3 ediç ões do SBSI, demonstrando uma relação mais forte entre os dois
+co-autores. Dentre os 3 autores analisados, este foi o único que apresentou a característica
+de ser diretamente ligado com todos os n ós da rede formada.
+Observa-se que dos três autores com destaque na frequência com que aparecem
+no SBSI apenas um deles também é um ator com centralidade de grau elevada. O autor 9,
+possuindo a maior centralidade de grau no ano de 2010, foi o único que também obteve
+destaque no critério de participaç ões, e os autores 58 e 88 não seriam notados sem o uso
+do critério de participaç ões. A análise evolutiva de uma rede é geralmente feita através
+da análise desta rede em diversos momentos diferentes t1, t2, t3, ..., tn, onde t1  < t2  <
+t3... < tn. No caso do SBSI podemos considerar que cada edição do evento corresponde
+a um momento da rede.  A inclusão de uma rede indica o percentual de vértices não
+isolados, ou seja, indica o percentual de autores com pelo menos uma colaboração. Nas
+ediç ões do SBSI em estudo, foi constatado que a grande maioria dos artigos foi escrito
+por pelo menos 2 autores, nos anos de 2009 e 2010 nenhum artigo foi escrito de forma
+solitária, levando a uma inclusão de 100 nestas ediç ões. A tabela 1 apresenta a evolução
+das ediç ões do SBSI nos anos de 2006 a 2011. A tabela mostra o n úmero de autores e o
+n úmero de artigos de cada evento, além disso, mostra os valores dos critérios inclusão e
+densidade.
+ao das redes de autores do SBSI
+4.3. Evoluç ão das instituiç ões - cumulativo
+O grafo de instituiç ões resultante ap ós o agrupamento das ediç ões de 2006, 2008, 2009,
+2010 e 2011 do SBSI possui 104 vértices e 83 arestas, distribuídos em 38 componentes
+conexos, sendo que o componente gigante do grafo interliga 26 instituiç ões distintas, o
+que corresponde a 25% das instituiç ões envolvidas.  O segundo maior componente tem
+a metade do tamanho do componente gigante, conta com 13 instituiç ões e corresponde
+a 12, 5% das instituiç ões envolvidas.  Mesmo agrupando cinco ediç ões do evento,  23
+instituiç ões permaneceram sem parcerias. A figura 8 apresenta este grafo.
+A evolução do grau no grafo de instituiç ões representa o aumento de parcerias
+entre instituiç ões ao longo das ediç ões do SBSI. Como pode ser visto no gráfico da figura
+9, diversas instituiç ões tiveram um crescimento razoavelmente gradual, exceto pela UFRJ
+180
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+que na edição de 2011 deu um salto significativo, se tornando a instituição com o maior
+n úmero de parcerias.
+oes. Arestas de retorno n ˜ao foram con-
+¸ ˜oes com grau final
+maior que 10
+5. Corte de vértices
+Um corte de vértices é um subconjunto V ′  de V  cuja remoção implica em aumento do
+n úmero de componentes conexos no grafo. As arestas incidentes aos vértices pertencen-
+tes a V ′  também são removidas. Abaixo serão apresentadas duas medidas, que utilizam
+corte de vértices, para identificar atores ou grupos de atores importantes em uma rede, no
+sentido de que sua remoção desconecta o grafo, ou seja, diminui a coesão do grupo.
+5.1. Ponderaç ão entre os componentes gerados e a soma do grau do corte de
+vértices
+Seja nc(G) o n úmero de componentes conexos de um grafo G = (V, E) e nc(V ′, G) o
+n úmero de componentes conexos do grafo G ap ós a remoção do subconjunto V ′  ∈ V . O
+181
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+subconjunto V ′  é um corte de vértices se nc(V ′, G) > nc(G).
+Então definimos a medida wcd(V ′) como a razão entre o n úmero de componentes
+conexos ap ós o corte V ′, e a soma do grau dos vértices que pertencem a V ′, da seguinte
+forma wcd(V ′) = ∑ nc (V ′ ,G)
+v∈V ′ Cd (v) . A faixa de valores desta medida é 0 < wcd(V ′) ≤ 1, sendo
+que o valor 1 ocorre quando cada aresta removida implica no aumento de componentes
+conexos. Esta medida destaca atores pouco importantes na centralidade de grau, mas que
+são essenciais na coesão do grupo de pesquisa.
+Figura  10.   Exemplos de grafos com corte de v ´ertices de mesmo tamanho e
+wcd (V ′ ) distintos
+A figura 10A exibe um grafo conexo que possui corte V ′ de tamanho 1, |V ′| = 1,
+V ′  = {1}, esta figura também exibe o grafo resultante ap ós o corte V ′  = {1}. O mesmo
+ocorre na figura 10B, porém com o corte do vértice V ′  =  {10}.  O resultado do corte
+nos dois grafos apresenta 4 componentes conexos.  A diferença está somente no grau
+                                                                                                 ∑       nc (1,A)=4
+do vértice.  No caso do grafo A o corte de vértices possui wcd(1)  =                                                  =
+v∈V ′ Cd (v)=8
+0.5, enquanto no grafo B o corte de vértice apresenta wcd(10)  =  ∑ nc (10,B)=4                  =  1.
+v∈V ′ Cd (v)=4
+Esta proposta auxilia na identificação de vértices que a princípio podem não ter grande
+destaque, mas que tem sua importância na coesão do grupo de colaboração, bem como
+pode ser um critério de desempate entre vértices de mesmo grau. No exemplo apresentado
+na figura 10, o resultado ap ós os cortes de vértices são grafos com 4 componentes cada,
+porém, a medida apresentada atribui um valor maior ao corte com menor grau, fazendo
+com que o corte de vértices V ′   =  {10} seja considerado mais importante que o corte
+V ′  = {1}, pois mesmo com grau menor, sua remoção causa o mesmo impacto a coesão
+do grupo.
+5.2. Ponderaç ão entre os componentes gerados e o tamanho do corte de vértices
+O segundo critério  é obtido através da razão entre o n úmero de componentes conexos
+gerados pelo corte e o n úmero de vértices no corte, da seguinte forma, wct(V ′) = nc (V ′ ,G)
+|V                                                                                               |
+Esta medida privilegia cortes pequenos com impacto grande na estrutura colaborativa
+formada na rede social, conforme exemplo da figura 11.
+orio
+de grau e wct (V ′ ) distintos
+182
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Observando a figura 11 temos dois exemplos de grafos com cortes de vértices
+onde o somat ório do grau dos vértices no corte  é igual.  O impacto na estrutura dos
+componentes também é igual, produzem 4 componentes conexos ap ós o corte.  Os dois
+grafos possuem wcd  =  4
+5 , para o corte proposto.  No grafo A o corte V ′  =  {1, 4} pos-
+sui wct(V ′)  =  nc (V ′ ,G)=4                                                                                  =  2, enquanto que o grafo B com o corte V ′  =  {10} possui
+                                                                                                    |V    |=2
+wct(V ′) = nc (V ′ ,G)=4                                                                                        = 4. Este exemplo demonstra a característica da medida, mencio-
+                                                                                               |V   |=1
+nada anteriormente, de priorizar cortes de menor tamanho.
+5.3. Verificaç ão dos cortes nas redes do SBSI
+As figuras 8 e 12 exibem as redes, de instituiç ões e de autores, acumuladas das ediç ões do
+SBSI em estudo. Foram gerados cortes para estas duas redes que atendiam aos seguintes
+critérios: tamanho máximo do corte igual ao tamanho do componente menos 2, ou seja,
+um componente com 5 vértices pode ter cortes de tamanho até 3, o tamanho dos cortes
+também foi limitado a 5, nos casos onde o componente possui mais de 7 vértices, a última
+restrição implica em que um vértice possua pelo menos dois vértices adjacentes para que
+possa ser incluído nos cortes. Mesmo com estas limitaç ões, foram gerados mais de 250
+mil cortes para as duas redes. As medidas wcd e wct foram calculadas para todos os cortes
+gerados exibindo alguns resultados interessantes. Na rede de autores, uma das primeiras
+coisas que se destaca é o componente gigante formado por 41 pesquisadores, quase 10%
+do total da rede, que é de 447.
+Três autores obtiveram wcd  =  1, ou seja o seu grau é igual ao n úmero de com-
+ponentes que mantém conectados, são eles 179, 034 e 140, todos possuem grau 2 e a
+remoção de cada um divide o componente em 2.  O pr óximo autor com valor elevado
+desta medida é o 158, com wcd  = 0.75, ele possui grau 4 e sua remoção divide o com-
+ponente em 3.  Na sequencia temos o autor 202 com wcd   =  0.66, este autor faz parte
+do componente gigante formado na rede, e sua remoção divide este componente em 2.
+Como pode ser visto, esta medida privilegia autores com grau relativamente baixo mas
+que possuem importância na coesão do grupo ao qual fazem parte. Observando a medida
+wct  o corte com maior valor foi V ′  =  {97}, com wct  =  5, na sequencia temos o corte
+V ′  = {9, 97}, com wct  = 4, a remoção destes dois autores causa um grande impacto ao
+componente gigante, dividindo-o em 8 componentes menores. Esta medida destaca cortes
+pequenos com impacto considerável no grupo de pesquisa.
+Observando a rede de instituiç ões o corte que obteve maior wcd  foi o corte V ′  =
+{UF SC }, com wcd  = 0.75, a UFSC possui grau 4 e sua remoção divide o componente
+em 3. Na sequência temos a UFOP, com grau 3 e wcd  = 0.667, dividindo o componente
+em 2.  Observando apenas o componente gigante, o corte com maior wcd  foi o corte
+V ′  = {P UCRS}, com wcd  = 0.333, grau 9 e dividindo o componente em 3. Observando
+a medida wct  o corte com maior valor é formado apenas pela UFPE, onde sua remoção
+divide o componente em 6, ou seja, é um corte de tamanho 1 o que leva a wct  = 6.  O
+pr óximo corte com valor elevado é formado pela UFRGS, com wct  = 5.  Na sequência
+temos um corte que possui tamanho 2, V ′  = {UF RGS, UF RJ } e divide o componente
+em 8, obtendo wct  = 4.
+6. Consideraç ões finais
+Foi identificado que praticamente 25% das instituiç ões não estabeleceram parcerias na
+publicação de artigos nos referidos eventos, este também  é o tamanho aproximado do
+183
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 12. Rede de autores de 2006, 2008, 2009, 2010 e 2011
+maior grupo de instituiç ões formado. A falta de parcerias é, normalmente, mais esperada
+no nível individual onde jovens pesquisadores iniciam com uma rede de colaboração nula
+ou pequena.  A falta de crescimento nos padr ões de cooperação entre instituiç ões, ao
+longo dos anos, pode ser preocupante se isto for visto como um indicador de que os
+pesquisadores de várias instituiç ões favorecem a pesquisa interna [Reijers et al. 2009].
+A análise da rede dos autores com grande frequência nos eventos destacou autores
+que não teriam destaque através das medidas clássicas de ARS, como a centralidade de
+grau, com exceção de um caso, onde o autor também era detentor de uma centralidade
+de grau elevada. A análise da atuação de atores com destaque em uma edição do evento
+demonstrou que na maioria dos casos estes autores não apresentam posiç ões de destaque
+em outras ediç ões, novamente com uma exceção, onde o autor 9 figura em outra edição
+com uma posição elevada. Por fim, foram apresentadas duas medidas baseadas em corte
+de vértices que auxiliam na identificação de grupos de autores que exercem papel impor-
+tante na coesão de grupos de pesquisa. Foi observado que um simples corte de tamanho 2
+pode dividir o componente gigante da rede de autores em 8, demonstrando a importância
+184
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+destes 2 pesquisadores ao grupo e a validade da medida. Na rede de instituiç ões a simples
+remoção da UFPE divide seu componente em 6, enquanto o corte da UFRGS e da UFRJ
+divide o componente gigante em 8 componentes menores. As duas medidas apresentadas,
+destacam atores, ou grupos de atores, que, em diversos casos, passam despercebido por
+medidas tradicionais da análise de redes sociais, mas que possuem grande importância na
+coesão dos grupos de pesquisa formados ao longo dos anos.
+Referências
+Berge, C. (1962). The theory of graphs and its applications / by Claude Berge ; translated
+by Alison Doig. Methuen ; Wiley, London : New York :.
+Bondy, J. A. (1976). Graph Theory With Applications. Elsevier Science Ltd.
+Getoor, L. and Diehl, C. P. (2005).  Link mining:  a survey.  SIGKDD Explor. Newsl.,
+7:3-12.
+Harary, F. (1994). Graph Theory. Westview Press.
+Jamali, M. and Abolhassani, H. (2006). Different aspects of social network analysis. In
+Web Intelligence, 2006. WI 2006. IEEE/WIC/ACM International Conference on, pages
+66 -72.
+Newman, M. (2004a).  Who is the best connected scientist?  a study of scientific co-
+authorship networks.  In Ben-Naim, E., Frauenfelder, H., and Toroczkai, Z., editors,
+Complex Networks, volume 650 of Lecture Notes in Physics, pages 337-370. Springer
+Berlin / Heidelberg.
+Newman, M. E. J. (2004b).  Coauthorship networks and patterns of scientific collabora-
+tion. In Proceedings of the National Academy of Sciences, pages 5200-5205.
+Nizamani, S. and Memon, N. (2011). Evolution of terrorist network using clustered ap-
+proach:  A case study.  European Intelligence and Security Informatics Conference,
+0:116-122.
+Ozgul, F., Atzenbeck, C., and Erdem, Z. (2011). How much similar are terrorists networks
+of istanbul? Social Network Analysis and Mining, International Conference on Advan-
+ces in, 0:468-472.
+Reijers, H. A., Song, M., Romero, H., Dayal, U., Eder, J., and Koehler, J. (2009).  A
+collaboration and productiveness analysis of the bpm community.  In Proceedings of
+the 7th International Conference on Business Process Management, BPM ’09, pages
+1-14, Berlin, Heidelberg. Springer-Verlag.
+Wang, C., Tang, J., Sun, J., and Han, J. (2011). Dynamic social influence analysis through
+time-dependent factor graphs. Social Network Analysis and Mining, International Con-
+ference on Advances in, 0:239-246.
+Wang, J.-H. and Lin, C.-L. (2011). An association model based on modus operandi mi-
+ning for implicit crime link construction. Social Network Analysis and Mining, Inter-
+national Conference on Advances in, 0:548-550.
+185
+
+
+
+
+

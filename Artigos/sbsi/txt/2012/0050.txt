@@ -1,0 +1,518 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+: Um Sistema de Identificação e Sugestão de
+Rotas de Ônibus Baseado em Informações de Redes Sociais
+Vanessa Gomes de Lima1, Filipe de Moraes Rêgo Magalhães1, Adriano de Oliveira
+Tito1, Rodolfo Arruda dos Santos1, Arley Ramalho Rodrigues Ristar1, Luana
+Martins dos Santos1, Vaninha Vieira2 e Ana Carolina Salgado1
+1Centro de Informática - Universidade Federal de Pernambuco (UFPE)
+50.733-970 - Recife - PE - Brasil
+2DCC - Universidade Federal da Bahia (UFBA) - Salvador - BA - Brasil
+{vgl2,fmrm,aot,ras7,arrr2,lms7,acs}@cin.ufpe.br,  vaninha@ufba.br
+Abstract.User Information Systems of public transport are intended to provide
+information to passengers and support their decisions. Most systems for this
+purpose are using static information or aided by GPS transmitters installed in
+vehicles. The citizens can support the improvement of public service and this
+can be done, for example, through social networks. This paper presents the
+UbibusRoute,  a  mobile  system  that  considers  dynamic  traffic  contextual
+information from social networks and presents information about routes for
+users, using the Google Maps API as a source of geolocation and the Twitter
+API as a provider of information by citizens.
+Resumo. Sistemas de Informação ao Usuário do transporte coletivo visam
+fornecer informações aos passageiros e apoiar suas decisões. A maioria dos
+sistemas com esse propósito utiliza informações estáticas ou auxiliadas por
+transmissores GPS instalados nos veículos. Os cidadãos podem contribuir
+com a melhoria dos serviços públicos e isto pode ser feito, por exemplo, com o
+uso das redes sociais. Este trabalho apresenta o UbibusRoute, um sistema
+móvel   que   considera   informações   contextuais   dinâmicas   do   trânsito
+provenientes de redes sociais e apresenta informações sobre as rotas aos
+usuários, utilizando a API do Google Maps, como fonte de geolocalização e a
+API do Twitter como provedora de informações dos cidadãos
+1. Introdução
+O cenário atual do trânsito nas grandes cidades brasileiras vem piorando a cada dia.
+Com  o  aumento  do  número  de  carros  particulares  nas  vias,  os  congestionamentos
+tornaram-se cada vez mais frequentes. Segundo [Zhang et al. 2011] não será possível
+melhorar o trânsito alargando ruas, construindo viadutos ou fazendo rodízio de carros.
+Para isto, é preciso que o poder público e as empresas operadoras do transporte coletivo
+aprimorem o serviço prestado, a fim de mudar a cultura das pessoas e fidelizá-las ao
+transporte público [Pilon 2009].
+No entanto, há muitos fatores que impedem que algumas parcelas da população
+optem pela utilização do transporte coletivo urbano e, de acordo com [Cutolo 2003], as
+principais barreiras são a ausência de informações relativas aos serviços e/ou sua baixa
+516
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+qualidade. Como opção de solução de alguns desses problemas surgiram os Sistemas
+Inteligentes  de  Transporte                                                                (SIT),  que  consistem  na  utilização  da  Tecnologia  da
+Informação  e  Comunicação                                                                  (TIC)  para  subsidiar  a  infraestrutura  do  sistema  de
+transporte  com  o  objetivo  de  buscar  melhorias  em  aspectos  referentes  ao  mesmo
+[Gómez  et al.  2009], tais como: gerenciamento de tráfego e sugestão de rotas aos
+motoristas;  informações  aos  usuários  sobre  condições  meteorológicas,  de  estradas,
+possíveis  perigos,  locais  de  incidentes,  rotas  ótimas  e  itinerário  de  veículos;
+conhecimento sobre o controle de veículos em determinadas situações, sistemas de
+alertas e colisões.
+Existem também os Sistemas Avançados de Transporte Público (SATP), que são
+aplicações do SIT no apoio ao aumento da eficiência e segurança dos sistemas de
+transporte público [Sussman 2005]. No contexto dos SATP, encontram-se os Sistemas
+de Informações aos Usuários (SIU) que constituem em uma importante ferramenta de
+comunicação entre os operadores/gestores do transporte público e os usuários, pois
+através destas é possível fornecer aos passageiros, informações que satisfaçam suas
+necessidades específicas, tais como: horário de chegada dos ônibus nas paradas, tempo
+de espera, próximo veículo a passar na parada e conselhos de rotas aos usuários [Schein
+2003][Pilon 2009].
+Em paralelo, o aumento da popularidade dos dispositivos móveis com acesso à
+Internet e o uso crescente das redes sociais têm contribuído para o surgimento de novos
+aplicativos que possam atender às diversas necessidades dos usuários. As redes sociais
+vêm ajudando as pessoas a lidar com seus problemas diários, uma vez que facilitam a
+troca e o compartilhamento de informações dinâmicas, em tempo real, relacionadas aos
+mais diversos aspectos do cotidiano, inclusive as situações que envolvem o trânsito.
+Segundo [Levy 2003], a área de Crowdsourcing (ou inteligência coletiva) incentiva a
+combinação do conhecimento individual provido por um grupo de pessoas para produzir
+novas informações ou ideias mais úteis.
+Existem  vários  tipos  de  aplicativos  baseados  em  localização  que  fornecem
+informações aos usuários sobre o trânsito (e.g. Google Maps1, [Mazhelis et al. 2011]).
+Esses aplicativos provêm, em sua maioria, informações sobre rotas e estimativa de
+tempo de chegada, mas não são totalmente direcionadas aos passageiros de ônibus e não
+levam em consideração acontecimentos dinâmicos como engarrafamentos, acidentes,
+alagamentos, entre outros.
+O problema, nos casos descritos, é que os passageiros do transporte público não
+têm um serviço que os apoie na decisão sobre que ônibus e rota tomarem para chegar
+aos seus destinos, contornando situações de tráfego intenso ou acidentes. Em nosso
+projeto de pesquisa, denominado Ubibus [Vieira et al. 2011], investigamos o uso de
+tecnologias relacionadas a dispositivos móveis, web e mídias sociais como apoio aos
+passageiros de transporte público em grandes e médios centros urbanos. Neste contexto,
+propomos o UbibusRoute, uma solução direcionada aos usuários de transporte coletivo
+por ônibus, que usa informações provenientes de redes sociais para recomendar rotas a
+esses usuários apoiando-os em suas tomadas de decisão. O sistema utiliza como fonte de
+1   http://maps.google.com
+517
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+informações contextuais dinâmicas a rede social Twitter2 e a API de geolocalização
+Google Maps.
+O restante desse artigo está organizado da seguinte forma: a Seção 2 descreve o
+uso de redes sociais e contexto no apoio à recomendação de rotas em sistemas de
+transporte  público  inteligente;  a  Seção                                                    3  descreve  alguns  trabalhos  correlatos  ao
+proposto;  a  Seção                                                                            4  apresenta  o  sistema  UbibusRoute,  sua  arquitetura  e  questões
+técnicas de implementação; a Seção 5 detalha um cenário de uso experimental realizado
+com o intuito de avaliar o sistema proposto; a Seção  6 discute as contribuições e
+conclusões alcançadas com essa pesquisa e as perspectivas de trabalhos futuros.
+2. Uso de Contexto e Redes Sociais para Recomendação de Rotas em
+Sistemas Inteligentes de Transporte
+Segundo                                                                                        [Kharaev                                                                       2010]  SIT  são  os  próximos  grandes  desafios  da  eletrônica
+automotiva mundial. Diante desta afirmação é necessária a criação de mecanismos que
+aprimorem seus serviços, enriqueçam sua semântica e provejam funcionalidades que
+aproximem mais o homem da máquina de maneira transparente.
+Contexto  computacional  pode  ser  visto  com  um  conjunto  de  condições  e
+influências relevantes à aplicação e que tornam uma situação única e compreensível
+[Brézillon                                                                                     1999].  Através  da  utilização  de  elementos  contextuais  estáticos  e/ou
+dinâmicos, a aplicação pode em circunstâncias diversas, mudar seu comportamento
+adaptando-se às necessidades atuais.
+O transporte coletivo por ônibus tem como características a complexidade e
+inflexibilidade, impondo rotas de ônibus e horários pré-estabelecidos. Muitas vezes os
+horários  não  são  respeitados  devido  a  incertezas  do  trânsito  nas  grandes  cidades,
+dificultando  o  planejamento  dos  deslocamentos  por  parte  do  usuário  de  transporte
+coletivo. A utilização de informações de contexto neste tipo de aplicação, como por
+exemplo, informações de redes sociais sobre o trânsito nas vias podem aumentar a
+medida de desempenho e tornar a aplicação desenvolvida mais adaptativa ao usuário,
+satisfazendo suas preferências e necessidades.
+Desde meados da década de 90, as redes sociais baseadas na Web vêm sendo
+desenvolvidas, apresentando ascendente crescimento tanto no número de redes quanto
+em seus escopos, estas estabelecem relações entre usuários com interesses semelhantes
+em um mesmo ambiente. Segundo [Golbeck 2005], as redes sociais podem ser vistas
+como grandes repositórios de dados que armazenam informações sobre seus usuários ou
+enviadas por eles.
+As informações inseridas nas redes sociais por seus usuários podem ser utilizada
+para gerar conhecimento coletivo dinâmico. Segundo [Dimitrakopoulos 2011] uma das
+áreas que podem se beneficiar destas informações é a de transportes, uma vez que
+veículos automotores tornaram-se parte indispensável em nosso cotidiano. Ao utilizar-se
+destas informações dinamicamente geradas, os sistemas de informações aos usuários do
+transporte coletivo urbano, podem fornecer informações mais relevantes aos usuários,
+inclusive para sistemas de recomendação e sugestão de rotas. Segundo [Burke 2002],
+2
+http://www.twitter.com
+518
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Sistemas de Recomendação (SR) são aqueles que produzem sugestões individualizadas,
+ou têm a função de guiar o usuário de forma personalizada, em ambientes onde a
+quantidade de informação ultrapassa a capacidade de qualquer indivíduo examiná-lo.
+Alguns Sistemas Inteligentes de Transporte em funcionamento exibem rotas de
+ônibus em mapas aos passageiros de transporte coletivo. Estes verificam, em tempo real,
+a  localização  do  veículo  entre  os  locais  apontados  pelos  usuários  como  origem  e
+destino. Segundo  [Ferris et al.  2010], os usuários de transporte público podem ser
+divididos em dois grupos: os usuários frequentes e os esporádicos. Para os usuários
+esporádicos a exibição de rotas é considerada como informação mais importante, haja
+vista que os mesmos não estão familiarizados com as opções disponíveis. Enquanto que
+os usuários frequentes se interessam pelas informações dos horários de chegada dos
+ônibus nas paradas, pois já conhecem a sequência de pontos e itinerários.
+Em   nossa   pesquisa,   buscamos   atender   aos   dois   grupos   de   usuários
+recomendando rotas e fornecendo informações aos passageiros esporádicos e apoiando o
+planejamento de deslocamentos dos usuários frequentes, fornecendo informações sobre
+rotas  alternativas,  que  podem  ser  utilizadas  por  ocasião  de  engarrafamentos  e/ou
+impedimentos das vias e atrasos dos ônibus.
+3. Trabalhos Relacionados
+Durante  nossas  pesquisas  encontramos  alguns  trabalhos  que  recomendam  rotas  aos
+usuários, como [Mazhelis et al. 2011], mas não são voltados ao transporte público. Em
+[Hoar 2010] e [Ferris et al. 2010], são apresentados sistemas que exibem rotas de ônibus
+aos usuários, mas não processam dados dinâmicos de redes sociais. A utilização de tipo
+de dados contextuais é vista em um SIT denominado Waze3, mas este não contempla o
+transporte público por ônibus. Existem ainda algumas propostas, como  [Alves et al.
+2011],  para  desenvolvimento  de  um  sistema  de  recomendação  de  rotas  utilizando
+inteligência coletiva de redes sociais.
+O presente trabalho apresenta um sistema de recomendação de rotas aos usuários
+de transporte público por ônibus, utilizando dados contextuais dinâmicos oriundos de
+redes  sociais.  Este  sistema  foi  desenvolvido  para  uma  plataforma  móvel,  usando
+smartphones, e será descrito na próxima seção.
+4. UbibusRoute
+Esta seção descreve a arquitetura e detalhes de implementação do UbibusRoute, um
+sistema de recomendação de rotas de ônibus por meio de informações contextuais
+dinâmicas extraídas de redes sociais. O sistema calcula as possíveis rotas, indicando no
+mapa o caminho a ser tomado juntamente com as rotas necessárias.
+4.1. Arquitetura
+O UbibusRoute foi projetado em uma arquitetura cliente-servidor  (Figura  1) onde o
+cliente contém um componente chamado Aplicativo Móvel, que pode ser nativo de
+qualquer sistema operacional móvel que se comunique com o servidor seguindo os
+padrões fornecidos pelo mesmo.
+3 http://www.waze.com/
+519
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Existem duas bases de dados principais no sistema, a de Dados Contextuais de
+Trânsito, e a de Dados Estáticos. Os dados estáticos são paradas, linhas de ônibus e
+percursos. O Aplicativo Móvel envia uma requisição de dados estáticos e pedido de rota
+ao servidor, recebendo como resultado a rota e as instruções para percorrê-la. Já o
+módulo Servidor é dividido em três componentes principais: o Identificador de Rotas,
+responsável por identificar todas as rotas possíveis de acordo com a localização ou
+parada de ônibus selecionada; Indicador de Rotas, responsável por selecionar a melhor
+rota de acordo com a preferência do usuário (tempo, preço ou distância); e o Extrator de
+Informações Contextuais que colhe informações de redes sociais e verifica como o
+trânsito está naquele momento.
+Figura 1. Arquitetura geral do UbibusRoute.
+4.1.1. Aplicativo Móvel
+O  cliente,  na  arquitetura,  contém  um  módulo  chamado  Aplicativo  Móvel,  que  é  a
+interface  com  o  usuário.  Na  execução  do  aplicativo,  é  realizada  inicialmente  uma
+requisição automática de dados das paradas de ônibus, sendo fornecido ao usuário um
+mapa onde o mesmo pode visualizar todas as paradas de ônibus disponíveis e selecionar
+duas: uma parada de ônibus como origem e outra como destino. Além disso, o usuário
+deve informar se prefere que a rota sugerida seja baseada em alguns fatores como:
+menor preço, viagem com menor tempo ou menor distância percorrida. Os dados das
+paradas de ônibus selecionadas, bem como o tipo de viagem escolhido, serão enviados
+para o Identificador de Rotas no servidor.
+A resposta obtida do servidor tem características visuais e textuais, onde consta
+uma rota traçada em um mapa, enfatizando o ponto de origem, o ponto de destino, os
+pontos de troca de ônibus (caso existam), o preço de cada um deles e uma mensagem
+textual. Tal visualização segue de acordo a opção selecionada pelo usuário inicialmente,
+contendo a distância total informada, o preço total a ser gasto, ou ainda o tempo total de
+viagem. Na resposta textual, o usuário verifica um texto explicando todas as etapas que
+o passageiro deve seguir para chegar ao seu destino.
+4.1.2. Identificador de Rotas
+O processo de identificar rotas, que acontece no componente Identificador de Rotas, é
+iniciado a partir de uma requisição por parte do Aplicativo Móvel. Desenvolveu-se um
+520
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+algoritmo de busca de rotas modificando o algoritmo guloso de Dijkstra4 para que seja
+retornado o menor caminho, levando em consideração o parâmetro vindo do Aplicativo
+Móvel, ou seja, o menor caminho não é sempre pela distância; a depender do parâmetro,
+o peso das arestas do grafo que o algoritmo Dijkstra gerencia muda de acordo com a
+preferência do usuário. A função do algoritmo desenvolvido é, desse modo, procurar os
+possíveis caminhos que possam ser traçados entre a origem e o destino, oferecendo
+como saída essas rotas com parâmetros que indicam preço da viagem, distância a ser
+percorrida e tempo total. Este módulo classifica, então, cada possível rota com três
+pontuações numéricas: uma para a distância, uma para o tempo e uma para o preço a ser
+gasto. A saída desse módulo é enviada ao Indicador de Rotas.
+4.1.3 Indicador de Rotas
+O  componente  Indicador  de  Rotas,  por  sua  vez,  utiliza  todas  as  rotas  possíveis,
+recuperadas a partir do processo de identificação, e seleciona a melhor, baseada na
+preferência  inicial  definida  pelo  usuário                                                 (menor  preço,  menor  distância  ou  menor
+tempo).  Esta  seleção  é  feita  a  partir  da  saída  das  rotas  repassadas  do  módulo
+Identificador de Rotas; como cada rota possui uma pontuação de tempo, custo de preço,
+e distância, é escolhida a que contém o menor valor do parâmetro indicado pelo usuário.
+Este componente consulta, também, informações contextuais armazenadas pelo Extrator
+de  Informações  Contextuais,  que  estão  guardadas  na  base  de  Dados  Contextuais,
+provenientes de redes sociais. Sendo assim, o Indicador de Rotas é responsável por
+cruzar as preferências do usuário com as informações contextuais capturadas das redes
+sociais, atribuindo uma nova pontuação relativa ao tempo para as possíveis rotas.
+4.1.4. Extrator de Informações Contextuais, Dados Contextuais e Redes Sociais
+O objetivo do Extrator de Informações Contextuais é capturar informações dinâmicas
+de Redes Sociais. É possível obter mensagens recentes relacionadas aos trechos do
+trânsito por onde passam as linhas de ônibus cadastradas no UbibusRoute.
+A rede social explorada no UbibusRoute foi o Twitter, devido à natureza curta
+de suas mensagens, com no máximo 140 caracteres. O módulo das Redes Sociais está
+intrinsecamente ligado ao Extrator de Informações Contextuais. Os tweets são extraídos
+a cada  20 minutos,  - tempo considerado como bom para atualização de uma nova
+quantidade de tweets relacionados ao trânsito -, tratados utilizando expressões regulares
+e armazenados em uma Base de Dados Contextuais de Trânsito, localizada no servidor.
+Tais informações são utilizadas para conhecer a situação atual do trânsito.
+As mensagens provenientes das redes sociais precisam estar em um formato pré-
+estabelecido, a fim de identificar a informação. Essa limitação pode acabar por excluir
+outras mensagens que contenham informações importantes e relevantes sobre o trânsito.
+No entanto, tendo as mensagens nesse formato pré-definido, há um ganho de velocidade
+no processo de identificação textual das diversas situações de trânsito, melhorando o
+desempenho e garantido corretude na informação identificada.
+Foi desenvolvida, então, uma gramática de reconhecimento e padronização das
+mensagens. As mensagens devem ser compostas por um número que identifica as horas,
+4 Dijkstra Algorithm <http://www.cs.auckland.ac.nz/~jmor159/PLDS210/dijkstra.html>.
+521
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+<HORA>, os minutos <MIN>, um agravante <AGRAVANTE>, que é uma palavra que
+intensifica uma situação de trânsito (a presença de um agravante na mensagem a ser
+identificada é facultativa). Uma situação de trânsito <SITUAÇÃO>,   por sua vez, é uma
+palavra que indica congestionamento ou fluidez no trânsito, em diferentes níveis. Uma
+preposição  <PREPOSIÇÃO> é apenas um conector entre a situação de trânsito e a
+localidade  da  ocorrência,  composta  por                                                  <LOCAL>  e  <TRECHO>.  A  gramática
+proposta é ilustrada na Figura 2.
+Figura 2. Gramática para Extração de Mensagens de Trânsito de Redes Sociais.
+Toda informação que é obtida a partir do processo de identificação do Extrator
+de Informações Contextuais é armazenada na base de Dados Contextuais de Trânsito,
+mas não a mensagem pura extraída do Twitter. As informações contextuais extraídas são
+armazenadas na base de dados como um tipo composto  [localização geográfica, dia,
+horário, pontuação].   A pontuação, que será detalhada na próxima seção, indica o grau
+de congestionamento de determinado local.
+4.2. Aspectos de Implementação
+O Aplicativo Móvel foi desenvolvido sobre a plataforma Android 5, em Java6 e usando
+alguns  recursos  da  API  do  Google  Maps.  A  comunicação  com  o  Servidor  é  feita
+seguindo os princípios REST7(Representational State Transfer), onde o módulo Cliente
+faz  uma  requisição  HTTP,  contendo  origem,  destino  e  tipo  de  busca,  e  o módulo
+Servidor responde com um objeto JSON8(JavaScript Object Notation).
+O servidor do UbibusRoute foi implementado com o framework Django9 e todos
+os  seus  módulos  foram  desenvolvidos  em  Python10.  A  resposta  do  servidor  ao
+Aplicativo Móvel é dada a partir da interação entre os componentes: Identificador de
+Rotas e Indicador de Rota, consultando os Dados Contextuais de Trânsito. Tal resposta
+possui  vários  parâmetros  como:  pontos  geográficos  da  origem  e  destino,  dados
+geográficos das paradas onde houver troca de ônibus; preço de cada troca de ônibus,
+caso exista; mensagem de resposta textual; e a mensagem final da requisição, que
+5 http://www.android.com/
+6 http://www.java.com/
+7 http://rest.elkstein.org/
+8 http://www.json.org/
+9 https://www.djangoproject.com/
+10 http://python.org/
+522
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+contém: a distância a ser percorrida, custo de tempo total da viagem, ou o custo relativo
+ao preço.
+A  comunicação  com  o  Twitter  é  realizada  pelo  Extrator  de  Informações
+Contextuais por meio da API REST11 do Twitter. Isto permite acesso a dados essenciais
+como: tweets (mensagens postadas pelos usuários), prazos de atualização e informações
+dos usuários. A atualização dos dados contextuais de trânsito ocorre de acordo com a
+atual situação de trânsito informada pelos tweets.
+Para  manter  os  dados  atualizados  sobre  o  estado  atual  do  trânsito,  foi
+desenvolvido um crawler (componente que busca continuamente os tweets relativos ao
+trânsito), que se encontra dentro do Extrator de Informações Contextuais. Este crawler
+utiliza a API REST do Twitter e captura automaticamente as informações do perfil
+@Ubibus_PE de acordo com dois parâmetros: quantidade máxima de tweets por captura
+- definida como  20, para efeitos de desempenho; e a diferença entre os instantes de
+tempo atual e de criação do tweet - definido como 20 minutos na versão atual (podendo
+ser parametrizado em versões futuras). Com isso, é possível obter os 20 últimos tweets
+que foram publicados no perfil.
+Também foi construído um script em Python que formata o conteúdo capturado
+do perfil do Twitter, extraindo o trecho e a situação atual do trânsito. Este script contém
+um algoritmo de interpretação de informações de trânsito que opera considerando a
+Gramática definida anteriormente (Seção 4.1.4). A situação do trânsito é calculada de
+acordo com algumas variáveis que classificam o adjetivo  <SITUAÇÃO> combinado
+com o seu  <AGRAVANTE>. De acordo com a situação e a presença ou não de um
+agravante é calculada uma pontuação para aquele endereço; essa pontuação é válida por
+20 minutos, (tempo considerado suficiente para mudança na fluidez do tráfego). Para
+facilitar a extração das informações do trânsito, foi criado um conjunto de classificação
+das situações e dos agravantes. A situação pode estar classificada como [bom, médio e
+ruim] e os agravantes como [alto, baixo].
+Toda  rua  que  é  representada  na  base  de  dados  possui,  estaticamente,  um
+indicativo  de  velocidade  da  via.  O  cálculo  no  tempo  de  trânsito                     (a  pontuação)  é
+calculado em função da mudança que pode ocorrer nessa velocidade. Uma vez que o
+trânsito está livre (sem interrupções ou congestionamentos), a velocidade não é alterada,
+portanto a pontuação fica zerada.
+Na primeira versão deste sistema, o retorno desse algoritmo consiste de uma
+pontuação que oscila de  0 a  3 onde:  0  (zero) indica que o trânsito está livre, como
+descrito  anteriormente;  1  (um)  indica  que  o  trânsito está moderado, quando houve
+detecção dos classificadores de situação médio; quando da detecção do classificador
+ruim, a pontuação atribuída é 2 (dois) e indica que o trânsito está lento; e, por fim, 3
+(três) indica que o trânsito está muito lento, quando da junção do classificador ruim com
+o agravante alto. Posteriormente, estes números são utilizados no algoritmo de busca de
+rotas para influenciar na decisão de qual rota sugerir e qual tempo informar ao usuário.
+11 Twitter, API REST. <http://dev.twitter.com/docs/api>
+523
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+5. Cenário de Uso do UbibusRoute
+A plataforma para experimentação do sistema teve como objetivo verificar se o mesmo
+se comportava de acordo com as informações contextuais dinâmicas extraídas da rede
+social utilizada. Tal plataforma foi inicialmente concebida com uma base de dados
+simulada  e  criação  de  um  perfil  no  Twitter  (@Ubibus_PE)  para  as  postagens  das
+mensagens de trânsito. A seguir, será descrito um cenário de uso do UbibusRoute,
+simulando algumas paradas de ônibus com latitude, longitude e um nome identificador.
+Também foram simuladas linhas de ônibus possuindo preços e rotas - todas situadas na
+cidade do Recife.   Ao iniciar a aplicação estará disponível ao usuário a tela com as
+várias paradas de ônibus (Figura 3). Será considerado o caso em que o usuário escolhe a
+parada cujo identificador é EC como origem e LS01 como destino.
+Figura 3 - Mapa com as paradas cadastradas no sistema.
+Entre EC e LS01 é possível ter rotas com distâncias e preços de passagens
+distintas, bem como pegar ônibus diferentes, e a frequência com que estes veículos
+passam  pelas  paradas  também  é  diferente.  Observar-se  na  Figura  4  a  parada  EC
+destacada mais à esquerda e a LS01 destacada mais à direita, existindo dois caminhos
+possíveis entre elas: o primeiro é seguindo pela Rua José Osório, cuja distância é de
+aproximadamente 760m, e o segundo pela Rua Real da Torre e em seguida Avenida
+Caxangá, cuja distância é de aproximadamente 1300m. Com as paradas de origem e
+destino selecionadas, o usuário poderá escolher o tipo de busca de acordo com suas
+preferências. Neste caso, foi selecionada a “Busca por Menor Tempo”, que resulta em
+um menor tempo de viagem  (Figura  4). Essa busca foi realizada sem que nenhuma
+informação sobre o trânsito tenha sido postada no perfil @Ubibus_PE do Twitter.
+Figura 4 - Mapa com paradas escolhidas em destaque e possíveis escolhas de rota.
+524
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Após realizar a busca, o UbibusRoute exibe ao usuário a rota escolhida e as
+informações necessárias como: a linha de ônibus escolhida; preço da tarifa; as paradas
+que foram anteriormente selecionadas e o tempo total do deslocamento (Figura 5). A
+rota escolhida indica ao usuário que pegue o ônibus 201 na sua parada de origem e vá
+até a parada de destino, sem troca de ônibus, pela Rua José Osório. Essa rota foi
+escolhida por que não há informações de alteração de trânsito em nenhuma das rotas
+possíveis. Então, foi considerada a velocidade média das vias, o caminho mais próximo
+e a maior frequência de circulação dos ônibus pelas paradas. Nota-se, que o tempo total
+gasto na viagem foi de 11 minutos.
+Figura 5 - Mapa e informações da rota indicada.
+Para uma melhor compreensão da influência da informação contextual dinâmica,
+foram publicados tweets de trânsito engarrafado na Rua José Osório (Figura 6) que faz
+parte da rota anteriormente mostrada.
+Figura 6- Tweet de Informação de Trânsito
+Ao refazer a busca com a mesma parada de origem e destino e o tipo de busca
+realizada anteriormente, verificamos que o sistema levou em consideração a informação
+colhida do tweet indicando outra rota com a linha de ônibus 101, diferente da sugerida
+anteriormente, não passando pela Rua José Osório que está engarrafada (Figura 7).
+Figura 7 - Mudança na rota Sugerida
+525
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+De  acordo  com  o  cenário  descrito,  o  sistema  proposto  obteve  resultados
+satisfatórios,  seguindo  os  elementos  contextuais  dinâmicos  colhidos  no  Twitter,  e
+indicando ao usuário a melhor rota para o seu deslocamento, de acordo com o tipo de
+busca selecionada pelo passageiro.
+6. Conclusão
+Atualmente os Sistemas Inteligentes de Transporte se transformaram em uma alternativa
+atrativa e muito viável para solucionar alguns problemas e superar desafios na área de
+transporte das grandes cidades, essa evolução se deve em parte ao acelerado crescimento
+da Tecnologia da Informação e Comunicação. Tal evolução contribui para a crescente
+utilização  de  sistemas  computacionais  em  praticamente  todas  as  áreas  da atividade
+humana. Sendo assim, há uma ascendente procura por sistemas dinâmicos e sensíveis ao
+contexto.  A  utilização  deste  tipo  de  aplicação  no  provimento  de  informações  aos
+usuários de transporte público urbano, podem proporcionar maior atração e fidelização
+ao serviço.
+Este trabalho teve por objetivo desenvolver uma aplicação móvel para indicar e
+sugerir rotas aos usuários de transporte público, capaz de obter informações contextuais
+dinâmicas da rede social Twitter. Tal recomendação é baseada em pontos de origem,
+destino e tipo de busca, fornecidos pelos usuários. Para implementação do UbibusRoute
+foram  utilizadas  ferramentas  externas  como  a  API  do  Google  Maps  e  Twitter.  O
+aplicativo mostrou que é possível recomendar rotas de ônibus aos usuários utilizando
+informações dinâmicas de redes sociais, apesar de demandar algumas melhorias que
+serão abordadas em pesquisas futuras.
+Alguns trabalhos futuros serão investigados com o intuito de contribuir para a
+melhoria do sistema desenvolvido, entre eles podemos citar: a implementação de outros
+algoritmos para a busca por menor preço, pois o algoritmo de Dijkstra, por ser guloso,
+não dá o resultado desejado. Uma das razões é o fato de levarmos em consideração as
+trocas de ônibus e frequência dos ônibus, o que não pode ser especificado somente com
+o algoritmo de Dijkstra, pois ele não possui nenhum método heurístico.   Outros pontos
+a serem considerados são: utilizar uma base de dados reais, a fim de realizar testes mais
+realistas e precisos; expandir o tratamento das redes sociais para permitir capturar
+informações de trânsito provenientes de outros perfis e sites; e evoluir o algoritmo de
+interpretação de informações de trânsito, a fim de realizar análise semântica.
+Referências Bibliográficas
+Alves, L. P. S., Chaves, A. P e Steinmacher, I. F. (2011) “Um aplicativo baseado em
+inteligência  coletiva  para  compartilhamento  de  rotas  em  redes  sociais”.  In:  VIII
+Simpósio Brasileiro de Sistemas Colaborativos (SBSC), Paraty-RJ.
+Brézillon, P. (1999) “Context in Artificial Intelligence: IA Survey of the Literature”,
+Computer & Artificial Intelligence, v. 18, pp. 321-340.
+Burke,  R.  (2002)  “Hybrid  Recommender  Systems:  Survey and  Experiments”,  User
+Modelling and User-Adapted Interaction, pp. 331-370.
+Cutolo,  F.  A.                                                                              (2003)                                               “Diretrizes  para  sistema  de  informação  ao  usuário”.  In:  III
+                                                                                             Seminário Internacional PROMOTEO, Porto Alegre-RS.
+526
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Dimitrakopoulos,  G.                                                                    (2011)                                                        “Intelligent  transportation  systems  based  on  internet-
+connected   vehicles:   Fundamental   research   areas   and   challenges”,   ITS
+Telecommunications (ITST), 11th International Conference, pp. 145-151.
+Ferris, B., Watkins, K. and Borning, A. (2010) “Location-Aware Tools for Improving
+Public Transit Usability”, IEEE Pervasive Computing, v. 9 n. 1, pp. 13-19.
+Golbeck, J. (2005) “Computing and Applying Trust in Web-Based Social Networks”.
+184 f. Thesis (Doctor of Philosophy) - University of Maryland, College Park, MD,
+USA.
+Gómez, A., Diaz, G. and Bousetta, K.  (2009)  “ITS Forecast:    GIS Integration with
+Active  Sensory     System”.  In:  Information  Infrastructure  Symposium,  GlJS'09.
+Global, pp. 1-6.
+Hoar, R. (2010) “A Personalized Web Based Public Transit Information System with
+User   Feedback”.   In:                                                                 13th   International   IEEE   Conference   on   Intelligent
+Transportation Systems, Portugal.
+Kharaev, V. (2010) “Comparative Analysis of Mobile Telecommunication Technologies
+for Intelligent Transport Systems”. Irkutsk Listvyanka, Russia.
+Levy, P. (2003), “A Inteligência Coletiva”. São Paulo: Loyola.
+Mazhelis, O., Zliobaite, I. and Pechenizkiy, M. (2011) “Context-aware personal route
+recognition”. In: The Fourteenth International Conference on Discovery Science (DS
+2011), Espoo, Finland, pp. 365-379.
+Pilon, J. A.  (2009)  “Sistema de Informação ao Usuário do Transporte Coletivo por
+Ônibus na Cidade de Vitória-ES”. 125 f. Dissertação (Pós-Graduação em Engenharia
+de Produção) - Universidade Tecnológica Federal do Paraná - Ponta Grossa-PR.
+Schein, A. L. (2003) “Sistema de Informação ao usuário como estratégia de fidelização
+e atração”. 148 f. Dissertação (Mestre em Engenharia de Produção) - Departamento
+de Engenharia de Produção, Universidade Federal do Rio Grande do Sul, Porto
+Alegre -RS.
+Sussman, J. (2005), “Perspectives on Intelligent Transportation Systems”. New York,
+USA: Springer.
+Vieira, V., Caldas, and L. R. Salgado, A.C. (2011) “Towards an ubiquitous and context
+sensitive  public  transportation  system”.  In                                         4th  International  Conference  on  Ubi-
+media Computing, São Paulo-SP.
+Zhang, J., Wang, F., Wang, K., Lin, W., Xu, X. and Chen, C.  (2011)  “Data-Driven
+Intelligent Transportation Systems: A Survey”, In: IEEE Transactions on Intelligent
+Transportation Systems. vol. 12, no. 4, pp. 1624-1639.
+527
+
+
+
+
+

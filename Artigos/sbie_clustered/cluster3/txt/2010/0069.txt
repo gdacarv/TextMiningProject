@@ -1,0 +1,419 @@
+﻿Rumo ao Uso de Metadados Educacionais em
+Sistemas de Recomendaç ão
+Tiago Thompsen Primo1, Rosa Maria Vicari1, Julia Marques Carvalho da Silva1
+1Instituto de Informática - Universidade Federal do Rio Grande do Sul (UFRGS)
+Caixa Postal 15.064 - 91.501-970 - Porto Alegre - RS - Brazil
+{ttprimo,rosa}@inf.ufrgs.br,  julia.silva@bento.ifrs.edu.br
+Abstract. This paper presents a model to recommend educational material des-
+cribed with metadata. In order to make it work, we propose a pattern to describe
+user profiles to provide interoperability among educational platforms and cog-
+nitive learning aspects.  We also present instructions to describe educational
+material as ontological individuals. The proposed model aims to be used with
+semantic web technologies and traditional recommender system algorithms.
+Resumo. Este  trabalho  apresenta  um  modelo  para  a  recomendaç ão  de
+conte údos educacionais descritos através de metadados.  Para seu funciona-
+mento é apresentada a proposta para descriç ão de perfis de usu ários que possi-
+bilitem interoperabilidade entre aplicaç ões educacionais e aspectos cognitivos
+de aprendizado.  Também é apresentado como podem ser descritos conte údos
+educacionais de forma a associa-los como indivíduos de ontologias. O modelo
+proposto visa ser utilizado em conjunto as tecnologias da Web Sem ântica e aos
+tradicionais algoritmos de recomendaç ão.
+1. Introduç ão
+E crescente o volume de informaç ões disponibilizadas diariamente na Internet. De acordo
+com a Internet World Stats1  dos anos 2000 até 2009 o taxa de crescimento foi de 380%
+e o n úmero de domínios alcançou segundo a internet Systems Consortium2  a quantia de
+730 milh ões em janeiro de 2010.
+Parte de tamanha sobrecarga também é composta pelo domínio educacional. Den-
+tre seus conte údos pode-se destacar apresentaç ões, artigos, jogos educacionais entre ou-
+tros materiais que visam auxiliar no processo de aprendizado. Considerando isto, a tarefa
+de encontrar e sugerir algum conte údo educacional que seja relevante e adequado as ca-
+racterísticas de cada usuário é contexto ao qual este trabalho engloba.
+Sugerir  conte údos  dentre  infinitas  possibilidades  vem  sendo  tratado  com  a
+utilização  de  Sistemas  de  Recomendação  (SR).  Ferramentas  que  utilizam  dos  seus
+métodos vem sendo amplamente utilizados em domínios de entretenimento com signi-
+ficativo sucesso.  Seja para sugerir filmes [Miller et al. 2003] ou produtos em web-sites
+de comércio eletr ônico [Leino and Räihä 2007]. SR auxiliam no processo de indicar ou
+receber indicação de “coisas” que porventura possam ser úteis para um usuário ou grupo
+de usuários. [Resnick and Varian 1997].
+1 http://www.internetworldstats.com/stats.htm
+2 http://ftp.isc.org/www/survey/reports/current/
+
+
+
+
+Dito isto, é possível inferir que sistemas educacionais que utilizem suas técnicas
+poderiam trazer benefícios a alunos de diferentes cursos e níveis desde que tomadas al-
+gumas precauç ões.  Parte-se desta premissa, pois acredita-se que receber a má sugestão
+de filme pode vir a ser menos “doloroso” para um usuário do que receber a sugestão de
+algum conte údo educacional que de alguma maneira o desmotive.
+Considerando a utilização de SR em domínios educacionais, defende-se que sejam
+considerados aspectos relacionados a requisitos pedag ógicos, cognitivos e culturais. Algo
+até então não observado na literatura pesquisada.
+Tradicionalmente                                                                             os                      SR    são    divididos    em    três    abordagens
+[Adomavicius and Tuzhilin 2005].    A  Filtragem  Colaborativa                               (FC)  que  realiza  o
+processo de recomendação considerando a similaridade entre os usuários;  Filtragem
+Baseada em Conte údo (FBC) que busca a similaridade entre os objetos a serem recomen-
+dados com o hist órico de cada usuário; Abordagem Híbrida que busca através de técnicas
+específicas mesclar FBC e FC [Burke 2007].
+A principal característica de tais abordagens é a utilização de funç ões de simila-
+ridade associadas a métodos estatísticos para seu funcionamento, não considerando as-
+pectos intrínsecos de seus usuários como, por exemplo, sua facilidade em compreender
+conte údos educacionais expressos através de diagramas ou imagens.
+Tais  aspectos  que  permitem  tal  delimitação  de  conte údos,  tradicionalmente,
+comp õem o conhecimento tácito de professores ou tutores, os quais, através de sua ex-
+periência adaptam suas sugest ões de conte údos de forma a auxiliar seus alunos a compre-
+ender determinados conte údos. Prover meios para que o raciocínio computacional con-
+temple tais aspectos no momento de sugerir conte údos educacionais é um dos desafios
+deste trabalho.
+A  inserção  de  tais  aspetos  de  maneira  a  permitir  seu  uso  computacional
+vem através da descrição das características através de metadados3  que contemplem
+informaç ões que possibilitem delimitar os conte údos educacionais adequados a cada tipo
+de aluno.
+Dentre a literatura de metadados educacionais,  iniciativas como IEEE LOM
+[IEEE 2002] e Dublin Core [Powell et al. 2005] provém conjuntos de metadados que ge-
+neralizam a descrição de conte údos educacionais permitindo considerar aspectos que per-
+mitem realizar determinadas inferências sobre sua descrição. Por exemplo: Caso o me-
+tadado Interactivity Type esteja preenchido com o valor “material de audio” e o usuário
+possuir problemas auditivos acredita-se que este conte údo educacional não seja apropri-
+ado para ele.
+Tais padr ões, embora amplamente conhecidos no domínio educacional, não con-
+templam de maneira apropriada aspectos relacionados ao contexto educacional brasileiro.
+Considerando isto, foi optado pela utilização do conjunto de metadados do projeto OBAA
+4. Outro motivo desta escolha é pelo fato dos autores terem s ólido conhecimento deste
+padrão, dado que são membros de seu grupo de desenvolvimento. Detalhes mais aprofun-
+3 O item de um metadado auxilia um computador na compreensão do referido dado.   Ex:         (meta-
+dado)EstiloCognitivo = (dado)’Visual’
+4 http://www.portalobaa.org
+
+
+
+
+dados sobre os padrão OBAA pode ser vistos também em [Bez et al. 2009].
+Considerando isto, neste trabalho será proposto um modelo de recomendação que
+possa ser utilizado em conjunto à ambientes educacionais como complemento aos tradi-
+cionais métodos de recomendação já existentes, não descartando as pesquisa realizadas
+até então. Esta espécie de p ós-processamento, na visão dos autores, delimita aspectos que
+devem ser considerados quando SR partem de ambientes de entretenimento para educaci-
+onais.
+Outra contribuição que pode ser mencionada é relacionada a utilização das tecno-
+logias da Web Semântica. O modelo proposto visa adequação a tais padr ões de forma a
+permitir a sugestão de conte údos presentes em outros sistemas de ensino, compartilha-
+mento de perfis de alunos e ontologias de domínio.
+De maneira a expor a contribuição deste artigo começamos apresentando os traba-
+lhos relacionados a utilização de SR na área da educação, uma revisão bibliográfica sobre
+SR, Metadados Educacionais e Web Semântica, o padrão de metadados OBAA com suas
+principais características, a Proposta de Recomendação que apresenta o modelo proposto
+a lidar com o objetivo apresentado e finalizamos com as Conclus ões e Rumos de Pesquisa.
+2. Trabalhos Relacionados
+A utilização de SR em sistemas educacionais não é novidade. [Zaïne 2002] prop õem um
+agente de recomendação que modela representaç ões do perfil de seus usuários através do
+uso de técnicas de mineração sobre o hist órico de acesso dos mesmos.  A partir desta
+representação o agente realiza recomendaç ões baseado no que usuários com hist óricos
+semelhantes fizeram em determinada atividade didática.
+[Zhu et al. 2007] apresentam um sistema de recomendação para ambientes educa-
+cionais baseado em agentes e pacotes SCORM. O processo de recomendação visa auxiliar
+no processo de aprendizado sugerindo conte údos que possam ser úteis para a realização
+de alguma atividade didática.
+[Zhuhadar et al. 2009] realizam o processo de recomendação baseados em bus-
+cas de conte údos educacionais realizadas por usuários.  O perfil de seus usuários consi-
+dera áreas de conhecimento associadas a estes de maneira a comparar com as áreas dos
+conte údos educacionais possibilitando o processo de recomendação.  Para o descrição
+destas áreas eles prop õem a utilização de ontologias.
+O trabalho de [García et al. 2009] apresenta um framework para recomendar alter-
+nativas que auxiliem professores a prover alternativas didáticas que auxiliem seus alunos
+na resolução de tarefas propostas em sala de aula.  Para isto, é baseado em métodos de
+FC apoiados a regras de associação extraídas automaticamente através de técnicas de
+mineração de dados dos hist óricos de aç ões no sistema.
+Apesar de serem efetivos em sua capacidade de realizar a recomendação de
+conte údos educacionais, tais sistemas não consideram:
+1.  Aspectos relacionados a aptid ões cognitivas dos usuários.
+2.  Reuso das informaç ões de seus usuários.                                                 E necessário que cada usuário informe
+ou realize conjuntos de aç ões que permitam delimitar seus gostos.
+3.  Reuso de conte údos educacionais.  Os conte údos educacionais estão restritos ao
+domínio da aplicação.
+
+
+
+
+Dentre os aspectos enumerados, neste trabalho buscam-se as seguintes alternati-
+vas:  Para o aspecto 1, considera-se o uso do padrão OBAA que prevê a descrição de
+aspectos cognitivos de ensino na criação de conte údos educacionais. Para o aspecto 2 é
+prevista a utilização de tecnologias provenientes da Web Semântica, como por exemplo,
+o uso do padrão FOAF sendo proposta a extensão de seu vocabulário sem a perda de com-
+patibilidade. Para o aspecto 3 é previsto que o modelo utilize reposit órios existentes de
+conte údos educacionais descritos por metadados. Este uso, elimina a necessidade de criar
+do zero todo o material de ensino.
+3. Referencial Técnico e Te órico
+3.1. Sistemas de Recomendaç ão
+Segundo [Resnick and Varian 1997] um Sistema de Recomendação tem por finalidade
+auxiliar no processo social de indicar ou receber indicação.  A recomendação pode ser
+referente a qualquer “coisa” que venha auxiliar ao usuário ou grupo de usuários.
+[Adomavicius and Tuzhilin 2005]  descreve  o  processo  de  recomendação  de
+acordo com a equação 1 :
+(1)
+∀u ∈ U, o′u  = argmaxf (u, o), s ∈ S
+Onde U, representa um conjunto de usuários, O, o conjunto de objetos a serem re-
+comendados (ambos podem ser compostos por milhares de usuários e milhares de objetos
+a serem recomendados) alguma função de utilidade f que mede o quão útil um objeto o
+pode ser a um usuário u temos por exemplo: U × O → R, onde R e um conjunto total-
+mente ordenado de objetos.  Desta forma, para cada usuário u ∈ U escolhe-se o objeto
+o′   ∈ O que maximize a função de utilidade de um usuário.
+De maneira geral, a função de utilidade  é representada por uma avaliação que
+represente o quanto determinado usuário qualifica o item recomendado. Por exemplo, o
+filme Matrix foi avaliado por um usuário com a nota 8 em um escala entre 1 à 10.
+3.2. Metadados Educacionais
+Metadados5  são utilizados como forma de facilitar a compreensão computacional sobre
+determinado objeto.  Seu uso tem se tornado comum em aplicaç ões que são voltadas a
+Web Sem ântica [Shadbolt et al. 2006]. No contexto educacional, os metadados descrevem
+informaç ões referentes a processos de aprendizagem, características recomendadas para
+o acesso de conte údos educacionais, entre outros aspectos.
+Tais informaç ões podem, por exemplo, auxiliar mecanismos inteligentes no pro-
+cesso de sugestão de conte údos educacionais a pessoas com necessidades especiais. Al-
+guns exemplos de iniciativas relacionadas a definição de metadados educacionais são:
+• IEEE LOM: consiste em 76 elementos, organizados em nove categorias.  Os
+elementos possuem sintaxes específicas que orientam o seu preenchimento.  A
+especificação possibilita a identificação do recurso, controle de seu ciclo de vida e
+características pedag ógicas. As categorias do IEEE LOM são: general, lifecycle,
+5 “Dados sobre dados” permitindo que estes se tornem inteligiveis por computador
+
+
+
+
+meta-metadata, technical, educational, rights, relation, annotation e classification
+[IEEE 2002].
+• Dublin Core Metadata Element Set:  consiste em um vocabulário de quinze
+propriedades usadas para a descrição do recurso.                                            E considerada como uma
+simplificação do IEEE LOM, pois contempla apenas os elementos mais utiliza-
+dos pelos professores e desenvolvedores na prática. Os elementos da versão 1.1
+são: coverage, description, type, relation, source, subject, title, contributor, crea-
+tor, publisher, rights, date, format, identifier e language [Powell et al. 2005].
+• CanCore Learning Object Metadata: baseia-se na especificação IEEE LOM,
+reduzindo a complexidade e ambiguidade dele, por exemplo, não fazendo uso
+da categoria annotation (em itálico ou traduza).  Para os elementos do  âmbito
+pedag ógico, o CanCore considera a estrutura do ensino p úblico do Canadá nos
+anos do primário, secundário e superior (em cursos presenciais e a distância) no
+Canadá [Friesen and McGreal 2005].
+• UK Learning Object Metadata Core (UK LOM Core):  baseia-se no IEEE
+LOM também. Ele foi otimizado para considerar a estrutura educacional do Reino
+Unido. O maior benefício dele é o aumento de incentivo para provedores de da-
+dos e serviços e a ampliação de vocabulários desenvolvidos exclusivamente para
+o contexto educacional local [Barker 2004].
+• OBAA: combina a tecnologia de objetos de aprendizagem com sistemas multi-
+agentes.  Ainda, permite a descrição de objetos de aprendizagem baseados na
+web, TV digital interativa e dispositivos m óveis. Para sua construção, ele se ba-
+seou nas especificaç ões IEEE LOM, TV-Anytime e MPEG-7. Além das categorias
+do IEEE LOM, criou novos elementos para as categorias technical e educational.
+Além disto são propostas novas categorias como accessibility e segmentinforma-
+tiontable. [Bez et al. 2009]
+No contexto educacional, os padr ões IEEE LOM e Dublin Core visam generali-
+zar as descriç ões educacionais com o objetivo de delimitar as informaç ões necessárias
+para descrever conte údos educacionais.  Os demais padr ões geralmente derivam destes
+atribuindo ou refinando metadados de maneira a adapta-los a região que são adotados.
+Considerando isto, neste trabalho será feito o uso do padrão OBAA.
+3.3. Web Sem ântica
+A Web Semântica [Shadbolt et al. 2006] provém métodos e padr ões que permitem dar
+significado ou “semântica” as informaç ões que estão presentes na internet. Os benefícios
+disto são relacionados a utilização de agentes computacionais que possam autonoma-
+mente buscar informaç ões através da inferência sobre seus conte údos.
+Dentre as tecnologias da Web Semântica destacam-se:  RDF  (utilizada para a
+descrição de recursos), RDF(s) e OWL, as duas ultimas além de permitir a descrição
+de recursos ampliam o vocabulário possibilitando sua descrição formal de conceitos, ter-
+mos e relacionamentos de em um domínio de conhecimento. Tais tecnologias podem ser
+utilizadas em arquivos em formatos específicos ou inseridos em um arquivo no formato
+XML.
+Muitas aplicaç ões nos dias de hoje fazem uso de tais tecnologias. Considerá-las
+no presente modelo de recomendação pode vir a trazer resultados positivos para usuários
+de SR educacionais.
+
+
+
+
+3.4. Padr ão OBAA
+Além das características que permitem a interoperabilidade entre plataformas de hard-
+ware, o padrão OBAA possui linhas de trabalho com pesquisas fortemente voltadas para
+o desenvolvimento de sistemas educacionais baseados em tecnologias de Inteligência Ar-
+tificial.
+Na prática, a independência de tecnologia e flexibilidade da proposta do OBAA é
+garantida pela definição de sintaxe em XML e da semântica usando uma ontologia OWL6
+compatível com a Web Semântica.
+A modelagem definida para o OBAA está de acordo com a linguagem OWL-
+DL7, o que permite uma expressividade suficiente para a sua aplicação no contexto destes
+metadados mantendo a completude computacional e decidibilidade.
+4. Proposta de Recomendaç ão
+Devido ao caráter interdisciplinar desta proposta, a Figura 1 ilustra como os t ópicos apre-
+sentados nas seç ões anteriores se complementam de maneira a dar funcionalidade ao mo-
+delo proposto.
+ao
+Desta forma, na Figura 1 são apresentadas as três principais áreas de pesquisa en-
+volvidas: SR Metodos (Composto por um ou mais algoritmos), Web Sem ântica (Com-
+posto pelas tecnologias de descrição) e Educaç ão (Composta por recomendaç ões pe-
+dag ógicas). Cada uma destas áreas se relaciona de maneira direcional quanto represen-
+tam regras de um domínio, ou bi-direcional quando o modelo faz uso de seus métodos e
+técnicas de acordo com as requisiç ões de uma Aplicaç ão Educacional.
+O presente trabalho se limita a dar ênfase aos requisitos principais para o funcio-
+namento de um SR. Focando na descrição dos perfis de usuários e dos conte údos educa-
+cionais.
+4.1. Fluxo de Funcionamento
+O modelo proposto  é baseado no formalismo e na taxonomia de SRs propostos por
+[Adomavicius and Tuzhilin 2005]. A Figura 2 apresenta uma visão sobre o processo de
+recomendação e a etapa em que o presente trabalho se situa frente esta taxonomia.
+6 Web Ontology Language: http://www.w3.org/TR/owl2-overview/
+7 Do inglês Description Logic em tradução livre: L ógica Descritiva
+
+
+
+
+Ainda tendo com base a Figura 2, a marcação de n úmero 1 ilustra três métodos
+de recomendação (RBC, FC e Híbrido) junto aos requisitos mínimos para o seu funciona-
+mento. Desta forma interpreta-se que o retângulo mais a esquerda ( RBC ) necessita para
+seu funcionamento no mínimo a comparação entre o perfil do usuário com o do perfil dos
+objetos para realizar alguma recomendação.
+O presente modelo prop õe o p ós-processamento das recomendaç ões realizadas
+por algum método tradicional de recomendação. Representado pela etapa marcada com o
+n úmero 2. Para seu funcionamento são necessários o conjunto de recomendaç ões o′  ∈ O
+para algum usuário u e no mínimo dois conjuntos de metadados. O primeiro conjunto des-
+creve o perfil do usuário u com as informaç ões iu′. O segundo conjunto descreve o objeto
+o′ com as informaç ões io′. Comparar iu′ e io′ originam a lista final de recomendaç ões.
+O exemplo ilustrado na Figura 2 marcação n úmero 2 considera o conjunto de
+metadados educacionais OBAA pelo fato de terem sido escolhidos para o escopo deste
+trabalho.
+¸ ˜ao + Modelo Proposto
+O processo de comparação pode ser feito através de regras de produção, Ra-
+ciocínio Baseado em Casos ou métodos que façam uso de funç ões estatísticas. O presente
+modelo visa padronizar a maneira como devem ser desenvolvidos SR para a educação,
+desta forma, detalhes sobre a estrutura de metadados de perfis de usuários e de conte údos
+educacionais são descritos no decorrer das seç ões.
+4.2. Modelo de Conte ´udos Educacionais
+O conte údo educacional pode ser considerado qualquer objeto que tenha por finalidade
+auxiliar no processo de aprendizagem. Desta forma, são exemplos de conte údos educa-
+cionais:  Livros; Artigos; Apresentaç ões; Vídeos ou até mesmo objetos físicos.  O que
+os torna “funcionais” para o modelo de recomendação proposto são os metadados que os
+descrevem. Neste trabalho será utilizado o modelo de conte údos educacionais do padrão
+OBAA.
+Conte údos educacionais previstos para este modelo são descritos com o padrão
+OBAA e constituídos por um conjunto de metadados armazenados em um arquivo no for-
+
+
+
+
+mato XML. A Figura 3 ilustra o modelo de conte údo educacional proposto. Desta forma,
+os conte údos educacionais são descritos em arquivos que possuam semântica e sintaxe
+OWL e formato XML ou OWL. Ap ós é previsto que estes passem a se tornar indivíduos
+de uma ontologia OBAA descrita em OWL. Esta abordagem permite que conte údos edu-
+cacionais “carreguem” partes da ontologia preenchidas com atributos específicos.
+Adotar esta abordagem, em nosso ponto de vista, torna o modelo adaptável a Web
+Semântica além de possibilitar a utilização de raciocínio l ógico sobre a descrição presente
+em tais conte údos, permitir classificação e categorização padronizada dos conte údos e
+tipos de informaç ões presentes, facilita o reuso de tais conte údos educacionais e permite
+que o modelo filtre resultados provenientes de algoritmos de recomendação tradicionais
+de acordo com características pedag ógicas, restriç ões de plataforma e demais presentes
+no padrão OBAA.
+udo educacional
+4.3. Modelo de Usu ário
+O  modelo  de  usuário  proposto  para  este  modelo                                           é  baseado  nos  trabalhos  de
+[Primo and Loh 2006]  e  [Lichtnow et al. 2006],  sendo  ilustrado  pela  Figura               4.                               A
+marcação de n úmero 1 ilustra o hist órico de atividade de um usuário. Este hist órico pode
+abranger avaliaç ões realizadas a conte údos educacionais, hist óricos de acesso, interes-
+ses explicitados entre demais aspectos relacionados a experiência de uso. A marcação de
+n úmero 2 ilustra como pretende-se armazenar e descrever semanticamente as informaç ões
+coletadas/extraídas dos usuários. No exemplo é mencionado o uso do padrão FOAF8.
+Figura 4. Modelo de Usu ´ario Proposto
+A utilização do padrão de metadados FOAF torna o presente trabalho de acordo
+com as atuais tecnologias da Web Semântica. A escolha por esta tecnologia é relacionada
+as seguintes observaç ões frente a literatura:
+• Permite descrever pessoas, suas relaç ões e atividades que realizam.
+8 http://www.foaf-project.org/
+
+
+
+
+• Vem sendo adotada por aplicaç ões que se direcionam ao uso da Web Semântica (
+Facebook, API‘s de grafos sociais do GOOGLE, entre outros);
+• Facilita o processo de aquisição de conhecimento, permitindo que os usuários
+forneçam uma URI apontanto para o seu perfil FOAF a ser importado reduzindo
+o problema de Partida Fria9;
+• Compatibilidade com ontologias OWL, facilitando o processo de inferência sobre
+os perfis de usuários
+• Possibilidade  de  utilizar  a  linguagem  de  consulta  SPARQL,  facilitando  a
+recuperação de informaç ões específicas sobre os usuários.                                 (A utilização desta
+linguagem também pode ser uma alternativa para a recuperação de conte údos edu-
+cacionais)
+De maneira a possibilitar a utilização do FOAF junto ao modelo proposto, estuda-
+se estender o seu vocabulário de maneira a utilizar metadados do padrão OBAA. Esta
+medida visa permitir que sejam descritas informaç ões de cunho pedag ógico.
+5. Conclus ões e rumos de pesquisa
+O presente trabalho apresentou um modelo de recomendação de conte údos educacionais
+descritos por padr ões de metadados.  A utilização deste modelo pode trazer benefícios
+para estudantes, que teriam conte údos sugeridos de acordo com seu perfil cognitivo e
+necessidades especiais.  Para professores tal modelo pode ser utilizado no processo de
+elaboração de conte údos programáticos e materiais de ensino para disciplinas a serem
+ministradas.
+Também foi apresentado como o presente modelo se adapta as atuais tecnologias
+da Web Semântica além de um apanhado superficial sobre metadados educacionais, bem
+como, a justificativa para a adoção do padrão de metadados OBAA.
+Para dar seguimento as pesquisas e colocar em prática o modelo proposto são
+planejados estudos que objetivem concretizar a utilização do modelo proposto com os
+atuais reposit órios de conte údos educacionais, além de permitir que possam fazer parte
+do processo de recomendação conte údos não necessariamente descritos com metadados
+educacionais, mas com fundo educacional. Por exemplo, artigos da Wikipedia.
+Também faz parte das pesquisas propor a extensão do vocabulário de metadados
+FOAF para que de suporte a conte údos educacionais.  Mensurar e prever custos associ-
+ados a implementação do modelo proposto junto aos sistemas de ensino popularmente
+utilizados (ex: Moodle).
+Por fim, desenvolver um prot ótipo que utilize deste modelo e mensurar o quanto
+este permite aumentar a precisão de uma recomendação sob o aspecto de utilidade para
+resolução de um problema específico é outro ponto crucial a ser explorado.
+Referências
+Adomavicius, G. and Tuzhilin, A. (2005).  Toward the next generation of recommender
+systems: A survey of the state-of-the-art and possible extensions. Knowledge and Data
+Engineering, IEEE Transactions on, 17(6):734-749.
+9 do inglês Cold Start. Problema comum enfrentado por Sistemas de Recomendação
+
+
+
+
+Barker,    P.                                                                                 (2004).   Uk   lom   core.   UK   LOM   Core   home   page
+¡http://www.cetis.ac.uk/profiles/uklomcore¿.
+Bez, M. R., da Silva, J. M. C., Santos, E. R., Primo, T., and Bordignon, A. (2009). Projeto
+obaa: Uma abordagem com objetos de aprendizagem interoperáveis baseados na web
+e na televisão digital. Inform ática na Educaç ão: Teoria e Pr ática, 12(1):119-126.
+Burke, R. D. (2007).  Hybrid web recommender systems.  In The Adaptive Web, pages
+377-408.
+Friesen, N. and McGreal, R. (2005). Cancore: Best practices for learning object metadata
+in ubiquitous computing environments.  Pervasive Computing and Communications
+Workshops, IEEE International Conference on, 0:317-321.
+García, E., Romero, C., Ventura, S., and Castro, C. D. (2009). An architecture for making
+recommendations to courseware authors using association rule mining and collabora-
+tive filtering. User Modeling and User-Adapted Interaction, 19(1-2):99-132.
+IEEE (2002). Ieee lom final standard metadata.
+Leino, J. and Räihä, K.-J. (2007). Case amazon: ratings and reviews as part of recommen-
+dations.  In RecSys ’07: Proceedings of the 2007 ACM conference on Recommender
+systems, pages 137-140, New York, NY, USA. ACM.
+Lichtnow, D., de Lima, J. V., Loh, S., Garin, R. S., Palazzo, L. A. M., Primo, T., Kampff,
+A. J. C., and de Oliveira, J. P. M. (2006). O uso de técnicas de recomendação em um
+sistema para apoio à aprendizagem colaborativa. Revista Brasileira de inform ática na
+educaç ão (RBIE), 14(3):49-59.
+Miller, B. N., Albert, I., Lam, S. K., Konstan, J. A., and Riedl, J. (2003).  Movielens
+unplugged: experiences with an occasionally connected recommender system. In IUI
+’03:  Proceedings of the 8th international conference on Intelligent user interfaces,
+pages 263-266, New York, NY, USA. ACM.
+Powell, A., Nilsson, M., Naeve, A., and Johnston, P. (2005). Dublin core metadata initia-
+tive - abstract model. White Paper.
+Primo, T. and Loh, S. (2006).  Técnicas de recomendação para usuários de bibliotecas
+digitais. In III Simp ósio Brasileiro de Sistemas de Informaç ão.
+Resnick, P. and Varian, H. R. (1997). Recommender systems. Commun. ACM, 40(3):56-
+58.
+Shadbolt, N., Berners-Lee, T., and Hall, W. (2006).  The semantic web revisited.  IEEE
+Intelligent Systems, 21(3):96-101.
+Zaïne, O. R. (2002). Building a recommender agent for e-learning systems.
+Zhu, F., Ip, H. H.-S., Fok, A. W. P., and Cao, J. (2007). Peres: A personalized recommen-
+dation education system based on multi-agents & scorm. In ICWL, pages 31-42.
+Zhuhadar, L., Nasraoui, O., Wyatt, R., and Romero, E. (2009).  Multi-model ontology-
+based hybrid recommender system in e-learning domain.  In Web Intelligence and
+Intelligent Agent Technologies, 2009. WI-IAT ’09. IEEE/WIC/ACM International Joint
+Conferences on, volume 3, pages 91 -95.
+
+
+
+
+

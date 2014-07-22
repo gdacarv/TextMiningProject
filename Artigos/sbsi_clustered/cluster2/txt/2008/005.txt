@@ -1,0 +1,377 @@
+﻿Organização de Grupos de Trabalho em Projetos
+Utilizando Sistemas Multi-Agentes
+Ryan Ribeiro de Azevedo1, Emanuel B. Santos1, Robson Godoi1, Fred Freitas1,
+Marcelo José Siqueira Coutinho Almeida1,2
+1Centro de Informática - Universidade Federal de Pernambuco (CIN-UFPE)
+Caixa Postal 7851 -50732-970- Recife - PE - Brasil
+{rra2,  ebs,  rgam,  fred}@cin.ufpe.br
+2
+Coordenação de Informática - Centro Federal de Educação Tecnológica da Paraíba
+Av. 1º de Maio, 720, Jaguaribe, CEP 58015-430, João Pessoa - PB - Brasil
+marcelo@cefetpb.edu.br
+Abstract. This article proposes a Multi-Agents system to solve the problem of
+composing workgroups for projects using the framework JADE. Its functioning is
+based on the interaction protocol contract-net. The agents should negotiate with
+each other the vacancy on the projects and the winners of this negotiation will be
+the final result. The argumentation used in this negotiation process among the
+agents is based on the criterion of brevity to the conclusion of each activity of a
+certain project.
+Resumo.  Este  artigo  propõe  um  sistema  Multi-Agentes  para  resolver  o
+problema de composição de grupos de trabalho para projetos utilizando o
+framework JADE. Seu funcionamento é inspirado no protocolo de interação
+contract-net. Os agentes deverão negociar entre si as vagas nos projetos e os
+agentes  vencedores  desta  negociação  farão  parte  do  resultado  final.  A
+argumentação  utilizada  neste  processo  de  negociação  entre  os  agentes  é
+baseada no critério de brevidade para a conclusão de cada atividade de um
+determinado projeto.
+1. Introdução
+A composição de grupos de trabalho em projetos é algo complexo por avaliar diversos
+atributos tanto dos indivíduos como das atividades desenvolvidas por eles. É de extrema
+importância para as organizações compor equipes que executem seus projetos em menor
+tempo possível e com qualidade. Para auxiliar nessa tomada de decisão está sendo
+proposto um sistema que sugere a alocação de indivíduos em grupos de trabalho de
+acordo  com  as  atividades,  perfis  e  duração  de  um  determinado  projeto  a  ser
+desenvolvido.
+O problema de composição de grupos é conhecido como manpower scheduling
+ou  employee  scheduling  e  é  uma  instância  do  problema  clássico  de  scheduling
+(escalonamento) [Conway, Maxwell, e Miller 1967]. O employee scheduling consiste
+em organizar uma agenda com os horários dos funcionários. Para resolver esse problema
+são utilizadas técnicas de resolução de problemas por CSP (Constraints Satisfaction
+
+
+
+
+Problems), por meta-heurísticas como Algoritmos Genéticos e busca tabu, ou por
+técnicas de programação linear como o método Simplex [Shamblin e Stevens 1979].
+Esses métodos procuram encontrar uma solução viável em termos de tempo para a
+organização. Esse tipo de solução se aplica as situações onde há restrições de tempo
+(horário dos funcionários) ou de recursos (ociosidade de máquinas).
+Procurando uma forma alternativa de solucionar o problema de composição de
+grupos em projetos de forma não centralizada como os métodos citados anteriormente
+propôs-se   usar   sistemas   Multi-Agentes   no   desenvolvimento   dessa   aplicação,
+considerada uma solução distribuída para o problema. O sistema objetiva obter uma
+solução viável cujo escalonamento resultante envolva o menor tempo possível ou um
+determinado tempo e uso da computação simbólica na tentativa de criar uma solução
+viável. O resultado do desenvolvimento é um sistema que recebe definições de projetos
+de uma dada organização e retorna a configuração de um  grupo de trabalho que
+executaria tal projeto em menos tempo ou no tempo proposto.
+Este trabalho está organizado da seguinte forma: na Seção 2 são descritos os
+trabalhos relacionados. A Seção 3 justifica a escolha e a relevância do tema e explica os
+objetivos do projeto, a Seção 4 foca em como a solução proposta esta estruturada, na
+Seção                                                                                       5  é  descrito  o  funcionamento  do  sistema,  sua  arquitetura  e  um  exemplo
+ilustrativo,  na  Seção                                                                     6,  pode-se  visualizar  os  resultados  alcançados  a  partir  dos
+experimentos realizados. As conclusões e trabalhos futuros se encontram na Seção 7.
+2. Trabalhos Relacionados
+O  problema  de  planejamento  de  escala de  serviço  para trabalhadores possui  uma
+literatura bastante extensa e diversificada, sendo inclusive um tópico de estudo na área
+de Pesquisa Operacional. Embora não haja uma terminologia padrão entre todos os
+autores,  esse  problema  é  conhecido  como  manpower  scheduling  ou  employee
+scheduling. Diferentes autores utilizam a mesma terminologia, porém suas pesquisas
+são  direcionadas  para  subproblemas,  como  escalas  para:  enfermeiras,  militares,
+condutores, entre outros.
+Diversas técnicas são utilizadas para resolução de problemas com escalonamento
+de empregados, onde se procura encontrar uma solução viável em termos de custos para
+a organização, levando em consideração restrições de tempo ou de recursos, a seguir são
+apresentados algumas dessas técnicas.
+No trabalho de [Chan e Weil 2002] é analisado o uso simultâneo de diferentes
+modelos de resolução, utilizando CSP (Constraints Satisfaction Problems), objetivando
+resolver problemas de escalonamento de empregados em larga escala. Na área de Metas-
+Heurísticas pode-se citar:  [Gröbner e Wilke  2001], onde os problemas da vida real
+relativos  ao  escalonamento  de  empregados  são  atacados  através  da  aplicação  de
+Algoritmos Genéticos Híbridos, onde são utilizados conhecimentos específicos de cada
+problema;  e  em                                                                            [Glover  e  McMillan                                                               1986],  o  problema  de  escalonamento  de
+empregados é atacado com a integração da Ciência do Gerenciamento e da Inteligência
+Artificial, através de busca tabu.
+De  maneira mais  abrangente,  [Tien  e  Kamiyama  1982]  faz  uma  revisão  e
+comparação dos diversos algoritmos disponíveis de manpower scheduling, baseado no
+
+
+
+
+framework  dos  cinco  estágios,  onde  problemas  gerais  de  escalonamento  são
+decompostos em cinco subproblemas (estágios) separados, porém relacionados.
+As vantagens do trabalho proposto em relação aos trabalhos relacionados citados
+acima são: contribuição do trabalho apresentado como um Sistema de Apoio à Decisão
+no planejamento de projetos em empresas e composição de equipes de projeto, algo
+fundamental na implementação de Sistemas de Informação em relação à alocação de
+funcionários, conforme perfil determinado para participação no desenvolvimento dos
+projetos.  O  uso  da  tecnologia  e  ambiente  distribuído  de  Sistemas  Multi-Agentes,
+adequada e eficiente neste domínio para alocação de recursos.
+3. Contextualização
+Para  restringir  o  escopo  da  aplicação  resolveu-se  utilizar  como  estudo  de  caso  a
+organização de grupos de trabalho em empresas que trabalham orientadas a projetos de
+software. Nesse modelo de organização os funcionários são alocados dinamicamente em
+grupos para trabalhar nos projetos assumidos. Cada projeto possuirá características
+individuais relevantes para a composição dos grupos de trabalho, tais como: tipo de
+projeto; duração do projeto; atividades; papel do profissional necessário para cumprir
+uma determinada tarefa.
+A composição dos grupos de trabalho se dará através da representação das
+características  dos  indivíduos  que  são  relevantes  ao  desenvolvimento  do  projeto.
+Características  como  a  experiência,  especialidade  e  disponibilidade  de  tempo,  por
+exemplo, são relevantes na escolha de qual indivíduo fará parte do grupo. O sistema
+representa os funcionários da empresa como agentes. Quando um novo projeto chegar à
+organização, a decisão de quem trabalharia em determinado projeto seria tomada pelos
+agentes. Essa decisão seria emergente dos agentes e viria da negociação entre eles.
+4. Arquitetura de SMA proposta
+Para desenvolver a aplicação, está sendo utilizado um sistema Multi-Agentes com
+agentes cognitivos. Como os agentes não têm que executar tarefas complexas, que
+exijam grande capacidade cognitiva, a arquitetura dos agentes é simplificada para se
+adequar melhor ao problema. Essa economia cognitiva não significa, no entanto, que os
+agentes serão incapazes de ter comportamentos ditos inteligentes. Os estados internos
+dos agentes são usados para definir a situação dos agentes em processos de tomada de
+solução.
+Como o projeto utiliza mecanismos de interação e negociação para obter uma
+solução é necessário evitar falhas como impasses e deadlocks para que o sistema possa
+garantir uma solução. Não é desejável que a negociação entre agentes se estenda
+infinitamente, por isso será utilizada uma argumentação simples e de duração limitada
+em uma negociação.
+O sistema foi implementado na linguagem de programação Java  [Gosling e
+McGilton 1996] por prover um conjunto considerável de bibliotecas que podem vir a ser
+utilizadas e desenvolvido na plataforma de desenvolvimento de sistemas Multi-Agentes
+JADE (Java Agent DEvelopment Framework) [Bellifemine et al 2003]. O uso de JADE
+permite abstrair alguns elementos do desenvolvimento como o controle de concorrência
+e o mecanismo de troca de mensagens.
+
+
+
+
+5. Descrição do Sistema
+O modelo de organização utilizado pelo sistema é composto por projetos e funcionários.
+As características de cada um desses elementos são armazenadas em arquivos XML -
+Extensible Markup Language. Quando a aplicação é iniciada, os elementos são lidos e
+representados  através  de  instâncias  de  projeto  ou  funcionário,  sendo  o  último
+representado por agentes.
+Para fazer a escolha de quais agentes farão parte de cada projeto, será utilizado o
+protocolo de interação contract-net  [FIPA  2002], onde a vaga em um projeto será
+conseguida através da avaliação das propostas dos agentes interessados. Dessa forma a
+decisão seria emergente do conjunto de agentes. O funcionamento básico do sistema é
+apresentado na Figura 1.
+Figura 1. Diagrama de atividades que descreve funcionamento do sistema.
+A seqüência de execução inicia com a entrada dos dados do projeto, em seguida
+os  agentes  recebem  a  notificação  de  existência  de  um  novo  projeto.  Os  agentes
+procuram submeter seus perfis a um leiloeiro que identificará conflitos entre agentes
+com os mesmos papeis. Depois de identificados os conflitos, os agentes passarão a
+negociar quem ficará com a vaga no projeto. O vencedor da negociação passa a fazer
+parte da solução final. Caso não haja disputa, a vaga é diretamente atribuída ao agente
+que será responsável por executar determinada atividade no projeto.
+Para  garantir  que  a  solução  não  será  apenas  uma  solução  aleatória,  as
+negociações entre os agentes serão baseadas em critérios que poderiam influenciar o
+desenvolvimento de um projeto. Para representar isso serão utilizadas restrições de
+produtividade em função do tempo. O tempo para desenvolver uma tarefa pode ser
+diferente para agentes com características diferentes. Um agente com mais experiência
+
+
+
+
+ou  um  histórico  favorável, por  exemplo,  levaria menos tempo para executar uma
+determinada atividade. Os atributos dos agentes são a base para a negociação, cada
+atributo é usado como argumento e deve ser interpretado pelos agentes que estão
+participando de uma negociação. Caso um agente identifique que suas características
+não são suficientes para ganhar uma negociação ele desiste da negociação e dá a vaga ao
+outro agente.
+Para representar os projetos foram considerados os seguintes atributos:
+- TIPO DE PROJETO: cada projeto será classificado por tipo, representando o seu
+domínio (Indústria, Comércio, Governo);
+- DATA DE INÍCIO: representando quando o projeto será iniciado. Esta informação
+será expressa em termos de unidade de tempo, a partir da entrada do projeto no sistema;
+- DURAÇÃO:   representando a quantidade máxima de unidades de tempo, esperada
+para a conclusão do projeto, a partir da DATA DE INÍCIO;
+- ATIVIDADES: representando as tarefas a serem executadas por cada funcionário da
+organização. Cada atividade será expressa em termos de:
+- DESCRIÇÃO DA ATIVIDADE
+- INICIO DA ATIVIDADE: indicando a quantidade de unidades de tempo
+passadas da DATA DE INÍCIO.
+- PRAZO DE CONCLUSÃO: indicando a quantidade de unidades de tempo
+necessárias para a conclusão desta ATIVIDADE.
+-  PERFIL:  indicando  o  papel  do  profissional  necessário  para  desempenhar  a
+ATIVIDADE.
+- DESCRIÇÃO: descrição do projeto a ser desenvolvido.
+É apresentado na Figura 2 a representação adotada para os projetos, incluindo
+seus atributos.
+Figura 2. Representação dos atributos referentes aos projetos.
+Cada funcionário será representado no sistema através de um agente com os
+seguintes atributos internos:
+- NOME: indica o nome do suposto funcionário.
+
+
+
+
+- PAPEL: indicando a função a ser exercida pelo profissional (Analista de Negócios,
+Engenheiro de Software, Gerente de Projeto, Desenvolvedor).
+- EXPERTISE: representando o grau de experiência do profissional (Júnior, Pleno e
+Sênior).
+- EXPERIÊNCIA: representando a participação do profissional em projetos anteriores.
+- DISPONIBILIDADE: indicando o início da disponibilidade do profissional em termos
+de unidades de tempo.
+- DESCRIÇÃO: dados a respeito do funcionário.
+É apresentado na Figura 3 a representação adotada para os funcionários, incluindo
+seus atributos.
+Figura 3. Representação das variáveis referentes aos funcionários.
+A escolha do funcionário que executará cada atividade em determinado projeto é
+resultado da negociação entre os agentes que atendam ao perfil exigido. O critério para
+identificação do vencedor utilizado na negociação entre os agentes que se candidatarem
+para uma vaga, se baseia no critério de brevidade para a conclusão de cada atividade. A
+brevidade será calculada seguindo os seguintes critérios:
+- A EXPERTISE será considerada para minimizar o tempo necessário para a execução
+da ATIVIDADE. Por exemplo, a EXPERTISE de Sênior reduz em 30% o tempo de
+conclusão, a do Pleno reduz em 20% e a do Júnior reduz 0%.
+-  EXPERIÊNCIA  de  cada  profissional  em  ATIVIDADES  do  mesmo  TIPO  DE
+PROJETO será levado em consideração para minimizar o tempo, por exemplo,  10
+atividades  reduziria  em                                                                 5%  o  tempo  para concluir  uma  atividade  em  um  projeto
+semelhante e 30 atividades reduziria em 10%.
+-  A DISPONIBILIDADE do profissional para iniciar uma nova ATIVIDADE. Os
+agentes poderão se candidatar a vagas mesmo sem ter encerrado um projeto atual, no
+entanto, isso contará negativamente durante a negociação.
+Desta forma, cada agente participando de uma negociação recebe como entrada a
+informação de DURAÇÃO das ATIVIDADES e considera os critérios de EXPERTISE
+e  EXPERIÊNCIA  para  minimizar  a  sua  proposta  e  a  DISPONIBILIDADE  para
+maximizar  a sua proposta. Uma vez  calculada, todas as propostas de tempo para
+conclusão das ATIVIDADES, são comparadas, durante a negociação entre os agentes,
+sendo vitorioso o que apresentar a proposta de menor valor, ou seja, a mais breve.
+
+
+
+
+5.1. Arquitetura do Sistema
+O  sistema  é  composto  por  três  tipos  de  agentes:  os  agentes  que  representam  os
+funcionários da organização, os agentes leiloeiros que anunciam a existência de projetos
+e os agentes que não participam diretamente do mecanismo principal de execução. Os
+agentes funcionários (EmployeeAgents) possuem uma representação interna de atributos
+que um funcionário humano possuiria.
+Os agentes leiloeiros são os iniciadores do protocolo contract-net, eles anunciam
+a existência de projetos e esperam a tomada de decisão dos agentes quanto à vaga no
+projeto. Os outros agentes são auxiliares em tarefas como a geração dos agentes e dos
+projetos, e a exibição dos resultados, eles são parte do sistema, mas não interferem nos
+protocolos de interação utilizados pelos agentes funcionários e leiloeiros.
+5.2. Exemplo do Funcionamento do Sistema
+Ao chegar um novo projeto na empresa os agentes receberão um aviso das vagas no
+projeto por um agente leiloeiro, negociarão entre si e concorrerão a uma vaga de
+trabalho no mesmo, logo após as negociações serão escolhidos os agentes que farão
+parte da solução final. Para ilustrar o processo de organização dos grupos é apresentado
+um exemplo de negociação dos agentes para a vaga de desenvolvedor.
+Supondo que o projeto possui os seguintes atributos:
+- TIPO DE PROJETO: Indústria.
+- ATIVIDADES: Implementação de “funcionalidade”, na linguagem   de programação
+Java.
+- PERFIL: profissional com habilidades em linguagem de programação Java.
+- DURAÇÃO: 10 unidades de tempo.
+Supondo que os funcionários modelados como agentes possuem os seguintes
+atributos:
+- Nome: Agente 1
+- Papel: Desenvolvedor;
+- Expertise: Sênior;
+- Experiência: Participou de inúmeras atividades em projetos, porém,   nenhuma
+participação em atividades nos projetos do tipo Indústria;
+- Disponibilidade: Disponível para iniciar atividades a partir da terceira unidade de
+tempo;
+- Nome: Agente 2
+- Papel: Desenvolvedor;
+- Expertise: Pleno;
+- Experiência: Participou de trinta projetos do tipo Indústria;
+- Disponibilidade: Disponível para iniciar atividades a partir da primeira unidade de
+tempo;
+Na negociação entre os agentes, apresentada na Figura 4, o vencedor seria o
+Agente  2, apesar de receber uma pontuação menor pelo seu grau de expertise em
+comparação ao Agente  1, o Agente  2 possui uma experiência de participação em
+projetos do tipo indústria que o Agente 1 não possui e também está disponível para
+
+
+
+
+iniciar o projeto a partir da data de inicio, e o Agente 2 só estará disponível depois de
+três unidades de tempo após a data de início do projeto.
+Figura 4. Diagrama de exemplo do funcionamento da negociação.
+6. Resultados
+O sistema proposto nesse artigo tem como objetivo organizar grupos de trabalho a partir
+de especificações de projetos. O protótipo desenvolvido utiliza um sistema Multi-
+Agentes para representar os funcionários e o protocolo contract-net para simular a
+adição dos agentes nos projetos.
+Os resultados obtidos são dados por heurísticas que são usadas para determinar
+quanto  tempo  uma  atividade  com  tempo  estimado  seria  finalizada.  Elas  têm  por
+finalidade apenas comparar os agentes, por isso não devem ser considerados como
+valores reais. O resultado exibido pelo sistema é a composição do grupo para um
+determinado projeto. Cada grupo vai possuir as datas iniciais e a duração estimada. Em
+testes em um ambiente controlado foram obtidos os resultados apresentados na Tabela
+1.  Esses  resultados  mostram  como  a  variação dos  valores dos atributos  influi  no
+comportamento do sistema.
+
+
+
+
+Tabela 1 - Resultados obtidos nos testes realizados
+Variável                                                                                  Valor Testado                                       Resultado Esperado            Resultado Obtido
+Expertise                                                                                 Junior                                              Não fazer parte de grupos     Não  foi  escolhido
+                                                                                                                                              onde  concorra  os  agentes   para nenhum desses
+                                                                                                                                              que   possuam   Expertise     grupos
+                                                                                                                                              Máster ou Sênior
+Expertise                                                                                 Master                                              Venceu    disputas    com     Venceu                disputas
+                                                                                                                                              agentes    com    expertise   com esses agentes
+                                                                                                                                     Junior
+Expertise                                                                                 Sênior                                              Venceu    disputas    com     Venceu                disputas
+                                                                                                                                              agentes    com    expertise   com esses agentes
+                                                                                                                                              Máster e Junior
+Histórico                                                                                                 Variação  no  número  de            Diminuição    no    tempo     Resultado  esperado
+                                                                                          unidades        de                         tempo    estimado de acordo com o      foi obtido
+                                                                                                          trabalhado em atividades            aumento  das  unidades  de
+                                                                                                          do mesmo tipo de projeto            tempo nas atividades
+Disponibilidade                                                                                           Aumentar a ocupação do              À medida que a ocupação       Resultado  esperado
+                                                                                                          agente  em  mais  de  um            aumenta o tempo estimado      foi obtido
+                                                                                                          projeto simultaneamente             também   aumenta   como
+forma de penalização.
+7. Conclusão e Trabalhos Futuros
+A composição de grupos de trabalho em projetos é uma atividade complexa e requer
+experiência e conhecimentos específicos para executar a atividade. Diversas técnicas
+estão disponíveis para este fim, entretanto neste trabalho propomos um sistema que
+realiza a alocação de indivíduos em grupos de trabalho de acordo com as atividades,
+perfis e duração de um determinado projeto, através de agentes.
+Os resultados obtidos mostram, portanto, que o sistema proposto possibilita a
+formação eficiente de grupos de trabalhos em projetos cumprindo o papel ao qual se
+propõe constituindo-se de uma ferramenta computacional que poderá ser utilizada na
+tomada de decisões por gerentes de projetos.
+Diversos trabalhos relacionados foram listados, entretanto nenhum deles foca no
+escalonamento para projetos, como abordado neste trabalho. Esta abordagem é eficiente
+como visto nos resultados.
+Para garantir uma maior coerência dos dados seria possível coletar métricas de
+produtividade em projetos reais e aplicar alguma técnica de aprendizado para usar esses
+valores  no  processo  de  decisão  dos  agentes.  Além  disso,  identifica-se  como
+possibilidade para trabalhos futuros o tratamento de escalonamento dinâmico, onde as
+necessidades de um projeto vão sendo alteradas a medida que o projeto está sendo
+desenvolvido, tanto pelo surgimento de novas atividades ou funcionários, como pela
+reorganização dos prazos para execução das tarefas.
+
+
+
+
+Outra  opção  seria  o  tratamento  de  projetos  globalmente  e  não  mais
+individualmente, desta forma, o critério de escolha poderia ser ampliado levando em
+consideração diversos projetos ao invés de apenas um.
+Referências
+Bellifemine, F., G. CAIRE, POGGI, A. e RIMASSA, G. (2003), JADE - A White Paper.
+TILAB (Telecom Italia Lab). Turin, Italy, p.141. 2003. (3)
+Chan, P. e Weil, G. (2002), Using Multiple-level Models to solve large-scale employee
+scheduling, http://4c.ucc.ie/~tw/ecai02/chan.ps.
+Conway, R. W., Maxwell, W. L. e Miller, L. W. (1967), Teory of Scheduling, Addison
+Wesley, Nova York.
+Daum, B. e Merten, U.  (2003), System Architecture with XML, Elsevier Science,
+2003,Page 441
+FIPA                                                                                    (2002),                                             FIPA    Contract    Net    Interaction    Protocol    Specification,
+                                                                                        http://www.fipa.org/specs/fipa00029/SC00029H.pdf.
+Glover, F. e McMillan, C.  (1986), The general employee scheduling problem: An
+integration  of  management  science  and  artificial  intelligence.  Computers  and
+Operations Research, 13(5):563-593, 1986.
+Gosling, J. e McGilton, H. (1996) “The Java Language Environment White Paper”,
+http://java.sun.com/docs/white/langenv/, Maio.
+Gröbner, M. e Wilke, P. (2001), Optimizing Employee Schedules by a Hybrid Genetic
+Algorithm, Lecture Notes in Computer Science, Volume 2037, Jan 2001, Page 463
+Shamblin, J. E. e Stevens, G. T. (1979). Pesquisa Operacional: Uma abordagem básica,
+Tradução: Carlos R. V. Araújo, Atlas, São Paulo.
+Tien, J. M. e Kamiyama, A. (1982), On Manpower Scheduling Algorithms. SIAM
+Review, Vol. 24, No. 3 (Jul., 1982) , pp. 275-287
+Welch, P. (2004) “JCSP: Communicating Sequential Processes for Java White Paper”,
+http://www.cs.kent.ac.uk/projects/ofa/jcsp/, July.
+Wooldridge, M. (2002), An introduction to Multiagents Systems, Wiley, Londres.
+
+
+
+
+

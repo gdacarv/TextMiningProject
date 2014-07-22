@@ -1,0 +1,420 @@
+﻿MSSearch: Busca Semântica de Objetos de Aprendizagem
+OBAA com Suporte a Alinhamento Automático de
+Ontologias
+Luiz Rodrigo Jardim da Silva1, João Carlos Gluz1
+1
+Programa Interdisciplinar de Pós Graduação em Computação Aplicada (PIPCA) -
+Universidade do Vale do Rio dos Sinos (UNISINOS) -
+Caixa Postal 275 - 93.022-000 - São Leopoldo - RS - Brasil
+rodjle@gmail.com, jcgluz@unisinos.br
+Abstract. Semantics heterogeneity problems are becoming an important field
+of  research.  Within  the  educational  context,  researchers have focused on
+developing  new  technologies  to  improve  the  processes  of  localization,
+retrieval, cataloging, and reuse of learning objects. This scenario highlights
+the  use  of  ontology  alignment  techniques  to  provide  integration  between
+different ontologies. Therefore, the goal of the present work is to develop a
+tool that provides mechanisms for semantic search of learning objects, with
+support for aligning ontologies.
+Resumo.  Problemas  relacionados  à  heterogeneidade  semântica  vêm  se
+mostrando atualmente como um importante campo de pesquisa. Dentro do
+contexto educacional, pesquisadores têm se dedicado ao desenvolvimento de
+novas  tecnologias  que  visam  melhorar  os  processos  de  localização,
+recuperação,  catalogação,  e  reutilização  de  objetos  de  aprendizagem.
+Baseado  neste  cenário,  destaca-se  o  uso  de  técnicas  de  alinhamento  de
+ontologias para prover integração entre ontologias distintas. Assim o objetivo
+deste trabalho é desenvolver uma ferramenta que forneça mecanismos de
+busca semântica de objetos de aprendizagem com suporte a alinhamento de
+ontologias.
+1. Introdução
+O  Brasil  vem  atualmente  adotando  estratégias  para  ampliar  a  disseminação           do
+conhecimento entre as escolas, através da disponibilização de ferramentas que possam
+auxiliar  alunos  e  professores  no  processo  de  aprendizagem.  Dentre  as ferramentas
+disponíveis  pode-se  destacar  o  Banco  Internacional  de  Objetos  de  Aprendizagem
+(BIOE), onde estão armazenados OAs (Objetos de Aprendizagem) em diversos formatos
+(áudio, vídeos, imagens, etc).
+A catalogação de OAs por meio de padrões de metadados contrasta com a
+grande parte das informações encontradas na Web (World Wide Web), pois estas estão
+armazenadas sem nenhum critério  ou  padrão  de  organização,  tendo  como  objetivo
+principal  a  leitura  e  interpretação  feitas  por  humanos.  Devido  ao  armazenamento
+desestruturado  dessas  informações,  a  tarefa  de  busca  e  recuperação  por  meio  de
+mecanismos inteligentes automatizados torna-se ineficiente em muitos casos. Com intuito
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+de  dar  mais  significado  às  informações,  Berners-Lee,  Hendler  e  Lassila               (2001)
+propuseram uma extensão da Web, denominada de Web Semântica, onde a informação
+deve  possuir  um significado  claro  e  bem definido,  possibilitando  a  interação  entre
+pessoas e máquinas.
+Desde essa proposta inicial, vários aspectos da Web Semântica tem apresentado
+uma grande evolução. Em particular, a especificação dos significados (a semântica) dos
+elementos que compõe os documentos da Web tem se centrado fortemente no uso de
+ontologias, com a definição e adoção da linguagem OWL pelo W3C para a especificar as
+ontologias  da  Web  Semântica.  Porém,  um  dos  principais  desafios  atuais  da  Web
+Semântica é prover mecanismos que permitam integrar ontologias heterogêneas, não só
+de  domínios  de  conhecimentos  distintos,  mas  até  do  mesmo  domínio.  Ontologias
+pertencentes  ao  mesmo  domínio  podem,  muitas  vezes,  ser  escritas  através  de
+vocabulários  distintos,  dificultando  a  interoperabilidade  entre  elas,  bem  como  a
+implementação  de  ferramentas de  busca  dentro  do  contexto  da Web Semântica.  O
+alinhamento de ontologias [OAEI 2012], vem sendo discutido amplamente como uma
+alternativa  possível  para  o  tratamento  do  problema  de  integração  de  ontologias
+heterogêneas. Essa é, entretanto, uma importante questão de pesquisa em aberto, porque
+a  complexidade  das  tarefas  de  alinhamento  exige  que  as  técnicas,  algoritmos  e
+ferramentas empregadas neste alinhamento, estejam preparadas para lidar com ontologias
+provenientes de diversas fontes.
+De maneira geral, as ferramentas atuais de alinhamento de ontologias não estão
+otimizadas para responder aos requisitos de tempo que os sistemas atuais apresentam. O
+tempo disponível para a execução é um fator determinante para a eficiência do processo
+de alinhamento. Portanto, para que seja possível atingir uma boa reposta de tempo de
+execução, muitas vezes é necessário aumentar a capacidade computacional, através do
+aumento da memória principal, largura de banda e CPU [Shvaiko e Euzenat                       2011].
+Dentro do processo de alinhamento,  o  uso  de heurísticas pode ser considerado como
+uma alternativa para se chegar a resultados próximos do ideal, fornecendo subsídios para
+que algoritmos encontrem “atalhos” dentro do processo para se chegar a um resultado
+qualificado em um tempo aceitável.
+Assim o problema de pesquisa do presente trabalho é verificar como mecanismos
+de alinhamento de ontologias, especializada para domínios educacionais podem tornar o
+processo  de  busca  semântica  mais abrangente  entre  os  domínios de  conhecimento,
+possibilitando a apresentação de resultados mais significativos. Esta verificação se dará
+através do desenvolvimento de uma ferramenta que seja capaz de prover alinhamento
+automático de ontologias padrão OBAA1 com ontologias inseridas dentro do contexto
+educacional para recuperação semântica de OAs.
+Este  trabalho  está  organizado  da  seguinte  forma:  a  Seção                              2  destina-se  a
+apresentação  do  problema relacionado  a heterogeneidade semântica.  As técnicas de
+alinhamento de ontologias são mostradas na Seção 3. Os trabalhos relacionados serão
+apresentados na Seção 4. O processo de alinhamento de ontologias proposto é mostrado
+na Seção 5. Na Seção 6, a arquitetura da ferramenta é detalhada. Por fim, as conclusões
+finais deste trabalho são apresentadas na Seção 7.
+1 Padrão de metadados baseados em agentes inteligentes (http://www.portalobaa.org).
+
+
+
+
+2. Heterogeneidade Semântica
+Segundo  [Ehrig  2007],  com a  expansão  das  bases  de  dados  de  conhecimento,  os
+sistemas  computacionais  precisam  estar  cada  vez  mais  preparados  para  lidar  com
+informações que se encontram armazenadas de forma heterogêneas e distribuídas. Sendo
+assim, um dos grandes desafios da Web Semântica é encontrar mecanismos para que
+essas  fontes  sejam  integradas                                                           (alinhadas),  não  só  sintaticamente,  mas  também
+semanticamente. A Figura 1 ilustra o problema da heterogeneidade semântica.
+Figura 1: Heterogeneidade Semântica Adaptado(fonte:[ Noy 2012])
+Ainda segundo [Goh 1997], o problema relacionado ao conflito semântico pode
+ser classificado da seguinte maneira:
+   Conflito  de  nomes:  ocorre  quando  o  valor  de  um  atributo  difere
+significativamente, e pode ser caracterizado pela presença de sinônimos e
+homônimos. O uso de padronizações e tabelas de mapeamentos podem
+ajudar a atenuar este problema;
+   Conflitos de escalas e unidades: geralmente é ocasionado por adoção de
+escalas de medidas distintas. Sistemas que medem valores precisam tratar
+desse problema constantemente;
+   Conflitos de confusão: por motivos temporais, mesmo que a informação
+tenha o mesmo significado, pode ser interpretada de forma errada;
+O  alinhamento  de  ontologias  tem sido  proposto  como  uma  alternativa para
+prover interoperabilidade semântica, através da integração de ontologias escritas em
+vocabulários distintos, sendo que atualmente existe um grande esforço de comunidades
+de pesquisadores no desenvolvimento de novas técnicas de alinhamento.
+3. Alinhamento de Ontologias
+O uso de ontologias possibilita que o conhecimento seja formalizado de tal maneira a
+permitir que máquinas interajam com humanos, por meio de sistemas inteligentes.
+Uma  ontologia  fornece  um  vocabulário  que  descreve  um  domínio  de  uma
+determinada área do conhecimento, sendo que estes vocabulários por vezes podem ser
+especificados de diferentes maneiras.
+
+
+
+
+Quando  ontologias  distintas  precisam  interoperar,  alguns  problemas  de
+compatibilidade  semântica  podem  gerar  resultados  imprevisíveis,  ambíguos  ou
+incompletos, contrapondo-se ao propósito da Web Semântica.
+Para  [Euzenat  2007], o termo Alinhamento é definido como o resultado do
+processo  que  tem  a  finalidade  de  encontrar  correspondências  entre  entidades
+semanticamente relacionadas, criando um conjunto de relações entre ontologias distintas.
+Este processo  (Figura  2) é denominado  “Ontology Matching”  (Correspondências de
+Ontologias).
+Conforme ilustrado na Figura 2, dado um par de ontologias O1 e O2, a tarefa de
+Matching (correspondências) é encontrar um alinhamento (A') entre essas ontologias.
+Um alinhamento de entrada (A) pode ser fornecido para auxiliar no processo. É possível
+ainda  definir    pesos  ou  limiares como  parâmetros,  bem como    o  uso  de recursos
+externos(Tesauros).
+Figura 2: Processo de Alinhamento Adaptado(fonte:[Shvaiko e Euzenat 2011])
+Uma função de alinhamento de ontologias align, é uma função parcial que parte
+do conjunto E de todas as possíveis entidades pertencentes as ontologias que se pretende
+alinhar e de um par de ontologias O1, O2 resultando nos elementos de E que estão
+devidamente alinhados às ontologias O1  e O2  [Ehrig                                       2007]. Assumindo O como o
+conjunto das ontologias que se pretende alinhar, o tipo de align é:
+align: E x O x O→ E
+Sendo assim, para um dado elemento е do conjunto E e para duas ontologias O1
+e O2, temos align(е,O1,O2) com o elemento de E correspondente a е que está alinhado
+entre O1 e O2 (caso O1 e O2 estejam subentendidas, pode-se usar simplesmente align(е)
+para denotar esse elemento).  Assim,  caso exista um alinhamento parcial entre duas
+ontologias O1 e O2, dizemos que uma entidade е está alinhada com a entidade ƒ quando
+align(е)=ƒ.
+Todo processo de alinhamento parte de pares de entidades (е,ƒ), denominado de
+alinhamentos candidatos, sendo posteriormente necessário a realização de processos de
+verificação para consolidação do processo de alinhamento.
+Segundo  [Ehrig                                                                            2007],  o  processo  de  alinhamento  de  ontologias  pode  ser
+realizado de três maneiras distintas:
+      Manualmente: neste caso o próprio usuário realiza o alinhamento entre as
+ontologias, geralmente com apoio de ferramentas gráficas;
+    Semi-Automático:  o  usuário  participa  em  determinadas  etapas  do
+processo de alinhamento, porém conta com auxílio de algoritmos que
+
+
+
+
+podem realizar pré-alinhamentos, intervindo somente em algumas etapas
+no processo de tomada de decisão;
+    Automático:todo o processo é realizado sem intervenção humana, apoiado
+por algoritmos inteligentes e técnicas de alinhamento sofisticadas;
+Dependendo da quantidade de elementos existentes nas ontologias, que se deseja
+integrar,  torna-se  humanamente  impossível  realizar  o  procedimento  de  alinhamento
+manual [Ehrig   2007].
+3.1. Técnicas e Métricas de Similaridades
+É  possível  encontrar  na  literatura  atual  diversas  técnicas  e  metodologias  para
+identificação  de  similaridades  entre  ontologias.  Para                                 [Ehrig     2007],  similaridade  de
+ontologias refere-se à comparação de um conjunto de ontologias e seus subelementos,
+sendo que esta comparação é realizada com base na utilização de funções que retornam
+um valor numérico indicando o grau de semelhança entre seus elementos. Esta função é
+expressa como:
+sim: B(E) × B (E) × Ο1 × Ο2 → [0, 1]
+onde B(E) representa o conjuntos de entidades e O1, O2,   as ontologias correspondentes.
+Conforme                                                                                   [Euzenat   2007],  é  possível  definir  algumas  técnicas  básicas  de
+similaridade dentro do processo de alinhamento de ontologias, sendo elas:
+   Técnicas Terminológicas: baseiam-se nos textos encontrados dentro das
+ontologias para identificar suas entidades. Geralmente são originárias de
+técnicas  de  processamento  de  linguagem  natural  e  recuperação  de
+informação, podendo ser: comparação de estruturas de strings, distância
+de strings, medidas estatísticas com base em frequência e ocorrência de
+termos;
+   Técnicas  Estruturais:  essas  técnicas  verificam  as  relações  entre  as
+entidades das ontologias a serem alinhadas,  sendo  que estas relações
+podem ser entre suas entidades e seus atributos, incluindo restrições de
+valores;
+   Técnicas Extensionais: comparam a extensão de entidades, com base nas
+suas instâncias. Dependendo das ontologias, suas respectivas classes são
+diferentemente rotuladas, porem o uso dessas técnicas pode deduzir uma
+relação a partir de seus indivíduos;
+   Técnicas Semânticas: leva-se em consideração a interpretação semântica,
+utilizando  métodos  dedutivos  para  se  encontrar  alinhamento  ou  para
+detectar conflitos;
+Muitas técnicas podem ser utilizadas de forma conjunta, incremental, de modo a
+encontrar os melhores resultados de alinhamentos.
+3.2. Alignment API
+A comunidade OAEI (Ontology Alignment Evaluation Initiative), é uma organização
+que tem como objetivo avaliar métodos e técnicas voltados ao alinhamento e casamento
+
+
+
+
+(matching) de ontologias. Para promover a evolução das técnicas de alinhamento de
+ontologias existentes, a OAEI estabeleceu alguns objetivos, como:
+   Avaliar a força e a fraqueza dos sistemas de alinhamentos atuais;
+   Comparar o desempenho das técnicas existentes;
+   Aumentar a comunicação entre a comunidade de desenvolvedores;
+   Melhorar as técnicas de avaliação;
+Nos  últimos  anos  inúmeras  ferramentas  foram  submetidas  ao  processo  de
+avaliação  da  OAEI,  porém  muitas  delas  encontram-se  descontinuadas,  não  sendo
+possível  localizar   seus   arquivos   fontes   para   download,   ou   são   distribuídas
+comercialmente.
+Para  este  trabalho  foi  utilizada  a  API  proposta  por                                    [David  et  al.   2012],
+denominada Alignment API, pois a mesma apresenta um conjunto de bibliotecas que
+auxiliam no processo de alinhamento, é distribuída de forma livre, o projeto encontra-se
+ativo com atualizações periódicas e recentes, e por fim pode ser facilmente integrada ao
+sistema  proposto,  sendo  utilizada  como  ferramenta  para  auxiliar  no  processo  de
+avaliação da OAEI.
+4. Trabalhos Relacionados
+Alinhamento de ontologias é considerado atualmente como um importante mecanismo
+para realização da integração de bases de dados semânticas heterogêneas, com isso
+inúmeros trabalhos têm sido desenvolvidos com o objetivo de melhorar este processo,
+conforme destacado anteriormente. Porém, cada trabalho possui enfoques distintos, onde
+muitos ainda se concentram no desenvolvimento de algoritmos que otimizem o processo
+de alinhamento, que muitas vezes pode ser custoso computacionalmente.
+Este  trabalho  caracteriza-se  por  apresentar  uma  proposta  de  otimização  no
+processo de alinhamento, através da definição de um vocabulário de sinônimos anotados
+em  ontologias  que  se  deseja  alinhar,  utilizando  agentes inteligentes para  realização
+automática de alinhamentos de ontologias e posteriormente prover uma interface para
+realização  de  busca  semântica  de  OAs.  Pesquisas  demonstraram  que  não  existem
+atualmente trabalhos que apresentem uma solução completa como a proposta,  porém   é
+possível destacar projetos que de alguma forma se assemelham com presente trabalho,
+como a ferramenta JAW [Silva et al. 2011], que realiza busca semântica de OAs e utiliza
+dicionário de sinônimos da Língua Inglesa para realizar consulta em bases semânticas. Já
+o sistema D-OSWS [Ochs et al. 2011], utiliza mecanismos alinhamento para construir
+uma ontologia intermediária para realização de buscas de pessoas famosas proveniente
+do DBpedia(dbpedia.org). Por fim, a ferramenta BROAD [Campos et al. 2008] habilita
+interfaces de serviços baseados na tecnologia RESTful para prover busca semântica de
+OAs e utiliza mecanismos de inferência.
+De acordo com os trabalhos apresentados, é possível concluir que os mesmos
+contribuem em parte para o problema de busca semântica, sendo muito restrito ao uso de
+suas próprias ontologias, não levando em consideração questões como interoperabilidade
+semântica  para  o  compartilhamento  de  conhecimento,  uma  das  premissas  da  Web
+Semântica.
+
+
+
+
+5. Processo de Alinhamento do Sistema MSSearch
+Para garantir que o sistema consiga realizar buscas semânticas com maior cobertura de
+conhecimento  é  necessário  que  o  mesmo  esteja  preparado  para  tratar  ontologias
+distintas. Propõe-se então, conforme destacado anteriormente, o uso de técnicas de
+alinhamento de ontologias.
+O processo de alinhamento de ontologias pode exigir uma grande capacidade
+computacional para sua realização. Na verdade o caso geral pode se aproximar de uma
+complexidade O(n2)  em relação  ao  número  de elementos das ontologias envolvidas
+[Ehrig 2007].
+Outra  questão  relacionada  ao  processo  de  alinhamento  é  o  emprego  de
+vocabulários léxicos gerais  nas métricas  de  similaridade  terminológicas,  que  são  as
+técnicas mais disseminadas de comparação dos elementos das ontologias. O serviço
+aberto e público WordNet  (wordnet.princeton.edu) possui uma ampla cobertura dos
+nomes,  verbos,  adjetivos  e  advérbios  existentes  na  Língua  Inglesa,  trazendo  bons
+resultados quando utilizado na função de similaridade. Porém, em termos da Língua
+Portuguesa não há um serviço aberto e público similar.
+Para minimizar esse tipo de problema será necessário empregar heurísticas derivadas
+da estrutura do domínio de aplicação do sistema de busca semântica. O objetivo geral do
+sistema é oferecer um repositório de metadados de objetos de aprendizagem com capacidade
+de busca semântica, em relação aos contextos educacionais.
+Como os metadados nesse repositório deverão ser conformes a proposta OBAA,
+então uma das ontologias a ser alinhadas sempre será a ontologia de metadados OBAA
+[Gluz e Vicari                                                                               2011]. Esta será a ontologia base para o processo de alinhamento. Este
+alinhamento ocorrerá entre a ontologia de metadados OBAA e ontologias provenientes de
+outras fontes, sendo que as mesmas devem estar inseridas dentro do contexto educacional.
+As ontologias que serão alinhadas com a ontologia de metadados OBAA, serão
+ontologias  relativas  aos  conteúdos  e  aplicações  educacionais,  suportados  pela
+infraestrutura MILOS  [Gluz e Vicari  2010]. A ontologia Onto-EduMat definida por
+[Xavier e Gluz 2010] será utilizada neste trabalho como ontologia a ser alinhada com a
+ontologia OBAA.
+Para  tanto,  serão  definidos  requisitos  estruturais  elementares  para  que  uma
+ontologia possa ser empregada na MILOS e também possa ser alinhada com a ontologia
+de metadados OBAA. O  principal requisito  para possibilitar o alinhamento de uma
+ontologia de  conteúdos ou aplicações educacionais,  com a ontologia de metadados
+OBAA é a necessidade das entidades dessa ontologia, sejam elas classes ou relações,
+terem seus nomes e sinônimos na Língua Inglesa explicitamente definidos através de
+anotações da ontologia. No mínimo o nome em inglês deve ser definido através de uma
+anotação de rótulos (label). Outras anotações com sinônimos (alias) também podem ser
+definidas. O mecanismo de anotação de ontologias OWL permite que qualquer elemento
+de uma ontologia possa ter anotações cuja língua natural tenha sido explicitamente
+indicada. Na verdade, somente as entidades que se pretende alinhar com a ontologia de
+metadados OBAA precisam ter ou os seus nomes (identificadores) definidos em Inglês,
+ou então anotações equivalentes para estes nomes na língua inglesa, os demais elementos
+não precisam suportar esse requisito.
+
+
+
+
+6. Arquitetura do Sistema de Busca MSSearch
+A arquitetura  geral do  sistema  é apresentada na Figura  3.  Sua estrutura se divide
+basicamente em três camadas:
+   Facilidades de Acesso: Camada responsável pela interação da ferramenta com
+usuário via página Web, ou com outros sistemas, via Web Services;
+   Camada de Agentes: Composta por agentes de software, inseridos dentro de uma
+plataforma, que se comunicam por intermédio do protocolo FIPA(www.fipa.org).
+O Agente QueryAgent é   responsável pela execução das consultas semânticas no
+repositório, já o UpdateAgent realizará atualização nos metadados armazenados,
+o LoadAgent será encarregado pela tarefa de população de OAs na base de dados
+,por fim o agente AlignAgent realizará o alinhamento das ontologias;
+   Armazenamento: Repositório OWL nativo, com possibilidade de se armazenar
+dados de ontologias distintas em forma de grafos (Graph Store);
+Figura 3: Arquitetura do Sistema MSSearch
+6.1. Rotulação e Alinhamento
+Uma das premissas do processo de alinhamento de ontologias é que a ontologia a ser
+alinhada  precisa  ter  suas  entidades  rotuladas  com  palavras  que  possibilitem  o
+alinhamento com a ontologia de metadados OBAA, conforme demonstrado na Tabela 1.
+Tabela 1: Rotulamento da Ontologia Onto-EduMat
+Ontologia Onto-EduMat                                                                     Anotação        Ontologia OBAA
+Disciplina.label                                                                          Course          General.Keyword
+Disciplina.alias                                                                          Keyword
+hasDisciplinaNome.label                                                                   hasCourseName   General.Title, General.Description
+hasDisciplinaNome.alias                                                                   hasKeyword
+Item.label                                                                                Item
+Item.alias                                                                                Title
+
+
+
+
+Item.alias                                                                                                         Description
+Conteudo.label                                                                                                     Content                                                                                                   General.Description
+Conteudo.alias                                                                                                     Description
+Idade.label                                                                                                        Age                                                                                                       Educational.IntededEndUserRole
+Idade.alias                                                                                                        AgeRange                                                                                                  Educational.TypicalAgeRange
+Com  a  ontologia  Onto-EduMat  devidamente  rotulada,  o  agente  AlignAgent
+quando acionado, poderá executar a tarefa de alinhamento, gerando uma nova ontologia
+(Aligned Ontology), que posteriormente será armazenada no repositório semântico. No
+quadro 1, pode ser verificado o resultado do alinhamento gerado.
+Quadro 1: Alinhamento em formato RDF
+1.                                                                                                                 <entity1 rdf:resource= http://www.semanticweb.org/ontologies/2009/8/OntoEduMat.owl#hasDisciplinaNome'/>
+2.                                                                                                                 <entity2 rdf:resource= http://obaa.unisinos.br/obaa22.owl#itsKeywordIs/>
+3.                                                                                                                 <relation>=</relation>
+4.                                                                                                                 <measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>0.86</measure>
+Conforme consta no Quadro 1, o alinhamento expresso em formato RDF, indica
+a correspondência entre as entidades previamente rotuladas. Na linha  1, a entidade
+"hasDisciplinaNome" é mapeada com a entidade "itsKeywordIs" da linha 2.   Na linha 3 o
+tipo de relação entre as entidades é especificada e na linha 4 o grau de similaridade, onde
+é possível especificar qual é a limiar mínimo aceito para que uma determinada entidade
+possui uma correspondência aceitável. No Quadro  2, agora o mesmo alinhamento é
+apresentado                                                                                                        em    formato    OWL,    sendo     possível    realizar    consultas
+SPARQL(www.w3.org/TR/rdf-sparql-query)  de  OAs  anotados  semânticamente  no
+padrão de metados OBAA, utilizando o vocabulário da ontologia Onto-EduMat.
+Quadro 2: Alinhamento em formato OWL
+<owl:ObjectProperty rdf:about=" http://www.semanticweb.org/ontologies/2009/8/OntoEduMat.owl# hasDisciplinaNome">
+<owl:equivalentProperty rdf:resource=" http://obaa.unisinos.br/obaa22.owl#itsKeywordIs"/>
+</owl:ObjectProperty>
+7. Considerações Finais
+Neste trabalho  foi apresentado um sistema destinado  à busca semântica  de objetos
+aprendizagem OBAA  com suporte  a  alinhamento  de  ontologias.  A combinação  de
+tecnologias  de  agentes  inteligentes  e  de  banco  de  dados  semânticos  possibilita  a
+construção de um ambiente capaz de suportar o armazenamento e recuperação de OAs
+anotados semanticamente. Já o uso de técnicas de alinhamento de ontologias   fornece
+meios para que ontologias interajam entre si, aumentando o seu poder da busca.
+Percebe-se  no  decorrer  do  desenvolvimento  desta  pesquisa,  que  as técnicas
+relativas a alinhamento de ontologias encontram-se em um estágio inicial, e muito ainda
+precisa ser evoluído, pois devido a sua complexidade, esta tarefa pode exigir muito
+poder  computacional,  o  que  a  torna  muitas  vezes  inviável  em  um  ambiente  real.
+Portanto,  espera-se que  este trabalho contribua    para a otimização do processo de
+alinhamento,  possibilitando  que  haja  uma  maior  interoperabilidade  entre  ontologias
+distintas e permitindo a recuperação semântica de OAs.
+
+
+
+
+8. Agradecimentos
+Os  Autores  agradecem  ao  MCT/FINEP/MC/FUNTEL,  CAPES  e  ao  CNPQ  por
+financiarem esta pesquisa.
+Referências
+Berners-Lee,  T.,  Hendler,  J.  e  Lassila,  O.,                                       (2001)  "The  SemanticWeb",    Issue  of
+Scientific American, Maio.
+BIOE (2012) "Banco Internacional de Objetos Educacionais", Normas para a definição
+dos metadados, http://objetoseducacionais2.mec.gov.br/retrievefile/normas, Abril.
+Campos, F., et al (2011). BROAD: Busca Semântica por Objetos de Aprendizagem. VIII
+Congresso Brasileiro de Ensino Superior a Distância, Ouro Preto.
+David, J., Euzenat, J., Scharffe, F. e Santos, C., T. (2012) The Alignment API 4.01
+http://www.semantic-web-journal.net/content/new-submission-alignment-api-40, M.
+Ehrig, M. (2012) Ontology alignment: bridging the semantic gap. Springer, Germany.
+Euzenat, J. (2007) Introduction to ontology matching and alignment (first M2R lecture
+notes). France.
+Gluz, J., C. e Vicari, R., M. (2010) MILOS: Infraestrutura de Agentes para Suporte a
+Objetos de Aprendizagem OBAA. Anais do XXI SBIE.
+Gluz, J., C. e Vicari, R., M. (2011) Uma Ontologia OWL para Metadados IEEE-LOM,
+Dublin-Core e OBAA . Anais do XXII SBIE.
+Goh,  C.,  H.                                                                           (1997)  Representing  and  Reasoning  about  Semantic  Conflicts  in
+Heterogeneous Information Sources. Phd Thesis (Philosophy Course), MIT.
+Noy,                                                                                    N.                                                                     (2012)     Ontology    Mapping      and           Alignment,
+http://disi.unitn.it/~accord/RelatedWork/Matching/Noy-MappingAlignment-SSSW-
+05.pdf . Maio.
+OAEI                                                                                    (2012),                                                                Ontology   Alignment   Evaluation   Initiative,
+http://oaei.ontologymatching.org/, Maio.
+Ochs, C., et al. (2011) Google Knows Who Is Famous Today - Building an Ontology
+From Search Engine Knowledge and DBpedia. Fifth IEEE International Conference
+on Semantic Computing.
+Shvaiko,  P.  e  Euzenat,  J.                                                           (2011)  "Ontology  matching:state  of  the  art  and  future
+challenges",  Knowledge and Data Engineering, IEEE Transactions.
+Souza, A., et al  (2008) Recuperação Semântica de Objetos de Aprendizagem: Uma
+Abordagem Baseada em Tesauros de Propósito Genérico. SBIE.
+Xavier, A., C. (2010) AutoEduMat: Ferramenta de Apoio a Autoria de Metadados de
+Objetos de Aprendizagem para o Domínio de Ensino de Matemática. Dissertação de
+Mestrado. Universidade do Vale do Rio dos Sinos.
+
+
+
+
+

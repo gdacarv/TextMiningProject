@@ -1,0 +1,511 @@
+﻿Orquestraç ão de Serviços por Meio de Agentes de Software no
+Domínio de Vida Ambiente-Assistida
+Vinicius Uriel C. Nunes1, Vander Alves1
+1Departamento de Ciência da Computação - Universidade de Brasília (UnB)
+Campus Universitário Darcy Ribeiro, Instituto Central de Ciências - Brasília
+DF - Brasil
+{viniciusuriel@gmail.com,valves@unb.br}
+Abstract. Solutions in the Ambient Assisted Living domain are inherently com-
+plex, resulting that information systems in this domain often require the com-
+bination of several modeling strategies.  Due to the critical nature of this ap-
+plication domain, the traceability of stakeholders goals within the underlying
+software is a key modeling issue. To address this problem, this paper presents
+a preliminary system modeling approach in that domain combining multi-agent
+systems with service-oriented architecture.
+Resumo. Soluç ões em Vida Ambiente-Assistida (VAA) s ão inerentemente com-
+plexas, resultando em que sistemas de informaç ão nesse domínio frequente-
+mente requererem a combinaç ão de diversas estratégias de modelagem.  De-
+vido à natureza crítica deste domínio de aplicaç ão, a rastreabilidade dos ob-
+jetivos dos atores no software subjacente é uma quest ão-chave para a modela-
+gem. Para resolver este problema, apresentamos uma abordagem preliminar de
+modelagem de sistema nesse domínio combinando sistemas multi-agentes com
+arquitetura orientada a serviços.
+1.                                                                                           Introduç ão
+O processo de envelhecimento da população tem se intensificado na  última década nos
+países industrializados [ONU 2001, Camarano 2002].  As despesas com sa úde para os
+governos e para a sociedade têm aumentado devido à necessidade de tratamento constante
+para as pessoas idosas ou com necessidades especiais.  Com o passar do tempo, a vida
+social dessas pessoas e as atividades diárias ficam cada vez mais comprometidas, o que
+diminui a qualidade de vida das mesmas [Nehmer et al. 2006].
+Vida Ambiente-Assistida (VAA) [Gross et al. 2009, Nehmer et al. 2006]  é uma
+solução de ambiente inteligente que visa propiciar melhor qualidade de vida para essas
+pessoas e reduzir os custos com sa úde.  Essas soluç ões são compostas por dispositivos
+e serviços para auxiliar as atividades diárias da pessoa assistida. Soluç ões em VAA são
+sistemas de informação críticos e, devido a isso, é especialmente importante assegurar que
+os objetivos do sistema sejam plenamente alcançados. Em particular, é preciso garantir
+que os objetivos dos atores sejam representados com precisão nessas soluç ões. Entretanto,
+rastrear tais objetivos às funcionalidades do sistema é um problema desafiador uma vez
+que os requisitos correspondentes aos objetivos dos diversos atores frequentemente estão
+dispersos em diversos pontos do sistema [Becker et al. 2008].
+
+
+
+
+Para   resolver   este   problema,   apresentamos   um   estudo   de   viabilidade
+[Shull et al. 2001]  de  uma  abordagem  de  modelagem  de  sistema  nesse  domínio
+combinando   sistemas   multi-agentes                                                          [Weiss 1999]   com   arquitetura   orientada   a
+serviços [Papazoglou et al. 2007], onde cada ator é representado por um agente que in-
+voca serviços para cumprir seus objetivos facilitando, assim, a rastreabilidade dos obje-
+tivos dos atores no sistema.  A descrição do domínio de aplicação e caracterização do
+sistema modelado será apresentada na Seção 2. Em seguida (Seção 3), serão apresenta-
+das a identificação dos serviços, a modelagem dos agentes, e as decis ões relevantes de
+cada uma dessas fases. Posteriormente, na Seção 4, serão discutidos os resultados da mo-
+delagem e as liç ões aprendidas.  A Seção 5 aborda trabalhos relacionados.  Por fim, as
+conclus ões são apresentadas na Seção 6.
+2. Vida-Ambiente Assistida
+Soluç ões  em  VAA  são  soluç ões  que  prestam  serviços  tais  como  tratamento  de
+emergências (prevenção, previsão e detecção), melhoria na autonomia das pessoas as-
+sistidas e conforto (ex: logística e entretenimento).
+A natureza do problema exige que essas soluç ões apresentem características tais
+como baixo custo, capacidade de customização, utilização eficiente de recursos (energia
+elétrica, largura de banda etc.), extensibilidade, usabilidade adequada ao perfil de usuário
+e confiabilidade [Gross et al. 2009]. Combinar essas caraterísticas é uma tarefa de difícil
+solução tendo em vista que o favorecimento de uma pode implicar o relaxamento de outra.
+O sistema motivador da abordagem de modelagem apresentada neste artigo é o
+EMERGE (Emergency Monitoring and Prevention) 1  e tem como principais objetivos
+a prevenção, previsão e o tratamento de emergências [Gross et al. 2009].  As situaç ões
+de emergências são divididas em desvios de longo prazo e emergências agudas.  Uma
+emergência aguda é uma situação de emergência que não pode ser prevista, por exemplo
+um acidente doméstico. Desvios de longo prazo são possíveis situaç ões de emergências
+detectadas por meio de desvios no padrão de comportamento da pessoa assistida.
+Por meio de dispositivos embutidos no ambiente, o sistema coleta dados sobre as
+atividades diárias da pessoa assistida tais como frequência de uso do banheiro, n úmero
+de refeiç ões, quantidade de horas de sono, etc. Além disso o sistema é capaz de coletar
+outros dados tais como sinais vitais, localização da pessoa dentro de sua residência e
+quedas.
+Por meio do hist órico dos dados das atividades diárias da pessoa, o sistema con-
+segue detectar desvios no comportamento e notificar o médico da família e seus parentes.
+Em situaç ões de emergência aguda, o sistema envia notificaç ões para o serviço médico
+de despacho de emergências.  Esse serviço  é responsável por confirmar as situaç ões
+de emergência, encaminhar as emergências para as equipes de atendimento médico de
+emergência e por acionar serviços de apoio social [Gross et al. 2009]. O EMERGE pos-
+sui vários usuários desempenhando papéis diferentes. A seguir, serão apresentados alguns
+desses papéis:
+• Pessoa Assistida: esse é o papel desempenhado pela pessoa que está sendo mo-
+nitorada pelo sistema. O sistema não deve requerer nenhuma habilidade especial
+1 www.emerge-project.eu
+
+
+
+
+dessa pessoa e também deve permitir que ela peça ajuda diretamente.
+• Centro de despacho:  essa central recebe os alarmes de emergência aguda,
+interpreta-os e aciona as equipes necessárias.
+• Serviço s ócio-médico: essa central recebe os alarmes de desvios de longo prazo
+e decide quem deve ser acionado para prestar assistência à pessoa assistida.
+• Sistema de detecç ão de emergência: Unidade de software responsável por moni-
+torar a pessoa assistida e dar o devido encaminhamento às situaç ões de emergência
+detectadas.
+A Figura 1 apresenta uma visão do sistema EMERGE representando os partici-
+pantes e algumas funcionalidades.  A figura apresenta a pessoa assistida em sua casa.
+Essa casa é equipada por vários sensores que comp õem uma rede de sensores.  Os da-
+dos desses sensores são então agregados em situaç ões mais representativas para o con-
+texto.   As situaç ões detectadas pelos perceptores são então repassadas  à  camada de
+detecção de emergência que decidirá se as situaç ões informadas representam algum tipo
+de emergência de acordo com sua base de informaç ões.  A camada de interação é res-
+ponsável por gerir as interaç ões com o usuário e por tomar decis ões de acordo com o tipo
+de evento encaminhado pela camada de detecção de emergências. As emergências e os
+desvios são encaminhados para o serviço s ócio-médico ou centro de despacho, serviços
+externos à casa da pessoa assistida.
+Figura 1. EMERGE - Sistema VAA (adaptado de [Gross et al. 2009])
+3. Modelagem do Sistema por meio de Agentes e Serviços
+A abordagem de modelagem apresentada neste artigo contempla a camada de interação
+apresentada do EMERGE na Figura 1.  Essa camada é responsável por tomar decis ões
+de acordo com os objetivos dos atores, sendo assim a camada mais importante para o
+problema apresentado. Na modelagem original do EMERGE, esta camada foi modelada
+segundo análise e projeto orientado a objetos [Becker et al. 2008]. No entanto, conforme
+relatado pelos autores da proposta, houve uma dificuldade em se rastrear os objetivos dos
+atores segundo esta abordagem. Desta forma, a proposta deste artigo é definir uma abor-
+dagem de modelagem desta camada como um sistema multi-agentes em que cada agente
+
+
+
+
+representa um ator e os recursos disponíveis aos agentes são os serviços, ou seja, o meio é
+modelado como um conjunto de serviços que são utilizados pelos agentes para realizar as
+aç ões que são desencadeadas a partir de eventos de emergência. Dessa forma, os agentes
+são os responsáveis pela orquestração dos serviços disponíveis na aplicação. Essa decisão
+ajuda a administrar a complexidade inerente aos sistemas VAA, já que os atores e o ambi-
+ente podem ser modelados de forma mais pr óxima possível à realidade. Assim, essa abor-
+dagem facilita o rastreamento dos objetivos dos atores e a tomada de decis ões por meio de
+analogias com o mundo real. Por exemplo, facilita a resposta de quest ões tais como: “O
+sistema deveria fornecer tais dados aos médicos de emergência?” [Becker et al. 2008].
+Nesse contexto, os dois atores são a pessoa assistida e o pr óprio subsistema de
+deteção de emergência. Esses atores interagem por meio de um fluxo de atividades pré-
+definido.  A Figura 2 apresenta os agentes e os serviços resultantes da modelagem.  Os
+agentes alcançam seus objetivos por meio da invocação dos serviços e pela comunicação
+com os demais agentes no sistema por meio de protocolos pré-estabelecidos.  A seguir
+serão apresentadas as etapas da modelagem e os resultados obtidos.
+3.1. Cen ário exemplo
+Em  um  cenário  típico  de  emergência,   o  agente                                          é   informado  pelo  serviço
+DetectarEmergencia sobre uma possível situação de emergência.   O pr óximo
+passo  do  assistente  de  emergência                                                         é  tentar  confirmar  a  emergência  junto  ao  assis-
+tente pessoal que por sua vez interage com a pessoa assistida por meio do serviço
+ConfirmarEmergencia para obter a confirmação ou não da situação de emergência.
+Supondo um cenário de uma emergência real, o usuário irá confirmar a emergência ou a
+emergência será confirmada automaticamente (timeout) levando o assistente pessoal a en-
+viar a resposta ao agente de emergência. O assistente de emergência envia, então, os dados
+da emergência para a central de despacho de ambulâncias (EnviarDadosDespacho)
+e informa o assistente pessoal sobre o envio de informaç ões a terceiros.  As interaç ões
+entre os assistentes citadas no cenário são as que estão representadas na Figura 2 de cima
+para baixo, respectivamente.
+¸os
+
+
+
+
+3.2. Identificaç ão dos serviços
+A metodologia utilizada é baseada em um método de identificação de serviços a partir da
+modelagem de processos de neg ócio [Azevedo et al. 2009]. Antes da execução do método
+é necessário levantar algumas informaç ões necessárias tais como escopo da identificação
+dos serviços e modelos de processo utilizados.  Assim, a metodologia foi dividida nas
+seguintes fases de levantamento e identificação.
+3.2.1. Levantamento
+Durante a fase de preparação, os fluxos de processos que representam as atividades de-
+sempenhadas pelo sistema ao tratar uma situação de emergência foram detalhados con-
+templando algumas informaç ões do modelo de atividades tais como papéis, requisitos e
+regras de neg ócio.  A Figura 3 apresenta o fluxo de atividades obtido representado por
+meio da notação BPMN [OMG 2009]. A numeração das atividades no fluxo não repre-
+sentam ordenação, são utilizadas apenas para facilitar referências posteriores.
+Figura 3. Fluxo de atividades
+3.2.2. Identificaç ão
+Primeiramente, são selecionadas as atividades automáticas e as atividades assistidas pelo
+sistema. No fluxo de atividades obtido na fase de levantamento, isso significa desprezar
+as atividades associadas à “Pessoa Assistida” e considerar as atividades ao “Sistema de
+detecç ão de emergência”.
+As atividades selecionadas do fluxo de processo detalhado serão avaliadas de
+acordo com as heurísticas apresentadas no trabalho de  [Azevedo et al. 2009].   Essas
+
+
+
+
+heurísticas consideram a semântica do serviço  (Heurísticas  1  e  2) e a estrutura do
+fluxo de processo (padr ões no workflow) para identificar os serviços.  Um mesmo sub-
+conjunto de atividades do processo pode ser identificado por mais de uma heurística.
+Para evitar ambiguidade e duplicação, as atividades são avaliadas primeiramente pe-
+las Heurísticas  1  e  2  (semântica) e caso não tenha sido identificado nenhum serviço
+candidato, são utilizadas as heurísticas baseadas em padr ões de workflow (as demais).
+As heurísticas semânticas foram consideradas de maior relevância para a identificação
+dos serviços uma vez que mapeiam diretamente objetivos dos atores.  Por exemplo, o
+serviço AvisarEnvioNotificacao representa um requisito de neg ócio: “A pessoa
+assistida deve ser informanda sempre que forem enviadas informaç ões para outros sis-
+temas” [Gross et al. 2009].  Esse requisito é representado pela atividade n úmero dez do
+fluxo de atividades.
+Em seguida os serviços candidatos foram detalhados na etapa de consolidação,
+os resultados obtidos dessas etapas estão apresentados na Tabela 1.  Esse detalhamento
+foi feito por meio do fluxo de atividades e de documentação adicional descrevendo os
+casos de uso do sistema e as atividades.  A Tabela 1 não apresenta serviços compostos
+(serviços que utilizam de outros serviços) porque não foram identificados serviços desta
+natureza. Além disso, por brevidade, a tabela não possui todas as informaç ões resultantes
+da modelagem. As atividades listadas na coluna “Atividades” da Tabela 1 são as ativida-
+des numeradas na Figura 3 que foram utilizadas na identificação de cada serviço da linha
+correspondente na tabela.
+Serviço                                                                                      Heurística                   Atividades                      Parametros de Entrada/Saída
+AvisarEnvioNotificacao                                                                       Requisito de neg ócio (2)    10                              Mensagem a ser exibida  / ne-
+                                                                                                                                                          nhum
+DetectarAlarme                                                                               Requisito de neg ócio(2)     1                               nenhum / nenhum
+ConfirmarEmergencia                                                                          Atividades sequenciais (3)   4,6 e 7                         Dados da emergência / sim ou
+                                                                                                                          não
+EnviarDadosSSM                                                                               Atividades sequenciais (3)   5 e 8                           Dados de desvio / nenhum
+DetectarEmergencia                                                                           Atividades em loop (7)       2                               nenhum / nenhum
+EnviarDadosDespacho                                                                          Atividades sequenciais (3)   9 e 11                          Dados  da  emergência  aguda  /
+nenhum
+DetectarDesvio                                                                               Atividades em loop (7)       3                               nenhum / nenhum
+Tabela 1. Servic¸os Consolidados
+3.3. Modelagem dos agentes
+Para                                                                                         a                            modelagem     dos     agentes   foi                               escolhida   a   metodologia
+GAIA  [Zambonelli et al. 2003]:  GAIA  é  uma metodologia de prop ósito geral,  ide-
+pendente da natureza do problema, baseada na metáfora de organizaç ões em que um
+sistema de software  é concebido como uma instanciação computacional de grupos de
+interação e indivíduos aut ônomos que desempenham um ou mais papéis.   Sistemas
+simples  podem  ser  modelados  como  sendo  uma  única  organização.   Para  sistemas
+complexos os princípios de modularidade e encapsulamento sugerem uma divisão da
+organização em diversas sub-organizaç ões.
+Sistemas multi-agentes tipicamente estão inseridos em um meio.  O meio pode
+ser composto por elementos físicos tais como entidades e dados, ou virtuais tais como
+aplicaç ões, sistemas de bancos de dados e serviços. A modelagem do meio é importante
+
+
+
+
+para as demais atividades de projeto, entretanto a metodologia GAIA não prop õe um
+método geral para realizar essa atividade, pois essa é uma atividade ligada à natureza do
+problema. A seguir serão apresentadas as três fases da metodologia GAIA e as decis ões
+tomadas em cada uma delas dentro do escopo definido (Seção 3). Ao final serão apresen-
+tadas as Tabelas 2 e 3 com as informaç ões levantadas durante modelagem dos agentes.
+Papel                                                                                       Assistente Pessoal
+Descriç ão                                                                                  Representa a pessoa assistida
+Resp. liveness                                                                              (PedirConfirmacao.InvocarConfirmarEmergência.PedirConfirmacao)ω                                                                                              ∥
+                                                                                            (EnviarNotificacao.InvocarAvisarNotificação)ω
+Resp. safety                                                                                TempoConfirmarEmergencia < 20s
+Permiss ões                                                                                 ConfirmarEmergência (consumo), AvisarNotificação (consumo)
+Protocolos   e                                                                              PedirConfirmacao,                                                       ConfirmarEmergência,                                                                 InvocarAvisarNotificação,
+Atividades                                                                                  InvocarConfirmarEmergência, EnviarNotificacao
+Descriç ão das                                                                              InvocarAvisarNotificação                                                Invoca o serviço AvisarNotificação disponível no ambiente
+Atividades                                                                                  InvocarConfirmarEmergência                                              Invoca o serviço confirmar emergência.
+                                                                                            Tabela 2. Papel: Assistente Pessoal
+Papel                                                                                       Assistente de Emergência
+Descriç ão                                                                                  Representa o sistema, monitorando eventos de emergência
+Resp. liveness                                                                              (InvocarDetectarAlarme|InvocarDetectarEmergencia)ω .PedirConfirmacao.
+                                                                                            [InvocarEnviarDadosDispatcher.EnviarNotificacao]                        ∥                                                                                    (InvocarDetectarDesvios)ω .
+                                                                                            InvocarEnviarDadosSSM. EnviarNotificacao
+Resp. safety                                                                                                                                                        TempoConfirmarEmergencia < 30s (Larga Margem de delay em relação ao Assistente
+Pessoal)
+Permiss ões                                                                                                                                                         DetectarAlarme (consumo), DetectarEmergencia (consumo), DetectarDesvio (consumo),
+                                                                                            EnviarDadosDispatcher (consumo), EnviarDadosSSM (consumo)
+Protocolos   e                                                                                                                                                      PedirConfirmacao, EnviarNotificacao, InvocarEnviarDadosSSM, InvocarDetectarAlarme,
+Atividades                                                                                                                                                          InvocarDetectarEmergencia, InvocarEnviarDadosDispatcher, InvocarDetectarDesvios
+Descriç ão das                                                                              InvocarEnviarDadosSSM                                                   Invoca o serviço EnviarDadosSSM disponível no ambiente
+Atividades                                                                                  InvocarDetectarAlarme                                                   Invoca o serviço DetectarAlarme
+                                                                                            InvocarDetectarEmergencia                                               Invoca o serviço DetectarEmergencia
+                                                                                            InvocarEnviarDadosDispatcher                                            Invoca o Serviço EnviarDadosDispatcher
+                                                                                            InvocarDetectarDesvios                                                  Invoca o Serviço DetectarDesvios
+Tabela 3. Papel : Assistente de Emerg ˆencia
+3.3.1. An álise
+Nessa fase é decidida a divisão do problema em suborganizaç ões, é determinado o modelo
+do meio e os modelos de papéis e de interaç ões preliminares. A seguir serão comentadas
+as decis ões em cada uma das atividades dessa fase:
+• Definiç ão  das  organizaç ões:   o  sistemas  foi  modelado  como  uma                   única
+organização responsável por identificar situaç ões de emergência e encaminhar
+prontamente as informaç ões. Nenhuma divisão nessa organização se mostrou ne-
+cessária; o escopo escolhido para o estudo do problema possui objetivos bem de-
+finidos e não apresenta as características sugeridas pela metodologia GAIA como
+indicadores para a subdivisão da organização.
+
+
+
+
+• Modelo do meio: o meio foi modelado como um conjunto de serviços. Os agen-
+tes cumprem seus objetivos através do consumo (ou invocação) de cada um desses
+serviços.  Os serviços que comp õem o meio estão listados na Tabela 1 e na Fi-
+gura 2. Dessa forma caso mais de um agente precise realizar uma mesma operação
+de neg ócio bastaria invocar o mesmo serviço.  Essa abordagem simplifica, por-
+tanto, a modelagem dos agentes e melhora a consistência do sistema já que, dessa
+maneira, a alteração em um regra de neg ócio em um serviço é automaticamente
+refletida em todos os pontos de chamada. Essa característica é especialmente re-
+levante em um sistema de natureza crítica como os sistemas em VAA.
+• Modelo de papéis preliminar:  foi identificado um papel preliminar para cada
+ator envolvido no escopo desse trabalho, mais especificamente a pessoa assis-
+tida e o subsistema de detecção de emergência. As informaç ões levantadas nesta
+fase compreendem que recursos do ambiente (serviços) cada papel pode utilizar
+(permiss ões), suas responsabilidades e suas atividades. As responsabilidades po-
+dem ser dividias em propriedades safety, invariantes que o agente deve respeitar,
+e liveness, sequência de atividades e protocolos que o agente deve executar na
+ocorrência de algum evento específico. Chamamos de atividade as aç ões que um
+agente pode realizar sem interagir com os demais agentes; chamamos de protocolo
+uma determinada sequência de troca de mensagens entre agentes.  Retomando o
+cenário apresentado na Seção 3, temos um exemplo de protocolo quando o assis-
+tente de emergência pede que o assistente pessoal confirme junto à pessoa assistida
+uma possível situação de emergência. Ainda nesse cenário, temos a representação
+das atividades, que nesse sistema consistem em invocaç ões de serviços como por
+exemplo, ConfirmarEmergencia.
+• Modelo de interaç ões preliminar: as interaç ões identificadas e representadas de
+maneira preliminar foram identificadas com base no fluxo de atividades e nos
+casos de uso do sistema.  Para cada interação são descritas entradas e saídas,
+descrição e participantes.  Algumas dessas informaç ões são complementadas na
+etapa de projeto detalhado. A seguir estão descritas as duas interaç ões identifica-
+das:
+- Pedir confirmaç ão:  interação entre o assistente pessoal e o assistente
+de emergência quando o agente de emergência detecta um evento de
+emergência que precisa ser confirmado.
+- Enviar notificaç ão:  caso alguma informação seja enviada ao Serviço de
+Despacho ou ao Serviço S ócio-Médico pelo assistente de emergência, este
+deve informar ao assistente pessoal sobre o envio de informaç ões
+• Regras organizacionais: Na modelagem desse sistema a única regra organizaci-
+onal observada foi: o assistente pessoal (Tabela 2) deve ser avisado sempre que
+um agente enviar informaç ões para um sistema externo.
+3.3.2. Projeto Arquitetural
+Nesta fase a estrutura organizacional é definida de maneira mais detalhada por meio da
+definição da topologia e do regime de controle dos papéis na organização. Em posse da
+estrutura organizacional, o modelo de papéis preliminares é então validado e complemen-
+tado. A seguir estão comentados os resultados de cada uma das etapas dessa fase:
+
+
+
+
+• Estrutura Organizacional:  a estrutura organizacional é definida por sua topo-
+logia e pelo regime de controle.  A metodologia GAIA sugere que a topologia
+seja sempre a mais simples possível que seja capaz de lidar com a complexidade
+de coordenação e de computação. Dessa forma foi escolhida uma topologia sem
+divisão hierárquica e o regime de controle adotado foi o de especialização de wor-
+kload, ou seja, cada agente é responsável por desempenhar uma tarefa específica.
+• Complementaç ão dos modelos de papéis:  nessa etapa o modelo de papéis  é
+complementado descrevendo atividades, permiss ões e responsabilidades. As Ta-
+belas  2  e  3  apresentam as informaç ões levantadas nesta etapa estão represen-
+tadas por meio da sintaxe definida pela metodologia GAIA. Em particular, as
+responsabilidades liveness utilizam a linguagem semi-formal definida pela me-
+todologia para a representação do sequenciamento de atividades e protocolos.
+Na linha “Protocolos e Atividades”, as atividades têm seus nomes sublinhados
+e os protocolos não.  Neste trabalho, não será apresentado o detalhamento dos
+protocolos.  Na linha responsabilidades estão representados os serviços a que
+o papel tem permissão de consumo; são considerados permitidos para um pa-
+pel apenas os serviços listados nessa linha.  A  última linha apresenta um breve
+descrição das atividades que consistem em invocaç ões de serviços.  Os serviços
+mencionados nessa tabela são os serviços apresentados na Tabela  1.   As Ta-
+belas 2 e 3 possuem detalhes suficientes para descrever o comportamento dos
+agentes; as responsabilidades liveness de cada um dos agentes descreve o se-
+quenciamento das atividades e dos protocolos de cada um deles.   Por exem-
+plo, retomando o cenário da Seção 3, observamos que a expressão de respon-
+sabilidade liveness da Tabela  3  descreve a sequência de atividades do agente
+de  emergência  nesse  cenário:  inicialmente  o  agente  aguarda  a  detecção  de
+uma emergência ou um sinal de alarme (InvocarDetectarEmergencia  |
+InvocarDetectarAlarme ), em seguida se comunica com o agente pessoal
+por meio do protcolo PedirConfirmacao em seguida o agente de emergência
+salva e envia dos dados ou encerra a sequencia dependendo da resposta recebida
+por meio do protcolo PedirConfirmacao.
+• Complementaç ão  dos  modelos  de  interaç ões:   nessa  etapa  o  modelo  de
+interaç ões  é então complementado definindo os papéis que participam de cada
+protocolo.
+3.3.3. Projeto Detalhado
+Nessa etapa, são definidos o modelo de agentes, que associa cada agente a um ou mais
+papéis definidos na organização, e o modelo de serviços, que identifica os serviços associ-
+ados a cada agente. Para o modelo de agentes, foi decidido que cada papel seja mapeado
+a um agente diferente.  Essa abordagem cria uma separação de responsabilidades mais
+evidente, facilitando a compreensão do sistema e a flexibilidade de adicionar ou remover
+papéis.
+O modelo de serviços2apresenta as funç ões de cada agente; nesse sistema cada
+agente desempenha um  único papel.  Sendo assim, os serviços dos agentes são apenas
+aqueles relacionados às responsabilidades liveness do papel desempenhado. Cada porção
+dessa propriedade que ocorre em paralelo (separadas pelo símbolo ∥ ) é considerada um
+
+
+
+
+serviço prestado pelo agente. Essas propriedades estão representadas por uma linguagem
+semi-formal definida pela metodologia GAIA [Zambonelli et al. 2003].
+3.4. Rastreamento Papéis-Serviços
+A Figura 2 apresenta os papéis identificados, as interaç ões entre eles, e os serviços asso-
+ciados a cada papel.  A relação entre os serviços e os papéis é determinada da seguinte
+forma: 1) cada papel representa um ator que por sua vez possui um conjunto de serviços
+associados; 2) o meio é composto por serviços; 3) as permiss ões de acesso aos recursos
+do meio determinam os serviços utilizados por cada papel; 4) as atividades dos papéis
+representam invocaç ões de serviços; 5) as propriedades liveness determinam a sequência
+em que os serviços e os protocolos (interaç ões) irão ocorrer.
+Por exemplo, retomando o cenário apresentado na Seção 3, temos que o assis-
+tente pessoal recebe uma requisição do assistente de emergência para confirmar uma
+situação de emergência (início do protocolo PedirConfirmacao), em seguida invoca
+o serviço ConfirmarEmergencia (atividade); esta invocação pode ser realizada pois
+este serviço faz parte dos conjunto de serviços que podem ser acessados por este pa-
+pel (permiss ões).  Por fim, o assistente pessoal envia de volta a resposta ao assistente
+de emergência (fim do protocolo PedirConfirmacao). Repare que o exemplo apre-
+sentado corresponde à primeira metade da expressão liveness do papel assistente pessoal
+(Tabela 2). O restante do cenário pode ser verificado também por meio das informaç ões
+apresentadas na tabela do assistente de emergência (Tabela 3).
+4. Discuss ão e Liçoes aprendidas
+A seguir, serão apresentadas e analisadas as liç ões aprendidas e as decis ões importantes
+tomadas durante a modelagem.
+1.  Cada ator é representado por um papel na modelagem.
+2.  Cada papel foi mapeado diretamente para um agente, desta forma, cada agente
+representa um ator.
+3.  O meio do sistema multi-agentes foi modelado como um conjunto de serviços.
+O Item 1 é interessante do ponto de vista da abstração para modelagem dos agentes
+facilitando a identificação dos papéis que comp õem a organização na metodologia gaia e
+a delimitação das responsabilidades de cada papel.
+O Item 2 é especialmente importante pois dessa forma é possível rastrear facil-
+mente os objetivos dos atores para o sistema, uma vez que o agente associado a cada ator
+representa os objetivos do ator na camada de decisão da aplicação (Seção 3).  Essa ca-
+racterística é especialmente importante para um sistema de natureza crítica pois ajuda a
+dminiuir as inconsistências entre os objetivos dos atores e o funcionamento do sistema.
+O último ponto se mostrou interessante para a integração entre a arquitetura ori-
+entada a serviços e o sistema multi-agentes. As responsabilidades dos agentes foram mo-
+deladas como uma sequência de invocação de serviços e de participação em protocolos.
+Dessa forma os agentes são os responsáveis pela orquestração dos serviços. Vale ressaltar
+2 Vale ressaltar que os serviços a que a metodologia se refere não são os serviços identificados a partir do
+fluxo de atividades, que representam os serviços consumidos pelo agente. Os serviços a que a metodologia
+se refere são os serviços prestados pelos agentes.
+
+
+
+
+que a modelagem dos serviços foi feita independentemente e anteriormente à modelagem
+dos agentes. Essa abordagem pode ser um gargalo no processo de modelagem com um
+escopo mais amplo uma vez que a identificação prévia de todos os serviços pode não ser
+viável.
+O modelo de processo utilizado para identificar os serviços descrito na Seção 3.2.2
+e apoiado em [Azevedo et al. 2009] está separado por atividades de cada ator o que faci-
+lita a visualização das responsabilidades de cada ator. Em modelos mais complexos pode
+haver compartilhamento de atividades dificultando esse tipo de representação. Em parti-
+cular, o reuso de serviços na modelagem apresentada traria benefícios do ponto de vista
+da consistência do comportamento do sistema, uma vez que regras de neg ócio contidas
+nesses serviços seriam compartilhadas por todos que os utilizassem evitando a replicação
+de c ódigo no sistema. Além disso, o mesmo método utiliza-se de heurísticas pré-definidas
+aplicadas sobre o fluxo de atividades. O método proposto por [Azevedo et al. 2009] fa-
+cilita a rápida identificação dos serviços mas não hierarquiza ou prioriza a utilização de
+uma heurística em detrimento de outra, deixando a resolução de conflitos a cargo de quem
+realiza a atividade de identificação. Em especial o uso excessivo de heurísticas que se ba-
+seiam em padr ões de workflow podem acarretar em serviços pouco representativos do
+ponto de vista do neg ócio. Por exemplo, uma mesma atividade pode compor diferentes
+serviços identificados por heurísticas distintas, o método apresenta de forma clara como
+resolver esse tipo de conflito.
+5. Trabalhos relacionados
+Os trabalhos relacionados encontrados abordam a combinação de sistemas multi-agentes
+com arquitetura orientada a serviços para solução de sistemas inteligentes distribuídos.
+[Lukasz Chomatek 2009] prop õe a implementação da arquitetura de agentes especificada
+pela FIPA por meio de web-services.  Nosso trabalho se prop õe trabalhar com os dois
+paradigmas conjuntamente, enquanto o trabalho citado apresenta uma solução para im-
+plementar um sistemas multi-agentes por meio de uma arquitetura orientada a serviços.
+[Luís Ribeiro 2008] prop õe a junção de funcionalidades comuns nos dois paradigmas
+apresentando uma proposta para a realização dessa integração onde aponta fraquezas e
+benefícios. O foco desse trabalho é automação de sistemas inteligentes distribuídos.
+6. Conclus ão
+O rastreamento dos objetivos dos atores para as funcionalidades de um sistema no
+domínio de VAA  é um problema-chave tendo em vista que são sistemas de natureza
+crítica e é importante assegurar que tais objetivos sejam devidamente representados no
+sistema. Neste artigo apresentamos um estudo de viabilidade de uma abordagem de mo-
+delagem de sistema VAA combinando sistemas multi-agentes com arquitetura orientada a
+serviços como proposta de solução para esse problema. A combinação dessas tecnologias
+facilita o rastreamento dos objetivos dos atores na camada de decisão do sistema.  Por
+outro lado, a modelagem proposta aumenta a complexidade do sistema além de reque-
+rer que a identificação dos serviços seja realizada previamente à modelagem dos agentes.
+Como trabalho futuro, este estudo pode evoluir para um estudo observacional e estudo
+de caso [Shull et al. 2001] objetivando uma avaliação mais precisa dos resultados obser-
+vados.  Além disso, podem ser estudados aspectos de segurança do sistema relativos a
+
+
+
+
+controle de acesso a informaç ões e as consequências decorrentes do mapeamento dos
+atores para a implantação desse tipo de controle.
+Agradecimentos
+Agradecemos a Ingrid Nunes e a Elder Cirilo por valiosos comentários, e ao Fraunhofer
+IESE por permitir acesso à documentação técnica do EMERGE.
+Referências
+Azevedo, L., Baiao, F., Santoro, F., Souza, J., Revoredo, K., and Pereira, V. (2009).
+Identificação de Serviços a partir da Modelagem de Processos de Neg ócio. Anais/SBSI
+2009, V Simp ósio Brasileiro de Sistemas de Informaç ão, pages 133-144.
+Becker, M., Alves, V., Vajda, L., Latour, L., Kyriazanos, D., Mitilineos, S., and Thomo-
+poulos, S. (2008).  Emerge architecture design.  Technical Report D6.2, Fraunhofer
+IESE.
+Camarano, A. A. (2002).  Envelhecimento da população brasileira:  uma contribuição
+demográfica. Technical report, Instituto de Pesquisas Econ ômicas Aplicada (IPEA).
+Gross, A., Steinbach-Nordmann, S., Jedlitschka, A., Becker, M., Steinke, I., and Bloice,
+M. (2009). Emerge system requirements specification. Technical Report D6.12, Frau-
+nhofer IESE.
+Lukasz Chomatek, A. P.-M. (2009). Modern Approach for Building of Multi-Agent Sys-
+tems . Lecture Notes in Computer Science.
+Luís Ribeiro, José Barata, P. M. (2008).  MAS and SOA: Complementary Automation
+Paradigms . IFIP International Federation for Information Processing.
+Nehmer, J., Becker, M., Karshmer, A., and Lamm, R. (2006). Living assistance systems:
+an ambient intelligence approach. In ICSE ’06: Proceedings of the 28th international
+conference on Software engineering, pages 43-50, New York, NY, USA. ACM.
+Nunes, V. (2009). Orquestração de serviços por meio de agentes de software no domínio
+de vida ambiente-assistida.   http://monografias.cic.unb.br/dspace/
+handle/123456789/225.
+OMG (2009). Business process modelling notation. http://www.bpmn.org/.
+ONU  (2001).   Population  division  department  of  economic  and  social  affairs  uni-
+ted nations world population prospects.  http://www.un.org/spanish/esa/
+population/wpp2000h.pdf.
+Papazoglou, M. P., Traverso, P., Dustdar, S., and Leymann, F. (2007).  Service-Oriented
+Computing: State of the Art and Research Challenges.
+Shull, F., Carver, J., and Travassos, G. H. (2001). An Empirical Methodology for Introdu-
+cing Software Processes. In In Proceedings of the 8 th European Software Engineering
+Conference, pages 10-14.
+Weiss, G. (1999).  Multiagent Systems, A Modern Approach to Distributed Artificial In-
+telligence. MIT, United States.
+Zambonelli, F., Jennings, N. R., and Wooldridge, M. (2003).  Developing multiagent
+systems: The Gaia methodology. ACM Trans. Softw. Eng. Methodol., 12(3):317-370.
+
+
+
+
+

@@ -1,0 +1,447 @@
+﻿Recomendação de Objetos de Aprendizagem Empregando
+Filtragem Colaborativa e Competências
+Sílvio César Cazella1, Eliseo Berni Reategui2, Munique Machado1, Jorge Luis V. Barbosa1
+1Universidade do Vale do Rio dos Sinos (UNISINOS)
+Av. Unisinos, 950, CEP 93022-001, São Leopoldo, RS - Brasil
+2 Universidade Federal do Rio Grande do Sul
+Av. Paulo Gama 110, prédio 12105, Porto Alegre, RS, Brazil
+{cazella, jbarbosa}@unisinos.br, muniquem.machado@gmail.com,
+eliseoreategui@gmail.com
+Abstract. This paper presents a model for a learning objects recommender
+system based on collaborative filtering and competencies. The model enables
+students  to  receive  recommendations  of  learning  objects  automatically,
+according to students’ interests but also according to competencies that have
+to be developed. The prototype implemented was able to recommend relevant
+contents  to  students,  aiming  at  helping  them  in  the  development  of
+competencies. At the end of this paper, a couple of experiments are presented
+as well as results achieved and ideas for future work.
+Resumo. Este artigo apresenta um modelo de sistema de recomendação de
+objetos de aprendizagem baseado em Filtragem Colaborativa e competências.
+O  modelo  permite  que  alunos  recebam  a  recomendação  de  objetos  de
+aprendizagem de forma automática conforme interesses do aluno, e de acordo
+com as competências que devem ser desenvolvidas dentro de um plano de
+aula. O protótipo implementado permitiu recomendar conteúdo relevante para
+os alunos com o intuito de auxiliá-los no processo de desenvolvimento destas
+competências.  No  final  deste  artigo  são  descritos  alguns  experimentos
+realizados e os resultados promissores obtidos com a aplicação do modelo
+proposto, bem como trabalhos futuros.
+Palavras  Chave:  Sistemas  de  Recomendação,  Filtragem  Colaborativa,
+Competências
+1. Introdução
+Um  desafio  importante  com  o  qual  todo  educador  se  depara  é  a  organização        de
+conteúdos e atividades voltados ao desenvolvimento de determinadas competências.
+Este  desafio  é  intensificado  quando  se  busca  identificar  e  recomendar  materiais
+distintos,  personalizados  para  cada  aluno,  com  base  em  necessidades  individuais,
+interesses e competências a serem desenvolvidas.
+Este  artigo  propõe  um  sistema  computacional  para  fazer  a  recomendação
+personalizada  de  objetos  de  aprendizagem                                                (OA),  de  acordo  com  as  predileções
+(“gostos” por determinados objetos de aprendizagem) de cada aluno, bem como em
+competências a serem desenvolvidas. Objetos de aprendizagem são compreendidos aqui
+como materiais educacionais digitais desenvolvidos de forma modular de maneira que
+possam ser utilizados separadamente, bem como em conjunto  - sendo baseados no
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+paradigma orientado a objeto [Wiley 2000]. Neste sentido, um artigo científico, uma
+página web, um simulador, um programa de perguntas e respostas programadas, todos
+são considerados aqui objetos de aprendizagem.
+O   foco   na   recomendação   de   objetos   de   aprendizagem   voltados   ao
+desenvolvimento  de  competências  exige  uma  mudança  de  paradigma  educacional,
+desprendendo-se  de  modelos  pedagógicos  fundamentados  em  currículos  rígidos  e
+metodologias  transmissivas  centradas  no  ensino.  Volta-se  então  para  modelos
+pedagógicos mais flexíveis com foco no desenvolvimento de competências, respeitando
+características sociais, interesses, necessidades e limitações de cada indivíduo. Entende-
+se o conceito de competência como a inteligência prática para situações que se apóiam
+sobre conhecimentos adquiridos e os mobilizam, transformando-os de acordo com a
+complexidade das situações [Zarifian 2002]. Neste sentido, conhecimentos (saberes) e
+habilidades (saber fazer, ou know-how) fazem parte do conceito de competência [Fleury
+and Fleury 2000].  Embora   a   recomendação   personalizada   de   OA   seja   uma
+característica  desejável  em  qualquer  sistema  computacional  voltado  à  educação,
+independente da área do conhecimento, nosso foco de estudo são os currículos dos
+cursos de graduação nas áreas de Tecnologia da Informação (Ciência da Computação,
+Engenharia da Computação, Sistemas de Informação, Licenciatura em Computação).
+Estes apresentam uma série de disciplinas que são distribuídas ao longo dos semestres
+de acordo com um conjunto de pré-requisitos. As ementas destas disciplinas geralmente
+elencam uma série de competências que os alunos deverão desenvolver. Por exemplo,
+em um currículo de Engenharia da Computação, uma disciplina de Banco de Dados
+pode exigir que o aluno desenvolva competência em “Modelagem Multidimensional”. É
+com base nesta organização de competências que se fundamenta este trabalho. Busca-se
+através deste projeto facilitar o acesso do aluno aos objetos de aprendizagem mais
+apropriados em determinados momentos de acordo com características próprias dos
+alunos, bem como de acordo com competências que precisam ser desenvolvidas, e
+distribuídas em um plano de aulas.
+Dentre as técnicas computacionais destinadas a auxiliar na busca de informações
+relevantes,  destacam-se os Sistemas  de  Recomendação  [Adomavicius and  Tuzhilin
+2005],  capazes  de  identificar  automaticamente  conteúdos  apropriados  para  cada
+indivíduo  com  base  em  suas  características  ou  “gostos”.  Este  artigo  descreve  um
+modelo  para  sistemas  de  recomendação  que  possibilita  recomendar  objetos  de
+aprendizagem relevantes a alunos de graduação, focando nas competências a serem
+desenvolvidas nas disciplinas. A principal contribuição deste artigo é apresentar este
+modelo bem como sua aplicação e avaliação junto a uma turma da graduação.
+Este artigo está estruturado da seguinte forma: a seção 2 estende a discussão
+sobre o conceito de competência, enfatizando suas implicações no desenvolvimento de
+um sistema de recomendação; a seção 3 apresentada a técnica de Filtragem Colaborativa
+aplicada  a  sistemas  de  recomendação;  a  seção  4  descreve  em  detalhes  o  modelo
+proposto, bem como prototipação e experimentos realizados, e resultados obtidos; a
+seção 5 apresenta conclusões e propostas para trabalhos futuros.
+2. O Conceito de Competência
+É possível encontrar na literatura várias definições para o conceito de competência. Do
+dicionário Aurélio da Língua Portuguesa, obtém-se a seguinte definição: “Qualidade de
+quem  é  capaz  de  apreciar  e  resolver  certo  assunto,  fazer  determinada  coisa;
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+capacidade, habilidade, aptidão, idoneidade”. Nesta definição, contudo, não ficam
+explícitas  as  relações  entre  os  conceitos  mencionados                                (ex.:  habilidades,  assuntos,
+conhecimentos). Outros autores aprimoram a definição: competência pode ser definida
+como sendo o conjunto de conhecimentos, habilidades e atitudes necessárias para que a
+pessoa desenvolva suas atribuições e responsabilidades  [Dutra  2001]. Já  [Perrenoud
+1999] define competência como a faculdade de mobilizar um conjunto de recursos
+cognitivos (saberes, capacidades, informações, etc.) para solucionar com pertinência e
+eficácia uma série de situações. Desta forma as competências estão ligadas a contextos
+culturais, profissionais e condições sociais.
+Em  todas  as  definições,  percebe-se  o  relacionamento  do  conceito  de
+competência com habilidades (saber fazer), conhecimentos (saberes) e atitudes (quando
+fazer). No contexto desta pesquisa, portanto, a questão que se coloca é como, quando e
+de  que  forma  podemos  fazer  a  recomendação  de  objetos  de  aprendizagem  que
+possibilitem  aos  estudantes:  construir  conhecimento  relacionado  a  determinados
+assuntos;  desenvolver  habilidades  precisas  relacionadas  aos  conteúdos  tratados;
+desenvolver  nos  alunos  uma  consciência  crítica  com  relação  à  importância  desta
+competência para que compreendam como e quando utilizá-la.
+A  proposta  para  endereçar  as  questões  acima  é  empregar  um  sistema  de
+recomendação para filtrar informações relevantes para o estudante e a partir destas
+selecionar objetos de aprendizagem mais apropriados de acordo com as competências a
+serem  desenvolvidas.  A  próxima  seção  apresenta  o  conceito  de  sistemas  de
+recomendação.
+3. Sistemas de Recomendação
+Existem várias aplicações de recuperação de conteúdo que buscam auxiliar os usuários
+na identificação de itens de interesse. Porém, é comum que estas aplicações tragam
+muito conteúdo irrelevante [Adomavicius and Tuzhilin 2005]. Buscando minimizar este
+problema, os sistemas de recomendação surgiram, focando na busca por informações
+relevantes  de  acordo  com  características  do  próprio  usuário,  bem  como  em
+determinados requisitos relacionados aos itens que se quer encontrar.
+Diferentes técnicas são aplicadas nos sistemas de recomendação para que os
+conteúdos mais adequados para seus usuários sejam encontrados. Em [Sarwar et al.
+2000], por exemplo, diferentes algoritmos de recomendação são comparados quanto ao
+sua precisão e desempenho. Aqui, nosso foco é a técnica de Filtragem Colaborativa
+(FC)                                                                                       [Shardanand  and  Maes           1995],  uma  técnica  que  se  baseia  nas  informações
+coletadas sobre toda a comunidade de usuários e que já se mostrou adequada às mais
+variadas aplicações [Herlocker et al. 2004].
+3.1. Filtragem Colaborativa
+A  Filtragem  Colaborativa  constitui-se  em  uma  das  mais  populares  técnicas  de
+recomendação, sendo utilizada em muitos sistemas existentes na Internet [Schafer et al.
+2001]. A técnica se baseia na análise de preferências comuns em um grupo de pessoas.
+A essência desta técnica está na troca de experiências entre as pessoas que possuem
+interesses comuns e possuem “gostos” semelhantes por itens.
+Nesta técnica, os conteúdos que podem ser recomendados são filtrados com base
+nas avaliações (feedback) feitas pelos usuários sobre os mesmos itens. Esta avaliação
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+procura observar o comportamento de um grupo e analisar as similaridades entre os
+“gostos”  pelos itens dentro do grupo.  Para  cada usuário procura-se identificar um
+conjunto  de                                                                                  “vizinhos  próximos”,  que  são  assim  classificados  por  possuírem  um
+comportamento semelhante [Adomavicius and Tuzhilin 2005].   As próximas subseções
+tratam do cálculo do coeficiente de similaridade entre dois usuários, etapa preliminar de
+um processo de Filtragem Colaborativa, e da seleção dos subconjuntos de usuários com
+maiores  similaridades,  denominados  vizinhos,  que  serão  considerados  na  etapa  de
+predição. Nesta última etapa, predições são calculadas para indicar o quão apropriado é
+um item para determinado usuário.
+3.1.1 Cálculo do Coeficiente de Similaridade e Cálculo da Predição
+Para o cálculo da similaridade entre alunos, o modelo proposto neste artigo adotou o
+coeficiente de Pearson, sendo esta uma abordagem amplamente utilizada na área de
+Sistemas de Recomendação baseados em Filtragem Colaborativa [Shardanand and Maes
+1995].  Este  coeficiente  permite  medir  o  grau  de  correlação  entre  duas  variáveis,
+resultando em valores entre  [-1;+1], onde o valor  -1 representa ausência total de
+correlação entre as variáveis, e o valor +1 representa forte correlação entre as mesmas.
+Uma  vez  que  se  obtenha  a  correlação  entre  as  opiniões  de  alunos  sobre
+determinados objetos de aprendizagem, pode-se calcular a recomendação de um objeto
+com  base  em  uma  predição  de  quanto  o  aluno  apreciaria  receber  determinada
+recomendação (predição refere-se a prever qual a nota que este aluno daria ao objeto,
+caso tivesse acesso ao mesmo).
+O cálculo da predição é realizado independentemente do coeficiente utilizado no
+cálculo da similaridade, uma vez que este cálculo é realizado com base em uma média
+ponderada das avaliações fornecidas pelos alunos identificados como vizinhos mais
+próximos (indivíduos que obtiveram um coeficiente de similaridade igual ou superior a
+um limiar pré-estabelecido). A equação 1 apresenta o cálculo da predição [Cazella and
+Correa and Reategui 2008].
+(1)
+Sendo que corrab é a correlação do aluno alvo a com um determinado aluno b;
+predição de um conteúdo i para um aluno alvo a;     é a média de todas as avaliações
+do aluno alvo a aos conteúdos que foram pontuados por todos os alunos similares;              é
+a avaliação que o aluno ativo b atribuiu para o conteúdo i;                                   é a média de todas as
+avaliações do aluno b, em comum com o aluno a.
+3.1.2 O Processo de Recomendação considerando Competências
+Calculado o fator de predição de um objeto para um aluno, indicando o quanto este
+aluno apreciaria o referido item, é necessário agora aplicar as regras de competência.
+Estas têm por objetivo filtrar os objetos de aprendizagem de acordo com competências
+que precisam ser desenvolvidas. Através deste procedimento, são descartados objetos de
+aprendizagem que poderiam ter um bom fator de predição, mas não desenvolvem
+competências  apontadas  pelos  professores  como  importantes  em  determinados
+momentos da disciplina.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Após a aplicação das regras de competência, o modelo verifica na base de dados
+se alguma predição de conteúdo foi feita e se esta recomendação está aguardando seu
+envio  ao  aluno.  Assim  que  o  sistema  identifica  que  o  aluno  está  conectado,  a
+recomendação lhe é apresentada.
+4. Modelo Proposto
+O modelo proposto é apresentado na Figura  1. O modelo foi concebido como um
+serviço  disponibilizado  em  um  servidor  de  aplicação.  Este  serviço  é  chamado
+diariamente em um horário pré-determinado.
+Figura 1 - Modelo Proposto
+O modelo propõe a seguinte sequência de passos para seu funcionamento:
+1) O Professor planeja as aulas com base nas competências descritas na ementa da
+disciplina.  Este  disponibiliza  os  objetos  de  aprendizagem  a  serem  utilizados  para
+desenvolver as respectivas competências, por exemplo, na quarta e quinta aula da
+disciplina de Banco de Dados o aluno deveria desenvolver a competência de “Elaborar
+Projeções Aplicando Álgebra Relacional” segundo o plano de aula, desta forma os
+objetos de aprendizagem que permitem desenvolver esta competência serão elencados
+pelo professor;
+2) Na primeira execução do modelo é feito um cálculo geral, ou seja, o modelo calcula o
+coeficiente de similaridade (coeficiente de Pearson) entre todos os usuários cadastrados
+na base de dados que avaliaram conteúdos e depois realiza o cálculo da predição para
+todos os conteúdos cadastrados na base. Em novas interações apenas serão processados
+os  novos usuários e  conteúdos  que entraram  no  sistema  ou  que já  existiam,  mas
+receberam novas avaliações;
+3)  Depois de executados os cálculos de coeficiente de similaridade e de predição
+(subseção 3.1.1), o modelo deve aplicar as regras da competência. Estas regras têm por
+objetivo filtrar os conteúdos recomendados pela predição de forma a permitir que o
+usuário possa desenvolver determinadas competências em um determinado tempo. Por
+exemplo, outros alunos similares ao aluno alvo avaliaram um objeto de aprendizagem
+relacionado à competência a ser desenvolvida na quarta e quinta aula, e o aluno alvo
+ainda não teve acesso a este objeto de aprendizagem que foi predito como de possível
+interesse,  e  filtrado  pela  competência  de                                                “Elaborar  Projeções  Aplicando  Álgebra
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Relacional”. Como o aluno alvo não teve acesso a este objeto, e o mesmo foi predito
+como sendo de interesse do aluno, e o objeto atende a competência que está em
+desenvolvimento, o objeto deverá ser recomendado ao aluno.
+4.1. Protótipo e Experimentos
+A  prototipação  do  modelo  possibilitou  a  avaliação  do  mesmo.  Alguns  alunos
+convidados a participar dos experimentos avaliaram objetos de aprendizagem  (neste
+caso artigos científicos) que lhe foram recomendados pelo sistema.
+A escala adotada para avaliação dos objetos de aprendizagem foi uma escala
+Likert de 5 pontos, onde a opção “Não avaliado” é a opção padrão onde o usuário pode
+não querer avaliar o objeto naquele momento; neste caso, é adotado internamente o
+valor 0; opção “Péssimo”, equivalendo ao valor 1; opção “Ruim ”, equivalendo ao valor
+2; opção “Bom”, equivalendo ao valor 3; opção “Muito Bom”, equivalendo ao valor 4;
+opção “Excelente”, equivalendo ao valor 5. A ferramenta para avaliação dos objetos de
+aprendizagem foi desenvolvida como uma ferramenta Web que pode ser acessada por
+todo dispositivo que possua um browser e tenha acesso à Internet. A figura 2 apresenta
+as Telas do protótipo em PDA (Personal Digital Assistent).
+(a)                                                                                         (b)
+Figura 2 - (a) Tela de acesso ao protótipo em um dispositivo móvel; (b) Tela com opções
+para avaliação de artigos
+Para  o  desenvolvimento  deste  protótipo  foi  utilizada  a  linguagem  de
+programação Java, e a camada de persistência foi desenvolvida utilizada a API JDBC. A
+base de dados foi implementada utilizando MySQL5.
+4.1.1 Método de Pesquisa
+A avaliação do protótipo se deu através de dois experimentos com uma amostra por
+conveniência  (não probabilística) de  10 alunos do final do curso de graduação de
+Engenharia da Computação da Universidade. Os objetos de aprendizagem utilizados
+para  a  recomendação  foram  artigos  científicos  selecionados  por  um  professor
+especialista  da  área,  e  que  tinham  direta  relação  com  as  competências  a  serem
+desenvolvidas na disciplina de Banco de Dados.
+Os experimentos realizados tiveram os seguintes objetivos:  1) Avaliar se as
+notas de predição calculadas pelo protótipo conseguiriam igualar-se ou aproximar-se da
+avaliação dos alunos utilizando-se a métrica de avaliação MAE (Mean Absolute Error)
+[Cazella and Correa and Reategui 2008]; 2) Avaliar a precisão nas recomendações dos
+objetos  de  aprendizagem  através  das  métricas  Recall                                   (abrangência)  e  Precision
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+(precisão) [Cazella and Correa and Reategui 2008]. No   contexto   de   sistemas   de
+recomendação, diz-se que a precisão é a relação entre a nota dada pelo usuário a um
+conteúdo que lhe foi recomendado e a nota da predição do sistema. Assumiu-se que os
+artigos a serem recomendados aos usuários são apenas aqueles que possuem predição
+igual ou superior a 3 pontos, dentro de uma escala Likert de 5 pontos. Para avaliar o
+sistema foram aplicadas as métricas descritas a seguir.
+4.1.2 Métricas de Avaliação
+A métrica MAE (Mean Absolute Error) permite calcular o desvio absoluto médio entre
+as predições do sistema de recomendação e as avaliações reais feitas pelos alunos, e a
+diferença   obtida   é   tomada   como   o   erro   da   predição                         [Herlocker   et   al
+2004].Com esta métrica,  é  possível  verificar  qual  o  impacto  da  utilização  das
+recomendações  feitas  pelo  sistema  no  que  se  refere  à  margem  de  erro  das
+recomendações calculadas. A equação (2) apresenta o cálculo do MAE, onde pi constitui
+nos valores preditos pelo sistema, ri constitui nos valores das avaliações dos usuários
+aos itens recomendados, e n refere-se ao número de itens considerados.
+(2)
+A métrica Precision é uma métrica muito utilizada em sistemas de recuperação
+de informação, e representa a relação entre o número de conteúdos relevantes sobre o
+total de conteúdos retornados. No contexto de sistemas de recomendação, se diz que
+Precision é a relação entre o número de conteúdos que o usuário considera relevante e o
+número de conteúdos recomendados. Por sua vez, a métrica Recall é uma medida do
+número de conteúdos recomendados, e Precision é a medida de quanto os conteúdos
+recomendados são relevantes ao usuário. Recall (Equação 3) e Precision (Equação 4)
+são definidas como [Cazella and Correa and Reategui 2008]:
+(3)                                                                                       (4)
+Onde RA é número de conteúdos relevantes recomendados pelo sistema; R é
+número de conteúdos totais que deveriam ser recomendados; A é número de conteúdos
+recomendados pelo protótipo, levando-se em conta os positivos e os falsos positivos.
+Com estas métricas, foi possível verificar qual o impacto da utilização da competência
+em um determinado período de tempo no que se refere à precisão dos conteúdos
+recomendados.
+4.2 Experimentos e Resultados
+4.2.1 Primeiro Experimento: Avaliação de Artigos Pré-Selecionados
+O primeiro experimento teve como objetivo selecionar uma base inicial de objetos de
+aprendizagem  para  a  disciplina  de  Banco  de  Dados,  objetos  necessários  para
+desenvolver as competências da disciplina. Foram selecionados 30 artigos científicos,
+os quais foram catalogados por competência pelo professor da disciplina. Desta forma
+buscou-se a criação de uma base com relação de cardinalidade de  1:N, onde cada
+competência possuía N artigos científicos que possibilitassem o seu desenvolvimento
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+durante a disciplina. As competências foram distribuídas nos encontros conforme o
+plano  de  aula  e  os  objetos  de  aprendizagem  foram  organizados  conforme  as
+competências que representavam. Estes artigos foram então avaliados pelos acadêmicos
+amostrados, com vistas a resolver a limitação denominada de cold start presente na
+técnica de Filtragem Colaborativa [Herlocker et al 2004].
+Os alunos foram solicitados a avaliarem artigos que lhes foram atribuídos de
+forma randômica, usando para isso, a ferramenta de avaliação do protótipo (figura 2).
+Estes artigos foram distribuídos para os alunos, gerando assim uma matriz de avaliações
+iniciais “artigo x usuário”, totalizando 103 avaliações. Em média, foram atribuídos 10,3
+artigos para avaliação por aluno e estas avaliações iniciais tratavam de auxiliar o
+protótipo na identificação das preferências/perfil de cada aluno. A partir das avaliações
+fornecidas,  o  sistema  pôde  calcular  o  coeficiente  de  similaridade  entre  os alunos,
+utilizando  para isso  o cálculo do coeficiente de  Pearson                                    (escala de                                               -1  para fraca
+correlação, a 1 para forte correlação). Aplicando o cálculo do coeficiente de Pearson
+nesta amostra  obteve-se  os coeficientes de  similaridade  entre os alunos,  onde  por
+exemplo, o valor de correlação entre os alunos U4 e U6 foi de 1, o que demonstra uma
+forte correlação segundo o coeficiente de Pearson. O coeficiente de Pearson calculado
+entre os alunos U2 e U4 foi de -1, o que significa uma ausência total de similaridade
+entre esses usuários. Como resultado, obteve-se que 27,59% das correlações calculadas
+entre os alunos usando o coeficiente de Pearson foram consideradas fortes (estes alunos
+apresentavam                                                                                   “gostos”   semelhantes   pelos   objetos   avaliados),   20,69%   foram
+consideradas  fracas                                                                           (estes  alunos  apresentavam                             “gostos”  divergentes  pelos  objetos
+avaliados). Para 51,72% das correlações calculadas nada se pôde afirmar.
+4.2.2 Segundo Experimento: Geração das Predições
+No segundo experimento, foi executada a segunda rodada de avaliações de artigos
+científicos pelos acadêmicos após o sistema ter recomendado novos artigos a eles (com
+base  nas  avaliações  fornecidas  no  primeiro  experimento).  Neste  momento,  os
+acadêmicos foram solicitados a avaliar os artigos  gerados como recomendação do
+protótipo. O sistema recomendou apenas os artigos que obtiveram nota de predição
+igual ou superior a 3 dentro de uma escala Likert de 5 pontos. Após a execução do
+cálculo de correlação de similaridade e predição, foi aplicada a regra de competência na
+disciplina de Banco de Dados.  Para conseguir analisar a questão de competência em um
+determinado  período  de  tempo                                                                (um  dos  semestres  do  ano  letivo,  no  caso  do
+experimento), utilizou-se o plano de aula do professor da disciplina. Neste plano de aula
+existiam   conteúdos   pré-programados   para   serem  ministrados   em   cada   aula,
+considerando as competências que  deveriam  ser  desenvolvidas  em cada  momento.
+Como informado anteriormente, os artigos científicos foram catalogados por
+competência e estas estavam distribuídas no plano de aula por encontro. Desta forma,
+por exemplo, a aula referente à competência “Elaborar Projeções Aplicando Álgebra
+Relacional”, estava registrada no oitavo encontro da disciplina e se estenderia até o
+décimo encontro. Os alunos, durante este período, deveriam receber recomendações de
+objetos de aprendizagem apropriados para desenvolver esta competência.
+A Tabela 2 apresenta o cálculo do MAE e a precisão obtida após o segundo
+experimento.  Através  da  métrica  MAE  observou-se  uma  diferença  média  entre  as
+predições feitas pelo protótipo e as avaliações feitas pelos alunos de um ponto (1 ponto).
+O  grau  de  precisão  atingida  pelas  predições  do  protótipo  foi  de  76%,  o  que  foi
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+considerado  satisfatório  dentro  da  amostragem  disponível.  Na  Tabela                    2  pode-se
+observar que com a aplicação da Filtragem Colaborativa e do filtro da competência,
+foram geradas  16 recomendações para os alunos amostrados conforme os encontros
+planejados para as aulas. Todas essas recomendações referiam-se às competências a
+serem desenvolvidas pelos alunos nos encontros previstos para o mês de outubro de
+2008.   Deve-se observar que o aluno U4 não consta na Tabela 2 por não ter avaliado os
+artigos recomendados pelo sistema.
+Tabela 2 - Resultado dos experimentos
+A tabela 3 apresenta os resultados dos experimentos com relação à relevância
+das recomendações para os alunos.
+Tabela 3 - Resultado dos experimentos
+Para 7 dos 10 alunos, é possível afirmar que o protótipo conseguiu recomendar
+de maneira bastante apropriada os artigos que eram relevantes para que o usuário
+desenvolvesse as competências no período estipulado (conforme o plano de aula), uma
+vez que o fator Precision chegou a 1 e o fator Recall ficou abaixo deste valor.  Já           os
+alunos U6 e U7 receberam, respectivamente, uma e duas recomendações cada um,
+recomendações baseadas em Filtragem Colaborativa e competências. Porém, as notas
+que estes usuários deram para as recomendações não foram satisfatórias para o cálculo
+da predição, que é de no mínimo 3. Logo, não foi possível afirmar nada sobre estes
+alunos em especial. Novamente, seriam necessárias avaliações complementares para se
+chegar a alguma conclusão com relação a estes alunos.
+5. Conclusão
+O  principal  objetivo  desta  pesquisa foi  possibilitar  a  recomendação  de  objetos  de
+aprendizagem aos alunos com o intuito de:  (a) auxiliar os alunos a terem acesso a
+materiais educacionais relacionados ao desenvolvimento de competências específicas;
+(b) flexibilizar o processo de sugestão de materiais a serem consultados/utilizados pelos
+alunos, na medida em que os interesses de cada um passaram a ser considerados no
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+processo de recomendação. Ao dar suporte aos alunos em suas aprendizagens, o sistema
+computacional aqui proposto termina por apoiar também o trabalho do professor, sendo
+de responsabilidade deste a organização de materiais e situações de aprendizagem,
+propiciando uma melhor articulação entre saberes e competências. Neste sentido, o
+modelo  proposto  procura  se  alinhar  a  estes  princípios,  recomendando  objetos  de
+aprendizagem  que  melhor  se  adaptam  aos  interesses  do  aluno,  mas  respeitando
+competências que precisam ser desenvolvidas em determinado momento. Através    dos
+experimentos realizados com uma turma de alunos da graduação em Engenharia da
+Computação, pôde-se verificar que o grau de precisão atingido pelas recomendações
+geradas pelo protótipo foi satisfatório. O grau de precisão de 76% evidenciou que o
+sistema conseguiu recomendar os objetos de aprendizagem que satisfariam os alunos
+para seus estudos, sem negligenciar as competências exigidas na ementa da disciplina
+durante o semestre. Conforme as métricas de avaliação Recall e Precision pode-se
+afirmar que o protótipo conseguiu fazer com que os alunos dentro do conjunto de
+objetos de aprendizagem disponíveis tivessem acesso exatamente àqueles que eram
+relevantes para a competência a ser desenvolvida no período.
+Como  trabalhos  futuros  destacam-se:  testar  o  sistema  com  outros  tipos  de
+objetos de aprendizagem para verificar se o seu desempenho se mantém satisfatório;
+utilizar informações dos metadados dos objetos de aprendizagem para selecioná-los de
+acordo  com  necessidades  específicas  também  relacionadas  ao  desenvolvimento  de
+competências (ex.: nível de dificuldade, nível de interação, etc); incluir a relevância de
+opinião de um usuário para complementar o processo de recomendação; implementar a
+formação de comunidades virtuais entre os usuários que possuam um coeficiente de
+similaridade dentro da escala aceitável.
+Referências
+Adomavicius, G. and Tuzhilin, A. (2005) “Toward the Next Generation of Recommender Systems: A
+Survey of the State-of-the-Art and Possible Extensions”. In   IEEE Transactions On Knowledge and
+Data Engineering, vol. 17, no. 6, pages 734-749.
+Cazella, S.C. and Corrêa, I. and Reategui, E. (2008)                                                        “Um modelo para recomendação de conteúdos
+baseado  em  filtragem  Colaborativa  para  dispositivos  móveis”.  Revista  Novas  Tecnologias  na
+Educação, v. 7, pages 12-22.
+Dutra, J. S. (2001) , Gestão por Competências. Editora Gente, São Paulo.
+Fleury, A. C. C. and Fleury, M. T. L. (2000) Estratégias empresariais e formação de competências. Atlas.
+Herlocker, J., Konstan, J., Terveen, L., Riedl, J. (2004) “Evaluating Collaborative Filtering Recommender
+Systems” In ACM Transactions on Information Systems, Vol. 22, No. 1, pages 5-53.
+Perrenoud, P. (1999) “Construir as competências desde a escola”. Artmed, Porto Alegre.
+Sarwar, B. G., Karypis, G. ,   Konstan, J. ,   Riedl, J. (2000) “Analysis of recommender algorithms for
+ecommerce” In ACM E-Commerce Conference , Minneapolis, MN, pages 158-167, ACM Press.
+Schafer, J. B., Konstan, J., Riedl, J.                                                                      (2001)  “E-Commerce Recommendation Applications” In Data
+Mining and Knowledge Discovery, Hingham, MA,USA, Vol 5. Issue 5, Kluwer Academic Publishers.
+Shardanand, U. and Maes, P. (1995) “Social information filtering: Algorithms for automating “word of
+mouth””, In Human Factors in Computing Systems, Denver, Colorado, USA.
+Wiley, D. A. (2000) “Learning object design and sequencing theory”. Tese de doutorado, Brigham Young
+University.
+Zarifian, P. (2002) “La politique de la compétence et l'appel aux connaissances à partir de la stratégie
+d'entreprise   post-fordiste”.   Contribuição   ao   Colóquio   de   Nantes,                                13   de   dezembro
+2002.http://www.scoplepave.org/ledico/auteurs/zarifian%20competence%201.htm. Agosto.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+

@@ -1,0 +1,446 @@
+﻿Algebra
+Relacional
+Arley Prates, Daniela Barreiro Claro, Edlane Proencia, Jo ão Queiroz
+1Instituto de Matemática (IM) - Universidade Federal da Bahia (UFBA)
+Av. Adhemar de Barros, s/n, Ondina - Salvador - BA - Brasil
+Grupo de Pesquisa em Formalismos e Aplicaç ões Semânticas (FORMAS)
+Laborat ório de Sistemas Distribuídos (LaSiD)
+{arprates,  edlaneproencia,  jpqueiroz}@dcc.ufba.br,  dclaro@ufba.br
+Abstract. The difficulty in teaching Algebra and Relational Calculus has been
+proven through the GPA in Database courses. The abstraction of these langua-
+ges makes difficult the understanding and culminates with the demotivation in
+the sequence of the course.  However, Algebra and Calculus are the foundati-
+ons that support the SQL language and especially the foundations to optimize a
+DBMS. Thus, in order to facilitate and motivate learning, we developed a tool
+called ProgramAR which has as its main objective the description of expressions
+in Algebra and Relational Calculus which are converted to the SQL language.
+These expressions are executed over a DBMS, allowing students to view the re-
+sults. In order to validate the tool, some tests were conducted with students of
+the Information Systems and Computer Science courses from the Federal Uni-
+versity of Bahia.
+Algebra e do C álculo Relacional tem sido
+comprovada através dos rendimentos nas disciplinas de Banco de Dados.  A
+abstraç ão destas linguagens dificulta a compreens ão dos discentes e culmina
+com a desmotivaç ão na sequencia did ática.  Porém, a                                 Algebra e o C álculo
+s ão as bases que fundamentam a linguagem SQL e sobretudo os alicerces da
+otimizaç ão em um SGBD. Assim, com o intuito de facilitar e motivar o apren-
+dizado, foi desenvolvida uma ferramenta denominada ProgramAR que tem por
+principal objetivo descrever express ões em                                           Algebra e C álculo Relacional que
+s ão convertidas para a linguagem SQL. Estas express ões convertidas s ão exe-
+cutadas em um SGBD, permitindo que os discentes visualizem os resultados
+obtidos. Com o prop ósito de validar a ferramenta, alguns testes foram realiza-
+dos com os discentes do Bacharelado em Sistemas de Informaç ão e Ciência da
+Computaç ão da Universidade Federal da Bahia.
+1.                                                                                    Introduç ão
+A                                                                                     Algebra Relacional é uma linguagem de consulta formal associada ao modelo relacio-
+nal. Uma expressão em álgebra relacional é recursivamente definida como uma relação
+[RAMAKRISHNAN and GEHRKE 2008].
+Algebra Relacional e do Cálculo Relacional  é fundamen-
+tal para os discentes,  pois,  ambas as linguagens contribuem para a compreensão na
+manipulação em um SGBD relacional.  O entendimento da                                 Algebra Relacional e do
+499
+
+
+
+
+Cálculo Relacional, quando ensinadas apenas sob o ponto de vista conceitual, dificulta
+a aprendizagem devido ao alto grau de abstração exigido. Além disso, a impossibilidade
+de visualizar os resultados de uma consulta em                                                Algebra ou Cálculo Relacional, torna
+menos atrativo o processo de aprendizagem.
+A transformação de álgebra e do cálculo relacional em linguagem SQL permite
+que os resultados das consultas sejam retornados visto que há uma real manipulação de um
+SGBD. Diversas ferramentas foram desenvolvidas para realizar a conversão da álgebra re-
+lacional para a linguagem SQL, tais como EnsinAR[Paes 2004], SIMALG[Lautert 2010]
+e iDFQL [Appel and Traina Jr. 2004].  Porém, a maioria delas possuem limitaç ões tais
+como: dificuldades na instalação, interface gráfica pouco intuitiva, falta de tratamento de
+erros nas express ões descritas e, sintaxe e simbologia não adotada por livros didáticos da
+área de Banco de Dados.
+Assim, o presente trabalho prop õe o desenvolvimento de uma ferramenta denomi-
+nada ProgramAR, onde o discente pode escrever uma expressão em álgebra relacional e
+visualizar o resultado dessa consulta visto que esta expressão é traduzida para a lingua-
+gem SQL. O principal objetivo desta ferramenta é o aprendizado de álgebra relacional
+e do cálculo relacional com o intuito do discente compreender as suas manipulaç ões e
+facilitar a compreensão de um SGBD, principalmente a linguagem SQL e a otimização
+das consultas.
+Especificamente, este trabalho destaca as seguintes contribuiç ões:
+Algebra Relacional;
+2.  Tratamento de erro das express ões descritas;
+Algebra Relacional para a linguagem SQL;
+Algebra para realização de consultas em um SGBD;
+Algebra Relacional.
+Esse artigo está organizado da seguinte maneira: a seção 2 apresenta conceitos de
+Algebra Relacional, a seção 3 apresenta o funcionamento da ferramenta ProgramAR, a
+seção 4 demonstra as funcionalidades e a seção 5 descreve os trabalhos relacionados. A
+seção 6 apresenta o estudo de caso que foi utilizado para validar a ferramenta e por fim, a
+seção 7 as conclus ões e os trabalhos futuros.
+2.                                                                                            Algebra Relacional
+Os conhecimentos sobre álgebra relacional permitem entender a execução e otimização
+de consultas em Sistemas Gerenciadores de Bancos de Dados Relacionais  (SGBDR)
+Algebra Relacional descrevem as con-
+sultas que podem ser especificadas para obter os dados de um SGBD. Uma sequência
+de  operaç ões  da                                                                            álgebra  relacional  forma  uma  expressão,  cujo  resultado  também
+será  uma  relação  que  representa  o  resultado  de  uma  consulta  de  banco  de  dados
+[ELMASRI and NAVATHE 2010].
+Algebra Relacional podem ser classificados como dois tipos
+básicos:  os operadores unários e operadores binários.  Dentre os operadores unários,
+destacam-se a Seleção, a Projeção e a Renomeação. Enquanto que os operadores binários,
+destacam-se as operaç ões baseados na Teoria dos Conjuntos e as Junç ões.
+500
+
+
+
+
+2.1. Operadores relacionais un ários
+Uma operação é unária pois atua sobre uma única relação, produzindo um subconjunto
+apenas com os elementos especificados na condição.
+A operação de Seleç ão é conhecida também como uma operação que filtra linhas
+de uma tabela, através da construção de um subconjunto horizontal de uma relação. Seu
+símbolo é: σ (sigma).
+A operação de Projeç ão também é unária e produz um subconjunto com apenas as
+colunas escolhidas na condição especificada, filtrando as colunas destacadas na operação
+para a criação do novo conjunto. Este tipo de relação é vertical e o seu símbolo é: π (pi).
+A operação Renomear redefine um nome para uma relação e/ou um relaciona-
+mento. Esta operação é muito utilizada em casos que contêm express ões relacionais gran-
+des. Dessa forma, pode-se realizar a divisão da expressão em duas ou mais sub-express ões
+para obter o resultado esperado de forma mais simples. Sua simbologia é:ρ (rho).
+2.2. Operaç ões de álgebra relacional com base na teoria dos conjuntos
+As principais operaç ões com base na teoria dos conjuntos são a Uni ão, Intersecç ão e a
+Diferença.
+A operação de Uni ão cria uma relação partindo de duas outras relaç ões, estabele-
+cendo assim, a união de todas as tuplas dessa nova relação. Seu símbolo é: ⋃ (união). A
+união entre duas relaç ões é realizada somente se as relaç ões forem compatíveis, ou seja:
+• As relaç ões precisam ter o mesmo n úmero de atributos;
+• O domínio dos atributos de cada relação precisam ser os mesmos.
+A operação de Interseç ão  é uma operação binária que cria uma relação par-
+tindo de duas outras relaç ões, estabelecendo assim a intersecção das duas, gerando uma
+nova relação onde estão presentes apenas os dados pertencentes às duas condiç ões pré-
+estabelecidas. Seu símbolo é: ⋂ (intersecção).
+A operação de Diferença é uma operação que cria uma relação partindo de duas
+outras relaç ões, o qual resultará em uma nova relação que contenha todas as tuplas que
+pertençam a primeira relação e não pertença a segunda. Seu símbolo é: − (menos).
+2.3. Operaç ões bin árias de junç ão
+Além das operaç ões binárias baseadas na teoria dos conjuntos, tem-se as operaç ões de
+junç ões.
+A operação Produto Cartesiano permite a combinação de dados de duas relaç ões
+quaisquer. Assim a relação resultante conterá todas as tuplas da primeira relação relacio-
+nadas as da segunda relação. Seu símbolo é: × (produto cartesiano).
+A operação Divis ão resulta em uma tabela que contém apenas os elementos da
+primeira tabela que se relacionam com todos os elementos da segunda tabela. Seu símbolo
+é: ÷ (divisão).
+A operação de Junç ão tem como objetivo unir duas tabelas, as quais possuem um
+atributo em comum. Este tipo de operação é muito utilizado quando se trata de relaciona-
+mentos com chaves estrangeiras, em que é realizada uma seleção a partir dos atributos de
+um relacionamento sobre um produto cartesiano das tabelas. Seu símbolo é: ⊲⊳.
+501
+
+
+
+
+A operação Junç ão Natural é uma operação binária que tem como objetivo com-
+binar tuplas de duas relaç ões em uma única tupla.  Esta operação é muito semelhante à
+junção, porém na junção natural não é preciso informar a condição de junção, visto que a
+mesma será formada por atributos que possuem nome e domínio iguais nas duas relaç ões.
+Seu símbolo é: ∗.
+A operação Junç ão Externa a Esquerda tem como objetivo combinar tuplas de
+duas relaç ões em uma única tupla.  Esta operação recebe como parâmetro as condiç ões
+de junção que serão utilizadas para fazer a junção entre as relaç ões.  Para cada tupla
+da primeira relação (Esquerda)  é verificado se existe alguma tupla na segunda relação
+(Direita) que satisfaça as condiç ões de junção.  Caso exista, as tuplas são combinadas
+para a formação de uma  única tupla com os valores dos atributos das duas relaç ões,
+caso contrário é criada uma tupla com os valores dos atributos da primeira relação (Es-
+querda) e os atributos da segunda relação (Direita) serão preenchidos com valores nulos
+[ELMASRI and NAVATHE 2010].
+A operação Junç ão Externa a Direira  é uma operação binária que tem como
+objetivo combinar tuplas de suas relaç ões em uma  única tupla.  Esta operação recebe
+como parâmetro as condiç ões de junção que serão utilizadas para fazer a junção entre as
+relaç ões. Para cada tupla da segunda relação (Direita) é verificado se existe alguma tupla
+na primeira relação (Esquerda), que satisfaça as condiç ões de junção.  Caso exista, as
+tuplas são combinadas para a formação de uma única tupla com os valores dos atributos
+das duas relaç ões, caso contrário  é criada uma tupla com os valores dos atributos da
+segunda relação (Direta) e os atributos da primeira relação (Esquerda) serão preenchidos
+com valores nulos [ELMASRI and NAVATHE 2010].
+A operação Junç ão Total tem como objetivo combinar tuplas de duas relaç ões
+em uma única tupla. Esta operação recebe como parâmetro as condiç ões de junção que
+serão utilizadas para fazer a junção na outra relação.  Para cada tupla de uma relação é
+verificado se existe alguma tupla na outra relação que satisfaça as condiç ões de junção.
+Caso exista, as tuplas são combinadas para a formação de uma única tupla com os valores
+dos atributos das relaç ões, caso contrário é criada uma tupla com os valores dos atributos
+da relação em que a tupla foi selecionada e os valores dos atributos da outra relação serão
+nulos.
+A operação Agregaç ão é uma operação que tem como objetivo utilizar funç ões
+matemáticas de agregação, que recebem uma coleção de valores e retorna um único va-
+lor como resultado, como agrupamento de tuplas [ELMASRI and NAVATHE 2010]. Seu
+símbolo é: ℑ.
+A Atribuiç ão é uma operação utilizada para atribuir a uma variável um determi-
+nado relacionamento. Seu símbolo é: ←.
+Com o uso dos operadores da  álgebra relacional,  é possível transformar as ex-
+Algebra em uma consulta SQL. Além disso, muitos otimizadores de SGBD
+Algebra Relacional para a geração dos planos de execução das
+consultas, analisando as similaridades e eficiência entre diversos planos convertidos em
+Algebra. Neste sentido, é importante dispor de uma ferramenta que permita aos discentes
+Algebra Relacional e os seus operadores.
+502
+
+
+
+
+3. Funcionamento da ProgramAR
+Algebra
+Relacional e verificar o resultado destas consultas.  A tradução de uma expressão em
+Algebra Relacional para a linguagem SQL requer um conhecimento específico em ambas
+Algebra
+Relacional e facilitar o aprendizado do aluno na manipulação das consultas relacionais.
+Algebra adotados no
+livro [ELMASRI and NAVATHE 2010] para facilitar a absorção do conhecimento, visto
+o mesmo ser um referencial te órico na área de Banco de Dados.
+Segundo a Figura 1, a ferramenta ProgramAR executa uma consulta através de
+Algebra Relacional seguindo as etapas:
+Algebra Relacional escrita pelo discente;
+2.  Realiza uma an álise sint ática na expressão, para identificar possíveis erros. Caso
+algum erro seja identificado, é informado ao discente o tipo de erro e a posição do
+erro na expressão;
+3.  Caso não tenha sido encontrados erros na análise sintática, a ferramenta faz uma
+Algebra Relacional para SQL;
+4.  O SQL, gerado na etapa anterior,  é executado em um SGBD e o resultado da
+consulta é enviado ao ProgramAR;
+5.  A ferramenta disponibiliza o resultado da consulta para o discente.
+Figura 1. Funcionamento da ferramenta ProgramAR.
+3.1. An álise Sint ática
+A ferramenta ProgramAR possui dois m ódulos que realizam a análise sintática da ex-
+pressão em                                                                                       Algebra Relacional.  O primeiro m ódulo  é acionado na medida em que o
+discente digita a expressão. A cada caractere digitado pelo discente, o m ódulo é acionado
+e uma análise sintática da expressão digitada até o momento, é realizada.  Este m ódulo
+foi criado para facilitar a verificação de erros de sintaxe e para facilitar a visualização da
+expressão pelo discente.
+A cada execução deste m ódulo são identificadas as partes que comp õem a ex-
+pressão.  Estas partes são classificadas como Norma, Operador, Sobrescrito, Renomear
+503
+
+
+
+
+Relaç ão ou Erro.  Cada classificação possui sua fonte, cor e tamanho especifico.  Essas
+características são utilizadas pela ferramenta para fazer uma diferenciação das diversas
+partes que comp õem uma expressão, facilitando, assim, a visualização da expressão.
+O segundo m ódulo é acionado quando o usuário realiza uma consulta a um SGBD
+Algebra Relacional.  Este m ódulo recebe como entrada a
+expressão digitada pelo discente e faz a verificação da sintaxe da expressão.  Caso seja
+encontrado algum erro de sintaxe, este é informado ao usuário indicando a sua respectiva
+posição na expressão.
+Os dois m ódulos de análise sintática da ferramenta foram criados tendo como base
+o conceito de Aut ômato Finito Determinístico que é um modelo matemático utilizado para
+reconhecer uma linguagem, que recebe como entrada uma cadeia x e responde “sim” se
+x for uma sentença da linguagem e “n ão” em caso contrário [ULLMAN et al. 1995].
+Assim, os m ódulos recebem a expressão como entrada e realizam uma verificação na
+expressão, percorrendo todos os caracteres, conforme a Figura 2.
+ao
+Para cada operador da                                                                      Algebra foi criada uma função que realiza o reconheci-
+mento do respectivo operador. A Figura 2 apresenta o aut ômato criado para o reconheci-
+mento do operador Seleç ão que possui a seguinte sintaxe:
+σ
+(condiç ão de seleç ão)(Relaç ão)
+O símbolo σ é utilizado para denotar o operador seleç ão e a condiç ão de seleç ão
+é denotada por uma expressão booleana que utiliza os atributos da relaç ão. A expressão
+booleana é construída da seguinte forma:
+(atributo) (comparaç ão) (atributo)
+ou
+(atributo) (comparaç ão) (valor constante)
+504
+
+
+
+
+O atributo é o nome de um atributo da relação e a comparaç ão pode ser um dos
+operadores {>, <, =, =, ≥, ≤}. Estas cláusulas podem ser conectadas com os operadores
+booleanos {AND, OR} para a formação de novas condiç ões de seleção.
+Algebra Relacional para SQL
+Ap ós a realização da análise sintática, todas as partes que comp õem a expressão em
+Algebra  Relacional  foram  devidamente  armazenadas  nas  variáveis  do  sistema,  para
+que sejam utilizadas na tradução para o SQL. O armazenamento  é feito nas seguintes
+variáveis: Nome, Predicado, Atributos, Renomear Atributo, Renomear Relaç ão, Relaç ão,
+Condiç ões de Join,  GroupBy e Operador Bin ário.   Ap ós a completa formulação da
+Algebra para SQL.
+Embora as etapas que correspondem  à execução de uma consulta em SQL por
+meio de um SGBD específico sejam importantes, a descrição e o detalhamento das mes-
+mas não fazem parte do escopo deste trabalho.
+4. Ferramenta ProgramAR
+A ferramenta ProgramAR foi desenvolvida na linguagem Java e utilizada nos seguintes
+Sistemas Operacionais: Windows (32bits e 64 bits), Linux.
+Algebra Relacional foi implementada.
+Especificamente, os operadores implementados foram: seleç ão, projeç ão, uni ão, produto
+cartesiano, junç ão, junç ão externa total, junç ão externa a direita, junç ão externa a es-
+querda, renomear, junç ão natural e funç ões de agregaç ão.
+Os operadores Interseç ão, Diferença e Divis ão não foram implementados com
+prioridade devido a sua baixa utilização, mas já estão previstos para a pr óxima versão.
+4.1. Interface Gr áfica
+A Figura 3 apresenta a interface gráfica da ferramenta ProgramAR com um menu dividido
+em dois: a) Criar Conexão com SGBD e b) Consulta SGBD.
+oes do Menu
+Ao Criar Conex ão com Banco de Dados, o discente pode catalogar suas conex ões
+com o SGBD, conforme pode ser observado na Figura 4. Todas as conex ões criadas são
+armazenadas localmente.  Assim, o discente não precisa se conectar ao SGBD toda vez
+que executar a ferramenta.
+Já no menu Consulta ao Banco de Dados, detalhado na Figura 5, o discente cria
+Algebra Relacional e verifica o resultado das consultas.  Esta janela é
+dividida em três áreas principais:                                                             Algebra Relacional, SQL e Resultado.
+505
+
+
+
+
+Algebra Relacional
+4.2.                                                                                          Algebra Relacional
+Algebra Relacio-
+nal utilizadas na realização das consultas no SGBD específico.
+Nesta área, foi desenvolvido um quadro com os operadores da álgebra conforme
+o livro [ELMASRI and NAVATHE 2010].                                                           A medida que o discente vai escrevendo a
+expressão em                                                                                  Algebra, a mesma vai sendo customizada e corrigida, facilitando assim
+a compreensão.  Exemplificando, os símbolos e palavras reservadas ficam na cor azul
+enquanto que o nome dos atributos, condiç ões de junção e condição de seleção ficam
+sobrescritos.  Caso o discente escreva alguma expressão que possua erro de sintaxe, da
+posição do erro até o fim da mesma, as letras ficam com a cor vermelha, facilitando assim
+a identificação do erro.
+4.3. SQL
+Atualmente, nesta versão do ProgramAR, esta  área SQL corresponde  à expressão em
+Algebra traduzida para a linguagem SQL que é utilizada para a consulta ao SGBD desig-
+nado, conforme pode ser observado na Figura 6.
+4.4. Resultado
+A área Resultado é utilizada para a visualização do resultado de todas as consultas efetua-
+das no SGBD. As informaç ões são organizadas em uma tabela para facilitar a visualização
+dos resultados, conforme Figura 6.
+506
+
+
+
+
+Figura 6. Resultado de uma consulta em Algebra Relacional
+5. Trabalhos Relacionados
+Diversos trabalhos foram analisados, dos quais alguns foram destacados por se tratar de
+softwares educacionais para a área de Banco de Dados, especificamente os que utilizam
+Algebra Relacional.
+Autores em [Pereira 2012] propuseram uma análise dos ambientes de Ensino de
+Banco de Dados, os quais destacaram um comparativo entre as principais ferramentas
+Algebra relacional, MER e SQL. A partir dessa análise comparativa criteriosa, os
+autores propuseram um modelo de ambiente capturando as vantagens dos ambientes anali-
+sados e corrigindo algumas de suas desvantagens. O ambiente contempla vários requisitos
+e promete possuir bons resultados, porém ainda não há vers ões que foram implementadas
+e disponibilizadas.
+Autores em [Appel and Traina Jr. 2004] propuseram desenvolver uma ferramenta
+de consulta baseado no construcionismo denominada iDFQL  (Interactive Data Flow
+Query Language), cujo objetivo é auxiliar o processo de ensino-aprendizagem da álgebra
+relacional usando elementos gráficos para representar consultas.  A iDFQL permite aos
+alunos criar e executar consultas de forma interativa, tornando o aprendizado desta lin-
+guagem mais estimulante e intuitivo.  Diferente da proposta neste trabalho, os autores
+prop õem a construção de árvores de express ões algébricas.
+Autores em [Paes 2004] desenvolveram uma ferramenta para o apoio do ensino
+de álgebra relacional e banco de dados denominada EnsinAR. Esta ferramenta baseia-se
+na conversão de express ões escritas em álgebra relacional para a SQL (Structured Query
+Language).  A expressão resultante em SQL é então exibida e executada e o resultado
+é apresentado. A ferramenta é dotada de um compilador desenvolvido: o GALS (Gera-
+dor de Analisadores Léxicos e Sintáticos).  A execução das consultas e gerenciamento
+das relaç ões e atributos criados durante a utilização é feita através do SGBD SQL Server
+Express da Microsoft. Apesar deste trabalho usar express ões algébricas, os autores não
+evidenciam a utilização de SGBDs diferentes. Além disso, é preciso criar as tabelas na
+pr ópria aplicação, não contemplando a utilização de uma ferramenta de MER, restrin-
+gindo assim a sua manipulação.
+6. Estudo de Caso
+Com o intuito de validar a ferramenta desenvolvida, um estudo de caso foi aplicado
+aos alunos da disciplina Banco de Dados dos cursos de Bacharelado em Ciência da
+Computação e Bacharelado em Sistemas de Informação da Universidade Federal da
+Bahia. Foram desenvolvidos roteiros os quais foram seguidos pelos discentes utilizando
+a ferramenta ProgramAR.
+507
+
+
+
+
+Primeiramente, foi proposto que os discentes executassem as consultas abaixo e
+Algebra Relacional na ferramenta ProgramAR, conforme as Figu-
+ras 7, 8 e 9:
+1. Recuperar os nomes de todos os empregados do departamento 5 que trabalhem
+mais de dez horas por semana no projeto ‘Product X’.1
+Algebra Relacional na ProgramAR
+2. Para cada projeto, liste o nome do projeto e o total de horas por semana (de
+todos os empregados) gastas no projeto.
+Algebra Relacional na ProgramAR
+3. Recupere o nome do Projeto e os nomes de todos os empregados que trabalhem
+em pelo menos um projeto.
+Algebra Relacional na ProgramAR
+O experimento 1 verifica a utilização dos operadores seleç ão, projeç ão e junç ão.
+Já no experimento 2, observa-se o uso operador ℑ (agregação) na primeira linha, onde
+recebe uma coleção de valores e retorna um  único valor como resultado, realizando a
+sumarização de uma coleção de valores de um determinado atributo.
+O experimento 3 faz uso do operador Join, porém, destaca que ap ós o essn foi
+colocado um espaço e então o essn não foi detectado como uma condição de junção,
+ficando todo o resto da frase em vermelho, sinalizando ao discente que há um erro na
+expressão gerada, conforme a Figura 10.
+Ao final dos experimentos, um questionário sobre a ferramenta foi entregue aos
+discentes e a maioria informou que não houve dificuldades em executar os comandos pela
+ferramenta; a formatação (cores, fontes, tamanho) auxiliou na visualização da expressão
+facilitando a detecção de inconsistências; as funcionalidades dos operadores da álgebra
+1 As  consultas  foram  escritas  em  inglês  para  seguir  o  mesmo  exemplo  disponibilizado  no  livro
+[ELMASRI and NAVATHE 2010].
+508
+
+
+
+
+Figura 10. Mensagem de Erro
+relacional relatadas foram fáceis de identificar devido a utilização de novas fontes de co-
+res; os operadores utilizados na sala de aula foram os mesmos utilizados na ferramenta
+facilitando o aprendizado; e por fim a ferramenta tornou-se um ambiente gráfico e intera-
+tivo que auxiliou o ensino da álgebra relacional.
+Os tutoriais de instalação e configuração de um SGBD foram disponibilizados no
+site da ferramenta, onde há outros exemplos de consultas, além de um arquivo de bac-
+kup de um SGBD para testes.  Alguns discentes notificaram a dificuldade de instalação
+e configuração do SGBD na plataforma Linux; nenhuma dificuldade na plataforma Win-
+dows foi detectada.
+7. Conclus ão e trabalhos futuros
+A  ferramenta  ProgramAR  tem  por  principal  objetivo  automatizar  o  processo  de
+visualização  dos  resultados  das  consultas  em                                             Algebra  Relacional  por  meio  da
+transformação em linguagem SQL. Os discentes podem estabelecer a conexão com o
+Algebra
+Relacional.
+A visualização dos resultados contribui para o ensino-aprendizagem do conte údo
+da disciplina, visto que sem uma ferramenta como a ProgramAR não é possível conferir os
+resultados das express ões e principalmente avaliar se os resultados estão de acordo com o
+esperado. Assim, as funcionalidades presentes nessa versão da ferramenta potencializam
+Algebra Relacional.
+Como trabalhos futuros, pretende-se desenvolver uma versão da ProgramAR para
+plataforma Web e a implementação do Cálculo Relacional, onde as consultas serão reali-
+zadas a partir de express ões em Cálculo Relacional de Tupla e de Domínio.
+Agradecimentos
+Os autores gostariam de agradecer ao Programa Permanecer, Projeto n úmero 2231 com
+Plano de Atividade n úmero 4946 da Universidade Federal da Bahia.
+509
+
+
+
+
+Referências
+Appel, A. P. and Traina Jr., C. (2004). iDFQL - Uma Ferramenta de Apoio ao Processo
+Algebra Relacional Baseado no Construcionismo.  PhD
+thesis, Instituto de Ciências Matemáticas e de Computação - USP. São Carlos, SP.
+ELMASRI, R. and NAVATHE, S. B. (2010).  Sistemas de banco de dados.  Pearson
+Addison Wesley.
+Algebra Re-
+lacional.  PhD thesis, Trabalho de Graduação. Universidade Federal de Santa Maria.
+Centro de Tecnologia. Curso de Ciência da Computação. Santa Maria, RS.
+Algebra Relacional.
+PhD thesis, Universidade Federal de Santa Catarina - Centro Tecnol ógico. Departa-
+mento de Informática e Estatística. Florian ópolis.
+Pereira, Juliana Alves; Resende, A. M. P. d. (2012). Uma An álise dos Ambientes de Ensino
+de Banco de Dados.  PhD thesis, Universidade Federal de Lavras - Departamento de
+Ciência da Computação - UFLA. Lavras, MG.
+RAMAKRISHNAN, R. and GEHRKE, J. (2008). Sistemas de Gerenciamento de Banco
+de Dados. McGraw Hill, 3rd edition.
+Sumathi, S. and Esakkirajan, S. (2007). Fundamentals of Relational Database Manage-
+ment Systems. Springer.
+ULLMAN, J. D., AHO, A. V., and SETHI, R.  (1995).   Compiladores  - Princípios,
+Técnicas e Ferramentas. LTC.
+510
+
+
+
+
+

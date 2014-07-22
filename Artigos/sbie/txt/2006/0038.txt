@@ -1,0 +1,416 @@
+﻿Controle de Estilos Musicais em Tarefa de Aprendizagem -
+Design, Implementação e Avaliação Empírica
+Weber Martins1,3, Murilo Borges Silva1,2, Lauro E. G. Nalini1,3
+1Grupo PIRENEUS / Engenharia Elétrica e de Computação
+Universidade Federal de Goiás - Goiânia - GO - Brazil
+2 Departamento de Sistemas da Informação
+Faculdades Álvares Faria   - Goiânia - Goiás - Brazil
+3 Departmento de Psicologia
+Universidade Católica de Goiás - Goiânia - GO - Brazil
+{weber, mborges, lauro}  @pireneus.eee.ufg.br
+Abstract.  The  present  study  proposes,  implements,  and  evaluates  the
+intelligent  selection  of  musical  styles  with  Reinforcement  Learning.  The
+evaluation   is   empirical   and   undertaken   in   the   context   of   human
+experimentation with chaining, a typical psychological task. Average values of
+group performance (number of trials, session duration and response latency)
+in three experimental conditions (silence, random and intelligent), at the first
+and fourth programmed sequences in each condition and among conditions
+have  revealed  significant  reductions.  In  order  to  avoid                             “crisp”  musical
+transitions,  a                                                                            (one-dimensional)  ring  is  trained  based  on  Kohonen’s  Self-
+Organizing Maps and on a proper representation of musical styles.
+Resumo. O presente estudo propõe, implementa e avalia a seleção inteligente
+de estilos musicais com Aprendizado por Reforço. A avaliação é empírica e
+realizada no contexto de experimentação humana com encadeamento, uma
+tarefa tipicamente estudada em Psicologia. Valores médios de desempenho
+coletivo (número de tentativas, duração da sessão e latência da resposta) em
+três condições experimentais (silêncio, aleatório e inteligente), na primeira e
+na  quarta  seqüências  programadas  em  cada  condição  e  entre  condições,
+revelaram reduções significantes. Para evitar transições musicais bruscas, um
+anel unidimensional foi treinado baseado em Mapas Auto-organizáveis de
+Kohonen para representar adequadamente os estilos musicais.
+1. Introdução
+Um fator comum existente nos diferentes povos é a presença da música. Ela existe nos
+mais diversos ritmos, formas, melodias, causando fascínio e repúdio, dependendo do
+meio cultural onde se manifesta. Esta forma de expressão, que talvez seja uma das mais
+antigas,  é  encontrada  desde  a  Pré-história,  e  em  todas  as  sociedades  humanas.
+Considerados os objetivos do presente estudo (descritos adiante), breve fundamentação
+de aspectos da produção musical será apresentada neste ponto.
+
+
+
+
+2. Música e Comportamento Humano
+A  partir  de  observações  cotidianas,  pode-se  notar  que  cada  indivíduo  mantém  sua
+própria relação com a estimulação sonora  (música) enquanto, por exemplo, estuda.
+Alguns preferem total silêncio para aprender, outros utilizam aparelhos de reprodução
+sonora reproduzindo algum estilo musical enquanto estudam. Outros aprendem mais
+lentamente se não possuírem um rádio, ou um aparelho de CD, ou aparelhos similares
+ligados ao lado.
+Araújo  [1]  realizou  estudo  sobre  o  controle  de  sinais  fisiológicos  humanos
+(especificamente,  a  condutância  galvânica  da  pele)  com  o  emprego  de  técnicas
+computacionais  de  Aprendizado  por  Reforço  (AR)  [2].  No  estudo,  uma  estrutura
+musical proposta por Mozart [3] era capaz de gerar trechos musicais completos, com
+melodia  e  harmonia.  Posteriormente  foram  identificados  quais  trechos  musicais
+conseguiam  reduzir  a  condutância.  Os  resultados  de  Araújo  tornaram  evidente  a
+eficiência de redes neurais artificiais e da música para gerar contextos sonoros úteis ao
+controle fisiológico.
+A verificação da influência da música sobre comportamento humano [1] abre um
+leque  para  investigação  das  possíveis  influências  da  música  sobre  aspectos  do
+comportamento,  campo  este  que  ainda  está  por  ser  estudado  sistematicamente.  A
+utilização do aprendizado por reforço em redes neurais artificiais se apresenta como
+uma boa alternativa para o estudo das relações entre estilos musicais e aprendizagem.
+Conseguir que um agente inteligente selecione estilos musicais durante uma tarefa de
+aprendizagem no sentido de estabelecer o contexto musical mais apropriado a aquisição
+pode trazer melhorias ao processo.
+Vários  trabalhos  vêm  sendo  desenvolvidos  na  área  de  sistemas  tutores
+inteligentes [4, 5, 6], demonstrando que demonstraram que, dentre outros, fatores como
+a cor de fundo de uma tela, o perfil psicológico e o estilo de aprendizagem do aprendiz,
+e  rotas  de  navegação  do  conteúdo  em  educação  a  distância,  exercem  influências
+significativas durante a execução de tarefas específicas. Cabe, portanto, investigar a
+influência do “fundo musical”.
+O uso de técnicas computacionais de aprendizado por reforço em redes neurais
+artificiais tem sido intensificado [7], devido à exigência de pequeno conhecimento sobre
+o ambiente e de sua dinâmica. No presente estudo, propomos a criação de um agente
+inteligente baseado em aprendizado por reforço que controle a seleção de um estilo
+musical específico na tentativa de melhorar o desempenho de um indivíduo na execução
+de  uma  tarefa  de  aprendizagem.  Mais  especificamente,  o  objetivo  foi  mostrar  a
+aplicabilidade de redes neurais artificiais treinadas com técnica de aprendizado por
+reforço no controle inteligente da manutenção ou alteração de nove estilos musicais
+durante a aprendizagem de seqüências (ou, na linguagem da Psicologia, de responder de
+ordenação seqüencial em tarefa de encadeamento) [8, 9, 10, 11, 12, 13].
+3. Aprendizado por Reforço
+O AR se baseia na aprendizagem do que deve ser feito para maximizar o sinal de
+retorno numérico a partir do mapeamento das situações para as ações. Não é dito ao
+aprendiz que ação deve ser realizada. Ao invés disto, o aprendiz deve descobrir que
+ação produz o maior retorno através de tentativas realizadas por ele próprio. De acordo
+
+
+
+
+com Sutton e Barto (1998), tentativa e erro são as características mais importantes deste
+método. À medida que os padrões vão sendo apresentados ao sistema, é fornecida não a
+resposta correta esperada, mas sim um indicativo de acerto ou de erro. No caso de um
+retorno errado, o sistema não fica sabendo o que estava errado ou o porquê do erro.
+Através de tentativas e erros, o sistema formula gradualmente uma representação de
+como terminar a tarefa. O aprendizado acontece com o fornecimento de “recompensas”
+ou “punições” a cada par entrada/saída, característica esta que se considera justificar o
+nome “aprendizado por reforço”. A avaliação do sistema é simultânea ao aprendizado, o
+que torna a exploração do ambiente necessária considerando o objetivo de mapeá-lo.
+Três fatores, detalhados à diante, são levados em consideração para que o sistema possa
+mapear a dinâmica de cada ambiente: 1. Estado, 2. Ação e 3. Recompensa.
+O AR funciona através de um algoritmo apropriado que processa as informações
+obtidas do ambiente (parcialmente desconhecido), a partir das interações do agente com
+o  ambiente.  Não  é  necessário  conhecimento  completo  do  ambiente.  O  objetivo  do
+algoritmo é obter uma “política ótima”. Uma política ótima é obtida quando o agente
+consegue avaliar cada estado e definir um modo de atuação que lhe proporcione o
+melhor retorno naquele ambiente. De fato, uma política ótima nada mais é do que um
+conjunto de regras sobre como o sistema trata os reforços e punições, caso não se
+conheça de antemão a função que modela esta política [7].
+O modelo padrão do AR possui um agente que, além de ser aprendiz, toma
+decisões  e  acumula  experiências  a  cada  passo.  O  agente  está,  através  dos  seus
+“sensores”, percebendo o ambiente. O ambiente é o conjunto de todos os elementos
+externos ao agente [1]. “Motores” implementam as ações tomadas pelo agente, ações
+estas que continuamente se repetem, gerando novas situações. As recompensas e as
+punições  fornecidas  são  valores  numéricos  especiais,  normalmente  positivos  ou
+negativos, respectivamente. Disto decorre que, quanto maior a recompensa total até o
+final da tarefa, melhor terá sido a interação com o ambiente. Em uma determinada
+tarefa, o agente terá, a passos de tempo t, uma representação do estado do ambiente, st ∈
+S, onde S é conjunto dos estados possíveis. Tal como mostra a Figura 3, a partir de um
+estado st, o agente irá selecionar a próxima ação a∈A(st), onde A(st) é o conjunto das
+ações disponíveis entre o estado st e o estado st+1. Estas ações afetarão o ambiente ao
+transitarem de um estado para outro.
+Figura 3: Transições Possíveis de um Estado Atual st para Estados st+1.
+No  passo  seguinte,  st+1,  em parte  como  conseqüência  da  ação  realizada,  o
+agente receberá uma recompensa numérica com valor entre 0 e 1. Tal conseqüência é
+denominada “reforço escalar”.
+
+
+
+
+A  Figura  4  mostra  como  ocorre  a  interação  entre  o  agente  e  o  ambiente,
+concebida a partir do dilema “exploration vs. exploitation” [7]:
+Figura 4: Interação Agente-Ambiente no Dilema “Exploration vs. Exploitation”.
+O dilema exploration vs. exploitation consiste numa dicotomia descritiva de
+como o agente se comporta na descoberta das melhores ações. O agente pode ficar com
+as informações já descobertas (exploration) ou buscar novas informações (exploitation).
+No primeiro caso, o agente deve descobrir entre ações desconhecidas já no início da
+tarefa. No segundo, mesmo conhecendo determinada ação, o agente deve tentar novas
+ações à medida que o mapeamento do ambiente é realizado. O objetivo do agente é
+maximizar o volume total de recompensas recebidas. A cada passo de tempo t, uma
+conseqüência (recompensa ou punição) é atribuída ao agente, sendo um valor totalizado
+no final da tarefa. A cada sinal retornado, o agente irá direcionar as ações para tentar
+alcançar o seu objetivo final. O uso do sinal é o que distingue o AR. Incentivar o agente
+a atingir objetivos secundários pode levá-lo a não alcançar o objetivo principal definido
+na tarefa. Assim, para que o sistema atinja os objetivos esperados, o mais adequado é
+“dizer” para o agente o que se quer que ele faça e não como ele deve fazer [7].
+Mapeamento dos estados (sobretudo registro dos retornos) se dá a cada passo do
+agente para que a probabilidade de selecionar cada ação possível fique indicada, e seja
+possível a maximização das recompensas e, conseqüentemente, o alcance do objetivo
+final da tarefa. “Política do agente” é o nome dado para este mapeamento, cuja notação
+é πt. O mapeamento representa o comportamento do sistema para alcançar o objetivo,
+onde  πt(s,  a)  é  a  probabilidade  de  at  =  a  se  st  =  S.  A  política  do  agente  dá  o
+direcionamento  para  o  agente  mudar,  considerados  os  resultados  alcançados.  Uma
+política ótima do agente é notada por π*(s, a) [7].
+Conforme mencionado acima, a maximização das recompensas e o alcance do
+objetivo final da tarefa decorrem do registro dos retornos recebidos cada passo de tempo
+t. A equação 1 descreve a seqüência de retornos, onde RT   é o retorno total e T o passo
+de tempo final.
+RT = rt+1 + rt+2 + rt+3, ... rT                                                                     (1).
+Neste ponto, uma distinção se faz necessária para melhor esclarecimento da
+noção de retorno introduzida acima, considerado o caso especial que será apresentado
+abaixo.
+Algumas  interações  entre  agente  e  ambiente  podem  definir                                     “episódios”.
+Episódios são seqüências de fatos com duração e tempo final definido (por exemplo,
+uma  partida  de  basquete).  Um  episódio  chega  ao  “estado  terminal”  quando  cessa,
+podendo, neste ponto, dar início a um novo episódio. Neste caso, a tarefa pode se
+
+
+
+
+considerada episódica. Quando as interações entre agente e ambiente progridem sem
+limites  ou  os  episódios  não  são  claramente  identificados                            (como,  por  exemplo,  a
+atividade de um robô de ciclo de vida longo), a tarefa é considerada contínua.
+No caso de tarefas contínuas, há dificuldade na maximização do retorno da ação
+do agente já que o tempo final é T = ∝. Assim, para tais casos, foi implementado um
+cálculo denominado “Taxa de Desconto”, cuja notação é γ. A taxa de desconto torna o
+cálculo  do  retorno  conceitualmente  mais  complexo.  Matematicamente,  a  taxa  de
+desconto pode ser obtida com a equação 2 abaixo.
+RT = rt+1 + γ rt+2 + γ2 rt+3, ... rT = k=0Σ∝ γk rt+k+1                                     (2).
+A taxa de desconto γ é um parâmetro que varia entre 0 e 1, e determina o valor
+das recompensas futuras. De acordo com a equação 2, quanto menor for o valor de γ,
+menos importância os valores de desconto anteriores terão e, com isto, ocorrerá a
+maximização  dos  valores  atuais.  Esta  possibilidade  tem  sido  denominada             “Visão
+Míope”. Quanto mais próximo de 1 for o valor de γ, maior importância os valores de
+desconto anteriores terão. Neste caso, o impacto relativo dos valores atuais é pequeno.
+Esta possibilidade tem sido denominada “Visão Ampla” [7].
+Um dos pontos principais do AR consiste em saber se as escolhas feitas pelo
+agente são boas. Uma função, denominada “Função Valor”, estabelece uma medida para
+a definição de que ação o agente deve realizar. A função valor estima o quão boa é a
+ação para o agente num determinado estado tomando como referência uma medida de
+recompensas  futuras                                                                       (retorno  esperado)  a  partir  da  ação  tomada.  Na  maioria  dos
+algoritmos AR, a notação geral utilizada para a função valor é Vπ. Se a função valor
+considerar apenas o estado s, então a notação é Vπ(s). Caso a função valor considere o
+par estado-ação, então a notação é Qπ(s, a).
+Método da Diferença Temporal
+O método da diferença temporal (DT) se baseia na diferença entre um passo de tempo e
+o passo seguinte para cálculo e atualização do retorno. A utilização da experiência para
+resolver os problemas de AR é uma característica do DT. A atualização dos valores de
+retorno é feita a cada passo de tempo e tem como base outras estimativas já aprendidas.
+A equação 15 é a formulação utilizada para o cálculo:
+V(st) = V(st) + α [rt+1 + γV(st+1) - V(st)]                                                (3).
+Na equação 3, α é uma constante de atualização que indica o quanto a rede vai
+aprender. O trecho entre colchetes é conhecido como “Erro da Diferença Temporal” e
+significa a diferença entre o passo de tempo t e o passo de tempo t+1. A estimativa da
+diferença temporal se baseia em outra estimativa ocorrida no passo de tempo anterior
+recursivamente, recebendo o nome de “Bootstrap” [7]. A Figura 5 descreve o algoritmo
+do DT.
+
+
+
+
+Figura 5: Algoritmo da Diferença Temporal.
+O DT não requer modelagem do ambiente, dos retornos e das probabilidades de
+transição dos estados segundo processos markovianos. Portanto, pode ser implementado
+totalmente de forma incremental para aplicações on-line. Os valores pressupostos das
+atualizações garantem a convergência até a resposta correta. Adicionalmente, tem sido
+demonstrado  experimentalmente  que  os  métodos  DT  são  mais  rápidos  que  outros
+métodos em tarefas estocásticas [12].
+Obter Q*(s, a) torna a escolha de ações ótimas ainda mais fácil. Neste caso, o
+agente não necessita fazer a pesquisa de um passo à frente. Para qualquer estado s, o
+agente pode simplesmente encontrar uma ação qualquer que maximize Q*(s, a). A
+função valor estado-ação ótima memoriza os resultados de todas as procuras nos passos
+à frente e, ainda, fornece o retorno ótimo esperado de longo prazo como um valor que
+está imediata e localmente disponível para cada par estado-ação. Assim, sem ter que
+conhecer a dinâmica do ambiente  (características ou valores) dos estados sucessores
+pode-se, com a função valor estado-ação ótima, selecionar ações ótimas.
+4. Sistema Proposto
+O sistema proposto utiliza o método de diferença temporal (DT) com atualização da
+estimativa de valor (ou função valor) conforme a equação 15. O valor 0,2 foi definido
+para  ambas  as  variáveis  α  e  γ.  Erros  ocorridos  foram  considerados  de  menor
+importância e o momento atual com os valores de α e γ foram priorizados. A transição
+entre estilos musicais, quando controladas inteligentemente pelo sistema, aconteceu de
+acordo com uma entre cinco opções distintas: 1) do estilo vigente para ele mesmo, 2) do
+estilo vigente para o vizinho da direita, 3) do estilo vigente para o vizinho da esquerda,
+4) do estilo vigente para o segundo vizinho da direita, ou 5) do estilo vigente para o
+segundo  vizinho  da  esquerda.  A  cada  escolha  e  mudança  sucessiva  de  um  estilo
+musical,  o  somatório  da  função  valor  dos  cinco  neurônios  era  realizado,  numa
+totalização sempre igual a 100%. No processo de transição, portanto, o sistema escolhia
+o próximo estilo probabilisticamente, se baseando na distribuição das estimativas de
+
+
+
+
+valor dos cinco neurônios atualizadas. Em cada atualização da função valor, a diferença
+entre  o  valor  anterior  e  o  novo  valor  era  distribuída  entre  os  outros  quatro  pesos
+possíveis  na  transição.  O  estilo  anterior  e  estilo  atual  foram  considerados  para
+atualização dos pesos, pois somente após o estilo ter sido escolhido é que o retorno
+(resultado da escolha) vinha a ser conhecido. A Figura  6 mostra esquematicamente
+como ocorria a transição inteligente entre os estilos musicais.
+No sistema, os critérios de punição e recompensa estão relacionados ao ambiente
+onde  o  agente  trabalha.  Consideradas  as  propriedades  da  tarefa  de  encadeamento
+(descrita  adiante)  a  que  os  participantes  foram  expostos,  os  critérios  de  punição  e
+recompensa para o agente do sistema proposto foram definidos da seguinte forma: 1)
+quando o participante incorria em erro por re-escolha de estímulo errado para a posição,
+ocorria a punição da rede denominada  “reincidência de erro absoluto”;  2) quando o
+participante errava um estímulo que já havia acertado anteriormente, ocorria a punição
+da rede denominada “erro real”, e 3) caso não acontecesse nenhum dos tipos de erro
+citados anteriormente, o valor de recompensa para o agente era 0,2.
+Figura 6: Transição entre Estilos Musicais Controlada Inteligentemente.
+Adicionalmente,  para  cada  situação  de punição, o valor atribuído ao agente
+(variável  de  retorno  no  tempo  t+1)  foi                                                       -0,3.  As  transições  entre  estilos  musicais
+controladas  inteligentemente  tinham  como  alternativas  possíveis  somente  os  estilos
+dentro dos retângulos na Figura 6. Como mencionado, inicialmente, os pesos valem 0,2,
+representando  20% de chance de serem escolhidos. Deste modo, cada estilo tinha a
+mesma chance de ser escolhido na primeira transição, no início da tarefa. Admitiu-se
+que a rede estava suficientemente treinada a partir da terceira seqüência de figuras que
+cabia ao participante aprender. Verificou-se ser esta a quantidade mínima de experiência
+para atualização apropriada dos pesos nas transições.
+Cabe registrar que a escolha dos estilos musicais foi arbitrária, buscando obter
+diversidade suficiente para afetar significativamente os participantes. O uso de Mapas
+de Kohonen  [14,  15] é importante no arranjo topológico dos estilos no sentido de
+
+
+
+
+impedir  mudanças  bruscas  de  estilos.  Maiores  detalhes  deste  processo  podem  ser
+obtidos em [16].
+5. Experimentos e Resultados
+Delineamento  experimental  de  grupos  independentes  foi  utilizado  no  estudo.           96
+participantes foram alocados oportunisticamente em um de três grupos, tendo sido cada
+grupo associado a uma condição implementada a partir da ausência ou presença dos
+estilos musicais.
+Para um grupo de participantes, a aprendizagem das seqüências na tarefa de
+encadeamento  ocorreu  na  ausência  completa  de  som,  ou  seja,  nenhum  dos  estilos
+musicais  selecionados  era  apresentado  aos  participantes  deste  grupo  durante  a
+aprendizagem. Este grupo foi denominado “Grupo Silêncio” (GS), tendo sido formado
+por 31 indivíduos.
+Um segundo grupo de participantes, denominado  “Grupo Aleatório”  (GA) e
+composto  por  31  indivíduos,  aprendeu  as  seqüências  com  som  (estilos  musicais)
+presente. Para os participantes no GA, nove estilos musicais foram apresentados em
+sucessão aleatória durante a realização da tarefa. No controle aleatório das transições
+entre os estilos musicais, o estilo sucessor do estilo vigente podia ser qualquer um dos
+estilos, incluindo o estilo vigente. O tempo de execução do estilo vigente foi de  30
+segundos, duração esta definida em pré-testes empíricos desta variável.
+De  oito  medidas  de  desempenho  definidas  para  análise,  apenas  três  foram
+analisadas no presente estudo5. As medidas analisadas foram: 1) o número de tentativas
+para aquisição da seqüência (NTt), 2) a tempo gasto para aquisição da seqüência (TG,
+em segundos), e 3) a latência média das respostas aos estímulos da seqüência (Ltµ, em
+segundos). De acordo com o referencial metodológico da Análise Experimental do
+Comportamento, o NTt é definido pelo número de vezes em que o participante tenta
+montar a seqüência desde a primeira escolha de um estímulo até o cumprimento do
+critério de aprendizagem adotado (no presente estudo, três repetições consecutivas da
+seqüência sem erros). O TG é definido pelo tempo que decorre desde a primeira escolha
+de um estímulo até o cumprimento do critério de aprendizagem adotado. Por fim, a Ltµ
+é definida pelo quociente entre o somatório da duração de todos os intervalos de tempo
+que transcorrem entre a disponibilização da matriz de estímulos para o participante
+responder em cada tentativa e a(s) resposta(s) de escolha emitida(s) ao(s) estímulo(s) e o
+número total de respostas  (certas e erradas) emitidas  (NTR). Como o somatório da
+duração de todos os intervalos de tempo entre a disponibilização da matriz de estímulos
+atualizada e a escolha de um deles é, neste caso, igual ao TG para aprender a seqüência,
+a Ltµ pode ser também enunciada como o quociente entre o TG e o número total de
+respostas (certas e erradas) emitidas — ou seja, Ltµ = TG/NTR. O Chain 1.0 promovia,
+armazenava e, ao final da sessão experimental, gerava o registro de todas as medidas do
+estudo. A Figura 18 ilustra o registro de desempenho gerado pelo Chain 1.0.
+Tabela 1: Valores Médios do Número de Tentativas (µ NTt), do Tempo Gasto (µ TG) e da
+Latência Média de Repostas aos Estímulos (µ LTµ) para cada seqüência,
+em cada condição (Grupos GS, GA e GC).
+Seqüência                                                                                            1A                       2A                       3A                                                                                   4A
+Grupo                                                                                        GS      GA      GC       GS                               GA       GC       GS       GA       GC       GS       GA       GC
+µ NTt                                                                                        95,94   97,65   109,09   98,16   91,42   99,50   100,03   95,94                                                               103,21   99,35   95,26   96,26
+µ LTµ                                                                                        2,58    2,53    2,52     2,71    2,61    2,54    2,63     2,65                                                                2,50     2,64    2,60    2,47
+
+
+
+
+Numa  comparação  intra-grupo  dos  valores  obtidos  para  cada  variável  na
+primeira e na quarta seqüências, pode ser observado que a diferença do µ NTt no GS (µ
+NTt 1ª GS − µ NTt 4ª GS) foi igual a −3,41, no GA (µ NTt 1ª GA − µ NTt 4ª GA) foi
+igual a 2,45, e no GC (µ NTt 1ª GC − µ NTt 4ª GC) foi igual a 12,83. Para a variável µ
+TG, pode ser observado que a diferença no GS (µ TG 1ª GS − µ TG 4ª GS) foi igual a
+−49,04, no GA (µ TG 1ª GA − µ TG 4ª GA) foi igual a 4,39, e no GC (µ TG 1ª GC − µ
+TG 4ª GC) foi igual a 166,18. Por fim, para a variável µ LTµ, a diferença observada no
+GS (µ LTµ 1ª GS − µ LTµ 4ª GS) foi igual a −0,06, no GA (µ LTµ 1ª GA − µ LTµ 4ª
+GA) foi igual a −0,07, e no GC (µ LTµ 1ª GC − µ LTµ 4ª GC) foi igual 0,05. Os dados
+mostram que, quando os participantes foram solicitados a aprender as seqüências na
+ausência do contexto musical (GS) ou com este contexto mudando aleatoriamente (GA),
+os valores médios de desempenho do início (1ª seqüência) para o fim (4ª seqüência) da
+realização da tarefa, foram inferiores àqueles observados quando a aprendizagem se deu
+sob mudança inteligente  (ou seja, sob controle da rede neural artificial) do contexto
+musical. Enquanto para o GS e o GA os valores médios de µ NTt, µ TG e µ LTµ ou
+aumentaram                                                                               (valores  de  diferença  negativos)  ou  permaneceram  aproximadamente
+iguais, os valores médios para GC diminuíram. Em média, os participantes do GC
+aprenderam  a                                                                            4ª  seqüência  em  menos                                                 13,31  tentativas,  menos   3,14  minutos  e
+respondendo 0,12 segundos mais prontamente aos estímulos que os participantes dos
+grupos GS e GA.
+Noutra análise intra-grupo, verificou-se que a dispersão dos valores que deram
+origem aos valores médios de NTt, TG e LTµ na aquisição da 1ª e da 4ª seqüências
+também mudou de modo correspondente ao observado para os valores descritos acima.
+A Tabela 2 mostra a porcentagem de redução dos valores de desvio-padrão (dp, não
+mostrados) em torno das médias obtidas de NTt, TG e LTµ na 1ª e na 4ª seqüências. A
+porcentagem de redução da dispersão observada para o NTt foi de 33%. Para o TG, a
+redução foi de 19%, e para a LTµ foi de 18%.
+Tabela 2: Porcentagem de Redução dos Valores de Desvio Padrão (dp) em torno
+das Médias do Número de Tentativas (µ NTt), do Tempo Gasto (µ TG) e da
+Latência Média de Respostas aos Estímulos (µ LTµ),
+obtidas na 1ª e na 4ª Seqüências, em cada Condição (Grupos GS, GA e GC).
+Grupo
+                                                                                         µ NTt                                                                    µ TG                        µ Ltµ
+(Condição)
+GS                                                                                       8                                                                        16                          0
+GA                                                                                       16                                                                       9                           -10
+GC                                                                                       33                                                                       19                          18
+Os dados da Tabela 2 mostram que o desempenho de cada um dos diferentes
+participantes do GC se tornou mais homogêneo que o desempenho dos participantes do
+GS e do GA do início para o fim da sessão experimental, à medida que progrediam na
+aquisição das quatro seqüências programadas.
+6.  Conclusão
+O presente artigo demonstrou como estilos musicais podem ser selecionados de modo a
+fornecer ambientes sonoros apropriados a tarefas humanas. Em particular, tal estudo é
+apropriado a Sistemas Tutores Inteligentes. O baixo número de reforços recebido pelo
+
+
+
+
+sistema pode ter sido responsável pela falta de informação relevante a uma melhor
+adaptação.
+O emprego de sinais fisiológicos, tais como a resistência galvânica da pele e a
+taxa  de  batimentos  cardíacos,  será  investigado  no  futuro  como  fonte  de  reforços
+ambientais.
+Referências
+[1]                                                                                          MARTINS,  W.;  ARAUJO,  I.  Z.  (2001).  Soft  control  of  human  physiological
+                                                                                             signals  by  reinforcement  learning.  Proc.  IJCNN2001,  Washington,  USA.  Los
+                                                                                             Alamitos - CA: IEEE Computer Society Press. v. 4. p. 2501-2505.
+[2]                                                                                          HAYKIN, S. (2002) Redes neurais: princípios e prática. Porto Alegre: Bookman.
+[3]                                                                                          MOZART, W. A. (1983) Mozart Melody Dicer. Brighton (MA), USA: Carousel
+Publishing Corporation.
+[4]                                                                                          MARTINS, W.; CARVALHO, S. D. (2004) An Intelligent Tutoring System Based
+on  Self-Organizing  Maps  -  Design,  Implementation  and  Evaluation.  Proc                7th
+International Conf on Intelligent Tutoring Systems, Maceio, Brazil, p. 573-579.
+[5]                                                                                          MARTINS, W. et al (2004) A Novel Hybrid Intelligent Tutoring System and Its
+Use of Psychological Profiles and Learning Styles, Proc 7th International Conf on
+Intelligent Tutoring Systems, Maceio, Brazil, p. 211-213.
+[6]                                                                                          NARCIZO, P. H. D. (2003) A influência das cores em sistemas tutores inteligentes.
+Dissertação (Mestrado), Universidade Federal de Goiás.
+[7]                                                                                          SUTTON, R. S.; BARTO, A. G. (1998) Reinforcement learning: an introduction.
+Cambridge: The MIT Press.
+[8]                                                                                          BORGES, M.; TODOROV, J. C. (1985) Comportamento de ordenação de humanos
+nos procedimentos para-frente e para-trás. Psicologia: teoria e pesquisa, v. 1, n. 3,
+p. 237-247.
+[9]                                                                                          ASSIS,  G.                                                                          (1987)  Comportamento  de  ordenação  de  humanos:  uma  análise
+experimental de algumas variáveis. Psicologia: teoria e pesquisa, v. 3, p. 57-69.
+[10]   MALOTT, R. W et al.  (1997) Elementary principles of behavior. Upper Saddle
+River: Prentice Hall.
+[11]   SKINNER, B. F. (1938) The behavior of organisms. New York: Appleton-Century.
+[12]   FESTER, C.B.; SKINNER, B. F. (1957) Schedules of reinforcement. New York:
+Appleton-Century Crofts.
+[13]   CATANIA, A. C. (1999) Learning. Upper Saddle River: Prentice Hall.
+[14]   KOHONEN, T. (1989) Self-organization and associative memory, Berlin: Springer-
+Verlag.
+[15]   KOHONEN, T. (1997) Self-organizing maps, Finland: Springer.
+[16]   MARTINS, W. et al (2004) Controle inteligente de estilos musicais baseado em
+Aprendizado por Reforço. Revista Estudos, Goiânia, v. 31, 103-136.
+
+
+
+
+

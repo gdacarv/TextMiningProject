@@ -1,0 +1,202 @@
+﻿Um Modelo de Adaptação de
+Objetos de Aprendizagem com foco em Dispositivos Móveis
+Márcia Abech, Cristiano André da Costa,
+Jorge Barbosa, Sandro Rigo, Wagner Cambruzzi
+1  Programa Interdisciplinar de Pós-Graduação em Computação Aplicada (PIPCA)
+Universidade do Vale do Rio dos Sinos (UNISINOS) São Leopoldo - RS - Brasil
+marcia.abech@gmail.com,  {cac,jbarbosa,rigo}@unisinos.br,  wagner@cambruzzi.com.br
+Abstract. The popularity of mobile devices with Internet access makes possible
+access to educational content regardless of time or place. However, using this
+technology for this purpose, requires effort on the part of educators, because
+the content should be made available to the various versions and device models,
+and could be adapted to the profile of student learning.  This paper proposes
+a model and a prototype system for adaptation of learning objects for mobile
+devices.
+Resumo. A popularidade de dispositivos móveis com acesso a internet torna
+viável o acesso a conteúdo educacional independente do lugar ou momento. En-
+tretanto, utilizar esta tecnologia para este propósito, requer esforço por parte
+dos educadores, pois o conteúdo deve ser disponibilizado para as diversas ver-
+sões e modelos de dispositivos, bem como, poderiam estar adaptados ao perfil
+de aprendizado do aluno.  Este trabalho propõe um modelo e um protótipo de
+um sistema de adaptação de objetos de aprendizagem para dispositivos móveis.
+1. Introdução
+Com a crescente utilização de dispositivos móveis, laptops, tablets e smartphones no
+cotidiano dos alunos, é necessário prover soluções para proporcionar uma maior disponi-
+bilidade de recursos educacionais fora da sala de aula em qualquer lugar e em qualquer
+momento, de forma ubíqua [Weiser 1991].  Por outro lado, a oferta de cursos na moda-
+lidade de Ensino a Distância (EaD) vem crescendo, favorecendo pessoas que não podem
+frequentar o modelo tradicional de ensino em horários e locais determinados, ou ainda,
+complementando o ensino tradicional.
+Nesse âmbito, o presente artigo, propõe um ambiente que através de conhecimen-
+tos de perfil de aprendizagem do aluno e de contexto, pode adaptar objetos de aprendiza-
+gem (OA) visando entregar um conteúdo mais adequado às necessidades educacionais e
+apto a ser visualizado no dispositivo móvel do aluno proporcionando aos estudantes um
+outro modo de desenvolver seu aprendizado através de sistemas móveis.
+O artigo está organizado em seis seções. A seção 2 descreve conceitos que per-
+meam a adaptação de modo geral.  A seção 3 descreve a proposta de modelo para este
+trabalho. Na seção 4, é descrito brevemente o protótipo da aplicação cliente para sistemas
+Apple iOS. Na seção 5 é apresentado a metodologia e a avaliação do sistema proposto. E
+por fim, na seção 6 temos as considerações finais sobre este trabalho.
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+2. Adaptação na Computação Ubíqua
+Na Computação Ubíqua, a adaptação é compreendida como um processo reativo causado
+por um evento específico ou um conjunto de eventos em um contexto, com o objetivo
+de aprimorar a qualidade do serviço percebido pelo usuário final [Kakousis et al. 2010].
+Segundo [Kakousis et al. 2010] um sistema adaptável ao conteúdo, deve possuir a ha-
+bilidade de alterar e se auto-reconfigurar como resultado de alterações contextuais para
+entregar o mesmo serviço de diferentes modos quando requisitados em diferentes con-
+textos.  Com o padrão de conteúdo definido, o sistema deve analisar esse conteúdo em
+todos os aspectos do contexto recebido, para assim, formular uma estratégia de adaptação
+adequada ao usuário.
+3. Modelo Proposto
+O modelo proposto segue a arquitetura apresentada na figura 1(a), elaborada de acordo
+com a notação Technical Architecture Modeling  (TAM)[SAP 2007].   Essa arquitetura
+prevê a comunicação com um sistema de gestão de aprendizagem (Learning Manage-
+○  para obter algumas informações
+educacionais, que irão compor o perfil educacional do aluno.
+Com a detecção da necessidade de entrega de um conteúdo educacional para o
+aluno, após verificar a existência de objetos educacionais para as suas necessidades, o
+servidor emite uma notificação através do sistema notificação, que enviará para o disposi-
+tivo do aluno um aviso da disponibilidade de conteúdo para uma determinada disciplina.
+Após o recebimento dessa notificação, o aluno acessa no seu dispositivo, o sistema cliente.
+Essa aplicação, instalada no dispositivo do aluno, tem como função obter informações do
+dispositivo como nível de bateria, tipo de conexão, sistema operacional, etc. e algumas
+informações do aluno como por exemplo as preferências de mídias a serem visualizadas.
+O contexto extraído do dispositivo é enviado para o servidor (via web services) junta-
+mente com as informações que foram coletadas no sistema Moodle. Essas informações
+irão compor as bases de dados de contexto juntamente com o perfil. Com as base de dados
+de perfil, contexto e de objetos de aprendizagem, o módulo adaptador verifica o melhor
+objeto a ser entregue, de acordo com o perfil e contexto, disponibilizando esse objeto para
+o dispositivo do aluno.
+(a) Arquitetura da aplicação                                                                  (b)  Modelo da arquitetura do adaptador de con-
+teúdo
+Figura 1. Arquitetura da aplicação proposta (a), (b)
+A figura 1(b), também empregando o modelo TAM, exibe o módulo Adaptador
+mais detalhadamente. Em Base de Dados temos as bases de dados que irão conter respec-
+
+
+
+
+tivamente, o contexto do aluno (que será abastecido pelo módulo Consumidor de Con-
+texto), algumas características de dispositivos, um repositório para armazenar os metada-
+dos de objetos de aprendizagem e finalmente um repositório para armazenar o perfil do
+usuário obtido do moodle.
+O módulo AdaptadorOA será responsável por realizar a adaptação ou por Sprea-
+ding Activation que será descrita na seção 3.1(Seletor de Conteúdo) ou por formato (mó-
+dulo Adaptação por formato) ou adaptação da área de tela ocupada pela mídia (módulo
+Adaptação de tamanho). A seguir o método usado para adaptação de conteúdo é descrito.
+3.1. Spreading Activation
+Spreading Activation foi utilizado no modelo para auxiliar a escolha de objetos de apren-
+dizagem.  Essa técnica surgiu na década de 70, proposta por [Collins and Loftus 1975],
+sendo utilizada principalmente na área de neurolinguística, onde demonstraram que as es-
+truturas do conhecimento e de memória poderiam ser representadas no formato de grafo.
+O conceito básico do SA, consiste no mapeamento das informações importantes
+em um grafo.  Cada nodo que constitui esse grafo, possui um “nível de ativação” e um
+conceito associado.  Os conceitos são relacionados uns com os outros, esses relaciona-
+mentos são representados por links entre seus nodos correspondentes. Cada nodo possui
+um valor inicial de ativação, por exemplo, 0. Quando um conceito é ativado, o nodo que
+representa esse conceito é usado como o nodo principal e inicia, assim, o fluxo de ativação
+propagando para os nodos adjacentes valore menores de ativação.  No fim do processo,
+vários nodos são ativados, indicando um grau de relacionamento com os conceitos ativa-
+dos inicialmente.
+4. Implementação
+O protótipo cliente (que executa no dispositivo móvel do aluno) foi construído inicial-
+○  para dispositivos iPhone1  (futuramente a aplicação
+será desenvolvida também para a plataforma Android).   Na aplicação cliente temos
+primeiramente, a exibição dos objetos de aprendizagem que foram disponibilizados para
+o aluno. Esses objetos estão de acordo com o perfil educacional e o contexto do aluno no
+momento em que foi detectada a necessidade de envio de um objeto. Ao acessar qualquer
+um dos itens listados, o aluno pode visualizar o conteúdo do objeto. Como apresentado
+na figura 2, os objetos podem estar representados em diversas mídias compatíveis com o
+dispositivo como apresentações, documentos de texto, páginas em HTML, vídeo e áudio.
+O servidor, codificado em .NET na linguagem C# possui a implementação de web
+services para a comunicação com os dispositivos móveis e os módulos de que constituem
+o processo de adaptação de OAs. Para aquisição de objetos de aprendizagem, um sistema
+de coleta foi construído utilizando o protocolo OAI-PMH2. Esse sistema de coleta, de-
+pende do suporte ao protocolo OAI-PMH e de metadados no formato Dublin Core (DC)
+pelos repositórios digitais [Júnior 2011].
+5. Metodologia e Avaliação
+Em ambientes sensíveis ao contexto, a comunidade científica tem empregado cenários
+para avaliação como abordado em [Dey et al. 2001]. Partindo dessa estratégia, definiu-se
+1 www.apple.com/br/iphone/
+2 http://www.openarchives.org/pmh/
+
+
+
+
+Figura 2. Exibição dos objetos de aprendizagem
+um cenário para avaliações do conceito apresentado. Este cenário envolve um aluno de
+uma disciplina e um sistema de adaptação de objetos de aprendizagem que tem como base
+o perfil educacional e o contexto do estudante de acordo com a seguinte situação:
+“João é um aluno de ensino médio, que acabou de realizar um exercício no moo-
+dle sobre logaritmos. Ao corrigir a atividade do aluno, o professor detecta alguma carên-
+cia no aprendizado sobre esse tema. A partir do sistema de adaptação, o professor indica
+algumas palavras-chaves que envolvem o conteúdo ministrado, o qual o aluno possui
+a carência, neste exemplo, o professor indicaria os temas relacionados à logaritmos.
+Com posse das palavras-chaves, o servidor realiza uma busca de objetos de aprendiza-
+gem que possuam estas palavras-chaves e que estejam de acordo com as características
+de aprendizagem do aluno. O dispositivo móvel de João, aceita objetos que contenham
+mídias como MP4, PDF ou MP3.  Em um momento qualquer do dia, João recebe uma
+notificação, indicando um material para complementar os seus estudos em logaritmos. A
+aplicação instalada no dispositivo do João apresenta os objetos de acordo com o contexto
+do dispositivo e perfil detectados para o João.”.
+No momento em que é localizado o objeto (ou um conjunto de objetos) é enviado
+uma notificação para o aluno, através do sistema de notificação. Dependendo do dispo-
+sitivo que o aluno possui, ações serão realizadas para adaptar o conteúdo que deverá ser
+entregue. Por isso, ao receber a notificação no dispositivo móvel, o aplicativo cliente en-
+via ao sistema adaptador do servidor, o arquivo de contexto contendo as características do
+dispositivo, sem a necessidade de nenhuma intervenção do aluno.
+Para o cenário apresentado, o servidor encontrou apenas quatro objetos aptos a
+serem entregues para o aluno.  Os objetos, nos formatos PDF (Documento), Flash (An-
+imação), AVI (vídeo) e MP3 (áudio) podem ser compatíveis ou não com o dispositivo
+do aluno.  O adaptador, tendo conhecimento do dispositivo que o aluno está utilizando
+(através de informações de contexto) e os objetos que foram selecionados, monta em
+memória o grafo exibido na figura 3 que utiliza a técnica de spreading activation para ma-
+pear os objetos mais adequados para o aluno. Nesse caso, como apresentado no grafo, o
+aluno João, não pode receber vídeos em formato AVI pois o formato AVI não é compatível
+com o dispositivo, ao contrário dos objetos em PDF e MP3 que são compatíveis.Sendo
+assim, apenas os dois últimos são enviados para o aluno.
+6. Considerações Finais
+Neste artigo, foi proposto um modelo para complementar o ensino do aluno através de
+dispositivos móveis.  O modelo, utiliza contexto e perfil do aluno para adequar objetos
+
+
+
+
+Figura 3. Grafo gerado para a escolha do objeto de aprendizagem
+de aprendizagem para um determinado dispositivo de acesso. Foi apresentando também,
+um protótipo que exibe os objetos de aprendizagem adaptados para o perfil e contexto
+do aluno. Além da proposição de um modelo, foi desenvolvido um protótipo para iOS e
+um servidor .NET. Tais implementações foram avaliadas através de um cenário de uso.
+Os resultados demonstraram a viabilidade de uso do modelo, bem como destacaram a
+adaptação dos objetos de acordo com alguns contextos.
+Como trabalhos futuros, além de desenvolver uma versão do protótipo para An-
+droid, pretende-se validar esta aplicação em turmas EAD e em conjunto com sistemas
+LMS fazer a devida adaptação de objetos de acordo com a necessidade dos alunos e
+avaliar as melhorias educacionais com a entrega desses objetos. Além disso, pretende-se
+desenvolver uma ontologia substituindo as bases de dados atuais por bases de conheci-
+mento, aumentando assim a possibilidade de obter informações semânticas e de realizar
+raciocínio sobre os dados armazenados.
+Referências
+Collins, A. M. and Loftus, E. F. (1975).  A spreading-activation theory of semantic pro-
+cessing. Psychological review.
+Dey, A. K., Abowd, G. D., and Salber, D. (2001). A conceptual framework and a toolkit
+for supporting the rapid prototyping of context-aware applications. Human-Computer
+Interaction, pages 1-67.
+Júnior, H. d. N. (2011). Sistema de Recomendaçao Hibrido para Bibliotecas Digitais que
+Suportam o Protocolo OAI-PMH. Anais do XXII SBIE - XVII WIE, pages 140-149.
+Kakousis, K., Paspallis, N., Papadopoulos, G. A., and Ruiz, P. A. (2010).  Testing self-
+adaptive applications with simulation of context events.  Electronic Communications
+of the EASST, 28.
+SAP (2007). Standardized Technical Architecture Modeling.
+Weiser, M. (1991). The computer for the 21st century. Scientific American.
+
+
+
+
+

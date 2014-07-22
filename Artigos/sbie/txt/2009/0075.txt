@@ -1,0 +1,422 @@
+﻿Uma aplicação para o ensino da língua portuguesa para
+surdos utilizando o SensorLibras*1
+João E. da R. Tavares1, Valderi Leithardt1 2, Cláudio F. R. Geyer2, Jorge S. Silva³
+1Faculdade Cenecista Nossa Senhora dos Anjos (FACENSA)
+Gravataí - RS - Brasil
+2Universidade Federal do Rio Grande do Sul, Instituto de Informática - GPPD
+Porto Alegre - RS - Brasil
+³Universidade de Coimbra, Sistemas Largamente Distribuídos
+Pólo II - Coimbra - Portugual
+joaotavares@facensa.com.br,  {vrqleithardt,geyer}@inf.ufrgs.br,
+sasilva@dei.uc.pt
+Resumo. Este artigo tem por objetivo apresentar uma solução baseada em
+interface  computacional  para  a  tradução  automática  entre  a  Língua
+Brasileira de Sinais (Libras) e o Português Brasileiro, através de um software
+embarcado no dispositivo Sun SPOT, voltado para a computação ubíqua. Esta
+tecnologia assistiva possibilita o ensino da língua portuguesa para os surdos
+brasileiros. Além disso, esta solução propõe-se a oferecer uma alternativa à
+acessibilidade comunicacional dos surdos, enfrentando esta problemática sob
+a perspectiva da comunidade dos surdos do Brasil.
+Abstract.  This  article  aims  to  present  a  solution  based  on  computational
+interface  for  automatic  translation  between  the  Brazilian  Sign  Language
+(Libras) and Brazilian Portuguese, through an embedded software on the Sun
+SPOT  device,  aimed  at  ubiquitous  computing.  This  assistive  technology
+enables the teaching of portuguese language for brazilian deaf. Morever, this
+solution  is  proposed  to  offer  an  alternative  to  the  accessibility  of
+communication deaf, facing this problem from the perspective of the deaf
+community in Brazil.
+1. Introdução
+O presente artigo tem por objetivo reportar a aplicação para ensino da língua portuguesa
+para  os  surdos  através  da  interface  computacional  de  tradução  automática                   -
+SensorLibras [Tavares; Leithardt 2009]. Esta solução baseia-se na tradução interlínguas-
+intermodal [Martins; Pelizzoni; Hasegawa 2005] da Língua Brasileira de Sinais (Libras),
+1
+Trabalho desenvolvido com o apoio do projeto cooperação internacional MW4G Financiado pelo edital
+Capes-Grices.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+uma língua gestual-visual, a primeira para os surdos brasileiros, para oral-auditiva, o
+português brasileiro, considerada neste caso como empréstimo linguístico [Farias 2006].
+O foco deste trabalho concentra-se na datilologia dos sinais da Libras.
+O  enfoque  social  do  SensorLibras  reside  na  promoção  da  acessibilidade
+comunicacional aos surdos, abordada pelo paradigma de comunicação surdo-ouvinte.
+Segundo  o  último  Censo  IBGE  (2000),  existem  no  Brasil  24  milhões  de  pessoas
+portadoras de necessidades especiais, ou seja, cerca de  14% da população brasileira.
+Destes, uma quarta parte, aproximadamente 5,7 milhões, são pessoas com deficiência
+auditiva. Estas encontram-se excluídas de diversas formas, de várias dimensões da vida
+social e produtiva [Lira 2009].  De  acordo  com                                                 [Unisc   2009]:   “A  acessibilidade  aos
+PNEs  reflete  no  ‘direito  ao  acesso’  que  está  diretamente  relacionado  ao  ‘direito  à
+eliminação de barreiras’ que impedem as pessoas de ir e vir e de usufruir de tudo aquilo
+que  compõem  o  cenário  social  da  cidadania”.  Portanto,  são  necessárias  ações  que
+resolvam tais desigualdades e promovam a inclusão efetiva dessas pessoas.
+De acordo com [Portal de Libras 2009], línguas de sinais podem expressar letras,
+palavras  ou  frases  inteiras  e  nas  quais  se  devem  considerar  cinco  parâmetros:  a
+localização,  a  forma  da  mão,  a  orientação,  os  movimentos  e  a  expressão  facial.
+Analogamente à soletração das línguas orais, há a datilologia na língua de sinais, que
+consiste em “soletrar palavras com as mãos”. Usualmente, a datilologia, destina-se para
+a expressão de nomes de pessoas, lugares e outras palavras que não possuem sinal.
+Representando cada letra do alfabeto pela conjugação do movimento ou posicionamento
+da mão prioritária (esquerda ou direita) combinada com a articulação e posicionamento
+dos dedos [Libras 2009].
+Baseando-se nas necessidades de acessibilidade em termos de comunicação para
+os surdos brasileiros, apresenta-se como solução de tecnologia assistiva o SensorLibras,
+tecnologicamente embasado nos conceitos da computação ubíqua, segmentado-se seu
+contexto às Redes de Sensores sem Fio  (RSSFs). Devido ao seu amplo escopo de
+atuação, o software do SensorLibras foi dividido em quatro módulos que perfazem cada
+uma das etapas do processo de tradução Libras-Português: Reader, Analyzer, Parser e
+Feedback.    O desenvolvimento deste trabalho está dividido em seções; Na seção 2 serão
+apresentados  estudos  sobre  o  desenvolvimento  e  características  de  tecnologias
+utilizadas. Na seção 3 são apresentados os estados da arte. Na seção 4 é apresentada a
+solução proposta. Na seção 5, o comparativo com os trabalhos relacionados. Na seção 6,
+os testes e simulações. Na seção 7, as conclusões finais. Na seção 8, os trabalhos futuros
+são descritos.
+2. Tecnologias utilizadas
+A computação ubíqua foi mencionada pela primeira vez por Mark Weiser - Cientista
+Chefe da Xerox PARC (Palo Alto Research Center), no fim da década de 80 e publicada
+em  1991 no seu artigo  “The Computer for the  21st Century”. Neste artigo, Weiser
+previu que haveria um aumento nas funcionalidades e na disponibilidade de serviços de
+computação para os usuários finais, e que a visibilidade destes serviços seria a menor
+possível [Weiser 1991].
+O SensorLibras baseia-se nos conceitos da computação ubíqua descritos por
+[Leithardt 2008], essencialmente por tratar-se de um sistema embarcado, instalado no
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+dispositivo portátil Sun SPOT, que associa ao potencial da computação móvel, diversos
+sensores, Unidade Central de Processamento (UCP), consumo eficiente de energia, além
+da comunicação sem fio. Essas características proporcionam um inédito sistema de
+interação humano-computador (IHC) [Xavier; Raabe; Sales; Sigulem 2004], abstraindo
+do surdo a questão computacional, oferecendo a ele um instrumento “transparente” para
+sua interação e comunicação com seus interlocutores ouvintes.
+Considerando-se  cada  dispositivo  Sun  SPOT  como  um  nó  da  aplicação
+SensorLibras,   constitui-se   uma   RSSFs                                                    [Loureiro                                                            2004]   com   capacidade   de
+sensoriamento dos movimentos corporais e gestos manuais do surdo, lendo os sinais
+quando este expressa-se em Libras.
+O dispositvo Sun Small Programmable Object Technology (Sun SPOT), surgiu
+do projeto Wireless Sensor Networks  (WSN) da Sun Microsystems, no ano de  2003,
+quando esta se propôs a pesquisar acerca dos dispositivos móveis para sensoriamento
+capazes  de  se  comunicar  sem  a  necessidade  de  fios                                     [Canto                                                               2008].  Devido  às
+dificuldades  enfrentadas  para  encontrar  sensores  no  mercado  com  protocolos  e
+ferramentas compatíveis com a tecnologia Java, deu-se inicio então ao Projeto Sun
+SPOT. O objetivo principal seria produzir um sensor próprio capaz de rodar uma Java
+Virtual  Machine                                                                              (JVM)  embutida,  de  simples  acesso  e  comunicação  com  outros
+dispositivos sem fio, além de ser pequeno robusto e com boa durabilidade da bateria de
+acordo com com as características de hardware descritas por [Canto 2008], atende as
+configurações necessárias para o objetivo da aplicação.
+A  placa  de  sensores  do  Sun  SPOT  possui  os  seguintes  recursos  de
+sensoriamente:  aceleração/inclinação,  temperatura,  luminosidade,  além  de  pinos  de
+entrada/saída de sinais analógicos e digitais,  8 LEDs e  2 botões switch. Dentre os
+recursos citados, destaca-se o sensor de aceleração ou acelerômetro, capaz de realizar a
+leitura da aceleração do dispositivo nos três eixos espaciais (X, Y e Z), na frequência de
+1Khz,  retornado  os  valores  correspondentes  ao  movimento  em  cada  um  dos  eixos
+individualmente [Sun SPOT World 2009].
+3. Estado da arte
+Os trabalhos relacionados analisados foram: SiSi [BBC News 2009], realiza a tradução
+voz-sinal  na  língua  de  sinais  britânica                                                  (British  Sign  Language                                             -  BSL),  por
+reconhecimento de voz para avatar 3D; SignSmith Studio [VCom3D 2009], proporciona
+um  ambiente  para  composição  de  personagens  animados  modelados  em  3D,  para
+interpretação de sinais em American Sign Language (ASL); iSign [iDev2 2009] é um
+software-dicionário que utiliza um avatar animado, para representação da língua de
+sinais  americana  (ASL),  desenvolvido  para  os  dispositivos  portáteis  iPhone  e  iPod
+Touch, fabricados pela empresa Apple; Player Rybená [Rybená 2009] é uma solução
+que realiza a tradução automática on line de textos em língua portuguesa para Libras. A
+representação gráfica por avatar dos sinais Libras pode ser visualizada em celulares,
+smartphones ou navegador de internet; TLIBRAS  [Acessibilidade Brasil 2009] é um
+tradutor  automatizado  de  Português-Libras  para  ser utilizado em sala de aula, pela
+televisão  (concomitante ou em substituição aos textos legendados), em vídeos, pela
+internet,  na  construção  de  livros,  traduzindo  informações  em  português  de  origem
+textual  ou  sonora  para  Libras,  por  meio  de  sinais  animados,  apresentados  via
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+computador; AcceleGlove  [LQES  2009], apresenta-se como uma  “luva” tradutora do
+alfabeto e algumas frases em ASL para a língua inglesa.
+4. Solução Proposta
+A principal contribuição deste trabalho, consiste em um aplicativo desenvolvido para o
+ensino   da  língua  portuguesa  para  surdos,  baseado  no  sistema  SensorLibras,
+proporcionando uma interface computacional para a tradução automática dos sinais
+(datilologia) em letras alfabéticas, podendo ser integrado a jogos educacionais ou ainda
+servir  como  ferramenta  para  a  comunicação  com  os  ouvintes  que  não  possuem  o
+conhecimento da Libras.
+A solução consiste em um software programado em Java Micro Edition (ME)
+embarcado no dispositivo Sun SPOT, capaz de ler os dados capturados pelos sensores
+de aceleração (utilizados para captar os movimentos das mãos no espaço tridimensional)
+concatenados  à  leitura  dos                                                              5  pinos  de  entrada,  os  quais  estarão  respectivamente
+conectados a botões do tipo switch (capazes de obter o pressionamento dos dedos das
+mãos do surdo, pois estes botões estarão situados na ponta dos dedos da “luva” que o
+mesmo utilizará, Figura 1), simultaneamente, enviando-os pela conexão wireless para a
+estação-base, conectada via porta USB ao host.
+Figura 1. “Luva” protótipo-modelo                                                          Figura 2. Arquitetura de comunicação
+A  Figura  2  apresenta  a  arquitetura  geral  de  comunicação  da  solução,  onde
+destacam-se os três elementos principais: (1) Dois nós sensores (um para cada mão),
+responsáveis pelo sensoriamento dos sinais, representando os nodos da RSSF;  (2) A
+estação-base, responsável por receber via radiofreqüência (IEEE 802.15.4) os dados da
+leitura;                                                                                   (3)  A  estação-base  conectada  ao  computador  pela  porta  USB.  Nesta  etapa
+realiza-se o processamento (interpretação e tradução) dos sinais da Libras para a língua
+portuguesa. A estação-base, que faz parte do kit Sun SPOT, serve apenas para recepção
+dos  sinais  de  radio,  encaminhando  os  dados  recebidos  para  processamento  no
+computador principal (host).
+O software responsável pela realização da leitura, interpretação e tradução dos
+sinais da Libras para a língua portuguesa está dividido em quatro módulos: (1) Reader,
+(2)  Analyzer,  (3) Parser e  (4) Feedback. Visualiza-se na Figura  3 a arquitetura de
+software.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Figura 3. Arquitetura de software do SensorLibras.
+Pormenorizando cada um dos quatro módulos, apresenta-se suas características e
+funcionalidades:
+4.2.1. Reader
+O módulo reader configura-se como um middleware, desenvolvido em Java Micro
+Edition (ME), com a funcionalidade principal de ler os dados dos sensores de aceleração
+(movimento das mãos) e os pinos de entrada (pressionamento dos dedos), transmitindo-
+os à estação-base por datagramas na comunicação via radiofrequência pelo protocolo
+IEEE 802.15.4. Este módulo instala-se no SPOT fixado na “luva” correspondente à mão
+prioritária do surdo (direita para destros, esquerda para canhotos).
+O  segundo  SPOT,  situado  na  mão  auxiliar  serve  de  apoio  ao  principal,
+retornando o resultado do processamento do sinal no host, sinalizando visualmente
+através dos LEDs coloridos, que são acionados pelo módulo feedback. Portanto, este nó
+não requer qualquer adaptação física especial, pois os recursos utilizados são on board.
+4.2.2. Analyzer
+Este  módulo  localiza-se  no  computador  host,  responsabilizando-se  pela  análise  e
+interpretação  dos  dados  recebidos  pela  estação-base                                      (leitura  da  aceleração  do
+movimento da mão prioritária e posicionamento dos dedos). Resultando a função que
+concatena o comportamento dos três eixos (x, y e z), modelando-se matematicamente o
+sinal gesticulado.
+4.2.3. Parser
+O módulo parser recebe do analyzer a função matemática do sinal para realizar a
+pesquisa  na  base  de  dados,  retornando  o  caractere  correspondente.  Se  o  caractere
+correspondente ao sinal Libras for localizado, o parser processa a saída deste para o
+arquivo XML, de acordo com as configurações previamente configuradas pelo usuário,
+emitindo o sinal positivo ao módulo feedback. Caso contrário emite sinal negativo e
+aborta  o  processamento  do  sinal.  Lembrando  que  o  processamento  dos  módulos
+Analyzer e Parser ocorrem no computador host, por este possuir maior capacidade
+computacional que os SPOTs, além de possibilitar a integração com outras aplicações,
+bem como recursos visuais gráficos.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+4.2.4. Feedback
+O feedback responsabiliza-se por sinalizar visualmente através dos LEDs do Sun SPOT
+auxiliar o resultado da transação. Ao receber o parâmetro positivo do módulo parser,
+pisca  alternadamente  os  oito  LEDs  na  cor  verde.  Porém,  se  receber  a  mensagem
+negativa, sinaliza-os na cor vermelha.
+5. Comparativo com os trabalhos relacionados
+A Tabela  1 apresenta um estudo comparativo entre a solução proposta e os demais
+sistemas analisados no estado da arte:
+Tabela 1. Comparativo entre os sistemas analisados.
+Foram analisadas as funcionalidades apresentadas pelos sistemas mencionados
+na seção anterior, constatou-se que as soluções em sua maior parte abordam a temática
+da acessibilidade para os surdos sob a perspectiva da sociedade ouvinte. Ou seja, são
+soluções que realizam a tradução da língua majoritária para a língua de sinais, tendo
+como input para tradução: texto ou voz. Dessa forma destaca-se no SensorLibras, o
+diferencial do uso de sensores como tecnologia para leitura e interpretação dos sinais, tal
+qual o AcceleGlove, porém com o acréscimo de possuir ampla autonomia, devido ao
+baixo consumo de energia; Utilizar comunicação totalmente wireless; Ser projetado para
+uso independente de plataforma operacional (Multiplataforma) e voltado para a Língua
+Brasileira de Sinais (Libras).
+6. Testes e simulações
+Os  testes  práticos  realizados  em  ambiente  real  de  utilização  contemplaram  a
+participação de um surdo, do sexo masculino, canhoto, 20 anos de idade, estudante de
+escola especial para surdos, letrado em Libras e em língua portuguesa. Como corpus, a
+experiência considerou a palavra CASA, pela abordagem da datilologia Libras, ou seja,
+com a soletração das letras C-A-S-A, sequencialmente. O computador utilizado possui a
+configuração: Notebook HP Pavilion dv5-1125br com processador AMD Turion X2
+Dual  Core,  HD  de  160  GB,  memória  RAM  de  2GB  800Mhz  DDR2  e  sistema
+operacional Windows Vista Home Basic SP1.
+O módulo reader do SensorLibras foi utilizado para a leitura dos movimentos
+relativos aos sinais, abrangendo dois posicionamentos corporais: em pé e sentado. As
+                                                                                              amostras  coletadas  consideraram  três  velocidades  de  leitura:                                            “calmo”                  (devagar),
+“intermediário”                                                                               (médio)  e                                                           “breve”   (rápido).  Foram  realizadas   3  coletas  para  cada
+velocidade em cada posição, totalizando 18 repetições da mesma palavra.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+O intervalo de tempo entre cada leitura da aceleração da mão do surdo, foi de
+10ms e a escala padrão de aceleração foi de 2G (1G = 9,8m/s², portanto o teto da leitura
+é  19,6m/s²; Os valores em análise nos gráficos estão em decimais da escala G). A
+distância entre a “luva” e o computador (host) cuja leitura foi realizada sem perda de
+qualidade foi de aproximadamente 30 metros, sem obstáculos.
+Tendo em vista que os termos “calmo”, “intermediário” e “breve” são subjetivos
+e  serviram  apenas  como  forma  de  se  estabelecer  a  comunicação  na  linguagem  do
+usuário, realizou-se o monitoramento dos tempos de gesticulação da palavra sob análise,
+em cada uma das 3 velocidades, conforme a Tabela 2:
+Tabela 2. Tempos de leitura na posição “em pé”.
+A partir do registro dos dados coletados, obteve-se o gráfico de seqüência das
+acelerações nos três eixos espaciais (X, Y e Z), que apresentou o mesmo padrão em
+todas as leituras realizadas. Para efeito de comparação, selecionaram-se os gráficos da
+média das leituras da posição  “em pé”, nas velocidades  “calmo” e  “intermediário”,
+conforme visualiza-se na Figura 6 e Figura 7, respectivamente:
+                                                                                                                      Palavra C-A-S-A (Calmo)                                                                                                                                               Palavra C-A-S-A (Intermediário)
+1,50                                                                                                                                                                                           1,50
+1,00                                                                                                                                                                                           1,00
+0,50                                                                                                                                                                                           0,50
+                                                                                                                                                                                     X Accel                                                                                                                                                               X Accel
+0,00                                                                                                                                                                                 Y Accel   0,00                                                                                                                                                        Y Accel
+                                                                                            1   3   5   7             9  11 13  15 17 19 21  23 25 27 29 31  33 35 37 39  41 43 45   Z Accel           1   3                                                                        5   7   9  11 13  15 17 19 21  23 25 27 29 31  33 35 37 39  41 43 45   Z Accel
+-0,50                                                                                                                                                                                          -0,50
+-1,00                                                                                                                                                                                          -1,00
+-1,50                                                                                                                                                                                          -1,50
+                                                                                                                      leitura (10 ms)                                                                                                                                                       leitura (10 ms)
+                                                                                                                      Figura 4. Gráfico da leitura “calmo”.                                                                                                                                 Figura 5. Gráfico da leitura “intermediário”.
+                                                                                                        As  figuras                                                                                        4  e  5  apresentam  os  gráficos  de  leitura,  sendo  a  leitura  nº                                                                                    4
+(equivalente a 40 ms), os valores são constantes em ambos os gráficos, pois a mão do
+surdo encontra-se parada. A partir da leitura nº 5 (50 ms) há a variação nos três eixos
+(X, Y e Z), indicando o movimento no espaço tridimensional, havendo o retorno ao
+status quo, nas leituras nº 30 (3000 ms) e nº 24 (2400 ms), respectivamente. A partir
+desta constatação, surge a necessidade da análise minuciosa do período que compreende
+os valores não constantes. Identifica-se neste período um padrão estatístico que descreve
+as letras gesticuladas, podendo-se a partir disso, gerar um modelo para finalmente obter-
+se a função matemática do sinal, que terá por característica a variável “aceleração” em
+relação ao tempo.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Além disso, com os testes realizados comprovou-se o padrão gráfico nas duas
+velocidades  supracitadas,  embora  se  evidencie um  “estreitamento” da representação
+gráfica no segundo caso, que deve-se ao aumento da velocidade de gesticulação.
+Cabe ressaltar que para o caso em análise, considerou-se somente a aceleração
+do   movimento/posicionamento   da   mão   prioritária   do   surdo,   ignorando-se   o
+posicionamento/pressionamento  dos  dedos,  restando  esta  análise  para  o  momento
+oportuno da classificação individual das letras.  Para   visualização   da   simulação   em
+pauta, disponibilizou-se o vídeo deste laboratório em [Acessibilidade para TI 2009].
+7. Conclusão
+Este  trabalho  apresentou  como  principal  contribuição  uma  solução  de  ferramenta
+tecnológica para o ensino da língua portuguesa para surdos, podendo ainda, ser utilizada
+como tecnologia para a promoção da acessibilidade comunicacional para os membros
+desta comunidade.
+O estágio atual de desenvolvimento está em fase intermediária, centrando-se em
+testes e simulações para a obtenção dos modelos de padrões estatísticos dos sinais da
+Libras, correspondentes às letras da língua portuguesa.
+Preliminarmente,  dentre  as  contribuições  científicas  mais  relevantes  obtidas,
+destacam-se a abordagem sob a perspectiva surdo-ouvinte  (Libras-Português). Além
+disso, validou-se a capacidade do dispositivo Sun SPOT como arquitetura para leitura
+dos  movimentos,  através  da  boa  qualidade  na  captura  da  aceleração/ângulos  de
+inclinação da mão. Ainda sobre o dispositivo, comprovou-se sua eficiência no consumo
+de energia  (boa durabilidade da bateria, até  7 horas em uso constante) e satisfatória
+capacidade  de  processamento/transmissão  por  radiofreqüência,  além  do  suporte  on
+board para o feedback do processamento, sinalizado por LEDs coloridos e entrada de
+sinais, relativos aos dedos do usuário surdo, através dos pinos digitais.
+Por fim, apesar do escopo restrito da simulação, comprovou-se a possibilidade
+de tradução dos sinais da Libras para letras da língua portuguesa pela determinação de
+modelos de padrões estatísticos exclusivos a cada caractere, obtidos pela interpretação e
+comparação dos movimentos e posicionamento espacial da mão do surdo.
+8. Trabalhos futuros
+Em termos de desenvolvimento futuro para a solução SensorLibras, os aprimoramentos
+deverão  se  voltar  para  a  tradução  dos  sinais  complexos  da  Libras,  não  somente  a
+datilologia,  assim  como  o  desenvolvimento  de  módulos  específicos  voltados  para
+determinadas áreas de atuação do surdo ou que o mesmo possa selecionar contextos de
+utilização.
+Para além do foco do SensorLibras, outros trabalhos futuros para esta solução
+mostram-se  promissores,  pois  se  possibilitaria  combiná-la  com  outras  aplicações,
+gerando soluções como:
+- A fala para surdos, através de sintetizadores de voz, com a entrada do texto a partir do
+XML gerado pelo SensorLibras; Isto possibilitaria por exemplo, a comunicação direta
+entre surdos e cegos;
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+- Inclusão/Comunicação digital, a partir do uso de mensageiro instantâneo, chat, e-mail
+e  navegador  de  internet,  acessados  diretamente  pela  sua  língua  materna             (Libras),
+proporcionando agilidade e naturalidade na interação surdo-computador, abstraindo-se o
+teclado/mouse;
+- Escrita de livros/Registros para surdos, pela transcrição direta para SignWriting  (a
+escrita pictográfica da língua de sinais), através do uso do SWService  [Souza 2005],
+possibilitando a representação escrita na sua língua materna;
+- Comunicação efetiva (“fala” e “audição”) com os ouvintes, a partir da integração do
+SensorLibras com alguma das tecnologias exploradas no estado da arte deste artigo,
+sendo que o surdo “falaria” pelo sintetizador de voz e “ouviria” pelo avatar que sinaliza
+a voz reconhecida e interpretada do interlocutor ouvinte.
+Agradecimentos
+Agradecemos à empresa Sun Microsystems pela doação dos kits do Sun SPOT que
+possibilitaram a realização do presente estudo e ao estudante surdo Jéferson Machado da
+Escola Municipal Especial para Educação de Surdos  (EMEES) situada na cidade de
+Gravataí/RS, Brasil, pela colaboração na realização dos testes apresentados.
+Referências
+Acessibilidade Brasil. (2009), <http://www.acessobrasil.org.br>, Abril.
+Acessibilidade para TI. (2009), <http://acessibilidadeti.blogspot.com>, Agosto.
+Alves,  Adriana  G.;  Raabe,  André  Luís  Alice;  Fischer,  G.  S.;  Grandi,  G.           (2002),
+“Inclusão  digital  para  Portadores  de  Necessidades  Especiais”,  In:  II  Congresso
+Brasileiro de Computação - CBCOMP2002, Itajaí/SC.
+BBC News. (2009), <http://news.bbc.co.uk/1/hi/technology/6993326.stm>, Fevereiro.
+Campos, M. B.; Silveira, Milene Selbach; Santarosa, L. M. C.  (1999),  “Tecnologias
+para  a  Educação  Especial”,  Informática  na  Educação,  PGIE/UFRGS                       -  Porto
+Alegre/RS, v. 1, n. 1, p. 55-72.
+Canto, R. P. (2008), “SensorNet - Uma proposta de aplicação para gerenciamento de
+redes de sensores sem fio”, Instituto de Informática, UFRGS, TCC, Porto Alegre,
+Novembro.
+Farias, G. M. (2006), “Aquisição da Língua Portuguesa Escrita por crianças surdas”,
+Monografia  (Licenciatura  em  Letras),  Universidade  do  Vale  do  Rio  dos  Sinos
+(UNISINOS), São Leopoldo/RS.
+iDev2. (2009), <http://idev2.com/iSign/iSign.html>, Fevereiro.
+Leithardt,  V.  R.  Q.                                                                      (2008),                                                            “Modelo  Gerenciador  de  Serviços  para  Plataformas
+                                                                                            Pervasivas  Sensíveis  ao  Contexto”,  Dissertação  de  mestrado   (Faculdade  de
+                                                                                            informática), PUCRS, 86 páginas, Dezembro 2008.
+Libras. (2009), <http://www.libras.org.br/index.php>, Abril.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Lira, G. A. (2009), “O impacto da tecnologia na educação e inclusão social da pessoa
+portadora de deficiência auditiva: Tradutor digital português x Língua brasileira de
+sinais - Tlibras”, <http://www.senac.br/BTS/293/boltec293d.htm>, Março.
+Loureiro,  A.  F.  (2004),  “Arquiteturas  para  redes  de  Sensores  Sem  Fio”,  Simpósio
+Brasileiro de Redes de Computadores (SBRC), Maio.
+LQES.  (2009),  “A linguagem dos sinais, usada por deficientes surdos-mudos, pode
+agora                                                                                        ser                           traduzida                                                  por                     uma   luva
+eletrônica”,<http://lqes.iqm.unicamp.br/canal_cientifico/lqes_news/lqes_news_cit/lq
+es_news_2003/lqes_news_novidades_292.html>, Fevereiro.
+Martins, R.; Pelizzoni J.; Hasegawa R. (2005), “Para um Sistema de Tradução Semi-
+Automática Português-Libras”, In: III Workshop em Tecnologia da Informação e da
+Linguagem  Humana  -  TIL  2005  (XXV  Congresso  da  Sociedade  Brasileira  de
+Computação).  Universidade  do  Vale  do  Rio  dos  Sinos                                    (UNISINOS),  São
+Leopoldo/RS. Anais do XXV Congresso da Sociedade Brasileira de Computação -
+SBC 2005, Julho.
+Portal  de  Libras.                                                                          (2009),                       <http://www.pr.senai.br/portaldelibras/FreeComponent5283
+                                                                                             content33477.shtml>, Abril.
+Rybená. (2009), <http://www.rybena.org.br/rybena/default/index.jsp>, Fevereiro.
+Souza, V. C. (2005), “SWService: uma biblioteca para a escrita da Língua Brasileira de
+Sinais baseada em Web Services”, Dissertação (Mestrado em Computação Aplicada),
+130f. UNISINOS, São Leopoldo/RS.
+Souza, V. C.; Vieira, R. (2006), “Uma proposta para tradução automática entre Libras e
+Português  no  Sign  WebMessage”,  IV  Workshop  in  Information  and  Human
+Language Technology - TIL 2006.
+Sun SPOT World. (2009), <http://www.sunspotworld.com>, Junho.
+Tavares,  João  E.  da  R.  (2009),  “SensorLibras  -  Estudo  e  desenvolvimento  de  um
+sistema para tradução libras/língua portuguesa  utilizando   RSSFs”,   Trabalho   de
+Conclusão de Curso, Sistemas de Informação, FACENSA/RS.
+Tavares,  João  E.  da  R.;  Leithardt,  Valderi  R.  Q.                                     (2009),                       “Uma  proposta  para
+acessibilidade através da tradução automática libras-português”, In: I Simpósio de
+Computação Aplicada, Universidade de Passo Fundo/RS, Setembro.
+Unisc.                                                                                       (2009),   NAAC                (Núcleo   de   Apoio   Acadêmico),                         <http://www.unisc.br/
+universidade/estrutura_administrativa/nucleos/naac/index.html>, Abril.
+VCom3D. (2009), <http://www.vcom3d.com//index.php?id=ssstudio>, Fevereiro.
+Weiser, M. (1991), “The Computer for the Twenty-First Century”, Scientific American,
+p. 94, Setembro.
+Xavier,  A.  J.;  Raabe,  André  Luís  Alice;  Sales,  M.  B.;  Sigulem,  Daniel.            (2004),
+“Desafios de interação e acessibilidade para o usuário Idoso”, In: CBIS’2004 - IX
+Congresso Brasileiro de Informática em Saúde, Florianópolis.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+

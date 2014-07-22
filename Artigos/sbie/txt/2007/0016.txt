@@ -1,0 +1,372 @@
+﻿Definição Formal de Táticas de Xadrez por Meio da
+Autoria Incremental de Conceitos Heurísticos
+Alexandre Feitosa1,2, Alexandre Direne2,   Fabiano Silva2, Luis de Bona2, André
+Guedes2, Marcos Castilho2, Marcos Sunyé2, Laura García2
+1Universidade Tecnológica Federal do Paraná (UTFPR)
+Avenida Alberto Carazzai no 1.640,   Cornélio Procópio - PR - CEP 86.300-000
+2Universidade Federal do Paraná - C3SL - Departamento de Informática
+Caixa Postal 19.081, Curitiba - PR - CEP 81.531-980
+alexandrefeitosa@utfpr.edu.br, prdcoord@c3sl.ufpr.br
+Abstract.  The  paper  presents  the  research  results  about  a  formal  and
+incremental definition of heuristics knowledge for games. Firstly, a critical
+analysis   of   the   existing   concepts,   intrinsic   to   heuristic   knowledge
+formalization  in  games,  took  place,  including  temporal-,  spatial-  and
+material-advantage  aspects,  which  also  considered  symmetry  across  de
+players.  Secondly,  a  heuristics  definition  language,  called  DHJOG,  was
+proposed.  The  language  allows  the  complete  formalization  of  heuristic
+knowledge so that it can be applied in simulated two-player matches. The
+definition of heuristic parameters is based on the formalisms of Production
+Rules and Finite State Machines. Finally, a prototype authoring tool was
+implemented and now serves as a means to validate the DHJOG language in
+Chess training centres.
+Resumo.  O artigo apresenta os resultados da pesquisa sobre a definição
+formal   e   incrementável   de   conhecimentos   heurísticos   de   jogos.
+Primeiramente, foi realizada uma análise crítica dos conceitos existentes e
+inerentes à formalização de conhecimentos heurísticos de jogos, incluindo
+fundamentos como vantagem espacial, temporal e material, os quais foram
+cuidadosamente  observados  inclusive  sob  seus  aspectos  de  simetria  em
+relação aos jogadores. Na segunda etapa, foi especificada uma linguagem
+para a definição de heurísticas de jogos, chamada DHJOG. Essa linguagem
+permite a formalização completa destes conhecimentos heurísticos e o uso da
+especificação  criada  para  alimentar  um  simulador  de  partidas  de  dois
+jogadores. A definição de parâmetros heurísticos se fundamenta em Regras de
+Produção  e  Máquinas  de  Estados  Finitos.  Finalmente,  um  protótipo  de
+ferramenta de autoria foi implementado e serve agora como meio para a
+validação da linguagem DHJOG em escolas de Xadrez.
+1. Introdução
+Os jogos heurísticos, como Xadrez e Go, se distinguem dos chamados “jogos de azar”
+por não possuírem nenhuma componente aleatória em seu contexto de planejamento do
+movimento  das  peças  no  tabuleiro.  O  ensino  de  jogos  heurísticos  é  normalmente
+realizado através de aulas expositivas, onde o instrutor apresenta as regras básicas de
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   155
+
+
+
+
+movimento das peças e, o quanto antes, conduz estudos de casos contextualizados sobre
+partidas  reais  ou  hipotéticas.  Nesse  processo,  o  aluno  é  levado  a  desenvolver
+habilidades para identificar, relacionar, e valorar as possíveis vantagens que podem
+ocorrer durante uma partida. Tais vantagens são organizadas em 3 grandes classes: (a)
+material; (b) espacial; (c) temporal. A de natureza material se refere aos pesos relativos
+entre os diferentes tipos de peças ao passo que a espacial considera a posição das peças
+no tabuleiro, ambas em um dado instante da partida. A terceira vantagem sintetiza
+elementos de evolução da partida (fases), sempre contabilizada em relação ao jogador e
+seu oponente, assim como nas duas primeiras classes.
+A adoção de táticas específicas por parte do jogador, derivadas das classes
+citadas, pode acelerar a conquista de uma partida. Todavia, é possível identificar vários
+problemas nessa abordagem de ensino. Primeiramente, muitos conceitos sobre táticas de
+como  atingir  vantagens  são  tratados  de  maneira  subjetiva  e  entrelaçada,  sem  um
+formalismo claro que os separe nas três grandes classes citadas acima. Por exemplo, no
+Xadrez existe a tática de dominar o centro do tabuleiro na abertura do jogo, mas não
+existe nenhum formalismo que deixe claro para o aprendiz iniciante quando uma partida
+está na fase de  “abertura,” quais casas constituem o  “centro” do tabuleiro e de que
+forma uma região pode ser considerada “dominada.”
+Em segundo lugar, mesmo que o aprendiz analise registros de partidas onde um
+lance tenha sido informalmente adotado, ele terá dificuldade em identificar a tática que
+o jogador   aplicou mentalmente durante o jogo para decidir o quão plausível era o lance
+que lhe conferiu a vantagem. A prática mostra que a perícia desta percepção de táticas
+específicas só é alcançada depois da análise exaustiva de várias partidas e do uso das
+citadas táticas em um número muito grande de competições (centenas, ou até milhares).
+Em terceiro,  a  validação  do  aprendizado  apenas  através  da  participação em
+competições é um processo impreciso pois, ao final de cada partida, apenas se constata
+a vitória, o empate ou a derrota do aprendiz. Um instrutor poderá, acompanhando a
+partida, perceber quais técnicas o aprendiz tentou utilizar, mas não conseguirá, de forma
+precisa, enumerar os parâmetros assumidos mentalmente na decisão de cada um dos
+lances.  Tal  quadro  de  imprecisão  e  falta  de  formalismos  oferece  dificuldades  aos
+instrutores na composição de explicações destinadas à correção de postura.
+Por último, essa abordagem didático-pedagógica não direciona o aprendiz a
+entender explicitamente o conceito-chave de heurística e não o estimula a formalizar
+suas decisões, adotadas passo-a-passo durante a condução das partidas. Tais limitações
+se devem em muito à falta de linguagens e ferramentas que permitem aos especialistas,
+instrutores e aprendizes descrever formalmente seus conhecimentos heurísticos sobre
+um jogo, o que facilitaria muito a troca desses conhecimentos especificados entre os
+membros da comunidade. Em boa parte, a escassez de estudos científicos nesse campo
+se deve   à dificuldade de se conceber representações externas (RE) que sejam de fácil
+assimilação por parte de usuários leigos, principalmente crianças sem conhecimentos de
+Inteligência Artificial, para que sejam autores de parâmetros heurísticos.
+Este  trabalho  apresenta  novos  conceitos  e  ferramentas  de  software  para  a
+definição  (autoria) formal e incremental de conhecimentos heurísticos de jogos. Ele
+também serve de base para o projeto e desenvolvimento de mecanismos mais genéricos
+que apóiam a aprendizagem de conceitos em diversas disciplinas do currículo escolar
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      156
+
+
+
+
+(Matemática, Física, etc.) por fazerem uso de parâmetros heurísticos como um meio
+para estimular competições de finalidade educacional (Qin et alli., 1995).
+2. Resenha literária
+Várias  pesquisas  e  sistemas  foram  desenvolvidos  utilizando  jogos  no  processo
+educacional. As ferramentas existentes atualmente para o ensino de jogos se preocupam
+apenas em apresentar suas regras básicas e, logo em seguida, enfrentar o aprendiz
+humano como um   adversário artificial. Fora do mundo comercial, também não foram
+encontrados  na  literatura  de  pesquisa,  trabalhos que enfocam a aprendizagem livre
+(Netto, 2005), a formalização e a validação de conceitos heurísticos.   Um dos poucos
+exemplos  desse  último foi o estudo realizado  por  Gadwal  et. alli.  (2000), que  foi
+dirigido ao apoio do ensino de táticas específicas do Xadrez, mas não dos conceitos
+heurísticos explícitos do jogo.
+Em campos paralelos aos da pesquisa em jogos educacionais, o conceito de
+representação  externa                                                                      (RE)  foi  definido  como  o  uso  de  técnicas  para  descrever,
+organizar e apresentar conhecimento ao usuário. A utilização de diagramas, textos e
+gráficos são exemplos clássicos do uso de técnicas de representação externa. Autores
+como Zhang (2001) mostram como é importante o uso adequado de REs para facilitar a
+solução de problemas complexos. O benefício mais evidente do uso de representações
+externas (RE) é o de facilitar o processo de memorização, reduzindo a carga cognitiva
+necessária para se realizar uma tarefa. Todavia, essa ainda não é a sua característica
+fundamental. Uma RE pode possuir as seguintes propriedades (Zhang, 2001): (a) prover
+informações  que  podem  ser  usadas  diretamente  sem  nenhuma  interpretação  ou
+formulação  explícita;  (b) fixar comportamento cognitivo;  (c) mudar a natureza das
+tarefas a serem realizadas, podendo torná-las mais fáceis ao usuário.
+Swidersk (2001), por sua vez, propõe a criação de uma ferramenta de controle
+de  conteúdos  educacionais  em  sistemas  hipermídia.  Esta  ferramenta  possibilita  ao
+usuário controlar quais tipos de mídias são mostrados (vídeo, som, texto, etc.) e qual
+nível de detalhamento das REs deve ser aplicado na apresentação. Dessa forma, o
+aprendiz  pode  acomodar  a  interface  ao  seu  nível  de  conhecimento  e  às  suas
+preferências. Se ele for um usuário iniciante, pode escolher o acesso a menos detalhes
+sobre um conteúdo e utilizar mídias mais simples, como o vídeo. A partir do momento
+em que ele se sentir confortável com o tema, pode querer aprofundar os estudos. Para
+isso, ele altera a interface para apresentar mais informações e para utilizar REs mais
+complexas, como diagramas, textos e fórmulas.
+Nos estudos feitos por Ainsworth & Labeke (2004), sucedidos pelos de Major
+et.alli. (2997), é discutida a importância do uso de várias formas de RE em ambientes de
+aprendizagem, as quais foram chamadas de MRE (Múltiplas Representações Externas).
+O referido trabalho descreve o sistema Calques3D para apoio ao ensino de conceitos
+geométricos. Nesse sistema existem diferentes formas de RE que são utilizadas para
+apresentar o mesmo conhecimento, só que por abordagens diferentes. Por exemplo, por
+meio do Calques3D, é   possível criar uma figura geométrica e analisá-la através de uma
+visão 3D, de uma visão 2D, pela lista de figuras geométricas que a compõem, ou ainda
+pelas fórmulas matemáticas que a descrevem. Isto permite que o aprendiz tente utilizar
+a RE que mais se adapta à sua capacidade cognitiva atual.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                    157
+
+
+
+
+Também se dedicando às pesquisas em MREs, Joolingen (1999) apresentou um
+estudo realizado sobre o uso de REs em um ambiente colaborativo de ensino, onde os
+aprendizes podem modelar e simular modelos matemáticos. Ele utilizou neste sistema
+três tipos de REs: gráfica  (na forma de um grafo), textual  (fórmulas matemáticas) e
+dinâmico-visual                                                                                (um  gráfico  de  execução  do  modelo).  Durante  os  experimentos
+realizados, a RE de natureza dinâmico-visual estava acessível a todos os aprendizes
+para que pudessem validar os modelos criados. Foi observado que apenas os aprendizes
+que  utilizaram  a  representação  textual  conseguiram  efetuar  comparações  entre  a
+simulação esperada e o gráfico da representação dinâmico-visual.
+3. Conceitos fundamentais para a definição de heurísticas
+3.1. A linguagem  DHJOG  e a valoração heurística
+Nos diversos contextos de um jogo, cada tipo de peça poderá ter uma importância maior
+ou menor para um jogador, de acordo com a visão que ele tem de como a peça pode
+ajudá-lo a conquistar a vitória. Tal importância é definida atribuindo-se a cada tipo de
+peça um valor inicial. Por exemplo, no Xadrez, o Peão poderia valer 1, a Torre 2, o
+Cavalo  4,  etc.  O  valor  escolhido  deve  levar  em  consideração  as  características  e
+comportamentos da peça, comparando-a sempre com os demais tipos existentes, de
+forma independente de situações específicas do jogo. No Xadrez, um Peão sempre é
+considerado uma peça mais fraca do que uma Dama, pelas suas limitações de ação. Tal
+constatação pode ser atingida rapidamente por meio de uma competição artificial.
+A partir dos estudos realizados neste trabalho sobre os parâmetros heurísticos
+existentes em uma situação de jogo e a relação entre eles, foi definida uma linguagem
+para a definição de heurísticas de jogos, chamada DHJOG. Ela é formada por vários
+componentes  distintos                                                                         (etapas,  estimativas,  primitivas,  etc..)  que  possibilitam  a
+formalização  de  uma  ampla  gama  de  conhecimentos  heurísticos  de  um  jogo.  Em
+particular,  a  DHJOG  possui  vastos  recursos  de  primitivas  lógico-matemáticas  com
+grande  expressividade  e  formalismo.  Os  tipos  de  primitivas  disponíveis  são:           (a)
+aritméticas; (b) geométricas; (c) lógicas; (d) algébricas.
+3.2. Níveis de expressividade da linguagem DHJOG
+As funcionalidades para a formalização de parâmetros heurísticos de jogos disponíveis
+na linguagem DHJOG foram agrupadas em níveis de expressividade. Quanto maior o
+nível, mais conhecimento é necessário ao Autor e mais recursos da linguagem estarão
+disponíveis para serem utilizados. As principais vantagens resultantes desta abordagem
+são (a Tabela 1 traz os níveis de expressividade criados para a linguagem DHJOG):
+   permite-se realizar uma análise profunda sobre os elementos da linguagem, a
+relação entre eles, o grau de complexidade, e de expressividade de cada um;
+   o autor iniciante pode, desde o primeiro momento, utilizar a linguagem para
+a criação de heurísticas simples de um jogo e acompanhar o desempenho
+dessas heurísticas em partidas automáticas;
+   a  ferramenta  de  edição de heurísticas permite que o usuário acomode a
+interface  ao  seu  conhecimento  e  experiência  na  criação  de  heurísticas,
+possibilitando melhor utilização da aplicação tanto para usuários iniciantes
+quanto para avançados.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       158
+
+
+
+
+Nível                                                                                                       Descrição da Expressividade Permitida
+1                                                                                           Iniciante       Neste nível o aprendiz praticará a alteração dos valores iniciais de cada tipo de Peça.
+2                                                                                           Básico          Neste nível o aprendiz poderá definir regiões e criar Heurísticas de Valor de Peça.
+3                                                                                           Intermediário   Neste nível o aprendiz poderá criar Heurísticas de Valor de Jogo.
+Neste nível o aprendiz poderá definir novas Etapas e criar os critérios de transições
+4                                                                                           Pleno
+entre elas (Heurísticas de Transição de Etapas).
+Neste nível o aprendiz poderá alterar as Expressões de Cálculo Heurísticos de cada
+5                                                                                           Avançado
+                                                                                                            Etapa criada.
+6                                                                                           Especialista    Neste nível o autor poderá alterar e codificar novas funções internas.
+                                                                                                            Tabela 1 - Níveis de Expressividade da Linguagem DHJOG
+4. Ferramenta de autoria de heurísticas
+Nesta  seção  iremos  discutir  as  técnicas  e  representações  externas  adotadas  no
+desenvolvimento do protótipo da ferramenta de autoria de heurísticas que utiliza a
+DHJOG.
+4.1. Adaptação de Interface ao Nível de Conhecimento do Usuário
+Na linguagem DHJOG, foram especificados níveis de expressividade. Cada nível indica
+uma  faixa  de  conhecimento  heurístico,  de  esforço  cognitivo  e  de  elementos  de
+formalização heurística. Quanto mais alto o nível, maior conhecimento e experiência
+são necessários ao aprendiz (autor) e maior será o poder de representação heurística
+disponível.  O  autor,  no  momento  da  criação  de  um  novo  conjunto  de  parâmetros
+heurísticos, deverá definir qual nível de expressividade pretende utilizar na edição. A
+interface da ferramenta irá adaptar-se para prover apenas funcionalidades compatíveis
+ao nível de expressividade selecionado. Essa adaptação incluirá ações como ocultar,
+exibir ou adaptar as funções do sistema e as representações externas utilizadas dentro no
+nível.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                    159
+
+
+
+
+Figura 1 - Tela de Edição de Etapas e de Visualização de Regiões
+A interface do editor apresenta no seu canto superior direito um item chamado “Nível
+de  Complexidade”,  o  qual  exibe  o  nível  de  expressividade  da  linguagem  DHJOG
+atualmente  em  uso.  O  termo  complexidade  foi  utilizado  em  detrimento  do  termo
+expressividade por ser mais compreensível aos usuários iniciantes. A Figura 1 apresenta
+a interface do Editor de Heurísticas e o item discutido.
+O autor poderá, a qualquer momento, alterar o nível de complexidade do
+conjunto de parâmetros heurísticos atualmente aberto no editor. O simples fato de
+alterar este nível fará primeiramente com que a interface questione o usuário sobre essa
+ação e caso ele confirme a intenção de fazê-la, a interface será adaptada para
+contemplar o novo nível de expressividade selecionado. Isto possibilita que o aprendiz
+possa avançar para o próximo nível no instante em que se sentir confortável com o
+conhecimento estudado até o momento.
+4.2. Utilização de Facilitadores de Tarefas - Wizards
+A formalização de heurísticas de jogos usando a linguagem DHJOG é um processo que
+compreende a especificação de vários elementos, tais como: conjunto de parâmetros
+heurísticos, etapa, anotação, função e região. A ferramenta de autoria de heurísticas
+possui interfaces para auxiliar o autor no processo de criação, alteração e exclusão
+desses itens. Tais interfaces foram projetadas com o enfoque de direcionar o usuário
+durante toda a realização da tarefa, especificando um caminho a ser seguido, oferecendo
+apenas as opções de ações válidas para o contexto atual e validando automaticamente as
+entradas feitas pelo usuário. Interfaces que seguem esta linha de desenvolvimento são
+comumente chamadas de “Wizards”.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   160
+
+
+
+
+4.3. Definição Visual de Regiões
+Na linguagem DHJOG é possível especificar uma lista de posições de jogo chamada
+“região.” Esta lista pode ser utilizada como parâmetro para funções de identificação de
+contextos. Na ferramenta de autoria foi criada uma interface específica para a definição
+visual de regiões. Nessa interface, o autor poderá utilizar ferramentas que seguem o
+padrão de aplicações de editoração gráfica, tais como:
+    Retângulo (permite desenhar um retângulo no tabuleiro onde as casas que
+estão inclusas nesta figura serão pertencentes à região);
+    Lápis                                                                                   (permite  marcar  casas  do  tabuleiro,  uma  a  uma,  como  se  fossem
+pontos, sendo que cada casa marcada está incluída na região);
+    Borracha: (apaga uma casa marcada pela ferramenta lápis ou um retângulo
+desenhado no tabuleiro, eliminando as casas da região definida);
+    Seleção (permite selecionar uma figura desenhada no tabuleiro, um retângulo
+ou ponto, e movê-la para outra posição).
+Como  é  possível  criar  várias  regiões  a  serem  utilizadas  pelas  heurísticas
+formalizadas, foi necessário também projetar um mecanismo que permite ao usuário
+verificar quais regiões foram definidas até o momento. A técnica escolhida segue o
+mesmo princípio das ferramentas de editoração gráfica para que seja de fácil uso pelos
+jovens. É apresentada ao autor a figura de um tabuleiro de Xadrez onde as regiões
+definidas são desenhadas sobre ele, cada qual com uma cor especifica. Como é possível
+a existência de regiões que se sobrepõem, cada região é desenhada usando o efeito de
+semi-transparência.  Isso  permite  ao  usuário  a  opção  de  movimentá-las  para  frente
+(cima) ou para trás (fundo) e de defini-las como visíveis ou não (vide Figura 1).
+4.4. Diagrama de Transição entre Etapas
+No momento da criação do conjunto de parâmetros heurísticos, uma etapa padrão será
+associada  automaticamente  a  ele.  De  acordo  com  o  progresso  da  assimilação  de
+conhecimento por parte do aprendiz sobre a definição de parâmetros heurísticos, ele
+poderá aumentar o nível de expressividade a ser utilizado. Quando o nível for igual ou
+superior  a  quatro                                                                          (“pleno”),  ele  poderá  definir  novas  etapas  para  o  conjunto  de
+parâmetros e regras de transições entre elas.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     161
+
+
+
+
+Figura 2 - Diagrama de Transições entre Etapas
+Com  o  intuito  de  facilitar  a  compreensão  desses  conceitos,  foi  definida  uma  aba
+específica  no  editor  para  conter  elementos  de  representação  externa  das  transições
+definidas entre as etapas. Esta representação é na forma de um diagrama de Máquina de
+Estados, onde temos um símbolo para indicar o estado inicial (elipse), setas para indicar
+as transições (a ponta da seta indica o estado destino), e vértices que indicam os estados
+possíveis (retângulos). A Figura 2 apresenta a aba de mudança entre etapas
+4.5. Geração Automática de Codificação Heurística
+O processo de formalização de conhecimento heurístico de jogo utilizando a linguagem
+DHJOG resulta em vários elementos codificados, os quais são: parâmetros, regiões,
+valores iniciais de peça, e funções de identificação de contexto. A ferramenta de autoria
+de  heurísticas  deixa  transparente  para  o  usuário  o  processo  de  geração  destas
+codificações.  Um  aprendiz  iniciante  não  precisa  ter  contato  com  a  representação
+intermediária da linguagem DHJOG, sendo que apenas as representações externas de
+mais  alto  nível  são  utilizadas  num  primeiro  momento.  A  Figura                         3  apresenta  a
+especificação de uma heurística de valor de peça, na aba principal da tela de edição do
+parâmetro heurístico.
+Ao alcançar o nível quatro (pleno) de expressividade, serão disponibilizadas ao
+aprendiz  as  abas  para  a  visualização  da  codificação  gerada  pela  ferramenta.  Isto
+permitirá ao usuário associar as alterações feitas em um elemento heurístico com as
+alterações geradas na sua codificação. Entender o processo  (sintaxe e semântica) da
+implementação destes elementos é um pré-requisito fundamental para se atingir o nível
+seis (especialista). Nesse nível, o autor poderá alterar e criar funções de identificação de
+contextos. A Figura 4 apresenta uma aba de código gerado com a implementação da
+heurística de valor de peça apresentada na Figura 3.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       162
+
+
+
+
+Figura 3 - Aba Principal                                                                               Figura 4 - Aba Código Gerado
+5. Conclusão e trabalhos futuros
+Apresentamos neste trabalho conceitos e ferramentas que propiciam a definição
+formal e incrementável de conceitos heurísticos de Xadrez. Este estudo está integrado a
+um  projeto  de  apoio  computacional  ao  ensino  de  Xadrez  nas  escolas  brasileiras
+(Martineschen  et.  all.,                                                                              2006).  Após  os  estudos  realizados  durante  o  levantamento
+bibliográfico sobre esse assunto e os temas correlatos, ficou constatado que não existem
+trabalhos semelhantes com a abordagem de ensino, e nem sobre o uso da formalização
+de conhecimento heurístico de jogos com benefício direto para disciplinas do currículo
+escolar.
+Como trabalho futuro, já foi iniciado o projeto de um assistente inteligente que
+possa monitorar o aprendiz durante o uso dos recursos do sistema, auxiliando-o no
+processo de compreensão e melhoria do desempenho dos parâmetros heurísticos do
+Xadrez. Isso é feito por meio da oferta de novas representações externas na interface de
+autoria  que  facilitam  a  descoberta  de  conhecimento  motivada  pelo  aprendiz.  Por
+exemplo, um gráfico dinâmico decompondo a ativação de cada parâmetro heurístico na
+avaliação de situações de jogo deverá funcionar como uma ferramenta de depuração
+para complementar o ambiente e autoria e aprendizagem.
+Referências
+AINSWORTH,  S.,  Labeke,  N.  (2004).  Multiple  forms  of  dynamic  representation.  Learning  and
+Instruction, 14(3):241.255, 2004.
+MARTINESCHEN, D., Direne, A., Bona, L., Silva, F., Castilho, M., Guedes, A., Sunyé, M. (2006)
+Alternância entre competição e colaboração para promover o aprendizado por meio de heurísticas de
+jogos. Anais do WIE2006 - Workshop sobre Informtica na Escola, p. 1-10. Campo Grande.
+GADWAL, D., Greer, J. E., McCalla, G. (2000). Tutoring bishop-pawn endgames: An experiment in
+using knowledge-based Chess as a domain for intelligent tutoring. Relatório Técnico, Department of
+Computacional Science, University of Saskatchewan, Canadá.
+JOOLINGEN,  W.  R. van,  (1999).  Cognitive tools for  discovery learning,  International Journal of
+Artificial Intelligence in Education, 10, 385-397.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                               163
+
+
+
+
+MAJOR, N, Ainsworth, S. and Wood, D. (1997). REDEEM: Exploiting symbiosis between psychology
+and authoring environments. International Journal of Artificial Intelligence in Education (IJAIED),
+8, 317-340.
+NETTO, J. F. M., Tavares, O, L., Menezes, C. S. (2005). Um Ambiente Virtual para Aprendizagem de
+Xadrez. Workshop - Jogos Digitais na Educação (XVI SBIE), 2005, Juiz de Fora - MG. Anais do
+XVI SBIE (versão digital).
+QIN, Z., Jhonson, D. W e Jhonson, T. J. (1995). Cooperative versus competitive efforts and problem
+solving. Reviews of Educational Research, 65, 129-143.
+SWIDERSK, Z., Parkes, A., (2001). A Volume Mechanism for Content-Based Control of Multimedia, em
+AI-ED 2001, Workshop External representations in AIED, San Antonio, Texas.
+WILLIAMS, B. (2001). The Role of External Representations in Intelligent Tutoring System authoring:
+Supporting localised decision making in a complex and evolving global context.Workshop External
+representations in AIED, San Antonio, Texas.
+ZHANG, J. (2001). External Representations in Complex Information Processing Tasks. Encyclopedia of
+Library and Information Science, Marcel Dekker, New York.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                              164
+
+
+
+
+

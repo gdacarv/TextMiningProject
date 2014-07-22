@@ -1,0 +1,204 @@
+﻿Configuração Automática de um Laboratório de Acesso
+Remoto por Meio de Agentes e Framework O-MaSE
+Marckson M. da Silva, José Francisco M. Netto
+Instituto de Computação (IComp/PPGI) - Universidade Federal do Amazonas (UFAM)
+Av. Gen. Rodrigo Otávio, 3.000, Coroado - Manaus - AM - Brasil
+{marcksonms,jnetto}@icomp.ufam.edu.br
+Resumo. Nesse artigo é apresentado o problema de configuração de cenários
+experimentais  em  Laboratórios  de  Acesso  Remoto                                          (LARs)  e  como  esse
+problema é resolvido usando a abordagem de Sistemas Multiagente (SMA).
+Para apresentar como resolver o problema, o SMA é modelado usando a
+metodologia O-MaSE. Esta metodologia permite modelar SMA a partir da
+abordagem organizacional e é focada em objetivo do SMA e não em cada
+agente de forma isolada.
+1. Introdução
+O avanço das tecnologias de comunicação, a crescente expansão de ofertas de cursos nas
+modalidades semipresencial e Educação a Distância (EaD) e o aumento da procura por
+plataformas educacionais baseadas na Internet, que consigam apoiar eficientemente as
+diversas interações que ocorrem entre professores e alunos, têm transformado a Internet
+em uma importante ferramenta para fins pedagógicos. Cada vez mais as Tecnologias da
+Informação  e  Comunicação                                                                   (TICs)  são  consideradas  no  processo  de  ensino-
+aprendizagem, usadas para tentar romper as barreiras do tempo e distância, além de
+procurar  atingir  um  processo  efetivo,  onde  as  ferramentas  usadas  permitam  uma
+dinâmica mais flexível e agradável.
+Geralmente, disciplinas como Física, que são ministradas no ensino médio, têm
+seus horários divididos em duas partes: uma carga horária de teorias e outra de práticas
+laboratoriais. Se o curso de Física adotar a forma de EaD, um dos desafios é a prática de
+laboratório,  que  nessa  modalidade  são  realizados  pelos  LARs.  Várias  tecnologias e
+abordagens apoiam a prática de LARs, mas mesmo assim, apresentam vários problemas,
+alguns desses apresentados por Gravier [Gravier 2008]: falta de reutilização de software
+em sua construção, falta de interoperabilidade entre laboratórios com mesmo campo
+científico de experimentação e a falta do uso de ferramentas de aprendizado colaborativo
+apoiado por computador. O problema abordado neste trabalho é apresentado dentro do
+tema  dos  LARs  e  é  baseado  na  seguinte  questão:  Como  robôs  autônomos  podem
+configurar cenários para experimentação?
+Uma  maneira  de  resolver  esse  problema  é  usando  SMA.  Este  artigo  está
+estruturado como segue: além desta seção de introdução, na seção 2 é apresentado sobre
+a  configuração  automática  de  LARs  e  a  justificativa  de  usar  SMA  na  solução  do
+problema  proposto  neste  artigo.  Na  seção                                                3  é  descrito  em  resumo  o  processo  de
+modelagem em O-MaSE criado para LAR. Na seção  4 são apresentados os modelos
+desenvolvidos usando o processo O-MaSE. Na seção 5 é apresentada a conclusão desse
+trabalho.
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+2. Laboratório de Acesso Remoto
+Depois de examinar vários trabalhos sobre laboratórios remotos distintos, exemplo do
+ambiente telerrobótico educacional LARRE [Souza 2010], WebLab-Box Deusto [Zubía
+2010]  e  plataforma  de  experiências  com  microcontrolador                                    [Masár   2011],  não  foi
+encontrado  um  laboratório  que  montasse  de  forma  autônoma  um  determinado
+experimento a ser executado. No levantamento realizado o cenário de experimentação já
+se encontrava pronto para uso. O grau máximo de configuração experimental encontrado
+foi de configuração de parâmetros das variáveis experimentais. A falta de liberdade de
+experimentação tira a oportunidade do usuário de escolher qual domínio experimental
+quer executar e este fica limitado a executar o mesmo experimento em um LAR. A partir
+dessa observação surge a definição do problema abordado nesse artigo: como realizar a
+configuração autônoma de ambientes? A estratégia adotada para solução desse problema
+é usar SMA. Para montar o cenário experimental de forma autônoma, o SMA é usado
+em conjunto com um Sistema Robótico Móvel (SRM).
+A justificativa principal para usar SMA para resolver esse problema encontra-se
+no fato de que a configuração de cenários de experimentação pode ser resolvido de
+forma  distribuída.  O  uso  de  SMA  oferece  uma  maior  variedade  de  recursos  para
+solucionar problemas onde as atividades são distribuídas [Reis 2003]. Nesse problema as
+atividades são realizadas pelos agentes robóticos autônomos que montam os cenários.
+Além disso, com o paralelismo de atividades desempenhadas pelos agentes, podemos
+atribuir diferentes tarefas a diferentes agentes robóticos de forma que a execução da
+configuração  do  cenário  seja  mais  rápida,  aproveitando  assim  as  características  de
+cooperação, colaboração e negociação entre agentes para uma montagem de cenários
+mais eficaz. Pelo o fato da solução do problema ser distribuída, podemos ter um sistema
+com maior robustez, flexibilidade e escalabilidade.
+3. Criação do processo de modelagem usando O-MaSE
+Usando  a metodologia O-MaSE é explicitado  quais os agentes criados, como serão
+programados e como eles vão atuar no ambiente. O uso da metodologia O-MaSE é
+justificada por ser bastante difundida em modelagem de SMA. Ainda, o projeto O-MaSE
+têm ferramentas que apoiam o seu uso, como o AgenTools. No desenvolvimento do
+SMA, o primeiro passo da modelagem é criar o processo personalizado em O-MaSE
+[DeLoach  2010]  para  o  SMA  LAR.  O  Engenheiro  de  SMA  adota  ou  cria  sua
+organização  em fases.  A organização  de  fases deve  respeitar  as dependências entre
+atividades  que  são  definidas  em  diretrizes  de  construção  do  método  [Garcia-Ojeda
+2007].  O  processo  de  criação  é  formado  por  fases,  iterações,  atividades,  tarefas  e
+modelos. O processo criado tem uma única fase e não há iterações. Nas atividades são
+criados os modelos, como mostrado na seção a seguir.
+4. Modelos do processo O-MaSE criado para LAR
+Nessa seção são apresentados os produtos de modelagem do LAR: modelo de objetivos,
+modelo de organização, modelo de papéis, modelo de classe de agente, modelos de
+protocolos  e  modelos  de  planos  de  agentes,  cada  um  desses  detalhados  em  uma
+subseção.
+
+
+
+
+4.1. Modelo de Objetivos
+O  modelo  de  objetivos  é  definido  para  capturar os objetivos principais do  SMA,  e
+geralmente vem após definir o documento com requisitos do SMA. O modelo tem os
+objetivos organizados de forma hierárquica. Para capturar o dinamismo inicial do SMA é
+refinado  o  modelo  de objetivos com informações  adicionais. Esse novo modelo é o
+GMoDS, que pode ser visto na Figura 1.
+Figura 1. GMoDS
+4.2. Modelo de Organização
+O modelo de organização tem objetivo de identificar interfaces do SMA com os atores
+externos.  O  GMoDS  é  predecessor  do  modelo  de  organização,  ficando  mais  fácil
+identificar interface organizacional. O modelo de organização do LAR é visto na Figura
+2a. O ator externo  SR  (Sistema Robótico) segue a taxonomia de configurações em
+alocação de tarefas robóticas de   Gerkey [Gerkey 2003a] e [Gerkey 2003b]
+4.3. Modelo de Papéis
+O objetivo do modelo de papéis é identificar os papéis do SMA e suas interações. O
+GMoDS e modelo  de organização são predecessores para esse modelo. Os atores e
+protocolos do modelo de organização são mapeados para modelo de papéis, assim como
+os objetivos do GMoDS, representados pelo uso pré-fixado de <<achieves>>. O modelo
+de  papéis do  LAR  pode  ser  visto  na  Figura  2b.  O  papel Interface  Professor pode
+modificar  os  cenários  experimentais  que  o  ator  estudante  escolhe  usando  o  papel
+Interface  Estudante.  Para  agendar  o  cenário  escolhido  pelo  estudante,  o  papel BD
+Agenda é o responsável por agendar de maneira correta e respeitando as condições de
+limite  e  ordem  do  LAR.  O  papel  Coordenador  Laboratório  fica  responsável  pela
+organização eficiente da montagem do cenário chegando a solicitar ao papel Extrator
+Tarefas o desmembramento da montagem do cenário em tarefas atômicas. O papel mais
+próximo do SR é o Robô Móvel que tem como principal objetivo enviar comandos de
+tarefas e aguardar respostas.
+4.4. Modelo de Classe de Agente
+O  modelo  de  classes  de  agentes  tem  objetivo  de  aproximar  do  formato  da
+implementação, portanto, são capturadas as funcionalidades básicas do SMA. Os papéis
+do  Modelo  de Papéis são atribuídos para classes de agentes pelo uso pré-fixado de
+<<plays>>.  O  LAR  possui  um  agente  Coordenador  que  desempenha  dois  papéis
+enquanto os outros agentes desempenham somente um, como pode ser visto na Figura 3.
+
+
+
+
+Figura 2. a) Modelo de Organização. b) Modelo de Papéis.
+Figura 3. Modelo de Classes de Agentes.
+As classes de agentes e protocolos foram identificadas, porém não definidas.
+Então, são criados modelos de protocolo e modelos de plano do agente.
+4.5. Modelos de Protocolos
+O modelo de protocolos tem objetivo de detalhar cada protocolo entre agentes ou entre
+ator externo apresentado no modelo de classes de agentes. O modelo de protocolos usa
+a  abordagem  do  diagrama  de  interação  AUML.  Devido  a  limitações  de  espaço  é
+apresentado  apenas  um dos  dois  modelos  de  protocolos.  A Figura  4a  representa  a
+montagem dos cenários e é formado por 5 protocolos: verificarCenarioAtualMontado,
+realizarTarefas,                                                                            atualizarCenarioAtualMontado,   realizarComandosTarefas   e
+extrairTarefas.
+Figura 4. a) Modelo dos Protocolos de Montagem. b) Modelo de Plano do Agente Coordenador.
+4.6. Modelos de Planos de Agentes
+Os modelos de planos do agente representam o algoritmo para alcançar o objetivo do
+agente  na  organização.  A quantidade de modelos de planos deve ser pelo  menos a
+mesma da quantidade de agentes no Modelo de Classes de Agentes, ou seja, um para
+cada  agente.  O  comportamento  do  agente  no  Modelo  de  Plano  é  definido  em um
+autômato finito e cada transição corresponde às mensagens recebidas ou enviadas. A
+sintaxe da transição é [guard] receive(message, sender) / send(message,receiver), onde
+o parâmetro  [guard] determina a habilitação da transição. Os modelos de planos dos
+agentes  devem  ser  desenvolvidos  em  coerência  e  consistência  com  os  protocolos
+
+
+
+
+identificados  no  modelo  de  classe  de  agentes  e  modelos  de  protocolos.  Devido  a
+limitações de espaço é apresentado um dos cinco modelos de plano de agentes, Figura
+4b.
+5. Conclusão e trabalhos futuros
+Primeiro foi realizada a adaptação do processo da metodologia O-MaSE para LAR e sua
+execução resultou em modelos que podem ser usados para descrever como implementar
+os agentes do  sistema.  Concluímos que  o  uso  da  abordagem SMA para configurar
+cenários de experimentação é factível para ser modelado por O-MaSE. Entretanto são
+limitadas as técnicas de formalização de mapeamento e navegação e as limitações dos
+dispositivos de hardware usados para atuar e sensoriar o ambiente físico.
+Como trabalhos futuros queremos aproveitar o atributo de capacidades do O-
+MaSE  para  desenvolver  um sistema  mais  flexível e  adaptativo,  onde  os  papéis são
+definidos em termos de capacidades assim como as classes de agentes. Com esse atributo
+podemos ter LAR com características de reorganização dos agentes, selecionando o
+melhor agente para desempenhar determinado papel no ambiente conforme a capacidade
+e seus estados.
+Referências
+[DeLoach 2010] DeLoach, S.A. e Garcia-Ojeda, J.C. “O-MaSE: a Customizable Approach to
+Designing and Building Complex, Adaptive Multiagent Systems”. In: International Journal of
+Agent-Oriented Software Engineering, 2010.
+[Garcia-Ojeda 2007] Garcia-Ojeda, J.C., DeLoach, S.A., Robby, Oyenan, W.H., e Valenzuela, J.
+“O-MaSE: A Customizable Approach to Developing Multiagent Development Processes”. In:
+International Workshop on Agent Oriented Software Engineering, 2007.
+[Gerkey 2003a] Gerkey B.P. “On Multi-Robot Task Allocation” Tese de Doutorado. University
+Of Southern California, 2003a.
+[Gerkey  2003b] Gerkey B.P. e Mataric, M.J.,  “Multi-robot Task Allocation: analyzing the
+Complexity and Optimality of Key Architectures” In: IEEE International Conference on
+Robotics and Automation, 2003b.
+[Gravier 2008] Gravier, C.; Fayolle, J.; Bayard, B.; Ates, M. e Lardon, J. “State of the Art
+About  Remote  Laboratories  Paradigms                                                            -  Foundations  of  Ongoing  Mutations”.  In:
+International Journal of Online Engineering (iJOE), 2008.
+[Masár  2011] Masár,  I.;  Bahnik,  P.;  Batora,  V.  e Hudacek, M.  “Design of an Easy Re-
+configurable  Remote  Laboratory”.  In:                                                           14th  International  Conference  on  Interactive
+Collaborative Learning (ICL), 2011.
+[Reis  20003] Reis, L. P.  “Coordination in Multi-Agent Systems: Applications in University
+Management and Robotic Soccer”, Tese do Doutorado, FEUP, 2003.
+[Russell  2009] Russell, S. e Norvig, P.  “Artificial Intelligence: a Modern Approach”,  2009.
+Edition: 3.
+[Souza 2010] Souza, M.B. e Netto, J.F.M. “LARRE, Um Ambiente Telerobótico Educacional
+Baseado em Sistemas Multiagente”. In: XVI WIE, 2010.
+[Zubía 2010] Zubía, J.G., Angulo, I., Irurzun, J., Orduña, P., Ruiz, J., Hernández, U., Castro,
+M. e Cristóbal, E.S. “Easily Integrable Platform for the Deployment of a Remote Laboratory
+for Microcontrollers”. In: IEEE EDUCON 2010.
+
+
+
+
+

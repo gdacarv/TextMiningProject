@@ -1,0 +1,415 @@
+﻿Ferramenta Especialista para Avaliação de Software
+Educacional
+Carine Webber, Elisa Boff, Fernanda Bono
+Centro de Computação e Tecnologia da Informação - Universidade de Caxias do Sul
+Caixa Postal 15.064 - 91.501-970 - Caxias do Sul - RS - Brazil
+{cgwebber,eboff,fbono2}@ucs.br
+Abstract. This  article  presents  an  expert  tool  for  educational  software
+evaluation named FASE. As long as expert knowledge is required to evaluated
+educational software, we have considered in this work principles from the
+domain of Artificial Intelligence and Expert Systems. We describe here the
+processes of knowledge acquisition and some implementation details. In order
+to illustrate a use case, we have developed an experiment on the web-based
+tool counting on several experts on the educational domain.
+Resumo.Este artigo apresenta uma ferramenta especialista para avaliação
+de software educacional denominada FASE. Por se tratar de uma área onde o
+conhecimento  especializado  é  necessário,  optou-se  por  desenvolver  uma
+ferramenta baseada em princípios de sistemas especialistas. A FASE permite
+que o conhecimento sobre avaliação de software educacional seja registrado
+e  evolua  à  medida  que  os  especialistas  contribuem  com  a  sua  base  de
+conhecimento.  Neste  artigo  descreve-se  o  processo  de  aquisição  do
+conhecimento  realizado,  bem  como  a  implementação  da  FASE.  A  fim  de
+ilustrar  o  seu  uso,  apresenta-se  um  cenário  de  utilização  da  ferramenta
+desenvolvido em uma plataforma web com o auxílio de diversos especialistas
+na área de software educacional.
+1.                                                                                        Introdução
+Sistemas  especialistas  são  programas  que  utilizam  conhecimento  e  procedimentos
+inferenciais para resolver problemas que normalmente requerem muita perícia humana
+[1,2]. Segundo Barone, um sistema especialista é uma forma de sistema baseado em
+conhecimento especialmente projetado para emular a especialização humana de algum
+domínio  específico                                                                       [3].  Um  sistema  especialista  emprega  conhecimento,  regras  e
+heurísticas para resolver problemas em uma especialidade. Geralmente os melhores
+sistemas especialistas são capazes  de atuar  em um  domínio  bem  restrito  de  forma
+semelhante ou melhor que especialistas humanos.
+Um  sistema  especialista  deve  possuir  uma  base  de  conhecimento,  um
+mecanismo  de  inferência,  um  mecanismo  de  explanação  e  meios  de  aquisição  de
+conhecimento. Tal como um especialista humano faria, o sistema deve ser capaz de
+produzir  um  resultado                                                                   (uma  decisão,  um  diagnóstico,  ou  recomendação),  além  de
+permitir a incorporação de novos conhecimentos e heurísticas à base de conhecimento.
+Para  Buchanan a etapa mais importante do desenvolvimento de um sistema
+especialista é a Aquisição de Conhecimento [4]. Esse processo depende fortemente da
+interação  com  o  especialista  humano,  podendo  também  abranger  outras  fontes  de
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+conhecimento                                                                                  (revistas  especializadas,  dados  estatísticos,  entre  outras).  Existem
+diversas  técnicas  de  aquisição  do  conhecimento  tais  como  entrevistas,  observação,
+monitoramento,  coleta  de  dados,  além  de  técnicas  automáticas  de  extração  do
+conhecimento. A definição sobre qual técnica utilizar depende da disponibilidade do
+especialista e de características intrínsecas ao conhecimento a ser modelado. O uso
+dessas técnicas permite a construção de uma Base de Conhecimento contendo fatos e
+regras relevantes e suficientes à resolução do problema a que se propõe o sistema.
+Diversos  domínios  têm  sido  modelados  com  a  tecnologia  de  sistemas
+especialistas [2,3]. Neste trabalho propõe-se aplicá-la à área de avaliação de software
+educacional (SE). A avaliação de SE segue critérios oriundos da área da Educação e
+outros da área da Computação, especialmente de Engenharia de Software e Interface
+Humano-Computador. Percebe-se assim que um bom avaliador de SE deve possuir boa
+formação nas duas grandes áreas. Experiência no ensino e no uso de tecnologias de
+informática na educação também auxiliam. Necessita-se de fato de critérios formais que
+aliados à experiência e percepção do avaliador permitam que uma análise correta em
+termos de aplicabilidade e adequação sejam realizadas.
+Neste contexto, este artigo apresenta uma ferramenta especialista para avaliação
+de software educacional  (sigla  FASE). A FASE permitir  que usuários especialistas
+definam  critérios  de  avaliação  de  SE  de  forma  que  se  construa  uma  base  de
+conhecimento na forma de um instrumento de avaliação. Avaliadores de SE podem
+fazer  uso  destes  instrumentos  para  avaliarem  softwares,  recebendo  indicações  da
+ferramenta que visam desenvolver o espírito crítico do avaliador tendo em vista as
+características do software analisado. Além disso, a FASE permite que critérios de
+avaliação sejam continuamente criados.
+2.  Avaliação de Software Educacional
+A avaliação é uma etapa importante do processo de desenvolvimento de software. É
+nesta etapa que os projetistas identificam se um software é utilizável e se está de acordo
+com o que os usuários desejam. Para [5] a avaliação é o processo sistemático de coleta
+de dados responsável por nos informar o modo como um determinado usuário ou grupo
+de usuários deve utilizar um produto, para uma determinada tarefa, em um certo tipo de
+ambiente. Quando o produto em desenvolvimento é um SE, a avaliação durante todo o
+processo  deve  garantir  que  o  software  leve  em  consideração  as  necessidades  dos
+usuários, que o software seja fácil de aprender, seja eficaz, seguro, desafiador, com
+linguagem adequada e que estimule a criatividade.
+A avaliação de SE se apóia em técnicas utilizadas em avaliação de software para
+uso geral. Porém, para esta finalidade específica, a avaliação deve contemplar aspectos
+como  as  teorias  pedagógicas  que  embasam  o  desenvolvimento  do  software  e  a
+adequação pedagógica e contextual.
+De acordo com Paiva [6], atualmente dispomos de várias técnicas de avaliação
+de SE. Entre elas podemos citar os checklists, a avaliação heurística, os ensaios de
+interação, a exploração cognitiva, os questionários, as entrevistas, as inspeções formais
+de usabilidade, a investigação contextual e as pesquisas. A escolha de uma ou mais
+técnicas depende do tipo ou dos objetivos da avaliação pretendida pelo usuário. Campos
+[7],  por  exemplo,  apresenta  critérios  para  avaliação  de  SE  baseados  na  avaliação
+proposta pela área de Engenharia de Software.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Sob o ponto de vista de Oliveira [8], a avaliação de SE deve ser pensada sob
+duas formas, a objetiva através de listas de critérios e a formativa conduzida através de
+entrevistas, questionários e acompanhamento de perto do desempenho dos usuários
+durante a utilização do software. A avaliação formativa compreende a utilização do SE
+em um ambiente real de aprendizagem, onde os alunos interagem com o seu objeto de
+conhecimento com intuito de serem levados à compreensão de um conteúdo didático. Já
+Begoña  e  Spector  [9],  subdividiram  os  métodos  de  avaliação  de  software  em  três
+diferentes níveis:
+- A avaliação orientada ao produto: realizada através de uma descrição crítica do
+SE  por  especialistas  que,  normalmente,  utilizam  lista  de  verificação  ou  folha  de
+inspeção, e seguem um conjunto de procedimentos para guiar a inspeção.
+- A avaliação orientada ao usuário: o objetivo principal desta avaliação é analisar
+a eficiência dos processos de aprendizagem envolvidos no uso de SE pelos alunos.
+- A avaliação orientada ao contexto: tem como objetivo principal compreender o
+contexto no qual o software está inserido, mensurando o nível de interferência causada
+por ele na aprendizagem do aluno.
+De  acordo  com  Campos                                                                         [10],  ao  avaliarmos  os  softwares  educacionais
+precisamos observar as seguintes características:
+a)  Características  Pedagógicas:  São  aquelas  que  incluem  um  conjunto  de
+atributos responsáveis pela determinação e viabilização da utilização do software no
+contexto educacional. Essa característica abrange subcaracterísticas que melhoram a
+identificação de um software de qualidade:
+Ambiente  educacional:  o  software  deve  disponibilizar  a  identificação  do
+ambiente educacional e do modelo de aprendizagem que ele privilegia;
+Pertinência em relação ao programa curricular: o software deve ser adequado e
+seguir regras de um dado contexto educacional ou a uma disciplina específica;
+Aspectos didáticos: o software deve atender a um objetivo educacional, sendo
+fácil de usar, amigável ao usuário, apresentando aspectos motivacionais e respeitando as
+individualidades.  É  importante  que  inclua  atributos  como:  clareza  e  correção  dos
+conteúdos, recursos motivacionais, carga informacional e tratamento de erros.
+b) Facilidade de uso: compreende os atributos que determinam a facilidade e a
+objetividade de uso do software.
+c) Características da interface: determinam a existência de recursos que facilitam
+a interação do usuário com o software. Inclui as seguintes subcaracterísticas: condução,
+afetividade, consistência, significado de códigos e denominações e gestão de erros.
+d) Adaptabilidade: caracteriza-se por um conjunto de atributos que determinam a
+capacidade do software de se adaptar a necessidades e preferências do usuário e ao
+ambiente educacional selecionado.
+e) Documentação: refere-se aos atributos que verificam a qualidade do material
+que acompanha o software. Esse material precisa estar completo, consistente, legível,
+organizado e de fácil entendimento. Os alunos que utilizarem esse material precisam
+entender  de  forma  clara  o  que  está  sendo  proposto  e  por  isso  o  material  precisa
+satisfazer as necessidades de informações dos diferentes tipos de usuários.
+f)  Portabilidade:  disponibiliza  um  conjunto  de  atributos  que  determinam  a
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+adequação  do  software  ao  ambiente  onde  será  instalado.  Ou  seja,  determina  a
+disponibilidade  do  software  em  se  adequar  aos  equipamentos  que  compõem  o
+laboratório de informática educativa.
+g)  Retorno  do  investimento:  é  composta  por  um  conjunto  de  atributos  que
+evidenciam a adequação do investimento na aquisição do software.
+Outros aspectos também podem ser observados na avaliação do SE, tais como:
+faixa  de  preço,  disponibilidade  no  mercado,  recomendação  de  outros  usuários,
+possibilidade de obtenção de cópias, convênios e análise de versões demonstrativas.
+Também é importante ressaltar e observar a qualidade da informação quando se trata de
+ambientes  e  sites  disponibilizados  na  Web.  A  qualidade  da  informação  inclui
+características  como:  conteúdos  corretos,  fontes  fidedignas,  carga  informacional
+compatível, pertinência e temas transversais [10].
+Gamez [11] desenvolveu a técnica de inspeção de conformidade ergonômica de
+SE. Esta técnica tem um enfoque na ergonomia de software (baseada na norma ISO/IEC
+9241 de 1998) aplicada a produtos educacionais informatizados. Esta técnica contempla
+tanto aspectos ergonômicos de interface como os aspectos pedagógicos, documentação
+do produto, adequação do software ao contexto pedagógico, identificação da taxonomia
+de SE e identificação dos objetivos pedagógicos. Trabalhos anteriores, como o de Cybis
+[12], também tratam da avaliação da ergonomia de interfaces de SE.
+Seguindo a linha da Inteligência Artificial, Rech [13] propõe uma aplicação para
+a avaliação de SE baseada na técnica de raciocínio baseado em casos. A utilização desta
+técnica auxilia  o avaliador do software, trazendo casos similares de ferramentas já
+avaliadas.
+Com base nesses aspectos é possível perceber a importância da avaliação do SE
+para garantir sua eficiência e eficácia no processo de ensino-aprendizagem. Entretanto,
+essa avaliação carece de ferramentas e recursos que simplifiquem esse processo de
+avaliação  e  o  torne  mais  prático  e  objetivo.  O  professor  precisa  de  métricas  bem
+definidas para avaliar o SE, o que em geral não existe nas escolas e instituições de
+ensino onde os professores ainda não estão preparados para esta tarefa. Isso faz surgir
+uma demanda não suprida de recursos que auxiliem o professor nesse processo de
+avaliação.
+Este trabalho se apoiou nas técnicas propostas por [10,11] para desenvolver a
+base de conhecimento sobre avaliação de software educacionais. O desenvolvimento do
+software proposto é apresentado nas próximas seções.
+3.  Metodologia
+A ferramenta para Avaliação de Software Educacional foi desenvolvida em 4 etapas. A
+primeira etapa foi de aquisição de conhecimento sobre avaliação de SE. A segunda
+etapa correspondeu à compilação e análise do conhecimento obtido na primeira etapa. A
+terceira  etapa  compreendeu  a  implementação  da  FASE.  Na  quarta  etapa  foram
+realizados testes da ferramenta, bem como a análise dos resultados obtidos. Esta seção
+descreve brevemente o desenvolvimento de cada uma destas etapas.
+3.1.  Aquisição de Conhecimento
+O processo de aquisição de conhecimento foi realizado a partir de instrumentos de
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+avaliação  de  SE  em  uso  pelo  grupo  de  estudos  da  UCS  na  área.  Através  destes
+instrumentos, elaborou-se um único instrumento contemplando aspectos pedagógicos e
+computacionais variados. Para avaliar este instrumento realizou-se dois experimentos
+com  estudantes  e  especialistas  na  área  de  informática  na  educação.  No  primeiro
+experimento foi feita uma pré-análise do instrumento com estudantes de diversas áreas
+do conhecimento matriculados no curso de Especialização em Informática na Educação
+da UCS. Nesse experimento contou-se com a participação de 10 alunos que assumiram
+o papel de especialistas na área. A cada um deles foi solicitado que classificassem as
+questões do instrumento (76 questões) conforme sua percepção sobre a relevância da
+questão no processo de avaliação de SE. Cada questão deveria ser classificada em uma
+escala de 1 a 5 respectivamente como irrelevante, pouco relevante, nem importante nem
+relevante, relevante e muito relevante. A tabela 1 apresenta as primeiras questões do
+instrumento de avaliação.
+Tabela 1.   Exemplo de questões do instrumento de avaliação de SE.
+Questão 1                                                                                                                                             O software pode ser classificado como:
+1 (                                                                                          )   ( ) Jogo educativo
+2 (                                                                                          )   ( ) Simulador
+3 (                                                                                          )   ( ) Exercício e prática
+4 (                                                                                          )   ( ) Tutorial
+5 (                                                                                          )   ( ) Hipermídia
+( ) Sistema Tutor Inteligente
+( ) Ambiente de aprendizagem interativo (micromundos)
+( ) Sistema de Autoria
+( ) Ambiente de aprendizagem cooperativo
+( ) Outro:__________________________________
+Questão 2
+1 (                                                                                          )                                                        O software propõe situações-problema que envolvam a formulação
+2 (                                                                                          )   de hipóteses, a investigação e/ou a comparação?
+3 (                                                                                          )
+4 (                                                                                          )   ( ) Sim ( ) Parcialmente ( ) Não ( ) Não se aplica
+5 (                                                                                          )
+Questão 3
+1 (                                                                                          )   É adequado ao nível do aprendiz (público-alvo)?
+2 (                                                                                          )
+3 (                                                                                          )   ( ) Sim ( ) Parcialmente ( ) Não ( ) Não se aplica
+4 (                                                                                          )
+5 (                                                                                          )
+Para análise dos resultados, tabulou-se a relevância média encontrada para cada
+questão. Delimitou-se o índice 3.9 como sendo o ponto de corte da análise, eliminando-
+se do instrumento todas as questões que obtiveram média inferior a ele. Como resultado
+dessa etapa obteve um novo instrumento contendo 59 questões.
+No segundo experimento,  4 especialistas  (professores com experiência em
+Informática  na  Educação)  avaliaram  o  novo  instrumento.  Solicitou-se  que  fossem
+apontadas  melhorias  com  relação  aos  seguintes  aspectos:  enunciado  da  questão;  se
+questões apresentadas seriam suficientes; se deveriam ser eliminadas; e qual a melhor
+ordenação para as questões. A partir da análise realizada pelos especialistas, realizou-se
+uma nova e criteriosa extração de conhecimento, observando cada questão avaliada,
+decidindo se ela permaneceria no instrumento, e quais melhorias poderiam ser feitas.
+Como resultado dessa etapa obteve um novo instrumento contendo 24 questões.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Para finalizar, solicitou-se a uma das especialistas que classificasse as questões
+do instrumento atribuindo a cada uma um nota de 0 a 2 indicando respectivamente se a
+questão não era importante (0) , importante(1), ou muito importante (2), levando em
+conta cada categoria de SE (conforme questão 1 da tabela 1) para as quais a questão
+seria pertinente. Desta forma, produziu-se uma ordem de relevância de critérios e seus
+pesos para cada categoria de SE.
+Como conclusão desta etapa de aquisição do conhecimento formulou-se um
+conjunto  de  questões  de  avaliação  de  SE,  considerando  aspectos  pedagógicos  e
+computacionais, organizados e pontuados para cada categoria de software.
+3.2.  Processo de Inferência
+Comumente  os  sistemas  especialistas  utilizam  uma  máquina  de  inferência  que
+implementa o algoritmo de Rete [14] para seleção e aplicação de regras de produção. O
+sistema aponta decisões, produz diagnósticos ou recomendações precisas para resolver
+um caso. Nosso sistema difere desse modelo tradicional de sistema especialista uma vez
+que ele se propõe a orientar o usuário no processo de avaliação de SE, ponderando sobre
+como o software em avaliação atende os requisitos definidos pelo especialista. Sendo
+assim, a inferência que a ferramenta FASE realiza compreende a atribuição de uma
+pontuação ao software em avaliação, levando em consideração à pontuação máxima que
+um software nesta categoria poderia receber (segundo os especialistas).
+A pontuação do software em avaliação é dada pelo somatório dos pesos (PQ) de
+cada questão (j), dada a classificação de software selecionada pelo avaliador (questão 1),
+multiplicado-se  pelo  peso  da  resposta                                                    (PR)  dada  para  a  questão.  As  questões,  as
+alternativas de resposta e seus respectivos pesos são definidos pelo usuário especialista
+no momento da criação do instrumento. A seguinte expressão calcula a pontuação do
+software em avaliação.
+j                                                                                            j PR                                                         PQ
+
+j
+Note que o peso de cada questão foi atribuído conforme a relevância apontada
+pela especialista. Questões consideradas muito importantes receberam peso 2; questões
+importantes  receberam  peso                                                                 1;  as  demais  questão  receberam  peso  0.  O  peso  das
+respostas do avaliador é: para sim peso 1; parcialmente, peso 0.5; não, peso 0; e não se
+aplica, peso 0. Esta pontuação foi definida como valor defaultpara as respostas.
+Ao término do processo de avaliação (preenchimento do instrumento) a FASE
+ativa seu mecanismo de inferência para computar a pontuação através dos métodos:
+Método CalculaPesoMaxTipoSoftwarc:alcula o peso máximo que um software
+da categoria selecionada pode atingir.
+Método CalculaPesoAnalise:calcula o peso obtido pelo software em avaliação.
+A inferência produz um valor numérico que quantifica o desempenho do SE em
+relação aos critérios estabelecidos e à pontuação máxima possível de ser obtida.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+3.3.  Mecanismo de Explanação
+A explanação em sistemas especialistas permite que o usuário verifique o processo de
+inferência, analisando o caminhamento das regras e a resposta produzida pelo sistema.
+O  mecanismo  de  explanação  auxilia  também  o  especialista  na  avaliação  do
+comportamento do sistema.
+O processo de explanação da FASE compreende a elaboração de um texto a
+partir  das  respostas  às  questões  do  instrumento  de  avaliação.  A  composição  da
+mensagem final ocorre a partir da concatenação dos textos inseridos pelo especialista
+para cada resposta a cada questão do instrumento.
+3.4.  Implementação
+A FASE foi implementada usando tecnologias que permitissem integrá-la ao portal
+institucional da UCS. A arquitetura cliente servidor foi desenvolvida com a ferramenta
+Zope  [15], que implementa um servidor de aplicações que provê um ambiente para
+publicação de objetos na internet. Utilizou-se o software Plone  [16] para a criação,
+edição, publicação e gerenciamento dos conteúdos a serem publicados. A principal
+linguagem de programação utilizada foi Python.
+4.  Ferramenta FASE
+A FASE reconhece duas classes de usuários: especialistas e avaliadores. Os especialistas
+definem  os  critérios  de  avaliação  de  SE  e  constróem  o  instrumento  de  avaliação,
+podendo também realizar avaliações. Os avaliadores utilizam a ferramenta para obter
+um  parecer  sobre  a  adequação  técnica  e  pedagógica  de  um  software  no  contexto
+educacional.
+A partir de uma tela de login, o usuário se identifica e é autorizado pelo sistema,
+assumindo papel de especialista ou avaliador. A figura 1 apresenta o cadastro de um
+instrumento de avaliação por um especialista. Ele pode incluir novos instrumentos, ou
+apenas complementar o mesmo instrumento adicionando novas questões.
+Fig. 1. Inclusão de questões pelo usuário especialista.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Uma vez que o instrumento esteja pronto, ele é liberado para os avaliadores. O
+próprio especialista pode testar a avaliação (figura 2).
+Fig. 2. Interface do especialista para gerenciamento de instrumentos de avaliação.
+Os avaliadores podem então proceder com o preenchimento do instrumento de
+avaliação. A figura 3 apresenta um exemplo de avaliação para o software Aplusix [17].
+Observe que o especialista definiu questões com respostas em forma textual e outras de
+múltipla escolha.
+Fig.3. Avaliador responde ao questionário durante avaliação de um software.
+Ao  final  do  preenchimento  do  instrumento  de  avaliação  é  apresentado  o
+resultado da avaliação (figura 4).
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Fig. 4. Resultados da avaliação do software Aplusix.
+O resultado apresenta valores quantitativos que indicam a pontuação do software
+com relação a pontuação máxima que ele poderia atingir. Além disso o mecanismo de
+explanação  produz  um  texto  que  justifica  a  pontuação  atingida  com  base  nas
+observações do especialista sobre as respostas dadas pelo avaliador.
+5.  Conclusões
+O  processo  de  avaliação  de  software  constitui  uma  habilidade  bastante  específica
+(poucas pessoas a dominam), pois ela exige tanto conhecimento técnico na área de
+informática quanto pedagógico. Considerou-se por esta razão que esta é de fato uma
+tarefa especialista, o que justificou neste trabalho seguir-se as abordagens indicadas para
+o  desenvolvimento  de  um  sistema  especialista.  O  processo  de  aquisição  do
+conhecimento se revelou bastante complexo pois, como verifica-se na maioria das áreas
+do conhecimento, os especialistas nem sempre possuem a mesma opinião. Ao término
+deste trabalho, obteve-se como resultado o sistema de avaliação FASE (Ferramenta de
+Avaliação de Software Educativo) para auxiliar não especialistas na avaliação de SE,
+bem como orientar profissionais da área de educação na escolha do software mais
+adequado para suas atividades pedagógicas.
+A FASE constitui uma ferramenta web, com interface para usuários do tipo
+especialista e avaliador, banco de dados de questões, alternativas, atribuição de pesos a
+questões e alternativas e instrumento  de  avaliação com pontuação. Após o usuário
+preencher  o  instrumento  de  avaliação,  a  ferramenta  retorna  um  feedbackcom  as
+características do software, assim como a sua pontuação alcançada. Além disso, o FASE
+foi desenvolvido num ambiente virtual de aprendizagem compatível com o ambiente da
+UCS. O Plone oferece recursos de comunicação que de maneira amigável auxiliam na
+avaliação de software além permitir a trocar ideias sobre os softwares e avaliações.
+Referências Bibliográficas
+1.  Harmon,  P.  King,  D.  Sistemas  Especialistas.  Tradução  Antonio  Fernandes
+Carpinteiro. Rio de Janeiro: Campus, 1988.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+2. Giarratano,J., Riley,G. Expert Systems: Principles and Programming PWS Publishing
+Co., 1994, p. 513-545.
+3.  Barone,  D.A.C.  Sociedades  Artificiais:  A  Nova  Fronteira  da  Inteligência  nas
+Máquinas. In: Flores, Cecília Dias. Fundamentos dos Sistemas Especialistas. Porto
+Alegre: Bookman, 2003, p. 127-154.
+4.Buchanan,B.G.   Building   a   KnowledgeBase.   http://www.aaaipress.org/Classic/
+Buchanan/ Buchanan09.pdf, abril de 2008.
+5. Preece, J., Rogers, Y. And Sharp, H. Design de Interação: além da interação humano-
+computador. Porto Alegre: Bookman, 2005.
+6. Paiva, C.R. Avaliação De Software Educativo "História Do Mundo, Uma Aventura
+Visual": Aplicações No Ensino Presencial De História.  2002. Obtido via internet
+http://teses.eps.ufsc.br/defesa/pdf/9235.pdf.
+7. Campos, G. H. B., Campos, F. C. A. e Rocha, A. R. C. Qualidade de software
+educacional: padrões para avaliação. In: X Simpósio Brasileiro de Informática na
+Educação.  X  SBIE,                                                                        1999,  Curitiba.  X  Simpósio  Brasileiro  de  Informática  na
+Educação. X SBIE. Curitiba : SBIE/SBC, 1999. v. 1.
+8. Oliveira, C.C., Costa, J.W., Moreira, M. Ambientes informatizados de aprendizagem.
+Produção e Avaliação de Software Educativo Campinas: Papirus, 2001.
+9.  Begoña, G.; Spector, J.M. Evaluating automated instructional design systems: A
+complex problem. Educational Technology. New Jersey: v. 34, n. 5, 1994, p. 37-46.
+10.    Campos, F. C. A., Campos, G. H. B. Qualidade de Software Educacional. In:
+Rocha, A. R. C. da, Maldonado, J. C. , Weber, K.C. (Orgs.) Qualidade de Software:
+Teoria e Prática. São Paulo: Prentice Hall, p. 124-130.
+11. Gamez, Luciano. Ticese: Técnica de Inspeção de Conformidade Ergonômica de
+Software                                                                                   Educacional.                                                     Disponível   em
+http://www.labiutil.inf.ufsc.br/estilo/Ticese.htm. Acesso em maio 2008.
+12. Rech, C., Reategui, E. B. e Boff, E. Utilizando o Raciocínio Baseado em Casos na
+Avaliação de Softwares Educativos. SBIE 2007. São Paulo, novembro 2007.
+13. Cybis, W. A.; Catapan, A. H.; Conelio, P; Souza, A.C; Thomé, Z.R.G. Ergonomia
+em Software Educacional: a possível integração entre usabilidade e aprendizagem.
+IHC 1999, Campinas.
+14. Forgy, C.L.: Rete: A Fast Algorithm for the Many Pattern/Many Object Pattern
+Match Problem Artificial Intelligence, 19(1982) 17-37
+15.   ZOPE Corporation. Zope Community. http://www.zope.org/
+16. PLONE Foundation. Plone CMS-Open Source Content Management System. http://
+www.plone.org/.
+17.Aplusix Software. http://aplusix.imag.fr/
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+

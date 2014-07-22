@@ -1,0 +1,470 @@
+﻿VII Simpósio Brasileiro de Sistemas de Informação
+C´elia Ghedini Ralha2, Alexandre Zaghetto2, Bruno Macchiavello2
+1
+Instituto Brasileiro do Meio Ambiente e dos Recursos Naturais Renováveis (IBAMA)
+SCEN Trecho 2 - Ed. Sede - Cx. Postal no  09566 - CEP 70818-900 - Brasília-DF
+carolina.abreu@ibama.gov.br
+2Departamento de Ciência da Computação - Universidade de Brasília (UnB)
+Caixa Postal 4466 - 70.904-970 - Brasília - DF - Brasil
+{cassiocouto,ghedini,alexandre,bruno}@cic.unb.br
+Abstract. This paper introduces a prototype for a computer system that per-
+forms simulations of land use. The proposed system is an evolution of an earlier
+work and aims to assist in analyzing the dynamics of land use and land cover,
+so it can serve as a tool in making decisions. The system uses a multi-agent ap-
+proach and configurable model. The model takes into account certain proximal
+variables such as the presence of roads, buildings, water courses, etc. These va-
+riables are used in order to identify which regions are most likely to be used in
+any anthropic activity. The system presents the potential for the user to be able
+to configure the simulation model indicating which proximal variables will be
+taken into account, the importance of each variable, and even the state machine
+used during the simulations. The multi-agent system allows the development of
+various behaviors of the agents involved which can generate different simula-
+tion’s scenarios.  Initial simulations are also presented for the cerrado biome.
+The cerrado is one of the major biomes and is considered a hotspot of global
+biodiversity.
+ó tipo para um sistema computa-
+ã                                                                                   õ es do uso do solo.  O sistema
+ã o de um trabalho anterior e tem como objetivo auxiliar
+na an´alise da dinâ mica do uso e cobertura do solo, de tal forma que possa ser-
+oes.  O sistema utiliza
+á vel pelo usuá rio.  O modelo
+                                                                                    ã                                                                                                                                                                ¸a
+                                                                                    õ                                                                                                                                                                ã o uti-
+                                                                                                                                                                                                                                                     ó pico.
+                                                                                                                                                                                                                o seja capaz de configurar
+                                                                                    ã                                                                                                                           ã o levadas
+em consideraco                                                                      ã                                            , a importâ ncia de cada uma delas e inclusive a maquina de
+                                                                                    estados a ser utilizada durante a simuloc¸   ã                                                                              . O sistema multiagentes permite a
+                                                                                                                                 elaborac¸ã o de diversos comportamentos dos agentes envolvidos podendo gerar
+                                                                                                                                 ã o. Sã o també m apresentadas simulaes                                        õ                                    iniciais
+e
+considerado um hotspot da biodiversidade mundial.
+214
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+ambientais do plano político e de planejamento, não incluindo-os de maneira significativa
+seja na formulação de políticas p úblicas ou na resolução de quest ões cruciais de gestão
+ambiental.  Dessa maneira, uma miríade de informaç ões ambientais que são produzidas
+por atores técnicos não tem o seu potencial explorado para embasar a tomada de decisão.
+Um exemplo claro desse distanciamento entre a informação e a ação é o Bioma Cerrado.
+O Cerrado é o segundo maior bioma brasileiro, ocupando 21% do territ ório na-
+cional com uma das mais ricas savanas do mundo.                                             E considerado um hotspotda bio-
+diversidade mundial, requerendo aç ões urgentes para a conservação pelo seu alto nível
+de endemismo e avançado grau de perda de habitat.  Entretanto, são altíssimas as taxas
+de desmatamento nesse bioma, muito superiores inclusive às taxas de desmatamento na
+Floresta Amaz ônica.  Os dados do Instituto Brasileiro do Meio Ambiente e dos Recur-
+sos Naturais Renováveis - Ibama, mostram uma perda acumulada de 47,8% de cobertura
+vegetal natural do Cerrado até  2008.  Especialistas apontam que existe um esforço de
+conservação muito inferior às reais necessidades do bioma. Somente 2,2% do territ ório
+ocupado pelo Cerrado é legalmente protegido [Klink and Machado 2005].
+Essa rápida e intensa exploração se dá principalmente pelas mudanças na cober-
+tura e uso do solo, principalmente porque o Cerrado é considerado uma das últimas fron-
+teiras de produção agrícola do mundo.  As mudanças no uso e cobertura do solo são
+relevantes não somente para este bioma, pois são consideradas uma das principais fontes
+de alteração recente na superfície terrestre.  Portanto, o entendimento da dinâmica des-
+ses fen ômenos é condição precípua para uma adequada política de uso sustentável dos
+recursos.
+Uma das ferramentas que podem ser aplicadas para entender essa dinâmica são os
+modelos, em especial os modelos de simulação.  As simulaç ões são vistas como instru-
+mentos de aquisição do conhecimento e de apoio à decisão [Verburg 2006]. Pela tentativa
+de reproduzir os mecanismos da realidade, esses modelos podem mostrar como as es-
+colhas de como o solo  é usado afetam as direç ões futuras desse sistema.  Na  área da
+Ciência da Computação, a subárea da Inteligência Artificial (IA), com ênfase na aborda-
+gem de Sistemas Multiagentes (SMA) [Wooldridge 2009] surge como técnica candidata
+à resolução de problemas de modelos de simulação dinâmica. A abordagem de SMA lida
+com a autonomia dos agentes ganhando representatividade para fins de organização de
+sistemas constituídos por interaç ões entre os diversos agentes de forma complexa e in-
+teligente [Weiss 2000]. A relação entre os processos biofísicos e socioecon ômicos pode
+ser representada pela dinâmica entre agentes heterogêneos que interagem entre si e com
+o ambiente.
+A partir desse contexto,  o problema  é  entender a dinâmica do uso e cober-
+tura do solo no Cerrado para contribuir na investigação de cenários mais favoráveis
+para a manutenção da cobertura vegetal natural, visando o equilíbrio entre políticas de
+conservação e o avanço das atividades de uso do solo para exploração econ ômica. O sis-
+tema proposto é uma evolução de um trabalho anterior [Marinelli et al. 2010] e visa de-
+senvolver uma ferramenta computacional de simulação, baseada na abordagem de SMA,
+para analisar a dinâmica de uso e cobertura do solo, utilizando como estudo de caso o
+bioma Cerrado.
+215
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+distintas para abordar o problema da simulação dinâmica das mudanças no uso do solo.
+Foram comparadas as tecnologias e funcionalidades de algumas dessas ferramentas, além
+da complexidade dos modelos, utilizando o frameworkdescrito em trabalhos anteriores
+[Agarwal et al. 2001], onde são analisados parâmetros de complexidade de espaço, tempo
+e tomada de decisão humana. Algumas ferramentas foram selecionadas para exemplificar
+a variedade de soluç ões hoje existentes, com suas características apresentadas na Tabela 1.
+O    CORMAS                                                                                    (Common-Pool    Resources    and    Multi-agent    Systems)
+[Bousquet et al. 1998],  desenvolvido  pela  French  Agricultural  Research  Centre  for
+International Development(CIRAD), é uma ferramenta de simulação que utiliza abor-
+dagem SMA, construída na plataforma Visual Workscom a linguagem Smaltalk.  Foi
+projetada para ser um ambiente de fácil desenvolvimento, dedicado  à modelagem das
+interaç ões das sociedades humanas com os recursos renováveis. Entretanto, a abordagem
+de SMA utilizada não faz uso de racionalidade nos agentes.  O trabalho anterior do
+grupo utilizou a ferramenta CORMAS para realizar uma simulação em uma reserva de
+desenvolvimento sustentável na Amaz ônia [Marinelli et al. 2010].
+A Universidade Federal de Minas Gerais (UFMG) destaca-se com a ferramenta
+de domínio p úblico Dinamica-EGO [Soares-Filho et al. 2002].  O Dinamica-EGO é um
+simulador com cálculo estocástico, baseado em formalismo de aut ômato celular, para
+replicação dos padr ões espaciais de mudanças da dinâmica de paisagens.  O Dinâmica-
+EGO possibilita a concepção e a aplicação de modelos de simulação para a gestão ambi-
+ental. Entretanto, a ferramenta não utiliza técnicas de IA ou SMA.
+Modelos de simulação espacial baseados em aut ômatos celulares têm se tornado
+populares, sendo incluídos em softwares comerciais de Sistemas de Informaç ões Ge-
+ográficas, como o IDRISI [Eastman 2001], devido  à sua facilidade de implementação,
+habilidade em mimetizar formas e capacidade de serem readaptados para produzir vários
+tipos de fen ômenos espaciais. IDRISI utiliza a combinação de aut ômato celular com mo-
+delo estocástico. Existe um m ódulo projetado para as mudanças no uso do solo, o LCM
+- Land Change Modeler, mas queãno utiliza técnicas de SMA. Aplica somente técnicas
+estatísticas para avaliar a mudança no espaço, tendo por base a imagem em dois tempos
+distintos.
+Em [Verburg et al. 2002] é apresentado o frameworkde modelagem CLUE - The
+E uma plataforma específica para as investigaç ões
+de uso e cobertura do solo, por meio de um modelo discreto cujas funç ões de mudança são
+baseadas em cálculos estatísticos. Possui uma limitação espacial, sendo mais adequado
+para aplicação em pequenas regi ões, e não incorpora técnicas de SMA.
+Algumas críticas em relação às ferramentas estão descritas em vários artigos de
+revisão.  Um ponto presente em quase todos os trabalhos é a questão das escalas.  Ne-
+nhuma ferramenta pesquisada permite análises em m últiplas escalas simultaneamente.
+Outra crítica diz respeito ao modo como as ferramentas interagem no espaço, ao con-
+siderarem o espaço homogêneo, ao aplicarem regras de transição universais ou ao per-
+mitirem unicamente vizinhanças estácionárias.  Especificamente para as ferramentas de
+abordagem SMA, muito questiona-se acerca da fragilidade da racionalidade dos agen-
+216
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Tabela 1. Características das ferramentas
+Características                                                                              Dinamina-EGO                                   IDRISI (LCM)                                                                      CLUE                       CORMAS
+Tipo de                                                                                      Modelos espaciais                              Modelo espacial                                                                   Modelo de estado           Simulaç ões
+Modelo                                                                                       dinâmicos                                      de Markov                                                                         discreto finito            Multiagentes
+Tecnologia                                                                                   Aut ômato Celular                              Aut ômato Celular                                                                 Matrizes de conversão      Sistema Multiagente
+Hierarquia                                                                                   top-down                                       top-down                                                                          top-down                   bottom-up
+Complexidade                                                                                 Representação e                                Representação                                                                     Representação e            Representação e
+Espacial                                                                                     interação                                                                                                                        interação                  interação
+Escala                                                                                       Raster                                         Raster                                                                            Raster                     Raster
+Resoluc¸ão                                                                                   Matriz Quadrada                                Definida pelo usuário                                                             Definida pelo usuário      Definida pelo usuário
+Tomada de                                                                                                                                   Assumida como relacionada    Nenhuma, s ó variáveis     Função de probabilidade                              Variável conforme o
+                                                                                             Decisã o Humana     ao tamanho da população,   biofísicas no modelo                                                              que depende de variáveis   comportamento
+                                                                                             densidade, etc.                                                                                                                  socioecon ômicas           dos agentes
+tes. Alguns apontamentos de ordem mais geral observam que é necessário conferir maior
+credibilidade aos modelos, por meio de verificaç ões e validaç ões consistentes. As carac-
+terísticas técnicas de cada uma das ferramentas, bem como as críticas foram consideradas
+no projeto da ferramenta de simulação aqui apresentada.
+3. Apresentac¸ã o dos Modelos
+O modelo definido representa a cobertura e o uso do solo do Distrito Federal, unidade fe-
+derativa que tem 100% do seu territ ório na região do Cerrado. Com área de 5.789,16 Km2,
+estima-se que 68,11% da vegetação nativa já foi desmatada. Foram utilizadas as imagens
+do Projeto de Monitoramento do Desmatamento dos Biomas Brasileiros por satélite (Mi-
+nistério do Meio Ambiente - MMA/Ibama) e o Mapa de Cobertura Vegetal dos Biomas
+Brasileiros (MMA), escala 1:250.000, ano base 2002.
+3.1. Classes de Uso do Solo
+Para  a  definição  das  classes  a  serem  utilizadas  no  modelo,  trabalhos  recentes
+de  classificação  do  solo  foram  consultados.    Conforme  o  mapeamento  de  Sano
+[Sano et al. 2008], o DF apresenta as seguintes classes de uso de solo: cultura agrícola,
+pastagem cultivada, massa d’água, vegetação nativa, e área urbana. Na escala de estudo
+não foram detectadas áreas de mineração e as áreas de reflorestamento são pouco signifi-
+cativas. A proporção de ocupação das áreas é apresentada na Figura 1.
+De acordo com a revisão de sucessão da fronteira agrícola no Cerrado e com o
+apoio de especialistas, especificou-se uma máquina de estados simples e determinística
+para o estado de conservação dos solos (Figura 2), com as classes agricultura, pecuária,
+urbanização, conservação e vegetação nativa.                                                 E possível explorar cenários diversos pela
+alteração das taxas de conversão entre os estados, caracterizando uma perspectiva tenden-
+cial (business as usual), conservativa ou degradativa.
+3.2. Vari á veis Proximais
+A exploração do uso do solo depende de diversos fatores sociais, econ ômicos, geográficos
+e inclusive de caráter político.  Muitos destes fatores são difíceis de serem previstos e
+modelados em um sistema de simulação. Porém, certas informaç ões do ambiente podem
+ser levadas em consideração para criar um ambiente de simulação do uso do solo. Estas
+217
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Figura 1. Proporç                                                                             ão de  áreas ocupadas pelas diferentes classes de uso da terra
+Figura 2. M áquina de estados do modelo
+informaç ões são comumente chamadas de variáveis proximais.  As variáveis proximais
+consideradas no presente trabalho foram: Ferrovia, Rodovia, Rio, Lago, Rua, Edificao¸         ã
+e Unidade de Conservao¸                                                                       ã                                                                .  Consideramos que Ferrovia, Rodovia, Rio, Lago, Rua e
+Edificação estimulam o uso antr ópico de áreas situadas em suas imediaç ões.  Ou seja,
+áreas pr óximas a uma rodovia, por exemplo, são mais propensas a serem ocupadas que
+áreas mais distantes.
+Para  se  modelar  a  capacidade  de  estímulo                                                à  ocupação  de  cada  uma  dessas
+variáveis, as imagens que as representam foram filtradas por meio de um filtro Gaussi-
+ano isotr ópico (circularmente simétrico) bidimensional h(x, y), definido pela Equação 1,
+2
+                                                                                              1                                                                +y2
+h(x, y) =                                                                                                                                                      2σ2                                                       ,   (1)
+2πσ2 e− x
+onde hsize  e σ representam o tamanho do filtro e o desvio padrão, respectivamente, e
+são parâmetros que podem ser ajustados pelo usuário do sistema.  A Figura 3 mostra o
+filtro Gaussiano utilizado na geração das imagens da Figura 4 (hsize  = 11 e σ  = 2). A
+Figura 5 mostra uma parte ampliada para uma variável proximal. As regi ões mais claras
+nas imagens representam os lugares onde existe uma maior probabilidade de ocupação da
+terra para uso antr ópico.  As áreas mais escuras, que estão circundadas por pixelsmais
+claros, indicam regi ões que não podem ser utilizadas durante o processo de simulação.
+Estas regi ões mais escuras representam  áreas que já estão ocupadas, por exemplo por
+estradas, edificaç ões, etc., ou áreas de curso de água. A variável Unidade de Conservação,
+mostrada na Figura 6, tem o efeito de inibir o uso antr ópico. Nesse exemplo, a região em
+branco é uma área protegida e não pode ser ocupada.
+Ap ós terem sido geradas, as imagens filtradas são utilizadas no c ômputo de uma
+média ponderada, de acordo com a Equação 2,
+∑
+T  =                                                                                          Mi  · pi,                                                        (2)
+i=0
+218
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+0.05
+0.04
+0.03
+0.02
+0.01
+0
+5
+                                                                                             5
+0
+y                                                                                            0
+x
+−5                                                                                           −5
+Figura 3.  Filtro Gaussiano utilizado na geraç                                               ˜ao das imagens mostradas nas Fi-
+guras 4 e 5.
+onde T é o mapa resultante, Mi representa a imagem filtrada referente a variável proximal
+i e pi indica quanto a variável i vai contribuir na geração do mapa T . Além disso, gerou-
+se um mapa auxiliar Taux  que indica as regi ões desabilitadas para qualquer tipo de uso,
+por constituirem Unidades de Conservação ou por serem áreas que já estão ocupadas. A
+Figura 7 mostra os mapas T e Taux para o cerrado. Todos os pesos pi foram considerados
+iguais a 1/6.
+A Figura 8 mostra uma exemplo de como os diferentes mapas podem ser utilizados
+para determinar a movimentação de um agente explorador. Tomando como referência a
+ilustração da Figura 8(a), considere que  áreas em amarelo são  áreas que já foram ou
+estão sendo exploradas, e  áreas em verde são  áreas que potencialmente poderiam ser
+exploradas.  O círculo indica um agente explorador.  Uma vez que haja a necessidade
+de movimentação do agente, o mapa Taux, mostrado na Figura 8 (b), é consultado e as
+células vizinhas marcadas com o valor l ógico 1 são identificadas com potenciais distinos.
+Note que nesse exemplo estão sendo descartadas as células que já foram exploradas (em
+amarelo na Figura 8(a)) ou que estão marcadas com valor l ógico 0. Em seguida o mapa
+T  é consultado para que dentre as células candidatas a destinos seja escolhida aquela que
+apresenta o maior potencial de atração do agente explorador. Essa célula, então, passa a
+ser a nova área em exploração.
+4. Protó tipo
+O prot ótipo da ferramenta implementa o modelo descrito na seção anterior, configurando
+as mudanças ocorridas no tempo por meio das variáveis proximais definidas no modelo,
+bem como pela racionalidade definida para cada um dos agentes. Esta proposta de solução
+considera camadas (layers) arquiteturais para a simulação.
+A ferramenta proposta pode ser sintetizada como um SMA híbrido de coordenação
+competitiva. SMA por ser composto por vários agentes, os quais perseguem um objetivo
+de projeto. A abordagem de interação entre os agentes pode ser definida como competi-
+tiva, uma vez que os agentes do uso do solo concorrem pelo mesmo recurso (o espaço para
+uso do solo) dentro do grid de simulação e podem ter objetivos distintos e concorrentes.
+A abordagem híbrida se refere à comunicação e interação dos agentes, permitindo, uma
+abordagem multiescalar, como mostrado na Figura 9.
+219
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+(a) Ferrovia                                                                             (b) Rodovia
+(c) Rio                                                                                  (d) Lago
+(e) Rua                                                                                  (f) Edificação
+Figura 4. Vari  áveis proximais.
+A estrutura top-downpara o modelo de uso do solo assume que a taxa de mudança
+pode ser determinada para a região como um todo.  Na estrutura bottom-up, típica dos
+SMA tradicionais, a análise ocorre em cada pixel, sendo a mudança resultante de todas
+as decis ões locais.  A proposta híbrida conjuga as duas hierarquias, permitindo maior
+flexibilidade de análise.
+4.1. Framework de Desenvolvimento
+O desenvolvimento do prot ótipo utiliza o Java Agent Development FramewoJA( DE),
+que implementa a arquitetura proposta pela FIPA (Foundation for Intelligent Physical
+Agents) para definição de um SMA. A FIPA é uma organização pertencente a instituição
+IEEE (Institute of Electrical and Electronics Engineers) que especifica poes para o
+desenvolvimento de tecnologias baseadas em agentes inteligentes.  O frameworkJADE,
+desenvolvido pela TILAB (Telecom Italia LAB)é um middlewarepara desenvolvimento
+220
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Figura 5.  Parte ampliada da vari                                                         ável proximal  Edificaç  ˜oes.  Segundo o que est             á
+sendo proposto, regi                                                                      ˜oes mais claras estariam mais propensas a ocupaç   ão que
+regi ˜oes mais escuras.
+Figura 6. Unidade de Conservaç                                                            ão: inibe o uso antr                                ´opico.
+e execução de aplicaç ões baseadas em agentes inteligentes, desenvolvido na linguagem
+Java. Fornece serviços de comunicação e interação de agentes, além de ferramentas para
+a mobilidade de agentes entre plataformas [Bellifemine et al. 2008].
+Para a racionalidade dos agentes utiliza-se o DROOLS, um motor de inferência
+para construção de bases de conhecimento e inferência dirigida por padrão nos agentes
+inteligentes.  O DROOLS  é feito para interagir com Java usando conhecimento vindo
+das regras declarativas nele implementadas.  Um dos aspectos relevantes é que o DRO-
+OLS fornece uma sintaxe declarativa e é bastante flexível para combinar a semântica do
+domínio do problema com a linguagem de programação. Tais características permitem,
+por exemplo, definir regras para a sucessão de classes de uso do solo.
+Para os cálculos dos mapas de influência, foi utilizado a ferramenta simulinkdo
+software MATLAB, exportado pela biblioteca matlabcontrol, que provê a interface e per-
+mite que agentes JADE interajam com sistemas desenvolvidos em MATLAB. Ademais,
+optou-se pela utilização de XML para configuração do modelo a ser simulado e pela per-
+sistência de dados em MySQL com frameworkHibernate.
+4.2. Proposta Inicial de Arquitetura
+Foram propostas classes de agentes, delimitando entidades responsáveis pelas tomadas de
+decisão, pela execução das aç ões, pelo ambiente de visualização e pela simulação.  Até
+o momento foram criadas cinco classes de agentes conforme apresentado na Tabela 2,
+221
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+(a) Mapa T                                                                               (b) Mapa Taux
+Figura 7. Mapas  T e Taux resultantes, utilizados como indicadores de propens            ão
+oes mais clara indicam maior propens                                                     ão  à exploraç  ão.
+Em (b) regi  ˜oes mais escuras indicam impossibilidade de exploraç                       ao.
+                                                                                                                       Tabela 2. Descriç  ão das Classes de Agentes.
+Agentes                                                                                  Tipo                          Qdade Instâncias)    Func¸ ões
+Gerente de                                                                               Orientado                     1                                               Promover interface dos comandos do usuário
+                                                                                         GRID (GGRID)    a Objetivos                                                   Ordenar início, pausa, fim dos agentes
+                                                                                                                                                                       Recebe estados dos agentes para visualização
+                                                                                                                                                                       Promove a visualização dos estados dos agentes p/ usuário
+Gerente de                                                                               Orientado                     1                                               Instancia a qdade de células para simulação
+Células (GC)                                                                             a Objetivos                                                                   Recebe ordens do GGRID, replica para células
+                                                                                                                                                                       Recebe os estados das células, replica para GGRID
+Gerente                                                                                  Orientado                     1                                               Instancia a qdade de GG necessários para a simulação
+Genérico (GG)                                                                            a Objetivos                                                                   Recebe ordens do GGRID e replica para as células
+                                                                                                                                                                       Recebe os estados dos exploradores, replica para GGRID
+Célula                                                                                   Reflexivo                     Definido pelo                                   Recebe ordens do GC
+                                                                                                                       usuário                                         Envia seu estado para o GC
+Explorador                                                                               Reflexivo                     Definido pelo                                   Recebe ordens do GG
+                                                                                                                       usuário                                         Move-se de uma célula para outra
+Envia seu estado e posição para o GC
+as quais podem ser expandidas ou criadas novas instâncias, à medida que os diferentes
+comportamentos dos agentes forem modelados.  Atreladas  à cada uma das classes de
+agentes estão imagens com o domínio espacial nativos  à classe, como por exemplo, o
+mapa das  áreas urbanas associada aos agentes urbanos, formando assim uma layer de
+simulação.
+Para administrar a coordenação dos agentes, a cooperação e a resolução de confli-
+tos, optou-se por uma organização em níveis hierárquicos. Nessa hierarquia, agentes de
+níveis mais altos possuem maior controle sobre agentes em níveis inferiores, conforme
+apresentado na Figura 10.
+Na camada de usuário projetou-se uma interface que permitisse a configuração
+do modelo e obtenção dos resultados de simulação. Toda a configuração fornecida pelo
+usuário da ferramenta é traduzida em arquivos XML e carregada pelo prot ótipo de forma
+a iniciar os agentes e associá-los à camada de simulação.
+O usuário configura quais agentes farão parte da simulação, adicionando com-
+portamentos a eles a partir de uma biblioteca disponível.  Também  é possível associar
+222
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+(a)
+(b)                                                                                         (c)
+Figura 8.  Ilustraç                                                                         ão do processo de deslocamento de um agente explorador a
+partir do mapa de uso antr                                                                  ´opico, mostrado em (a), e dos mapas    Taux e T , mosta-
+dos em (b) e (c), respectivamente.
+máquinas de estados à cada agente, a fim de especificar o ciclo de vida de cada um. Além
+disso, regras adicionais, como diretrizes globais à simulação, são também colocadas nessa
+etapa. A flexibilidade da configuração estende-se à criação do n úmero de agentes de cada
+classe, que interagirão no espaço definido pelo usuário por layersde simulação respecti-
+vas de cada classe.
+A camada de controle se utiliza das regras e configuraç ões definidas previamente
+para produzir a simulação.                                                                  E nessa camada que estão os mecanismos de simulação, de
+sobreposição das layerse de armazenamento dos resultados intermediários.  A camada
+física é responsável por carregar as imagens reais e compará-las com as imagens proveni-
+entes da simulação, calculando o PSNR (peak signal-to-noise ratio) entre as duas.
+5. Conclusã o e Trabalhos Futuros
+O resultado esperado do trabalho em curso é a implementação e validação da ferramenta
+computacional de simulação, por meio de uma arquitetura baseada em SMA, para ana-
+223
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Figura 9. Representaç                                                                        ˜ao da hierarquia na estrutura dos modelos de uso do solo
+(adaptado de Verburg, 2006).
+Figura 10. Proposta de Arquitetura em Níveis.
+lisar a dinâmica de uso e cobertura do solo.  Uma vez operacional, a ferramenta terá
+a finalidade de explorar cenários alternativos e investigar hip óteses para subsidiar pro-
+postas de políticas p úblicas de gestão ambiental.  Os estudos realizados até o momento
+apontam SMA como uma iniciativa emergente e promissora, destacando o papel chave da
+Ciência da Computação para o fortalecimento da interdisciplinaridade com as Ciências
+Ecol ógicas.
+E importante ressaltar que, com base nos estudos efetuados, não existe hoje ferra-
+menta de abordagem SMA que apresente flexibilidade de representação espaço-temporal
+capaz de simular diferentes modelos de forma genérica.  Ferramentas baseadas em ou-
+tras técnicas que apresentam essa generalidade possuem uma série de restriç ões quanto à
+representação espacial (consideram o espaço homogêneo), quanto à dinamicidade (apre-
+sentam vizinhanças estacionárias) ou quanto  à representação das tomadas de decis ões
+tipicamente humanas (utilizam regras de transição universais). Este projeto explora essas
+lacunas, ao combinar a flexibilidade dos agentes com cálculos de mapas de influência para
+determinar comportamentos distintos e influência das adjacências, além de ser espacial-
+mente explícito, simulando as interaç ões em mapas reais de forma não homogênea.
+A continuidade da pesquisa deverá explorar as características dos agentes e da
+plataforma, bem como a caracterização detalhada do modelo. Buscar-se-á o desenvolvi-
+224
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+mento de uma arquitetura flexível para a definição de agentes para que a interação entre
+as press ões naturais e antr ópicas agindo no espaço possam ser reproduzidas.
+Uma ferramenta de simulação baseada em agentes contribuirá para a área de IA e
+SMA por reproduzir o conhecimento e o raciocínio de agentes heterogêneos, coordenados
+de forma conjunta para que problemas de gestão sejam resolvidos. A área das Ciências
+Ecol ógicas também poderá explorar a dinamicidade que advém da abordagem de SMA
+para representar os problemas de complexidade, inerentes ao meio ambiente. Pela análise
+da dinâmica de uso e de ocupação do solo para o contexto proposto, será possível inves-
+tigar a implicação de diferentes estratégias de conservação, gestão e/ou planejamento.
+Referê ncias
+Agarwal, C., Green, G. M., Grove, J. M., Evans, T. P., and Schweik, C. M. (2001). A re-
+view and assessment of land-use change models: dynamics of space, time, and human
+choice. United States Department of Agriculture - USDA.
+Bellifemine, F., Caire, G., Poggi, A., and Rimassa, G. (2008).  Jade:  A software fra-
+mework for developing multi-agent applications.  In Software: Practice and Experi-
+ence, number 50, pages 10-21.
+Bousquet, F., Bakam, I., Proton, H., and Page, C. L. (1998).  Cormas:  Common-Pool
+Resources and Multi-agent Systems. In IEA/AIE ’98, pages 826-837.
+Eastman, J. R. (2001).  IDRISI 32.2 - guide to GIS and image processing.  Clark Labs,
+Clark University, Worcester, USA.
+Klink, C. A. and Machado, R. B. (2005). A conservação do Cerrado brasileiro. In Mega-
+biodiversidade, volume 1, pages 147-155.
+Marinelli, C. E., Coelho, C. G. C., Ralha, C. G., Zaghetto, A., and Macchiavello, B.
+(2010).  Modelo de simulaçãao com uso de abordagem de sma para o zoneamento
+de unidades de conservação da amaz ônia.  In VI Simpó sio Brasileiro de Sistemas de
+Informac¸ã o.
+Sano, E. E., Rosa, R., Brito, J. L. S., and Ferreira, L. G. a. (2008).  Mapeamento se-
+midetalhado do uso da terra do bioma cerrado. In Pesquisa Agropecuária Brasileira,
+volume 43, pages 153-156.
+Soares-Filho, B. S., Cerqueira, G. C., and Pennachin, C. L. (2002). DINAMICA: a sto-
+chastic cellular automata model designed to simulate the landscape dynamics in an
+Amazonian colonization frontier. In Ecological Modelling, volume 154.
+Verburg, P. H. (2006). Simulating feedbacks in land use and land cover change models.
+In Landscape Ecology, volume 21, pages 1171-1183.
+Verburg, P. H., Soepboer, W., Veldkamp, A., Limpiada, R., Espaldon, V., and Mastura, S.
+S. A. (2002). Modeling the spatial dynamics of regional land use: the CLUE-S model.
+In Environmental Management, volume 30, pages 391-405.
+Weiss, G. (2000).  Multiagent Systems: a Modern Approach to Distributed Artificial In-
+telligence. The MIT Press.
+Wooldridge, M. (2009). An Introduction to Multiagent Systems. John Wiley & Sons, 2nd
+edition.
+225
+
+
+
+
+

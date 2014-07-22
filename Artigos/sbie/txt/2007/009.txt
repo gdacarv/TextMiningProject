@@ -1,0 +1,431 @@
+﻿Aperfeiçoamento Automático do Perfil do Aprendiz em
+Ambientes de Educação Ubíqua
+Darci Levis1, Jorge Barbosa1, Sérgio Crespo1, Débora Barbosa2
+1Programa Interdisciplinar de Pós-Graduação em Computação Aplicada (PIPCA)
+Universidade do Vale do Rio dos Sinos (UNISINOS) - São Leopoldo - RS - Brasil
+darcilevis@gmail.com;{jbarbosa,crespo}@unisinos.br
+2 Centro Universitário LaSalle (UniLasalle) - Canoas - RS - Brasil
+nice@unilasalle.edu.br
+Abstract.  This  paper  presents  PeLeP  -  Pervasive  Learning  Profile,  which
+consists in a learner profile model oriented to ubiquitous learning systems.
+PeLeP aims to let applications explore ubiquitous education and learning
+through user profiles organized by categories containing information about
+the learner's daily life. Learner profiles in PeLeP are refined and enriched
+through inferences.
+Resumo. Este artigo apresenta o PeLeP  (Pervasive Learning Profile), um
+modelo que suporta o aperfeiçoamento automático do perfil do aprendiz em
+ambientes de educação ubíqua. O PeleP usa o histórico dos aprendizes nos
+contextos de um ambiente ubíquo (tracking) para atualização dos perfis. O
+texto apresenta ainda a integração do modelo com um sistema de educação
+ubíqua. Os resultados iniciais mostram a viabilidade da proposta.
+1. Introdução
+Atualmente,  os  estudos  sobre  mobilidade  em  sistemas  distribuídos  vêm  sendo
+impulsionados  pela  proliferação  de  dispositivos  eletrônicos  portáteis  (por  exemplo,
+telefones  celulares,  handhelds  e  notebooks)  e  pela  exploração  de  tecnologias  de
+interconexão baseadas em comunicação sem fio (por exemplo, WiFi, Bluetooth, GSM e
+WiMAX). A mobilidade aliada à difusão da comunicação sem fio permitiu aos serviços
+computacionais  serem  conscientes  do  contexto                                              [Augustin   2004].  Além  disso,  os
+sistemas de localização [Hightower 2006] estão viabilizando o uso preciso desse tipo de
+computação de acordo com a posição física do usuário. Neste cenário, a computação
+ubíqua [Satyanarayanan 2001] permite que os processos computacionais ocorram em
+qualquer  lugar,  a  qualquer  tempo  e  com  qualquer  dispositivo.  A  aplicação  dessas
+tecnologias  na  educação  ocasionou  o  surgimento  de  uma  nova  frente  de  pesquisa
+denominada educação ubíqua [Rogers 2005].
+Este artigo apresenta o PeLeP (Pervasive Learning Profile), um modelo   que
+suporta o aperfeiçoamento automático do perfil do aprendiz em ambientes de educação
+ubíqua. O texto está organizado da seguinte forma. A segunda seção apresenta o modelo
+proposto.  A  seção  três  descreve  a  implementação  e  discute  sua  avaliação  em  um
+cenário.  As  duas  últimas  seções  apresentam  os  trabalhos  relacionados  e  as
+considerações finais.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      165
+
+
+
+
+2. Modelo PeLeP
+2.1. Arquitetura
+O PeLeP foi concebido para ser conectado a um Sistema Ubíquo que forneça determinadas
+informações de tracking. Essas informações devem ser disponibilizadas por um Sistema
+de  Localização. Usando o tracking, o PeLeP realiza o aperfeiçoamento dos perfis dos
+aprendizes e a atualização no Sistema de Perfis. A Figura 1 mostra a arquitetura do PeLeP
+e sua integração com o sistema ubíquo.
+Figura 1. Arquitetura do PeLeP
+O  PeLeP  é  composto  por  quatro  módulos  e  um  banco  de  resultados.  A
+organização das informações recebidas no tracking é realizada pelo módulo Filtro  de
+Tracking. O módulo Normalização de Dados padroniza os dados numéricos para os cálculos
+de Fatores de Certeza (FC) realizados pelo módulo Cálculo do Fator de Certeza.   O   módulo
+Gerenciador de Perfil é encarregado de: 1) solicitar os dados filtrados pelo Filtro de Tracking;
+2) transmiti-los ao módulo de Normalização de dados e enviá-los, normalizados, ao módulo
+Cálculo do Fator de Certeza; 3) armazenar os itens que possuem os maiores FCs no Banco de
+Resultados, que armazena um resumo dos resultados da análise do tracking; 4) comparar
+esse resumo com as informações disponíveis no Sistema de Perfis do ambiente ubíquo;
+5) atualizar automaticamente o Sistema de Perfis usando os FCs como guias.
+2.2. Perfil do Aprendiz
+As informações que constituem o perfil do aprendiz são armazenadas no banco de dados
+do   Sistema    ubíquo.   Visando   a   compatibilidade   com   os   sistemas   GlobalEdu
+[Barbosa 2005]  e  Local                                                                           [Barbosa                                                                                 2006],  o  PeLeP  suporta  o  uso  das  seguintes
+categorias: Identificação, Objetivos, Preferências, Segurança e Competências. Além disso, são
+usadas as categorias Relacionamentos e Agenda suportadas pelo Local.
+A categoria Identificação é válida para todos os contextos que o aprendiz visita.
+Ela  contém  as  seguintes  informações  para  sua  identificação:                                 1)   IdAprendiz:
+identificador  único  no  sistema;                                                                 2)  Nome:  nome  completo;  3)  Endereço:  endereço
+completo  (rua, número, bairro, cidade);  4) Email: endereço eletrônico;  5) Telefone:
+telefone de contato.
+Objetivos contém os objetivos de aprendizagem. A categoria possui os seguintes
+elementos:                                                                                         1)  IdAprendiz:  identificador  único;                                                   2)  Objetivo:  objetivo  educacional;
+                                                                                                   3) Descrição: descrição detalhada do objetivo; 4) Contexto: contexto em que o aprendiz
+                                                                                                   possui o    objetivo;  5) Data: data da última atualização do objetivo. Através dessa
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                           166
+
+
+
+
+categoria são inferidas informações sobre o que o aprendiz gostaria de aprender.
+A categoria Preferências se refere às preferências do aprendiz. Essa categoria
+contém    os    seguintes    elementos:                                                        1)                                                       IdAprendiz:    identificador   único;
+2) EstiloAprendizagem: estilo de aprendizagem preferido; 3) FcEA: fator de certeza da
+preferência do aprendiz pelo estilo de aprendizagem; 4) ObjetoAprendizagem: objeto de
+aprendizagem (OA) [LOM 2007] preferido, relacionado com cada contexto; 5) TipoOA:
+tipo do OA, que pode ser OArp  (OA recomendado pelo professor) ou OAsup  (OA
+suplementar,  presente  no  cadastro  de  objetos  do  Sistema  ubíquo,  mas  que  não  foi
+recomendado  pelo  professor);  6)  FcOA:  fator  de  certeza  da  preferência  pelo  OA;
+7) Dispositivo: dispositivo preferido; 8) FcDispositivo: fator de certeza da preferência
+pelo dispositivo; 9) Aplicativo: aplicativo preferido; 10) FcAplicativo: fator de certeza
+da  preferência  pelo  aplicativo;                                                             11)  Contexto:  contexto  em  que  foi  determinada  a
+preferência; 12) Data: data da última atualização da preferência.
+Segurança contém as credenciais de segurança, que permitem o acesso ao sistema.
+Esta  categoria  é  populada  com  os  elementos:                                              1)  IdAprendiz:  identificador  único;
+2) Login: string que representa o login de acesso; 3) Senha: senha de acesso.
+Na categoria Competências estão às experiências e conhecimentos já adquiridos
+pelo   aprendiz.   Essa   categoria   contém:                                                  1)   IdAprendiz:   identificador   único;
+2) CompetenciaGeral:  descrição  geral  do  conteúdo  da  competência                          (por  exemplo,
+Matemática);  3) CompetenciaEspecifica: descreve especificamente à que se refere a
+competência  (por exemplo, Teoria dos conjuntos);  4) Contexto: contexto em que o
+aprendiz adquiriu a competência; 5) Data: data da última atualização da competência.
+Com esta categoria inferem-se informações sobre o que o aprendiz gostaria de ensinar.
+A  categoria  Relacionamentos  contém  os  relacionamentos  do  aprendiz  com  os
+contextos visitados por ele. Atualmente, os relacionamentos considerados são Professor
+e Aluno. Como podem existir vários contextos em um ambiente ubíquo, um usuário
+pode ser Professor em um contexto e Aluno em outro. Essa categoria é constituída de
+quatro elementos: 1) IdAprendiz: identificador único; 2) ContextoRelacao: contexto do
+relacionamento;                                                                                3)  Relacao:  relação  com  o  contexto;                 4)  Data:  data  da  última
+atualização do relacionamento.
+A  categoria  Agenda  é  baseada  nas  categorias  Activity  e  Qcl  do  padrão  LIP
+[LIP 2007]. Ela suporta informações sobre as atividades previstas para o aprendiz nos
+contextos  gerenciados  pelo  sistema  ubíquo.  Essa  categoria  possui  os  elementos:
+1) IdProfessor:   identificador   único   do   professor   que   cadastrou   a   atividade;
+2) TipoAtividade:  tipo  de  atividade                                                         (por  exemplo,  reunião,  palestra,  aula,  etc);
+3) Conteudo: conteúdo da atividade; 4) DataInicio: data e hora de início da atividade;
+5) DataFim:  data  e  hora  do  fim  da  atividade;                                            6)  IdEvento:  identificador  do
+evento/atividade; 7) Contexto: contexto da atividade.
+2.3. Tracking do Aprendiz
+Tracking é o histórico do aprendiz nos contextos do ambiente ubíquo, durante um
+determinado período de tempo. O tracking suportado pelo PeLeP contém informações
+sobre  a  localização  nos  contextos  e  o  que  foi  usado  em  cada  contexto  (recursos,
+dispositivos e aplicativos). O tracking está organizado em quatro campos:
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       167
+
+
+
+
+1. Localizações:  Este  campo  do  tracking  contém  a  identificação  dos  contextos
+visitados pelo aprendiz em um período. Este elemento alimenta as categorias Agenda,
+Relacionamentos, Objetivos, Preferências e Competências;
+2. Recursos  acessados:  Identifica  os  Objetos  de  Aprendizagem  (OAs)  que  foram
+acessados  pelo  aprendiz  nos  contextos.  O  professor  responsável  por  um  contexto
+seleciona  OAs  e  os  disponibiliza  para  os  aprendizes.  O  seu  trabalho  consiste  em
+selecionar OAs que abordem o assunto que os aprendizes freqüentadores do contexto
+precisam aprender. Esses OAs são classificados como OArp (objeto de aprendizagem
+recomendado pelo professor), enquanto que os demais são classificados como OAsup
+(objetos  de  aprendizagem  suplementares).  Além  disso,  o  PeLeP  considera  quatro
+dimensões   de   Estilos   de   Aprendizagem                                                  (EAs)   [Felder   e   Henriques   1995]:
+sensorial/intuitiva (percepção), visual/verbal (entrada), ativo/reflexivo (processamento)
+e seqüencial/global (compreensão). Para cada assunto, o professor deve recomendar no
+mínimo quatro OAs, um para cada EA considerado, e disponibilizá-los aos aprendizes.
+Os  EAs  dos  aprendizes  são  automaticamente  determinados  pelo  acesso  aos  OArps
+durante o período de tempo especificado para o tracking. O aprendiz pode acessar
+também um ou mais OAsups. Mas o acesso aos objetos suplementares não é utilizado
+para determinação do estilo do aprendiz. Os conteúdos acessados são utilizados para
+alimentar as categorias Preferências, Competências e Objetivos;
+3. Dispositivos utilizados: Esse campo registra os dispositivos que foram utilizados
+pelo aprendiz nos contextos visitados. Os dispositivos considerados são: PDAs, Tablet
+PCs, Notebooks, Desktops e telefones celulares. Este campo é utilizado na categoria
+Preferências;
+4. Aplicativos executados: Registra os programas que foram executados pelo aprendiz
+nos contextos (por exemplo, editores de texto e browsers). Este campo também é usado
+para a criação da categoria Preferências.
+2.4. Normalização dos Dados do Tracking
+As variáveis numéricas recebidas no tracking dependem de uma transformação que
+garanta  a  sua  equivalência  em  termos  de  magnitude.  Este  processo  é  chamado  de
+normalização.  A normalização da amplitude  [Lopes 2007] transforma as variáveis de
+modo que elas tenham uma amplitude idêntica e partilhem o mesmo valor máximo e
+mínimo. Sendo m o valor mínimo escolhido e M o valor máximo, então o operador
+linear aplicado ao elemento xi de um vetor é dado pela equação 1, onde mx e Mx são os
+valores mínimo e máximo do vetor.
+                                                                                                                                                     x      m
+                                                                                                                                                     i           x
+z                                                                                                    (                         M           m   )                      m   (1)
+i
+M                                                                                                    m
+                                                                                              x       x
+O termo zi corresponde à variável normalizada. Os valores escolhidos para o
+menor valor (m) e o maior (M), foram 1 e 10, respectivamente. Dificilmente Mx e mx
+assumirão valores idênticos, pois cada vetor de fatores possui três elementos. Caso isso
+ocorra, para que não haja divisão por zero na equação 1 foi convencionado que zi será
+igual a m, que vale sempre 1.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      168
+
+
+
+
+2.5. Fatores de Certeza
+O  Fator  de  Certeza  (FC)  determina  o  grau  de  certeza  das  informações  que  serão
+alteradas no perfil, considerando o percentual de relevância de cada fator. Os fatores
+considerados foram: tempo, número de acessos e número de dias. Esses fatores são
+representados por uma variável numérica no tracking. Além disso, foram definidos os
+seguintes percentuais de relevância para eles:  10% para o fator tempo,  30% para o
+número de acessos e 60% para o número de dias. O FC é calculado usando a equação 2.
+n
+                                                                                                                                                    f       p
+                                                                                                                                                       i       i
+i                                                                                                                                            0
+100
+FC                                                                                                                                           (2)
+n
+Na equação, fi é o valor normalizado para o fator, pi é o seu percentual de
+relevância e n é o número de fatores considerados. O fator de certeza determina que
+item (recurso, aplicativo ou dispositivo) será atualizado no perfil. Por exemplo, se o FC
+de um item do tracking analisado for maior do que o FC do item que já está armazenado
+no perfil, então ocorrerá a substituição.
+2.6. Banco de Resultados
+No Banco de Resultados são armazenados os dados dos maiores FCs que foram calculados
+nas últimas análises de tracking. O banco possui quatro tabelas:
+1. Aplicativos temporários: armazena os aplicativos executados que retornaram os
+maiores FCs;
+2. Dispositivos temporários: armazena os dispositivos utilizados que retornaram os
+maiores FCs;
+3. Objetos temporários: armazena os objetos de aprendizagem  (OAs) que foram
+mais acessados pelo aprendiz, o que também é determinado através dos FCs;
+4. Estilos temporários:  armazena os estilos de aprendizagem  (EAs) dos OAs de
+maiores FCs.
+2.7. Regras
+O processo de atualização do perfil do aprendiz é baseado em regras e fatores de
+certeza. As regras adotadas no PeLeP são descritas no formato “SE condição ENTÃO
+ação”.
+Categoria  Preferências:  A  substituição  e/ou  acréscimo  de  dados  na  categoria
+Preferências é baseada nas seguintes regras:
+SE itembr                                                                                    no perfil   ENTÃO acrescentar item de maior FC
+SE FCbr > FCperfil ENTÃO substituir item
+SE FCbr = FCperfil ENTÃO acrescentar item
+SE FCbr < FCperfil ENTÃO manter item
+FCbr é o fator de certeza  (FC) do item armazenado no Banco  de  Resultados e
+FCperfil é o FC já armazenado no banco de perfis do sistema ubíquo. Nas regras acima,
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     169
+
+
+
+
+item corresponde à preferência que é analisada, que pode ser estilo de aprendizagem
+(EA), objeto de aprendizagem (OA), dispositivo ou aplicativo.
+Categoria  Competências:  A  substituição  e/ou  acréscimo  de  dados  na  categoria
+Competências do perfil é baseada nas seguintes regras:
+SE itembr      no perfil ENTÃO acrescentar itembr de maior FC
+SE FCbr = FCperfil E itembr ≠ itemperfil ENTÃO acrescentar item
+SE FCbr = FCperfil E itembr = itemperfil ENTÃO atualizar item
+FCbr é o FC do item armazenado no Banco  de  Resultados e FCperfil é o FC já
+armazenado no perfil. Nas regras acima o item é competência. A execução dessas regras
+determina se os dados são acrescidos ou atualizados no perfil. Não existe regra para
+excluir as competências que foram adquiridas pelo aprendiz.
+Categoria Objetivos: A substituição e/ou acréscimo de dados na categoria Objetivos do
+perfil do aprendiz é baseada nas seguintes regras:
+SE itembr                                                                                     no perfil ENTÃO acrescentar itembr de maior FC
+SE FCbr = FCperfil E itembr ≠ itemperfil ENTÃO acrescentar item
+SE itembr = itemperfil ENTÃO atualizar item
+O significado das variáveis é o mesmo das categorias anteriores. Neste caso, o
+item é objetivo.
+Categoria Agenda: Esta categoria não é gerenciada no intervalo de tempo do tracking,
+como as demais. O gerenciamento é ativado automaticamente sempre que uma nova
+atividade é inserida, ou uma antiga modificada, pelo professor no Sistema  ubíquo. A
+atualização da agenda é baseada nas seguintes regras:
+SE atividade foi modificada no Sistema ubíquo ENTÃO substituir itemperfil_agenda
+SE atividade                                                                                  no perfil ENTÃO acrescentar atividade
+Percebe-se que estas regras não utilizam nenhum FC. Por isso as informações
+dessa categoria não são armazenadas no Banco de Resultados. Nas regras acima, atividade
+representa a atividade que o professor cadastra no Sistema ubíquo.
+Categoria Relacionamentos: As regras que definem os dados armazenados na categoria
+Relacionamentos são baseadas na categoria Agenda. Pela consulta ao elemento IdProfessor
+da  Agenda  determina-se  se  um usuário  é  professor  ou  aprendiz.  Um usuário  que  é
+professor em um contexto pode ser aprendiz em outro. Neste sentido, as regras que
+definem o que é armazenado nessa categoria do perfil são:
+SE IdAprendizRelacionamentos = IdProfessorAgenda   ENTÃO RelacaoRelacionamentos = professor
+SE IdAprendizRelacionamentos ≠ IdProfessorAgenda  ENTÃO IdRelacaoRelacionamentos = aluno
+IdAprendizRelacionamentos    representa   o   elemento   IdAprendiz   da   categoria
+Relacionamentos,  e  IdProfessorAgenda  o  IdProfessor  da  Agenda.  As  informações  da
+categoria Relacionamentos determinam se os usuários do Sistema ubíquo são professores ou
+aprendizes.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      170
+
+
+
+
+3. Integração PeLeP/Local
+O PeLeP foi prototipado e integrado a um sistema de educação ubíqua denominado
+Local [Barbosa 2006]. A figura 2 mostra a integração. O protótipo do PeLeP é baseado
+na linguagem de programação PHP 5.1 e no banco de dados MySQL 5.0. Além disso, a
+comunicação entre o PeLeP e o Local é suportada pelo padrão XML. O Filtro de tracking
+(veja a Figura  1) faz a leitura do arquivo XML gerado pelo Sistema  de  Localização do
+Local e organiza as informações para os demais módulos do PeLeP.
+Figura 2. PeLeP integrado na arquitetura do Local
+O PeLeP permite que o intervalo de tempo entre as solicitações de tracking seja
+escolhido. Nos testes apresentados nessa seção, o intervalo usado foi uma semana.
+Desta  forma,  o  módulo  Gerenciador  de  Perfil  foi  programado  para  semanalmente:  1)
+Executar o Filtro de tracking; 2) Ativar a Normalização de Dados; 3) Executar o Cálculo do Fator
+de Certeza; 4) Armazenar os maiores FCs no Banco de Resultados; 5) Executar as regras de
+inferência, comparando as informações existentes no Sistema de Perfis do Local com as
+informações do Banco de Resultados do PeLeP; 6) Atualizar os dados no Sistema de Perfis no
+Local.
+A integração foi testada no MobiLab1, onde o Local foi desenvolvido e está em
+funcionamento.  Os  trackings  foram  gerados  para  todos  os  aprendizes  e  contextos
+cadastrados nos sistemas de perfis do Local. No entanto, o restante dessa seção discute
+uma seleção de resultados obtidos para dois aprendizes. Além disso, o número de OAs
+cadastrados para o teste foi limitado a doze.
+Figura 3. Primeira execução para a categoria Competências
+A Figura 3 mostra os resultados da primeira execução do PeLeP para a categoria
+Competências.  ID_APRENDIZ  representa  o  elemento  IDAprendiz  dessa  categoria,
+(descrito  na  subseção                                                                                2.2).  Percebe-se  que  o  aprendiz  que  possui  no  campo
+ID_APRENDIZ o número 322 realizou tarefas apenas no contexto “Sala 206”, enquanto
+que  o  outro  atuou  em  quatro  contextos.  Após  a  primeira  execução,  o  PeLeP  foi
+executado mais duas vezes, nas datas: 28/05/2007 e 04/06/2007, uma e duas semanas
+após, respectivamente. As categorias Identificação e Agenda permaneceram inalteradas.
+1 Laboratório de Pesquisa e Desenvolvimento em Computação Móvel. http://www.inf.unisinos.br/~mobilab
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                               171
+
+
+
+
+Figura 4. Terceira execução para a categoria Competências
+A Figura  4 exibe os resultados obtidos na terceira execução para a categoria
+Competências. Percebe-se que o número de contextos em que cada aprendiz executou
+tarefas após três semanas foi considerável. Nota-se que o aprendiz cujo ID vale 321 foi o
+que mais adquiriu competências no período. Cabe ressaltar também, que uma mesma
+competência do aprendiz pode ser determinada para mais de um contexto, pois as regras
+apresentadas na seção 2.7 valem para todos os contextos visitados pelo aprendiz.
+A Figura 5 representa a categoria Preferências para a terceira execução do PeLeP.
+Os campos FC_EA, FC_OA, FC_DISPOSITIVO e FC_APLICATIVO representam,
+respectivamente, os fatores de certeza (FC) dos estilos de aprendizagem (EA), objetos
+de aprendizagem (OA), dispositivos e aplicativos. TIPO_OA retrata o tipo do objeto,
+que pode ser Objeto de Aprendizagem recomendado pelo professor (OArp) ou Objeto
+de Aprendizagem suplementar (OAs). Este último foi representado desta forma apenas
+no protótipo, pois no restante do artigo foi utilizado o termo “OAsup”.
+Figura 5. Terceira execução para a categoria Preferências
+O professor recomenda para cada assunto quatro objetos de aprendizagem, um
+para cada estilo. A determinação dos EAs dos aprendizes é baseada apenas nesses tipos
+de objetos (OArp). Os FCs resultam valores diferentes para estilos e objetos se o maior
+FC ocorre para um OA do tipo “OAs”. Neste caso, o FC que define o estilo será menor.
+Percebe-se  na  Figura  5  (linha  em destaque),  que  quando  o  campo  TIPO_OA  vale
+“OAs”, o valor armazenado em FC_EA é diferente do FC_OA. Esse fato comprova que
+os  Estilos  de  Aprendizagem  são  determinados  com  base  apenas  nos  objetos  de
+aprendizagem classificados como “OArp”.
+A Figura 5 mostra ainda que para as três primeiras execuções do PeLeP não
+houve mais do que uma preferência em cada contexto. Basta analisar cada CONTEXTO
+relacionado com seu ID_APRENDIZ nas duas primeiras colunas. Analisando a linha
+destacada na Figura 5, o Sistema ubíquo conectado ao PeLeP poderia indicar um novo
+objeto de aprendizagem para o aprendiz de ID_APRENDIZ 321 que: (1) possua o estilo
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                    172
+
+
+
+
+“Processamento”;                                                                             (2)  possa  ser  executado  num  dispositivo   “Tablet”;           (3)  seja  um
+documento a ser visualizado no aplicativo “Internet Explorer”. Adicionalmente, através
+da análise da categoria Objetivos, poderia ser indicado um documento relacionado aos
+objetivos  do  aprendiz  no  contexto.  No  Local,  o  componente  responsável  por  essa
+indicação é o Tutor, mostrado na Figura 2.
+4. Trabalhos relacionados
+Diversos  sistemas  utilizam  o  perfil  do  aprendiz  em  aplicações                        [Barbosa 2005]
+[Ogata 2005][Roschelle e Pea  2002][Rigaux e Spyratos  2007]. Porém, o uso de um
+perfil de aprendiz para auxílio no processo de aprendizagem em um cenário ubíquo é
+recente.  Pode-se  citar  Japelas                                                            [Ogata                                         2005],  GlobalEdu   [Barbosa        2005]  e  Local
+[Barbosa 2006] como as primeiras propostas que surgiram para esse cenário. No âmbito
+dos padrões de modelos de aprendiz, o PAPI [PAPI 2007] estrutura o perfil com seis
+categorias bastante objetivas. Por sua vez, o LIP [LIP 2007] organiza as informações do
+perfil  do  aprendiz  através  de  nove  categorias,  que  abrangem todas  as  informações
+consideradas  no  PAPI.  Esses  padrões  não  abordam  o  ambiente  ubíquo  e  o
+aperfeiçoamento dos perfis com base no tracking do aprendiz.
+O modelo SeLeNe [Rigaux e Spyratos 2007] utiliza os padrões PAPI e LIP para
+modelar o aprendiz. Esse modelo possui um serviço que analisa o perfil e o histórico
+das consultas feitas pelo aprendiz no ambiente e-Learning. Por não ser um modelo
+desenvolvido para o ambiente ubíquo, não oferece serviço de consciência do contexto,
+nem considera a mobilidade do aprendiz. Japelas [Ogata 2005] é um sistema consciente
+de contexto específico para suporte ao ensino de expressões de tratamento da língua
+japonesa. Os perfis são preenchidos pelo usuário e não passam por nenhum tipo de
+aperfeiçoamento. O GlobalEdu [Barbosa 2005] é uma arquitetura de aprendizagem que
+suporta aplicações educacionais considerando um ambiente de computação ubíqua em
+larga  escala.  Ele  especifica  um  modelo  de  aprendiz,  onde  define  um  conjunto  de
+informações  que  consideram  o  histórico  no  ambiente  ubíquo.  No  entanto,  nenhum
+aperfeiçoamento baseado no histórico do aprendiz é proposto.
+Local  [Barbosa  2006]  usa  informações  de  localização  e  de  contexto  como
+auxílio ao processo de ensino e de aprendizagem. A proposta original do Local não
+suporta  aperfeiçoamento  de  perfis.  Tendo  como  base  a  revisão  bibliográfica  desse
+artigo,  pode-se  afirmar  que  a  integração  Local/PeLeP  cria  o  primeiro  sistema  de
+educação  ubíqua  com  suporte  ao  aperfeiçoamento  automático  de  perfis  usando  o
+tracking de aprendizes.
+5. Considerações Finais
+A  principal  contribuição  do  PeLeP  é  o  aperfeiçoamento  automático  de  perfis  em
+ambientes ubíquos de ensino e aprendizagem. Embora o PeLeP inicialmente tenha sido
+integrado ao Local, sua proposta é genérica o bastante para ser aplicada em outros
+sistemas  de  educação  ubíqua.  Os  testes  comprovaram  sua  viabilidade.  A  melhoria
+contínua e transparente dos perfis dos aprendizes nos contextos permitirá aos sistemas
+de educação ubíqua uma atuação mais eficaz. No caso da integração Local/PeLeP, o
+Tutor usará perfis sempre atualizados.
+O primeiro trabalho futuro será a ampliação dos testes iniciais. Nesse sentido, a
+integração será avaliada nos cursos de graduação em Engenharia da Computação e no
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     173
+
+
+
+
+Mestrado  em  Computação,  ambos  na  Unisinos.  Durante  essa  avaliação,  um  dos
+principais pontos de análise será o impacto do PeLeP na melhoria das intervenções
+pedagógicas realizadas pelo módulo Tutor. Posteriormente, será realizada a integração do
+PeLeP com o sistema de educação ubíqua GlobalEdu [Barbosa 2005].
+Referências
+Augustin, I. et al. (2004). “ISAM, Joing Context-awareness and Mobility to Building
+Pervasive  Applications”.  Imad  Mahgoub;  Mohammad  Ylias                                 (Org.).  Mobile
+Computing Handbook. New York, CRC Press, p. 73-94.
+Barbosa, D. N. F. et al. (2005). “GlobalEdu: An Architecture to Support Learning in a
+Pervasive  Computing Environment”.  IFIP Workshop on Educational Technology
+(EDUTECH), Perth, Australia, Springer-Verlag, p. 1-10.
+Barbosa,  J.  L.V.  et  al.  (2006).  “Local:  Um Modelo  para  Suporte  à  Aprendizagem
+Consciente de Contexto”. XVII Simpósio Brasileiro de Informática na Educação
+(SBIE) Brasília: SBC, p.437-446.
+Felder, R. M.; Henriques, E. R. (1995). “Learning and Teaching Styles in Foreign and
+Second Language Education”. Foreign Language Anais, v. 28, n. 1, p. 21-31.
+Hightower,  J.  et  al.                                                                    (2006).           “Practical  Lessons  from  Place  Lab”.  IEEE  Pervasive
+Computing. IEEE Press, v. 5, n. 3, p. 32-39.
+LOM - Learning Technology Standards Committee of the IEEE (2007). “Draft Standard
+for Learning Object Metadata”, http://ltsc.ieee.org/wg12/index.html, August.
+LIP                                                                                        (2007).           “Learner                                                   Information   Package                                                             Specification   1.0”,
+                                                                                                             http://www.imsglobal.org/profiles/index.html, August.
+Lopes,   J.                                                                                (2007).                                                                                    “Normalização”,   http://bsel.ist.utl.pt/2007/PortalQuimiometria/
+                                                                                                             Contents/procdados/node7.html, August.
+Ogata, H. et al. (2005). “JAPELAS: Supporting Japanese Polite Expressions Learning
+Using PDA towards Ubiquitous Learning”. The Journal of Information and Systems
+in Education, v. 2, n. 1, p. 33-39.
+PAPI. (2007). “Public and Private information for learners”. IEEE P1484.2/d7, 2001.
+Draft standard for learning technology, http://www.edutool.com/papi, August.
+Rigaux, P.; Spyratos, N. (2007) “SeLeNe Report: Metadata Management and Learning
+Object                                                                                     Composition       in                                                         a             Self                                                                eLearning       Network”.
+http://www.dcs.bbk.ac.uk/selene/reports, August.
+Rogers, Y. et al.  (2005).  “Ubi-learning Integrates Indoor and Outdoor Experiences”.
+Communications of the ACM, v. 48, n. 1, p.55-59.
+Roschelle, J.; Pea, J. (2002). “A walk on the WILD side: How wireless handhelds may
+change CSCL”. Computer Supported Collaborative Learning, January.
+Satyanarayanan,  M.                                                                        (2001).           “Pervasive  computing:  vision  and  challenges”.  IEEE
+Journal, v. 8, n. 4, p. 10-17.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   174
+
+
+
+
+

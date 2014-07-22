@@ -1,0 +1,421 @@
+﻿Avaliação de Políticas de Aprendizagem por Reforço para
+Modelagem Automática e Dinâmica de Estilos de
+Aprendizagem: Uma Análise Experimental
+Fabiano A. Dorça1,2, Luciano V. Lima2, Márcia A. Fernandes1, Carlos R. Lopes1
+1Faculdade de Computação (FACOM) - Universidade Federal de Uberlândia (UFU)
+2
+Faculdade de Engenharia Elétrica (FEELT) - Universidade Federal de Uberlândia (UFU)
+{fabiano,marcia,crlopes}@facom.ufu.br,  vieira@ufu.br
+Abstract. A huge number of studies attest that learning is facilitated if teaching
+strategies are in accordance with students learning styles, making the learning
+process more effective and improving students performances.  In this context,
+this paper presents an automatic, dynamic and probabilistic approach for mo-
+deling students learning styles based on reinforcement learning.  Three diffe-
+rent strategies for updating the student model are proposed and tested through
+experiments.  The results obtained are analyzed, indicating the most effective
+strategy.
+Resumo. Um grande número de estudos atestam que a aprendizagem é facili-
+tada se as estratégias de ensino estiverem de acordo com os estilos de aprendi-
+zagem do estudante, tornando o processo de aprendizagem mais eficaz, e melho-
+rando o seu desempenho. Neste contexto, este trabalho apresenta uma aborda-
+gem automática e dinâmica para modelagem de estilos de aprendizagem base-
+ada em aprendizagem por reforço. Três estratégias de aprendizagem diferentes
+são propostas e testadas por meio de experimentos. Os resultados obtidos são
+apresentados e discutidos, indicando a estratégia mais eficiente.
+1. Introdução
+Um grande número de estudos atesta que a aprendizagem é facilitada se as estratégias
+pedagógicas estiverem de acordo com os estilos de aprendizagem (EA) do estudante,
+tornando o processo de aprendizagem mais efetivo, e melhorando consideravelmente
+a performance do estudante, conforme apontam [Graf et al. 2008, Kinshuk et al. 2009,
+Graf et al. 2009].
+Mas, as abordagens tradicionais para detecção de EA se mostram ineficientes
+[Graf e Lin 2007, Price 2004].   Neste sentido,  abordagens automáticas tendem a ser
+mais precisas e menos suscetíveis a erros,  já que permitem analisar dados resultan-
+tes de um intervalo de tempo, ao invés de dados colhidos em um momento específico
+[Graf et al. 2009].  De acordo com [Giraffa 1999], um modelo realista do estudante im-
+plica em uma atualização dinâmica enquanto o sistema avalia o desempenho do estudante.
+Um  problema  com  abordagens  automáticas  é  a  obtenção  de  informação  su-
+ficientemente  confiável  para  se  construir  um  modelo  do  estudante                  (ME)  robusto
+[Graf e Lin 2007].  Então, a construção deste tipo de abordagem, fundamentada em um
+modelo probabilístico, é um importante problema em pesquisas [Danine et al. 2006].
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+Neste contexto, este trabalho apresenta uma abordagem automática, dinâmica
+e probabilística para modelagem de EA do estudante,  e também avalia e compara,
+através de experimentos,  três diferentes políticas de aprendizagem por reforço  (AR)
+[Sutton e Barto 1998] para atualização do ME, apontando claramente a política mais efi-
+ciente.
+A teoria de EA que dá suporte a este trabalho é o modelo de EA proposto
+por [Felder e Silverman 1988], o Felder-Silverman’s Learning Styles Model (FSLSM).
+O FSLSM se destaca dos demais por combinar os principais modelos de EA, con-
+forme alerta  [Kinshuk et al. 2009].   Além disto,  o FSLSM é o mais frequentemente
+utilizado na construção de sistemas adaptativos e inteligentes para educação  (SAIE)
+[Graf e Kinshuk 2009].
+As demais seções deste trabalho são descritas a seguir. A seção 2 apresenta o es-
+tado da arte e analisa alguns dos principais trabalhos relacionados. A seção 3 apresenta
+em detalhes a abordagem proposta e as diferentes políticas de aprendizagem implemen-
+tadas e experimentadas.  A seção 4 apresenta e analisa os resultados obtidos através de
+experimentos. Finalmente, a seção 5 apresenta as conclusões e discute trabalhos futuros.
+2. Trabalhos Relacionados
+Alguns trabalhos recentes têm apresentado propostas para detecção automática de EA
+[Graf e Viola 2009, Limongelli et al. 2009]. Estas propostas utilizam sistemas de inferên-
+cia determinísticos baseados em padrões de comportamento pré-definidos do estudante,
+de forma que, através de seu comportamento e ações no sistema, possam inferir seus EAs.
+[Graf et al. 2009, Graf e Viola 2009] discutem padrões de comportamento considerados
+relevantes para identificação de cada EA.
+Sistemas  de  inferência  determinísticos,   baseados  em  padrões  de  com-
+portamento  pré-definidos,   ignoram  importantes  considerações,   apresentadas  por
+[Marzano e Kendall 2007, Messick 1976, Felder e Spurlin 2005, Roberts e Erdos 1993],
+relacionadas aos aspectos dinâmicos e não-determinísticos de EA e do comportamento
+do estudante. Neste contexto, a abordagem apresentada neste trabalho apresenta avanços
+ao considerar, de forma probabilística, os EAs dos estudantes.
+Algumas   abordagens,   como                                                                 [García et al. 2007,   Carmona e Castillo 2008,
+Zatarain-Cabada et al. 2009, Villaverde et al. 2006], utilizam técnicas de aprendizagem
+supervisionada de máquina, tais como redes Bayesianas e redes neurais.  Uma crítica
+a estas abordagens é sua alta complexidade de implementação e grande consumo de
+recursos computacionais, de forma que a presença simultânea de vários estudantes pode
+comprometer, ou mesmo inviabilizar, seu uso.
+Além disto, destaca-se aqui a elevada dificuldade e o alto grau de subjetividade na
+tarefa de se relacionar EA e os aspectos de comportamento que o identificam, conforme
+observa [García et al. 2007].  Consequentemente, a obtenção de pares de treinamento é,
+além de complexa, duvidosa, pois gera uma massa de dados com alto nível de incerteza,
+podendo conter inconsistências, o que pode resultar em treinamento equivocado da rede,
+comprometendo seriamente o processo de fornecimento de adaptatividade.
+Acredita-se que, neste contexto, uma abordagem que aprenda de forma não su-
+pervisionada, devido à sua própria natureza, elimina diversas dificuldades e problemas
+
+
+
+
+encontrados no processo de diagnóstico automático de EA. O fato da abordagem pro-
+posta neste trabalho ser baseada em AR, que tem como características fundamentais o
+aprendizado incremental e a não utilização de conhecimento específico do domínio de
+aplicação, torna o método mais geral, e portanto, mais facilmente reutilizável.
+3. Abordagem Proposta
+Na abordagem proposta, os EA dos estudantes são armazenados através de distribuições
+de probabilidades no ME, indicando as probabilidades de preferência por cada EA den-
+tro de cada uma das quatro dimensões do FSLSM, chamados aqui de EA probabilísticos
+(EAp). Então, tem-se um ME probabilístico em que EA são tratados pelo sistema como
+probabilidades, e não como certezas. A Tabela 1 apresenta um exemplo de EAp no ME,
+representando um estudante que provavelmente é Reflexivo, Intuitivo, Verbal e Sequen-
+cial.
+Tabela 1. Exemplo de Inicialização dos EAp
+EA Probabilísticos (EAp)
+                                                                                            Processamento   Percepção               Entrada            Organização
+Ativo                                                                                       Reflexivo       Sensitivo   Intuitivo   Visual    Verbal   Sequencial    Global
+0,28                                                                                        0,72            0,09        0,91        0,45      0,55     0,82          0,18
+Caso  seja  utilizado  um  questionário  inicial  para  auto-avaliação  de  EA
+compatível  com  o  FSLSM,  como  o  Index  of  Learning  Styles  Questionnaire
+(ILSQ)[Felder e Spurlin 2005], o ME pode ser inicializado através dos dados obtidos pelo
+questionário, fazendo-se a conversão considerando-se a proporcionalidade das respostas
+pontuadas para cada EA, dividindo-se a quantidade de respostas favoráveis a um EA pelo
+total de respostas dentro da dimensão (11 para cada dimensão, totalizando 44 questões no
+ILSQ). Caso nenhum questionário para a identificação inicial de EAs dos estudantes seja
+utilizado, todos os EAp no ME são inicializados em 0, 50 (preferência indefinida).
+Os processos de modelagem automática e dinâmica dos EAp  do estudante, e de
+seleção das estratégias de ensino, reforço e remediação, são baseados na seleção dinâmica
+de uma combinação de estilos de aprendizagem (CEA) que defina uma ação pedagógica
+apropriada a ser tomada em determinado momento. Uma CEA é uma tupla formada por
+4 estilos de aprendizagem, cada um pertencente a uma dimensão do FSLSM, conforme
+apresenta a Definição 3.1.
+Definição 3.1  Combinação de estilos de aprendizagem (CEA)
+CEA = (a, b, c, d|a ∈ D1, b ∈ D2, c ∈ D3, d ∈ D4)
+considerando:
+D1 = {Ativo(A), Reflexivo(R)};
+D2 = {Sensitivo(S), Intuitivo(I )};
+D3 = {V isual(V i), V erbal(V e)};
+D4 = {Sequencial(Seq), Global(G)}.
+Desta forma, existem 16 (24) possíveis CEAs.  A cada seção de aprendizagem
+do curso,  seleciona-se estocasticamente uma CEA de acordo com sua probabilidade
+de preferência pelo estudante, dada por P, de acordo com (1).  Consequentemente, a
+probabilidade da CEA (A, S, V i, Seq) ser selecionada é dada por P (A, S, V i, Seq)  =
+
+
+
+
+0,28 × 0, 09 × 0, 45 × 0, 82.  A CEA selecionada define a estratégia pedagógica a ser
+adotada na apresentação do conteúdo do curso durante uma seção de aprendizagem.
+P (a, b, c, d) = P ra  × P rb  × P rc  × P rd                                               (1)
+Considera-se, então, que o estudante pode, com maior ou menor probabilidade,
+pertencer a qualquer uma das 16 categorias pedagógicas dadas pelas 16 CEAs.  Então,
+pode-se dizer que temos uma classificação probabilística e dinâmica dos estudantes, que
+estocasticamente se enquadram a estas categorias pedagógicas ao longo do processo de
+aprendizagem com maior ou menor probabilidade. Com isto, espera-se produzir um me-
+lhor tratamento da incerteza inerente à inferência da categoria pedagógica à qual um es-
+tudante pertence.
+Neste contexto, apresenta-se, a seguir, os componentes relacionados à aplicação
+de AR na modelagem de EA:
+• Estados (S): Valores de EAp e nível cognitivo armazenados no ME;
+• Ações (A): Ações que o sistema pode executar, com intuito de ensinar o conteúdo
+maximizando a qualidade da performance do estudante, durante o processo de
+aprendizagem, ou seja, as CEAs dadas pela Definição 3.1;
+• Percepção do ambiente (I : S → S): Indica como o sistema percebe o estado do
+estudante. Por exemplo, um SAIE pode perceber o estado cognitivo do estudante
+através da avaliação de seu conhecimento por meio de testes ou exames;
+• Reforço (R  :  S × A  →  ℜ):  Essa função define os sinais de reforço a serem
+aplicados no aprendizado das melhores CEAs para um estudante, dada por (2);
+• Função valor-ação, ou ganho (Q : S × A → ℜ): Esta função estima a utilidade
+de se adotar determinada CEA (ação), considerando determinado estado (EAp),
+fornecendo um método de avaliação para as ações do sistema. Esta função é dada
+por (1), e associa uma ação a um número real, denominado ganho, e estima quão
+boa determinada CEA é em determinado estado.
+O sinal de reforço é calculado em função da qualidade da performance (PFM)
+obtida pelo estudante na seção de aprendizagem, de acordo com (2). O reforço é inversa-
+mente proporcional à performance, já que, provavelmente, quanto menor o desempenho,
+maior é a dificuldade de aprendizagem, que pode provavelmente estar sendo causada por
+forte inconsistência nos EAp, que deve ser eliminada o quanto antes, necessitando-se de
+um reforço maior. Em contra-partida, deseja-se que quanto maior a distância entre estilos
+de aprendizagem (DEA) em uma dimensão, menor o reforço, para que se possa evitar
+reforços abruptos em EAp  já consideravelmente fortes, e, ao mesmo tempo, possibilitar
+um reforço maior quando a DEA se aproximar de 0 (preferência indefinida). O valor de
+PFM é considerado no intervalo real [0, 100] e o valor da DEA é considerado no intervalo
+real [0, 1].  Um limite Rmax  é imposto ao valor do reforço, com intuito de impedir que
+reforços demasiadamente grandes sejam aplicados quando a DEA ou PFM tender a 0.
+1
+R =                                                                                         (2)
+P F M × DEA
+Para decidir como os EAp do estudante devem ser atualizados, leva-se em consi-
+deração a CEA aplicada durante uma seção de aprendizagem. Foram testadas 3 políticas:
+
+
+
+
+• política 01:  os EAp  presentes na CEA são reforçados sempre que o estudante
+obtiver uma performance considerada satisfatória.
+• política 02: os EAp presentes na CEA são reforçados sempre que o estudante obti-
+ver uma performance satisfatória, e são decrementados (reforço negativo) sempre
+que o estudante obtiver uma performance considerada insatisfatória;
+• política 03: os EAp presentes na CEA são decrementados (reforço negativo) sem-
+pre que o estudante obtiver uma performance considerada insatisfatória.
+O  algoritmo                                                                                     3.1   implementa  o  processo  de  AR  baseado  no  Q-learning
+[Sutton e Barto 1998], e leva em consideração a definição dos componentes de AR no
+domínio de SAIE, conforme apresentado anteriormente.  O algoritmo 3.1 é executado a
+cada seção de aprendizagem, até que sejam atingidos todos os objetivos de aprendizagem
+do estudante.
+Algoritmo 3.1 Q-learning aplicado à modelagem automática e dinâmica de EA
+Inicialize o ME;
+while s não seja o estado final do
+Selecione um conceito C a ser apresentado ao estudante;
+Selecione uma CEA a;
+Execute a, apresentando adequadamente os objetos de aprendizagem que ensinam o
+conceito C ao estudante;
+Avalie a performance do estudante no conceito C ;
+Atualize o estado cognitivo do estudante no ME em relação a C ;
+Receba a recompensa r, dada por P F M ;
+Calcule o reforço R de acordo com (2);
+Atualize os EAp;
+Faça de s o próximo estado, dado pelo ME atualizado;
+end while
+A cada iteração do algoritmo, os valores de Q (dados pela função P ) convergem
+para os seus valores ótimos automaticamente, possibilitando ao sistema selecionar a me-
+lhor estratégia pedagógica com a maior frequência possível para cada estudante.
+Sabe-se que uma diversidade de aspectos podem envolver a avaliação de apren-
+dizagem e desempenho do estudante em SAIE. Desta forma, com o intuito de se testar a
+abordagem proposta neste capítulo isolando-se toda esta complexidade, foi desenvolvido
+um modelo probabilístico para simular o processo de aprendizagem e performance do
+estudante levando em consideração alguns aspectos relacionados ao impacto dos EAs no
+processo de aprendizagem [Graf et al. 2008, Kinshuk et al. 2009, Graf e Liu 2008].
+4. Verificação e Validação da Abordagem Proposta
+A  fim  de  analisar  e  comparar  as  três  políticas  para  atualização  do  ME,  apresenta-
+das na seção anterior, foram observadas e analisadas duas variáveis nos experimentos
+(considerando-se 10 execuções consecutivas de cada experimento):
+• consistência: os EAp efetivamente convergem para os EAr  (estilos re aprendiza-
+gem reais do estudante) durante o processo de aprendizagem?
+• eficiência: os EAp convergem para os EAr em tempo razoável, isto é, EAp torna-
+se consistente no início do processo de aprendizagem?
+
+
+
+
+Entende-se que 10 execuções consecutivas de cada experimento é suficiente para
+que se possa observar e analisar o comportamento, a consistência e eficiência de cada
+uma das políticas propostas, a fim de compará-las. Para cada experimento, apresenta-se
+graficamente o processo de atualização dos EAp  em sua primeira execução.  Em cada
+gráfico, o eixo x mostra o número de iterações do processo de aprendizagem, e o eixo y
+mostra os valores que os EAp assumem ao longo do processo de aprendizagem em cada
+dimensão.
+Para a realização dos experimentos apresentados nesta seção, considera-se um es-
+tudante com EAr  = { Reflexivo(Forte), Intuitivo(Forte), Verbal(Moderada), Global(Leve)
+}. Os EAp  do estudante são inicializados de forma inconsistente com os EAr , em todas
+as dimensões, com distribuições de probabilidades (0, 70; 0, 30).  A Figura 1 apresenta
+graficamente a atualização dos EAp no ME durante a primeira execução do experimento,
+considerando a política 01 para atualização dos EAp. Como pode-se notar, as inconsis-
+tências foram reforçadas ao invés de serem corrigidas, demonstrando a ineficiência desta
+política.
+Figura 1. Atualização do ME utilizando a política 01
+A Tabela 2 apresenta o número de iterações ocorridas em 10 execuções conse-
+cutivas deste experimento, utilizando-se a política 01 para atualização dos EAp, além
+da quantidade de problemas de aprendizagem ocorridos (quando P F M                         <  60), e os
+EAp  armazenados no ME ao final do processo de aprendizagem.  Os EAp  destacados
+em vermelho não foram corrigidos durante o processo de aprendizagem, permanecendo
+inconsistentes no ME. Conclui-se, então, que esta política é extremamente ineficiente na
+modelagem de EA.
+A Figura 2 apresenta graficamente a atualização dos EAp  no ME durante a pri-
+meira execução deste experimento, considerando a política 02 para atualização dos EAp.
+Como pode-se perceber, apenas 3 preferências foram corretamente detectadas, permane-
+cendo ainda a dimensão sensitivo-intuitivo inconsistente no ME.
+A Tabela 3 apresenta os resultados obtidos em 10 execuções consecutivas deste
+experimento, utilizando a política 02. Os EAp destacados em vermelho não foram corri-
+gidos durante o processo de aprendizagem, permanecendo inconsistentes no ME. Pode-se
+notar um nível de consistência melhor nestes resultados em relação aos resultados obti-
+
+
+
+
+Tabela 2. Resultados obtidos utilizando a política 01
+N.                                                                                                Iterações   Prob. de Aprendizagem   EAp
+1                                                                                         390     210                                 {(0,9;0,1); (0,9;0,1); (0,9;0,1); (0,9;0,1)}
+2                                                                                         298     118                                 {(0,9;0,1); (0,1;0,9); (0,9;0,1); (0,9;0,1)}
+3                                                                                         299     119                                 {(0,9;0,1); (0,9;0,1); (0,1;0,9); (0,9;0,1)}
+4                                                                                         322     142                                 {(0,1;0,9); (0,9;0,1); (0,9;0,1); (0,9;0,1)}
+5                                                                                         317     137                                 {(0,9;0,1); (0,9;0,1); (0,9;0,1); (0,1;0,9)}
+6                                                                                         381     201                                 {(0,9;0,1); (0,9;0,1); (0,9;0,1); (0,9;0,1)}
+7                                                                                         407     227                                 {(0,9;0,1); (0,9;0,1); (0,9;0,1); (0,9;0,1)}
+8                                                                                         404     224                                 {(0,9;0,1); (0,9;0,1); (0,9;0,1); (0,9;0,1)}
+9                                                                                         429     249                                 {(0,9;0,1); (0,9;0,1); (0,9;0,1); (0,9;0,1)}
+10                                                                                        374     194                                 {(0,9;0,1); (0,9;0,1); (0,9;0,1); (0,9;0,1)}
+Média                                                                                     377,5   197,5                               -
+Figura 2. Atualização do ME utilizando a política 02
+dos através da política 01. Nota-se uma redução acentuada no número de problemas de
+aprendizagem ocorridos, resultando na redução do número de iterações do processo de
+aprendizagem, o que denota um ganho de eficiência desta política em relação à política
+01.
+A Figura 3 apresenta graficamente a atualização dos EAp  no ME durante a pri-
+meira execução deste experimento, considerando a política 03. Como pode-se perceber,
+todas as inconsistências foram corrigidas nos EAp do estudante, demonstrando a eficácia
+desta política em relação às demais.
+A Tabela 4 apresenta os resultados obtidos neste experimento, utilizando a polí-
+tica 03. Como pode-se observar, todas as inconsistências nos EAp  foram eficientemente
+eliminadas. Nota-se uma redução no número de problemas de aprendizagem ocorridos,
+resultando na redução do número de iterações do processo de aprendizagem, o que denota
+um ganho de eficiência desta política em relação à política 02.
+
+
+
+
+Tabela 3. Resultados obtidos utilizando a política 02
+N.                                                                                                  Iterações   Prob. de Aprendizagem   EAp
+1                                                                                             204   24                                  {(0,1;0,9); (0,9;0,1); (0,1;0,9); (0,1;0,9)}
+2                                                                                             206   26                                  {(0,1;0,9); (0,9;0,1); (0,1;0,9); (0,1;0,9)}
+3                                                                                             189   9                                   {(0,1;0,9); (0,1;0,9); (0,1;0,9); (0,1;0,9)}
+4                                                                                             215   35                                  {(0,1;0,9); (0,9;0,1); (0,1;0,9); (0,1;0,9)}
+5                                                                                             191   11                                  {(0,1;0,9); (0,1;0,9); (0,1;0,9); (0,1;0,9)}
+6                                                                                             211   31                                  {(0,9;0,1); (0,1;0,9); (0,1;0,9); (0,1;0,9)}
+7                                                                                             206   26                                  {(0,1;0,9); (0,1;0,9); (0,9;0,1); (0,1;0,9)}
+8                                                                                             210   30                                  {(0,9;0,1); (0,1;0,9); (0,1;0,9); (0,1;0,9)}
+9                                                                                             207   27                                  {(0,1;0,9); (0,1;0,9); (0,8;0,2); (0,1;0,9)}
+10                                                                                            205   25                                  {(0,1;0,9); (0,1;0,9); (0,1;0,9); (0,9;0,1) }
+Média                                                                                         206   26                                  -
+Figura 3. Atualização do ME utilizando a política 03
+5. Conclusão
+Acredita-se que os resultados dos experimentos apresentados mostram a eficiência e efi-
+cácia da abordagem proposta através da utilização da política 03 para atualização do ME,
+e permitem considerá-la promissora na implementação de novos SAIE e na agregação de
+adaptatividade a sistemas já existentes. Conclui-se, então, após a análise apresentada, que
+mesmo desconhecendo as preferências verdadeiras do estudante e o peso de cada uma
+delas, é possível inferi-las eficientemente através de um modelo estocástico baseado em
+CEA, corrigindo-se automaticamente inconsistências entre o desempenho do estudante e
+suas preferências, que são dinâmicas e podem variar ao longo do tempo e em diferentes
+circunstâncias.
+Encontra-se  em  andamento  a  integração  da  abordagem  proposta  ao  Moodle
+[Moodle 2010], para que se possa realizar experimentos com estudantes reais em um
+ambiente capaz de fornecer adaptatividade baseada em EA dos estudantes. Para isto, tem-
+se trabalhado na recuperação automática de objetos de aprendizagem na web, a partir de
+repositórios, levando-se em consideração características específicas de EA na análise de
+
+
+
+
+Tabela 4. Resultados obtidos utilizando a política 03
+N.                                                                                                    Iterações   Prob. de Aprendizagem   EAp
+1                                                                                               208   28                                  {(0,2;0,8); (0,1;0,9); (0,1;0,9); (0,3;0,7)}
+2                                                                                               204   24                                  {(0,2;0,8); (0,1;0,9); (0,2;0,8); (0,3;0,7)}
+3                                                                                               213   33                                  {(0,2;0,8); (0,2;0,8); (0,2;0,8); (0,1;0,9)}
+4                                                                                               206   26                                  {(0,1;0,9); (0,2;0,8); (0,2;0,8); (0,2;0,8)}
+5                                                                                               201   21                                  {(0,2;0,8); (0,2;0,8); (0,2;0,8); (0,2;0,8)}
+6                                                                                               204   24                                  {(0,2;0,8); (0,2;0,8); (0,2;0,8); (0,1;0,9)}
+7                                                                                               210   30                                  {(0,1;0,9); (0,2;0,8); (0,2;0,8); (0,3;0,7)}
+8                                                                                               196   16                                  {(0,1;0,9); (0,2;0,8); (0,2;0,8); (0,2;0,8)}
+9                                                                                               200   20                                  {(0,2;0,8); (0,1;0,9); (0,1;0,9); (0,2;0,8)}
+10                                                                                              198   18                                  {(0,2;0,8); (0,3;0,7); (0,1;0,9); (0,3;0,7)}
+Média                                                                                           204   24                                  -
+metadados dos objetos. Neste contexto, a abordagem apresentada neste trabalho pode ser
+útil na seleção das estratégias de ensino, reforço e remediação. Desta forma, um trabalho
+já em execução é a discussão detalhada sobre a aplicabilidade e integração da abordagem
+apresentada em ambientes de aprendizagem.
+Agradecimento
+Agradecemos à FAPEMIG, Fundação de Amparo à Pesquisa do Estado de Minas Gerais,
+pelo apoio financeiro concedido a este trabalho.
+Referências
+Carmona, C. e Castillo, G. (2008).  Designing a Dynamic Bayesian Network for Mode-
+ling Students Learning Styles. In Eighth IEEE International Conference on Advanced
+Learning Technologies, pages 346-350. IEEE.
+Danine, A., Lefebvre, B., e Mayers, A. (2006). Tides-using bayesian networks for student
+modeling. In Proceedings of the Sixth International Conference on Advanced Learning
+Technologies (ICALT’06). IEEE Computer Society, IEEE Computer Society.
+Felder, R. e Silverman, L. (1988). Learning and teaching styles in engineering education.
+Journal of Engineering education, 78(7):674-681.
+Felder, R. e Spurlin, J. (2005). Applications, reliability and validity of the index of lear-
+ning styles. International Journal of Engineering Education, 21(1):103-112.
+García,  P.,  Amandi,  A.,  Schiaffino,  S.,  e Campo,  M.  (2007).   Evaluating Bayesian
+networks’ precision for detecting students’ learning styles.  Computers & Education,
+49(3):794-808.
+Giraffa, L. (1999).  Uma arquitetura de tutor utilizando estados mentais.  PhD thesis,
+Universidade Federal do Rio Grande do Sul. Instituto de Informática. Programa de
+Pós-Graduação em Computação.
+Graf, S. e Kinshuk (2009).  Advanced Adaptivity in Learning Management Systems by
+Considering Learning Styles. In Proceedings of the 2009 IEEE/WIC/ACM Internatio-
+
+
+
+
+nal Joint Conference on Web Intelligence and Intelligent Agent Technology-Volume 03,
+pages 235-238. IEEE Computer Society.
+Graf, S., Kinshuk, e Liu, T. (2009). Supporting teachers in identifying students’ learning
+styles in learning management systems:  An automatic student modelling approach.
+Journal of Educational Technology & Society, 12(4):3-14.
+Graf, S. e Lin, T. (2007). Analysing the Relationship between Learning Styles and Cog-
+nitive Traits.  In Advanced Learning Technologies, 2007. ICALT 2007. Seventh IEEE
+International Conference on, pages 235-239. IEEE.
+Graf, S. e Liu, T. (2008). Identifying Learning Styles in Learning Management Systems
+by Using Indications from Students’ Behaviour. In Advanced Learning Technologies,
+2008. ICALT’08. Eighth IEEE International Conference on, pages 482-486. IEEE.
+Graf, S., Liu, T.-C., e Kinshuk (2008).  Interactions Between Students Learning Styles,
+Achievement and Behaviour in Mismatched Courses. In Proceedings of the Internatio-
+nal Conference on Cognition and Exploratory Learning in Digital Age (CELDA 2008),
+pages 223-230. IADIS International Conference.
+Graf, S. e Viola, S. (2009).  Automatic student modelling for detecting learning style
+preferences in learning management systems. Citeseer.
+Kinshuk, Liu, T., e Graf, S. (2009). Coping with Mismatched Courses: Students’ beha-
+viour and performance in courses mismatched to their learning styles.  Educational
+Technology Research and Development, 57(6):739-752.
+Limongelli, C., Sciarrone, F., Temperini, M., e Vaste, G. (2009). Adaptive learning with
+the LS-plan system: a field evaluation. IEEE Transactions on Learning Technologies,
+pages 203-215.
+Marzano, R. e Kendall, J. (2007). The new taxonomy of educational objectives. Corwin
+Pr.
+Messick, S. (1976).  Personal styles and educational options.  Individuality in learning,
+pages 327-368.
+Moodle (2010). http://www.moodle.org/.
+Price, L. (2004).  Individual differences in learning: Cognitive control, cognitive style,
+and learning style. Educational Psychology, 24(5):681-698.
+Roberts, M. e Erdos, G. (1993). Strategy selection and metacognition. Educational Psy-
+chology, 13(3):259-266.
+Sutton, R. e Barto, A. (1998).  Reinforcement learning:  An introduction, volume 116.
+Cambridge Univ Press.
+Villaverde, J., Godoy, D., e Amandi, A. (2006).  Learning Styles’ Recognition in e-
+learning Environments with Feed-Forward Neural Networks.  Journal of Computer
+Assisted Learning, Vol. 22(3):197-206.
+Zatarain-Cabada, R., Barrón-Estrada, M., Zepeda-Sánchez, L., Sandoval, G., Osorio-
+Velazquez, J., e Urias-Barrientos, J. (2009).  A Kohonen Network for Modeling Stu-
+dents’ Learning Styles in Web 2.0 Collaborative Learning Systems.  MICAI 2009:
+Advances in Artificial Intelligence, pages 512-520.
+
+
+
+
+

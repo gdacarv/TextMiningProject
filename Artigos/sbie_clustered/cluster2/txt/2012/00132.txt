@@ -1,0 +1,422 @@
+﻿Mapeamento de aspectos afetivos em um
+ambiente virtual de aprendizagem
+Magalí T. Longhi, Patricia A. Behar*, Magda Bercht*
+Programa de Pós-Graduação em Informática na Educação
+Universidade Federal do Rio Grande do Sul (UFRGS)
+Caixa Postal 5071 - 90.041-970 - Porto Alegre - RS - Brasil
+magali@cpd.ufrgs.br,  pbehar@terra.com.br,  bercht@inf.ufrgs.br
+Abstract. This paper presents computing mechanisms conceived in order to get
+to know and infer students’ mood states when interacting in a virtual learning
+environment  (VLE).  The  research  was  conducted  from  an  interdisciplinary
+perspective (Education, Cognitive Psychology, and Affective Computing) which
+enabled  the  development  of  a  new  tool  for  ROODA  VLE  known  as
+ROODAafeto.  The  student´s  affective  model  considers  motivational  factors,
+subjectivity  in  texts  and  personality  traits,  which  also  serve  to  assess  the
+inference engine. These variables are handled through probabilistic reasoning
+using Bayesian networks.
+Keywords.   Affective subject; Moods states; Student´s affective model; Bayesian
+nets; Virtual learning environment.
+Resumo.  Esta  tese  apresenta  mecanismos  computacionais  concebidos  para
+reconhecer aspectos afetivos e inferir estados de ânimo de alunos em interação
+num ambiente virtual de aprendizagem (AVA). A pesquisa foi conduzida a partir
+de  uma  perspectiva  interdisciplinar                                                        (Educação,  Psicologia  Cognitiva  e
+Computação  Afetiva),  que  fundamentou  o  desenvolvimento  de  uma  nova
+ferramenta  no  AVA  ROODA:  o  ROODAafeto.  O  modelo  afetivo  do  aluno
+considera  os  fatores  motivacionais  e  a  subjetividade  afetiva  em  textos
+reconhecidos nas funcionalidades do AVA e os traços de personalidade, que
+também  servem  para  aferir  a  máquina  de  inferência.  Tais  variáveis  são
+tratadas sob o raciocínio probabilístico, mediante redes bayesianas.
+Palavras-chave. Sujeito afetivo; Estados de ânimo; Modelo afetivo de aluno;
+Redes bayesianas; Ambientes virtuais de aprendizagem.
+1. Introdução
+A Educação, ao valorizar uma formação mais integral, passa a enfatizar, além do aspecto
+cognitivo, as dimensões sociais e as afetivas.  De  outra  parte,  as  práticas  de  ensino
+apoiam-se,  cada  vez  mais,  em  novos  recursos  tecnológicos.  Esse  quadro  vem
+determinando o repensar da ação educacional.
+No caso específico da EAD, com suporte em ambientes virtuais de aprendizagem
+(AVA), o aluno é o protagonista [Behar, 2009]. No AVA, as experiências baseadas na
+colaboração, na cooperação e na comunicação favorecem amplamente o processo de
+construção do conhecimento. Desse modo, extrapola-se a mera e convencional busca e
+*
+Orientadoras da tese.
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2316-6533
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+apreensão do conteúdo. As relações emergentes dessas experiências - cognitivas, afetivas,
+simbólicas, sociais e comportamentais  - caracterizam o ambiente. Nelas, os sinais de
+afetividade são expostos no contexto das interações aluno  « objeto de conhecimento,
+aluno « outro participante e aluno « coletividade.
+Isso significa que esses ambientes reúnem potencialidades que não a de simples
+repositório de conteúdos, de organização da disciplina/curso ou de meio de contato entre
+os participantes. Os AVA conduzem a transformações no ensino e na aprendizagem que,
+por sua vez, inspiram pesquisas em várias áreas. Muitas delas têm por foco tecnologias
+voltadas para um ensino mais personalizado e pervasivo (ou ubíquo).
+A maioria das pesquisas relacionadas à incorporação da afetividade em sistemas
+computacionais direcionados à Educação está inserida no grupo de estudos sobre emoção
+de  máquina ou emoção em máquina  [Bercht,  2001]. As pesquisas do primeiro grupo
+buscam  replicar  os  estados  emocionais  em  robôs  com  o  objetivo  de  assistir  a
+aprendizagem. No segundo, investiga-se a detecção, o reconhecimento e a modelagem
+dos  fenômenos  afetivos  de  usuários  em  sistemas  desenvolvidos  para  determinado
+domínio educacional, tais como os Sistemas Tutores Inteligentes (STI), os sistemas de
+simulação e os jogos educacionais. Tais investigações, contudo, não se apresenta em
+relação ao AVA, pois as mesmas encontram-se em estágio exploratório.
+Este trabalho1 parte de uma reflexão sobre o tema da afetividade em AVA. Tem-se
+por hipótese que os estados de ânimo de um aluno possam ser reconhecidos através de um
+modelo  computacional  que  inter-relacione  seus  fatores  de  personalidade  e  de
+comportamento. Para tanto, aborda-se a construção de um modelo afetivo do aluno e, de
+modo  mais  específico,  discute-se  uma  funcionalidade  idealizada  para  o  ambiente
+ROODA2, sob o título de ROODAafeto.
+A pesquisa, conduzida sob uma perspectiva interdisciplinar, reuniu as áreas de
+Educação, Computação Afetiva e Psicologia Cognitiva, tendo em vista, sobretudo, as
+peculiaridades da Educação a Distância (EAD). As duas primeiras áreas conjugaram-se
+para  o  objetivo  de  formular  uma  solução  computacional  pensada  para  assegurar  um
+ensino e aprendizagem mais eficazes a partir de informações sobre aspectos afetivos do
+aluno. Já a incursão na Psicologia Cognitiva tem por justificativa considerar os estados de
+ânimo do aluno ao longo do processo de aprendizado.
+2. O sujeito afetivo e os modelos psicológicos e computacionais
+O  estudo  da  afetividade  torna-se  árduo  em  razão  das  diferentes  conceituações
+apresentadas nas variadas abordagens filosóficas e psicológicas (jamesiana ou fisiológica;
+darwinista,                                                                                              evolucionária   ou    adaptativa;   social-construtivista-construcionista;
+comportamentalista e cognitivista). Cada abordagem psicológica recorre a um ou mais
+modelos para diferenciá-los.
+Neste trabalho, optou-se pelo modelo de Scherer [Scherer, 1984], de orientação
+cognitiva, por se revelar especialmente apropriado para a compreensão do fenômeno
+afetivo de estudo - estado de ânimo. Segundo o autor, um fenômeno afetivo pode ser
+pensado  como  uma  interface  entre  o  sujeito  e  o  ambiente  (interno  e  externo).  Essa
+1
+A pesquisa contou com o financiamento do CNPq  (Pr.472562/2008-8, Edital MCT/CNPq  014/2008  -
+Universal;  Pr.  479132/2010-0,  Edital  MCT/CNPq  014/2010  -  Universal);  pela  SEAD/UFRGS  (Edital
+UFRGS EAD 12/2010); pela FAPERGS (Pr. 1017390, Edital PqG - 006/2010).
+2
+Disponível em https://ead.ufrgs.br/rooda.
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+interface serve como elemento mediador entre as mudanças que ocorrem no ambiente e as
+respostas originadas a partir de cinco componentes orgânicos: (i) sistema cognitivo, avalia
+a relevância dos estímulos do ambiente para as necessidades, planos ou preferências do
+indivíduo;  (ii) sistema fisiológicoou de suport, prepara as reações fisiológicas mais
+adequadas ao estímulo recebido;  (3) sistema motivacionalou executivo, determina as
+ações a serem executadas;  (4) sistema comunicacional,expressa as reações, estados e
+intenções para o ambiente; e (5) sistema monitoo u sentimento subjetivo, integra todas as
+informações  advindas  dos  outros  componentes,  cujo  resultado  emerge  na  forma  de
+sentimentos, visíveis apenas ao proprietário.
+O modelo psicológico adotado tem a vantagem de evidenciar as diferenças entre
+os  termos  emoção,  estado  de  ânimo  e  traços  de  personalidade.  As  emoçõessão
+classificadas em primárias ou básicas (inatas e de segurança individual) e secundárias ou
+sociais (construídas a partir das primárias); manifestam-se de modo espontâneo e súbito,
+sendo caracterizadas pela alta intensidade e pela duração de minutos ou horas. Os estados
+de  ânimo  surgem,  muitas  vezes,  de  causa  desconhecida.  Esse  fenômeno  afetivo
+acompanha  os  sujeitos  por  mais  tempo  (meses,  até),  frequentemente  observado  pelo
+comportamento  não  verbal  (desenhos,  símbolos,  expressões  facial  e  corporal).  Já  os
+traços de personalidade constituem padrões através dos quais o sujeito percebe a realidade
+e conduz suas relações, intra e interpessoais, de modo sistemático.
+Em termos educacionais, enfatiza-se a relação da afetividade com a construção do
+conhecimento  sob  a  ótica  da  Psicogenética  Construtivista,  principalmente  na  visão
+piagetiana.   A metáfora de Piaget (2005) sobre o automóvel e a gasolina sugere que a
+afetividade é o fator energético para o desenvolvimento intelectual. Essa energia pode
+influenciar o funcionamento da inteligência sem que suas estruturas sejam modificadas.
+Piaget  critica  a  noção  de  que  o  sujeito  psicológico  se  restrinja  a  dois  sujeitos
+independentes: o cognitivo (ou dimensão cognitiva) e o afetivo (ou dimensão afetiva). Em
+contraste com a visão cartesiana, Piaget esclarece que o sujeito afetivo intervém no
+desenvolvimento cognitivo. Isso significa que a debilidade na formação do sujeito afetivo
+repercutirá no sujeito psicológico quanto ao desenvolvimento cognitivo e social.
+Desse  modo,  a  correspondência  entre  a  estrutura  multicamada  dos  níveis  de
+avaliação cognitiva (sensório-motor, esquemático e conceitual) de um fenômeno afetivo
+proposta por Leventhal e Scherer (1987) e os estádios de desenvolvimento intelectual-
+afetivo  na  visão  piagetiana                                                                  (sensório-motor,  pré-operatório,  operações  concretas  e
+operações abstratas) revela a articulação entre as teorias cognitivista e construtivista que
+embasaram esta investigação.
+Sob a perspectiva computacional, esta pesquisa assumiu premissas relacionadas à
+Computação Afetiva, preocupando-se, sobretudo, com o reconhecimento e a modelagem
+dos estados de ânimo. Adotaram-se três tipos de  “sinais” para capturar os estados de
+ânimo: (i) textos registrados nas ferramentas síncrona e assíncrona do AVA; (ii) dados
+sobre  o  comportamento  observável  do  aluno  quando  em  interação  no  AVA;  e  (iii)
+respostas em inventários e questionários para determinar os traços de personalidade e a
+autoavaliação  dos  estados  afetivos  percebidos  durante  o  desenvolvimento  de  uma
+atividade de aprendizagem.
+A tecnologia de rede bayesiana (RB) foi a abstração computacional escolhida para
+apropriar  o  modelo  afetivo  do  aluno.  Tal  escolha,  fundamentada  na  teoria  das
+probabilidades, mostrou-se adequada ao considerar os aspectos de incerteza inerentes à
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+dimensão afetiva. Dessa forma, aplicou-se o modelo afetivo de aluno sobre uma RB com
+o propósito de obter inferências estatísticas.
+Uma  RB  é  um  tipo  de  rede  semântica  representada  por  um  grafo  orientado
+acíclico, em que cada nodo possui informações de probabilidade [Russel; Norving, 2004].
+A  rede  pode  ser  analisada  sob  duas  perspectivas:  qualitativa  e  quantitativa.  Na
+qualitativa, o modelo gráfico representa a dependência entre os nodos, expressando as
+assertivas  de  independência  de  forma  visual,  de  modo  a  proporcionar  a  percepção
+semântica  do  problema.  Já  segundo  a  perspectiva  quantitativa,  as  tabelas  de
+probabilidades  condicionais                                                                  (TPC)  armazenam  as  distribuições  de  probabilidade  das
+variáveis associadas a cada nodo.
+3. ROODAafeto: mapeamento dos estados de ânimo
+O ROODA (Rede cOOperativa De Aprendizagem), institucionalizado pela UFRGS em
+2005, é um AVA desenvolvido com base em princípios construtivistas, ou seja, sob a
+concepção epistemológica interacionista [Piaget, 1973].
+O ROODAafeto, funcionalidade acoplada ao AVA ROODA, apresenta um mapa
+afetivo, através do qual é possível representar os estados de ânimo. Para tanto, essa
+funcionalidade integra técnicas de mineração de subjetividade em texto, de análise do
+comportamento e da interação do aluno no ambiente. A inferência é feita através de um
+mecanismo conhecido como raciocínio probabilístico, implementado por meio de RB.
+3.1. Modelo de representação dos estados de ânimo
+O modelo para a representação dos estados de ânimo foi baseado na Geneva Emotion
+Weel (GEW3). A GEW consiste em um espaço que circunscreve dezesseis famílias de
+emoções,  agrupadas  segundo  a  valência  (prazerosas  ou  desagradáveis)  e  o  grau  de
+controle presumido4 (alto ou baixo). A disposição das famílias de emoções na GEW é
+suportada em dados empíricos e em extensivas considerações teóricas formuladas por
+Scherer  (2005)  e  Tran  (2004).  A  GEW  foi  adaptada  para  a  língua  portuguesa,  ora
+u simplesmente REA (Figura 1).
+Figura 1. Espaço de representação dos estados de ânimo (Tran, 2004).
+3 Disponível em http://www.unige.ch/fapse/emotion. Outras informações, em Scherer (2005).
+4 Também conhecido por potencial de copinou a capacidade de enfrentamento de uma situação.
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+A REA apresenta-se seccionada em quadrantes, e estes, por sua vez, em quatro
+setores. Os quadrantes englobam os estados de ânimo considerados representativos no
+processo de aprendizagem: satisfeito  (quadrante I, definido pelas emoções logrativas),
+insatisfeito (quadrante II, refere-se a emoções antagônicas), desanimado (quadrante III,
+composto por emoções de resignação) e animado (quadrante IV, integrado pelas emoções
+condutivas). Os setores são determinados por grupos de emoções que abrangem uma
+família de termos afetivos. Por exemplo, a família afetiva representada pela  “alegria”
+agrupa  os  termos                                                                             (ser/estar/sentir-se):  alegre,  bem-humorado,  contente,  divertido,
+encantado, feliz, lisonjeado, privilegiado, entre outros.
+3.2. Modelo de representação dos fatores motivacionais
+Uma das maneiras de reconhecer os estados de ânimo é identificar a forma pela qual o
+aluno atua quando em interação em AVA. Bercht (2001), influenciada pelos trabalhos de
+del Soldato e du Boulay (1995), apresenta o modelo afetivo do aluno a partir dos fatores
+motivacionais Confiança, Esforço e Independência.  Na  presente  pesquisa,  o  modelo  de
+Bercht também sinaliza o provável estado de ânimo.
+Cada funcionalidade do AVA ROODA abrange um conjunto próprio de variáveis
+associadas ao comportamento observável. No modelo implementado no ROODAafeto
+foram  consideradas  as  variáveis  relacionadas  às  ferramentas  de  comunicação  do
+ambiente, a saber: número de acessos à funcionalidade (NA); frequência de participação
+(FP);  modo  de  participação  (MP);  pedidos  ou  prestação  de  ajuda  (PA);  geração  de
+mensagens ou criação de tópicos (TO); número de vistas ao tópico (NV); e tempo de
+permanência na sessão (TP).
+Do modelo de Confiança é extraído o indicador acerca do grau de segurança com
+que o aluno desenvolve uma atividade e interage no AVA. A participação indica, em
+termos quantitativos (frequência: NA, NV e FP) e qualitativos (modo de manifestação:
+MP, TO e PA), o grau de adesão a determinada funcionalidade.
+Um  aluno  é  considerado  esforçado  quando  procura  conhecer  as  diversas
+dimensões do objeto de estudo; testa todas as possibilidades; solicita auxílio; enfim,
+denota persistência na resolução de problemas. O modelo de Esforço é definido pelas
+variáveis quantitativas  (TP, NA, e FP) que dimensionam a participação do aluno no
+AVA. Já as qualitativas (MP e PA), o modo como ele se empenha.
+O modelo de Independência leva em conta o grau de autonomia. Considera-se que
+o aluno demonstra certa autonomia no ambiente ao: tomar a iniciativa, estabelecer contato
+com seus colegas e formadores (PA), criar novos tópicos e mensagens (TO) e visitar os
+tópicos do Fórum (NV). A frequência com que solicita ajuda também é considerada para
+efeito do cálculo do grau de independência.
+3.3. Modelo afetivo do aluno
+O modelo afetivo do aluno, representado através da rede semântica ilustrada na Figura 2,
+inspira-se no modelo de Scherer. As variáveis que repercutem sobre os estados de ânimo
+compreendem a subjetividade afetiva em texto, os fatores motivacionais e os traços de
+personalidade.
+A subjetividade afetiva envolve um julgamento unilateral (Dorsch et al., 2008),
+que  se  consolida  à  medida  que  o  aluno  registra  suas  preocupações,  seus  êxitos  e
+motivações nos textos disponibilizados nas funcionalidades de   comunicação   síncrona   e
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+Figura 2 - Classe de variáveis e relações do modelo afetivo do aluno.
+assíncrona do AVA. A variável é inferida através do framework AWM (Affective Word
+Mining), descrito em Longhi et alli (2010a). O AWM identifica e classifica as palavras de
+conotação afetiva presentes no texto. Para esse efeito, o processo de mineração extrai os
+lexemas afetivos e classifica-os na posição da REA em que se insere. Já a variável
+relacionada à motivação é inferida pelo framework BFC (Behavioral Factor Calculation).
+O BFC (Longhi et al., 2010b) calcula os níveis de Confiança, Esforço e Independência,
+obtidos a partir dos padrões comportamentais.
+Por fim, recorreu-se ao instrumento IFP  (Inventário Fatorial da Personalidade),
+elaborado por Pasquali et alli (1997), para inferir os traços de personalidade do aluno5. A
+aplicação dos questionários e a análise dos dados foram efetuadas por psicólogo.
+3.4.   Arquitetura do ROODAafeto
+A arquitetura do ROODAafeto (Figura 3) proporciona uma visão geral da pesquisa.
+Figura 3 - Arquitetura geral do ROODAafeto
+O sistema tem por base recursos de comunicação síncrona e assíncrona (Diário de
+Bordo,   Fórum   e   Bate-papo)   e   a   funcionalidade   interROODA,   a   qual   trata
+5 Foram selecionadas as dimensões: ordem, mudança, persistência, autonomia, assistência, desempenho,
+e denegaçãoA   escolha do IFP se justifica por representar um instrumento adaptado
+à realidade brasileira, fidedigno e de natureza verbal mais consistente com os propósitos da pesquisa.
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+quantitativamente os acessos aos recursos do ROODA e qualitativamente as interações
+ocorridas no AVA.  O Motor de Tratamento dos Dados (que inclui os frameworks AWM
+e BFC) e a Máquina de Inferência, denominada como Mood Inference Machin(M IM),
+representam os componentes desenvolvidos para a funcionalidade. O motor acolhe os
+frameworks de detecção e reconhecimento de informações afetivas6. A máquina infere os
+estados de ânimo a partir das informações fornecidas pelos frameworksque alimentam o
+motor, assim como de outros dados armazenados no banco ROODA.
+3.5. A máquina de inferência dos estados de ânimo
+A rede semântica descrita na seção 3.3 foi submetida a uma RB7, que constitui a base para
+o desenvolvimento do framework MIM. A topologia da RB (Figura 4) foi segmentada em
+duas partes: (1) determinação da tendência dos traços de personalidade; e (2) inferência
+da motivação e dos estados de ânimo.
+Figura 4 - A rede bayesiana desenhada para a máquina de inferência
+As  variáveis  independentes  possuem  valores  de  probabilidade  a  priori                                    (ou
+incondicional),  tão  somente  a  partir  da  crença  sobre  determinada  proposição.  A
+probabilidade a priori atribuída aos parâmetros das variáveis de evidência  (traços de
+personalidade, subjetividade em texto e fatores motivacionais) foi de  20%8. Por outro
+lado,  as  variáveis  dependentes  possuem  valores  de  probabilidade  a  posteriori (ou
+condicional),  estabelecidos  através  da  estimação  das  possíveis  combinações  entre  os
+parâmetros. Isso significa que a probabilidade de um evento acontecer está condicionada
+à ocorrência de outros eventos.
+6 A arquitetura descrita na Figura 3 admite dispositivos tecnológicos para análise visual e sensores para
+capturar sinais biofisiológicos não implementados nesta pesquisa.
+7 Utilizou-se o software NETICA v. 4.16 da Norsys Software Corp. para desenhar a RB.
+8 O percentual de 20% refere-se a cada um dos cinco parâmetros da escala Likert (desde muito forte a muito
+baixo para traços de personalidade e fatores motivacionais; e animado, desanimado, satisfeito, insatisfeito e
+indefinido para subjetividade afetiva em texto).
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+4. Experimentos e resultados
+A  funcionalidade  ROODAafeto,  que  congrega  os  frameworksAWM  (minerador  de
+subjetividade  afetiva),  BFC  (cálculo  dos  fatores  motivacionais)  e  MIM  (máquina  de
+inferência), constituiu o recurso a partir do qual foi possível coletar e interpretar dados.
+A população de estudo compreendeu um conjunto de alunos de graduação, pós-
+graduação e em nível técnico. Teve-se em mente buscar informações sobre como o aluno
+se comporta afetivamente em relação ao conteúdo, à disciplina ou às relações sociais.
+A pesquisa foi viabilizada em função da participação voluntária de 184 alunos de
+sete  disciplinas/turmas  na  primeira  fase.  Nessa  oportunidade,  aplicou-se  o  objeto  de
+aprendizagem AnimA-K9 para fins de validação do modelo afetivo do aluno e de uso da
+tecnologia  RB.  Na  segunda  fase,  a  aplicação  envolveu  outros                              34  alunos  de  três
+disciplinas/turmas, quando da coleta e análise de acurácia e viabilidade do ROODAafeto.
+A título de ilustração, este trabalho exibe um recorte da população contendo três
+alunos referentes à segunda fase.  A  Tabela                                                     1  apresenta  os  resultados  produzidos  na
+primeira parte da RB, cuja topologia está ilustrada na Figura 4. As probabilidades em
+destaque informam a crença sobre a predominância dos traços de personalidade.
+Tabela 1. Crenças sobre a predominância dos traços de personalidade
+Predominância
+Aluno
+                                                                                                 Positiva                                       Negativa    Ambígua
+749                                                                                              0,2290                                         0,1715      0,5995
+961                                                                                              0,0195                                         0,8815      0,0990
+963                                                                                              0,7090                                         0,0380      0,2530
+Na Figura 5 encontram-se os resultados obtidos através do framework AWM. O
+AWM exibe o mapa da subjetividade afetiva das mensagens postadas pelo aluno ao longo
+do semestre.  O AWM define o quadrante e a intensidade do estado afetivo nas mensagens
+postadas  nas  funcionalidades  de  comunicação.  Já a Figura  6 apresenta os graus dos
+fatores  motivacionais  Confiança,  Esforço  e  Independência,  informados  através  do
+framework BFC durante o semestre. O mapa dos estados de ânimo dos alunos-exemplo
+está ilustrado na Figura  7. Percebe-se que a máquina de inferência encontrou valores
+coerentes com a crença sobre a predominância dos traços de personalidade da Tabela 1
+(aluno 749, estado de ânimo indefinido; aluno 961, desanimado; e aluno 963, animado).
+Aluno 749                                                                                        Aluno 961                                      Aluno 963
+Figura 5 - Mapa da subjetividade afetiva em texto .
+9 O AnimA-K é um objeto de aprendizagem desenvolvido para o conteúdo Construção de Algoritmos
+Computacionais. A descrição e os resultados estão apresentados em Longhi et alli (2011).
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+Aluno 749                                                                                   Aluno 961   Aluno 963
+Figura 6 - Gráfico dos fatores motivacionais.
+Aluno 749                                                                                   Aluno 961   Aluno 963
+Figura 7 - Mapa dos estados de ânimo.
+5. Considerações finais
+O fenômeno afetivo, inerente à realização das atividades de aprendizagem, é em grande
+medida influenciado pela natureza da tarefa, mas também o é pela estratégia pedagógica
+aplicada  [Bercht,  2001]. Pode, por outro lado, ser explicado por fatores pessoais, que
+condicionam o grau de motivação, seja para levar a termo uma atividade, seja mesmo
+para abandoná-la. Desse modo, estudos sobre a afetividade, subjacente às relações intra e
+interpessoais em AVA, vêm concorrendo para uma nova postura frente à avaliação da
+aprendizagem nas modalidades de educação presencial e a distância. A visão humanista
+do processo educacional aposta na valorização do indivíduo, de modo a promover a
+colaboração, a cooperação e a autenticidade na expressão de ideias e sentimentos.
+Com efeito, este trabalho partiu da premissa de que os participantes em AVA
+vivenciam experiências afetivas durante as trocas realizadas em encontros síncronos e
+assíncronos. Também, que os fatores motivacionais, reconhecidos pela forma mediante a
+qual o usuário age no ambiente, constituem subsídios para inferir os estados de ânimo. A
+pesquisa, ao pressupor uma reflexão sobre o tema da afetividade no âmbito do AVA
+ROODA, motivou a implementação de uma ferramenta computacional, o ROODAafeto.
+Em  síntese,  através  do  ROODAafeto,  propõe-se  uma  funcionalidade  concebida  para
+acompanhar o percurso cognitivo-afetivo do aluno em AVA.
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+Concurso de Teses e Dissertações em Informática na Educação (CTD-IE 2012)
+As contribuições advindas da pesquisa referem-se: (1) ao estudo e discussão, no
+âmbito da Educação, de qual fenômeno afetivo é efetivamente representativo e capaz de
+ser reconhecido em AVA; (2) à adaptação do modelo dos fatores motivacionais proposto
+por  Bercht                                                                                      (2001),  que  inspiraram  a  construção  do  framework  BFC;   (3)  ao
+desenvolvimento do framework AWM para minerar as palavras de conotação afetiva; (4)
+à construção do acervo de símbolos linguísticos, somando mais de  3000 palavras do
+léxico  afetivo  e  símbolos  em  sentido  estrito                                               (interjeições,  emoticonş  etc.);  e                           (5)  à
+utilização  de  RB  (redes bayesianas) para o modelo computacional de inferência dos
+estados de ânimo.
+Com base nos resultados alcançados, apresenta-se a perspectiva de aprimoramento
+da funcionalidade ROODAafeto, em relação aos seguintes pontos: (1) inclusão de outras
+funcionalidades  (além das de comunicação) no cálculo dos fatores motivacionais;  (2)
+incorporação de novas características no modelo afetivo do aluno (a exemplo dos estilos
+de aprendizagem e atitude social); e (3) utilização de formalismo híbrido para representar
+o modelo afetivo do aluno, isto é, a combinação de rede semântica com Lógica BDI
+), de modo a tornar o modelo mais robusto.
+Na presente fase de investigação, a pesquisa prossegue com novas aplicações para
+viabilidade de uso institucional. Também, reflexões sobre os modos de ser professor
+quando de posse de informações afetivas estão sendo conduzidas. Trata-se, em suma, de
+propor indicadores para fins de uma avaliação pedagógica mais atenta à dimensão afetiva.
+Referências Bibliográficas
+Behar, P.A. (2009) “Modelos Pedagógicos em Educação a Distância”. Porto Alegre: Artmed.
+Del Soldato, T.; Du Boulay, B.  (1985)  “Implementation of motivational tactics in tutoring
+systems”. Journal of Artificial Intelligence in Education, v. 6, n. 4, p. 337-378.
+Bercht, M. (2001) “Em direção a agentes pedagógicos com dimensões afetivas”. 152 f. Tese
+(Doutorado: PGCC), Instituto de Informática, UFRGS, Porto Alegre.
+Dorsch, F.; Häcker, H.; Stapf, K.H. (2008) “Dicionário de psicologia”. Petrópolis, RJ: Vozes.
+Leventhal, H.; Scherer, K. R. (1987). “The relationship of emotion and cognition: A functional
+approach to a semantic controversy”. Cognition and Emotion. vol. 1, n. 1, p. 3-28.
+Longhi, M. T., Behar, P. A., and Bercht, M. (2010a). “Em busca de palavras com conotação
+afetiva  registradas  em ambiente  virtual  de  aprendizagem”.  In:  IADIS  Ibero-Americana
+WWW/Internet 2010, Algarve. Portugal. p. 43-50.
+Longhi, M. T., Behar, P. A., Bercht, M.; Simonato, G. (2010b) “Os fatores motivacionais e os
+estados de ânimo em ambientes virtuais de aprendizagem”. In: Congresso Iberoamericano de
+Informática Educativa. Santiago do Chile, Chile, Dez. 1-3, 2010. p. 551-558.
+Longhi,  M.  T. ; Pereira,  D.  F. ; Behar,  P.  A. ; Bercht,  M. (2011)                         “AnimA-K:  objeto  de
+aprendizagem como experimento para avaliação do modelo  afetivo de aluno”. In:  6ta.
+LACLO 2011. Montevideo. Universidad de la República, 2011. v. 1. p. 34-44.
+Pasquali, L., Azevedo, M. M., and Ghesti, I.  (1997)  “Inventário Fatorial de Personalidade:
+manual técnico e de aplicação”. São Paulo: Casa do Psicólogo.
+Piaget, J. (2005) “Inteligencia y afectividad”. Buenos Aires: Aique.
+Piaget, J. (1973) “Estudos Sociológicos”. Rio de Janeiro: Forense. 1973.
+Russell, S.J. & Norving, P. (2004) “Inteligência Artificial”. Rio de Janeiro: Elsevier.
+Scherer, K. R.(1984) “On the nature and function of emotion: A component process approach”.
+In: Scherer, K., Ekman, P. (Eds.), Approaches to Emotion. L. E. Publishers. p. 293-317.
+Scherer, K. R.(2005) ”What are emotions? And how can they be measured?” In: Social Science
+Information 44 (4), 695-729.
+Tran, V. (2004) The influence of emotions on decision-making processes in management teams.
+Faculte De Psychologie et des Sciences de l’Education. Université de Genève.
+@CBIE 2012, Rio de Janeiro-RJ
+
+
+
+
+

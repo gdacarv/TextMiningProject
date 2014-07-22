@@ -1,0 +1,398 @@
+﻿Sistema LINNAEUS: apoio inteligente para a catalogação e
+edição de metadados de objetos de aprendizagem
+Ederson Luiz Silveira1, João Carlos Gluz1
+1PIPCA - Programa Interdisciplinar de Pós-Graduação em Computação Aplicada-
+Universidade do Vale dos Sinos (UNISINOS)
+Av. Unisinos, 950 - 93.022-000 - Cristo Rei - São Leopoldo - RS - Brasil
+esilveira1@gmail.com,  jcgluz@unisinos.br
+Abstract. Learning objects are assuming a greater role in the educational
+context,  providing  digital  resources  that  are  increasingly  present  in
+classrooms  and  in  distance  education.  This  increasing  role  creates  the
+necessity of tools able to help users to catalog and/or edit the metadata of
+these objects.  To  provide  support  to  this  process this paper proposes  the
+system  LINNAEUS,  an  intelligent  tool,  which  supports  learning  object
+cataloging,  and  metadata  editing  activities.  The  paper  presents  the  main
+features of LINNAEUS, and use cases of the system.
+Resumo.  Os  objetos  de  aprendizagem  vêm  tendo  um  papel  crescente  no
+contexto  educacional,  oferendo  recursos  digitais  que  estão  cada  vez mais
+presentes em salas de aula e na educação a distância. Com sua crescente
+utilização, surge à necessidade de ferramentas que auxiliem o processo de
+catalogação e de edição dos metadados destes objetos. Para prover apoio a
+este  processo,  o  presente  trabalho  propõe  uma  ferramenta  inteligente  de
+suporte a catalogação de objetos de aprendizagem e edição de metadados, o
+sistema   LINNAEUS.   No   trabalho   são   apresentadas   as   principais
+características do LINNAEUS, além de casos de uso do sistema.
+1. Introdução
+Com o crescente emprego da internet em todos os âmbitos do cotidiano, além da grande
+variedade existente de ferramentas direcionadas ao ensino, aumenta a possibilidade de
+tornar a mediação digital entre professor e aluno mais didática e produtiva. Um Objeto
+de Aprendizagem (OA) é mais um recurso didático digital para auxiliar professores e
+alunos. Entretanto, para que este OA possa ser armazenado, localizado e ser alterado
+remotamente pelo professor, este deve ter suas informações de catalogação devidamente
+preenchidas  e  registradas  de  acordo  com  o  domínio  do  objeto,  a  aplicação,  a  sua
+localização na Web, a plataforma de utilização, dentre outras informações. No contexto
+da padronização dos OA, tal catalogação é implementada pelos metadados.
+Este artigo apresenta o sistema de catalogação LINNAEUS, cujo objetivo é
+prover uma solução de software que dê apoio à autoria de objetos de aprendizagem
+descritos e suportados pela proposta para o padrão de metadados OBAA [Vicari e tal.
+2010; Bez et. al 2010]. O padrão OBAA é definido com base no padrão IEEE-LOM
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+[IEEE-LTSC, 2002] incluindo suporte para a adaptabilidade e interoperabilidade entre
+OAs em diversas plataformas de operação como Web, TV Digital, dispositivos móveis,
+a sua compatibilidade com padrões internacionais, a acessibilidade aos OAs por todas as
+pessoas inclusive as portadoras de necessidades especiais, e a independência juntamente
+com  flexibilidade  do  padrão  que  não  necessita  de  tecnologias  proprietárias,  e  que
+permita  que  inovações  tecnológicas  sejam  acrescidas  ao  padrão,  sem  perder  a
+compatibilidade com o material já desenvolvido [Bez et al., 2010].
+Os OA podem ser vistos como artefatos descritos em duas camadas (ou níveis):
+   Camada dos Metadados: que engloba as informações de catálogo do objeto de
+aprendizagem, informando sua localização na base de dados, domínio do objeto,
+aplicação, plataforma de operação, etc... Dentre as informações com significativa
+importância na aplicação educacional destacam-se dados descritivos utilizados
+em busca, localização, recuperação e apresentação do conteúdo;
+   Camada  de  Conteúdo:  que  contém  o  material  de  aprendizado  que  deve  ser
+visualizado  pelo  usuário  para atingir  os  objetivos  de determinado tópico de
+ensino.
+O sistema LINNAEUS opera somente na camada de metadados. O protótipo
+deste sistema será integrado à infraestrutura MILOS [Vicari e Gluz, 2010], fornecendo
+parte do serviço de autoria de OA a ser disponibilizado pela infraestrutura. Assim o
+LINNAEUS  efetua  um  intercâmbio  de  informações  com  os demais subsistemas da
+infraestrutura.
+A organização deste artigo é a seguinte: a Seção 2 e 3 apresentam o referencial
+teórico do artigo. A Seção 4 arquitetura do sistema e dos seus componentes, na Seção 5
+é apresentada à aplicação de exemplo da ferramenta e na seção  6 são apresentas as
+considerações finais.
+2. Catalogação de Objetos de Aprendizagem
+Metadados são informações que descrevem os objetos de aprendizagem, assim sempre
+que houver uma alteração no conteúdo do OA é importante que isso se reflita nos seus
+metadados,  causando  uma  atualização  dos  mesmos  para  manter  coerentes  as
+informações de catálogo a respeito de um objeto de aprendizagem.
+Porém a complexidade dos padrões de metadados para OA existentes atualmente
+IEEE-LOM e DCMI força que a criação ou alteração de metadados requeira um alto
+nível de conhecimento técnico desses padrões  [Gluz e Vicari,  2010]. Uma possível
+solução para esse problema é oferecer um suporte inteligente para as tarefas de criação,
+atualização ou adição de metadados. Para realizar esta tarefa é de grande importância
+que e ferramenta tenha o conhecimento do conjunto de metadados disponibilizado pelo
+padrão escolhido, além de conhecimentos sobre como eles devem ser configurados a
+partir do surgimento de novas versões adaptadas de um mesmo conteúdo.
+Com o objetivo de maximizar a aderência aos padrões de metadados existentes
+atualmente  e  garantir  a  compatibilidade  dos  metadados,  este  trabalho  irá  utilizar
+somente metadados compatíveis com o padrão OBAA, porque este padrão engloba os
+padrões de metadados IEEE-LOM e DCMI [Vicari e tal. 2010, Bez et al., 2010], além
+
+
+
+
+de  permitir  o  tratamento  de  questões  de  acessibilidade  e  interoperabilidade  entre
+plataformas digitais.
+Figura 1 - Classificação dos grupos de Metadados OBAA. Fonte autor.
+Dessa  forma,  o  objetivo  do  presente  trabalho  é  projetar  e  desenvolver  um
+sistema multiagente capaz de manipular os metadados do padrão OBAA e realizar as
+alterações do conteúdo correspondente. Para tanto será definida uma arquitetura de um
+sistema multiagente integrado à infraestrutura MILOS [Vicari, Gluz e Passerino, 2012;
+Gluz e Vicari, 2010].
+3. Infraestrutura MILOS
+O projeto de pesquisa OBAA-MILOS tem por objetivo a busca da convergência das
+tecnologias de objetos de aprendizagem (OA) e sistemas multiagente, para auxiliar no
+desenvolvimento de ambientes de aprendizagem. Tais objetos de aprendizagem são
+baseados na tecnologia de agentes inteligentes para seu desenvolvimento.
+O resultado concreto deste projeto será a infraestrutura MILOS que oferecerá
+suporte  a  objetos  de  aprendizagem  compatíveis  com  o  padrão  OBAA,  fornecendo
+suporte ao ciclo de vida inteiro de um objeto de aprendizagem e possibilitando que estes
+objetos  sejam  interoperáveis  na  WEB,  televisão  digitais  e  dispositivos  móveis.  A
+infraestrutura MILOS faz uso extensivo das tecnologias de ontologias e de agentes para
+desenvolver  aplicações  inteligentes  de  manipulação  de  objetos  de  aprendizagem.
+Agentes inteligentes de software, com suporte de mecanismos de inferência capazes de
+manipular os tipos de representações de conhecimento usados em ontologias (OWL),
+serão os principais componentes ativos da infraestrutura MILOS. MILOS [Vicari, Gluz
+e Passerino, 2012; Gluz e Vicari, 2010].
+
+
+
+
+Figura 2 - Organização geral da MILOS. Fonte [Gluz e Vicari, 2010].
+A arquitetura da infraestrutura MILOS é dividida em três grandes níveis de
+abstração conforme mostrado na Figura 2: (a) Nível das Ontologias: responsável pela
+especificação   do   conhecimento   que   será   compartilhado   entre   os   agentes   da
+infraestrutura;  (b) Nível de Agentes: responsável pela implementação do suporte aos
+requisitos de adaptabilidade, interoperabilidade e acessibilidade previstos na proposta
+OBAA;  (c)  Nível  das  Facilidades  de  Interface:  responsável  pela  comunicação  dos
+agentes da MILOS com servidores Web, ambientes virtuais, repositórios de objetos de
+aprendizagem, bancos de dados, serviços de diretórios e demais tipos de aplicações
+educacionais.  As  principais  entidades  de  cada  nível  da  infraestrutura  MILOS,
+respectivamente ontologias, agentes e facilidades, desempenham papéis organizacionais
+específicos para que a arquitetura da MILOS possa operar.
+4. Sistema LINNAEUS
+O nome LINNAEUS é inspirado em Carl Linneaus criador da taxonomia moderna e
+catalogação [Koerner, 1999]. Tendo essa inspiração em mente, espera-se que a principal
+característica do LINNAEUS será auxílio o projetista (designer) ou desenvolvedor de
+objetos de aprendizagem a catalogar de forma rápida e fácil os novos objetos. Assim o
+sistema  LINNAEUS  será  encarregado  de  editar  os  metadados  dos  objetos  de
+aprendizagem suportados pela plataforma MILOS.
+A proposta do sistema apresentado no presente artigo é o desenvolvimento de
+um sistema para catalogação de OA de forma inteligente e automático de grande parte
+do  conteúdo  dos  metadados  suportados  pela  proposta  OBAA-MILOS,  exigindo  do
+usuário final nenhum ou o conhecimento básico em relação a objetos de aprendizagem.
+Este sistema será desenvolvido utilizando à linguagem de programação JAVA com
+suporte a web, atendendo umas premissas da proposta OBAA-MILOS de que suas
+ferramentas devem ser open source de domínio publico. O sistema LINNAEUS possui
+suas operações e tarefas implementadas por meio de agente de software [Wooldridge,
+2002; Weiss, 1999], usando o conceito de agentes wizards inteligentes. A criação do
+catalogo de metadados do sistema se dará de forma automática sem o conhecimento do
+usuário,  o  catalogo  seguirá  como  uma  de  suas  premissas  o  domínio  do  OA,  sua
+aplicabilidade, plataforma de operação, para a criação do catalogo.
+Cada grupo de agente wizard é responsável pela realização de uma tarefa dentro
+do sistema. Essas tarefas podem consistir: em analisar o tipo de objeto de aprendizagem
+que  será  criado,  buscando  identificar  a  finalidade  do  OA                             (qual  o  objetivo  do
+desenvolvedor para este objeto), a metodologia de aplicação do OA e a área deste objeto
+dentro do domínio educacional.
+Os agentes do sistema LINNAEUS são organizados em uma hierarquia. No nível
+mais elevado de hierarquia há um agente chamado  “coordenador do sistema”. Neste
+agente são centralizados todos os comandos e orientações para que os grupos de agentes
+situados em um nível hierárquico abaixo possam realizar a execução de tarefas e ações
+de acordo com a necessidade específica do desenvolvedor de OA, o domínio do objeto
+de aprendizagem, sua utilização e aplicação e a plataforma digital em que será utilizada.
+Este conjunto de agentes pode ser visto como uma distribuição em formato de pirâmide,
+de forma que o agente gerenciador de ambiente e coordenação esta no localizado no
+
+
+
+
+topo e os demais agentes localizados nos níveis abaixo. O agente  “coordenador do
+sistema” tem como seu objetivo prover informações de orientação e de operação para a
+camada  inferior  de  agentes.  Suas  intenções  dentro  do  sistema  são  de  recolher  um
+determinado número de informações recebidas do desenvolvedor de OA para que possa
+atingir seu objetivo. A arquitetura da figura 3 é composta de agentes que executam seus
+papéis de forma atômica e autônoma. Os principais componentes da arquitetura são
+descritos a seguir:
+O agente “gerenciador de ambiente” è responsável criação da tarefa macro para
+os  agentes  wizards.  Uma  tarefa  macro  consiste  em  preparar  o  ambiente  para  o
+desenvolvedor, ajuste dos itens que serão solicitados para o usuário do sistema, o pré-
+preenchimento dos metadados quando o perfil do usuário for iniciante ou intermediário.
+Na camada de agentes abaixo do agente “gerenciador do sistema”, encontram-se
+os agentes wizards responsáveis pela execução de partes de uma tarefa macro dentro do
+sistema. Tarefas como a criação de interface para o operador, tarefas de comunicação
+com os demais sistemas da MILOS através do protocolo FIPA, tarefas de elaboração e
+criação de informações para a catalogação de metadados de acordo com o domínio do
+objeto de aprendizagem, sua aplicação, plataforma de operação.
+Interface Visual
+AgenteGGerencaadordde                                                                         Repositórios
+AmbeenteeeCCoordenação                                                                        Sistema
+                                                                                              OBAA-MILOS
+AgenteWWzzardCCraaçãodde                                                                      AgenteWWzzarddde
+Ambeente                                                                                      Cataoogação
+Sistemas de
+Facilidades e                                                                                 Agente Catalogação   Sistemas de
+Ontologias                                                                                    Agente Wizard        Facilidades e
+                                                                                              OA multimidia
+                                                                                              “Iniciante”          Ontologias
+                                                                                                                   Agente Catalogação
+                                                                                              Agente Wizard        OA para portadores de
+                                                                                              “Intermediário”      necessidades especiais
+                                                                                              Agente Wizard        Agente Catalogação
+                                                                                              “Expert”             OA multiplataforma
+Agente Catalogação
+OA domínio
+educacional específico
+Figura 3 - Arquitetura Proposta para o Sistema. Fonte: autor
+O wizard de coordenação da catalogação necessita das informações descritas
+pelo usuário e que indicam qual é o domínio de ensino do objeto de aprendizagem e
+qual o tipo de aplicação ou uso educacional que se pretende dar ao objeto. Elas são
+usadas para identificar as ontologias e agentes wizards de catalogação específicos para o
+objeto. Logo após obter essas informações, o agente passa a coordenar os trabalhos dos
+agentes especialistas em catalogar aspectos específicos do OA. A divisão de trabalhos
+destes  agentes  especialistas  de  catalogação  é  baseada  na  estrutura  dos  metadados
+OBAA. São previstos agentes especialistas para aplicações educacionais que envolvem
+o uso de objetos de aprendizagem multimídia, objetos para portadores de necessidades
+especiais, objetos de aprendizagem que operam em mais de um sistema operacional,
+
+
+
+
+objetos de aprendizagem  de domínios educacionais específicos  (matemática, logica,
+algoritmos e estruturas de dados, etc..).
+O objetivo do wizard de criação de ambiente é gerar e fornecer uma interface
+para o desenvolvedor utilizando as características do perfil e do conhecimento técnico
+do  usuário.  Este  agente  possui  três  opções  para  criação  de  interface  para  o
+desenvolvedor,  estas  seguem  o  conhecimento  do  desenvolvedor  em  objetos  de
+aprendizagem. O primeiro nível é o nível leigo, caracterizando-se por usuários que
+possuem pouco ou nenhum conhecimento técnico sobre objetos de aprendizagem. Para
+este nível o wizard irá fornecer uma interface com questões dividida em três etapas e
+finalizará  a  catalogação  do  objeto  de  aprendizagem  sem  que  o  usuário  tenha  a
+conhecimentos técnicos sobre objetos de aprendizagem.
+O nível intermediário assume que o usuário possui um conhecimento técnico
+básico sobre metadados dos OAs, desta forma o wizard irá fornecer ao desenvolvedor
+uma interface também com perguntas relacionadas ao domínio de ensino do objeto, a
+aplicação  e  demais  características,  com  a  opção  do  desenvolvedor  de  OA  poder
+visualizar os metadados se for de seu interesse, esta operação de catalogação é divida
+em três ou quatro etapas dependendo da necessidade do desenvolvedor. Já o último
+nível “expert”, o wizard apresenta todos os campos pertinentes ao domínio de ensino,
+aplicação do objeto, plataforma de operação, para que o desenvolvedor possa alimentar
+estas informações de acordo com seu conhecimento.
+Figura 4 - Tela inicial LINNAEUS. Fonte autor.
+A figura 4 apresenta a tela do protótipo do sistema de catalogação LINNAEUS,
+na  em  sua  tela  principal  os  agentes  wizard  desenvolveram  a  interação  com  o
+desenvolvedor de objetos de aprendizagem para receber as informações necessárias para
+o preenchimento dos metadados do objeto utilizado pelo desenvolvedor.
+5. Cenário de Uso do LINNAEUS
+Para a apresentação do cenário de uso do sistema LINNAEUS, a seguir será mostrado
+um  exemplo  da  sua  utilização  com  um  objeto  de  aprendizagem  para  o  ensino  de
+matemática.
+O proposito do usuário apresentou-se ao sistema como tendo pouco ou nenhum
+conhecimento técnico sobre OAs, tendo a intenção de criar um objeto de aprendizagem
+com domínio no ensino de matemática. Este OA é do tipo multimídia para auxiliar na
+tutoria de equações e sistemas trigonométricos. Após a autoria do conteúdo do objeto o
+
+
+
+
+sistema LINNAEUS é executado e como o conhecimento técnico do usuário é pouco ou
+nenhum  em  relação  à  OAs  o  sistema  apresentará  as  informações  previamente
+preenchidas por ele para que o usuário possa altera-las ou seguir para o próximo passo
+se for o desejo do usuário.
+Na figura 5 é mostrada a primeira tela apresentada ao usuário para a catalogação
+do objeto de aprendizagem, com o preenchimento prévio dos campos de acordo com as
+informações  passadas  pelo  usuário  na  autoria  do  conteúdo.  Caso  o  desenvolvedor
+desejar pode alterar as informações contidas nos campos, ou seguir para a próxima etapa
+do processo de catalogação.
+Figura 5 - Tela que solicita os dados básicos de identificação do objeto de
+aprendizagem (wizard para o nível iniciante). Fonte autor.
+Com  a  intenção  de  agilizar  o  processo  de  catalogação  de  objetos  de
+aprendizagem, o sistema LINNAEUS nos modos iniciante e intermediário realiza o
+preenchimento automático de grande parte dos metadados principais utilizados para o
+determinado OA solicitando apenas as informações de maior importância.
+As próximas figuras apresentam a catalogação de um OA para o domínio de
+ensino  na  área  da  matemática.  Com  o  perfil  do  desenvolvedor  selecionado  para
+iniciante, como pode ser visualizado na figura 5, por se tratar de um perfil com pouco
+conhecimento  em  objetos  de  aprendizagem  o  wizard  minimiza  a  solicitação  de
+informações do desenvolvedor com o intuito de agilizar o processo de catalogação e
+minimizar o tempo dispendido no preenchimento de diversos metadados onde muitas
+vezes  o  usuário  não  tem  o  menor  conhecimento  de  qual  informação  utilizar  em
+determinados campos.
+Figura 6 - Tela que solicita a localização física do objeto de aprendizagem
+(wizard para nível iniciante). Fonte autor.
+O  objeto  de  aprendizagem  catalogado  no  exemplo  necessita  apenas  de
+informações  básicas  a  respeito  de  seu  conteúdo  que  o  desenvolvedor de  OA  deve
+fornecer sem maiores problemas em adquirir tais informações. Na figura 6 é necessário
+
+
+
+
+somente  o  preenchimento  do  campo  onde  estão  localizados  os  conteúdos,  as
+informações pertencentes ao grupo de metadados referências e informações gerais do
+objeto de aprendizagem são inferidas automaticamente após a análise do upload do
+conteúdo,  informações  como  tipo  do  arquivo,  tamanho,  plataforma  de  operação,
+extensões, etc...
+Também no exemplo apresentado pode ser visto que o wizard minimizou as
+etapas de preenchimento dos metadados em três etapas distintas, sendo a primeira para a
+identificação do objeto de aprendizagem a próxima etapa é de informações para o
+armazenamento e localização posterior do objeto, na terceira etapa o wizard identificou
+que  este  objeto  de  aprendizagem  diz  respeito  ao  domínio  de  ensino  e  realizou  a
+solicitação destas informações e a ultima etapa é somente para que o usuário confirme
+os dados informados para o wizard.
+A criação e montagem das etapas e telas apresentadas ao usuário é realizada de
+forma dinâmica e utiliza informações de domínio de ensino do OA, aplicação deste
+objeto,  plataforma  em  que  será  utilizado,  metodologia  de  ensino  e  outros  tópicos
+sugeridos pelo projeto OBAA-MILOS.
+O preenchimento das informações dos metadados, para o perfil iniciante como
+apresentado na figura 6 propõem um sistema com o mínimo de informações do usuário
+e com o preenchimento correto dos metadados para que o desenvolvedor tenha sua
+atenção exclusiva para a criação do conteúdo do OA. O processo de catalogação de
+objetos de aprendizagem é criado pelos respectivos agentes wizards para que atendam
+somente a necessidade mínima do desenvolvedor de OA levando em consideração o
+grau de conhecimento deste em relação aos objetos de aprendizagem. Em um perfil
+“expert” o wizard terá a intenção de extrair o maior número de informações possíveis do
+usuário para que os metadados personalizados e preenchidos em sua totalidade pelo
+desenvolvedor, diferente dos outros perfis que os wizard’s realizam o preenchimento
+automático das informações.
+6. Considerações Finais
+Atualmente  ferramentas  de  software  como o DSPACE  (www.dspace.org) permitem
+realizar a catalogação de todos os metadados de um objetos de aprendizagem quando
+esses metadados seguem um padrão relativamente simples, com poucos metadados,
+como  é  o  caso  do  DSPACE  que  usa  os  metadados  DCMI.  Porém  quando  essas
+ferramentas são adaptados para o uso com outros tipos de metadados, como a solução
+DSPACE-OBAA que adapta o DSPACE para operar com os metadados OBAA, isso
+resulta em um aplicativo complexo e de difícil operação (ver Figura 7), que exige o
+preenchimento de um grande volume de informações, ocasionando, assim, muitas vezes
+um desânimo e uma eventual desistência dos desenvolvedores ou projetistas do objeto
+de aprendizagem de efetuar a correta catalogação deste objeto.
+Na figura  7 é mostrada a ferramenta de catalogação DSPACE com os onze
+grupos de metadados do OBAA [Gluz e Vicari, 2011], em destaque as etapas que o
+desenvolvedor de OA deve percorrer para preencher todas as informações do catalogo
+para que os metadados do objeto de aprendizagem estejam corretos.
+
+
+
+
+Figura 7. Interface do DSPACE-OBAA. Fonte autor.
+A  expectativa  do  sistema  LINNAEUS  é  justamente  reduzir  de  forma
+significativa o volume de informações que o projetista tem que catalogar. Isso será feito
+através de um extensivo uso de wizards, tal como delineado na seção anterior, que
+incorporam  os  conhecimentos  de  ontologias  sobre  domínios  de  ensino  e  sobre
+aplicações educacionais (incluindo interoperação e acessibilidade de OAs) que sejam
+compatíveis com a ontologia de metadados OBAA [Gluz e Vicari, 2011].
+O sistema LINNAEUS terá sua aplicabilidade testada em conjunto com outros
+subsistemas  presentes  na  proposta  OBAA-MILOS,  o  sistema  esta  disponível  para
+acessos online e preenchimento de metadados suportados pela proposta OBAA. Em um
+próximo  passo  o  sistema  LINNAEUS  será  integrado  com  o  sistema  de  autoria  de
+conteúdo para ter a sua totalidade de serviços testados e validados pelo usuário final. A
+avaliação  de  sua  usabilidade  e  aplicação  será  comparada  a  outras  ferramentas  de
+catalogação existentes, no decorrer do desenvolvimento e implementação do sistema
+LINNAEUS.
+A  arquitetura  do  sistema  de  catalogação  LINNAEUS  pretende  viabilizar  o
+desenvolvimento de um software para a catalogação de objetos de aprendizagem que
+possa ser juntar-se a uma solução de maior âmbito que compreenda um ambiente de
+autoria, recuperação e consulta de objetos de aprendizagem [Gluz e Vicari, 2010; Gluz e
+Vicari, 2012]. Espera-se com os resultados deste trabalho validar a aplicabilidade da
+proposta de catalogação para objetos de aprendizagem compatíveis com a proposta
+OBAA.
+7. Agradecimentos
+Os autores agradecem ao MCT, FINEP, FUNTTEL, CNPq e a CAPES por financiarem
+esta pesquisa.
+
+
+
+
+Referências
+BEZ, M., VICARI, R. M. SILVA, J. M. C., RIBEIRO, A., GLUZ, J. C., PASSERINO,
+L. M., SANTOS, E. PRIMO, T., ROSSI, L., BEHAR, P., FILHO, R., ROESLER, V.
+Proposta  Brasileira  de  Metadados  para  Objetos  de  Aprendizagem  Baseados  em
+Agentes (OBAA). RENOTE. Revista Novas Tecnologias na Educação. v.8, p.1 - 10,
+2010.
+GLUZ, J.C. e VICARI, R. MILOS: Infraestrutura de Agentes para Suporte a Objetos de
+Aprendizagem OBAA. Anais do SBIE 2010, João Pessoa, 2010.
+GLUZ, J. C.; VICARI, R. Uma Ontologia OWL para Metadados IEEE-LOM, Dublin-
+Core e OBAA. Anais do SBIE 2011, Aracaju, 2011. v. 1. p. 204-213.
+GLUZ,  J.C.,  VICARI,  R e PASSERINO, L. An Agent-based Infrastructure for the
+Support of Learning Objects Life-Cycle. Procs. of ITS 2012, Chania, Creta, 2012.
+Lecture Notes in Computer Science. New York: Springer, 2012. v. 7315. p. 691-693.
+IEEE    Learning  Technology  Standards  Committee  (LTSC).  Standard  for  Learning
+Object Metadata, IEEE Standard 1484.12.1. Nova York, Institute of Electrical and
+Electronics Engineers, 2002.
+JENNINGS, N.; SYCARA, K.; WOOLDRIDGE, M. A Roadmap of Agent Research
+and Development. 1998. Em Journal Autonomous Agents and Multi-Agent Systems,
+Holanda.
+KOERNER,  L.  1999.  Linnaeus:  Nature  and  Nation.  Harvard  University  Press,
+Cambridge.
+VICARI, R.; GLUZ, J.; PASSERINO, L. M. ; SANTOS, E.; PRIMO, T.; ROSSI, L.;
+BORDIGNON, A. ; BEHAR, P.; ROESLER, V. The OBAA Proposal for Learning
+Objects  Supported  by  Agents.  Procs.  of  AAMAS  2010  -  MASEIE  Workshop,
+Toronto, 2010.
+WOOLDRIDGE, M.; JENNINGS, N. Agent Theories, Architectures, and Languages: A
+Survey. 1994. Amsterdam, Holanda. Em Workshop on Agent Theories, Architectures
+and Languages. p. 1-32.
+WOOLDRIDGE, M. An Introduction to MultiAgent Systems. 2002. John Wiley & Sons
+Ltd, paperback.
+WEISS  G.,  1999.  Learning  in  Multiagent  Systems.  In  G.Weiss,  editor,  Multiagent
+Systems: A Modern Approach to Distributed Artificial Intelligence, pages 559-298.
+The MIT Press, Cambridge, MA.
+
+
+
+
+

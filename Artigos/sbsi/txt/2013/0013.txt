@@ -1,0 +1,471 @@
+﻿Ferramentas para Coleta M óvel de Dados ∗
+Alvaro H. Mamani-Aliaga, Bruno G. dos Santos, Jimmy V. S ánchez,
+Tiago Barabasz, Matheus F. Mendonça e Arlindo F. da Conceiç ão1
+1  Instituto de Ciência e Tecnologia (ICT)
+Universidade Federal de São Paulo (UNIFESP)
+Rua Talim, 330. São José dos Campos - SP
+alvaroma@ime.usp.br,
+{bruno.gsantos89,  sirghost,  tbarabasz,  mts.seven}@gmail.com e
+arlindo.conceicao@unifesp.br
+Abstract. The usage of mobile devices is growing rapidly. Actually, it is incre-
+asingly common to use digital forms for mobile data acquisition using mobile
+devices (smartphones and tablets). This paper presents the project Maritaca, an
+open solution for create mobile applications to data gathering using Android
+mobile devices. By using the platform, no programming skill is needed to cre-
+ate the mobile applications. Moreover, the platform facilitates the sharing of the
+collected data in the cloud, thus allowing the formation of social networks for
+gathering and information sharing. The project was designed to support a he-
+avy volume of users and data acquisition. It is based on free software and can
+be accessed at: maritaca.unifesp.br.
+Resumo. O uso de dispositivos m óveis vem crescendo rapidamente. No cen ário
+atual é cada vez mais comum o uso de formul ários eletr ônicos m óveis para a
+aquisiç ão de dados através de dispositivos m óveis (smartphones e tablets). Este
+trabalho apresenta o projeto Maritaca, uma soluç ão aberta para a geraç ão de
+aplicaç ões para coleta de dados a partir de dispositivos m óveis Android. O sis-
+tema permite a criaç ão autom ática de aplicaç ões para a coleta m óvel de dados,
+mesmo por usu ários sem conhecimentos técnicos de programaç ão. Além disso,
+a plataforma facilita o compartilhamento dos dados coletados na nuvem, per-
+mitindo, assim, a formaç ão de microredes sociais de coleta e compartilhamento
+de informaç ões. O projeto foi desenhado para comportar um grande volume de
+usu ários e de dados. Baseado em software livre, o sistema pode ser acessado no
+endereço: maritaca.unifesp.br.
+1.                                                                                          Introduç ão
+Nos últimos anos, o mercado de comunicação pessoal m óvel evoluiu rapidamente. Essa
+evolução foi marcada principalmente por três fatores: a queda dos preços, o lançamento de
+dispositivos m óveis com alta capacidade de processamento e o surgimento de novas tecno-
+logias para o desenvolvimento de Aplicaç ões M óveis (Apps). Estes fatores, combinados,
+criaram condiç ões apropriadas para o surgimento de uma nova categoria de aplicaç ões: a
+Coleta M óvel de Dados (CMD) [Rezende et al. 2010].
+∗Pesquisa apoiada pela FINEP, processo 04.11.0077.00, referência 1488/10.
+146
+
+
+
+
+Em sistemas de informação, as aplicaç ões de CMD são usadas em muitos cenários.
+Em geral, elas substituem coletas tradicionais de dados, usando lápis e papel, por coletas
+realizadas a partir de dispositivos m óveis.
+Entretanto, apesar do avanço das tecnologias de hardware e software, a criação de
+aplicaç ões para coleta m óvel de dados continua exigindo o trabalho de programadores e de
+profissionais de Tecnologia da Informação (TI). Em outras palavras, apesar dos avanços,
+ainda  é preciso programar os questionários eletr ônicos. Atualmente, essa  é a principal
+limitação para a ampla utilização de CMDs, pois nem toda empresa possui recursos, quer
+humanos, quer financeiros, para elaborar aplicaç ões m óveis [de Andrade et al. 2012]. Este
+é o caso, por exemplo, da maioria das pequenas e micro empresas no país. Pode-se chegar
+a essa conclusão analisando-se o n úmero de sistemas de informaç ões m óveis que foram
+descontinuados por falta de recursos para manutenção de software.
+Para enfrentar ou reduzir estas limitaç ões e, desse modo, contribuir para a ampla
+utilização de ferramentas m óveis em sistemas de informação, foi desenvolvido o Pro-
+jeto Maritaca, uma infraestrutura para a geração de aplicaç ões de Coleta M óvel de Da-
+dos (CMD). O nome Maritaca vem do acr ônimo MARitaca Is a Tool to creAte Cellular
+phone Applications. Desse modo, buscou-se permitir o desenvolvimento de aplicaç ões
+m óveis para coleta de dados sem a necessidade de intervenção de profissionais de TI para
+a criação e manutenção das aplicaç ões m óveis. Além disso, o projeto é de c ódigo aberto
+e altamente escalável.
+O restante deste trabalho está organizado da seguinte maneira: a Seção 2 define o
+escopo dessa pesquisa; a Seção 3 apresenta os trabalhos relacionados; a Seção 4 descreve
+uma visão geral da arquitetura; a Seção 5 descreve as principais componentes da interface
+e os serviços presentes na plataforma; a Seção 6 descreve algumas aplicaç ões diretas e
+indiretas da plataforma. Por fim, são apresentados os trabalhos futuros, as consideraç ões
+finais e os agradecimentos.
+2. Objeto do trabalho
+A meta inicial do Projeto Maritaca era simplificar o desenvolvimento de aplicaç ões de
+CMD. No estágio atual da pesquisa, o objetivo principal consiste em prover uma infraes-
+trutura completa para CMD, o que a inclui: a criação simplificada das Apps para coleta, o
+armazenamento em nuvem dos dados coletados e a disponibilização de ferramentas que
+auxiliem o compartilhamento dos dados. Buscou-se, sobretudo, permitir o desenvolvi-
+mento de aplicaç ões m óveis para coleta de dados sem a necessidade de intervenção de
+profissionais de TI para a criação e manutenção das aplicaç ões m óveis.
+3. Trabalhos Relacionados
+Existem algumas ferramentas com prop ósitos similares aos do Maritaca. A ferramenta
+App Inventor1   permite construir visualmente aplicativos para a plataforma Android.
+Concentra-se no desenho passo-a-passo de elementos de interface, conectando-os aos res-
+pectivos eventos. O diferencial positivo do projeto Maritaca em relação ao App Inventor
+está na simplicidade de utilização. O Maritaca provê uma forma mais simples e intui-
+tiva para o desenvolvimento de interfaces voltadas para CMD, para fazer isso, oferece
+1 http://appinventor.mit.edu
+147
+
+
+
+
+interfaces gráficas e controles arrastáveis que permitem a geração de aplicaç ões sem a
+necessidade de profissionais de TI.
+O Nokia Data Gathering2   é um sistema para criação de questionários m óveis
+usando dispositivos Nokia. Os dados são colocados em um servidor na Internet e po-
+dem ser acessados pelos dispositivos m óveis com acesso a rede. Os dados são coletados e
+armazenados nos celulares e podem ser transmitidos para o servidor. No entanto, trata-se
+de uma solução para dispositivos específicos de um fabricante.
+Outro trabalho a ser citado é o Open Data Kit (ODK)3, que consiste em um con-
+junto de ferramentas de c ódigo-fonte aberto que auxiliam a criação e o gerenciamento de
+coleta m óvel de dados. Ele é composto por três ferramentas: Build, Collect e Aggregate.
+A ferramenta Build é utilizada para a modelagem dos formulários. A Collect é utilizada
+para a realização da coleta dos dados nos dispositivos m óveis, que possuem o sistema
+operacional Android, bem como também para o envio destes ao servidor. Por fim, a fer-
+ramenta Aggregate re úne os dados coletados existentes no servidor e os converte para
+formatos mais usuais. Cabe salientar que a ferramenta m óvel Collect gera as interfaces do
+aplicativo m óvel a partir de um arquivo em formato XForm, um padrão de formatação de
+formulários especificado na linguagem XML. Entretanto, o ODK não oferece infraestru-
+tura para a construção de formulários, mas sim define padr ões e APIs.
+O projeto DoForms4  é um sistema para criação de questionários m óveis multipla-
+taforma, cuja proposta é semelhante ao Projeto Maritaca, entretanto, de c ódigo fechado.
+No DoForms há uma cota livre para usuários de até 200 MB, ultrapassado esse limite é
+cobrada uma taxa mensal por dispositivo m óvel utilizado.
+4. Arquitetura do Sistema Maritaca
+O    projeto    Maritaca    foi    desenvolvido    como    uma    aplicação    em    nu-
+vem  [Armbrust et al. 2010,  Cook et al. 2011,  Nurmi et al. 2009],  prevendo  o  uso  do
+modelo de “software como serviço”.
+Os dados coletados a partir de dispositivos m óveis são armazenados em nuvem e
+são visualizados através de um navegador web. Nesta seção será apresentada a arquitetura
+do projeto, suas componentes e o modelo de integração entre as componentes.
+4.1. Componentes da Plataforma Maritaca
+A Figura 1 apresenta as principais componentes da arquitetura e ilustra a relação entre
+essas componentes.
+Os elementos apresentados na Figura 1 são:
+• Servidor  de  Aplicaç ões:  a  parte  servidora  do  projeto  utiliza  o  servi-
+dor  de  aplicaç ões  JBoss                                                                  [Davis and Marrs 2005],  onde  são  hospedados  os
+serviços  e  componentes  Web.  Toda  a  parte  servidora,  exceto  alguns  scripts
+de  manutenção,  foram  implementados  em  Java  utilizando  o  arcabouço
+Spring [Tate and Gehtland 2005]. Todos os webservices implementados utilizam
+a abordagem de serviços RESTFul [Richardson and Ruby 2007]. Apesar de estar
+2 http://projects.developer.nokia.com/ndg/wiki
+3 http://opendatakit.org/
+4 http://www.doforms.com/
+148
+
+
+
+
+embutido na plataforma Web, o Editor de Formulários é uma aplicação Web in-
+dependente, escrita em HTML5 e Ajax, permitindo o desenvolvimento rápido e
+intuitivo dos questionários. Esta componente gera como resultado um descritor
+de question ário, que é gravado em formato XML.
+• Componente m óvel:  é uma aplicação Android que interpreta o arquivo XML
+(descritor da coleta de dados) e renderiza as interfaces automaticamente. Trata-
+se  de  uma  Engine  de  interpretação,  baseada  no  padrão  de  projeto  Interpre-
+ter [Gamma et al. 1994].
+• Servidor de Dados Cassandra: componente para armazenamento escalável ba-
+seado no paradigma NO-SQL. Utilizamos o Cassandra para persistir, basicamente,
+os dados coletados e estruturados em formato XML.
+• Sistema de arquivos Hadoop [Shvachko et al. 2010]: um sistema de arquivos dis-
+tribuído e escalável. ´E utilizado no projeto para armazenar dados não estruturados,
+principalmente arquivos, tais como Apps, imagens, áudio e vídeo.
+4.2. Servidor de Aplicaç ões
+No m ódulo servidor encontram-se implementados os serviços e funcionalidades Web
+do projeto. Dentre as principais pode-se citar: armazenamento de dados estruturados e
+não estruturados (conte údo multimídia e Apps), os serviços RESTFul utilizados para a
+comunicação entre o servidor e o dispositivo m óvel, o editor de formulários, entre outros
+serviços.
+A interação entre o usuário e a plataforma Web, via um navegador, é feita através
+da camada Web do sistema, que utiliza principalmente Spring MVC, JQuery e HTML5.
+149
+
+
+
+
+A interação entre dispositivos m óveis e a plataforma é realizada sempre utilizando-se de
+serviços RESTFul. A camada web e os serviços RESTFul interagem com a camada de
+l ógica do neg ócio utilizando o arcabouço Spring.
+4.3. M ódulo M óvel
+O usuário pode editar os questionários a partir de um navegador padrão e, uma vez e-
+ditado, o questionário pode ser preenchido a partir do dispositivo m óvel, onde os dados
+ficam temporariamente armazenados até serem transferidos para o servidor.
+O M ódulo M óvel consiste em uma engine que traduz o descritor do questionário
+(representado em formato XML) em uma hierarquia de objetos instanciados responsáveis
+pela renderização das interfaces e validação dos dados. O modelo computacional utilizado
+para representar os questionários é a parte mais sofisticada do componente m óvel e foi o
+desenvolvimento tecnol ógico que viabilizou a solução.
+A técnica de mapeamento do XML em uma lista de objetos está inspirada no
+padrão de projeto Interpreter [Gamma et al. 1994]. A aplicação m óvel é uma controla-
+dora de contexto, que sempre faz referência para um objeto em uso, no caso do Maritaca
+o objeto em questão trata-se de um objeto do tipo Question [Durham et al. 2003]. O ob-
+jeto é instanciado conforme o tipo da pergunta e cada tipo de objeto implementa as suas
+respectivas políticas, por exemplo, de validação de campo ou de exibição do controle.
+4.3.1. Autenticaç ão
+Para ser utilizada a partir do dispositivo m óvel, a aplicação m óvel requer que o usuário
+autentique-se no servidor; deste modo, garante-se que o usuário tenha autorização para
+coletar dados para aquele formulário. Esse processo  é feito utilizando o protocolo de
+autorização OAuth  [Tassanaviboon and Gong 2011] sobre o protocolo HTTPS. A Fi-
+gura 2 ilustra os passos para a autenticação segundo o padrão OAuth: (i) primeiro, o
+usuário faz uma requisição de autorização para o servidor, com isso, o servidor redireci-
+ona o usuário para uma tela de autenticação; (ii) se o usuário é autenticado com sucesso,
+gera-se um c ódigo, esse passo é chamado de “confirmação da autorização”; (iii) com este
+c ódigo, o usuário pode gerar um token, que precisa ser renovado ap ós um determinado
+tempo de validade; (iv) por fim, de posse de um token válido para o formulário, o usuário
+pode coletar, salvar e visualizar os dados. Essa transferência de dados é feita utilizando-se
+de serviços RESTFul, seja nos formatos JSON ou XML.
+ao entre o componente M ´ovel e o Servidor utili-
+zando OAuth.
+150
+
+
+
+
+4.3.2. Formato do arquivo XML de integraç ão
+O principal método de integração entre as componentes é o formato Extensible Markup
+Language (XML) gerado pelo Editor de Formulários. O arquivo contém as quest ões do
+formulário representadas como tags.
+Cada tag possui os seguintes atributos básicos: id, next, previous, required, label,
+help e type. Os campos id, next e previous são do tipo numérico, sendo que id identi-
+fica o n úmero da pergunta atual, next  é o id da pr óxima pergunta e previous é o id da
+pergunta anterior a atual. O campo required define se a questão é obrigat ória, sendo seu
+valor definido como: true ou false. O campo label deve conter a pergunta a ser mostrada
+no questionário. O atributo help é não obrigat ório e contém um texto de ajuda ou de escla-
+recimento sobre a pergunta. O atributo type define o tipo de resposta, que pode assumir,
+por exemplo, os seguintes valores: text, number, radiobutton, combobox, multimedia, gps
+etc.
+Além disso, alguns tipos de tag podem possuir estruturas condicionais, utilizadas
+para definir a navegação condicional entre as perguntas. A navegação entre as perguntas é
+definida no r ótulo condition, onde a resposta da pergunta atual é utilizada para determinar
+a pr óxima pergunta a ser exibida. Por exemplo, considere a seguinte questão: “Qual a
+sua idade?” Se a resposta for um valor inferior a 18 anos, a pr óxima questão poderia ser:
+“Qual o nome do seu respons ável?” Caso contrário, essa pergunta poderia ser omitida.
+4.4. Construç ão autom ática de aplicaç ões
+Sempre que um formulário é salvo, o sistema gera um novo aplicativo Android (arquivo
+em formato APK) e o armazena no sistema de arquivos distribuído Hadoop. Esse processo
+de compilação e montagem leva alguns segundos, mas, como é realizado em background,
+não afeta negativamente a usabilidade do sistema.
+Essa não foi a primeira abordagem adotada. Inicialmente planejava-se criar uma
+única aplicação Android, na qual descritores XML seriam carregados para cada aplicação
+de coleta. Entretanto, notou-se que esse método era menos seguro, dificultava o processo
+de divulgação de aplicaç ões e a manutenção das vers ões das Apps.
+4.5. Metodologia de Desenvolvimento
+O processo de desenvolvimento do projeto foi baseado na metodologia  ágil conhecida
+como Programação eXtrema (XP) [Beck and Andres 2004]. A prática dessa metodologia
+foi fundamental no processo de desenvolvimento. Do lado dos desenvolvedores, todos
+estão envolvidos e têm conhecimento de todas as camadas do c ódigo, principalmente
+devido à programação em par. Outro princípio aplicado foi o desenvolvimento orientado
+a testes, onde para cada funcionalidade desenvolvida são desenvolvidos também testes
+unitários e de integração.
+5. Funcionalidades do Sistema
+Esta seção descreve as funcionalidades oferecidas pela Plataforma Maritaca. O sistema
+permite que um usuário construa aplicaç ões para coleta de dados, que podem ser insta-
+ladas em quaisquer dispositivos m óveis compatíveis com Android, versão 2.2 ou superior.
+151
+
+
+
+
+No dispositivo m óvel, a App permite a coleta de dados utilizando interfaces
+amigáveis. Os dados são armazenados no dispositivo m óvel até serem transferidos para o
+servidor. Para realizar a coleta não é necessário que o usuário esteja conectado à Internet.
+A seguir são apresentados os principais passos para a utilização da plataforma.
+5.1. Passo-a-passo para utilizaç ão da soluç ão
+Os passos a seguir exemplificam a utilização da plataforma:
+1.  O sistema está disponível em http://maritaca.unifesp.br. Para utilizá-
+lo, o usuário necessita autenticar-se na tela inicial do sistema, o que pode ser
+realizado de duas maneiras: (i) utilizando usuário e senha registrados no sistema
+(ii) ou com uso de OpenID [Recordon and Reed 2006].
+2.  Ap ós a autenticação, é apresentada ao usuário a tela principal do sistema, desti-
+nada ao gerenciamento de questionários. A lista de questionários está organizada
+entre formulários criados pelo pr óprio usuário (parte superior) e formulários com
+ele compartilhados (parte inferior). Há ainda um menu com abas na parte superior
+para o gerenciamento de grupos de usuários. A Figura 3 apresenta a interface para
+gerenciamento de formulários.
+Figura 3. Tela inicial de gerenciamento de formul ´arios.
+3.  Para criar um novo formulário, basta pressionar o botão New Form, no canto in-
+ferior esquerdo da tela. A Figura 4 ilustra a interface para criação e edição de
+formulários. A interface utiliza controles HTML5 arrastáveis (Drag and Drop),
+que permitem ao usuário “arrastar” as componentes a serem utilizadas no ques-
+tionário. O usuário pode escolher um tipo de pergunta ou dado que queira coletar
+dentre o conjunto de componentes disponíveis na caixa de ferramentas localizada
+no lado esquerdo da interface. Na figura apresentada como exemplo, o formulário
+que está sendo criado possui três perguntas.
+4.  Uma vez criado o formulário, o usuário pode descarregá-lo para um dispositivo
+m óvel com sistema operacional Android. A instalação do aplicativo no dispositivo
+m óvel é trivial. A Figura 5(a) mostra a tela de autenticação na aplicação m óvel.
+A Figura 5(b) mostra o menu principal da aplicação, a partir da qual inicia-se a
+coleta clicando-se no botão Collect.
+5.  A Figura 6 mostra a interface (especificada na Figura 4) renderizada automatica-
+mente no dispositivo m óvel. Cada pergunta é mostrada em uma tela e cada tela é
+152
+
+
+
+
+(b) Tela inicial
+ao m ´ovel
+organizada em duas partes principais: acima, com o título do formulário, bot ões
+auxiliares (ajuda e cancelar), e barra de progresso que indica quantas perguntas
+do questionário já foram respondidas; e abaixo, ocupando o restante da tela, a
+questão em si. Os controles de navegação (retornar e avançar) podem ser execu-
+tados através de comandos touch5  ou pressionando o botão de menu do celular.
+6.  A coleta de dados pode ser realizada in úmeras vezes. Cabe reforçar que para cole-
+tar os dados não é necessário que o dispositivo m óvel esteja conectado à Internet.
+Uma vez coletados os dados, o usuário pode conectar-se  à Internet e enviar as
+coletas realizadas para o servidor. Uma vez armazenados no servidor, os dados
+podem ser visualizados acessando-se a plataforma.
+5.2. Os tipos de pergunta
+Um questionário é composto por uma ou mais perguntas. Cada pergunta pode ser de di-
+ferentes tipos, tais como: texto, numérico, data, m últipla escolha (radio button), seleção
+5 Touch Screen: Tecnologia de tela sensível ao toque, em que o usuário interage com a interface do
+aplicativo pressionando a ponta do dedo na tela do aparelho m óvel, podendo fazer gestos predeterminados
+para executar alguma tarefa.
+153
+
+
+
+
+(a)  Primeira  questão,  do  tipo                                                             (b)  Segunda  questão,  do  tipo   (c) Terceira questão, do tipo foto.
+texto.                                                                                        data.
+Figura 6. Perguntas renderizadas no dispositivo m ´ovel.
+m últipla (combo box e check bok), foto, áudio, vídeo, localização, c ódigo de barras, por-
+centagem (controle deslizante ou slider) e desenho. Pretende-se implementar ainda outros
+tipos, pois uma das características mais positivas da plataforma, graças ao seu desenho
+modular, é a facilidade para se criar e integrar ao sistema novas componentes.
+Além disso, o usuário pode personalizar valores padrão (default) para alguns tipos
+de campos a serem coletados, configurar validaç ões para os valores inseridos e definir a
+ordem de navegação entre as perguntas em função dos valores inseridos.
+5.3. Compartilhamento de dados
+Atualmente, o sistema permite criar 3 classes de formulários: privados, p úblicos e com-
+partilhados. Como os nomes indicam:
+• O formulário privado: pode ser utilizado apenas pelo seu criador;
+• O formulário p ´ublico: pode ser visto por qualquer usuário da plataforma;
+• Os formulários compartilhados podem ser de dois subtipos: hier árquico e social;
+- o formulário compartilhado hier árquico: o seu criador pode convidar,
+por exemplo, os usuários A e B, mas os dados coletados por A não são
+visíveis por B e vice-versa;
+- por sua vez, no formulário compartilhado social: os usuários A e B po-
+dem ver os dados coletados um pelo outro.
+De forma similar aos formulários, as respostas (informaç ões coletadas) de cada
+formulário são afetadas de acordo a política de compartilhamento adotada. A Tabela 1
+resume as políticas implementadas no projeto e como cada política influencia tanto no
+formulário quanto nas coletas geradas.
+                                                                                              Privado                            Comp. Hier árquico                    Comp. Social      P ´ublico
+Visualização                                                                                  Criador                            Criador e Lista                       Criador e Lista   Todos
+Question ário
+Modificação                                                                                   Criador                            Criador                               Criador           Criador
+Visualização                                                                                  Criador                            Criador                               Criador e Lista   Todos
+Respostas
+Coleta                                                                                        Criador                            Criador e Lista                       Criador e Lista   Todos
+Tabela 1. Políticas de compartilhamento de dados no Maritaca.
+154
+
+
+
+
+6. Cen ários de Aplicaç ão
+O projeto tem aplicação em diversos campos de ação direta. Por exemplo, a plataforma
+pode ser usada em diferentes domínios de aplicaç ões sociais. Um deles é o uso da pla-
+taforma como ferramenta de apoio à coleta de dados em programas de atenção básica à
+sa úde que envolvam visitas domiciliares. Com isso, os dados coletados por esses progra-
+mas podem ser revisados e avaliados sem perda de informação no processo de redigitação
+e transcrição de dados.
+Outro exemplo de aplicação  é o uso da plataforma para construir uma base de
+dados sobre a linguagem brasileira de sinais (LIBRAS) [Digiampietri et al. 2012].
+Por fim, planeja-se o uso da plataforma para o acompanhamento nutricional de
+grupos de pacientes que são convidados a utilizar as Apps para registrar fotograficamente
+a sua alimentação cotidiana.
+O n úmero de aplicaç ões possíveis do Maritaca é muito amplo. Estes exemplos são
+uma pequena amostra de situaç ões relevantes onde o projeto pode ser aplicado. Abaixo
+enumeramos algumas aplicaç ões potenciais menos óbvias ou indiretas.
+6.1. Aplicaç ões: Maritaca como ferramenta para formaç ão de Redes Sociais
+Uma rede social é uma estrutura de relacionamentos entre atores com prop ósitos comuns
+(pessoais, acadêmicos, profissionais etc.) [Gomes 2009]. Observe que o Maritaca pode ser
+utilizado para a formação do que chamamos de micro redes sociais. Redes locais criadas,
+para fins específicos, que envolvam coleta de dados.
+Utilizando-se a plataforma pode-se formar pequenas redes sociais, onde o usuário
+pode criar e compartilhar o formulário com os seus contatos, pode convidar novos parti-
+cipantes, pode gerar coletas e baixar as coletas disponíveis, entre outras funcionalidades.
+6.2. Aplicaç ões: Maritaca como ferramenta para geraç ão de Inteligência Coletiva
+Segundo [Lévy 1994], Inteligência Coletiva pode ser definida da seguinte maneira:
+“ ´E uma inteligência distribuída por toda parte, incessantemente valoriza-
+da, coordenada em tempo real, que resulta em uma mobilização efetiva das
+competências. Acrescentemos  à nossa definição com este complemento
+indispensável: a base e o objetivo da inteligência coletiva são o reconheci-
+mento e o enriquecimento m útuo das pessoas, e não o culto de comunida-
+des fetichizadas ou hipostasiadas.”
+A plataforma Maritaca pode permitir a criação e extração de Inteligência Coletiva
+a partir das redes complexas formadas por usuários de aplicaç ões de CMD. Os dispositi-
+vos m óveis são muito comuns na sociedade atual, se utilizados de forma coordenada para
+captura de dados podem fornecer dados com alto valor agregado.
+Atualmente trabalha-se para oferecer a funcionalidade de construção de Inte-
+ligência Coletiva. Essas alteraç ões visam permitir a criação simples, flexível e gratuita de
+aplicaç ões colaborativas capazes de oferecer informaç ões globais, construídas por cente-
+nas ou milhares de usuários.
+Algumas das formas de aproveitar a inteligência coletiva no projeto são:
+155
+
+
+
+
+• Busca  (Search): o sistema mostrará os resultados de pesquisa mais relevantes
+usando o perfil de um usuário.
+• Avaliaç ões, opini ões e mecanismos de recomendação: a informação coletada dos
+usuários influenciará outros usuários.
+• Votação e tagging: os usuários podem qualificar os formulários e, possivelmente,
+as respostas, com isso pode-se extrair informaç ões com valor agregado sobre os
+usuários e sua rede.
+7. Conclus ões e Trabalhos Futuros
+O Projeto Maritaca é uma solução aberta para a Coleta M óvel de Dados. O projeto foi
+iniciado a mais de quatro anos e evoluiu de um gerador automático de aplicaç ões para
+uma solução completa que permite a coleta, o armazenamento e o compartilhamento de
+dados tanto estruturados quanto não estruturados. Acreditamos que o sistema resolve um
+problema prático: a redução de custos de produção de sistemas m óveis.
+A aplicabilidade do projeto é ampla. Atualmente, pretende-se utilizar o projeto
+no “Programas Sa úde da Família”, onde, mensalmente, são coletados dados sociais e
+de sa úde das famílias acompanhadas pelo programa. São coletados dados tais como o
+n úmero de nascimentos, gestantes, hospitalizaç ões, óbitos etc. Nosso objetivo é utilizar o
+Maritaca para essa coleta de dados.
+Além disso, atualmente estamos trabalhando no desenvolvimento de um editor
+de relat órios. O objetivo  é construir uma ferramenta adicional que permita configurar,
+sem programar, relat órios consolidados de dados. Por exemplo, além de construir uma
+aplicação capaz de coletar os preços de um produto e os locais de venda, deseja-se con-
+sultar onde o produto é vendido com o menor preço.
+Referências
+Armbrust, M., Fox, A., Griffith, R., Joseph, A., Katz, R., Konwinski, A., Lee, G., Patter-
+son, D., Rabkin, A., Stoica, I., et al. (2010). A view of cloud computing. Communica-
+tions of the ACM, 53(4):50-58.
+Beck, K. and Andres, C. (2004).  Extreme programming explained: Embrace change.
+Addison Wesley.
+Cook, N., Milojicic, D., and Talwar, V. (2011). Cloud management. Journal of Internet
+Services and Applications, pages 1-9.
+Davis, S. and Marrs, T. (2005). JBoss at work: A practical guide.
+de  Andrade,  S.  C.,  Tait,  T.  F.  C.,  de  Oliveira,  F.  M.,  and  Ribeiro,  M.  B.  (2012).
+Caracterização do gerenciamento de projetos de software para m-business.  In SBSI-
+Simp ósio Brasileiro de Sistemas de Informaç ão.
+Digiampietri, L., Teodoro, B., Santiago, C., Oliveira, G., and Ara újo, J. (2012).  Um
+sistema de informação extensível para o reconhecimento automático de libras. In SBSI-
+Simp ósio Brasileiro de Sistemas de Informaç ão.
+Durham, A., Sussumu, E., and da Conceição, A. (2003). A framework for building lan-
+guage interpreters.  In Companion of the 18th annual ACM SIGPLAN conference on
+Object-oriented programming, systems, languages, and applications (OOPSLA). Edu-
+cators Symposium, page 196. ACM.
+156
+
+
+
+
+Gamma, E., Helm, R., Johnson, R., and Vlissides, J. (1994). Design Patterns. Addison-
+Wesley Professional.
+Gomes, E. A. (2009). Segurança em aplicaç ões p2p através de reputação inferida de redes
+sociais.
+Lévy, P.  (1994).   A Inteligência Coletiva por uma antropologia do ciberespaço.   La
+Décpuverte.
+Nurmi, D., Wolski, R., Grzegorczyk, C., Obertelli, G., Soman, S., Youseff, L., and Zago-
+rodnov, D. (2009). The eucalyptus open-source cloud-computing system. In Procee-
+dings of the 2009 9th IEEE/ACM International Symposium on Cluster Computing and
+the Grid, pages 124-131. IEEE Computer Society.
+Recordon, D. and Reed, D. (2006). OpenID 2.0: a platform for user-centric identity mana-
+gement. In Proceedings of the second ACM workshop on Digital identity management,
+pages 11-16, New York, NY, USA. ACM.
+Rezende, J. V. P., Silva, B. N. M., and da Conceição, A. F. (2010). Plataforma para desen-
+volvimento simples e flexível de questionários para Coleta M óvel de Dados (CMD). In
+I Workshop de Pesquisa e Desenvolvimento em Software Livre (WPeDSL), Natal-RN.
+Richardson, L. and Ruby, S. (2007). RESTful web services. O’Reilly Media, Incorporated.
+Shvachko, K., Kuang, H., Radia, S., and Chansler, R. (2010).  The hadoop distributed
+file system. In Proceedings of the 2010 IEEE 26th Symposium on Mass Storage Sys-
+tems and Technologies (MSST), pages 1-10, Washington, DC, USA. IEEE Computer
+Society.
+Tassanaviboon, A. and Gong, G. (2011).  OAuth and ABE based authorization in semi-
+trusted cloud computing: aauth. In Proceedings of the second international workshop
+on Data intensive computing in the clouds, DataCloud-SC ’11, pages 41-50, New
+York, NY, USA. ACM.
+Tate, B. and Gehtland, J. (2005). Spring: a developer’s notebook. O’Reilly Media, Incor-
+porated.
+157
+
+
+
+
+

@@ -1,0 +1,425 @@
+﻿Uma Abordagem para Prover Avaliações Online Seguras
+Juliana Augusto Stocco, Gislaine Cristina Micheloti Rosales, Joice Lee Otsuka,
+Regina Borges de Araújo
+Universidade Federal de São Carlos
+CEP 13565-905 - São Carlos - SP - Brasil
+jul.stocco@gmail.com, gimicheloti@gmail.com, joice@ufscar.br,
+regina@dc.ufscar.br
+Resumo.  Cursos  na  modalidade  a  distância  apresentam,  frequentemente,
+avaliações   presenciais   baseadas   em   papel.   No   entanto,   o   cenário
+contemporâneo  aponta  que  avaliações  online  são  importantes,  mas  ainda
+muito vulneráveis do ponto de vista da confiabilidade dos resultados. Este
+artigo pretende propor uma solução de avaliação online segura baseada em
+uma rede de sensores. O processo de levantamento de requisitos, os trabalhos
+relacionados, a arquitetura do sistema e os principais sensores envolvidos no
+monitoramento são apresentados.
+Abstract. Distance education presents, commonly, face to face and paper-
+based  assessments.  However  contemporary  scenario  shows  that  online
+assessments are important, but vulnerable in term of results reliability. This
+work intends to propose a solution for security vulnerabilities based on a
+sensor network. The elicitation requirements process, work related and a set
+of the main sensors used to monitor are presented.
+1. Introdução
+No Brasil, a legislação que regulamenta os cursos de educação a distância, estabelece a
+obrigatoriedade  e  prevalência  das  avaliações  presenciais  sobre  outras  formas  de
+avaliação [Brasil, 2005]. Em   consonância   com   a   legislação,   o   documento   de
+Referenciais  de  Qualidade  para  Educação  Superior  a  Distância  apresentado  pela
+SEED/MEC  [Brasil,                                                                          2007]  destaca  a  necessidade  de  garantia  de  segurança  nas
+avaliações presenciais:
+“As avaliações da aprendizagem do estudante devem ser compostas de avaliações a distância
+e avaliações presenciais, sendo estas últimas cercadas das precauções de segurança e
+controle de frequência, zelando pela confiabilidade e credibilidade dos resultados.”
+Dados do relatório analítico da aprendizagem a distância no Brasil do Censo
+EAD.br de 2010 apontam que na educação a distância,   a prova escrita presencial é
+aplicada por 82% das instituições, tanto durante o curso quanto no final, dentre outras
+formas de avaliação presencial e a distância, como provas práticas, apresentação de
+trabalhos etc. [ABED, 2010].
+As provas escritas presenciais ainda são predominantemente baseadas na mídia
+impressa, envolvendo um complexo processo de preparação, impressão e distribuição.
+Esse processo em geral tem alto custo, é lento (exige a elaboração da prova com várias
+semanas de antecedência) e requer a manipulação das provas por outras pessoas além do
+professor, podendo comprometer o sigilo.
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+A  aplicação  de  avaliações  presenciais  online  em  um  ambiente  virtual  de
+aprendizagem  (AVA) parece sanar muitos desses problemas, reduzindo o custo e o
+tempo de distribuição, possibilitando que o próprio professor disponibilize a prova no
+AVA no momento da avaliação. Além disso, torna possível a elaboração de avaliações
+utilizando e integrando diferentes recursos (vídeos, áudio, gráficos em 3D etc.).
+No entanto, as avaliações online, mesmo quando realizadas presencialmente,
+ainda são muito vulneráveis, pois estando online, é difícil assegurar que o aluno não
+consulte materiais não permitidos pelo professor, não troque informações, mensagens
+ou até mesmo tenha sua prova realizada por terceiros. Outra dificuldade reside em
+prover  mecanismos  que  permitam  ao  professor  e  tutores  um  acompanhamento  das
+atividades do estudante durante e após a realização dos exames.
+Desta forma, propomos uma aplicação que provê mecanismos para avaliações
+online seguras a partir da supervisão das interações do usuário dentro e fora do AVA.
+Nossa aplicação faz uso de um framework de coleta de dados baseado em uma rede de
+sensores [Rosales et al. 2011], responsável por rastrear ações e intenções de interação
+do usuário, e de suas aplicações, a partir do ambiente físico e do ambiente lógico com o
+qual  ele  interage.  Esses  dados  coletados  nos  dois  ambientes  são  submetidos  a  um
+processo de inferência que permite à aplicação identificar ações ilícitas do aluno durante
+a realização de uma avaliação online.
+Este  artigo  está  estruturado  da  seguinte  maneira:  a  seguir  os  trabalhos
+relacionados são apresentados, a terceira seção descreve a metodologia empregada, a
+quarta seção apresenta o processo para o levantamento de requisitos da aplicação de
+monitoramento de avaliações online, a quinta seção introduz a arquitetura do sistema,
+uma configuração inicial de ações a serem monitoradas durante uma avaliação online, o
+processo  de  interpretação  de  dados,  seguida  de  conclusões,  trabalhos  futuros  e
+referências bibliográficas.
+2. Trabalhos Relacionados
+Agulla et al. (2008) apresentam um aplicativo que monitora e reconhece a face de um
+estudante durante uma avaliação online ou apenas na permanência deste no AVA. Este
+aplicativo, de acordo com os autores, pode ser facilmente integrado ao AVA e pode ser
+considerado poderoso, pois a permanência do aluno no AVA não é detectada apenas
+gravando-se o tempo de entrada e saída do estudante no sistema, mas conhecendo-se o
+tempo que ele está realmente estudando, focado.
+Ko  e  Cheng  (2008)  focam-se  no  fato  que  avaliações  eletrônicas  geram
+complicadas  manutenções,  configurações  e  instalações  de  software  e  hardware,
+enquanto permitem a utilização de multimídias e gráficos em 3D. Levando-se isso em
+conta, a proposta é utilizar um sistema fácil de manusear e que permita ter segurança em
+avaliações realizadas em computador. Este sistema é baseado em um “disco zip” que
+contém todos os questionários e respostas criptografadas. A criptografia só pode ser
+desfeita no momento da prova por um programa específico (e-Test), que só funciona em
+redes pré-registradas e durante o período proposto para a realização do exame.
+Montanari e Campbell  (2009) apresentam um framework capaz de construir
+ferramentas  que  analisam  se  um  sistema  online  é  seguro.  Baseado  na  extração
+automática de configurações da rede, ele é capaz de detectar pequenas mudanças e
+reagir bem próximo ao tempo real. Todos os aspectos relacionados à segurança do
+
+
+
+
+sistema estão representados em um vocabulário específico conhecido como “Resource
+Description Framework” (RDF) (“Fonte de descrição do Framework”, em uma tradução
+livre) o qual contém todo o conhecimento sobre os requisitos do sistema e permite a
+construção do framework não para prevenir ataques desconhecidos, mas para informar
+que um sistema é “seguro o suficiente” para ataques já conhecidos.
+Thelwall                                                                                           (2000)  classifica  avaliações  baseadas  em  computador  como  uma
+ferramenta educacional versátil. Uma análise detalhada de um projeto é apresentada:
+questionários são gerados aleatoriamente e abertos a estudantes, este tipo de estratégia,
+que só os computadores tornam possível, tem um impacto positivo nas estratégias de
+estudo dos alunos, pois eles estudam e fazem mais revisões, dessa forma, esta parece ser
+uma motivação aos estudos. Avaliações via computador tornaram-se comuns no Reino
+Unido, permitindo multimídia, gráficos, um grande banco de questões, e um “feedback”
+automático e rápido (especialmente em questões de múltipla escolha).
+Souto et al. (2001) apresentam outro propósito para monitoramento do aluno. A
+partir  da  análise  do  seu  comportamento  enquanto  ele  interage  com  o  material
+instrucional,   um  agente   inteligente   artificial   identifica   o   perfil   cognitivo   de
+aprendizagem do aluno e, a partir de então, passa a se adaptar às necessidades de
+aprendizagem deste estilo, de modo que o material instrucional que ele disponibiliza ao
+aluno se ajuste as suas características de aprendizagem, visando a otimização da mesma.
+Otsuka et. al. (2007) apresentam uma arquitetura multiagente com o objetivo de
+prover suporte à avaliação formativa em ambientes de aprendizagem. A arquitetura é
+baseada, principalmente, em dois tipos de agentes, (i) os agentes de monitoramento de
+atividades que coletam dados sobre a participação do estudante em cada atividade, de
+acordo com os critérios definidos, tais como a regularidade de acesso e postagem de um
+aluno em um determinado fórum e o número de mensagens postadas; (ii) os agentes
+analisadores são responsáveis pela análise dos indicadores de participação coletados em
+uma determinada atividade do AVA, a partir de uma base de conhecimento, que podem
+indicar padrões de comportamento, inferir ocorrência de problemas, alertas e qualidade
+nas participações.
+Nossa solução difere das demais abordagens principalmente pela utilização de
+um  framework  de  coleta  de  dados  de  aprendizagem  que  possibilita  a  coleta  de
+informação semântica a partir de quatro diferentes fontes de dados: (i) interações do
+usuário dentro do browser, (ii) interações fora do browser, (iii) ambiente físico em que
+o usuário se encontra e (iv) base de dados do AVA.   Logo, há o acesso a um grande
+conjunto  de  dados  de  granularidade  fina  que  pode  ser  usado  para  determinar  o
+comportamento  do  usuário  durante  a  realização  de  avaliações  online  e,  sobretudo,
+interagir com o usuário impedindo que realize uma ação inapropriada durante uma
+avaliação.
+3. Metodologia
+A primeira etapa deste trabalho consistiu em um levantamento bibliográfico, sendo
+analisados  artigos  provenientes  dos  principais  periódicos  e  congressos  da  área  de
+Computação  Aplicada  à  Educação.  Os  principais  resultados  desta  etapa  foram
+apresentados na seção 2.
+A segunda etapa baseou-se no levantamento de requisitos. Assim, os dados
+considerados relevantes no contexto de avaliações online puderam ser coletados por
+
+
+
+
+meio de análises de trabalhos relacionados na literatura especializada e a partir de
+pesquisa  qualitativa  com  a  aplicação  de  questionários  semiestruturados  aplicados  a
+professores, pesquisadores, técnicos e especialistas da área de educação a distância. A
+análise dos resultados e as contribuições para o cenário tecnológico de avaliações online
+estão expostas na seção 4.
+A terceira etapa caracterizou-se pelo estudo das tecnologias utilizadas para o
+monitoramento das avaliações online e o processo de desenvolvimento da aplicação. A
+quarta  etapa  consiste  em  testes  e  refinamento  da  solução  proposta.  Os  primeiros
+resultados das duas últimas etapas são apresentados ao longo da seção 5.
+4. Requisitos para o monitoramento de avaliações online seguras
+O levantamento de requisitos do sistema foi realizado por meio de análises de trabalhos
+relacionados  na  literatura  especializada  e,  principalmente,  a  partir  de  pesquisa
+qualitativa  com  a  aplicação  de  questionários  semiestruturados  como  ferramenta  de
+coleta  de  dados                                                                             [Cervo  e  Bervian,   1996].  Os  questionários  foram  aplicados  a
+professores  que  ministram  disciplinas  em  cursos  de  graduação  a  distância,  com  o
+objetivo  de  reunir  informações  que  pudessem  contribuir  para  a  identificação  de
+informações  relevantes  que  devam  ser  monitoradas  no  contexto  de  uma  avaliação
+online. Foram obtidas trinta e cinco respostas de professores.  Para    consolidar    nossa
+pesquisa, em uma segunda etapa, foram aplicados questionários não estruturados, além
+de entrevistas   com especialistas e pesquisadores em educação a distância e também
+entrevistas com técnicos responsáveis pela segurança de AVAs. Os dados coletados nas
+duas  etapas  da  pesquisa  proporcionaram  um  panorama  do  que  os  profissionais  da
+educação a distância da UFSCar esperam de um sistema seguro para aplicação de
+avaliações  online.  Deste  modo,  a  combinação  entre  literatura  e  expectativas  dos
+profissionais da área foi de suma importância para o encontro dos requisitos, bem como
+a identificação das principais ações do usuário a serem monitoradas.
+Figura 1: Exemplo de respostas dos questionários aplicados aos professores
+de educação a distância.
+Durante a aplicação dos questionários 97.14% dos professores classificaram a
+segurança em avaliações online um assunto relevante. Surgiram, também, opiniões em
+comum, especialmente quando perguntados sobre questões de segurança durante uma
+prova presencial. O gráfico da Figura 1 demonstra as respostas mais frequentes para a
+
+
+
+
+questão: “O que, em sua opinião, torna insegura a realização de avaliações presenciais
+online?”. O gráfico da Figura 2 demonstra as respostas mais frequentes para a questão:
+“Por que um monitoramento seria importante?”. É válido salientar que os professores
+poderiam enfatizar qualquer problema na segurança de uma avaliação online. Assim, as
+Figuras 1 e 2 representam agrupamentos de respostas semelhantes.
+Figura 2: Exemplo de respostas dos questionários aplicados aos professores
+de educação à distância.
+Perguntados sobre como o sistema poderia ajudar a identificar que um estudante
+não fez uma prova sozinho, 48.57% dos participantes responderam que o AVA deveria
+oferecer  uma  análise  mais  completa  de  log  e  poderia  oferecer  mecanismos  para
+facilmente comparar o desempenho do aluno ao longo do curso. O sistema não deveria
+aceitar respostas advindas de um endereço IP diferente ou de diferentes máquinas que
+tentassem  acessar  o  sistema  com  o  mesmo  login.  Além  disso,  alguns  professores
+sugeriram   monitorar   o   estudante   durante   a   prova   usando   ferramentas   de
+compartilhamento de tela para evitar fraudes.
+Ao realizar a análise dos resultados da pesquisa com os professores, especialistas
+e profissionais responsáveis pela segurança do sistema, fica claro que avaliações online
+tornam-se inviáveis se nenhum apoio for oferecido para assegurar que, sob nenhuma
+circunstância, o aluno tenha acesso a recursos, ferramentas ou sites não autorizados.
+O sistema deve assegurar, ainda, que em frente ao computador está apenas o
+estudante  apropriado,  autenticando  sua  identidade,  e  que  ele  não  está  utilizando
+aplicativos ou dispositivos móveis para se comunicar com outras pessoas. Ao mesmo
+tempo, se o professor não deixar explícito que CDs, DVDs ou pen drive, por exemplo,
+são permitidos, o sistema fará o monitoramento de memórias secundárias a fim de
+impedir o seu uso durante a realização de uma avaliação online presencial. Baseando-se
+em tais informações os principais requisitos funcionais elencados neste trabalho para
+garantir segurança em avaliações online são apresentados a seguir:
+1.                                                                                           Garantir a autenticação do aluno;
+2.                                                                                           Garantir o acesso à internet enquanto monitora as ações dos estudantes;
+3.                                                                                           Alertar caso haja uso de portas não autorizadas (memória secundária);
+
+
+
+
+4.                                                                                        Alertar caso atividades não autorizadas sejam acessadas dentro ou fora do
+AVA;
+5.                                                                                        Alertar caso haja uso de sites não autorizados;
+6.                                                                                        Alertar caso haja uso de dispositivos móveis;
+7.                                                                                        Alertar o sistema caso haja acesso de endereço  (Internet Protocol  - IP)
+diferente;
+8.                                                                                        Garantir o sigilo da prova, tornando-a pública somente no momento da
+avaliação, monitorando possíveis acessos ilegais em um momento anterior;
+9.                                                                                        Garantir que computadores diferentes não estão utilizando o mesmo login
+durante o exame, a menos que explicitamente informado.
+A partir do levantamento de requisitos e do conhecimento de quais ações devem
+ser monitoradas no ambiente do usuário, foi possível iniciar  o desenvolvimento da
+aplicação. A seguir é apresentada a arquitetura de suporte ao sistema e os conceitos
+relacionados à coleta de dados por meio de rede de sensores.
+5. Uso de Rede de Sensores Lógicos e Físicos para Monitoramento de
+Avaliações Online Seguras
+Tipicamente, uma rede de sensores consiste em um conjunto de sensores densamente
+distribuídos em uma área de interesse  (por exemplo, uma biblioteca ou uma sala de
+aula). Um sensor é um dispositivo que pode ser depositado em um ambiente físico para
+sentir e coletar informação de interesse, tais como presença, localização, movimento,
+sinal de dispositivo móvel, identificação do usuário, entre outras. Os sensores podem
+colaborar entre si e entregar informação ao nó receptor, chamado de sink. O sink é um
+nó  da  rede  com  maior  poder  de  processamento  e  comunicação,  utilizado  para
+comunicação da rede com outras redes ou com outros sinks [Ruiz et al., 2004].
+Dados coletados por sensores físicos tradicionais podem ser combinados com
+dados coletados por sensores lógicos que monitoram ambientes digitais a fim de prover
+um conjunto mais rico de dados e uma visão mais abrangente do quê está ocorrendo.
+Um sensor lógico pode ser visto como um componente de software que pode capturar
+eventos específicos e relevantes sobre as ações e intenções de interação de usuários em
+um ambiente digital. Nossa aplicação faz uso da abstração de rede de sensores conforme
+sua definição e utiliza, adicionalmente, o conceito de sensores lógicos que podem ser
+depositados no dispositivo do usuário para detecção localizada de eventos gerados por
+ele e por suas aplicações.
+A fim de contemplar maior abrangência no monitoramento de ações do usuário,
+o framework disponibiliza sensores para rastrear ações dentro do browser. Os sensores
+lógicos são embarcados no browser via plugin e “sentem” objetos ativos (clicáveis ou
+mutáveis) na página correspondente às ações do usuário, tais como carregamento de um
+documento, cliques do mouse, informações que são digitadas em formulários, mudança
+de foco do mouse.
+Com  o  intuito  de  monitorar  também  ações  fora  do  browser,  utilizamos  o
+framework de sistemas multiagente JADE, que segue as especificações da Foundation
+for Intelligent Physical Agents (FIPA)1 para implementar a arquitetura básica da coleta
+1 http://www.fipa.org/
+
+
+
+
+de dados externos ao browser. Neste caso, um sensor lógico é implementado como um
+microagente coletor de dados. Esses sensores são depositados dentro do ambiente lógico
+do usuário e possuem a tarefa de “sentir” a ocorrência de um determinado evento e
+reportá-lo. Aplicações interessadas podem monitorar, por meio deste tipo de sensores,
+eventos tais como: acesso offline aos materiais do curso, aplicações executadas em
+paralelo enquanto o aluno estuda ou realiza uma avaliação online (tais como uso de
+comunicadores  instantâneos,  players  multimídia,  entre  outros  aplicativos),  uso  de
+memória de armazenamento secundário, características do dispositivo físico e da rede
+de comunicação (tais como tamanho da tela, largura de banda, latência da rede), entre
+outros. A arquitetura de suporte ao sistema é apresentada na seção seguinte.
+5.1. Arquitetura de Suporte
+A arquitetura geral do sistema é apresentada na figura 3. A camada base da arquitetura -
+rede  de  sensores  -  consiste  de  sensores  físicos,  sensores  lógicos  e  atuadores.    Os
+sensores têm a tarefa particular de coletar dados e roteá-los para o sink, que é utilizado
+como interface entre a rede de sensores e as aplicações e serviços por gerenciar dados
+coletados por nós sensores. O framework utilizado disponibiliza três funcionalidades
+intrínsecas, implementadas no sink: (i) gerenciamento de eventos coletados por sensores
+utilizando  o  padrão  publish/subscribe;                                                         (ii)  notificação  de  eventos  às  aplicações  e
+serviços interessados e (iii) persistência de dados.
+Figura 3.   Arquitetura geral do sistema.
+A camada intermediária da arquitetura provê serviços reutilizáveis que podem
+ser configurados para criar aplicações em rede. Um dos principais serviços oferecidos é
+o Serviço de Interpretação de Contextos responsável por prover informação de alto nível
+sobre o que é percebido pelos sensores no processo de coleta. Diferentes técnicas de
+interpretação estão disponíveis para uso das aplicações, tais como redes Bayesianas,
+ontologias  e  árvores  de  decisão.  Sendo  esta  última,  a  técnica  utilizada  por  nossa
+aplicação de monitoramento de avaliações online seguras. A camada topo da arquitetura
+consiste de aplicações que fazem uso do framework de coleta de dados.
+
+
+
+
+5.2. Sensores Utilizados pela Aplicação de Monitoramento de Avaliações Online
+Seguras
+A preocupação com a segurança e com um desempenho fidedigno do estudante torna
+sensores  lógicos  e  físicos  uma  solução  interessante  e  confiável.  A  partir  dos
+questionários  aplicados  aos  profissionais  da  educação  a  distância  e  consequente
+levantamento  de  requisitos  apresentados  na  seção                                      3  deste  trabalho  foi  possível  a
+definição dos principais sensores utilizados por nossa aplicação (Tabela 1). A sigla SF
+indica sensores físicos, SL sensores lógicos.
+Tabela 1: Sensores lógicos e físicos para aplicação de monitoramento de
+avaliações online
+Monitora acesso à porta USB com dispositivo de
+SL   usb_sensor                                                                            armazenamento secundário. Exemplos: pen drive, disco
+secundário.
+                                                                                           Monitora arquivos acessados pelo usuário. Exemplos:
+SL   parallelAplications_sensor
+texto.doc, video.mpeg.
+                                                                                           Monitora materiais do AVA acessados pelo usuário.
+SL   accessedMaterials_sensor
+                                                                                           Exemplos: livro eletrônico, sites recomendados.
+SL   instantCommunication_sensor   Monitora ferramentas de comunicação instantânea
+utilizadas. Exemplo: skype, MSN, gtalk
+                                                                                           É um sensor biométrico. Exemplo: digital do usuário, face
+SF   userIdentification_sensor
+do usuário.
+SL   login_sensor                                                                          Identifica o usuário que realiza login no AVA.
+                                                                                           Monitora atividades do AVA acessadas pelo usuário.
+SL   accessedActivities_sensor
+Exemplos: fórum, chat, wiki.
+                                                                                           Identifica sinais de dispositivos móveis no espaço coberto
+SF   mobileSign_sensor
+pelos sensores. Exemplos: celular, tablet.
+SL   accessedSites_sensor                                                                  Monitora sites acessados pelo usuário
+5.3.    Descrição  do  Funcionamento  da  Aplicação  de  Monitoramento  de
+Avaliações Online Seguras
+A aplicação de monitoramento de avaliações online seguras se subscreve para receber
+dados de sensores que monitoram eventos gerados por usuários e suas aplicações. Logo,
+os dados detectados por sensores previamente depositados no AVA, no ambiente físico
+e  nos  dispositivos  dos  usuários  são  enviados  e  interpretados  pelo  Serviço  de
+Interpretação de Contextos. Sempre que eventos de risco são identificados, a aplicação
+recebe uma notificação e emite ações a determinados atuadores da rede de sensores,
+com o intuito de garantir a credibilidade da avaliação online.
+Durante a configuração de uma avaliação no AVA, o professor pode escolher o
+que deseja monitorar, pois a aplicação oferece certa flexibilidade à medida que atende a
+diferentes estilos de prova. A Figura 4 ilustra a interface de configuração.
+Logo, um professor que permita, por exemplo, consultas aos materiais postados
+no AVA, como livros eletrônicos e sites recomendados, não selecionará a opção de
+monitoramento dessas ações, e, portanto, a aplicação de monitoramento de avaliações
+não fará a subscrição no accessedMaterials_sensor.
+
+
+
+
+Figura 4.   Interface para configuração de opções de monitoramento de eventos
+a ser realizado por sensores lógicos.
+A figura 5 ilustra a interface exibida no dispositivo do usuário/estudante pelo
+atuador  após  a  aplicação  identificar  uma  tentativa  de  acesso  não  autorizado  aos
+materiais da disciplina durante a realização de uma prova. Neste caso, a aplicação só
+será desbloqueada com a ação de um responsável pela aplicação da prova, por meio de
+uma senha gerada aleatoriamente logo após o bloqueio. Esta senha pode ser enviada via
+SMS ao celular cadastrado (celular do tutor, por exemplo) ou ao próprio computador
+utilizado pelo tutor no momento da avaliação, por meio de programas como Messenger
+e Gtalk. Logo, não há como o aluno proceder à realização da prova sem que pelo menos
+o tutor presencial tenha ciência da tentativa ilícita de acesso.
+Figura 5.   Interface do Sistema de Monitoramento de Avaliações Seguras.
+O  processo  de  bloqueio/desbloqueio  e  o  fato  de  anexar  ao  relatório  de
+ocorrências já é uma razão para inibir tentativas ilegais de obtenção de um melhor
+desempenho. Logo, como mais de 25% dos professores consultados em nossa pesquisa
+indicaram, este é um motivo importante para aumentar a confiabilidade nos resultados
+de provas online.
+5. Considerações finais
+Este  artigo  apresentou  uma  aplicação  de  monitoramento  de  avaliações  online  que
+oferece mecanismos para suprir vulnerabilidades de segurança encontradas nos sistemas
+de aprendizagem existentes atualmente.
+O sistema proposto diferencia-se por ser baseado em uma abstração inovadora,
+os sensores lógicos, e apresentar respostas em tempo real. Os questionários aplicados
+aos professores da educação à distância foram de suma importância para o levantamento
+dos principais requisitos do sistema. O trabalho está em fase de desenvolvimento e a
+próxima etapa consistirá na realização de provas de conceito utilizando o ambiente
+
+
+
+
+virtual de aprendizagem Moodle integrado ao sistema de monitoramento de provas para
+a realização de simulações de provas online em polos parceiros da UFSCar.
+O estudo e desenvolvimento de tecnologias para o monitoramento de avaliações
+online são de extrema importância no contexto de educação a distância, com o intuito de
+assegurar  a  legitimidade  e  qualidade  desses  processos  avaliativos  presenciais.  No
+entanto, vale destacar que a avaliação presencial é apenas uma das etapas de avaliação
+da  aprendizagem em  cursos  da  modalidade  EaD.  A  avaliação  formativa,  que  deve
+ocorrer  continuamente  por  meio  do  acompanhamento  e  regulação  das  atividades
+desenvolvidas nos ambientes virtuais de aprendizagem, também tem papel essencial
+para a qualidade dos processos de ensino-aprendizagem, em especial na modalidade a
+distância, como destacado em Otsuka et al. [2007].
+6. Agradecimentos
+Os autores agradecem o apoio e suporte concedido pela CAPES e CNPq.
+7. Referências Bibliográficas
+BRASIL  (2005). DECRETO Nº  5.622, DE  19 DE DEZEMBRO DE  2005. Disponível em:
+http://www.planalto.gov.br/ccivil_03/_Ato2004-2006/2005/decreto/D5622.htm
+BRASIL                                                                                                (2007).                                                     Referenciais   de    Qualidade    para    EAD.    Disponível    em:
+portal.mec.gov.br/seed/arquivos/pdf, 2007.
+ABED (2010).   Censo EAD.BR Relatório analítico da aprendizagem a distância no Brasil. São
+Paulo:                                                                                                Pearson                                                     Education      do                                                     Brasil,   2010.   Disponível   em:
+http://www.abed.org.br/censoead/CensoEaDbr0809_portugues.pdf
+Agulla, E.G.;     Rifon, L.A.;     Castro, J.L.A.;     Mateo, C.G.”Is My Student at the Other Side?
+Applying Biometric Web Authentication to E-Learning Environments”. In: Eighth IEEE
+International Conference on Advanced Learning Technologies, 2008.
+Ko C.C.  ; Cheng C.D.  “Flexible and secure computer-based assessment using a single zip
+disk”, In: Computers & Education 50 (2008) 915-926.
+Montanari  M.;  Campbell  R.H.                                                                        “Multi-Aspect  Security  Configuration  Assessment”.  On:
+Proceedings of the  2nd ACM workshop on Assurable and usable security configuration,
+2009, New York, NY, USA.
+Otsuka, J. L.  ; Rocha, H. V.; Beder, D. M.  “A Multi-Agent Formative Assessment Support
+Model  for  Learning  Management  Systems”,  In:  7th  IEEE  International  Conference  on
+Advanced Learning Technologies, 2007, Niigata.
+Thelwall,M.  “Computer-based  assessment:  a  versatile  educational  tool”  .  In:  Computers  &
+Education 34 (2000) 37-49.
+Souto,  M.  A.  M.;Bica,  F.;  Warpechowski,M.;  Vicari,  R.  M.;  Oliveira,  J.  P.  M.;  Zanella,
+R.;Sonntag,  A.A.  “Ferramentas  de  Suporte  a  Monitoração  do  Aluno  em  um  Ambiente
+Inteligente de Ensino na Web”. Simpósio Brasileiro de Informática na Educação, 2001.
+Cervo A.L.; Bervian P.A. Metodologia Científica. Makron Books, São Paulo, 1996.
+Rosales, G. C. M., Araújo, R. B., Otsuka. J. L. and Rocha, R. V. Using Logical Sensors
+Network to the Accurate Monitoring of the Learning Process in Distance Education Courses.
+In: International Conference on Advanced Learning Technologies (ICALT 2011), 6-8 July,
+Georgia, USA, 2011, pp.573-575.
+Ruiz L.B.;Nogueira J.M.S.; Loureiro A.A. Handbook of sensor network: Compact Wirelles and
+Wired Sensing Systems. vol. 1, 2004.
+
+
+
+
+

@@ -1,0 +1,370 @@
+﻿Uso da técnica de planejamento hier árquico no
+sequenciamento autom ático de atividades colaborativas
+Geiser Chalco Challco1, Marco Aurélio Gerosa 1, Leliane Nunes de Barros1
+1Instituto de Matemática e Estatística - Universidade de São Paulo (USP)
+Caixa Postal 66.281 - São Paulo - SP - Brasil
+{geiser,gerosa,leliane}@ime.usp.br
+Abstract. The automatic sequencing of activities in a collaborative learning sys-
+tem is a task that can be modeled as a planning problem in the field of Artificial
+Intelligence.  In this article, we modeled the automatic sequencing of collabo-
+rative learning activities, this task involve the modeling of educational goals,
+the teaching domain, the student model and the general tasks of instructional
+design. The proposed model can be input of the JSHOP2 system, a hierarchical
+domain independent planner.
+Resumo. O sequenciamento autom ático de atividades num sistema de apren-
+dizagem colaborativa é uma tarefa que pode ser modelada como um problema
+de planejamento autom ático da área de Inteligência Artificial. Neste artigo, é
+modelado o sequenciamento autom ático de atividades de aprendizagem cola-
+borativa envolvendo a modelagem dos objetivos pedag ógicos, do domínio que
+se deseja ensinar, do modelo do estudante e das tarefas genéricas de um pro-
+jeto instrucional.  A modelagem proposta pode ser dada como entrada para o
+sistema JSHOP2, um planejador hier árquico independente do domínio.
+1.                                                                                          Introduç ão
+O sequenciamento automático de atividades de aprendizagem, conhecido também como
+sequenciamento de curso [Brusilovsky and Vassileva 2003] tem uma longa hist ória em
+informática na educação no que diz respeito  à adaptação de cursos, liç ões, m ódulos
+e exercícios                                                                                às características e necessidades dos estudantes.   Com os trabalhos de
+[Peachey and McCalla 1986] e [Marcke 1992] surgiram propostas de sequenciamento au-
+tomático de atividades de aprendizagem que utilizam diversas técnicas de planejamento
+em inteligência artificial [Santos and Boticario 2007], [Vrakas et al. 2007]. Contudo, no
+sequenciamento de atividades colaborativas as propostas atuais encontradas são baseadas
+em workflows e padr ões de colaboração [Hernández-Leo et al. 2006] [Pinkwart 2003],
+que oferecem pouco suporte à adaptação de atividades a cada participante, tornando este
+processo uma tarefa complexa.
+Neste artigo apresentamos uma proposta de sequenciamento automático de ativi-
+dades colaborativas, adaptadas a cada participante, que utiliza a técnica de planejamento
+hierárquico.  Na Seção 2, os conceitos fundamentais de planejamento hierárquico são
+apresentados. Na Seção 3 apresentamos a modelagem do sequenciamento automático de
+atividades colaborativas como problema de planejamento hierárquico e finalizamos com
+a Seção 4, apresentando um exemplo do processo de planejamento hierárquico de uma
+tarefa de projeto instrucional.
+
+
+
+
+2. Planejamento hier árquico
+Planejamento hierárquico é uma técnica de Inteligência Artificial na qual o problema de
+busca e sequenciamento de um conjunto de aç ões, chamado de plano, é gerado mediante
+a decomposição de tarefas compostas (tarefas com nível de abstração) em sub-tarefas até
+atingir um nível de tarefas primitivas (tarefas que não podem ser decompostas em sub-
+tarefas) [Nau et al. 2004].  Assim, o plano deve ser executado num determinado estado
+inicial (S0) e alcançar um estado meta para atingir o objetivo que é efetuar a tarefa inicial
+(T ) (tarefa composta, de maior nível de abstração).
+Neste trabalho, utilizamos o sistema de planejamento hierárquico JSHOP2 (Java
+Simple Hierarchical Ordered Planner  2)  [Ilghami 2006], planejador independente de
+domínio de aplicação desenvolvido pela Universidade de Maryland, no qual o conjunto
+de tarefas, métodos e operadores são representados com base na l ógica de predicados de
+primeira ordem mediante variáveis anotadas com o prefixo “?”  e  átomos (express ões
+l ógicas) representados como as n-uplas (p t1  ...  tn).  As tarefa são representadas com a
+expressão (p t1  ... tn) na qual p é o nome da tarefa e os argumentos t1  ... tn são termos (as
+tarefas primitivas são anotadas com o prefixo “!” no nome). Os métodos são representa-
+dos utilizando a forma (:method h pre t) na qual h é o nome a tarefa composta, pre é a
+expressão l ógica que define a aplicabilidade e t representa a lista de sub-tarefas em que a
+tarefa composta h pode ser decomposta. As tarefas primitivas são representadas mediante
+operadores utilizando a forma (:operator h pre del add) na qual h é o nome da tarefa
+primitiva, pre é a pre-condição, del e add representam os efeitos de uma ação como a
+lista de átomos a serem removidos (efeitos negativos) e adicionados (efeitos positivos) na
+representação do estado atual.
+(a) Domínio de planejamento em JSHOP2                                                             (b) Decomposição da tarefa transportar
+ao do problema de transporte de pacotes com planejamento hier ´arquico
+A Figura 1 exemplifica parte de um domínio de planejamento para o problema de
+transporte de pacotes de uma localização.  Nesse exemplo, a representação do estado é
+feita com os átomos (em t l), significa que o pacote ou veículo t está localizado em l e
+(disponivel t), significa que o veículo t está disponível. As tarefas primitivas são: reservar
+um veículo (!reservar ?t), mover o veículo de uma localização para outra (!mover ?t ?l1
+?l2), carregar um pacote no veículo (!carregar ?t ?p) e descarregar um pacote do veículo
+(!descarregar ?t ?p). As tarefas compostas são: despachar um veículo (despachar ?t ?l1),
+que envolve as tarefa reservar e mover; retornar o veículo (retornar t l1), que envolve
+despachar e mover; e transportar um pacote (transportar ?p ?t ?l1 ?l2) que envolve des-
+pachar, carregar, mover e retornar. A Figura 1a apresenta o método de decomposição da
+tarefa transportar um pacote (transportar ?p ?t ?l1 ?l2) (linhas 1-7) que é aplicável se as
+precondiç ões, o pacote ?p está localizado em ?l1 e o transporte ?t está disponível (linhas
+
+
+
+
+3-4), são satisfazíveis. Esse método é decomposto nas sub-tarefas: despachar, !carregar,
+!mover e retornar (linhas 4-7). O operador (!mover ?t ?l1 ?l2) (linhas 8-11) representa a
+ação de mover um veículo ?t de ?l1 para ?l2 com a remoção do átomo (em ?t ?l1) (linha
+10) e a adição do átomo (em ?t ?l2) (linha 11). A Figura 1b ilustra a decomposição da
+tarefa transportar o pacote p da localização l1 a l2.  O plano solução para o problema é
+dado pela sequência de tarefas primitivas: (!reservar t), (!mover t home l1), (!carregar t
+p), (!mover t l1 l2), (!despachar t) e (!mover t l2 home).
+3. Sequenciamento autom ático de atividades colaborativas como um
+problema de planejamento hier árquico
+Um sistema de planejamento hierárquico aplicado ao domínio de aprendizagem colabo-
+rativo é inicializado pelo educador mediante a seleção dos participantes e dos objetivos
+pedag ógicos que definem a tarefa inicial (T ) e o estado inicial (S0). Essas definiç ões são
+feitas usando-se uma ferramenta de edição dos modelos de domínio e de estudante, Figura
+2.  A sequência de atividades colaborativas que será gerada pelo planejador hierárquico
+JSHOP2 é especificada no padrão IMS-LD (IMS - Learning Design) para ser executada
+num ambiente virtual de aprendizagem (LMS).
+arquico
+Nas subseç ões a seguir apresentamos a representação da tarefa inicial (Subseção
+3.1), estado inicial (Subseção 3.2), operadores (Subseção 3.3) e as tarefas e métodos
+hierárquicos (Subseção 3.4) utilizadas no sequenciamento das atividades de aprendiza-
+gem colaborativas, em termos da linguagem do planejador JSHOP2 [Ilghami 2006].
+3.1. Tarefa inicial: objetivos pedag ógicos e participantes
+A tarefa inicial (createCLUoL l p) é definida utilizando a formalização dos objetivos pe-
+dag ógicos l como 4-uplas (si  ls                                                                ki  lkj ) que representam os níveis de competência dese-
+i
+jados para os estudantes em termos de desenvolvimento de habilidade, si, e aquisição de
+um conhecimento específico, kj . Os níveis de competência utilizam valores qualitativos
+do modelo de aprendizagem do estudante (LGM [Isotani and Mizoguchi 2006]) em que
+lsi  assume valores: i) sem habilidade (nothing), ii) inicial (rough), ii) explicativo (expla-
+natory), iii) associativo (associative) e iv) aut ônomo (autonomous); e lk                       assume valores:
+i
+i) sem conhecimento (nothing), ii) crescimento (accretion), iii) aperfeiçoamento (tuning)
+e iv) reestruturação (restructuring).
+A Figura 3b ilustra a definição dos objetivos pedag ógicos para o t ópico 8.2 “O
+Laço While”  (T8.2) na disciplina  “Introdução  à Ciência da Computação com Java e
+
+
+
+
+Orientação a Objetos” (ICCJOO) [Kon and Goldman 2004] na qual o educador definiu
+como objetivos pedag ógicos:  (s1 aut ônomo k1 reestruturaç ão), (s2 associativo k3 cres-
+cimento) e (s1 aut ônomo k2 aperfeiçoamento).  A partir da definição dos objetivos pe-
+dag ógicos de um determinado t ópico.  Por exemplo, no T ópico 8.2, a Fígura 3a) define
+a tarefa inicial, createCLUoL, que envolve a seleção dos estudantes que participam das
+atividades (student01, student02, ..., student08).
+(a) Tarefa inicial                                                                           (b)  Ilustração  da  definição  dos  objetivos  pe-
+dag ógicos
+ao de objetivos no t ´opico 8.2 do curso ICCJOO
+3.2. Estado inicial: domínio que se deseja ensinar e modelo do estudante
+O estado inicial modela o domínio que se deseja ensinar em termos de conhecimento, con-
+ceitos e recursos instrucionais; e o modelo do estudante envolve os níveis de competência
+que o estudante possui.
+A modelagem do domínio a ser ensinado  é feita com a definição dos elemen-
+tos:  habilidade (skill s), conhecimento (knowledge k), conceito (concept c) e recurso
+instrucional (resource r); tudo dado em termos do conhecimento específico do domínio.
+Além disso, esse conhecimento, é definido através de relaç ões entre os elementos do tipo:
+composição (isPartOf e1  e2), ordem (requieres e1  e2) e associação (relatedWith e1  e2).
+Aos elementos skill e knowledge é associada a relação denominada definiç ão de
+competências para representa a habilidade de aplicar um conhecimento específico num
+determinado conceito. A Figura 4 apresenta a representação formal da definição de com-
+petências para o T ópico 8.2 da disciplina ICCJOO.
+ao de compet ˆencias
+As relação associada aos elementos concept e resource é denominada estrutura
+de conceitos e estrutura de recursos respectivamente, utilizados para dividir o conte údo
+a ser aprendido em cursos, m ódulos e liç ões. Os recursos instrucional são associados à
+estrutura de conceitos utilizando-se relaç ões que definem o papel instrucional de cada
+recurso. Por exemplo, exercício (exercise r c) é o papel que o recurso instrucional r de-
+sempenha para o aprendizado do conceito c. Se aplica o mesmo aos papéis instrucionais:
+questionário (questionarie r c) e leitura (lecture r c). Definimos também uma medida de
+
+
+
+
+benefício esperado na utilização de um recurso instrucional para o desenvolvimento de
+uma habilidade d ou aquisição do conhecimento d que é definida por (competence r d l).
+O modelo do estudante define os níveis de competência possuídos pelo estudante
+no desenvolvimento de habilidades e aquisiç ões de conhecimento, definidos por (skill si
+p ls                                                                                       ) e (knowledge ki p lk                                ), que relacionam o estudante p com um nível ls                                         no desenvol-
+                                                                                           i                                                 i                                                                                           i
+                                                                                           vimento de uma habilidade si  e com um nível lk                                                         na adquisição de conhecimento ki. A
+i
+Figura 5 apresenta a formalização do modelo de estudante para as competências definidas
+no T ópico 8.2 da disciplina ICCJOO.
+ao do modelo de estudante
+3.3. Operadores de planejamento
+Os operadores de planejamento são utilizados para representar elementos pertencentes à
+especificação IMS-LD, denominados daqui em diante simplesmente como elemento(s)
+LD. Por exemplo:  A criação de um ato (elemento <act> em IMS-LD), criação de um
+cenário (elemento <play> da IMS-LD) ou a crição de uma atividade de aprendizagem
+(elemento <learning-activity> em IMS-LD). No sequenciamento das atividades colabo-
+rativas, os operadores de planejamento !createLDElement e !closeLDElement (Figura 6)
+definem a criação de elementos LD com variáveis ?type e ?params que representam o
+tipo de elemento LD e a lista de parametros do elemento LD.
+Figura 6: Operadores para adicionar elementos LD
+O operador !insertResource (Figura 7) é utilizado para definir a inclusão de um
+recurso instrucional (elemento <resource> em IMS-LD) com variáveis ?resource e ?role.
+Ao ser inserido o recurso instrucional, a execução do operador de planejamento adiciona
+os átomos (inserted ?resource ?learner) ao modelo do estudante que desempenhe o papel
+?role.
+Figura 7: Operadores para adicionar um recurso instrucional
+Os operadores !addUserToRole e !removeUserToRole apresentados na Figura 8
+são utilizados para definir a atribuição e remoção de papéis para cada estudante.
+3.4. Tarefas é métodos de um projeto instrucional
+Em aprendizagem colaborativa, os scripts colaborativos são receitas utilizadas pelos
+educadores para definir a formação de grupos e o sequenciamento de atividades cola-
+borativas que podem ser divididas em macro e micro-scripts, representadas naturalmente
+
+
+
+
+ao de pap ´eis
+por tarefas e sub-tarefas de planejamento hierárquico.  A Tabela 1 resume os conceitos
+desenvolvidos por [Villasclaras-Fernández et al. 2009] que apresentam a integração de
+macro e micro-scripts através da definição de uma sessão colaborativa.
+Tabela 1: Conceitos desenvolvidos por [Villasclaras-Fern ´andez et al. 2009]
+Conceito                                                                                    Descrição
+Fases                                                                                       As fases efetuam a formação de grupos e a distribuição dos grupos nas atividades colaborativas com
+                                                                                            a restrição de que os grupos somente mudam entre cada fase.
+Atividades                                                                                  As atividades de grupo apresentam um conjunto de sess ões sequênciadas pelo macro-scripts que
+de grupo                                                                                    definem o trabalho em grupo de acordo com um conjunto de objetivos de grupo. Definimos o obje-
+                                                                                            tivo de grupo como o par de estrategias de aprendizagem que definem a interação entre participantes
+                                                                                            utilizada para atingir os objetivos individuais.
+Sessão  co-                                                                                 Atividade colaborativas efetuada pelos participantes do grupo a fim de atingir um objetivo específico
+laborativa                                                                                  definindo a sequência de interaç ões através de um padrão de interação.
+Padrão   de                                                                                 O padrão define as estratégias de aprendizagem a serem efetuadas pelos participantes na atividade,
+interação                                                                                   formalizando como um conjunto de interaç ões necessárias e complementares.
+Interação                                                                                   A interação é um evento instrucional e um evento de aprendizagem (Evento IL) definido por um ator,
+(Evento IL)                                                                                 uma ação (ou conjunto de aç ões), benefícios esperados (para o efetuador das aç ões) e os recursos
+instrucionais necessários.
+A  partir  dos  conceitos  apresentados  na  Tabela                                         2  propomos  quatro  tarefas
+hierárquicas principais de projeto instrucional que definem o sequenciamento das ati-
+vidades colaborativas detalhadas na Tabela 1 com o mapeamento dos elementos LD cor-
+respondentes. A modelagem desses métodos são apresentadas na Seção 4.
+4. Exemplo de planejamento instrucional no sequenciamento de atividades
+colaborativas
+Fazendo uso das modelagem da Seção 3 foi desenvolvida uma aplicação WEB que faz
+uso das tarefas de projeto instrucional para dar apoio ao educador no planejamento de
+atividades colaborativas. Neste exemplo, utilizamos como entrada: a tarefa inicial (T) da
+Figura 3 e o estado inicial (S0) definido nas Figuras (4-6).
+A Figura 9 apresenta o processo de planejamento da tarefa inicial createCLUoL
+(1) na qual a primitiva (sortByKnowledge ?competences ?r) (linha 2) efetua a ordenação
+dos objetivos pedag ógicos. Na decomposição da tarefa planningCLUoL (1), é definida a
+inclusão de um elemento LD <play> (linhas 11,16) por cada objetivo pedag ógico. Assim,
+no T ópico 8.2 da disciplina ICCJOO três elementos LD <play> são adicionados.
+A tarefa planningWithCLSteps (2) estabelece objetivos individuais a cada par-
+ticipante pi  adicionando as relaç ões (goal ?learner ?skill ?goalSkill) e (goal ?learner
+?knowledge ?goalKnowledge) para a definição dos objetivos individuais. A tarefa create-
+CLPhase é inicializada para atingir os objetivos individuais e a tarefa planningWithCLS-
+teps é executada enquanto o n úmero de elementos LD ato (<atos>) gerados for menor ou
+igual ao máximo permitido (linhas 15, 18-19). No exemplo da Figura 9 a tarefa é efetuada
+
+
+
+
+Tarefa Hierárquica                                                                                Descrição
+(createCLUoL l p)                                                                                                                                        Tarefa de projeção instrucional de mais alto nível na qual se definem os objeti-
+l = (c1  c2  ... cm )                                                                                                                                    vos pedag ógicos l=(c1  c2  ... cn ) a serem atingidos pelos participantes p = (p1
+com ci  = (si  lsi  ki  lk                                                                  i )   p2  ... pn ).
+p = (p1  p2  ... pn )                                                                             Elemento IMS-LD: <method>, <ld>
+(createCLPhase l p)                                                                                                                                      A tarefa define o agrupamento dos dos participantes e o sequênciamento das
+l = (s ls  k lk )                                                                                                                                        atividades de grupo entre os participantes p = (p1  p2  ... pn ) efetuada para atingir
+p = (p1  p2  ... pn )                                                                             o conjunto de objetivos pedag ógico l=(s ls  k lk ).
+                                                                                                  Elemento IMS-LD: <act>
+(createCLGroupActivity l p)                                                                                                                              A tarefa define a criação de uma atividade de grupo e o sequenciamento das
+l = (g1  g2  ... gn )                                                                                                                                    sess ões correspondentes a fim de que os participantes p = (p1  p2  ... pn ) posam
+p = (p1  p2  ... pn )                                                                                                                                    atingir o conjunto de objetivos de grupo (g1  g2  ... gn ). Desta maneira por cada
+                                                                                                                                                         objetivo gi  de grupo uma sequência de sess ões colaborativas é criada.
+                                                                                                  Elemento IMS-LD: <role-part>
+(createCLSession l p)                                                                                                                                    A tarefa define a criação de uma sessão colaborativa como uma atividade cola-
+l = (s k pStrat sStrat)                                                                                                                                  borativa a fim de atingir o objetivo de grupo (s k pStrat sStrat).  De forma
+p = (p1  p2  ... pn )                                                                                                                                    que as estratégias pStrat e sStrat definem o fluxo de interaç ões entre os par-
+ticipante.
+Elemento IMS-LD: <activity-structure>, <learning-activity>
+em três situaç ões gerando assim 3 elementos.
+A tarefa createCLPhase (1) (Figura 10) define a criação de um elemento LD ato
+<act> (linhas 5,7) e o planejamento das atividades a serem efetuadas no ato através
+da tarefa planningCLPhase (linha 6) na qual os objetivos de grupos são identificados a
+partir dos objetivos individuais pela tarefa getGroupGoals (linha 3). A tarefa planning-
+CLPhase (2) efetua a formação de grupos procurando participantes que possam trabalhar
+em atividades colaborativas atingindo assim os objetivos de grupo.  A tarefa getLear-
+nersWithStrategy (linhas 5-8) efetua a seleção dos participantes utilizando a definiç ão
+de competências e o modelo do estudante.  Os estudantes student01 e student02 foram
+selecionados utilizando a estratégia de aprendizagem learning by discussion enquanto
+student05 e student06 são selecionados utilizando as estratégias learning by reflection e
+learning by selfexpression.  Isso mostra uma adaptação  às necessidades específicas de
+cada estudante.
+A  tarefa  de  planejamento  planningByTheory  (2)  apresenta  dois  métodos  de
+decomposição que efetuam o agrupamento de estudantes efetuando a divisão do grupo em
+sub-grupos, tarefa divideGroupInSubGroups (linhas 28-29), se o n úmero de participantes
+é maior do que o máximo permitido. A tarefa createByInstruction (3) efetua a criação de
+uma atividade de grupo mediante a atribuição de papéis utilizando a tarefa addUserToRole
+(linhas 7-8). Assim, como é ilustrada na Figura 10, os estudantes student02 e student01
+são agrupados numa atividade colaborativa la-distribute-cognition; enquanto os estudan-
+tes student06 e student05 são agrupados em outra atividade la-cognitive-flexibility.
+A tarefa createCLGroupActivity (1) (Figura 11) efetua a criação de um novo papel
+createRoleGroup (linha 2) utilizando os elementos LD <role-part> e <role-ref> (linhas
+4-6, 8) aos quais será atribuída uma sessão colaborativa.  A tarefa createCLSession (2)
+define a criação de uma atividade colaborativa de aprendizagem utilizando o elemento
+LD <learning-activity> (linhas 5-6,8).
+O processo de planejamento completo da tarefa de projeção instrucional gera o
+
+
+
+
+¸ao das tarefas createCLPhase, planningCLPhase e createByInstruction
+
+
+
+
+visualizar a individualização de atividades colaborativas.  Por exemplo:  O estudantes
+student01 é agrupado com student02 para realizar a atividade la-distributed-cognition e
+em seguida é agrupado com student04 para realizar a atividade la-anchored-instruction; e
+finalmente com student06 para efetuar a atividade la-cognitive-apprenticeship. Da mesma
+forma, visualizamos que o estudante student06 realiza primeiro a atividade la-cognitive-
+flexibility com student05 realizando em seguida a atividade la-cognitive-apprenticeship
+com student01 atingindo assim os benefícios pedag ógicos definidos na tarefa inicial.
+Figura 12: Exemplificac¸ao do processo de planejamento
+5. Conclus ões
+Neste artigo, a geração automática de curso colaborativos é modelada como um problema
+de planejamento hierárquico através da definição dos elementos do problema e domínio
+de planejamento como tarefas de projeto instrucional definidas em termos dos conceitos
+e elementos principais pertencentes aos scripts colaborativos. Dessa maneira, a principal
+contribuição de nossa proposta de sequenciamento automático de atividades colaborativas
+é o agrupamento de estudantes e a definição das atividades colaborativas com fundamen-
+tos nesses scripts.
+A utilização de operadores que definem elementos da especificação IMS-LD pos-
+sibilita sua execução em quaisquer ambientes virtuais de aprendizagem compatíveis.
+Além disso, as modelagens efetuadas no domínio que se deseja ensinar e domínio do
+
+
+
+
+estudante apresenta relaç ões e dados que podem ser representados com as especificaç ões
+IMS-RDCEO, IMS-MD e IMS-LIP. Os pr óximos passos deste trabalho são: a integração
+com outras especificaç ões IMS e a adição de mais métodos de decomposição nas tarefas
+de projeto instrucional efetuando a modelagem de scripts colaborativos como Jigsaw e
+Pyramid [Hernández-Leo et al. 2008].
+Referências
+Brusilovsky, P. and Vassileva, J. (2003).  Course sequencing techniques for large-scale
+webbased education. International Journal of Continuing Engineering Education and
+Lifelong Learning, 13:75-94.
+Hernández-Leo, D., Villasclaras-Fernández, E., Asensio-Pérez, J., and Dimitriadis, Y.
+(2008). Diagrams of learning flow patterns solutions as visual representations of refi-
+nable IMS Learning Design templates. Handbook of visual languages for instructional
+design: Theories and practices.
+Hernández-Leo, D., Villasclaras-Fernández, E., Asensio-Pérez, J., Dimitriadis, Y., Jorrín-
+Abellán, I., Ruiz-Requies, I., and Rubia-Avi, B. (2006).  COLLAGE: A collaborative
+Learning Design editor based on patterns. Jornal of Educational Technology and Soci-
+ety, 9(1):58.
+Ilghami, O. (2006). Documentation for jshop2. Technical report, Department of Compu-
+ter Science, University of Maryland.
+Isotani, S. and Mizoguchi, R. (2006). An integrated framework for fine-grained analysis
+and design of group learning activities. In Proceeding of the 2006 conference on Lear-
+ning by Effective Utilization of Technologies: Facilitating Intercultural Understanding,
+pages 193-200, Amsterdam, The Netherlands, The Netherlands. IOS Press.
+Kon, F. and Goldman, A.  (2004).   Introdução  à  ciência da computação com java e
+orientação a objetos.
+Marcke, K. V. (1992).  A generic task model for instruction.  In Dijkstra, S., Krammer,
+H. P., and Merrienboer, J. G. V., editors, Instructional Models for Computer-Based
+Learning Environments, volume 104, pages 171-194. Springer-Verlag New York, Inc.,
+Secaucus, NJ, USA.
+Nau, D., Ghallab, M., and Traverso, P. (2004). Automated Planning: Theory and Practice.
+Morgan Kaufmann, San Francisco, CA.
+Peachey, D. R. and McCalla, G. I. (1986). Using planning techniques in intelligent tuto-
+ring systems. International Journal of Man-Machine Studies, 24(1):77-98.
+Pinkwart, N. (2003). A plug-in architecture for graph based collaborative modeling sys-
+tems. In Shaping the future of learning through intelligent technologies. Proceedings of
+the 11th Conference on Artificial Intelligence in Education, pages 535-536. Citeseer.
+Santos, O. C. and Boticario, J. G. (2007). Supporting learning design via dynamic genera-
+tion of learning routes in adaptaplan. In Proceeding of the 2007 conference on Artificial
+Intelligence in Education, pages 638-640, Amsterdam, The Netherlands, The Nether-
+lands. IOS Press.
+Villasclaras-Fernández, E., Isotani, S., Hayashi, Y., and Mizoguchi, R. (2009). Looking
+into collaborative learning: Design from macro-and micro-script perspectives. Fronti-
+ers in Artificial Intelligence and Applications, 200.
+Vrakas, D., Tsoumakas, G., Kokkoras, F., Bassiliades, N., Vlahavas, I., and Anagnosto-
+poulos, D. (2007). PASER: a curricula synthesis system based on automated problem
+solving. International Journal on Teaching and Case Studies, Special Issue on Infor-
+mation Systems: The New Research Agenda, the Emerging Curriculum and the New
+Teaching Paradigm, 1:159-170.
+
+
+
+
+

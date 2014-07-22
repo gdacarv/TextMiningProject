@@ -1,0 +1,441 @@
+﻿Uma Abordagem Baseada em Algoritmo Genético para
+Recomendação de Objetos de Aprendizagem Sensível ao
+Contexto do Estudante
+Luiz Jácome Júnior1, Francisco Milton Mendes Neto1,
+Luiz Cláudio Nogueira da Silva2
+1Programa de Pós-Graduação em Ciência da Computação - PPGCC
+Departamento de Ciências Exatas e Naturais - DCEN
+Universidade Federal Rural do Semi-Árido - UFERSA
+BR 110 - Km 47 Bairro Pres. Costa e Silva - CEP 59.625-900 - Mossoró - RN
+2Superintendência de Tecnologia da Informação e Comunicação - SUTIC
+Universidade Federal Rural do Semi-Árido - UFERSA
+BR 110 - Km 47 Bairro Pres. Costa e Silva - CEP 59.625-900 - Mossoró - RN
+{luizjunior05}@gmail.com,
+{miltonmendes,luizclaudio}@ufersa.edu.br
+Abstract. Technological developments led to important consequences for the
+processes  of  teaching  and  learning.  This  evolution  has  promoted  the
+emergence of new approaches to distance learning, such as mobile learning.
+By facilitating access to diverse educational content, this learning modality
+provides content often inappropriate to the context of the student. One way to
+minimize  this  problem  is  by  using  computational  techniques  to  support
+context-aware mobile learning. Therefore, this paper presents an environment
+able to perform context-sensitive recommendation of learning objects, defined
+in a standard format, through the use of ontologies, a multi-agent system and
+the application of a Genetic Algorithm.
+Resumo. A evolução tecnológica ocasionou consequências relevantes para os
+processos de ensino e aprendizagem. Essa evolução promoveu o surgimento
+de  novas  abordagens  para  o  ensino  não  presencial,  sendo  uma  delas  a
+aprendizagem   móvel.   Por   facilitar   o   acesso   a   diversos   conteúdos
+educacionais, essa modalidade de ensino frequentemente fornece conteúdo
+inadequado ao contexto do estudante. Uma forma de minimizar esse problema
+é a utilização de técnicas computacionais para suporte à aprendizagem móvel
+sensível  ao  contexto  do  estudante.  Portanto,  este  artigo  apresenta  um
+ambiente capaz de realizar a recomendação sensível ao contexto de objetos de
+aprendizagem,  definidos  em  um  formato  padrão,  através  do  uso  de
+ontologias,de  um  sistema  multiagente  e  da  aplicação  de  um  Algoritmo
+Genético.
+1. Introdução
+Os  avanços  das  tecnologias  móveis  e  de  comunicação  sem  fio  contribuíram  para
+demarcar um novo horizonte aos processos de ensino e aprendizagem já estabelecidos.
+Os  dispositivos  móveis  possibilitam  o  acesso  a  ambientes  virtuais  de  ensino  e
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+aprendizagem, caracterizando, assim, a aprendizagem móvel, do inglês Mobile Learning
+ou m-learning [Saccolet et al. 2010].
+Este meio de oferecer ensino permite que estudantes e professores possam tirar
+vantagens dos recursos oferecidos pelas tecnologias móveis, dentre os quais destaca-se
+a possibilidade de acessar, visualizar e prover conteúdo independentemente do horário e
+a partir de qualquer localidade [Yau & Joy 2010]. Entretanto, as tecnologias móveis
+promovem o acesso a uma ampla quantidade e diversidade de conteúdos educacionais, o
+que pode acarretar em perda de desempenho dos estudantes, por provocar a dispersão
+destes. Para lidar com essa situação, ao fornecer conteúdo educacional, deve-se levar
+em consideração as características particulares de cada estudante, como também as
+restrições dos seus dispositivos móveis, uma vez que os mesmos possuem recursos
+distintos  e  limitados.  Surge  então  o  conceito  de  ambientes  sensíveis  ao  contexto
+(context-aware environments). Esse tipo de ambiente se adéqua ao perfil do usuário,
+levando em consideração informações fornecidas pelo próprio usuário, além daquelas
+captadas dinamicamente a partir de sua interação com os dispositivos computacionais
+[Moore et al. 2009].
+A  fim  de  desenvolver  ambientes  de  aprendizagem  que  sejam  sensíveis  ao
+contexto do estudante, é fundamental que os conteúdos educacionais sejam criados de
+maneira  padronizada.  Desta  forma,  é  possível  que  um  ambiente  de  suporte  à
+aprendizagem exiba o conteúdo de forma adequada e reutilize conteúdos em diferentes
+contextos e a partir de diversos repositórios. Além disso, é possível combinar conteúdos
+distintos, o que, por sua vez, melhora o processo de produção de conteúdo e, como
+conseqüência, reduz os seus custos [Rodolpho 2009]. Um modo eficaz de padronizar
+conteúdos educacionais é através do uso de Objetos de Aprendizagem (OAs), os quais
+consistem em pequenas unidades de conteúdo que podem ser usadas, reutilizadas e
+referenciadas durante um processo de aprendizagem [LTSC 2002].
+Este artigo apresenta um ambiente de aprendizagem móvel que, através do uso
+de OAs, ontologias, agentes de software e aplicação de um Algoritmo Genético (AG)
+[Linden                                                                                       2008]  se  adéqua  às  necessidades  dos  estudantes,  fornecendo  conteúdos
+educacionais  (OAs) adequados às características do contexto no qual os mesmos se
+encontram.
+Este artigo está dividido em oito seções. A Seção 2 mostra uma visão geral dos
+agentes de software. A Seção 3 apresenta a técnica dos Algoritmos Genéticos (AG). A
+Seção  4 traz conceitos  relacionados  a ambientes sensíveis ao contexto. A Seção  5
+discute os trabalhos relacionados. A Seção  6 descreve a abordagem baseada em AG
+para recomendação sensível ao contexto proposta neste artigo. A última seção apresenta
+nossas considerações finais e uma discussão sobre trabalhos futuros.
+2. Agentes de Software
+De acordo com Russell & Norvig (2003), agentes são entidades de software autônomas
+que percebem seu ambiente por meio de sensores e que atuam sobre esse ambiente
+através de atuadores, processando informação e conhecimento. Um Sistema Multiagente
+(SMA), por sua vez, consiste de um conjunto de agentes autônomos que colaboram para
+resolver um problema o qual seria impossível solucionar com apenas um agente.
+Agentes  de  software  podem  realizar  diversas  tarefas  em  ambientes  de
+aprendizagem, tais como monitorar as atividades do estudante, capturar dinamicamente
+
+
+
+
+informações  do  estudante,  recomendar  conteúdos  de  interesse  deste,  dentre  outras
+atividades. Diante do aumento no número de estudantes que interagem com os sistemas
+de  suporte  à  aprendizagem,  o  uso  de  agentes  para  realizar  estas  tarefas  torna-se
+extremamente importante, principalmente devido ao fato de serem tarefas complexas
+para os facilitadores gerenciarem a distância.
+3. Algoritmos Genéticos
+Os AGs constituem um ramo dos algoritmos evolucionários e, portanto, também podem
+ser definidos como uma metáfora do processo biológico de evolução natural [Linden
+2008]. De uma forma sucinta, os AGs tentam resolver problemas para os quais não
+existe um algoritmo conhecido, gerando-se uma população inicial e, de acordo com
+critérios  de  avaliação,  selecionando  os  melhores  indivíduos  dessa  população,  que
+servirão como solução para o problema ou, caso contrário, serão combinados para obter
+uma nova geração. Esse processo é repetido até que se encontre uma solução ou até que
+se perceba que não serão alcançadas melhores soluções nas novas gerações  [Artero
+2009].
+Os AGs, assim como os demais tipos de algoritmos evolucionários, não podem
+garantir que uma geração será melhor do que a sua geração antecessora, mesmo sendo
+pouco provável não ocorrer tal situação. Isso acontece devido ao fato desses algoritmos
+serem baseados na evolução natural que, por sua vez, não consiste em um processo
+dirigido à obtenção da solução ótima. De fato, o processo simplesmente consiste em
+fazer  competir  um  conjunto  de  indivíduos,  fazendo  com  que  sobrevivam  aqueles
+indivíduos que são mais aptos [Linden 2008; Petroli Neto 2011].
+4. Ambientes Sensíveis ao Contexto
+Sensibilidade ao contexto descreve um paradigma no qual o contexto de um usuário é
+levado em consideração para definir o seu perfil. Não existe um consenso a respeito da
+definição de  “contexto”, sendo este específico da aplicação e da intenção desejadas,
+requerendo a identificação das funções e propriedades dos domínios dos indivíduos
+[Moore et al. 2009; Moore et al. 2008].
+O  contexto  pode  ser  definido  de  acordo  com  informações  relativas  a
+propriedades que se combinam para descrever e caracterizar uma entidade e seu papel
+de uma forma legível pelo computador  [Moore et al.  2009; Moore et al.  2008]. A
+localização do estudante, por exemplo, é uma característica importante para a definição
+do seu contexto em um ambiente para aprendizagem móvel. Entretanto, o contexto
+inclui  mais  do  que  apenas  a  localização.  De  fato,  quase  todas  as  informações
+disponíveis no momento da interação podem ser vistas como informações contextuais,
+dentre as quais destacam-se [Moore et al. 2009; Schilit et al. 1994]: i) as diversas tarefas
+exigidas dos usuários; ii) a variada gama de dispositivos que se combinam para criar
+sistemas móveis, com a infraestrutura de serviços associada; iii) disponibilidade de
+recursos (ex. condição da bateria, tamanho de tela, etc.); iv) situação física (ex. nível de
+ruído, temperatura, nível de luminosidade etc.); vi) informação espacial (ex. localização,
+velocidade, orientação etc.); e vii) informação temporal (ex. hora do dia, data etc.).
+Esta lista, embora não contenha exatamente todas as informações que podem ser
+consideradas, serve para demonstrar a complexidade inerente ao contexto, sua natureza
+de domínio específico e a dificuldade em defini-lo e medi-lo [Moore et al. 2009]. Na
+
+
+
+
+tentativa de facilitar a compreensão sobre o contexto, Moore et al. (2008) definem dois
+tipos gerais de contexto: estático (denominado customização) e dinâmico (denominado
+personalização). O primeiro diz respeito à situação na qual um perfil de usuário é criado
+manualmente, estando o usuário ativamente envolvido no processo e tendo um elemento
+de controle. Já o contexto dinâmico refere-se à situação na qual o usuário é visto como
+sendo passivo, ou pelo menos com um pouco menos de controle no processo de criação
+de  seu  perfil.  Nesse  caso,  o  sistema  monitora,  analisa  e  reage  dinamicamente  ao
+comportamento do usuário e ao perfil identificado.
+Algumas  aplicações  de  aprendizagem  móvel  sensíveis  ao  contexto  utilizam
+contextos de aprendizagem a fim de adaptar ou sugerir apropriadamente atividades e
+conteúdos  [Yau & Joy  2010]. Entretanto, os trabalhos encontrados na literatura não
+levam em consideração os recursos físicos dos dispositivos móveis, o que compromete
+uma definição mais precisa do contexto dos estudantes e, conseqüentemente, o acesso e
+navegação adequados nos conteúdos recomendados, uma vez que isto é diretamente
+influenciado pelas características dos dispositivos móveis utilizados pelos estudantes.
+5. Trabalhos relacionados
+A utilização de sistemas de recomendação em ambientes educacionais não é nenhuma
+novidade. Em Primo et al. (2010) é apresentado um modelo para a recomendação de
+conteúdos educacionais descritos através de metadados. Esse modelo considera perfis
+de  usuários  e  interoperabilidade  entre  aplicações  educacionais,  além  de  aspectos
+cognitivos  de  aprendizado.  Esse  trabalho  também  apresenta  como  conteúdos
+educacionais  podem  ser  descritos  através  de  ontologias,  o  que  facilita  também  a
+inferência dos conteúdos apropriados aos perfis dos usuários.
+Em Gluz & Vicari (2010) é apresentada a MILOS (Multiagent Infrastructure for
+Learning Object Support), uma infraestrutura, combinando ontologias e agentes, que
+implementa as funcionalidades necessárias aos processos de autoria, gerência, busca e
+disponibilização de OAs compatíveis com a proposta de padrão de metadados de OAs
+OBAA (Objetos de Aprendizagem Baseados em Agentes).
+Yau & Joy (2010) propõem uma arquitetura de aprendizagem móvel sensível ao
+contexto  composta  por  três  componentes  principais:  o  perfil  do  estudante,  um
+mecanismo de personalização e um repositório de OAs. O perfil do estudante serve para
+armazenar  suas  preferências  de  aprendizagem  móvel,  capturadas  através  de  um
+questionário respondido pelo estudante. O mecanismo de personalização recebe esse
+perfil e combina as informações dele com aquelas obtidas dinamicamente através de sua
+interação com o ambiente. Em seguida, o mecanismo de personalização compara todas
+as  informações  obtidas  com  os  metadados  dos  OAs  disponíveis  no  repositório.  O
+sistema  então  recomenda  OAs  adequados  aos  estudantes  de  acordo  com  as
+características do seu contexto.
+O  presente  trabalho  reúne  as  principais  características  dos  trabalhos  citados
+anteriormente. Porém, o fator que difere o presente trabalho dos demais é o fato dele
+utilizar AG para recomendar OAs adequados às diversas características do contexto do
+estudante, inclusive os recursos dos dispositivos móveis, os quais podem constituir um
+fator limitante na aprendizagem do estudante no momento da recomendação dos OAs.
+Pelo fato de ser projetado para dispositivos móveis, o ambiente provê ao estudante
+flexibilidade  quanto  às  opções  de  estudo.  Utilizando  agentes  de  software  em
+
+
+
+
+combinação  com  as  ontologias  de  descrição  dos  perfis                                   (estático  e  dinâmico)  dos
+estudantes  e  o  AG,  o  ambiente  recomenda,  de  maneira  autônoma,  conteúdos
+educacionais adequados às características pessoais e cognitivas dos estudantes.
+6.  Abordagem  Baseada  em  Algoritmo  Genético  para  Recomendação  de
+Objetos de Aprendizagem Sensível ao Contexto do Estudante
+A arquitetura do ambiente proposto é apresentada na Figura 1. Como pode ser visto na
+figura, os estudantes devem, inicialmente, se autenticar no LMS e acessar algum dos
+cursos nos quais esteja matriculado. Para isto, eles precisam realizar um cadastro no
+qual irão informar algumas características de seu perfil, como, por exemplo, local e hora
+do dia preferidos para o estudo, sua área de interesse, entre outras. Essas informações
+servirão  para  a  instanciação  de  um  componente  essencial  da  arquitetura,  que  é  a
+ontologia de contexto estático dos estudantes.
+Figura 1. Arquitetura da solução proposta.
+Os agentes descritos nesta abordagem foram desenvolvidos utilizando o JADE
+(Java Agent Development Framework), que consiste em uma plataforma completa para
+desenvolvimento e execução de SMA [JADE 2012]. Também foi utilizado o framework
+de desenvolvimento de aplicações MLE (Mobile Learning Engine) [MLE 2012] para a
+construção do ambiente.
+Outro componente de extrema relevância é o repositório de OAs. Para que o
+mecanismo  de  recomendação  funcione,  é  necessário  que  estes  OAs  estejam  em
+conformidade com o padrão SCORM. Através dos metadados descritos nesse padrão, o
+agente será capaz de comparar as informações dos OAs com os perfis dos estudantes e
+realizar a recomendação de OAs de maneira adequada.
+A organização do SMA é do tipo comunidade de especialistas, pois cada um dos
+quatro tipos de agentes criados para este trabalho encontra-se no mesmo nível, sendo
+cada um deles especialista em determinada tarefa. Os agentes interagem entre si através
+de um protocolo de comunicação previamente estabelecido. Para o desenvolvimento dos
+agentes,  foram  utilizadas  as  bibliotecas  do JADE  e  os  mesmos  executam  sob  esta
+plataforma.
+
+
+
+
+6.1 Agentes de Software
+Como é possível perceber na Figura 1, o SMA é composto de quatro tipos de agentes:
+Agente Estudante (Student Agent - SAg), Agente Recomendador (Recommender Agent -
+RAg), Agente de Interface (Interface Agent - IAg) e Agente DF (Directory Facilitator).
+O agente DF possui o comportamento voltado para a mediação da comunicação
+entre  os  outros  agentes.  Sua  função  principal  é  fornecer  uma  arquitetura  do  tipo
+“quadro-negro”,  onde  agentes  escrevem  informações,  procuram  por  informações
+escritas  por  outros  agentes  e  conseguem,  através  do  serviço  provido  pelo  DF,  se
+comunicar com o agente que escreveu aquela informação.
+Os SAgs são responsáveis por monitorar as atividades dos estudantes, atualizar e
+recuperar,  das  ontologias  de  contexto  estático  e  dinâmico,  as  preferências  de
+aprendizagem que compõem os perfis dos estudantes e seus respectivos históricos de
+escolhas de OAs. Os SAgs também capturam as informações de localização geográfica
+e do horário corrente. Ou seja, o comportamento do SAg é voltado para monitoramento
+das  informações  relativas  ao  estudante.  Em  seguida,  todas  essas  informações  são
+cadastradas no agente DF.
+O RAg tem o intuito de detectar OAs adequados ao contexto do estudante,
+levando  em  consideração                                                                      (i)  as  informações  consultadas  no  agente  DF,   (ii)  as
+informações dos OAs disponíveis no repositório de OAs SCORM e (iii) as preferências
+similares de outros estudantes. Após aplicar o AG para identificar os OAs adequados, o
+RAg cadastra, no agente DF, as novas informações, as quais servirão ao IAg.
+O IAg é responsável, principalmente, por verificar a adequação visual do OA
+recomendado pelo RAg às características do dispositivo móvel do estudante. Caso o OA
+não seja adequado ao dispositivo, o IAg rejeitará a recomendação. Além disso, o IAg
+tem a responsabilidade de informar ao professor o conteúdo que foi sugerido.
+6.1.1 Recomendação Sensível ao Contexto
+A identificação dos OAs que serão recomendados é realizada pelo RAg, através da
+aplicação de um  AG.  A utilização do AG é justificada pela  alta complexidade do
+problema de recomendação, o que pode denegrir o desempenho do SMA quando o
+número de OAs for suficientemente grande. Neste caso, um algoritmo aproximativo
+(AG) viabiliza a busca por uma solução próxima da ótima.
+Para realizar uma recomendação de OAs adequada ao contexto do estudante, é
+essencial levar em consideração características que podem limitar a aprendizagem do
+mesmo.
+Na  modelagem  do  problema  no  AG,  inicialmente,  temos  uma  população
+composta de certa quantidade de OAs. Cada OA possui uma série de características que
+o relaciona com o contexto do estudante. No presente trabalho, foram consideradas as
+características detalhadas a seguir:
+i) Afinidade com o curso: representa o grau de relacionamento do conteúdo de
+um OA a determinado curso. Esse grau de afinidade é representado no AG em uma
+escala que varia de 0 (nenhuma afinidade) a 5 (alta afinidade). Determinado OA pode
+estar  relacionado  a  um  ou  vários  cursos,  sendo  o  administrador  de  cada  curso
+
+
+
+
+responsável por determinar, manualmente, quais OAs são afins ao curso e qual o seu
+grau de afinidade.
+ii)  Afinidade  com  o  dispositivo  móvel:  determina  o  grau  de  adequação  do
+conteúdo de um OA ao dispositivo móvel do estudante. O grau de afinidade com o
+dispositivo é definido no AG de acordo com uma faixa que varia de 0 (nenhum recurso
+suportado)  a  5  (todos  os  recursos  suportados).  As  informações  do  dispositivo  são
+capturadas a partir da requisição HTTP enviada do dispositivo móvel para o servidor no
+qual se encontra o LMS. Em seguida, em posse dessas informações, é possível verificar
+em  uma  base  de  dados,  chamada  WURFL  [WURFL  2012],  quais  recursos  aquele
+dispositivo móvel suporta.
+iii) Horário de estudo: os horários de estudo são definidos em faixas de horários.
+O  estudante  define,  inicialmente,  qual  o  horário  de  estudo  preferido  dele.  Assim,
+quando o estudante acessa o ambiente de aprendizagem, o sistema se encarrega de
+verificar se o horário corrente está incluso na faixa de estudo preferida do estudante.
+Caso esteja nessa faixa, o sistema atribui o maior valor possível a essa variável no AG
+(valor 5). Do contrário, será atribuído um valor cada vez menor, sendo o mínimo 1, à
+medida  que  o  horário  corrente  se  distancie  daquele  definido  como  preferido  pelo
+estudante.
+iv) Localização corrente: outra informação que pode ser levada em consideração
+para a definição do contexto do estudante é a localidade na qual ele se encontra. Em
+posse dessa informação, é possível verificar, nos metadados do padrão de OAs LOM
+(Learning  Object  Metadata)  [LTSC  2002],  a  incidência  de  palavras  relacionadas  à
+localização do estudante. Com base nisso, são capturadas e consideradas informações
+do  país,  estado  e  cidade  na  qual  o  estudante  se  encontra.  Quanto  mais  palavras
+relacionadas à localização do estudante forem encontradas, maior será o valor atribuído
+a essa variável no AG (máximo 5). Por outro lado, caso não seja encontrada nenhuma
+informação relacionada, será atribuída a pontuação mínima (valor 0).
+v) Escolhas de outros estudantes: define um valor proporcional que representa a
+quantidade de acessos de um OA. A informação de quais OAs são mais acessados é
+levada em consideração em conjunto com a informação de afinidade do OA com o
+curso, pois de nada adiantaria para a recomendação um OA ser o mais acessado e não
+possuir nenhuma afinidade com o curso em questão. Desta forma, esse valor pode variar
+de 0 a 5 dependendo da quantidade de acessos e da sua relação com o curso.
+vi) Incidência de palavras-chave: os OAs disponibilizados no padrão SCORM
+possuem metadados que informam as palavras-chave relacionadas ao assunto daquele
+OA  (tag keywords), além do título deste. Essas informações estão localizadas, mais
+especificamente, no padrão LOM, o qual é parte integrante do padrão SCORM. Em
+posse dessas informações, é feita uma verificação da incidência dessas palavras na
+descrição do curso do qual o estudante está participando. Quanto maior a quantidade de
+palavras-chave relacionadas, a probabilidade de que o OA possua assuntos relacionados
+ao curso será maior, sendo pontuado, portanto, com um peso maior (no máximo 5). Por
+outro lado, quanto menor a quantidade de palavras-chave relacionadas, o peso atribuído
+ao OA nessa variável no AG torna-se proporcionalmente menor.
+
+
+
+
+6.1.2 Codificação do Algoritmo Genético
+No AG cada cromossomo é formado por um conjunto de três OAs. A representação do
+OA (gene) é formada pelo ID e sua respectiva aptidão. O calculo da aptidão do OA é o
+somatório  dos  valores  atribuídos  a  cada  característica  citada  anteriormente.  Desta
+forma, cada cromossomo (ou indivíduo da população) é composto conforme o exemplo
+de cromossomo mostrado na Figura 2.
+Figura 2. Representação cromossomial utilizada.
+A população é composta de cromossomos que possuem, cada um, cinqüenta e
+um bits em representação binária (0 ou 1). Cada OA é representado por dezessete bits,
+sendo  dez  utilizados  para  a  sua  identificação  (ID)  e  sete  para  a  representação  do
+resultado de sua aptidão, considerando os aspectos descritos anteriormente. Assim, com
+cada  OA  utilizando  dezessete  bits,  e  com  uma  representação  de  cromossomo  de
+cinqüenta e um bits, é possível representar até três OAs por cromossomo (17 x 3 = 51
+bits).
+Com o ID do OA sendo representado por dez bits, é possível endereçar todo um
+repositório contendo até mil e vinte e quatro OAs  (210  =  1024). Isso permite que o
+repositório de OAs possa crescer sem causar problemas no AG. A aptidão de cada OA,
+por sua vez, é representada por sete bits, podendo resultar em um valor de até cento e
+vinte  e  oito  na  representação  decimal  (27  =  128).  Quando  da  execução  do  AG,  é
+considerada  como  aptidão  do  cromossomo  a  soma  das  aptidões  dos  três  OAs  do
+cromossomo. Ou seja, para efeito da escolha do indivíduo com maior possibilidade de
+reprodução (maior aptidão), é considerada a aptidão do cromossomo como um todo.
+Essa abordagem de um cromossomo contendo três OAs foi utilizada porque, no
+final da execução do AG, será indicado um cromossomo como o indivíduo mais apto,
+ou seja, como a melhor solução levando-se em consideração o contexto em questão.
+Portanto, não seria interessante, recomendar apenas um OA, mas sim um conjunto
+dentre o qual o estudante pudesse escolher aquele que lhe fosse mais conveniente.
+7. Considerações Finais e Trabalhos Futuros
+Um dos desafios do ensino não presencial é a adequação do conteúdo ao estudante de
+acordo com as características cognitivas deste. No ensino presencial, esta já é uma
+tarefa difícil de ser  realizada, visto que é necessário que o professor  possua certo
+conhecimento das necessidades de cada um dos alunos. Tal tarefa torna-se ainda mais
+complexa quando o ensino é realizado a distância, visto que muitos ambientes virtuais
+de  aprendizagem  enfocam,  geralmente,  aspectos  relacionados  à  sua  funcionalidade,
+esquecendo assim a função pedagógica do ambiente.
+
+
+
+
+Outro fator que deve ser levado em consideração é que, nem sempre, os recursos
+tecnológicos utilizados para o ensino permitem realizar o ensino de forma simples e
+completa,  sendo  necessárias  algumas  adaptações,  como  é  o  caso  da  aprendizagem
+móvel, a qual pode apresentar limitações de acordo com as características do dispositivo
+móvel do estudante.
+Pensando nisso, o presente trabalho apresentou uma abordagem que, através da
+aplicação de um AG, realiza a recomendação de conteúdos educacionais  (OAs) que
+sejam adequados às características do contexto do estudante. Para tanto, a abordagem
+leva em consideração uma série de características, conforme mostrado ao longo deste
+trabalho. O intuito desta abordagem é aperfeiçoar o processo de ensino-aprendizagem
+de forma transparente aos estudantes, provocando assim um maior interesse no estudo
+por parte destes.
+Apesar do trabalho realizado até o momento, há algumas melhorias que podem
+ser realizadas. Assim, como trabalho futuro, pretende-se:
+i) Testar o ambiente desenvolvido em um contexto real, utilizando os principais
+repositórios   de   conteúdos   educacionais                                                 (OAs).   Isso   possibilitará   mensurar,
+estatisticamente, o quanto este mecanismo de recomendação contribui para o processo
+de ensino-aprendizagem;
+ii) Disponibilizar a infraestrutura do ambiente, denominado MobiLE, como um
+componente  do  Moodle  sob  uma  licença  GPL,  de  forma  a  facilitar  a  instalação  e
+utilização do ambiente por instituições que utilizem esse LMS e desejem disponibilizá-
+lo através de dispositivos móveis;
+iii)  Testar  o  ambiente  desenvolvido  em  áreas  específicas                              (ex.  área  médica,
+petrolífera, etc.) para verificar a adequabilidade da recomendação de OAs em contextos
+específicos;
+iv)  Aperfeiçoar  a  visualização  da  recomendação,  visto  que  no  momento  a
+recomendação é feita de forma textual, informando o nome do OA;
+v)  Levar  em  consideração  outras  características  do  dispositivo  móvel  do
+estudante  antes  de  decidir  se  um  OA  é  adequado  ao  contexto  do  estudante,
+aperfeiçoando, consequentemente, o mecanismo de recomendação;
+Referências
+ADL (2012) “Advanced distributed learning”, http://www.adlnet.org, Abril.
+Artero, A. O.  (2009)  “Inteligência Artificial  - Teoria e Prática”.  1ª. ed. São Paulo:
+Livraria da Física.
+Dias, C. C. L., Kemczinski, A., and Lucena, S. V. d. S.  (2009)  “Padrões abertos:
+aplicabilidade em Objetos de Aprendizagem  (OAs)”,  In Anais do XX Simpósio
+Brasileiro de Informática na Educação, SBIE, Florianópolis, SC.
+Gluz, J.C., Vicari, R. M.  (2010)  “MILOS: Infraestrutura de Agentes para Suporte a
+Objetos  de  Aprendizagem  OBAA”,  In  Anais  do  XXI  Simpósio  Brasileiro  de
+Informática na Educação, SBIE, João Pessoa, PB.
+JADE (2012) “Java development framework: an open-source platform for peer-to-peer
+agent based applications”. Disponível em: http://jade.tilab.com/.
+
+
+
+
+Linden, R. (2008) “Algoritmos Genéticos - Uma importante ferramenta da Inteligência
+Computacional”. 2ª. ed. Rio de Janeiro, RJ: Brasport.
+LTSC                                                                                       (2002)                                                                                                     “Draft  Standard  for  Learning  Object  Metadata.  IEEE  Standard
+                                                                                                                                                                                                      1484.12.1”.LTSC, Learning Technology Standards Committee, New York: Institute
+                                                                                           of Electrical and Electronics Engineers.
+MLE                                                                                        (2012)                                                   “MLE-                                             Mobile                                                                          Learning   Engine”,
+http://mle.sourceforge.net/mle/index.php, Abril.
+Moore, P., Hu, B., Jackson, M., Wan, J. (2009) “Intelligent context for personalized m-
+learning”,  In  International  Conference  on  Complex,  Intelligent  and  Software
+Intensive Systems, 2009.CISIS ’09, p. 247 -254.
+Moore,  P.,  Hu,  B.,  Wan,  J.                                                            (2008)                                                   “A  Context  Ontology  for  Pervasive  Mobile
+                                                                                           Computing”, The Computer Journal, Vol. 53, p. 191-207.
+Petroli Neto, S. (2011) “Computação Evolutiva: desvendando os algoritmos genéticos.
+Ubiquidade”, Revista de Estudos de Tecnologia da Informação e Comunicações, v.
+1, n. 1, p. 34-45.
+Primo, T. T., Vicari, R. M, Silva, J. M. C. da (2010) “Rumo ao Uso de Metadados
+Educacionais em Sistemas de Recomendação”, In Anais do XXI Simpósio Brasileiro
+de Informática na Educação, SBIE, João Pessoa, PB.
+Rodolpho, E. R. (2009) “Convergência digital de objetos de aprendizagem SCORM”,
+Dissertação de Mestrado, Universidade Estadual Paulista Júlio de Mesquita Filho -
+UNESP, São José do Rio Preto, SP.
+Russell,  R.  &Norvig,  P.                                                                 (2003)                                                   “Artificial  Intelligence,  A  Modern  Approach   2nd
+Edition”, Prentice Hall.
+Saccol,  A.,  Schlemmer,  E.,  Barbosa,  J.                                                (2010)                                                   “m-learning  e  u-learning                        -  Novas
+perspectivas da aprendizagem móvel e ubíqua”. São Paulo, SP: Pearson.
+Schilit, B., Adams, N., Want, R. (1994) “Context-Aware Computing Applications”, In:
+IEEE Workshop on Mobile Computing Systems and Applications (WMCSA), p. 85-
+90, IEEE Computer Society, Santa Cruz.
+Yau,  J.-K.&  Joy,  M.  (2010)  “A  context-aware  personalized  m-learning  application
+based on m-learning preferences”, In 6th IEEE International Conference on Wireless,
+Mobile and Ubiquitous Technologies in Education (WMUTE), p. 11 -18.
+WURFL                                                                                      (2012)                                                   “WURFL                                            -                                                                               Wireless   Universal   Resource
+FiLe”,http://wurfl.sourceforge.net/, Abril.
+
+
+
+
+

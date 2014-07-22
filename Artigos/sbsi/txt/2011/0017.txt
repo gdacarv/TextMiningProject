@@ -1,0 +1,509 @@
+﻿VII Simpósio Brasileiro de Sistemas de Informação
+ã                                                                                           das
+¸os
+Web Semˆanticos∗
+Manuele Ferreira1, Daniela Barreiro Claro 1, Denivaldo Lopes2
+1FORMAS - Grupo de Pesquisa em Formalismos e Aplicaç ões Semânticas
+LaSiD/DCC/IM/UFBA
+Av. Adhemar de Barros, s/n, Ondina - Salvador - BA - Brasil
+manueleferreira@gmail.com, dclaro@ufba.br
+2Laborat ório de Engenharia de Software e Redes de Computadores (LESERC)
+Campus do Bacanga - CCET - São Luís - MA - Brasil
+dlopes@dee.ufma.br
+Abstract. The use of Web services has grown due to the increase of interoper-
+able environment, low cost, integrated and loosely coupled systems. However,
+an atomic service, at times, does not achieve the goal given by a user, thus it
+should be composed. Compositions of web services could become available in
+large and complex environments, for example the Internet, which leverage to
+faults during the execution process. In order to provide greater availability of
+these compositions, mechanisms of detection and failure recovery are neces-
+sary and were integrated into a development environment to improve reliability.
+Self-manageable features should also be included due to the complexity of the
+environment.  Thus, this work proposes the incorporation of mechanisms for
+self-healing as an Eclipse plugin to manage these web service compositions.
+Experiments were conducted to validate our proposal and generate a compari-
+son with previous work.
+ê ncia do aumento da ne-
+avel, com baixo custo,
+integrado e com baixo acoplamento. No entanto, um servic¸o isolado, em deter-
+rio, sendo assim
+                                                                                            õ e   s   de servic¸os web podem estar
+disponibilizadas em ambientes complexos e grandes, por exemplo a Internet, o
+                                                                                                                                     ã                 o.  Com o in-
+                                                                                                      õ                              , mecanismos de
+á rios e foram integrados em um am-
+biente de desenvolvimento para aumentar a confiabilidade. Estes mecanismos
+á veis devidoà complexidade
+oe a incorporacã o de mecan-
+ismos de auto-cura como um plugin do Eclipse para o gerenciamento destas
+¸os Web. Experimentos foram realizados visando validar
+a proposta e gerar um comparativo com os trabalhos relacionados.
+∗
+O autor Denivaldo Lopes agradece à FAPEMA pela bolsa de pesquisa concedida BEPP 0431/2010
+190
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+de ferramentas amigáveis e funcionais. Diversos serviços destes sistemas de informação
+têm sido publicado através da Web, utilizando um formato padronizado denominado
+Serviços Web(Web Services).  Este formato padronizado vem garantindo interoperabili-
+dade entre SI heterogêneos, facilitando a composição e consequentemente ampliando o
+fornecimento de novas funcionalidades. Ferramentas amigáveis e funcionais no processo
+de desenvolvimento de serviços web já foram incorporadas em diversos ambientes in-
+tegrados de desenvolvimento (IDE - Integrated Development Environm)ctomo a IDE
+Eclipse.  Essa incorporação propicia o aumento da produtividade e diminui a curva de
+aprendizado de um desenvolvedor Web.
+Descriç ões semânticas vêm sendo incorporadas em serviços Web e também nestes
+ambientes integrados de desenvolvimento (IDE) com o intuito de facilitar a utilização
+por desenvolvedores.  Dentre as linguagens semânticas, a OWL-S (Ontology Web Lan-
+guage for Services ) permite descobrir e selecionar serviços Web automaticamente, pois
+adiciona características não ambíguas e interpretáveis computacionalmente.  A OWL-S
+é uma linguagem para descrição de
+ontologias [McGuinness and van Harmelen 2004]. Os serviços Web que utilizam carac-
+terísticas semânticas na sua descrição são denominados Serviços Web Semânticos (SWS).
+Esses serviços web semânticos são normalmente publicados em ambientes com-
+plexos e grandes,  por exemplo,  a Internet,  o que os torna suscetíveis a falhas du-
+rante o processo de execução, principalmente, por indisponibilidade.   Visando mini-
+mizar esses problemas, prop õe-se a utilização de sistemas auton ômicos, que permitem
+o  auto-gerenciamento  de  sistemas  computacionais.   Existem  quatro  principais  pro-
+priedades de autogerenciamento:  auto-configuração (self-configuring), auto-otimizaão
+(self-optimizing), auto-proteão (self-protecting) e a auto-cura (self-healing) [Horn 2001].
+O mecanismo de auto-cura auxilia no aumento da disponibilidade de serviços,  pois
+prevê mecanismos para detectar, prover diagn ósticos e a correção de falhas de forma
+auton ômica, mantendo o sistema consistente.
+Diante desse contexto, o objetivo do presente trabalho é integrar mecanismos de
+auto-cura (self-healing) na etapa de execução de composiç ões de serviços web geradas
+pelo pluginOWL-S Composer [Sena et al. 2010]. A adição dessas novas funcionalidades
+permitem a geração, pelo plugin, de composições de serviços com maior disponibilidade.
+Este artigo encontra-se estruturado da seguinte forma: a seção 2 apresenta os tra-
+balhos relacionados; a seção 3 apresenta uma visão geral do pluginOWL-S Composer. A
+seção 4 descreve o trabalho proposto e a seção 5 apresenta os experimentos realizados. A
+seção 6 apresenta os resultados obtidos e a seção 7 finaliza com as conclus ões e trabalhos
+futuros.
+2. Trabalhos Relacionados
+Durante as pesquisas, três trabalhos relacionados à proposta deste artigo foram eviden-
+SHIWS) [Denaro et al. 2007] é um
+pluginpara a plataforma Eclipse que explora a auto-adaptação dos sistemas auton ômicos,
+provendo um mecanismo dinâmico que identifica e adapta as incompatibilidades entre os
+191
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+solicitantes dos serviços e seus fornecedores. Porém, o processo de modelagem desta fer-
+ramenta é manual, tornando custosa a etapa de inserção de um novo serviço e impossibili-
+tando a reutilização de serviços distribuídos na grande rede. Além disso, a automatização
+do processo é inviabilizada visto que uma linguagem de descrição semântica não é uti-
+lizada.
+O SH-BPEL [Modafferi et al. 2006] é um pluginpara WS-BPEL que busca prover
+uma arquitetura para monitoramento, geração de diagn óstico e recuperação de falhas iden-
+tificada na execução das composiç ões de serviços web modelados por essa linguagem.
+Um dos pontos negativos nessa abordagem é a utilização de uma linguagem que não ofe-
+rece suporte a semântica, o que não permite a busca e seleção automática de serviços
+web.
+Autores em [Wiesner et al. 2008] definem um modelo de recuperação de falhas
+em SWS, objetivando ampliar a flexibilidade, consistência e confiabilidade para serviços
+web. As idéias apresentadas em [Wiesner et al. 2008] são pr óximas à proposta deste tra-
+balho, porém não há evidências de implementação do mecanismo proposto pelos au-
+tores.  Além do mais, o mecanismo citado trata de serviços web, mas não aborda uma
+composição de serviços web, diferentemente do trabalho proposto neste artigo.
+Autores em [Sena et al. 2010] propuseram um plugin denominado OWL-S Com-
+poser 2.0para o ambiente Eclipse que permite a composição manual e visual de SWS,
+incluindo a geração de composiç ões semanticamente similares. Um dos principais pontos
+negativos do OWL-S Composer 2.é que este plugin não publica, nem executa e nem
+monitora uma composição de serviços web desenvolvida neste ambiente.
+Dessa forma, este trabalho tem como objetivo principal propor a integração de
+mecanismos de auto-cura na etapa de execução de composiç ões de SWS. Estes meca-
+nismos visam permitir a adaptação relativa às mudanças no ambiente, por exemplo, na
+presença de falhas, garantindo o alcance do objetivo na execução de composiç ões de
+SWS. Além disso, este trabalho incorpora uma linguagem de descrição semântica aos
+mecanismos de recuperação, tornando-os mais flexíveis e robustos.  Assim, o OWL-S
+Composer 3.0 foi desenvolvido para atender todo o ciclo de vida de uma composição
+OWL-S, publicando, executando e monitorando esta execução.
+3. Visã o Geral do OWL-S Composer 3.0
+[Fonseca et al. 2009] foi desenvolvido com o objetivo de prover
+um ambiente que permitisse a modelagem visual de composiç ões de SWS através de
+diagramas.  O desenvolvimento utilizando a plataforma Eclipse permitiu que ele fosse
+integrado com outras ferramentas que facilitassem as tarefas de criação e manutenção de
+serviços.
+Por  meio  da  utilização  da  ferramenta  OWL-S  Discoveryque  realiza  desco-
+berta semântica de serviços Web at ômicos, foi desenvolvido o OWL-S Composer 2.0
+[Sena et al. 2010] que permite a descoberta e geração visual de composiç ões de SWS
+semanticamente similares àquelas que foram modeladas manualmente.
+A versão 3.0 do plugin é apresentada neste trabalho e integra mecanismos de auto-
+cura durante a fase de execução que permite aumentar a confiabilidade nas composiç ões
+executadas neste ambiente.
+192
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+recuperação em caso de falha conforme descrito a seguir:
+• Reexecutar (Retry):Reexecuta o processo;
+• Substituic¸ ã o
+- Por uma r é plica (ReplaceByEqua:) Efetua uma busca em servidores pré-
+definidos visando selecionar um serviço alternativo que seja uma réplica daquele
+onde foi identificada uma falha. Esse novo serviço selecionado será executado e o
+seu resultado utilizado no fluxo de execução da composição;
+- Por um servic¸o equivalente (ReplaceByEquivalent):Essa estratégia tem
+como  objetivo  selecionar  serviços  que  são  semanticamente  similares                    àquele
+onde a falha foi identificada.                                                               E utilizada a ferramenta OWL-S Discoverypara
+identificação de serviços semanticamente similares. O novo serviço é executado
+e o resultado retornado ao fluxo de execução da composição;
+• Saltar (SkipOptionalService):Essa estratégia tem como objetivo deixar de ex-
+ecutar aqueles serviços que não são essenciais para alcançar o objetivo de uma
+composição. Para tal, é identificado se o serviço que falhou é obrigat ório ou fa-
+cultativo baseado em uma análise dos seus outputs. Se a quantidade deoutputsfor
+igual a zero ou não houverem interligaç ões entre esses outputse outros serviços,
+esse será considerado facultativo e não será executado.  Caso contrário,  é obri-
+gat ório.
+Estas estratégias de recuperação foram utilizadas para definir os mecanismos de
+auto-cura necessários a serem incorporados ao OWL-S Composer a fim de torná-lo mais
+confiável e robusto.
+4. Mecanismo de auto-Cura proposto incorporado no OWL-S Composer
+A fase de auto-cura foi incorporada no OWL-S Composer no processo de execução
+de composiç ões de serviços web.  A estrutura MDR  (Monitoramento, Diagn óstico e
+Recuperação), tal como mostrada na Figura 1, foi gerada baseada na estrutura do MAPE-
+K [Huebscher and McCann 2008]. Há três fases básicas no MDR: Monitoramento, onde
+é feito o processo de avaliação e identificação de uma falha gerada pelo elemento que
+está sendo gerenciado; Diagnó stico, cujo objetivo é avaliar as falhas identificadas e se-
+ã o, onde é executada a estratégia
+de recuperação que irá atuar no elemento gerenciado.                                         E importante ressaltar que esse
+processo é feito de forma automática e dinâmica, não necessitando do usuário qualquer
+modificação nos seus arquivos OWL-S ou criação de outros arquivos auxiliares.
+193
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Figura 1. Estrutura MDR
+As classes ReplaceByEqual,SkipOptionalService,Retrye ReplaceByEquivalent
+são as classes que irão receber a requisição com as informaç ões da falha no processo de
+recuperação (Figura 2). O monitoramento detecta quando ocorrem falhas e realiza uma
+requisição à classe SHMonitorque vai identificar a falha. A classe SHMonitortem como
+objetivo servir de interface entre as classes de execução de serviços da OWL-S API e o
+mecanismo de auto-cura.
+Figura 2. Diagrama de Classes do mecanismo de Auto-cura
+Essa sequência pode ser melhor visualizada através do diagrama de sequência
+definido nas figuras 3 e 4. Na presença de falhas, o primeiro mecanismo de recuperação
+a ser acionado é o Retry. Caso seja possível reexecutar o serviço, este mecanismo realiza
+a recuperação e retorna o valor esperado pela execução do processo.  Em caso negativo
+ou se ocorrer falhas durante o processo de recuperação, a classe SHDiagnosticaciona
+o mecanismo sucessor que é ReplaceByEquale assim sucessivamente. ReplaceByEqual
+implementa a estratégia de ‘substituição por uma réplica’, ReplaceByEquivalentimple-
+menta a estratégia de ‘substituição por um serviço similar’, Retryimplementa a estratégia
+de ’reexecutar’ e SkipOptionalServicimplementa a ‘saltar’. SHDiagnosticé uma classe
+abstrata que implementa métodos comuns às classes concretas e através da interface Di-
+agnosticobriga as subclasses implementarem métodos importantes para a verificação e
+194
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+execução da estratégia.  Em especial, a estratégia de recuperação ReplaceByEquivalent
+necessita de outras classes para efetuar o processo de identificação de similaridade entre
+os serviços que são as classes Degreee SimilarService.
+Figura  3.  Diagrama de sequ                                                                 ência do mecanismo de Auto-cura com início da
+sequ ência
+Figura 4. Diagrama de sequ                                                                   ência do mecanismo de Auto-cura com continuaç   ao
+da sequ ência
+5. Experimentos
+Com o intuito de validar o mecanismo de auto-cura no OWL-S Composer 3.0, seis ex-
+perimentos foram realizados. Os serviços utilizados foram obtidos do Online Portal for
+Semantic ServiceK[ rug et al. 2009], um portal colaborativo sobre SWS que contêm um
+reposit ório de serviços Web semânticos.
+5.1. Ambiente de desenvolvimento
+foi desenvolvido na versão Galileo 3.5.2 do Eclipse, utilizando
+os plugins EMF 2.5.0, GMF 1.2.0, GEF 3.5.1 e JET 1.1.0. As ferramentas integradas ao
+195
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+ambiente e independentes da plataforma Eclipse utilizadas foram: a OWL-S API versão
+1.1.0 e o OWL-S Discoverversão 1.0. Além disso, foi utilizado o JAX-SA com o objetivo
+de efetuar a conversão do arquivo WSDL para o OWL-S. No entanto, foi necessário efe-
+tuar algumas modificaç ões na versão 1.6 que vinha sendo utilizada pelo plugin, visando
+corrigir um defeito encontrado nesse processo de conversão.
+5.2. Servic¸os e Ontologias
+Cada parâmetro utilizado nos serviços web é mapeado em uma classe de uma ontologia
+de domínio.  ´E importante ressaltar que a utilização de ontologias é essencial para a fase
+de substituição por serviços semanticamente similares, pois é por meio delas que serão
+efetuadas as inferências necessárias para identificar correlação entre classes, conforme
+ilustra a Figura 5. Carro possui Sedancomo subclasse e Veículo como superclasse.
+Figura 5. Ontologia   Auto
+5.3. Experimentos Realizados
+O primeiro experimento realizado consiste na manipulação do plugin com o mecanismo
+de auto-cura sem falhas. O objetivo deste experimento foi analisar o funcionamento nor-
+mal da composição de serviços web.
+O segundo experimento analisou o funcionamento do mecanismo Reexecuco                         ã
+(Retry), simulando o estado do sistema na presença de falha por temporização ou por
+omissão (de recebimento e envio), supondo que essas falhas sejam transientes ou inter-
+mitentes.  Para simular a indisponibilidade temporária de um serviço, foi inserido um
+“loop infinito” dentro do serviço descrito para simular uma falhar por timeout. O tempo
+máximo (timeout) definido empiricamente foi de 60 segundos. Ao executar o estudo de
+caso, a falha por timeout foi acionada automaticamente pelo sistema e posteriormente o
+mecanismo de recuperação foi executado e o serviço reexecutado, ocasionando assim no
+sucesso da composição.
+O terceiro experimento se refere à substituição por réplica (ReplaceByEqu)l,ob-
+jetivando simular o estado do sistema na presença de falha por parada, timeout ou por
+omissão (de recebimento e envio), supondo que essas falhas sejam permanentes.  Para
+simular uma parada no funcionando do serviço requisitado, o loop inserido no serviço
+como descrito anteriormente não foi removido.  Uma réplica deste serviço foi inserida
+em um outro servidor sem o loop infinito.  Ao executar o serviço, a falha por timeout
+foi acionada automaticamente e o mecanismo de recuperação tentou reexecutar o serviço,
+196
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+porém houve reincidência da falha, culminando em um problema no acesso ao primeiro
+servidor. O segundo mecanismo foi analisado ReplaceByEquale identificou que existia
+uma réplica.  Dessa forma, realizou a substituição e retornou o resultado correto para a
+continuação da execução da composição.
+O quarto experimento refere-se à substituição por similaridade (ReplaceByEquiv-
+alent), simulando o estado do sistema na presença de falha por parada, timeout ou por
+omissão (de recebimento e envio), supondo que essas falhas sejam permanentes. Há uma
+reincidência do erro no serviço, e na ausência da réplica, o mecanismo ReplaceByEquiv-
+alent é acionado.  Uma busca foi realizada no reposit ório definido e identificou-se um
+serviço similar ao requisitado. Ao realizar a substituição, foi efetuada a execução, conse-
+quentemente o sucesso da composição.
+O quinto experimento refere-se à substituição por réplica (ReplaceByEquivale)t
+com falha de resposta.  Este experimento utiliza o mesmo mecanismo do experimento
+anterior, no entanto, simula o estado do sistema na presença de falha de resposta (de
+valor), supondo que essas falhas sejam permanentes.  Um erro de tipo de retorno (de
+String para int) foi inserido no programa com o intuito de forçar que a falha ocorresse.
+Os mecanismos de Retrye ReplaceByEqualnão foram acionados, uma vez que houve a
+execução correta e como a falha é específica da definição do serviço, a falha irá reincidir
+se for utilizada uma réplica.  Neste caso, foi realizada uma busca em um reposit ório e
+identificou um serviço similar que possui como retorno o tipo String, como esperado pela
+composição. A execução ap ós a substituição ocorreu com sucesso.
+O sexto experimento retrata o Saltar (SkipOptionalService) simulando o estado do
+sistema na presença de falha por parada, timeout ou por omissão (de recebimento e envio),
+supondo que essas falhas sejam permanentes. Um parâmetro de saída da composição foi
+retirado demonstrando que um dos serviços da composição não será mais obrigat ório
+para a sua execução final.  Assim, os parâmetros de saída do serviço requisitado foram
+analisados e foi identificado automaticamente que apesar desse serviço possuir parâmetros
+de saída, esses não tinham ligação com qualquer outro serviço.  Assim, este serviço é
+caracterizado automaticamente como opcional e o mecanismo “Saltar” permitiu que a
+execução da composição continuasse sem a obrigatoriedade do resultado desse serviço.
+6. Resultados obtidos
+A avaliação do plugin OWL-S Composer 3foi baseada nas funcionalidades implemen-
+tadas e divididas em dois contextos: Ferramenta e Estrutura do mecanismo de auto-cura.
+6.1. Ferramenta
+a. Crit é rios analisados
+Baseado em [Chafle et al. 2007], alguns requisitos mínimos para uma ferramenta
+de composição de serviços Web foram definidos: Funcionalidade,Interface,Usabilidade
+e Integrac¸ã o.  Além desses, foi proposto por [Fonseca et al. 2009] o requisito Legibili-
+ao
+de serviços e o mecanismo de auto-cura, o presente trabalho também prop õe mais dois re-
+quisitos Execuc¸ã o e Monitoramentoque estão atrelados ao critério Funcionalidade, con-
+forme abaixo:
+197
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+1.                                                                                        Funcionalidade: O ambiente de desenvolvimento da ferramenta deve permitir
+o suporte de todo o ciclo de vida de uma composição de serviços Web, desde a
+criação até a publicação;
+1.1                                                                                       Execuc¸ã o:    A  ferramenta  deve  permitir  que  o  usuário  execute
+composiç ões, fornecendo o seu resultado final;
+1.2 Monitoramento:  A ferramenta deve fornecer de forma transparente ao
+usuário mecanismos que permitam o aumento da confiabilidade das composiç ões
+durante o processo de execução;
+2.                                                                                        Interface: A interface deve se mostrar simples e funcional ao usuário, não neces-
+sitando que ele utilize recursos extras para implementar a composição de serviços;
+3.                                                                                        Usabilidade: A ferramenta deve possibilitar que o usuário acesse de forma in-
+tuitiva todas as funcionalidades, através da utilização de recursos que permitem
+facilitar o uso, como bot ões e menus, além da intuitiva disponibilização na tela;
+4.                                                                                        Integrac¸ ã o: As funcionalidades que contribuem para a composição de serviços
+Web devem estar integradas, permitindo que os recursos da ferramenta sejam
+aproveitados;
+5.                                                                                        Legibilidade: O c ódigo OWL-S gerado pela ferramenta deve ser legível e corres-
+ponder sintaticamente e semanticamente a um escrito de forma manual;
+6.                                                                                        Grau de similaridade: A ferramenta deve possibilitar ao usuário selecionar os
+graus de similaridade que deseja e, além disso, deve apresentar qual o grau da
+composição resultante.
+b. Avaliac¸ ã o destes Crité rios noOWL-S Composer 3.0
+                                                                                          atendeu aos critérios descritos no t ópico anterior como
+descrito a seguir:
+1.  Funcionalidade: A versão 3.0 do OWL-S Composerincorpora mais duas etapas
+do ciclo de vida de uma composição de serviço Web que são a invocação e moni-
+toramento. A publicação ainda não é suportada, consequentemente, esse requisito
+ainda está sendo parcialmente atendido.
+1.1 Execuc¸ã o: Esse critério é atendido, pois a ferramenta permite a execução
+de composiç ões de serviços gerados ou não pelo plugin.
+1.2 Monitoramento: Com a integração do mecanismo de auto-cura que per-
+mite a identificação dinâmica de falhas, seu diagn óstico e recuperação esse requi-
+sito foi atendido.
+2.  Usabilidade: Esse requisito é atendido pois são utilizados menus e bot ões padr ões
+do ambiente Eclipse. Além disso, a disposição dos elementos gráficos nas janelas
+é padronizada assim como as novas funcionalidades integradas na versão 3.0.
+ao é necessária a
+utilização de ferramentas extras.
+4.  Integrac¸ ã o: Critério atendido pelo plugin uma vez que são utilizados outros plu-
+gins do ambiente Eclipse na ferramenta proposta.
+5.  Legibilidade:  Para avaliar esse requisito,  foram gerados c ódigos OWL-S de
+composiç ões de serviços e comparados manualmente com a especificação do
+padrão.   Além disso, foi utilizado o método de validação de arquivos OWL-
+S  disponibilizado  na  API  e  a  pr ópria  execução  do  arquivo,  que  permite  a
+identificação de possíveis inconsistências.
+198
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+6.  Grau de similaridade: Esse critério é atendido, pois o plugin oferece suporte ao
+filtro dos resultados da geração de composiç ões semanticamente similares pelo
+grau de similaridade definido pelo usuário. Os graus de similaridade disponíveis
+são: Exact,Plugin, Subsumee Sibiling.
+ã                                                                                           o 2 )
+no contexto Ferramenta foram sele-
+cionados dois trabalhos relacionados: o SHIWSe o OWL-S Composer 2.0.
+O  SHIWS não  oferece  suporte  ao  ciclo  de  vida  do  desenvolvimento  de
+composiç ões de serviços web semânticos visto que o mesmo não possui informaç ões
+semânticas. Além disso, não gera arquivos OWL-S e nem trabalha com os graus de simi-
+laridade. No entanto, SHIWSaumenta a confiabilidade dos serviços executados por pos-
+suir um mecanismo de auto-cura, apesar de não ser totalmente transparente ao usuário.  ´E
+importante ressaltar também que como a forma de avaliação dos serviços é feita de forma
+manual para geração de arquivos auxiliares, o critério usabilidadefica comprometido.
+A Tabela  1  apresenta o resultado da análise comparativa entre as ferramentas
+baseadas nos critérios apresentados.  Diante desse contexto,  é possível afirmar que o
+é uma ferramenta adequada para desenvolvimento de composiç ões
+de serviços permitindo a sua execução com uma maior confiabilidade.
+                                                                                            SHIWS               OWL-S Composer 2.0 OWL-S Composer 3.0
+1. Funcionalidade                                                                           Parcial   Parcial   Parcial
+1.1 Execução                                                                                Sim       Não       Sim
+1.2 Monitoramento                                                                           Parcial   Não       Sim
+2. Interface                                                                                Sim       Sim       Sim
+3. Usabilidade                                                                              Não       Sim       Sim
+4. Integração                                                                               Sim       Sim       Sim
+5. Legibilidade                                                                             Não       Sim       Sim
+6. Grau de similaridade                                                                     Não       Sim       Sim
+Tabela 1. Tabela comparativa no contexto ferramenta
+6.2. Estrutura do mecanismo de auto-cura
+a. Crit é rios analisados
+Alguns requisitos foram selecionados para efetuar um comparativo em relação ao
+mecanismo de auto-cura desenvolvido.
+1.  Estrutura extensível:  Visa analisar se a arquitetura permite que novas funcio-
+nalidades relacionadas ao mecanismo de auto-cura sejam inseridas de forma cen-
+tralizada e que não necessite de muito conhecimento do sistema, facilitando a
+sua manutenção. Além disso, que possua baixo acoplamento e alta coesão entre
+classes.
+2.  Abordagem pr á tica:  Tenha ocorrido implementação e experimentos visando
+validar a abordagem.
+3.  Transpar ê ncia ao usuá rio: Permite que o usuário usufrua de todos os mecanis-
+mos de auto-cura sem a necessidade deste realizar qualquer procedimento extra
+ao uso normal do sistema.
+199
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+4.  Descoberta por similaridade: Permite que o sistema flexibilize o processo de
+substituição de serviços utilizando artifícios semânticos, visando alcançar um
+maior n úmero de serviços desejáveis.
+b. Avaliac¸ ã o destes Crité rios noOWL-S Composer 3.0
+atendeu aos critérios descritos no t ópico anterior como
+descrito a seguir:
+1.  Estrutura extensível: A arquitetura foi projetada utilizando os padr ões de projeto
+com o intuito de gerar uma estrutura s ólida e de fácil manutenção.
+2.  Abordagem pr á tica:  Foi desenvolvido um estudo de caso com o objetivo de
+avaliar de uma maneira prática a abordagem proposta.
+3.  Transpar ê ncia ao usuá rio: Não é necessário o uso de qualquer arquivo externo
+ou modificaç ões pelo usuário visando usufruir dos mecanismos de auto-cura.
+4.  Descoberta por similaridade: Foi desenvolvido o mecanismo de ReplaceByE-
+quivalentque permite usufruir das informaç ões semânticas dos arquivos visando
+efetuar o processo de substituição destes serviços.
+ã                                                                                           o 2)
+Dois trabalhos para análise do contexto do mecanismo de auto-cura foram sele-
+cionados: o SH-BPELe o “Mecanismos de recuperação para SWS”. Através do compa-
+rativo com essas ferramentas, foi possível evidenciar as vantagens do uso da versão 3.0
+do plugin OWL-S Composer.
+O SH-BPELpossui uma arquitetura que tem como objetivo facilitar a inserção
+de novos mecanismos e a realização de manutenç ões. No entanto, não possui suporte a
+semântica e necessita que o usuário efetue mapeamentos extras no arquivo do serviço.
+Essa mesma interferência é necessária em “Mecanismos de recuperação para SWS” e,
+adicionalmente, este trabalho foi te órico e o algoritmo proposto não se preocupa com a
+estrutura do mecanismo.
+A Tabela 2 apresenta o resultado da análise comparativa entre os trabalhos através
+dos critérios apresentados anteriormente. Diante desse contexto, é possível afirmar que o
+OWL-S Composer 3p0ossui um mecanismo de auto-cura que é adequado para o aumento
+da confiabilidade das composiç ões de serviços Web.
+                                                                                            SH-BPEL                                                        Mecanismos de recuperação   OWL-S Composer 3.0
+1. Estrutura extensível                                                                     Sim                                                            Não                         Sim
+2. Abordagem prática                                                                        Sim                                                            Não                         Sim
+3. Transparência ao usuário                                                                 Não                                                            Não                         Sim
+4. Descoberta por similaridade                                                              Não                                                            Sim                         Sim
+                                                                                            Tabela 2. Tabela comparativa no contexto estrutura do mecani                               smo de auto-cura
+A versão 3.0 do plugin e as anteriores estão disponíveis para download no site
+https://sourceforge.net/projects/owl-scomposer/.
+7. Conclusã o
+A incorporação de características semânticas aos serviços web facilita o processo de
+descoberta e contribui, principalmente, para as estratégias de substituição de serviços,
+200
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+visando o aumento da confiabilidade e disponibilidade na execução de composiç ões de
+serviços web.  Os sistemas auton ômicos, especificamente, auto-cura(self-healing) vem
+sendo integrada a sistemas de informação com o intuito de aumentar a confiabilidade,
+recuperar as falhas e principalmente manter o sistema em funcionamento de maneira cor-
+reta.
+que integra mecanis-
+mos de auto-cura ao processo de execução de composiç ões de SWS. Desta forma, o OWL-
+S Composer 3.oferece suporte a mais duas etapas do ciclo de vida de uma composição
+de serviços Web: a execução e o monitoramento.
+Como trabalho futuro, pretende-se desenvolver uma modelagem com suporte às
+composiç ões automáticas no OWL-S Composere ampliar os testes de desempenho do
+mecanismo de auto-cura desenvolvido.
+Referê ncias
+Chafle, G., Das, G., Dasgupta, K., Kumar, A., Mittal, S., Mukherjea, S., and Srivastava,
+B. (2007). An integrated development enviroment for web service composition. pages
+839-847, Salt Lake City, Utah, USA.
+Denaro, G., Pezze, M., and Tosi, D. (2007).  Shiws: A self-healing integrator for web
+services. In ICSE COMPANION ’07: Companion to the proceedings of the 29th Inter-
+national Conference on Software Engineering, pages 55-56, Washington, DC, USA.
+IEEE Computer Society.
+Fonseca, A. A., Claro, D. B., and Lopes, D. C. P. (2009). Gerenciando o desenvolvimento
+de uma composição de serviços web semânticos através do owl-s composer.  In Pro-
+ceedings of the 5th Brazilian Symposium of Information Systems (SBSI2009), Brasilia,
+DF, Brazil.
+Horn, P. (2001).  Autonomic computing: Ibm’s perspective on the state of information
+technology. http://www.research.ibm.com/autonomic/.
+Huebscher, M. C. and McCann, J. A. (2008). A survey of autonomic computing - degrees,
+models, and applications. ACM Comput. Surv., 40(3):1-28.
+Krug, A., K üster, U., and Ruhmer, C. (2009).  Opossum online portal for semantic ser-
+vices. http://fusion.cs.uni-jena.de/opossum/index.php.                                      Ultimo acesso em 03 de julho
+de 2010.
+McGuinness,  D.  L.  and  van  Harmelen,  F.  (2004).    Owl  web  ontology  language.
+http://www.w3.org/TR/owl-features/.                                                         Ultimo acesso em 20 de novembro de 2009.
+Modafferi, S., Mussi, E., and Pernici, B. (2006). Sh-bpel: a self-healing plug-in for ws-
+bpel engines.  In MW4SOC ’06: Proceedings of the 1st workshop on Middleware for
+Service Oriented Computing (MW4SOC 2006), pages 48-53, Melbourne, Australia.
+ACM.
+Sena, V. A., Claro, D. B., Amorim, R., and Lopes, D. (2010).  Similaridade semântica
+na composição de sistemas de informação através dos serviços web.  In VI Simpó sio
+Brasileiro de Sistemas de Informao¸                                                         ã                                          á/PA.
+Wiesner, K., Vaculín, R., Kollingbaum, M. J., and Sycara, K. P. (2008). Recovery mech-
+anisms for semantic web services. In DAIS, pages 100-105, Oslo, Norway.
+201
+
+
+
+
+

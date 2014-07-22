@@ -1,0 +1,474 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Problema de roteirizaç ão de veículos com janelas de
+atendimento, frotas heterogêneas e entregas fracionadas
+Marc Antonio Vieira de Queiroz1, Pedro Casagrande Campos1,
+Rodolfo Miranda de Barros1, Jacques Duílio Brancher1
+1Departamento de Computação - Universidade Estadual de Londrina (UEL)
+Caixa Postal 6.001 - 86.051-990 - Londrina - Pr - Brasil
+marc.queiroz@gmail.com,pccampos@gmail.com,{rodolfo,jacques}@uel.br
+Abstract. This paper presents a solution to the vehicle routing problem based on
+the technique of building routes using sequential insertion. The construction of
+routes is based on savings heuristics which is inspired on classical algorithms,
+such as developed by Clarke and Wright in 1964. The heuristics employed ma-
+kes use of four algorithms, Combined Savings (CS), Optimistic Opportunity Sa-
+vings (OOS), Realistic Opportunity Savings (ROS) and Realistic Opportunity
+Savings with a route shape parameter (ROSλ).  The proposed algorithms are
+tested by a set of benchmarks and presents graphic and numeric solutions.
+Resumo. Este artigo apresenta uma soluç ão para o problema de roteirizaç ão
+de veículos utilizando a técnica de construç ão de rotas por inserç ão sequencial.
+A construç ão de rotas baseia-se na heurística de economia inspirada em algorit-
+mos cl ássicos, como o desenvolvido por Clarke e Wright em 1964. A heurística
+de economia empregada faz uso de quatro algoritmos, Economia Combinada
+(EC), Oportunidade Otimista de Economia (OOE), Oportunidade Real de Eco-
+nomia (ORE) e Oportunidade Real de Economia com par âmetro modelador de
+rota (OREλ).  Os algoritmos s ão testados por um conjunto de benchmarks e
+apresentam soluç ões gr áficas e numéricas.
+1.                                                                                           Introduç ão
+O crescimento populacional e a ocupação desordenada nas metr ópoles têm exigido das
+empresas de logística a criação de novos centros de distribuição.  Este tipo de situação
+obriga as empresas a adotarem estratégias para minimizar seus custos operacionais na
+distribuição das encomendas aos clientes em sua periferia.   Para isso utilizam-se de
+técnicas de roteirização de veículos para as operaç ões de entrega.
+Com o crescimento da competição e da evolução dos serviços, os clientes finais
+tem se tornado mais exigentes quando se tratam de horários, o que trouxe um novo desafio
+à tarefa de distribuição. Ao incluir restriç ões de tempo na realização de entregas também
+houve a inclusão de novas necessidades e requisiç ões exigidas por parte do cliente. Por
+isso a concorrência entre empresas terceirizadas de roteirização tem crescido.  E quem
+oferece o serviço mais adaptado ao cliente acaba ganhando destaque no ramo.
+Na busca por oferecer melhores serviços em um tempo mais curto, passando as-
+sim confiabilidade aos clientes, as empresas de transporte têm procurado a saída para os
+desafios através de sistemas de roteirização de veículos, que objetivam construir e orga-
+nizar rotas econ ômicas para distribuição de encomendas a partir de um dep ósito central.
+595
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Aumentando assim a produtividade e visibilidade dos seus clientes no mercado em que
+atuam.
+O problema abordado trata da roteirização de veículos de entrega com capacidade
+de transporte mista e que obedeçam a janelas de atendimento, na literatura estes proble-
+mas são conhecidos como VRPMVTTWSD (Vehicle Routing Problem with Multiple Vehi-
+cle Types, Time Windows and Split Deliveries) [Belfiore and Yoshida Yoshizaki 2009].
+Os  sistemas  de  roteirização  de  veículos  (SRV),  ou  simplesmente  roteirizadores,  ti-
+veram  os  primeiros  estudos  de  casos  e  aplicação  em                                     [Semet and Taillard 1993],
+[Rochat and Semet 1994] e [Brandão 1997].
+Nesses casos citados e em estudos mais recentes os resultados da aplicação
+dos SRV se mostraram satisfat órios, no Brasil um exemplo  é a aplicação desta me-
+todologia num grupo varejista que teve seus custos com transportes reduzidos em 8%
+[Belfiore and Yoshida Yoshizaki 2009].
+Considerando-se o acima exposto, a proposta desse trabalho é apresentar um SRV
+levando em consideração restriç ões de janelas de atendimento e uma frota de veículos
+mista com entregas fracionadas.   O sistema tem como base métodos definidos por
+[Liu and Shen 1999], e por [Dullaert et al. 2002], que aplicam a heurística de inserção
+sequencial definida inicialmente por [Solomon 1987].
+Para este fim, o trabalho está dividido da seguinte forma: Na seção 2, é apresentada
+a formulação do problema . A seguir, na 3 são apresentadas as heurísticas de economia
+que foram utilizadas para o desenvolvimento do c ódigo computacional.  Na seção 4  é
+apresentada a metodologia utilizada.
+2. Formulaç ão do Problema
+Esta seção define as variáveis que comp õem o problema, bem como as heurísticas de
+economia para o VRPMVT que apresenta similaridades com o problema de janelas de
+atendimento.
+Este trabalho estuda um problema real de roteirização de veículos com frota hete-
+rogênea, janelas de atendimento e entregas fracionadas (VRPMVTTWSD 1) na empresa
+○  oferece
+seus serviços para empresas transportadoras que desejam fazer uso do seu SRV.
+O problema  é baseado em um  único centro de distribuição por transportadora,
+ou região de atuação, e pode realizar um n úmero variável de entregas.  As entregas são
+distribuídas através de uma frota de veículos heterogêneas.  A frota de veículos pode
+pertencer a transportadora, cliente da RoadSolution, quanto a terceiros contratados.
+Cada  veículo  relacionado  a  transportadora  possuí  cadastrado  seu  custo  de
+aquisição, fixo e variável. O ciclo de distribuição são de 24 horas, onde a demanda é co-
+nhecida antecipadamente pela coleção de notas fiscais cadastradas no SRV. Cada cliente
+pode ser atendido por mais de um veículo, utilizando a definição de entregas fracionadas.
+Isso pode acontecer quando alguma entrega possuir demanda superior a capacidade do
+maior veículo da frota disponível.
+1 Doravante denominada de VRP
+596
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Os clientes podem possuir restriç ões de janela de tempo e restriç ões de acessibi-
+lidade (ex: alguns clientes não possuem área suficiente para receber grandes caminh ões).
+As hip óteses relacionadas ao centro de distribuição:
+• A demanda dos clientes é conhecida;
+• Planejamento de entrega de um dia;
+• O tempo de entrega é determinado por ponto atendido, portanto variável;
+A formulação matemática do modelo apresentado está listada a seguir.
+2.1. Clientes
+O problema  é dado por um conjunto de clientes N                                                 =  1, 2, · · · , n, localizados em n
+posiç ões distintas, o ponto 0 é definido como o dep ósito central. Cada par de localizaç ões
+(i, j), onde i, j ∈ N e i = j, está associado com uma viagem de tempo tij  e a distância
+percorrida dij .  Os valores de tij  e dij  são simétricos, ou seja, tij                         = tji  e dij   = dji.  A
+demanda no ponto i é qi com i = 1, 2, · · · , n.
+2.2. Frota de veículos
+Todos os clientes são visitados a partir de um dep ósito central por uma frota heterogênea,
+com os veículos deixando e retornando ao dep ósito central. A demanda de cada cliente é
+conhecida. Para problemas com frota heterogêneas tem-se um conjunto T  = 1, · · · , k de
+diferentes tipos de veículos.
+Um veículo do tipo k  ∈ T tem a capacidade ak , um custo fixo fk  e um custo
+variável por unidade de distância gk . O custo do veículo do tipo k ∈ T realizar o percurso
+(i, j) é denotado por cij , no qual é obtido pela multiplicação da distância dij pelo custo
+gk . O n úmero de veículos do tipo k é assumido como ilimitado (nk  = ∞, k ∈ T ).
+Existem restriç ões de acessibilidade com relação ao tipo de caminhão que realiza
+as entregas.  A maioria dos casos estão ligados a quest ões operacionais como veículos
+muito grandes. Nestas situaç ões podem-se assumir que o custo cij  = ∞ quando nem o
+cliente i ou j podem ser atendidos pelo veículo do tipo k.
+Seja Ri  = ri(1), · · · , ri(ni) a rota do veículo i, onde ri(j) é o índice do j-ésimo
+cliente visitado e ni  é o n úmero de clientes na rota. Assume-se que toda rota termine no
+ponto central, ri(ni  + 1) = 0.
+2.3. Janela de atendimento
+Cada cliente i ∈ {1, 2, · · · , n} deve ser atendido. Cada cliente possui uma restrição de
+janela de tempo [ai, bi] tal que ai  ≤ bi, que corresponde, respectivamente ao horário inicial
+e final em que pode ser iniciado o atendimento. O tempo de atendimento si representa o
+tempo de descarga dos veículos (tempo médio de todos os processos administrativos e de
+operação). Uma rota pode ser formada por um único cliente ou por vários clientes.
+2.4. Entregas Fracionadas
+A demanda de cada cliente pode ser atendida por um ou mais veículos. Isso ocorre em
+casos onde a demanda excede a capacidade do maior veículo disponível para entrega, ou
+nos casos que o fracionamento se mostrar eficiente em relação ao custo.
+597
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+As variáveis de decisão do modelo são:
+{
+1,   se j é atendido ap ós i pelo veículo do tipo k;
+xij  =
+0,   caso contrário.
+bi  = momento de início de atendimento do cliente i pelo veículo do tipo k, i =
+1, · · · , n e v = 1, · · · , T .
+yi  = fração da demanda do cliente que é realizado pelo veículo do tipo k.
+O objetivo do modelo  é minimizar a distância viajada respeitando a restrição
+da  janela  de  atendimento.    Baseado  nos  trabalhos  de                                      [Dror and Trudeau 1989]  e
+[Ho and Haugland 2004], onde o objetivo é encontrar:
+∑                                                                                                ∑                            ∑
+min                                                                                                                                 dijxij
+i=0                                                                                              j=0                          k=1
+Além desta equação principal que precisa ser resolvida, há uma série de restriç ões
+que devem ser observadas. Tais restriç ões podem ser encontradas de forma detalhada em
+[Ho and Haugland 2004].
+3. Heurísticas de Economia VRPMVT
+O algoritmo mais famoso, de [Clarke and Wright 1964] (CW), foi desenvolvido para re-
+solver o problema clássico de VRP. Seja cij  o custo de transporte do cliente i para o j.
+Nesse algoritmo, cij  pode ser igual a distância dij  ou tij , no qual cada cliente é inicial-
+mente servido por um único veículo.
+Duas rotas distintas contendo os clientes i e j podem ser combinadas se i e j são o
+primeiro e o último cliente de suas respectivas rotas, e se a demanda total combinada não
+exceder a capacidade do veículo.  [Clarke and Wright 1964] definiu que a economia que
+pode ser alcançada combinando duas rotas em uma é: Sij  = ci,0  + c0,j  − ci,j . Para cada
+iteração as duas rotas com a maior economia são unidas. Este procedimento incremental
+continua até que nenhuma rota possa ser combinada.
+Pode ser visto que CW ignora o custo de aquisição do veículo.  Então  é espe-
+rado que a utilização do algoritmo puro de CW em VRPMVT resultará em uma solução
+deficiente. Consequentemente, [Golden et al. 1984] modificou a f órmula de CW conside-
+rando os custos de aquisição de uma maneira explicita. A seguir, serão apresentados uma
+revisão dos quatro algoritmos de economia propostos no trabalho:
+(1) Economia Combinada (EC)
+Seja F (z) o custo de aquisição do menor veículo que pode servir a rota com uma demanda
+total igual a z. Se k é o primeira ou última entrega da rota, utiliza-se zk  para expressar
+a demanda naquela rota. Claramente, duas rotas com demanda total, respectivamente de
+zi  e zj  pode ser combinado por um veículo que custa F (zi  + zj ). Portanto, a economia
+combinada das duas rotas é:
+= Si,j  + F (zi) + F (zj ) − F (zi  + zj )                                                       (1)
+i,j
+598
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+(2) Oportunidade Otimista de Economia (OOE)
+Como possíveis economias são ignoradas nas combinaç ões futuras, a EC tende a ser falha
+na combinação de duas rotas. A heurística OOE considera o potencial extra de economia
+através da capacidade não utilizada, ap ós a união de duas rotas. Seja P (z) a capacidade
+do menor veículo que pode servir a rota com uma demanda de z.  [Golden et al. 1984]
+define a f órmula de OOE como segue:
+i,j                                                                                          i,j        + F (P (zi  + zj ) − zi  − zj )   (2)
+(3) Oportunidade Real de Economia (ORE)
+Até mesmo para uma pequena quantidade de z, a f órmula OOE é otimista, pois assume
+que a capacidade não utilizada de z pode sempre economizar uma rota que tem a demanda
+menor ou igual a capacidade do veículo P (z). Para evitar a sobre combinação de rotas, a
+ORE revisa a f órmula de OOE da seguinte forma: Primeiro, a oportunidade de economia
+será adicionada a f órmula, se a combinação de duas rotas resultar no uso de um veículo
+maior do que o atual alocado para a rota. Segundo, o valor da oportunidade de economia é
+o custo de aquisição do maior veículo que tem a capacidade menor ou igual a capacidade
+não utilizada depois da união das duas rotas.  Seja F ′(z) o custo de aquisição do maior
+veículo no qual a sua capacidade seja menor ou igual a z. Então a f órmula de economia
+do procedimento ORE pode ser expressa como segue:
++ δ(τ )F ′(P (zi  + zj ) − zi  − zj ),
+i,j                                                                                          i,j
+onde
+                                                                                                        (3)
+τ = P ({i  + zj ) − P ( max(zi, zj )),
+0                                                                                            se τ = 0
+δ(τ ) =
+1                                                                                            se τ > 0
+(4) ORE com um par âmetro modelador de rota λ (OREλ)
+O algoritmo OREλ  simplesmente modifica a f órmula de economia do CW para c0,i  +
+cj,0  − λci,j . Então a nova f órmula de economia para OREλ  é dada por:
+                                                                                                        + (1 − λ)ci,j                     (4)
+i,j                                                                                          i,j
+Em contraste com as três f órmulas anteriores, o algoritmo (OREλ) resolve cada
+problema variando os valores de λ a partir de um conjunto pré-definido de valores.  O
+melhor resultado dessas execuç ões é selecionado como final.
+Os quatro algoritmos acima focam na modificação da f órmula de economia de
+CW, mesmo assim apresentam similaridades. Outro fator de destaque, uma vez que duas
+rotas são combinadas, no pr óximo passo iterativo do algoritmo, será necessário recalcular
+os valores daquela rota. Com a utilização de técnicas de programação dinâmica é possível
+melhorar a performance da execução.
+599
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+4. Metodologia para o VRP
+Uma rota pode conter um ou mais clientes.  Seja TIPO-I e TIPO-II o conjunto de rotas
+contendo somente um cliente ou contendo no mínimo dois clientes, respectivamente. Para
+os algoritmos de economia demonstrados anteriormente, quaisquer duas rotas podem ser
+combinadas caindo em um dos seguintes 3 casos: (1) TIPO-I, TIPO-I, (2) TIPO-II, TIPO-I
+e (3) TIPO-II,TIPO-II.
+Um exemplo das combinaç ões podem ser acompanhados na figura 1. No entanto
+pode-se interpretar esses casos através de um ponto de vista de inserção, ao invés do
+conceito tradicional de combinação.  Sabe-se que as rotas construídas para o problema
+VRPMVTTW são direcionados. Para estender a explicação sup õe-se para uma rota dire-
+cionada do TIPO-II, seja (0-f-...-g-0), chama-se a orientação (f-...-g) de caminho genérico
+e (g-...-f) de caminho inverso.
+ao
+Com a inserção pela orientação dos clientes pode-se combinar as operaç ões dos
+algoritmos baseados em CW. Segundo [Solomon 1987] algoritmos que aplicam inserção
+incremental geram resultados melhores para solução de problemas com janelas de aten-
+dimento.  Todos as arestas de uma rota pode gerar uma nova combinação na inserção
+de um novo ponto de entrega.  Portanto a maneira de encontrar um possível resultado é
+calcular a economia para cada combinação possível na rota. Para lidar com o problema
+do VRPMVTTW desta forma, é necessário descrever as condiç ões que tornam viáveis a
+execução das rotas.
+5. Resultados Computacionais e Discuss ões
+Para testar a performance computacional dos métodos propostos foram utilizados os ben-
+chmarks propostos por [Solomon 1987]. As modificaç ões em relação ao benchmark estão
+600
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+na utilização de frota de veículos com diferentes capacidades de transporte e uso de en-
+tregas fracionadas.
+○  2, realiza a anotação
+de pendência para as notas fiscais que apresentam demanda superior a capacidade de
+transporte do maior veículo. A técnica empregada para o fracionamento das entregas é a
+mesma utilizada por [Belfiore and Yoshida Yoshizaki 2009].  No pré-processamento das
+notas fiscais, o fracionamento acontece dividindo-se automaticamente ou manualmente
+a demanda do cliente, de tal forma a não superar a capacidade máxima de transporte da
+frota disponível.
+Os problemas apresentados podem ser agrupados em seis diferentes categorias:
+R1, C1, RC1 e R2, C2, RC2.  As letras R, C e RC dizem respeito a forma como os
+pontos foram gerados.  R para rand ômico, C para agrupados do inglês clustered e RC
+combinação de rand ômico com agrupados. Os n úmeros 1 e 2 dizem respeito as janelas de
+atendimento, o n úmero 1 são para janelas de atendimento mais curtas e o n úmero 2 para
+janelas de atendimento mais longas.
+Abaixo será apresentada uma solução por grupo, totalizando seis testes.  Cada
+um dos testes irá apresentar a distribuição visual dos clientes (pontos de entrega) e o
+dep ósito central.  Os clientes são representados por círculos, pontos desconectados são
+pendentes de entrega. Os dep ósitos são representados por quadrados. Nos testes realiza-
+dos os dep ósitos estão “geocodificados” em dois grupos os R e C, RC. A solução para
+as rotas é apresentada por arestas ligando os clientes e o dep ósito, com origem e fim no
+dep ósito central, a quantidade de veículos utilizados também define o n úmero de rotas
+para a solução apresentada.
+Os algoritmos utilizados foram o de Economia Combinada(EC), Oportunidade
+Otimista de Economia(OOE), Oportunidade Real de Economia(ORE) e Oportuni-
+dade Real de Economia com par âmetro modeladorOREλ. Serão apresentadas as me-
+lhores soluç ões para cada grupo de teste utilizando métricas como distância total percor-
+rida pela frota, taxa de ocupação, n úmero e quantidade de veículos utilizados e custo total
+do transporte realizado.
+Todas as figuras utilizadas para a representação dos grupos de testes foram retira-
+○, segue uma breve introdução ao SRV. A aplicação utiliza
+uma plataforma cliente-servidor. O servidor foi desenvolvido em Java, utilizando Spring-
+Framework 2.0, banco de dados Postgres-8.4, Postgis-1.5 e Pgrouting.  A comunicação
+com cliente é realizado através de uma aplicação Rich Internet Application(RIA), utili-
+zando Adobe Flex, integrada com o servidor através do BlazeDS (Adobe Remoting Mes-
+sage System).  A aplicação Flex utiliza o sistema de visualização de mapas OpenScales
+para traduzir visualmente as informaç ões geoespaciais.
+A versão do SRV utilizada para execução dos benchmarks foi modificada especi-
+almente para testar eficiência dos algoritmos implementados.  Portanto o percurso entre
+dois pontos será a distância euclidiana e o tempo de viagem será igual a essa distância.
+Na versão do software em produção os percursos são baseados em velocidades médias re-
+tiradas dos mapas digitais da malha viária brasileira. O resultado visual desse percurso no
+○, aplica-
+○  disponível na internet. A diferença é que a implementação
+601
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+do SRV utiliza uma pilha de softwares independentes e de c ódigo aberto.
+A tabela 1 mostra a configuração dos veículos utilizados, e a tabela 2 apresenta
+○.
+Tabela 1. Tipos de veículos utilizados nos testes.
+Veículo                                                                            Capacidade   Custo Fixo   Custo Vari ável
+A                                                                                  30           50           10
+B                                                                                  50           80           16
+C                                                                                  80           140          26
+D                                                                                  120          250          43
+E                                                                                  200          500          68
+                                                                                                                               oes encontradas para os benchmaks testados
+Teste                                                                              De (UP)      Di (UD)      O.M. (%)          Veículos                                     Unidades Monet árias
+R101                                                                               1458         2538.87      81.45             42                                           36925.18
+C101                                                                               1810         2641.09      92.35             38                                           49186.48
+RC101                                                                              1724         3006.69      93.19             37                                           51597.44
+R201                                                                               1458         2104.63      81.91             33                                           42443.68
+C201                                                                               1810         1578.84      89.60             17                                           75620.71
+RC201                                                                              1724         2309.44      91.22             26                                           62275.73
+5.1. Testes
+Tabela 3. Legenda para abreviaturas da tabela 2
+Sigla   significado
+De     Demanda
+Di                                                                                 Distância
+O.M.   Ocupação média
+UP     Unidades de peso
+UD     Unidades de distância
+602
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+(a) Pendências                                                                               (b) Rotas Geradas
+Figura 2. Teste R101
+E  possível  notar  na  figura                                                               2a  a  distribuição  rand ômica  de  clientes  e  uma
+aglomeração na parte inferior esquerda da mesma. A figura 2b apresenta a melhor solução
+encontrada para R101 que utilizou os algoritmos OOE e EC.
+(a) Pendências                                                                               (b) Rotas Geradas
+Figura 3. Teste C101
+E possível notar na figura 3a a distribuição agrupada dos pontos, apesar disto, o
+que importa são os requisitos das janelas de atendimento apresentadas por cada cliente. A
+figura 3b apresenta uma solução encontrada para C101 que utilizou o algoritmo OOE e
+a estratégia de primeiro ponto mais distante, ou seja, montar as rotas com o ponto inicial
+mais distante do dep ósito.
+E possível notar na figura 4a a distribuição agrupada dos pontos na periferia da
+mesma, enquanto a  área central apresenta a maioria dos pontos rand ômicos.  A figura
+4b apresenta uma solução encontrada para RC101 que utilizou o algoritmo ORE e a
+estratégia de primeiro ponto mais distante.
+A figura 5a apresenta os clientes a serem atendidos, com uma demanda total de
+1458 unidades de peso a serem transportadas.  Nesse teste as janelas de atendimento
+são mais alongadas, permitindo maior oportunidade na elaboração de rotas. A figura 5b
+apresenta a melhor solução encontrada para R201 que utilizou o algoritmo OOE.
+603
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+(a) Pendências                                                   (b) Rotas Geradas
+Figura 4. Teste RC101
+(a) Pendências                                                   (b) Rotas Geradas
+Figura 5. Teste R201
+(a) Pendências                                                   (b) Rotas Geradas
+Figura 6. Teste C201
+604
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+A figura 6a apresenta os clientes a serem atendidos, com uma demanda total de
+1810 unidades de peso a serem transportadas. A figura 6b apresenta uma solução encon-
+trada para o grupo de teste C201 que utilizou o algoritmo ORE e a estratégia de primeiro
+ponto mais pr óximo.
+(a) Pendências                                                                               (b) Rotas Geradas
+Figura 7. Teste RC201
+A figura 7a apresenta os clientes a serem atendidos, com uma demanda total de
+1724 unidades de peso a serem transportadas.                                                 E possível notar a distribuição agrupada
+dos pontos na periferia da figura, enquanto a área central apresenta a maioria dos pontos
+rand ômicos.  A figura 7b apresenta uma solução encontrada para RC201 que utilizou o
+algoritmo OOE e a estratégia de primeiro ponto mais distante.
+6. Conclus ão
+Com o objetivo de resolver os problemas de roteirização com frotas heterogêneas, en-
+tregas fracionadas e janelas de atendimento, apresentaram-se formulaç ões matemáticas e
+uma heurística construtiva para atender ao VRP proposto no trabalho.
+Os algoritmos apresentados tiveram seus resultados escolhidos entre os fatores,
+custo do transporte, distância percorrida e taxa de ocupação média dos veículos.  A
+heurística de inserção sequencial não  é  um método exato de solução, mas sim uma
+aproximação.  Portanto, esse estudo procurou avaliar a eficiência entre os algoritmos
+quando todos esses fatores são levados em consideração.
+Notou-se que o pior resultado é apresentado para os pontos aleat órios. O melhor
+resultado foi obtido para os pontos agrupados, apresentando uma melhor eficiência para
+○  pode-
+se notar que as transportadoras que fazem o uso do SRV definem 3 tipos de janela de
+atendimento, manhã, tarde e noite.  Se as janelas de atendimento do benchmark fossem
+geradas tendo como escolha um grupo limitado de períodos de entrega as rotas geradas
+apresentariam uma maior eficiência.
+O tempo computacional gasto para execução dos algoritmos é praticamente des-
+prezível, pois utilizou-se percursos euclidianos. Nesse sentido nenhuma referência é feita
+ao tempo computacional.
+605
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Quanto a utilização dos veículos o algoritmo mostrou-se eficiente pela alta taxa
+de ocupação alcançada. Esse é um dos fatores comerciais mais importantes para esse tipo
+de software.
+Na revisão bibliográfica realizada não foi possível observar menç ões a softwa-
+res que mesclassem soluç ões numéricas e visuais para os benchmarks apresentados por
+[Solomon 1987].  O diferencial das soluç ões apresentadas  é o padrão geométrico das
+soluç ões propostas, pois além do resultado numérico é possível acompanhar detalhes do
+agrupamento das rotas em setores.  Ressaltando que o algoritmo de inserção sequencial
+não emprega nenhum tipo de organização por varredura ou setorização.
+A utilização de diferentes algoritmos mostrou que EC e OOE apresentam melho-
+res resultados para encontrar caminhos mais curtos, utilizando veículos de maior capa-
+cidade de transporte.  E o algoritmo ORE encontra rotas com custo total de transporte
+mínimo.
+Referências
+Belfiore, P. and Yoshida Yoshizaki, H. T. (2009). Scatter search for a real-life heteroge-
+neous fleet vehicle routing problem with time windows and split deliveries in Brazil.
+European Journal Of Operational Research, 199(3):750-758.
+Brandão, J. (1997). A tabu search algorithm for the multi-trip vehicle routing and sche-
+duling problem. European Journal Of Operational Research, 100(1):180-191.
+Clarke, G. and Wright, J. W. (1964).  Scheduling of Vehicles from a Central Depot to a
+Number of Delivery Points. Operations Research, 12(4):568-581.
+Dror, M. and Trudeau, P. (1989).  Savings by Split Delivery Routing.  Transportation
+Science, 23(2):141-145.
+Dullaert, W., Janssens, G. K., S örensen, K., and Vernimmen, B. (2002). New heuristics
+for the Fleet Size and Mix Vehicle Routing Problem with Time Windows. Journal of
+the Operational Research Society, 53(11):1232-1238.
+Golden, B., Assad, A., Levy, L., and Gheysens, F. (1984). The fleet size and mix vehicle
+routing problem. Computers & Operations Research, 11(1):49-66.
+Ho, S. C. and Haugland, D. (2004).  A tabu search heuristic for the vehicle routing pro-
+blem with time windows and split deliveries.  Computers & Operations Research,
+31(12):1947-1964.
+Liu, F.-h. and Shen, S.-y. (1999).  A method for vehicle routing problems with multiple
+vehicle types and time windows. In Proceedings of Natural Science Council.
+Rochat, Y. and Semet, F. (1994). A Tabu Search Approach for Delivering Pet Food and
+Flour in Switzerland. The Journal of the Operational Research Society, 45(11):1233.
+Semet, F. and Taillard, E. (1993).  Solving real-life vehicle routing problems efficiently
+using tabu search. Annals of Operations Research, 41(4):469-488.
+Solomon, M. M. (1987).  Algorithms for the Vehicle Routing and Scheduling Problems
+with Time Window Constraints. Operations Research, 35(2):254-265.
+606
+
+
+
+
+

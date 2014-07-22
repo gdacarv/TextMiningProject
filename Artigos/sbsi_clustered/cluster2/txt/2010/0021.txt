@@ -1,0 +1,465 @@
+﻿TellStory-Analyzer: Um mecanismo para aprimorar a
+externalização do conhecimento
+Miguel G. P. Carvalho, Ruben P. Albuquerque,
+Marcos R. S. Borges, Vanessa Braganholo
+Programa de Pós Graduação em Informática - Universidade Federal do Rio de Janeiro
+(UFRJ) - Rio de Janeiro, RJ, Brasil
+{miguelgabriel,rrpero}@ufrj.br,mborges@nce.ufrj.br
+braganholo@dcc.ufrj.br
+Abstract. People and organizations have a need to review past events with the
+intention of reconstructing knowledge for several purposes. Group Storytelling
+is an important approach to knowledge retrieval and externalization through
+the collaborative construction of stories. However, in a Group Storytelling
+dynamic, past experiences show that it is not always easy to get the group
+committed.  This  paper  aims  to  demonstrate  that  through  computational
+mechanisms it is possible to increase the participation and contribution of the
+group. For this we’ve used the TellStory tool, that implements the Group
+Storytelling approach, and the TellStory-Analyzer mechanism, that aims to
+make a quantitative and qualitative analysis of the stories and also to analyze
+the participation and contribution of those involved.
+Resumo.  Pessoas  e organizações  têm necessidade de recordar  eventos  e
+acontecimentos passados com o intuito de reconstruir o conhecimento para
+diversas  finalidades.  O  Group  Storytelling  é  uma  importante  técnica  de
+recuperação de conhecimento, através de composição de narrativas em grupo
+visando  auxiliar  na  externalização.  No  entanto,  experiências  anteriores
+mostram que nem sempre é fácil obter o comprometimento do grupo na
+dinâmica do Group Storytelling. Este artigo visa a demonstrar que através de
+mecanismos   computacionais   é   possível   aumentar   a   participação   e
+contribuição do grupo. Para isso foi utilizado a ferramenta TellStory que
+implementa o Group Storytelling e o mecanismo TellStory-Analyzer que tem
+por  objetivo  fazer  uma  análise  quantitativa  e qualitativa  das  histórias  e
+também analisar a participação e contribuição dos envolvidos.
+1. Introdução
+O conhecimento é o ativo mais valioso de uma organização [Prusak, 2001]. A gestão
+adequada deste   bem pode estabelecer diferenciais competitivos para empresas [Alavi e
+Leidner,                                                                                 1999].  Pessoas  e  organizações  têm  necessidade  de  recordar  eventos  e
+acontecimentos passados com intuito de reconstrução do conhecimento para diversas
+finalidades, como, por exemplo, a tomada de decisões futuras, registro de uma memória
+organizacional e melhor entendimento de um acontecimento passado.
+O conhecimento pode ser caracterizado de duas formas: conhecimento tácito e
+explícito                                                                                [Nonaka,                                                                       1991].  O  conhecimento  tácito  é  pessoal,  adquirido  através  da
+experiência e permanece no intelecto individual. Já o conhecimento explícito envolve a
+captura e representação dos fatos, sendo facilmente codificado e transmitido [Paula e
+
+
+
+
+Cianconi, 2007]. A dificuldade no processo de gestão do conhecimento está em como
+permitir a sua externalização - transformação do conhecimento tácito para explícito - de
+uma forma eficaz.
+Uma técnica utilizada para a externalização do conhecimento é a técnica de
+Group Storytelling, ou contagem de histórias em  grupo, onde pessoas contribuem
+síncrona ou assincronamente para a reconstrução de eventos e fatos através da contagem
+de histórias. Os participantes do Group Storytelling podem estar no mesmo local ou
+geograficamente distribuídos [Valle, Prinz e Borges, 2002]. A contagem de histórias é
+um  caminho  natural  para  a  transformação  de  conhecimento  tácito  em  explícito
+[Carminatti, Borges e Gomes, 2005].
+Para apoiar a construção colaborativa de histórias utilizando a técnica de Group
+Storytelling, Perret, Borges e Santoro (2004) propuseram a ferramenta TellStory1. O
+TellStory é um importante mecanismo de recuperação do conhecimento, testado em
+diversos contextos [Perret, 2004; Carminatti, 2006]. Contudo, a ferramenta possui um
+problema recorrente em aplicações práticas, que é a falta de comprometimento dos
+participantes durante a dinâmica, gerando poucos fragmentos e uma história pobre
+[Laporti, Borges e Braganholo, 2009]. O TellStory-Analyzer, proposto neste trabalho,
+tem por objetivo estimular a maior cooperação e participação das pessoas envolvidas na
+contagem das histórias, a fim de promover uma maior externalização do conhecimento.
+A idéia é fornecer recursos para o gerenciamento global das histórias com apoio de
+análises qualitativas e quantitativas dos fragmentos, de forma que os participantes sejam
+estimulados a participar dos relatos.
+A partir de um experimento realizado com dois grupos utilizando a ferramenta
+TellStory, foram levantados requisitos para o desenvolvimento do mecanismo proposto
+nesse artigo  - o TellStory-Analiser. Em ambos os grupos, cada participante assistiu
+apenas  a  algumas  cenas  de  um  filme,  com  o  intuito  de  tentar  reconstruí-lo.
+Adicionalmente,  no  segundo  experimento  foi  proposta  uma  etapa  para  refinar  a
+reconstrução  do  conhecimento.  Para  validação  desse  mecanismo  foi  utilizado  um
+terceiro grupo, que foi submetido ao mesmo experimento, porém contando com o
+auxilio  computacional  do  TellStory-Analyzer.  Com  isso,  foi  possível  identificar
+evidências  de  que  mecanismos  de  gerência  de  histórias  permitem  um  ganho  na
+externalização  do  conhecimento,  pois  no  terceiro  grupo  foi  possível  constatar  um
+acréscimo  de  qualidade  e  quantidade  dos  fragmentos  e  comentários  descritos  no
+TellStory.
+Este artigo está organizado da seguinte maneira. A Seção 2 descreve a técnica
+Group Storytelling e a ferramenta TellStory. A Seção 3 descreve os dois experimentos
+que permitiram o levantamento de requisitos para a construção do TellStory-Analyzer e
+apresenta uma análise desses experimentos. Na Seção 4 apresentamos o mecanismo
+TellStory-Analyzer. Por fim, na Seção 5 descrevemos o terceiro experimento e o ganho
+com a utilização do TellStory-Analyzer, seguido da conclusão desse artigo na Seção 6.
+2. Group Storytelling
+Perret                                                                                       (2004)  descreve  três  maneiras  para  reconstruir  a  história  de  um  trabalho
+executado e concluído por um grupo. A primeira delas é delegar a tarefa a um dos
+1 http://chord.nce.ufrj.br:8080/tellstoryinv
+
+
+
+
+integrantes da equipe, que deverá contar todos os fatos de que se lembra. Este método é
+inadequado porque um único integrante não detém o conhecimento total do fato. O
+segundo método consiste em fazer entrevistas com todos os membros do grupo. Embora
+esse método possa permitir um enriquecimento da história em comparação com o
+primeiro, as entrevistas individuais ainda não estimulam a interação da equipe. O
+terceiro método é o  Group Storytelling, onde todos os membros do grupo têm a
+possibilidade de dialogar entre si formando no final um conhecimento que será a
+combinação do conhecimento de cada participante.
+Valle, Prinz e Borges  (2002) definem a técnica de Group Storytelling como
+sendo a construção de histórias na qual “mais de uma pessoa contribui, síncrona ou
+assincronamente, localmente ou de maneira distribuída, em vários pontos do processo,
+através de diversas mídias”. A técnica de Group Storytelling envolve a interação entre
+os participantes durante um tempo pré-determinado. Ao final da aplicação dessa técnica
+é formada uma história, que é a combinação dos conhecimentos de todos os membros.
+A vantagem dessa dinâmica é que durante sua aplicação os membros do grupo têm a
+possibilidade de lembrar e relatar coisas não descritas inicialmente, lembranças estas
+que são estimuladas pela leitura do relato de outros participantes.
+Como forma de auxiliar a aplicação da técnica do Group Storytelling, existem
+vários mecanismos e ferramentas que fornecem apoio computacional. Podem ser citados
+como ferramentas e mecanismo que implementam o Group Storytelling:
+StoryTellingADR: sistema construído pela Universidade Técnica de Lisboa que utiliza
+as técnicas de Group Storytelling no contexto judicial visando à resolução de conflitos,
+dentro da esfera legal através da contagem de história [Silva, 2006].
+BPM  Story:  aplicação  web  desenvolvida  para  desenho  de  processos  através  da
+contagem de histórias [Costa, Araújo e Borges, 2009].
+Athena: aplicação web para elicitação de requisitos de um sistema. A dinâmica de
+elicitação de requisitos utiliza Group Storytelling [Laporti, Braganholo e Borges, 2009].
+TellStory: aplicação Web que tem por objetivo a construção colaborativa de histórias,
+para assim explicitar o conhecimento compartilhado por um grupo [Perret, 2004].
+No TellStory, a história é uma seqüência de eventos que estão ligados uns aos
+outros por uma seqüência de fragmentos e comentários descritos pelos membros do
+grupo de forma síncrona ou assíncrona. Fragmentos são pequenos trechos da história
+contada pelos usuários, e comentários são interações textuais dos participantes feitas a
+partir da leitura dos fragmentos. Entre os recursos disponibilizados por essa ferramenta
+estão a atribuição de papéis aos seus usuários e a organização da seqüência de eventos.
+O  objetivo  final  dessa  ferramenta  é  a  construção  de  histórias                      (fatos)  através  de
+narrativas.
+Para  uma  melhor  externalização  do  conhecimento,  seja  através  do  Group
+Storytelling, seja por outra técnica, é de fundamental importância que os participantes
+estejam  motivados  e  tenham  comprometimento  com  o  trabalho  que  está  sendo
+desenvolvido. O mecanismo TellStory-Analyzer procura atuar nessa lacuna, permitindo
+um auxílio computacional para um maior comprometimento e motivação dos indivíduos
+através da gerência de histórias.
+
+
+
+
+3. Experimento para Levantamento de Requisitos
+Para a elicitação dos requisitos que compõem o TellStory-Analyzer e para comprovar
+que  mecanismos  de  gerência  de  histórias  permitem  uma  maior  externalização  do
+conhecimento, foram feitos dois experimentos utilizando a ferramenta TellStory. Para
+esse estudo foram utilizados questionários e análise dos perfis e da participação dos
+membros. A partir desses experimentos realizou-se um estudo sobre como obter uma
+participação mais efetiva dos membros das histórias.
+Nesses experimentos foram atribuídos os seguintes papéis aos membros da
+história:
+   Facilitador - membro da história que tem a função de coordenar e organizar a
+história.
+   Relator - membro que tem como função redigir a história final a partir dos
+fragmentos e comentários lidos.
+    Usuário comum - papel desempenhado por todos os membros do grupo que
+constroem a história.
+Ambos os experimentos foram realizados utilizando-se um filme, do qual cada
+participante poderia assistir apenas a alguns trechos. O objetivo final era recriar a
+história do filme juntamente com os demais participantes. Os experimentos ocorreram
+em três etapas:
+1º Etapa: Os participantes assistiram aos trechos do filme atribuídos a eles.
+2º Etapa: Os participantes descreveram os trechos assistidos usando o mecanismo
+TellStory e contribuíram para a reconstrução da história através da interação com os
+outros participantes. A interação com os outros participantes ocorreu pela leitura dos
+fragmentos dos demais participantes, pela adição de novos fragmentos e também pela
+inserção de comentários sobre os fragmentos já inseridos.
+3º Etapa: O relator da história, que também podia ser um participante, fez uma síntese
+de todos os fragmentos e tentou reconstruir a história.
+3.1. Primeiro Experimento
+Para o primeiro experimento, foram selecionados 7 participantes, sendo que 6 assistiram
+a trechos do filme e relataram os fragmentos e 1 teve a função de relator. O perfil dos
+participantes era o seguinte:  2 professores  (49 e 48 anos), 1 jornalista  (25 anos), 1
+estudante (22 anos), 1 defensor público (37 anos), 1 analista de sistemas (55 anos) e 1
+administrador (53 anos), que exerceu os papéis de relator e facilitador. O filme foi
+dividido de tal forma que os participantes precisassem uns dos outros para reconstruir a
+história.  Nesse  primeiro  experimento,  nenhuma  parte  do  filme  foi  ocultada  dos
+participantes.  Porém,  nem  todos  viram  a  mesma  proporção  do  filme.  Para  os
+participantes de 1 a 6, foram exibidos respectivamente 26%, 18%, 15%, 17%, 20% e
+18% do filme. É importante ressaltar que havia interseção entre os trechos assistidos por
+alguns dos participantes.
+Para a exibição do filme foi reservado uma semana. Logo depois dessa etapa
+houve o período de interação entre os participantes utilizando a ferramenta TellStory.
+Para essa segunda etapa foi também reservado uma semana. Por fim, foi utilizado o
+relator, que tentou reconstruir a história a partir dos fragmentos lidos.
+
+
+
+
+3.2. Segundo Experimento
+O segundo experimento foi realizado com um grupo de 8 participantes, dos quais 6
+assistiram ao filme e relataram os fragmentos e 2 extraíram a história de acordo com os
+fragmentos registrados. O perfil dos participantes era o seguinte: 1 músico (18 anos), 3
+aposentados (61, 77 e 80 anos), 2 professores (49 e 50 anos), e 2 estudantes (24 e 31
+anos). Os estudantes atuaram como relatores e facilitadores. Assim como no primeiro
+experimento, o filme foi divido de tal forma que os participantes não pudessem entender
+o filme sem a interação com os demais participantes. O percentual do filme assistido
+pelos participantes (de 1 a 6) foi: 15%, 21%, 16%, 17%, 21% e 16%. Novamente,
+alguns participantes viram trechos iguais do filme. Porém, nesse experimento ocultamos
+uma parte do filme de todos os participantes.
+Assim como no primeiro experimento, foi reservada uma semana para a exibição
+do filme e mais uma semana para a interação dos participantes através do mecanismo
+TellStory. Porém, nesse segundo experimento foram utilizados 2 relatores para extração
+da história, permitindo aos demais participantes um período de votação de 2 dias para a
+escolha da melhor história.
+3.3. Análise dos Experimentos Iniciais
+Na execução dos dois experimentos foram feitas análises e estudos sobre a participação
+e interação dos participantes. Alguns pontos observados e levantados através de um
+questionário foram:
+   O número de linhas escritas nos relatos não é proporcional à porcentagem do
+filme assistida pelos participantes.
+   O número de comentários também não é proporcional à porcentagem do filme
+assistido. Os comentários dependem diretamente do interesse do participante em
+obter o entendimento da história.
+   A  descrição  do  fragmento  depende  diretamente  do  estado  emocional  do
+participante.
+   Alguns participantes precisam de incentivos e lembretes para participar mais
+ativamente.
+   A profissão dos participantes pode interferir na descrição das cenas.
+   O  TellStory  não  fornece  ao  facilitador  da  história  nenhum  feedback  da
+participação dos membros.
+   O TellStory não fornece um mecanismo de administração global das histórias,
+que gere relatórios, como por exemplo, número de linhas escritas e participação
+dos membros.
+Outro ponto importante para a definição do mecanismo TellStory-Analyzer foi
+uma  entrevista  feita  com  os  participantes  na  qual  foi  perguntado  sobre  possíveis
+melhorias  na  interação  entre  os  usuários  e  de  como  motivá-los  a  participar  mais
+ativamente das histórias. Nessas entrevistas foram constatados os seguintes pontos a
+serem melhorados no TellStory:
+   Envio de e-mails a cada novo fragmento ou comentário inserido.
+
+
+
+
+   Possibilidade de uso de anonimato na descrição de um fragmento.
+   Prêmios para as contribuições mais relevantes.
+   Feedback sobre a participação dos usuários.
+   Lembretes sobre o período em que o relato da história deve ser feito.
+   Votação dos melhores fragmentos.
+Baseado nessas análises, nas entrevistas e nos estudos dos dados obtidos, pode-
+se constatar que um mecanismo de administração das histórias que permita analisar a
+participação qualitativa e quantitativa do grupo seria de enorme valia para o facilitador
+da história. A partir disso, foi desenvolvido o mecanismo TellStory-Analyzer, com o
+objetivo de suprir algumas lacunas deixadas pelo TellStory e possibilitar uma maior
+externalização do conhecimento.
+4. TellStory-Analyzer
+O coordenador ou facilitador de uma história tem a função de [Borges e Pino, 1999]
+motivar idéias; manter o grupo motivado; promover a interação entre os participantes;
+proporcionar meios e formas para uma melhor comunicação;  consolidar as idéias;
+manter a harmonia do grupo; e manter o controle de qualidade. Para apoiar estas
+funções, o mecanismo descrito neste artigo tem por objetivo fornecer um feedback para
+os membros do TellStory, principalmente aos facilitadores das histórias, permitindo um
+trabalho de gerência e motivação dos demais participantes. Além disso, esse mecanismo
+possui funcionalidades de gerenciamento e organização das histórias e dos membros,
+não  implementados  na  ferramenta  TellStory.  A  seguir  serão  descritas  algumas
+funcionalidades desse mecanismo e também as suas contribuições.
+O primeiro objetivo do mecanismo é fornecer aos usuários um feedback da
+participação. Para isso, esse mecanismo possui:
+   Histórico de um determinado membro na ferramenta TellStory (Figura 1).
+Nesta parte do mecanismo é possível vislumbrar em quais histórias um membro
+participa ou participou e o grau de atividade dele. Isso permite a escolha de um
+membro para contribuir em uma história através de sua experiência no assunto e
+também  que  o  facilitador  tenha  controle  sobre  quais  histórias  estão  sendo
+trabalhadas e quem são seus responsáveis.
+   Estatísticas individuais sobre cada usuário de uma determinada história (Figura
+2), podendo ser visualizado somente por facilitadores ou usuários comuns da
+história.
+Os  indicadores  utilizados  pelo  mecanismo  para  a  análise  quantitativa  e
+qualitativa são: número de fragmentos e comentários escritos e o total e a média
+de palavras escritas em cada fragmento ou comentário. A análise fornece um
+auxílio  aos  facilitadores  para  verificar  como  está  sendo  a  contribuição  e
+participação. A contribuição pode ser obtida pelo número de fragmentos e pelo
+total de texto escrito nos fragmentos. Já a participação pode ser calculada pelo
+número  de  comentários  e  volume  de  texto  escrito  nestes,  pois  para  poder
+
+
+
+
+comentar  o  participante  precisará  ler  os  fragmentos  escritos  pelos  demais
+participantes.
+Figura 1.   Histórico de participação de um usuário na ferramenta TellStory
+Figura 2. Estatísticas da História
+
+
+
+
+Cada uma das estatísticas individuais descritas anteriormente também pode ser
+exportada em formato de planilha para uma visualização gráfica, conforme mostrado na
+Figura 3. Os gráficos plotados nesta parte do mecanismo visam simplificar o trabalho do
+facilitador para o cálculo da participação e da contribuição dos membros da história.
+Alguns exemplos de gráficos criados a partir desse mecanismo são: gráficos sobre a
+porcentagem de fragmentos e comentários escritos por cada usuário. Isso contribui
+ainda mais para uma análise na linha do “participômetro” e do “contributômetro” dos
+membros da história, uma vez que a visualização de forma gráfica permite uma visão
+mais clara da participação e da contribuição de cada usuário.
+Outro objetivo desse mecanismo é a gerência e organização do conteúdo do
+TellStory. Para isso, o TellStory-Analyzer possui estatísticas gerais sobre toda a base de
+dados do TellStory. Essas estatísticas mostram, por exemplo, a data e o autor do último
+fragmento e comentário escrito em cada uma das histórias (Figura 4). Além disso, o
+mecanismo também permite a gerência de todas as histórias e usuários, facilitando,
+assim, a criação eficaz de relatórios, recuperação de senhas, adição ou remoção de um
+usuário ou de uma história, atribuição de papéis nas histórias                               (facilitador,  relator,
+usuário comum) e também inclusão ou exclusão de membros em uma determinada
+história.
+Figura 3. Visualização gráfica                                                               Figura 4. Estatísticas sobre a base
+dos dados                                                                                    de dados
+Outro ponto relevante desse mecanismo é a recuperação de informação nas
+histórias, que permite aos membros procurar por trechos de frases ou por marcações
+(tags) de relevância cadastradas pelos facilitadores das histórias. Com isso, pode-se
+descobrir histórias similares e recuperar uma família de histórias sobre um mesmo tema.
+Por exemplo, caso o facilitador da história quisesse descobrir histórias que tratem de
+gestão de emergência, poderia fazer uma busca sobre esse tema (Figura 5).
+
+
+
+
+O uso desse mecanismo de recuperação de informação permite ao facilitador
+procurar  e  adicionar  à  história  membros  com  experiência  sobre  um  determinado
+assunto. A avaliação da participação de cada membro, para uma posterior busca, é feita
+pelo facilitador da história antiga através de uma pontuação atribuída à competência e à
+experiência de cada usuário naquela história. Além disso, ao término de uma história, o
+facilitador atribui tags à história (contendo as palavras chaves) para permitir uma maior
+precisão ao mecanismo de busca.
+Figura 5. Recuperação de informação nas histórias
+5. Avaliação do TellStory-Analyzer
+Para avaliar o mecanismo TellStory-Analyzer e com o objetivo de demonstrar que o
+mecanismo  de  administração  e  análise  quantitativa  e  qualitativa  contribui  para  o
+enriquecimento das histórias, foi realizado um terceiro experimento. Assim como os
+outros dois experimentos, o terceiro experimento também foi realizado a partir da
+avaliação de um filme. Os integrantes do grupo assistiam a trechos desse filme com a
+intenção de reconstruí-lo no final.
+Na  realização  desse  experimento  foram  seguidas  as  etapas  e  os  métodos
+propostos nos outros dois casos. Para participar dessa dinâmica, foram selecionados 8
+participantes, sendo que 6 assistiram a trechos do filme e relataram os fragmentos, 1
+teve  a  função  de  relator  e                                                              1  teve  a  função  de  monitorar  a  externalização  do
+conhecimento através do mecanismo TellStory-Analyzer. O perfil dos participantes foi o
+seguinte: 2 professores (50 e 52 anos), 1 médico (28 anos), 1 secretária (27 anos), 2
+
+
+
+
+aposentados (62 e 78 anos), 1 estudante (25 anos, relator) e 1 analista de sistemas (24
+anos, facilitador).
+O mecanismo TellStory-Analyzer foi utilizado pelo facilitador, que não assistiu
+ao filme. Durante todo o período do experimento, o facilitador propôs questões sobre
+lacunas deixadas pelos outros membros, instigando-os a contribuírem mais. Além disso,
+ele estabeleceu uma ordem cronológica e uma classificação para os fragmentos a partir
+do conhecimento adquirido através da leitura dos fragmentos e dos questionamentos
+feito aos demais membros.
+Após  a  realização  do  terceiro  experimento,  foi  possível  constatar  um
+enriquecimento (tanto qualitativo quanto quantitativo) da história e da participação dos
+membros,  conforme  mostrado  na  Tabela                                                                             1.  Nesse  experimento,  foi  possível
+praticamente reconstruir a história total do filme. O critério usado para essa avaliação
+foi a escolha de duas pessoas que assistiram aos filmes inteiros e utilizaram como
+critério de avaliação a semelhança entre o filme e o relato escrito, atribuindo uma nota
+na escala de 0 a 10 à essa semelhança.
+Ficou comprovado através da aplicação  de um  questionário, que o  melhor
+desempenho do  terceiro  experimento foi devido à cobrança e questionamentos do
+facilitador, permitindo com isso uma maior interação, motivação e comprometimento do
+grupo.  Vale  ressaltar  que  quando  questionados  sobre  o  que  mais  os  motivou  a
+participarem, cinco dos seis participantes disseram que foi o interesse e também os
+questionamentos do facilitador, os quais os fizeram lembrar-se de coisas que haviam
+esquecido de relatar.
+Tabela 1. Itens Avaliados nos Experimentos.
+Item Avaliado                                                                                                        1º Experimento                           2º Experimento   3º Experimento
+Número de Fragmentos                                                                                                 20                                       28               38
+Número de Comentários                                                                                                36                                       25               68
+Média de Palavras escritas por Fragmentos                                                                            121,50                                   153,54           151,65
+Média de Palavras escritas por Comentário                                                                            17,78                                    23,88            33,90
+Nota atribuída à história resgatada2                                                                                 6,5                                      8,0              9,5
+6. Conclusões
+A externalização do conhecimento é importante para a gestão do conhecimento. Esse é
+um dos temas amplamente tratados no grupo GRECO3: gerenciar o conhecimento de
+uma maneira eficaz. Conhecimentos adquiridos anteriormente podem ser usados para
+uma série de finalidades, como, por exemplo, para tomada de decisões e para resolução
+de problemas futuros. O grupo GRECO vem utilizando o TellStory para recuperação de
+conhecimento.
+Através dos dois primeiros experimentos apresentados neste artigo, foi possível
+identificar funcionalidades que pudessem auxiliar membros das histórias do TellStory a
+participarem mais ativamente e interagirem entre si, possibilitando com isso um ganho
+na externalização do conhecimento. A partir dessas funcionalidades, foi desenvolvido o
+mecanismo TellStory-Analyzer, cujo principal objetivo é fazer uma análise quantitativa
+e qualitativa das histórias, a fim de fornecer um feedback aos membros da história,
+2  Essa  nota  foi  a  média  das  notas  atribuídas  por  duas  pessoas  que  assistiram aos  filmes  inteiros  e
+utilizaram como critério de avaliação a semelhança entre o filme e o relato escrito.
+3 www.greco.ppgi.ufrj.br
+
+
+
+
+principalmente ao facilitador. Esse mecanismo auxilia o trabalho do facilitador de
+motivação dos membros das histórias e também a agregação de conhecimento.
+A eficiência do TellStory-Analyzer  e a comprovação da hipótese de  que o
+mecanismo  de  administração  de  história  pode  enriquecê-las  pôde  ser  comprovada
+através do terceiro experimento que mostrou um ganho de qualidade e quantidade dos
+fragmentos e comentários escritos e também maior motivação e comprometimento dos
+membros  do  grupo.  Além  disso,  com  a  utilização  do  TellStory-Analyzer  pode-se
+constatar também um ganho efetivo no gerenciamento e organização da base de dados
+no TellStory.
+É  muito  importante  a  criação  de  meios  para  estimular  os  indivíduos  a
+participarem  e interagirem  com  o grupo. O mecanismo desenvolvido durante este
+trabalho  é  uma  forma  para  possibilitar  o  aprimoramento  dessa  externalização  na
+ferramenta TellStory.  Ainda há diversos estudos  a serem  feitos para  se conseguir
+aprimorar ainda mais os mecanismos de auxílio à externalização do conhecimento em
+diversas áreas. A proposta do TellStory é que com pequenos fragmentos com pouco
+conhecimento, pode-se chegar próximo ao conhecimento global do que está sendo
+relatado. Esse trabalho é como um pequeno fragmento do TellStory que junto com os
+demais conhecimentos pode permitir grandes resultados na pesquisa por mecanismos
+realmente eficazes e eficientes para a externalização do conhecimento.
+Como implementações futuras ao TellStory e ao TellStory-Analyzer, sugere-se:
+   A construção de um módulo que forneça apoio ao relator da história.
+   Estatísticas de quais usuários leram quais fragmentos, permitindo assim verificar
+conclusões sobre a história de uma maneira mais eficiente.
+   Envio de e-mail avisando aos usuários quando algo for atualizado, evitando que
+eles tenham que entrar na ferramenta constantemente para verificar atualizações.
+   Votação para fragmentos conflitantes.
+Referências
+Alavi,  M.  e  Leidner,  D.E.                                                              (1999)                                                                               “Knowledge  Management  Systems:  Issues,
+                                                                                           Challenges, and Benefits”, Communications of the AIS, vol. 1, article 7, pp. 1-38.
+Borges,  M.R.S  e  Pino,  J.A                                                              (1999)                                                                               “Awareness  Mechanisms  for  Coordination  in
+                                                                                           Asynchronous CSCW”,   In: Workshop on Information Technologies and Systems
+(WITS), Charlotte, EUA, pp. 69-74.
+Carminatti, N. A (2006) “Recuperação Coletiva do Conhecimento Aplicada a Situações
+de  Emergência”,  Dissertação  Mestrado  em  Informática                                   -  Programa  de  Pós-
+Graduação em Informática, Universidade Federal do Rio de Janeiro, Rio de Janeiro,
+107 f.
+Carminatti, N.A., Borges, M.R.S e Gomes, J.O. (2005) “Collective Knowledge Recall:
+Benefits  and  Drawbacks”,  In:  International  Workshop  on  Groupware,  Recife.
+Lecture Notes in Computer Science. Berlin, Heidelberg: Springer-Verlag, 2005, vol.
+3706, pp. 216-231.
+
+
+
+
+Costa, P., Araujo, E. , Borges, M.R.S (2009)                                              “Uma Nova Abordagem para Desenhar
+Processos através da Contagem de Histórias”, In: Workshop de Gestão de Processos
+de Negócio (WBPM), Fortaleza, Ceará.
+Laporti, V., Borges, M. e Braganholo, V. (2009) “Athena: A collaborative approach to
+requirements elicitation”, Computers in Industry, vol. 60, pp. 367-380.
+Nonaka, I. (1991) “The knowledge-creating Company”. Harvard Business Review, pp.
+96-104.
+Paula, D.R. e Cianconi, R.B. (2007) “Práticas de Gestão do Conhecimento: caso dos
+sítios associados ao portal corporativo da Fiocruz”, Perspectivas em Ciência da
+Informação. vol. 12, n. 2, pp. 49-63.
+Prusak, L. (2001) “Where Did Knowledge Management Come From?”, IBM Systems
+Journal, vol. 40, n. 4, pp. 1002-1007.
+Perret,  R.                                                                               (2004)                                                                   “A  Técnica  de  Group  Storytelling  Aplicada  à  Gestão  de
+                                                                                          Conhecimento”,  Dissertação  Mestrado  em  Informática                   -  Programa  de  Pós-
+                                                                                                                                                                   Graduação em Informática, Universidade Federal do Rio de Janeiro, Rio de Janeiro,
+189 f.
+Perret, R., Borges, M. R. S. e Santoro, F. M. (2004) “Applying Group Storytelling in
+Knowledge Management”,   In:   International Workshop on Groupware (CRIWG),
+San Carlos, Costa Rica. Groupware: Design, Implementation, and Use  - Lecture
+Notes in Computer Science. Berlin: Springer-Verlag, vol. 3198. pp. 34-41.
+Silva, S.A.                                                                               (2006)  ”Modelação de Processos  Alternativos de Conflito utilizando a
+Técnica de Storytelling”, Dissertação de Mestrado em Engenharia Informática e de
+Computadores. Universidade Técnica de Lisboa Instituto Superior Técnico, Lisboa.
+Portugal.
+Valle, C., Prinz, W. e Borges, M.R.S. (2002) “Generation of Group Storytelling in post-
+decision  implementation  process”,  In:  International  Conference  on  Computer
+Supported Cooperative Work in Design (CSCWD), Rio de Janeiro, pp. 361-367.
+
+
+
+
+

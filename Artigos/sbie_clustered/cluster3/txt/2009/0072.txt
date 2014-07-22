@@ -1,0 +1,431 @@
+﻿Um Framework para Mineraç ão de Dados Educacionais
+Basedo em Serviços Sem ânticos
+Tarsis Marinho1, Diego Dermeval1, Rafael Ferreira1, Lucas M. Braz1,
+Ig Ibert Bittencourt1, Evandro B. Costa1, Henrique Pacca L. Luna1
+1Instituto de Computação - Universidade Federal de Alagoas (UFAL)
+Macei ó - AL - Brasil
+{tarsis.ms,  diegodermeval,  rafaelflmello,  lmonteirobraz,  ig.ibert,  ebcosta,  hpluna}@gmail.com
+Abstract. This paper proposes a framework for providing educational activities
+for adaptation encapsulated in semantic web services.  It aims to provide:  i)
+reuse of data mining techniques, ii) educational semantic web services, and iii)
+automatic discovery, composition, and invocation of semantic web services. A
+case study has been developed to evaluate the feasibility of the proposed frame-
+work.
+Resumo. Este  artigo  prop õe  um  arcabouço  para  prover  atividades  edu-
+cacionais de adaptaç ão encapsuladas em Serviços Web Sem ânticos. Ele busca
+prover: i) a reutilizaç ão de técnicas de mineraç ão de dados; ii) serviços web
+sem ânticos educacionais e iii) descoberta autom ática, composiç ão e invocaç ão
+de serviços web sem ânticos. Um estudo de caso foi desenvolvido para avaliar a
+viabilidade do arcabouço proposto.
+1. Introduç ão
+Ambientes e-Learning armazenam um grande volume de dados sobre seus usuários. Esses
+são coletados automaticamente pelos servidores web que gravam todas as aç ões dos
+usuários enquanto os mesmos navegam pelo ambiente e realizam atividades. Tais dados
+podem ser uma grande e importante fonte de informação para professores e desenvolve-
+dores. Eles podem ser utilizados para, por exemplo, identificar possíveis dificuldades dos
+alunos, aperfeiçoar a estrutura dos ambientes e-Learning e de seus cursos e fornecer um
+acompanhamento individualizado para os estudantes.
+No entanto, dado o volume de dados armazenado, a análise deles em busca de
+informaç ões  úteis é uma tarefa complexa e dispendiosa para professores e desenvolve-
+dores. Assim, faz-se necessário o uso de uma abordagem que os auxilie nesse processo.
+Neste contexto, a mineração de dados apresenta-se como uma boa solução, contribuindo
+para esta tarefa de análise de dados.
+A mineração em ambientes educacionais tem sido usada em diferentes pers-
+pectivas,  entre  elas:   recomendar  conte údo                                                       [Markellou et al. 2005],   [Zaíane 2002]  e
+[Tang and McCalla 2003], aperfeiçoar ambientes e-Learning [Zaane and Zaïane 2001] e
+[Tang et al. 2000] e modelar perfis de estudantes [Tang and McCalla 2002].
+As duas principais abordagens presentes na literatura no uso da mineração de
+dados em ambientes e-Learning são: i) adaptação do ambiente existente, na qual os de-
+senvolvedores precisam modificar o ambiente, incluindo suas funcionalidades, para dar
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+suporte  à utilização de mineração de dados.  Entretanto, os desenvolvedores precisam
+ter conhecimento específico sobre as técnicas de mineração de dados para poder imple-
+mentá-las; ii) usar ferramentas de mineração educacionais, onde educadores podem usar
+ferramentas independentes do ambiente de aprendizagem e que oferecem funcionalidades
+de mineração. Contudo, nesta abordagem o pr óprio educador usará as informaç ões obti-
+das pela ferramenta de forma não automática, ou seja, ele irá usar os dados para tomar
+decis ões como recomendar a leitura de um material adicional a um aluno que tem dificul-
+dade em um determinado domínio.
+Em [Romero and Ventura 2007] destacam como linhas de pesquisa futuras em
+mineração de dados educacionais:  i) Padronização dos métodos e dados, onde as fer-
+ramentas e técnicas são úteis apenas aos seus desenvolvedores. Não existem ferramentas
+gerais ou reutilização de ferramentas e/ou técnicas que possam ser aplicadas a qualquer
+ambiente educacional.  Assim, a padronização dos dados e técnicas são necessarias; ii)
+Integração com ambientes e-Learning: Ferramentas precisam ser integradas a ambientes
+educacionais de forma simples. Todas as tarefas relacionadas à mineração devem ser ex-
+ecutadas como uma única atividade, para que feedbacks e resultados obtidos possam ser
+aplicados diretamente nos ambientes.
+Este trabalho prop õe um arcabouço, chamado SEDAM (Semantic Educational
+Data Mining), para mineração de dados educacionais baseados em serviços semânticos.
+Sendo assim, ocorrerá a reutilização e a padronização de técnicas e ferramentas, pois, tal
+arcabouço provê:  i) Técnicas de mineração:  disponibiliza técnicas de mineração, pré-
+processamento e p ós-processamento através de serviços semânticos, dessa forma am-
+bientes poderão reutilizá-las sem se preocupar com implementação;  ii) serviços edu-
+cacionais:  serviços  que  irão  prover  aos  ambientes  educacionais  funcionalidades  da
+mineração de dados com enfoque educacional; iii) Automatização dos processos:  irá
+prover a composição, descoberta e invocação de serviços educacionais automaticamente.
+Deste modo, a ferramenta proposta promove a simplicidade na integração entre mineração
+de dados com enfoque educacional e ambientes e-Learning. Assim, os feedbacks e resul-
+tados obtidos podem ser aplicados diretamente nos ambientes de maneira automática e
+sem precisar da intervenção direta do professor.
+Este artigo está organizado como se segue. Na Seção 2 são apresentados os trabal-
+hos relacionados, suas características e limitaç ões. Na Seção 3 é apresentada a arquitetura
+da ferramenta proposta. Na Seção 4 é apresentado um estudo de caso que demonstra o uso
+da ferramenta proposta em um ambiente e-Learning para a recomendação de alunos para
+uma resolução colaborativa. Por fim, é apresentada a conclusão e proposta de trabalhos
+futuros na Seção 5.
+2. Trabalhos Relacionados
+Nesta seção são discutidos alguns trabalhos relacionados ao SEDAM, ressaltando-se suas
+características e limitaç ões.
+TADA-Ed [Merceron 2005] é uma plataforma de mineração de dados dedicada aos
+professores, permitindo-lhes visualizar e minerar os exercícios on-line dos estudantes com
+o intuito de descobrir padr ões pedagogicamente relevantes. Esta ferramenta inclui alguns
+algoritmos de classificação, agrupamento e regras de associação adaptados da biblioteca
+disponibilizada pelo Weka [Weka 2009] e contém facilidades de pré-processamento dos
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+dados. Porém, nessa abordagem o pr óprio educador deve analisar sua base de dados no
+TADA-Ed para poder obter informaç ões relevantes que auxiliem o processo pedag ógico
+e possam ser aplicados ao ambiente.  Desta forma, o custo necessário para realizar a
+mineração será elevado dado à necessidade de interferência direta do professor tanto no
+processo da mineração dos dados quanto na análise dos resultados obtidos com ela.
+[Silva and Vieira 2002] discute como os recursos de data warehouse e data mining
+podem ser usados para a avaliação de ensino a distância e prop õe o ambiente MultiStar
+para descoberta de conhecimento em data warehouse para suportar tal avaliação.  Tal
+abordagem provê uma mineração mais precisa, pois é feita a partir de um armazém de
+dados, entretanto, da mesma forma que o TADA-Ed, o processo de mineração é custoso,
+dada a necessidade de interferência direta dos usuários interessados em usar o sistema.
+[Zaíane 2002]  sugere  a  implementação  de  um  sistema  de  recomendação  au-
+tomático para ambientes de aprendizagem web que levam em conta os perfis dos estu-
+dantes on-line, seus hist óricos de acesso e os padr ões de navegação coletivos.  Tal tra-
+balho prop õe uma abordagem para construir um agente de software que usa técnicas de
+mineração de dados, como regras de associação para gerar um modelo que representa o
+comportamento dos usuários on-line e usa esse modelo para sugerir atividades ou atal-
+hos a um determinado estudante. Apesar desse sistema realizar a mineração e utilizar as
+informaç ões obtidas de forma automática, essa abordagem está limitada pela única fun-
+cionalidade que o agente pode executar, que é a recomendação de atalhos e atividades
+para o estudante.
+A utilização da ferramenta proposta neste trabalho aparece como uma solução
+para as limitaç ões dos trabalhos acima, pois a presente ferramenta disponibiliza serviços
+web semânticos de mineração de dados educacionais, o que possibilita a redução do custo
+de adaptação dos ambientes e-Learning para o uso da mineração de dados em ambientes
+educacionais. O SEDAM é também facilmente expansível, podendo ser adicionados a ele
+serviços web semânticos que implementam novas funcionalidades. Outra vantagem é que
+o método para acesso deste novo serviço semântico é o mesmo das outras funcionalidades
+já existentes, bastando especificar a nova saída requerida.
+3. O Arcabouço Proposto
+Este trabalho prop õe um arcabouço, chamado SEDAM (Semantic Educational Data Min-
+ing), para mineração de dados educacionais baseados em serviços semânticos com en-
+foque educacional.  Esta ferramenta enfatiza três aspectos.  Primeiro, reuso de técnicas
+de mineração. Segundo, prover serviços semânticos de mineração que podem ser usados
+por ambientes e-Learning.  Terceiro, garante a descoberta, composição e invocação au-
+tomática de serviços semânticos. A Figura 1 apresenta a arquitetura do arcabouço e seus
+componentes. A arquitetura é composta por quatro camadas: Tools, Web Services, Service
+Manager e Ontologia. Tais camadas serão descritas nas subseç ões abaixo.
+3.1. Tools
+Esta camada irá prover os algoritmos de mineração que serão usados pelas camadas su-
+periores para realizar o processo de mineração. Ela é composta por várias ferramentas de
+mineração. Tais ferramentas fornecem os algoritmos de mineração e pré-processamento
+que serão utilizados para atingir os objetivos da mineração educacional.                     E necessário
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+cionalidades possam ser utilizadas pelas camadas superiores. Nesta proposta, foi utilizada
+a ferramenta WEKA, no entanto,  é importante notar que a utilização de Web Services
+proporciona a utilização de várias ferramentas ao mesmo tempo, e que a arquitetura se
+torna facilmente expansível para a adição de novas ferramentas (ex.: DBMiner, Clemen-
+tine). O WEKA foi escolhido, por ser amplamente utilizado na comunidade científica e
+na ind ústria, possuir uma documentação bastante abrangente e ser de fácil utilização.
+O WEKA é uma coleção de algoritmos de aprendizagem de máquina que se desti-
+nam a problemas comuns em mineração de dados, como: regressão, classificação, regras
+de associação e seleção de atributo [Weka 2009]. Ele inclui ainda ferramentas para pré-
+processamento dos dados, criação de modelos de aprendizagem e análise dos resultados
+e desempenho de um classificador [Witten and Frank 2005]. Todas as funcionalidades do
+WEKA estão acessíveis através de uma simples e intuitiva interface gráfica. Além disso, o
+WEKA provê uma API que permite utilizar os seus algoritmos e ferramentas diretamente
+em c ódigo Java, o que possibilita a criação de aplicaç ões que o utilizem.
+3.2. Service Manager
+Service Manager é um Web Service que tem a responsabilidade de descobrir, compor e
+invocar os serviços semânticos disponíveis.  Este processo é uma aplicação cliente, na
+qual s ó se necessita saber os parâmetros de entrada e saída do serviço que se quer invocar.
+A  operação  do  Service  Manager                                                              é  baseado  no  algoritmo  matchmaking
+[Calado et al. 2009], a partir dos parâmetros fornecidos ao algoritmo, ele tem o papel
+de buscar e compor os serviços necessários para que o serviço desejado seja devidamente
+executado.
+3.3. Web Services
+Os Web Services podem ser utilizados por qualquer aplicação que tenha acesso a web e
+que seja capaz de entender e processar mensagens no formato XML, independentemente
+de sistema operacional, servidor web ou até mesmo a linguagem de programação na qual
+o Web Service foi implementado [Newcomer and Lomow 2004].
+Esta camada arquitetural fornece uma abstração dos requisitos implementados nas
+ferramentas de mineração.  Através desta camada, os ambientes educacionais não ne-
+cessitam implementar os algoritmos de mineração, bastando apenas utilizar os serviços
+1 http://www.w3.org/2004/OWL/
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+disponíveis, diminuindo a complexidade e o tempo de desenvolvimento desse tipo de
+sistema.  Além disso, diminui-se o acoplamento entre esses ambientes/ferramentas das
+aplicaç ões, pois fazem uso dos algoritmos de mineração, independentemente da ferra-
+menta que os implementam.
+Os tipos de serviços disponíveis nesta camada são:
+• Web  Services  educacionais                                                                -  fornecem  recursos  fundamentais  para  garantir
+o  objetivo  de  um  sistema  educacional,  facilitando  algumas  atividades  edu-
+cacionais, como a integração de conte údos, a descoberta de recursos educacionais,
+personalização de conte údos e interfaces,  a colaboração,  a recomendação,  a
+resolução de problemas, diagn ósticos, entre outros;
+• Web  Services  de  mineração  -  fornecem  a  implementação  dos  algoritmos  re-
+sponsáveis por executar as tarefas de mineração, por exemplo Apriori ou o ID3;
+• Web Services de suporte - atividades que não tem fins educacionais, mas que são
+necessárias para o uso dos algorimos de mineração, tais como: conversas, pesquisa
+na web, eliminação de ruídos, detecção de dados inconsistentes, entre outros.
+3.4. Semantic Web Services
+De acordo com [Payne and Lassila 2004], Semantic Web Services são definidos como
+sendo um aperfeiçoamento das descriç ões dos Web Services através do uso de anotaç ões
+semânticas, o que possibilita um alto grau de automação na descoberta, composição, mo-
+nitoramento e invocação. A introdução de semântica aos Web Services faz com que tais
+serviços possam ser processados pela máquina.  Dessa forma,  é possível a criação de
+agentes de software capazes de descobrir, compor e invocar os serviços automaticamente.
+Além disso, a descoberta se torna bem mais precisa, visto que não é mais feita de maneira
+sintática, mas sim semântica.  Sendo assim, esta camada  é responsável por mapear os
+Web Services disponíveis a partir da camada inferior adicionando semântica aos mesmos
+obtendo-se com isso todas as vantagens oferecidas pelos Semantic Web Services.
+Para exemplificar, suponhamos a necessidade de se obter regras de associação a
+partir de uma base de dados qualquer.  Para realizar tal tarefa, é necessário que se faça,
+além do pré-processamento dos dados, conversão para o formato ARFF2  e a execução
+de algum algoritmo de associação,  como o Apriori.   Utilizando Web Services tradi-
+cionais, em cada uma dessas etapas seria necessário alguma intervenção humana.  Ao
+descrever tais Web Services semanticamente,  é possível configurar um agente de soft-
+ware capaz de buscar, compor e invocar esses serviços de forma automática e trans-
+parente.  Nesse artigo, para a descrição semântica dos serviços, foi utilizada a OWL-S
+[Martin et al. 2004]. Recomendação do W3C3, a OWL-S tem sido bastante utilizada pela
+comunidade científica.
+3.5. Ontologia
+As ontologias fornecem uma representação formal do conhecimento. Dessa forma, uma
+ontologia que descreve semanticamente aspectos conceituais e operacionais relacionados
+com a mineração de dados pode ser reutilizada por outras ontologias que descrevem fer-
+ramentas de mineração e pré-processamento de dados.  A ontologia proposta descreve
+2 Formato aceito pelo WEKA
+3 World Wide Web Consortium - http://www.w3c.org
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+algumas tarefas e técnicas de mineração de dados, além de especificar os parâmetros de
+entrada e saída de tais algoritmos de aprendizagem.
+Abaixo segue uma breve descrição das classes da ontologia:
+• DataMining: é uma classe genérica que representa a mineração de dados (sub-área
+de Inteligência Artificial) na ontologia.
+• DataMiningTasks: representa as tarefas de mineração de dados, como: associação,
+agrupamento, classificação e outras técnicas que também podem ser modeladas.
+• DataMiningTechniques:  classe mãe de todas as técnicas separadas por tipo de
+tarefa.
+- AssociationTechniques:  As técnicas que realizam associação devem ser
+subclasses dessa classe. Exemplo: Algoritmo Apriori.
+- ClusterTechniques: As técnicas que realizam clusterização devem ser sub-
+classes desta classe. Exemplo: K-means.
+- ClassifyTechniques: As técnicas que realizam classificação devem ser sub-
+classes desta classe. Exemplo: C4.5.
+• Parameters: representa os parâmetros de entrada e saída dos algoritmos de apren-
+dizagem que podem vir a ser representados na ontologia.
+Para especificar uma técnica  é necessário instanciar a ontologia descrita, isso
+transforma a tarefa de descobrir e interpretar ela uma atividade processável pela máquina.
+4. Estudo de Caso
+Esta seção apresenta um estudo de caso a fim de avaliar a viabilidade do arcabouço pro-
+posto.  Nele se aplica recomendação para sugerir estudantes que vão interagir com o
+objetivo de resolver problemas colaborativamente. Foi utilizado o FraW, tutor de fração
+na web, para realizar o estudo proposto e o processo de recomendação colaborativa uti-
+lizado por ele faz uso dos serviços disponilizados pelo SEDAM. Na Seção 4.1 o FraW
+é descrito, com foco em como a recomendação de estudante acontece e na Seção 4.2 é
+detalhado como ocorre o processo de recomendação utilizando a arquitetura proposta.
+4.1. FraW
+O FraW é um sistema tutor inteligente para ajudar estudantes a aprenderem operaç ões
+de fração mediante uma abordagem pedag ógica de aprendizagem baseada em resolução
+de problemas.  Tal sistema está habilitado a resolver problemas propostos pelos estu-
+dantes, inclusive explicando passo a passo a sua solução.  Além disso, o sistema pode
+avaliar as soluç ões apresentadas pelos estudantes aos problemas propostos, bem como
+oferecer ajuda nos erros que venham a ocorrer no processo de elaboração da solução
+[Sibaldo et al. 2008].
+O FraW foi reconstruído utilizando a MASSAYO [Bittencourt et al. 2009] e foram
+acrescentadas novas funcionalidades a ele, como a resolução de problemas colaborativos,
+que é o m ódulo em que foi realizado o estudo de caso.
+A resolução de problemas colaborativos agrupa alunos que já passaram por um
+determinado assunto para juntos resolverem o problema com o estudante que está atual-
+mente na matéria em questão. Os estudantes indicados são: um que tenha sido aprovado
+com boa nota, para ajudar os alunos, e outros dois que foram aprovados com notas inter-
+mediárias, para que eles possam voltar e aprender mais sobre determinado assunto.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+4.2. Recomendaç ão utilizando SEDAM
+Para recomendar seria necessário percorrer todos os alunos que já passaram pelo currículo
+para saber as notas deles e escolher alunos com os níveis indicados.  No entanto, essa
+busca exigiria um alto custo de processamento e de tempo para ser realizada, visto a
+quantidade de alunos que existem cadastrados no tutor.  Dessa forma, foi utilizado um
+algoritmo de agrupamento que divide os alunos em três grupos, alunos com notas entre
+7-8, 8-9 e 9-10. Então é recomendado um estudante de cada grupo criado.
+Ao invés de utilizar uma solução pr ópria, que necessitaria de implementação de al-
+goritmos de mineração e pré-processamento dos dados, ele pode fazer uso dos algoritmos
+de ferramentas consolidadas como o WEKA, apenas invocando os serviços disponibiliza-
+dos pelo SEDAM.
+Para utilizar o SEDAM o desenvolvedor precisa realizar a adaptação do ambiente,
+ela consiste basicamente em: i) implementar o processo de invocação do Service Manager
+− o processo de invocação é simples, pois o Service Manager é um serviço web tradi-
+cional; ii) Adaptar o ambiente para tratar o retorno do serviço invocado − o desenvolvedor
+deve adaptar o ambiente de modo que o mesmo possa utilizar a saída retornada.
+O SEDAM disponibiliza alguns serviços de transformação como: i) List2ARFF
+- este serviço recebe como entrada uma lista composta pelos hist óricos de acesso dos
+usuários. ii) OWL2ARFF - Serviço que realiza consulta nas ontologias e transforma os
+dados em um arff. Caso o ambiente que deseja utilizar o SEDAM utilize outra fonte de
+dados é necessário estender o SEDAM incluindo um serviço web semântico que realize a
+transformação dos dados em um ARFF ou em uma Lista.
+A adaptação realizada no FraW para utilização do SEDAM consistiu na inclusão
+de um link que realiza a invocação do service manager e a criação de uma página web que
+trata a saída, exibindo os alunos retornados. Não foi necessário criar um novo serviço web
+semântico de transformação para recuperar os dados disponíveis através de ontologias e
+gerar um ARFF, pois o mesmo já estava implementado no SEDAM.
+A Figura 2 apresenta o processo de composição e invocação realizada pelo service
+manager ap ós a invocação feita pelo FraW.
+ao dos Servic¸os
+Em seguida são descritas as etapas para realizar a recomendação.
+1. O estudante clica no link para realização da resolução colaborativa de problema.
+(Figura 3).
+2. O FraW invoca o Service Manager passando como parâmetro de entrada o usuário
+para o qual se deseja recomendar, e de saída, um conjunto de três estudantes para
+resolver o problema.
+3. Depois  de  realizar  a  descoberta  e  composição  dos  serviços,  baseados  nos
+parâmetros de entrada e saída, o Service Manager invoca o primeiro serviço,
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+OWL2Arff, esse serviço realiza a transformação dos dados disponibilizados nas
+ontologias do FraW em um formato que é aceito pelos algoritmos do WEKA, o
+ARFF. O serviço procura nas ontologias do FraW os alunos que já concluíram o
+assunto que o estudante está aprendendo, passado como parâmetro de entrada,
+e cria um arquivo ARFF contendo o nome do estudante e a sua nota naquele
+currículo. A saída deste serviço é o diret ório onde o ARFF foi criado.
+4. Depois de gerar o arquivo ARFF, o Service Manager seleciona o serviço simpleK-
+means - técnica de agrupamento.  Esse serviço agrupa os estudantes por nível e
+retorna o grupos que foram formados.
+5. Por fim, o Service Manager executa o serviço de recomendação, que tem como
+entrada os grupos de estudantes gerados pelo serviço anterior, recupera um aluno
+de cada grupo e retorna ao Service Manager os alunos selecionados. O resultado
+final retornado pelo Service Manager ao ambiente é tratado e apresentado em uma
+tela que mostra os estudantes sugeridos, com isso eles podem começar a resolver
+o problema colaborativamente (Figura 4).
+ao dos estudantes
+O estudo de caso apresentado destaca as vantagens e limitaç ões no uso do SEDAM
+como a disponibilização de mineração de dados educacionais a ambientes e−Learning.
+Tais vantagens são listadas a seguir:  i) reuso − desenvolvedores não necessitarão im-
+plementar algoritmos de mineração visto que tais algoritmos já estarão disponíveis pela
+ferramenta; ii) fácil adaptação de Ambientes e-Learning para o uso mineração de dados
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+educacionais; iii) as diversas funcionalidades de educacionais fornecidas pelo SEDAM
+podem ser acessadas por meio de uma mesma invocação, bastando ao desenvolvedor al-
+terar os parâmetros de entrada e a saída desejada para utilizar uma outra funcionalidade
+educacional; iv) extensibilidade − novas funcionalidades educacionais podem ser facil-
+mente incluídas com a adição de novos serviços semânticos.  Sob uma perspectiva da
+engenharia de software, o gerenciador de serviços equivale ao ponto congelado do frame-
+work (frozen spot)e os serviços semânticos os pontos de variabilidade da aplicação.
+Além disso,  o SEDAM disponibiliza as fases de processamento dos dados e
+mineração de dados educacional.   Entretanto,  o mecanismo de pré-processamento  é
+disponibilizado apenas para utilização de ontologias e entrada dos dados em formato
+de lista.                                                                                   E importante frisar que tais mecanismos de pré−ponto congelado do frame-
+work (frozen spot) e os serviços semânticos os pontos de variabilida de processamento
+não foram disponibilizados, pois cada aplicação tem seu formato de persistência dos
+dados, não sendo viável a implementação de serviços genéricos que executem tal fun-
+cionalidade.   Contudo,  os desenvolvedores podem adicionar serviços para realizar o
+pré−processamento de acordo com seus interesses.
+5. Conclus ão e Trabalhos Futuros
+O trabalho apresentou um arcabouço para mineração de dados educacionais baseados
+em serviços semânticos.  Esta ferramenta proporciona aos desenvolvedores a facilidade
+na criação e/ou adaptação de ambientes e-Learning para uso da mineração de dados
+no apoio educacional, pois ela disponibiliza, através de serviços semânticos, funcionali-
+dades como: recomendação de conte údo para os alunos, recomendação de usuários para
+colaboração, ajuda a modelar os perfis dos estudantes, entre outros. Tais funcionalidades
+podem ser utilizadas pelos ambientes apenas invocando o Service Manager e adaptando
+a saída dos serviços ao ambiente.
+Foi mostrado um estudo de caso, em um ambiente educacional real, para de-
+monstrar a viabilidade do SEDAM, desde o processo de invocação até a descoberta e
+composição dos serviços semânticos.
+Como trabalhos futuros pretende-se: i) concluir o desenvolvimento da ferramenta
+visto que a mesma encontra em fase de prot ótipo, ii) incluir novas ferramentas, aumen-
+tando as funcionalidades disponibilizadas, iii) desenvolver novos estudos de casos em
+diferentes domínios.
+Referências
+Bittencourt, I. I., Costa, E., Silva, M., and Soares, E. (2009).  A computational model
+for developing semantic web-based educational systems.  Knowledge-Based Systems,
+22:302-315.
+Calado, I., Barros, H., and Bittencourt, I. I. (2009).  An approach for semantic web ser-
+vices automatic discovery and composition with similarity metrics. pages 694-695.
+Markellou, P., Mousourouli, I., Spiros, S., and Tsakalidis, A. (2005). Using semantic web
+mining technologies for personalized e-learning experiences.  Web-Based Education,
+pages 461-826.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Martin, D., Burstein, M., Hobbs, E., Lassila, O., Mcdermott, D., Mcilraith, S., Narayanan,
+S., Parsia, B., Payne, T., Sirin, E., Srinivasan, N., and Sycara, K. (2004).  Owl-s:
+Semantic markup for web services. Technical report.
+Merceron, Agathe; Yacef, K. (2005).  Tada-ed for educational data mining.  Interactive
+Multimedia Electronic Journal of Computer-Enhanced Learning, 7.
+Newcomer, E. and Lomow, G. (2004). Understanding SOA with Web Services (Indepen-
+dent Technology Guides). Addison-Wesley Professional.
+Payne, T. R. and Lassila, O. (2004). Guest editors’ introduction: Semantic web services.
+IEEE Intelligent Systems, 19(4):14-15.
+Romero, C. and Ventura, S. (2007).  Educational data mining:  A survey from 1995 to
+2005. Expert Systems with Applications, 33(1):135 - 146.
+Sibaldo, M. A. A., Neves, A. F. R., Medeiros, F. M., Bittencourt, I. I., and Barros Costa,
+E. (2008).  Fraw - ambiente interativo de aprendizagem para o domínio de fração via
+web. Simp ósio Brasileiro de Inform ática na Educaç ão.
+Silva, D. and Vieira, M. (2002). Using data warehouse and data mining resources for on-
+going assessment in distance learning. In IEEE international conference on advanced
+learning technologies, pages 40-45.
+Tang, C., Yin, H., Li, T., Lau, R. W. H., Li, Q., and Kilis, D. (2000).  Personalized
+courseware construction based on web data mining. In WISE ’00: Proceedings of the
+First International Conference on Web Information Systems Engineering (WISE’00)-
+Volume 2, page 2204, Washington, DC, USA. IEEE Computer Society.
+Tang, T. and McCalla, G. (2003).  Smart recommendation for an evolving e-learning
+system. Workshop on Technologies for Electronic Documents for Supporting Learning,
+International Conference on Artificial Intelligence in Education, pages 699-710.
+Tang, T. Y. and McCalla, G. (2002). Student modeling for a web-based learning environ-
+ment: a data mining approach.  In Eighteenth national conference on Artificial intel-
+ligence, pages 967-968, Menlo Park, CA, USA. American Association for Artificial
+Intelligence.
+Weka (2009). Disponível em http://www.cs.waikato.ac.nz/ml/weka/. Acessado em 31 de
+Agosto de 2009.
+Witten, I. H. and Frank, E. (2005). Data Mining: Practical Machine Learning Tools and
+Techniques (Second Edition). Morgan Kaufmann.
+Zaane, E. O. and Zaïane, O. R. (2001). Web usage mining for a better web-based learning.
+In In Proc. of Conference on Advanced Technology for Education, pages 60-64.
+Zaíane, O. R. (2002).  Building a recommender agent for e-learning systems.  In ICCE
+’02: Proceedings of the International Conference on Computers in Education, page 55,
+Washington, DC, USA. IEEE Computer Society.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+

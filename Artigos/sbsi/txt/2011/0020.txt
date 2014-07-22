@@ -1,0 +1,544 @@
+﻿VII Simpósio Brasileiro de Sistemas de Informação
+O Impacto de Unidades de Software N ão Essenciais e Relaç ões
+de Precedência Flexíveis sobre o Valor de Projetos de Software
+Antonio Juarez Alencar1, Rafael Alcemar1, Eber Assis Schmitz1,
+Alexandre Luis Correa1, Angélica F. S. Dias1
+1Instituto Tércio Pacitti de Aplicaç ões e Pesquisas Computacionais
+Universidade Federal do Rio de Janeiro
+juarezalencar@dcc.ufrj.br,  rafael.alcemar@gmail.com,  eber@ce.ufrj.br
+alexcorr@yahoo.com,  angelica@nce.ufrj.br
+Abstract. This paper evaluates the impact of nonessential minimum marketable
+features modules (NMMF) and nonessential architectural elements (NAEs) on
+software projects, shows that the value-creation path of these self-contained
+software units may be quite different from that of essential software units, and
+discusses the impact of early NMMFs and NAEs identification on the value of
+software projects to business and the deployment of business strategies.
+Resumo. Este artigo avalia o impacto das minimum marketable features mod-
+ules (NMMF) e architectural elements n ão essenciais (NAEs) em projetos de
+software.  Mostra que a criaç ão de valor destas unidades de software pode
+ser bem diferente das unidades de software essenciais, e discute o impacto da
+identificaç ão prévia de NMMFs e NAES sobre o valor de projetos de software
+para o neg ócio e para a implantaç ão de estratégias de neg ócio.
+AO
+Apesar do papel de destaque que a tecnologia da informação(TI) desempenha no cenário
+corporativo, o financiamento de projetos de desenvolvimento de software no ambiente al-
+tamente competitivo no qual as empresas fazem neg ócios se tornou uma questão central
+tanto para gerentes quanto para profissionais de tecnologia [Wu et al. 2007]. Como con-
+sequência, se torna cada vez mais difícil conseguir financiamento para projetos de desen-
+volvimento de software que não propiciem um valor claramente definido para o neg ócio
+[Denne and Cleland-Huang 2005].
+Em sintonia com estas idéias, muitas propostas têm sido apresentadas para trazer
+disciplina financeira para o desenvolvimento de software.  Enquanto algumas propostas
+são amplamente baseadas em métricas de avaliação financeira de projetos, tais como o
+valor presente líquido, retorno do investimento, taxa interna de retorno e, mais recente-
+mente, teoria de opç ões reais, outras têm uma visão mais holística do desenvolvimento
+de software e defendem o uso de métricas baseadas em análise multivariada tais como
+Strategy-to-Bottom-Line Value Chain, Multi-layer evaluation process e Information Eco-
+nomics [Grembergen 2001].
+Contudo, todas essas tentativas falham em reconhecer que a priorização e a mo-
+dularizacão de requisitos têm um papel fundamental na construção do valor do soft-
+ware. Enquanto os requisitos satisfeitos por uma unidade de software são cruciais para a
+determinação do seu valor, a ordem na qual essas unidades são implementadas indicam
+298
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+quão cedo esse valor pode ser apropriado. Uma exceção notável é apresentada por Dennne
+e Cleland-Huang [Denne and Cleland-Huang 2005] que sugerem o uso de uma análise fi-
+nanceira abrangente com a finalidade de maximizar o valor de projetos de software com-
+postos por minimum marketablede features modules (MMFs), ou seja, unidades de soft-
+ware que contém pequenos conjuntos de funcionalidades que têm valor para o neg ócio.
+Em seu trabalho, Dennne e Cleland-Huang mostram que a ordem de implementação dos
+MMFs pode alterar substancialmente o valor destes projetos.
+Contudo Denne e Cleland-Huang (op. cit.) falham em não reconhecer que (a) nem
+sempre todas as unidades de software são essenciais ao desenvolvimento de um projeto
+de software; (b) se uma unidade de software não for essencial a um projeto de software,
+o seu desenvolvimento pode ou não ser realizado pelo gerente de projetos durante o ciclo
+de vida do software; (c) o valor de unidades de software não-essenciais pode variar de
+acordo com o conjunto de unidades que precederam o seu desenvolvimento e (d) quando
+implementados, ao invés de criar o seu pr óprio fluxo de caixa, as unidades de software
+não-essenciais podem contribuir para o valor de um software influenciando de forma pos-
+itiva o valor de unidades de software essenciais.
+Este artigo é um passo à frente no preenchimento desta lacuna, revelando o valor
+de MMFs não essenciais (NMMFs) e de elementos arquiteturais não-essenciais (NAEs),
+cujo o processo de criação de valor pode ser diferente das MMFs tradicionais.  Além
+disso, este artigo mostra como a combinação de relaç ões de precedência flexíveis, NAEs
+e NMMFs pode ser usada para aumentar ainda mais o valor do software.
+2. ARCABOUC¸O CONCEITUAL
+2.1. Casos de Uso
+Caso de uso é uma linguagem de especificação gráfica e textual criada no final dos anos
+1980’s por Ivar Jacobson, que descreve como um conjunto de atores  (o iniciador de
+interaç ões) usa um sistema para alcançar um objetivo que tem valor para o neg ócio, e
+como o sistema ajuda estes atores a alcançar os seus objetivos [Bittner and Spence 2002].
+A Figura 1 apresenta uma especificação de caso de uso de um sistema de controle de
+empréstimos. Na Figura 1 “Cliente” é um ator e as elipses são casos de uso, cujos signifi-
+cados são descritos na Tabela 1.
+Figura 1. Um modelo de caso de uso de um sistema de controle de empr ´estimos.
+299
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Caso de Uso
+Id                                                                                            Nome                      Descriç ão
+UC1                                                                                           Solicitar empréstimo      Coleta os dados necessários para conceder um empréstimo a um
+                                                                                                                        cliente
+UC2                                                                                           Solicitar   refinancia-   Coleta os dados necessários para conceder o refinanciamento de um
+                                                                                              mento                     empréstimo existente
+UC3                                                                                           Aceitar condiç ões        Permite que o cliente aceite ou recuse as condiç ões do empréstimo
+                                                                                              de empréstimo             propostas pelo cedente
+UC4                                                                                           Aceitar condiç ões  de    Permite que o cliente aceite ou recuse as condiç ões de refinancia-
+                                                                                              refinanciamento           mento propostas pelo cedente
+UC5                                                                                           Análise   rápida   de     Verifica a probabilidade de um cliente pagar um empréstimo de
+                                                                                              crédito                   acordo com os valores e as datas das parcelas
+UC6                                                                                           Verificar  disponibili-   Verifica se o cedente possui os fundos necessários para conceder um
+                                                                                              dade de fundos            empréstimo a um determinado cliente
+estimo
+Os casos de uso são independentes de tecnologia.  Assim, casos de uso não in-
+cluem detalhes sobre interfaces, uso de bancos de dados e design de telas, podendo ser
+aplicados em várias fases do processo de engenharia de requisitos[Denney 2005].
+2.2. Minimum Marketable Features
+De acordo com Denne e Cleland-Huang [Denne and Cleland-Huang 2004] minimum mar-
+ketable features modules, as MMFs, são m ódulos com pequenos conjuntos de funcionali-
+dades que podem ser entregues de forma rápida e que criam valor para o neg ócio. Embora
+uma MMF seja uma unidade auto-contida, muitas vezes ela s ó pode ser desenvolvida de-
+pois que outras partes do projeto tiverem sido finalizadas. Estas partes do projeto podem
+ser outras MMFs ou a infra-estrutura arquitetural, ou seja, o conjunto de funcionalidades
+básicas que não oferecem valor direto aos clientes, mas que são necessárias às MMFs.
+A pr ópria infra-estrutura arquitetural pode ser decomposta em elementos autocon-
+tidos que podem ser entregues separadamente.  Estes elementos, chamados de architec-
+tural elements (AEs), permitem que a arquitetura seja entregue de acordo com a demanda,
+reduzindo ainda mais o investimento inicial necessário para se executar um projeto. En-
+tretanto, o valor total criado para o neg ócio por um software constituído de vários MMFs
+interdependentes, cada um com seu pr óprio fluxo de caixa e restriç ões de precedência,
+depende da ordem de desenvolvimento destes MMFs. Por exemplo, a Figura 2 apresenta
+o diagrama de precedência do conjunto de casos de uso da Figura 1. Neste exemplo em
+particular UC1, . . . , UC5  são MMFs e UC6  é um AE. As raz ões pelas quais estes casos de
+uso são considerados MMFs e AEs são objeto de discussão da Seção 3.
+No diagrama apresentado na Figura 2, uma seta sai de UC1  para UC2, isto é, UC1
+→ UC2, indica que o desenvolvimento do m ódulo UC1  deve ser concluído antes que o de
+300
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+UC2 comece. O n ó inicial (Start) e o final (Finish) servem apenas para marcar o começo e
+o término do projeto, respectivamente, e por isso, possuem duração e custo de desenvolvi-
+mento iguais a zero. A Tabela 2 mostra todas as possíveis seq ü ências de desenvolvimento
+para o sistema de controle de empréstimos, considerando que (a) cada unidade de soft-
+ware demora somente um período para ser desenvolvida; (b) somente uma unidade de
+software pode ser desenvolvida de cada vez; (c) a primeira unidade de software é desen-
+volvida no período 1; (d) não existe nenhum intervalo entre o fim do desenvolvimento de
+uma unidade de software e o começo do pr óximo.
+oes de planejamento
+Opç ões de                                                                                                       Periodo
+Agendamento                                                                                 1     2     3        4         5       6
+1                                                                                           UC1   UC2   UC5      UC6       UC3     UC4
+2                                                                                           UC1   UC2   UC5      UC6       UC4     UC3
+3                                                                                           UC2   UC1   UC5      UC6       UC3     UC4
+4                                                                                           UC2   UC1   UC5      UC6       UC4     UC3
+A Tabela 3 mostra o fluxo de caixa não descontado de cada MMF e AE apresen-
+tado na Figura 2. Por exemplo, de acordo com a Tabela 3, UC1  requer um investimento
+inicial de US$ 50 mil.  Uma vez que o seu desenvolvimento termina UC1  produz uma
+série de retornos positivos até o décimo-quinto período, quando o sistema de empréstimo
+consignado torna-se obsoleto e é substituído por uma nova e mais avançada ferramenta.
+Tabela 3. Use-case cash-flow elements
+Cash Flow Elements (US$ 1,000)
+Id                                                                                                      Period
+                                                                                            1     2     3        4..14     15
+UC1                                                                                         -50   50    70       100       50
+UC2                                                                                         -70   20    28       40        20
+UC3                                                                                         -30   500   700      1,500     1,000
+UC4                                                                                         -40   200   280      600       200
+UC5                                                                                         -80   90    120      180       90
+UC6                                                                                         -10   0     0        0         0
+Uma vez que não  é apropriado executar operaç ões matemáticas sobre valores
+monetários  em  diferentes  instantes  de  tempo  sem  considerar  uma  taxa  de  juros,    é
+necessário calcular o seu fluxo de caixa descontado [Groppelli and Nikbakht 2006].  A
+Tabela 4 mostra o somat ório do fluxo de caixa descontado de cada MMF da Figura 2,
+considerando uma taxa de juros de 2% por período.  Este somat ório é o valor presente
+líquido (VPL) de todos os elementos do fluxo de caixa de uma MMF. Para facilitar o en-
+tendimento, os valores apresentados na Tabela 4 foram arrendodados para o valor inteiro
+mais pr óximo. Os demais valores apresentados neste artigo seguem a mesma convenção.
+Obviamente, nem todas as MMFs podem ser desenvolvidas no primeiro período.
+O grafo de precedência apresentado na Figura 2 indica que apenas o UC1  e o UC2  podem
+ser desenvolvido no primeiro período.  Uma vez que neste exemplo cada MMF precisa
+de exatamente um período para ser desenvolvido, o UC5  não pode ser desenvolvido até o
+terceiro período. Além disso, cada seq ü ência de MMFs produz o seu pr óprio VPL. Por
+exemplo, a seq ü ência UC1  → UC2  → UC5  → UC6  → UC3  → UC4, produz um VPL de
+$17.564 mil. Já a seq ü ência UC2  → UC1  → UC5  → UC6  → UC3  → UC4, produz um
+VPL de $17.601 mil.
+301
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Tabela 4. Use-case net-present value
+Net Present Value (US$ 1,000)
+Id                                                                                                                  Period
+                                                                                                  1        2        3        4        5        6
+UC1                                                                                               1,045    987      894      802      712      623
+UC2                                                                                               368      346      309      274      239      204
+UC3                                                                                               16,001   14,944   13,537   12,157   10,804   9,478
+UC4                                                                                               6,221    5,950    5,388    4,836    4,296    3,766
+UC5                                                                                               1,885    1,781    1,613    1,447    1,285    1,126
+UC6                                                                                               -10      -10      -10      -9       -9       -9
+AO
+As consideraç ões apresentadas neste artigo são introduzidas com a ajuda de um exemplo
+inspirado no mundo real1. Empréstimos consignados são empréstimos de utilidade geral,
+de baixo risco e baixa taxa de juros concedidos a funcionários qualificados de empresas
+associadas a uma instituição financeira, nos quais os pagamentos são feitos em parcelas
+deduzidas de seus salários [Peterson 2008]. Neste sentido, considere uma instituição fi-
+nanceira que faz empréstimos consignados a seus clientes. Para o prop ósito deste artigo,
+esta organização será chamada de DINHEIRO R ´APIDO, or DR.
+Assim que um pedido de um empréstimo é recebido, a DR calcula a probabilidade
+do cliente pagar o empréstimo solicitado de acordo com valores e datas pré-estabelecidas.
+Em seguida, a DR verifica se há fundos suficientes para conceder o empréstimo que o
+cliente está solicitando. Finalmente, são apresentadas ao cliente as condiç ões nas quais
+um empréstimo consignado pode ser concedido, se houver. Neste ponto, o cliente pode
+optar por aceitar ou recusar a oferta do empréstimo.
+Para oferecer uma resposta competitiva adequada aos movimentos recentes da
+concorrência no mercado de empréstimos consignado e desenvolver ainda mais seus
+neg ócios de empréstimos, a DR decidiu criar um novo sistema de empréstimo consignado
+para dispositivos m óveis baseado na Internet. A empresa acredita que se agir rapidamente,
+além de aumentar o seu faturamento consideravelmente, esse sistema pode redefinir favo-
+ravelmente o cenário competitivo dos neg ócios de empréstimos consignado. A Figura 1
+apresenta um modelo com os casos de uso do novo sistema de empréstimo consignado.
+3.1. Determinando Como Cada Unidade de Sofware Pode Gerar Receita
+A Tabela 1 descreve o significado e o tipo de cada caso de uso apresentado na Figura 1.
+Observa-se que todos os cinco primeiros casos de uso listados na tabela são unidades de
+software aut ônomas e que estas unidades geram receita para a DR da seguinte forma:
+• UC1  e UC2  - pergunta a cada cliente que solicita um empréstimo consignado se
+concorda em receber ofertas de novos produtos da DR e de seus parceiros com-
+erciais.  Novas campanhas de marketing podem ser aplicadas aos clientes que
+concordam, gerando novas oportunidades de vendas para a DR e receita na forma
+de taxas devidas pelo uso da base de clientes da DR por empresas parceiras;
+• UC3  e UC4  - assim que um cliente aceita uma oferta de empréstimo ou refinancia-
+mento, é gerada receita na forma de juros e
+1 O exemplo foi inspirado em um projeto desenvolvido por uma grande instituição financeira sul-
+americana, que solicitou que seu nome não fosse divulgado.
+302
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+• UC5  - os resultados do caso de uso “Análise rápida de crédito” são usados para
+enriquecer a base de dados de clientes da DR. As informaç ões de análise de crédito
+são particularmente importantes para campanhas de marketing que dependem da
+sa úde financeira dos clientes, especialmente as campanhas que permitem que o
+cliente pague por um produto ou serviço em parcelas. As empresas associadas à
+DR pagam uma taxa especial para acessar a base de dados enriquecida.
+Portanto os casos de uso UC1, UC2, · · ·, UC5  são MMFs.  Por outro lado, UC6,
+“Verificar a disponibilidade de fundos” é o único AE entre os casos de uso na Figura 1, já
+que apresenta um serviço essencial ao comportamento desejado do sistema. No entanto,
+nem os clientes nem as empresas associadas estão dispostas a pagar por este serviço.
+3.2. Planejando a Implementaç ão do Sistema
+Embora a equipe da DR responsável pelo projeto de construção do sistema de empréstimo
+consignado tenha considerado inicialmente adotar o diagrama de precedência da Figura
+2, logo perceberam que o comportamento da unidade UC5  é independente do tipo de
+empréstimo que está sendo solicitado, isto é: novo empréstimo ou refinanciamento. Por-
+tanto, o desenvolvimento de UC5  pode começar quando o desenvolvimento de UC1  ou
+UC2  estiver completo, ou mesmo quando o desenvolvimento de ambas estiver completo.
+Considerando que esta nova visão das dependências requeridas por UC5  é uma
+opção real, e que as opç ões poderem mudar substancialmente o valor de projetos de soft-
+ware [Fichman et al. 2005], a equipe de projeto da DR decidiu alterar o diagrama de
+precedência apresentado na Figura 2. A Figura 3 mostra o diagrama de precedência atu-
+alizado para o projeto de construção do sistema de empréstimo consignado.
+estimo
+consignado.
+Observa-se que o requisito de precedência flexível do UC5  é apropriadamente
+sinalizado pela presença do símbolo “+” (ou inclusivo) no diagrama. Também é impor-
+tante observar que, de acordo com as condiç ões atuais de mercado, determinadas através
+de pesquisa de mercado encomendada pela equipe de analistas de neg ócios da DR, as
+unidades apresentadas na Figura 3 formam o conjunto de unidades de software que são
+essenciais para o desenvolvimento do sistema de empréstimo consignado, ou seja este é
+o menor conjunto de unidades aut ônomas que tem alguma chance de apresentar retorno a
+longo prazo ao investimento a ser feito pela DR em seu desenvolvimento.
+A Tabela 5 indica todas as sequências possíveis de desenvolvimento do sistema
+de empréstimo consignado. Existem ao todo quatorze possibilidades.  ´E importante men-
+cionar que como as unidades UC1, UC2, · · ·, UC6  são todas essenciais ao comportamento
+desejado do sistema, todas devem ser desenvolvidas.
+3.3. Avaliaç ão de Diferentes Opç ões de Planejamento
+A Tabela 6 mostra os elementos de fluxo de caixa não-descontados de cada MMF e AE no
+modelo apresentado na Figura 3 conforme estimado pela equipe de projeto da DR. Uma
+303
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+vez que a unidade UC5 gera receita de acordo com o n úmero de clientes existentes na base
+de dados de clientes da DR (vide Seção 3.2), seus elementos de fluxo de caixa variam de
+acordo com o contexto no qual UC5  é desenvolvido. Quanto maior o n úmero de clientes
+na base de dados, maior a receita gerada por UC5. Portanto
+• Se UC1  preceder o desenvolvimento de UC5, o que é indicado por UC1  → UC5
+na Tabela 6, então UC5  produz US$ 60 mil no segundo período, US$ 90 mil no
+terceiro período, US$ 130 no quarto período, e assim sucessivamente;
+• Se UC2  preceder o desenvolvimento de UC5, ou seja, UC2  → UC5, então o UC5
+produz valores menores em cada período. Produz US$ 20 mil no segundo período,
+US$ 30 mil no terceiro, US$ 50 mil no quarto, e assim sucessivamente;
+• Contudo, se tanto UC1  quanto UC2  precederem o desenvolvimento de UC5, ou
+seja, (UC1,UC2) → UC5, então o valor produzido por UC5 em cada período atinge
+os seus valores mais altos. UC5  produz US$ 90 mil no segundo período, US$ 120
+mil no terceiro período, US$ 180 no quarto período, e assim sucessivamente.
+Em todas as circunstâncias, o investimento necessário pelo UC5 permanece o mesmo, isto
+é US$ 80 mil.
+A Tabela 7 relaciona as opç ões de planejamento apresentadas na Tabela 5 para os
+seus respectivos VPLs.  Por exemplo, na sétima opção, UC1  é desenvolvido primeira-
+mente.  Então, UC5, UC6, UC3, UC2  e UC4  são desenvolvidas no segundo, terceiro,
+quarto, quinto e sexto períodos, respectivamente, produzindo um VPL de US$18.460
+mil, que é o VPL mais alto entre as opç ões de planejamento e, como resultado, a escolha
+l ógica da equipe de projetos da DR.
+oes de Planejamento
+Opç ões de                                                                                                                                                                          Período
+Planejamento                                                                                1     2                                                                                 3         4         5       6
+1                                                                                           UC1   UC2                                                                               UC5       UC6       UC3     UC4
+7                                                                                           UC1   UC5                                                                               UC6       UC3       UC2     UC4
+14                                                                                          UC2   UC5                                                                               UC6       UC4       UC1     UC3
+                                                                                                  Tabela 6. Elementos de fluxo de caixa n ˜ao-descontados das unidades de sofware
+                                                                                                  Elementos de Fluxo de Caixa (US$ 1.000)
+Unid. de Software                                                                                                                                                                   Período
+                                                                                            1     2                                                                                 3         4 to 14   15
+UC1                                                                                         -50   50                                                                                70        100       50
+UC2                                                                                         -70   20                                                                                28        40        20
+UC3                                                                                         -30   500                                                                               700       1,500     1,000
+UC4                                                                                         -40   200                                                                               280       600       200
+UC1  → UC5                                                                                  -80   60                                                                                90        130       60
+UC2  → UC5                                                                                  -80   20                                                                                30        50        20
+(UC1 ,UC2 ) → UC5                                                                           -80   90                                                                                120       180       90
+UC6                                                                                         -10   0                                                                                 0         0         0
+304
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+3.4. Lidando com Unidades de Software N ão-Essenciais
+Antes de fazer uma opção de planejamento com base em um modelo que considere apenas
+unidades de software essenciais, a equipe de projetos da DR decidiu examinar o efeito
+das unidades não essenciais, que podem melhorar ainda mais a qualidade dos serviços
+prestados pela DR. A Tabela 8 descreve as unidades de software não essenciais.  Há
+somente uma MMF não essencial (NMMF) entre as unidades de software não essenciais,
+ou seja, UC7, “Análise detalhada de crédito”, que enriquece ainda mais a base de dados
+de clientes da DR com informaç ões que abrem oportunidades para novas campanhas de
+marketing, tanto da DR, quanto de empresas associadas.  Como a receita gerada pela
+unidade UC7  depende do n úmero de clientes aprovados, é razoável afirmar que quanto
+mais clientes tiverem seu crédito analisado, maior tende a ser a receita gerada.
+Assim sendo, a receita gerada por UC7  é influenciada diretamente pelo desenvolvi-
+mento das unidades UC1,“Solicitar empréstimo”, e UC2, “Solicitar refinanciamento”, as-
+sim como UC5, “Análise rápida de crédito”. A Tabela 9 apresenta os elementos de fluxo
+de caixa de UC7. A receita gerada por esta unidade de software em particular se dá através
+das empresas associadas à DR que pagam uma taxa especial para acessar a base de dados
+de clientes enriquecida.
+Surpreendentemente, esta não é a única forma em que UC7  contribui para o valor
+do projeto de construção do sistema de empréstimo consignado.  Se implementada, a
+unidade “Análise detalhada de crédito” aumenta o n úmero de pedidos de empréstimos
+e refinanciamentos aprovados.  Quanto mais pedidos de empréstimos e refinanciamen-
+tos forem aprovados, maior o retorno produzido pelas unidades “Aceitar condiç ões de
+empréstimo” e “Aceitar condiç ões de refinanciamento”. Portanto, a unidade de software
+ao de Planejamento
+Opç ão de                                                                                    VPL
+Planejamento                                                                                 (US$ 1,000)
+1                                                                                            17,564
+2                                                                                            16,769
+                                                                                                                    7                                                          18,460
+                                                                                                                    14                                                         15,814
+                                                                                                                                                                               oes das unidades de software n ˜ao essenciais
+                                                                                                                    Unidade de software
+Id                                                                                           Nome                   Descriç ão
+UC7                                                                                          Análise    de-                                                                    Executa uma análise de crédito mais detalhada em pedidos que foram re-
+                                                                                             talhada          de                                                               jeitados pela ”Análise rápida de crédito”, a fim de conceder o empréstimo
+                                                                                             crédito                a estes clientes, caso isso seja possível
+UC8                                                                                          Contratar  se-                                                                    Para conceder os empréstimos, inclui o custo de um seguro de vida em
+                                                                                             guro de vida                                                                      pedidos de empréstimo rejeitados pela “Análise rápida de crédito” devido a
+                                                                                                                    baixa expectativa de vida desses clientes
+UC9                                                                                          Lidar            com                                                              Determina a data mais provável na qual a DR pode conceder um pedido de
+                                                                                             empréstimos                                                                       empréstimo ou refinanciamento que foi rejeitado por ”Verificar disponibil-
+                                                                                             aprovados              idade de fundos” devido a uma falta de fundos temporária
+305
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+“Análise detalhada de crédito” também contribui para o aumento da receita gerada por
+estas duas outras unidades de software.
+Tabela 9. Elementos de fluxo de caixa de UC7
+Elementos de Fluxo de Caixa (US$ 1.000)
+Unidade de Software                                                                                                                               Período
+Id                                                                                          1                          2                          3         4 to 9   10
+UC1  → UC7                                                                                  -90                        65                         75        90       65
+UC2  → UC7                                                                                  -90                        25                         30        35       25
+(UC1 ,UC2 ) → UC7                                                                           -90                        90                         100       130      90
+Por outro lado, “Lidar com empréstimos aprovados” e “Contratar seguro de vida”
+são unidades aut ônomas cujos serviços nem os clientes, nem as empresas associadas dese-
+jam pagar. Portanto, são de fato elementos de arquitetura não essenciais (NAEs). Apesar
+destas duas unidades não gerarem receita por si mesmas, contribuem para o valor do sis-
+tema de empréstimo consignado influenciando a receita gerada por outras unidades.
+De modo semelhante a “Análise detalhada de crédito”, “Lidar com empréstimos
+aprovados” e “Contratar seguro de vida” aumentam o n úmero de pedidos de empréstimos
+e refinanciamentos aprovados. Como resultado, aumentam a receita gerada por ”Aceitar
+condiç ões de empréstimo” e “Aceitar condiç ões de refinanciamento”. A Tabela 10 apre-
+senta o impacto estimado do desenvolvimento de unidades de software não essenciais
+sobre a receita gerada por unidades de software essenciais.
+Tabela 10. O impacto estimado de unidades de software n ˜ao essenciais sobre a
+receita gerada por unidades de software essenciais
+Unidade de Software Essencial
+                                                                                            UC3  (Aceitar condiç ões   UC4  (Aceitar condiç ões
+                                                                                            de empréstimo              de refinanciamento)
+UC7   (Efetuar  análise                                                                     +20%                       +15%
+detalhada de crédito)
+Unidade de Software                                                                         UC8  (Contratar seguro     +15%                       +10%
+de vida)
+N ão- Essencial                                                                             UC9                        (Lidar                     com       +25%     +20%
+empréstimos aprovados)
+3.5. Replanejando a Implemantaç ão do Software
+A  Figura  4  apresenta  o  novo  diagrama  de  precedência  do  sistema  de  empréstimo
+consignado.  Este diagrama considera a existência de unidades de software essenciais
+e não essenciais. A linha tracejada ao redor da identificação da unidade tal como UC7  ou
+UC8  indica uma unidade de software não essencial, que pode ser desenvolvida ou não.
+Contudo, se um caso de uso não essencial for desenvolvido, as dependências que
+este cria devem ser satisfeitas.  Por exemplo, se nem UC7  nem UC8  forem desenvolvi-
+das, o desenvolvimento de UC6  pode começar imediatamente ap ós o desenvolvimento do
+UC5  estar completo. Porém, se UC7  for desenvolvida e UC8  não for, o desenvolvimento
+de UC6  s ó pode começar quando o desenvolvimento de UC5  e UC7  estiver completo,
+e assim por diante.  A Tabela 11 apresenta as opç ões de planejamento do sistema de
+306
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+empréstimo consignado, levando em consideração a existência de casos de uso essenciais
+e não essenciais. Há ao todo 144 diferentes opç ões de planejamento.
+oes de Planejamento
+#                                                                                                                       Período
+                                                                                         1     2     3         4        5         6     7     8     9
+1                                                                                        UC1   UC2   UC5       UC6      UC3       UC4
+81                                                                                       UC2   UC1   UC5       UC7      UC8       UC6   UC3   UC4
+144                                                                                      UC2   UC5   UC7       UC9      UC6       UC1   UC8   UC4   UC3
+3.6. Qual Opç ão de Planejamento Apresenta o VPL Mais Alto?
+A Tabela 12 exibe os elementos de fluxo de caixa não-descontados de cada MMF, AE,
+NMMF e NAE apresentados na Figura 4, conforme estimado pela equipe de projetos da
+DR.
+Tabela 12. Novos elementos de fluxo de caixa da unidade de software
+Novos Elementos de Fluxo de Caixa (US$ 1.000)
+Unid. de Software                                                                                    Período
+Id                                                                                       1     2     3         4 to 9   10
+UC1                                                                                      -50   50    70        100      50
+UC2                                                                                      -70   20    28        40       20
+UC3                                                                                      -30   500   700       1,500    1,000
+UC7  → UC3                                                                               -30   600   840       1,800    1,200
+UC8  → UC3                                                                               -30   625   875       1,875    1,250
+UC9  → UC3                                                                               -30   575   805       1,725    1,150
+(UC7 ,UC8 ) → UC3                                                                        -30   725   1,015     2,175    1,450
+UC9                                                                                      -10   0     0         0        0
+A Tabela 13 exibe o VPL de cada MMF, AE, NMMF e NAE apresentado na
+Figura 4 de acordo com o período no qual é desenvolvido, levando em consideração uma
+taxa de juros de 2% por período.  Observa-se que o n úmero de períodos que se leva
+Figura 4. Um diagrama de preced ˆencia contendo unidades de software essenci-
+ais e n ˜ao essenciais.
+307
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Unid. de Software                                                                                                  Período
+Id                                                                                        1             2          3                                                  · · ·            10
+UC1                                                                                       1,045         987        894                                                · · ·            369
+UC2                                                                                       368           346        309                                                · · ·            105
+UC3                                                                                       16,001        14,944     13,537                                             · · ·            5,653
+UC7  → UC3                                                                                19,207        17,939     16,250                                             · · ·            6,788
+C8  → UC3                                                                                 20,009        18,688     16,928                                             · · ·            7,072
+UC9  → UC3                                                                                18,406        17,190     15,572                                             · · ·            6,504
+(UC7 ,UC8 ) → UC3                                                                         23,215        21,683     19,641                                             · · ·            8,208
+UC9                                                                                       -10           -10        -10                                                -9
+para desenvolver todo o sistema aumentou de seis para nove períodos, devido à possível
+introdução de MMFs e AEs não essenciais (vide Tabela 11).
+Entre todas as opç ões de planejamento apresentadas na Tabela 11, a opção mais
+l ógica para a DR  é desenvolver as unidades de software que comp õem o sistema de
+empréstimo consignado na seguinte ordem: UC2  → UC1  → UC5  → UC7  → UC8  →
+UC6   → UC3   → UC4, que produz um VPL de US$ 19.651.  Observe que esta opção
+de planejamento não contempla o desenvolvimento do UC9,  “Lidar com empréstimo
+aprovado”. De acordo com as estimativas geradas pela equipe de projetos da DR, o custo
+de desenvolvimento do UC9  não compensa o seu impacto positivo sobre a receita gerada
+pelos UC3  e UC4.
+AO
+A Tabela 14 compara os valores das diferentes alternativas consideradas pela equipe de
+projetos da DR para o desenvolvimento do sistema de controle de empréstimo consignado.
+Observe que, geralmente, o que as unidades de software não essenciais e as relaç ões de
+precedência flexíveis fazem é permitir que gerentes de projeto adiem o desenvolvimento
+de unidades de software menos lucrativas até que se tornem totalmente necessárias. Como
+resultado, o valor de trilhas de desenvolvimento mais rentávies são obtidas e podem ser
+apropriadas antecipadamente.
+Tabela 14. Alternativas consideradas pela DR para o desenvolvimento do sistema
+de controle de empr ´estimo consignado
+#                                                                                         Referência               Flexibilidade                                      VPL da Escolha
+                                                                                          Mod. do       Diag. de                                                      L ógica
+                                                                                          Caso de Uso   Preced.                                                       (US$ 1.000)
+1                                                                                         Figura 1      Figura 2   Nenhuma                                            US$17.564
+2                                                                                         Figura 1      Figura 3   Relação de precedência de dependência entre os     US$18.460
+UC1 , UC2  e UC5  é flexibilizada
+3                                                                                         —             Figura 4   Relação de precedência entre os UC1 , UC2  e UC5   US$19.651
+é flexibilizada. NMMFs e NAEs são apresentados
+Como resultado,  é seguro afirmar que a introdução de relaç ões de precedência
+flexíveis e a presença de NMMFs e NAEs entre as unidades de software essenciais pode
+308
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+aumentar o valor de neg ócio de projetos de software. Uma vez que o objetivo esperado
+para o projeto de software está claramente definido, as unidades de software não essen-
+ciais são aquelas que podem ser retiradas do projeto sem prejudicar o objetivo traçado
+anteriormente[Pohl et al. 2010, Valente 2009].
+Apesar da considerável quantidade de pesquisa disponível na literatura sobre
+o impacto da flexibilidade na avaliação,  seleção e no gerenciamento de projetos de
+software  [Benaroch et al. 2006, Wu and Ong 2008, Fichman et al. 2005],  surpreenden-
+temente,  a introdução de flexibilidade através de unidades de software não essenci-
+ais e relaç ões de precedência flexíveis  é pouco explorada.  O objetivo deste artigo  é
+preencher essa lacuna.  Tendo consciência do valor potencial de NMMFs e relaç ões de
+dependência flexíveis, as empresas podem seguir as idéias de Denne e Cleland-Huang
+[Denne and Cleland-Huang 2005] e desenvolver projetos maiores e mais complexos a
+partir de um investimento relativamente menor.
+Referências
+Benaroch, M., Shah, S., and Jeffery, M. (2006). On the valuation of multistage informa-
+tion technology investments embedding nested real options.  Journal of Management
+Information Systems, 23(1):239-261.
+Bittner, K. and Spence, I. (2002). Use Case Modeling. Addison-Wesley.
+Denne, M. and Cleland-Huang, J. (2004). The incremental funding method: Data-driven
+software development. Software, IEEE, 21(3):39- 47.
+Denne, M. and Cleland-Huang, J. (2005). Financially informed requirements prioritiza-
+tion.  In Proceedings of the 27th  International Conference on Software Engineering
+(ICSE), pages 710-711, St. Louis, Missouri, USA. ACM Press.
+Denney, R. (2005). Succeeding with Use Cases. Addison-Wesley.
+Fichman, R. G., Keil, M., and Tiwana, A. (2005). Beyond valuation: Real options think-
+ing in IT project management. California Management Review, 47(2):74-100.
+Grembergen, W. V. (2001).  Information Technology Evaluation Methods and Manage-
+ment. Idea Group Publishing.
+Groppelli, A. A. and Nikbakht, E. (2006). Finance. Barron’s, 5th edition.
+Peterson, C. L. (2008). Usury law, payday loans, and statutory sleight of hand. Minnesota
+Law Review, 92(4).
+Pohl, K., Bckle, G., and van der Linden, F. J. (2010). Software Product Line Engineering:
+Foundations, Principles and Techniques. Springer, NY, USA.
+Valente, P. (2009). Goals Software Construction Process. VDM.
+Wu, L.-C. and Ong, C.-S. (2008). Management of information technology investment: A
+framework based on a real options and mean variance theory perspective.  Technova-
+tion, 28(3):122-134.
+Wu, S. D., Shi, C., and Gurbaxani, V. (2007).  Investigating the risk-return relationship
+of information technology investment:  Firm-level empirical analysis.  Management
+science, 53(12):1829-1842.
+309
+
+
+
+
+

@@ -1,0 +1,513 @@
+﻿Estilos Arquiteturais de Software na Construção de Objetos de
+Aprendizagem para a TV Digital Interativa
+Clayson Sandro Francisco de Sousa Celes, Cidcley Teixeira de Souza
+Centro Federal de Educação Tecnológica do Ceará (CEFETCE)
+Av. 13 de Maio, 2081 - Benfica
+CEP:60040-531 - Fortaleza - CE - Brasil
+claysonsandro@gmail.com, cidcley@cefetce.br
+Resumo.  Atualmente,  Objetos  de  Aprendizagem  (OAs)  têm  se  apresentado  como  uma
+tecnologia eficiente no auxílio à educação. Contudo, ainda é uma tarefa bastante complexa
+a construção de OAs a partir da seleção de um conjunto de recursos digitais ou do reuso de
+recursos a partir de outros OAs. Para facilitar essa tarefa, propomos nesse trabalho a
+adoção dos conceitos de estilos arquiteturais para o auxílio à construção de OAs para a TV
+Digital Interativa. Na nossa abordagem, realizamos a geração automática de código dos
+OAs na linguagem NCL a partir da descrição de um estilo, de modo a facilitar a construção
+de complexas estruturas hipermídia para fins educacionais.
+Abstract.  Nowadays,  Learning  Objects                                                                          (LOs)  have  present  themselves  as  an  effective
+technology in educational aid. However, building LOs from the selection of a set of digital
+resources or from the reuse of resources of other LOs are still extremely complex tasks. To
+facilitate these tasks, we propose in the work the adoption of architectural style concepts to
+aid the construction of LOs to the Interactive TV. In our approach, we perform an automatic
+code generation of LOs in the NCL language from the description of a style, in a way to
+facilitate the construction of complex educational hypermedia structures.
+1. Introdução
+A TV Digital Interativa (TVDi), representará muito em breve no Brasil uma revolução, combinando as
+características tradicionais da televisão analógica com as potencialidades do computador pessoal e da
+Internet. Essa nova mídia utilizará parte significativa da infra-estrutura existente da televisão analógica, e
+se beneficiará do alto grau de penetração dessa tecnologia [Bates 2003, Damásio 2003].
+A educação mediada pela TVDi, definida como t-learning, refere-se à utilização da tecnologia de
+Sistemas   de   TV   Interativa   para   fornecer   serviços   interativos   educacionais   semelhantes   aos
+disponibilizados no e-learning [Lytras et al 2002, Gupta 2003, Zhao 2002]. Dessa maneira, através de um
+aparelho de televisão, são fornecidos serviços interativos educacionais semelhantes aos disponibilizados
+pela Internet.
+A implementação desses serviços interativos, definido como estratégia do governo brasileiro no
+SBTVD (Sistema Brasileiro de TV Digital), deverá ser realizado através de ferramentas desenvolvidas no
+nosso próprio pais, onde pode ser destacada a linguagem NCL  [Soares e Rodrigues  2006].      Essa
+linguagem permite a construção de forma descritiva de aplicações hipermídia através da definição de
+relações  de  sincronização  espaço-temporal  entre  mídias  digitais.  Essas  especificações  devem  ser
+executadas  no  STB  (Set-Top-Box)  do  usuário  pelo  middleware  Ginga  [Ginga  2007],  desenvolvido
+durante os trabalhos dos consórcios do SBTVD.
+No  contexto  educacional,  a  necessidade  do  uso  de  novas  tecnologias  no  processo  de  ensino  e
+aprendizagem vem sendo cada vez mais presente no cotidiano de alunos e professores. Nesse sentido, um
+dos materiais educacionais que procuram atender esses objetivos são os Objetos de Aprendizagem (OAs).
+Durante os últimos anos diversos projetos e pesquisas têm sido realizados em torno dos OAs, definidos
+como qualquer entidade, digital ou não digital, que pode ser utilizada, reutilizada ou referenciada durante
+o aprendizado apoiado sobre a tecnologia [Wiley 2000].
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                         290
+
+
+
+
+Argumentamos nesse trabalho que a associação dos benefícios da TVDi com a eficácia dos OAs deve
+revolucionar em pouco tempo a forma de se utilizar às tecnologias no contexto educacional. Para tanto, as
+características  de  reusabilidade  e  adaptabilidade,  que  são  importantes  no  desenvolvimento  de  OAs,
+devem ser explicitamente tratadas de forma a facilitar o desenvolvimento de material educacional para a
+TVDi.
+Para atingir esses objetivos, estamos propondo a adoção dos conceitos de estilos arquiteturais para o
+desenvolvimento de OAs para TVDi. Com essa abordagem será possível a construção de OAs a partir da
+seleção de conteúdos digitais e da definição das suas relações, sendo que a definição de estilos permite o
+desenvolvimento de famílias de arquiteturas de OAs   que compartilham características semelhantes.
+Para justificar nossa proposta, apresentamos nesse trabalho um estilo arquitetural que permite a
+geração automática de OAs   a partir da definição de relações estruturais e semânticas especificadas na
+linguagem NCL. Dessa forma, os OAs especificados através desse estilo serão passíveis de execução no
+middleware Ginga, possibilitando sua utilização em TVDi.
+Para apresentar nossa proposta iniciaremos na seção 2 com a definição do conceito de Objetos de
+Aprendizagem. Nessa seção também serão apresentadas as principais propriedades necessárias em um
+OA. Além disso, também será apresentada uma taxonomia para OAs que servirá de base para a definição,
+posteriormente, de estilos arquiteturais para essa tecnologia. Na seção 3 a linguagem NCL é apresentada
+de forma sucinta. Na seção 4, apresentamos de forma detalhada a nossa proposta. Nessa seção mostramos
+a aplicabilidade do conceito de estilos arquiteturais na definição da arquitetura de OAs. Além disso,
+apresentamos todas as etapas para a elaboração de um OA, desde a descrição de um estilo arquitetural, até
+a geração automática de código NCL. Mostramos, na seção 5, a aplicação da nossa proposta através de
+um exemplo de construção de um OA simples. Apresentamos, na seção 6, alguns trabalhos relacionados e
+finalizamos na seção 7 com a definição de direcionamentos futuros.
+2. Objetos de Aprendizagem
+A necessidade do uso de novas tecnologias no processo de ensino e aprendizagem vem sendo cada vez
+mais presente no cotidiano de alunos e professores. Contudo, é preciso ampliar esta discussão com o
+objetivo de contextualizar as novas tecnologias da informação e da comunicação e suas relações com o
+ensino e aprendizagem na Educação [Fernandes 2004]. Esta discussão surge com o anseio de modificar a
+forma como a Educação propõe o ensino e como os materiais educacionais são projetados, desenvolvidos
+e entregue àqueles que desejam aprender.
+Atualmente, um dos materiais educacionais que procuram atender esses objetivos são os Objetos de
+Aprendizagem (OAs), que são definidos como qualquer entidade, digital ou não digital, que pode ser
+utilizada, reutilizada ou referenciada durante o aprendizado apoiado sobre a tecnologia [Wiley 2000]. Não
+há definição clara de limite de tamanho para um OA, existe porém o consenso de que ele deve ter um
+propósito educacional definido, um elemento que estimule a reflexão do estudante e de que sua aplicação
+não se restrinja a um único contexto [Bettio e Martins 2002].
+Há  diversos  fatores  que  favorecem  o  uso  de  OAs  na  área  educacional,  como  por  exemplo:  a
+flexibilidade, a facilidade para atualização, a customização, a interoperabilidade e por fim o aumento do
+valor de um conhecimento. Todas estas vantagens são mais que suficientes para justificar a utilização dos
+OAs nas diferentes modalidades de ensino.
+A discussão sobre os fatores de utilização de OAs em termos educacionais gera uma definição
+relacionada a tipos de objetos. Esses tipos se referem às qualidades apresentadas pelos mesmos. Nesse
+sentido,  tomando  como  base  para  esse  trabalho  a  taxonomia  definida  em  [Wiley  2000],  podemos
+identificar 5 tipos de OAs:
+   Fundamentais: um recurso digital individual;
+   Combinados-Fechados: um pequeno número de recursos digitais combinados em tempo de projeto
+formando um OA cujos componentes não estão disponíveis individualmente para reuso. Um vídeo
+clip, que possui um áudio e um vídeo associado, é um exemplo desse tipo de OA;
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                       291
+
+
+
+
+   Combinado-Aberto: um conjunto de recursos digitais que são combinados para a criação de um
+OA e que podem ser reutilizados de forma independente para a criação de novos OAs. Uma
+página web é um exemplo desse tipo de OA;
+   Generativos-por-Apresentação: definidos por uma lógica e uma estrutura para combinar objetos
+de baixo-nível (fundamentais ou combinados-fechados) para gerar outros objetos;
+   Generativos-Instrucionais: segue uma lógica e uma estrutura para combinar OAs, com exceção do
+tipo combinado-aberto, com o propósito de avaliar interações do usuário com essas combinações,
+criadas para refletir abordagens instrucionais diferentes. Visando a aplicabilidade multi-contexto.
+Nesse  trabalho,  adotaremos  estratégias  para  a  elaboração  de  OAs  do  tipo  Generativos-por-
+Apresentação, visto que esses tipos de OAs são passíveis de serem construídos através de reuso de
+recursos individuais e da definição de estruturas hipermídia que relacionam esses recursos.
+3. A Linguagem NCL
+Os sistemas para a apresentação de documentos hipermídia consistem em aplicações capazes de exibir
+objetos de diferentes tipos de mídia, buscando garantir que os relacionamentos entre esses objetos,
+especificados pelo autor, sejam obedecidos.   Para tanto, esses relacionamentos devem ser definidos em
+documentos através de alguma sintaxe específica. A linguagem NCL (Nested Context Language) [Soares
+e  Rodrigues  2006],  que  é  baseada  no  modelo  conceitual  NCM  (Nested  Context  Model)  [Soares  e
+Rodrigues 2006], é um exemplo de linguagem para a especificação de documentos hipermídia.
+Em NCL as principais entidades utilizadas são: composições, objetos de mídia, descritores, âncoras,
+eventos e elos. As composições modelam as estruturas dos documentos, onde uma composição  (um
+capítulo de uma novela, por exemplo) contém várias composições (um conjunto de cenas, por exemplo).
+Os objetos de mídia representam os objetos cujos conteúdos são unidades de informações em uma
+determinada mídia a serem exibidos. Descritores podem ser associados a objetos de mídia, indicando
+como  esses  objetos  devem  ser  apresentados.  Âncoras  representam  um  conjunto  de  unidades  de
+informação marcadas de um objeto de mídia, ou um atributo do objeto que permitem definir eventos
+associados aos nós. Os elos modelam as relações entre os eventos. Finalmente, eventos são ocorrências no
+tempo que podem ser instantâneas ou de duração finita. Em cada objeto de mídia, vários eventos podem
+ser estabelecidos, como o início ou o término da apresentação de uma âncora, a seleção de uma âncora
+pelo usuário etc.
+A interpretação da estrutura lógica de um documento hipermídia é realizada por uma ferramenta,
+usualmente denominada formatador hipermídia [Rodrigues 2003]. O formatador, de posse da estrutura
+lógica  do  documento,  constrói  a  sua  estrutura  de  apresentação.  Atualmente,  existe  uma  versão  do
+formatador para NCL, denominado GINGA   [Ginga 2007], que foi desenvolvido no contexto do Projeto
+SBTVD para a apresentação de documentos de TVDi.
+4. Estilos Arquiteturais em OAs
+É comum, quando professores estão colhendo material para a realização de um curso ou uma palestra,
+utilizar  a  Internet  para  localizar  informações  que  possam  ser  utilizadas  para  dar  suporte  a  sua
+apresentação. Nesse sentido, diversas mídias, como apresentações em PowerPoint, figuras, textos em
+PDF,  animações  em  Flash,  arquivos  de  áudio  e  vídeo,  entre  outros,  estão  disponíveis  para  serem
+utilizados, cabendo ao professor a complicada tarefa de escolher e organizar as informações para gerar
+suas apresentações. Essa atividade fica ainda mais complicada quando essas apresentações estão sendo
+produzidas para serem utilizadas pelo aluno na forma de um OA, e ainda mais quando esses OAs estão
+sendo produzidos para serem utilizados de forma privada por cada aluno, como pode ser o caso de OAs
+acessados através da TVDi, visto que esse material deverá ser pedagogicamente organizado de forma a
+permitir o aluno a explorá-lo de forma efetiva e individual.
+Nesse trabalho, estamos propondo a utilização de estilos arquiteturais para auxiliar o projeto de OAs
+para TVDi. Nosso objetivo principal é facilitar a construção e a reutilização de conteúdos educacionais
+digitais em diversos contextos.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                        292
+
+
+
+
+A grande vantagem de utilizar um estilo arquitetural na construção de um OA, é que através da
+definição  de  um  estilo  podem  ser  gerados,  automaticamente,  templates1  do  OA  que  poderão  ser
+customizados pelo professor. Particularmente nesse trabalho, os templates serão gerados na linguagem
+NCL, visto que a intenção é que esses objetos sejam utilizados em TVDi
+Um estilo arquitetural define um vocabulário de elementos de projeto e um conjunto de restrições
+sobre como esses elementos podem ser combinados, permitindo o reuso de organizações arquiteturais
+estabelecidas para resolver um determinado problema recorrente [Shaw e Clements 1996].
+A abordagem geral para a descrição de um estilo arquitetural é baseada na imposição de regras pré-
+estabelecidas às descrições arquiteturais seguindo o vocabulário e as restrições definidas para o estilo.
+Para especificar informalmente estilos, usaremos os seguintes itens:
+   Descrição Geral: Onde o estilo é apresentado de forma geral;
+   Componentes: Os componentes que formam o estilo são apresentados nesse item. Assim, os
+nomes que cada tipo de componente recebe são definidos, permitindo a criação do vocabulário do
+estilo;
+   Conectores: Os tipos de conectores que formam o estilo são descritos;
+   Restrições:  As  restrições  tanto  relativas  aos  componentes  (quantas  portas  pode  ter,  quantas
+conexões cada porta deve suportar etc.) como topológicas (quais tipos de componentes podem se
+comunicar com quais tipos de conectores etc.) são levantadas nesse momento.
+Para  realizar  a  descrição  de  estilos  arquiteturais,  de  forma  que  os  benefícios  da  arquitetura  de
+software sejam realmente alcançados, a sua descrição deve ser tratada explicitamente servindo como base
+para análise, projeto e implementação. Atualmente as Linguagens de Descrição de Arquitetura (ADLs)
+são utilizadas para realizar essa tarefa. Particularmente nesse trabalho, usaremos a ADL DraX [Souza e
+Cunha 2003], onde foi proposta a linguagem Xtyle [Souza e Cunha 2006], que é uma linguagem baseada
+em XML definida para a descrição de estilos arquiteturais.
+4.1. Processo de Desenvolvimento de OAs para a TVDi
+Para que estilos possam ser utilizados no desenvolvimento de OAs, adotamos a estratégia de gerar
+templates que devem ser customizados pelo autor do OA. Esses templates conterão a estrutura geral do
+OA, baseada nas informações do estilo que o gerou, cabendo ao autor do OA definir as informações
+específicas de cada objeto. Assim, para contextualizar nossa proposta da utilização de estilos na autoria
+de OAs, definimos o seguinte processo (Figura 1):
+Figura 1. Processo de Geração de OAs a partir de um Estilo
+Para aplicar o processo apresentado na Figura 1 devemos contar, inicialmente, com a descrição Xtyle
+do estilo que estamos utilizando. Nessa descrição estão definidos todos os tipos de mídia, conectores
+hipermídia  e  as  relações  entre  esses  elementos.  A  partir  dessa  descrição  aplicamos  um  script,
+implementado em XSLT, que gera um template NCL para ser preenchido (customizado) pelo autor do
+OA. Essa customização se refere à definição dos elementos hipermídia que deverão compor o OA. Assim,
+as  figuras,  os  arquivos  de  áudio,  vídeo,  e  quaisquer  outros  elementos  serão  identificados.  Para
+1 Denominamos de template uma especificação intermediária de um OA.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                         293
+
+
+
+
+exemplificar a aplicação desse processo, mostraremos nas próximas seções uma descrição mais detalhada
+dessas atividades, iniciando com a criação de um estilo.
+4.2. O Estilo Invocação Relacional
+Este estilo consiste em conjunto de mídias independentes que se relacionam a partir da ocorrência de
+eventos que são ações que ocorrem durante a exibição de uma mídia. Nele são definidos conectores que
+estabelecem um tipo de relacionamento entre as mídias e definem como serão estabelecidos os eventos,
+desta forma especificam a semântica da relação, mas não definem quais componentes devem participar do
+relacionamento. Só existe a especificação de quais componentes pertencerão à conexão de determinado
+conector nos aspectos topológicos do estilo, apresentados no item restrições na descrição informal do
+estilo.
+Este  estilo  dará  suporte  à  geração  de  OAs  no  formato  de  tutoriais  hipermídia,  organizados  e
+formatados a   partir de conteúdos multimídia pré-existentes para serem utilizados em TVDi. Deve ser
+observado que o estilo que estamos apresentando aqui fornece um mecanismo para a construção de OAs
+do tipo Generativos-por-Apresentação, como definido na seção 2 deste trabalho.
+Para  formalizar  a  especificação  do  estilo  arquitetural  Invocação  Relacional,  inicialmente
+realizaremos a sua descrição informal. Para tanto, seguindo a lista de itens definidos no início dessa
+seção, temos as seguintes descrições:
+Estilo: Invocação Relacional;
+Descrição Geral: Estilo arquitetural que define OAs nos quais existe um vídeo-aula sincronizado com
+um conjunto de Slides explicativos e aplicações de avaliação interativa, a ser utilizado no auxílio ao
+aprendizado sobre determinado assunto na TVDi;
+Componentes: O vocabulário do estilo é composto por quatro tipos de componentes. O tipo Video  que
+representa os arquivos de vídeo, o Slide que faz referência aos slides que compõem o OA, o tipo Xlet
+que  representa  as  aplicações  interativas  de  TVDi,  e  por  último  o  tipo  Text  que  representa  os
+componentes em formato texto;
+Conectores: Para a representação das relações entre os componentes deste estilo, foram definidos os
+seguintes conectores:
+   InterruptConn: conector que representa uma relação de referência entre componentes, e que
+permite a interrupção da exibição de um componente, por determinação de um evento de
+interação do usuário;
+   TerminateConn:  conector  que  representa  uma  relação  de  sincronização  temporal  entre
+componentes, determinando o término de exibição de um componente e apresentação de outro,
+devido o disparo de um evento temporal;
+   AttributionConn:  conector  que  representa  uma  relação  de  atribuição  por  passagem  de
+atributos  que  determina  a  forma  de  exibição  de  um  componente  dependendo  do  atributo
+passado como parâmetro.
+Restrições: Um conector InterruptConn estabelece conexão somente entre componentes Video  -
+Slide, Slide - Xlet ou entre Slide - Slide, vale ressaltar que o componente Slide representa um
+arquivo imagem   e que consideramos esta mídia com tempo de exibição indeterminado neste estilo, assim
+como, o tipo Text. O conector TerminateConn, obrigatoriamente, deve estabelecer uma conexão entre
+Video-Slide  na  qual  sempre  o  nó  de  exibição  de  início  é  um  componente  tipo  Video.  O
+AttributionConn  determina a conexão entre componentes  Xlet -  Text.
+A partir dessa descrição informal do estilo podemos entender melhor o funcionamento dos OAs
+que devem ser gerados a partir dele. Contudo, apenas essa definição não permite que o processo de
+desenvolvimento  desses  OAs  seja  automatizado.  Para  que  isso  seja  possível,  devemos  realizar  a
+especificação do estilo através da linguagem Xtyle. Apresentamos essa especificação a seguir.
+<?xml  version="1.0"?>
+<xtyle  name="InvocacaoRelacional">
+<medias>
+<media  name="Video"  mediaType="Video"  maxOccurs="1">
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                      294
+
+
+
+
+<media  name="Texto"  mediaType="Text"    maxOccurs="*"/>
+<media  name="Slide"  mediaType="Slide"  maxOccurs="*"/>
+<media  name="App"      mediaType="Xlet"    maxOccurs="1"/>
+</medias>
+<connectors>
+<connector  name="Interrupt"      connectorType="InterruptConn"/>
+<connector  type="Terminate"      connectorType="TerminateConn"/>
+<connector  type="Attribution"  connectorType="AttributionConn  "/>
+</connectors>
+<topology>
+<link  start="Video"  end="Slide"  conn="Interrupt"      card="1,*"/>
+<link  start="Slide"  end="Xlet"    conn="Interrupt"      card="1,1"/>
+<link  start="Slide"  end="Slide"  conn="Interrupt"      card="1,1"/>
+<link  start="Video"  end="Slide"  conn="Terminate"      card="1,*"/>
+<link  start="Xlet"    end="Text"    conn="Attribution"  card="1,*"/>
+</topology>
+</xtyle>
+Pode ser facilmente observado na especificação do estilo, que não há referências às mídias que farão
+parte do OA. De fato, essa não é uma responsabilidade do estilo arquitetural, pois esse deve fornecer
+apenas as diretrizes estruturas para a criação da arquitetura de OAs específicos. Por escassez de espaço,
+não mostraremos aqui detalhes sobre a linguagem Xtyle, contudo, achamos importante destacar alguns
+pontos da especificação anterior, como, por exemplo, os valores assumidos pelo atributo mediaType.
+Esses valores estão relacionados aos tipos de mídia e são definidos na gramática da linguagem NCL. Da
+mesma forma, o atributo connectorType assume valores de conectores definidos na gramática de NCL.
+4.3. Templates de OAs em NCL
+Como apresentado na seção 3, a linguagem NCL foi concebida com a intenção de permitir a descrição de
+aplicações hipermídia através da descrição das relações espaço-temporais entre objetos de mídia. Assim,
+para a implementação de uma especificação NCL todas as mídias devem ser descritas a priori. Contudo, a
+especificação de qualquer aplicação NCL é uma tarefa bastante complicada e exige de seu autor um vasto
+conhecimento de termos relacionados à área de sistemas hipermídia, o que dificulta bastante a tarefa de
+descrição de OAs, visto que o público principal relacionado à autoria desses objetos são professores.
+Para facilitar o processo de desenvolvimento de OAs para TVDi é que estamos tratando a descrição
+desses objetos em termos de estilos arquiteturais, o que já permite a definição à priori de diversos
+aspectos relacionados à construção da especificação NCL. Assim, de modo a facilitar a definição de OAs,
+desenvolvemos um script em XSLT que gera automaticamente um código intermediário NCL (Template
+NCL) baseado na especificação do estilo do OA. Esse código possui um conjunto de elementos que
+devem ser preenchidos  (customizados) pelo autor do OA de modo que os elementos de mídia sejam
+identificados. Para exemplificar, apresentamos a seguir um trecho de um Template NCL no qual são
+apresentadas as informações relativas aos objetos de mídia gerados a partir da descrição de um OA que
+utiliza o estilo Invocação Relacional.
+<img  descriptor="img_d1"                                                                                    id="img1"  src=!img1/>
+<img  descriptor="img_d2"                                                                                    id="img2"  src=!img2/>
+<img  descriptor="img_d3"                                                                                    id="img3"  src=!img3/>
+<text  descriptor="txt_d"                                                                                    id="txt1"  src=!txt1/>
+<video  descriptor="video_d"    id="video1"  src=!video1/>
+<xlet  descriptor="xlet_d"      id="xlet1"  src=!xlet1/>
+Através da observação desse trecho do Template NCL, gerado automaticamente a partir do estilo
+Invocação Relacional, podemos perceber a sua relação com esse estilo e entender um pouco sobre o
+processo de sua geração. De fato, na descrição do estilo Invocação Relacional, foram definidos apenas
+componentes cujos valores dos atributos mediaType eram dos tipos Slide, Xlet, Video e Text.
+Dessa forma, esses tipos foram transportados para o template. Contudo, como na definição do estilo
+apenas os tipos são definidos e não há identificação nem das mídias relacionadas a estes tipos nem da
+quantidade  de  elementos  a  serem  utilizados,  o  script  que  desenvolvemos  realiza  um  conjunto  de
+perguntas ao autor do OA de forma a permitir a geração correta do template. Assim, o script solicita a
+quantidade de cada tipo de elemento encontrado no estilo, usado o exemplo anterior, o script deve ter
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                     295
+
+
+
+
+solicitado ao autor a quantidade de elementos do tipo Slide que deveriam ser incluídos no template do
+OA. É válido ressaltar que esse elemento é transportado para NCL como tipo Image. Observando o
+trecho do template gerado, podemos constatar que a resposta do autor do OA foi 3 (três), visto que foram
+geradas três entradas nessa especificação para componentes do tipo Image.
+É valido observar que nesse primeiro momento, como citamos anteriormente, o estilo também não
+possui  informações  relacionadas  às  mídias  que  serão  utilizadas  na  descrição  do  OA.  Desse  modo,
+optamos por sinalizar na especificação do template os pontos de inserção dessas informações que devem
+ser preenchidas posteriormente. Essa sinalização foi realizada através de um sinal de exclamação "!",
+seguido do número do elemento gerado seqüencialmente. Assim, no template anterior, o primeiro slide
+recebeu, no campo relativo à localização da mídia o valor “!img1”, que indica que esse campo deverá
+ser preenchido posteriormente.
+Dessa forma, para completar a geração da especificação NCL final do OA, os valores das mídias
+devem ser fornecidos. Assim, desenvolvemos mais um script que tem como entrada o Template NCL
+gerado a partir do estilo, e, através da realização de um conjunto de perguntas ao autor do OA, gera a
+especificação NCL final. Essas perguntas são realizadas de acordo com as entradas marcadas com valores
+“!” no template. Assim, para o trecho de código mostrado anteriormente poderíamos apresentar como
+resultado o seguinte trecho de código NCL:
+<img  descriptor="sld_d1"  id="img1"  src="img/Introducao.jpg"/>
+<img  descriptor="sld_d2"  id="img2"  src="img/Proporcao.jpg">
+<img  descriptor="sld_d3"  id="img3"  src="img/ExercioResolvido.jpg"/>
+<vídeo  descriptor="video_d"  id="video1"  src="vid/MatematicaProporcao.wav"/>
+<xlet  descriptor="xlet_d"  id="xlet1"  src="xlets/ProporcaoXlet.class"/>
+É importante observar que as outras informações necessárias para a construção de aplicações NCL,
+como por exemplo, a definição das regiões, âncoras, descritores e do layout do OA, devem ser definidas
+também depois do estilo, visto que essas são informações específicas das aplicações. Contudo, por essa
+ser uma etapa bastante complexa do processo de geração de OAs, não a abordaremos nesse trabalho. A
+seguir, apresentamos um OA completo modelado com o estilo Invocação Relacional.
+5. Exemplo de OA e Discussão
+Para que sejam avaliadas as facilidades da utilização de estilos arquiteturais na construção de OAs para a
+TVDi,  mostraremos  nessa  seção  a  construção  completa  de  um  OA  utilizando  o  estilo  Invocação
+Relacional. O OA em questão trata todo um contexto de uso dos  “Números Proporcionais”, mostra
+inicialmente um vídeo-aula que trata a aplicabilidade desse assunto no nosso cotidiano, em seguida é
+exibida uma tela que proporciona uma facilidade navegacional de exploração do material através do uso
+do controle remoto, a partir dela tanto poderão ser mostrados individualmente um conjunto de slides que
+apresentam a teoria matemática sobre o assunto, como também uma aplicação na forma de exercícios
+para avaliação do conhecimento. Vale ressaltar, que propomos a criação de OAs baseados na reutilização
+de conteúdos existentes, por isso todas as mídias pertencentes ao OA desenvolvido foram extraídas de
+repositórios de conteúdos educacionais gratuitos, no caso, do RIVED [RIVED 2007], do Telecurso 2000
+[BibVirt 2007] e do TV Escola [Portal Domínio Público 2007].
+O OA desenvolvido está no contexto de aplicações para a   TVDi   que assumem o perfil de Enhanced
+Broadcast Profile,   estes tipos de aplicações acessam informações unicamente do middleware sobre o
+qual executam, permitindo uma interatividade local. A utilização do OA criado é feita através do controle
+remoto,  para  a  exploração  do  conteúdo  e  uso  do  material  interativo  são  utilizados  os  botões  de
+navegação(setas), os botões numéricos e os de cores.
+Para proporcionar uma maior interatividade ao usuário e, também, a construção de interfaces gráficas
+que permitam um melhor uso do material didático, foi necessária a adoção do JavaTV no processo de
+desenvolvimento do OA. Outro fator importante para essa adoção foi à possibilidade de aplicações
+desenvolvidas em JavaTV serem inclusas na linguagem NCL como objetos de mídia [Soares e Rodrigues
+2006]. Este tipo de aplicação NCL com suporte para elementos procedurais, no caso, Xlets que são
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                        296
+
+
+
+
+aplicações Java para inclusão na TVDi, são chamadas NCLet. Para a construção de aplicações NCLet   é
+necessário um controle sobre do objeto procedural, por exemplo, definições de start, stop, pause ou
+resume, mas não entraremos em detalhes neste trabalho por questão de espaço.
+Diante do que foi dito, para realizarmos a construção do OA, devemos seguir o processo detalhado na
+seção 4.1. Assim, após a realização de todo o processo de geração do Template NCL e da definição dos
+valores relativos às mídias, detalhados na seção 4.3, teremos a especificação NCL correspondente ao OA.
+O código a seguir apresenta um trecho desse objeto.
+<?xml  version="1.0"  encoding="UTF-8"?>
+<ncl  id="InvocacaoRelacional"  xmlns="..."  xmlns:xsi="..."
+xsi:schemaLocation="...">
+<head>
+<descriptorBase>  ...                                                                                         </descriptorBase>
+</head>
+<body>
+<port  id="entrada1"  component="Mat"  port="video"/>
+<composite  id="MatApp">
+<port  id="slides"  component="audioSlides"  />
+<img  descriptor="img_d1"
+id="slide_01"  src="  img/Introducao.jpg  "/>
+<img  descriptor="img_d2"
+id="slide_01"  src="  img/Proporcao.jpg  "/>
+<video  descriptor="video_d1"
+id="videoMat"  src="  vid/MatematicaProporcao.wav  ">
+</video>
+<linkBase>
+<link  id="link1"  xconnector="../../connectors/InterruptConn.xml">
+<bind  component="MatApp"  role="on_x_presentation_end"/>
+<bind  component="xlet_01"  role="start_y"/>
+</link>
+</linkBase>
+</composite>
+</body>
+</ncl>
+O código NCL do OA gerado já está pronto para ser executado. Mas devido ao não suporte atual do
+middleware Ginga [Ginga 2007] a execução de códigos NCL sincronizados com aplicações de JavaTV,
+não  é  possível  apresentar  o  produto  do  OA  gerado.  No  entanto,  para  validar  a  nossa  proposta,
+desenvolvemos o OA na forma de Xlet o qual foi visualizado em um emulador chamado xleTView
+[XleTView 2007], adotando processo semelhante de criação e uso do Estilo Invocação Relacional. A
+Figura 2 mostra a aplicação em execução no emulador xleTView.
+(a)                                                                                                           (b)                                                                 (c)
+                                                                                                              Figura 2. Objeto de Aprendizagem em execução no Emulador xleTView
+Podemos perceber facilmente que o código NCL gerado automaticamente a partir da descrição do
+estilo Invocação Relacional, facilita bastante o trabalho de construção de novos OAs que sigam essa
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                      297
+
+
+
+
+mesma  estrutura.  Adicionalmente,  como  as  características  de  flexibilidade  e  reusabilidade  são
+extremamente importantes em um OA, também contribuímos com esse trabalho para essa finalidade. De
+fato, poderíamos ter conseguido um conjunto extra de slides que mostrassem detalhes sobre algum
+aspecto da apresentação, e poderíamos inserir no OA sem a necessidade de reimplementá-lo, bastando
+apenas incluir uma entrada no Template NCL de forma a ser regerada a especificação NCL final com essa
+inclusão. Essa faceta mostra a facilidade introduzida pelos estilos na reutilização de conteúdos para
+incrementar e até mesmo produzir novos OAs.
+Outra característica que conseguimos ao utilizar as ferramentas aqui propostas na construção de OAs
+é a possibilidade de criarmos novos tipos de estilos a partir de estilos pré-existentes, aumentando bastante
+as possibilidades de reuso de OAs completos no desenvolvimento de novos OAs. Assim, poderíamos
+definir facilmente um estilo, onde poderia ser reutilizado o estilo Invocação Relacional e incluído um
+novo  componente  de  áudio  que  apresentasse  uma  explicação  sobre  o  conteúdo  dos  slides.  Essa
+característica está ligada à linguagem Xtyle, que por escassez de espaço não está sendo detalhada nesse
+trabalho.
+6. Trabalhos Relacionados
+Podemos identificar alguns outros esforços que versam sobre temas relacionados a essa pesquisa. Mais
+precisamente podemos citar a ferramenta Breeze Presenter  [Adobe  2006], que permite a criação de
+apresentações  onde  são  permitidas  a  realização  da  sincronização  de  áudio,  vídeo  e  texto  para
+apresentações WEB a partir de slides do PowerPoint. Essa ferramenta, contudo, está limitada a descrição
+de um único tipo de OA. No nosso trabalho mostramos que podemos realizar a mesma implementação
+realizada pelo Breeze, além de ser possível criarmos os mais variados estilos de OAs que necessitarmos.
+Outro trabalho importante, relacionado ao auxílio à geração de especificações NCL, é o XTemplate
+[Saade e Soares 2002]. Essa linguagem permite a descrição de templates que se comportam como estilos
+descritos em NCL. Uma desvantagem dessa abordagem com relação à nossa é que utilizando Xtyle, o
+autor dos OAs não precisa acessar o vocabulário de NCL, o que facilita bastante a descrição do estilo.
+Além  disso,  Xtyle  permite  a  construção  de  estilos  compostos,  através  da  reutilização  de  estilos  já
+existentes, o que torna essa linguagem muito mais expressiva para a definição de estilos arquiteturais dos
+OAs.
+7. Conclusão
+Apresentamos nesse trabalho uma abordagem baseada em estilos arquiteturais para a criação de OAs para
+a TVDi. Na nossa proposta desenvolvemos um estilo simples que mostra a eficiência desse mecanismo.
+Entretanto, para que todo o poder de expressão introduzido pela adoção de estilos na criação de OAs seja
+de fato entendido, acreditamos que devemos produzir, como trabalhos futuros, outros estilos arquiteturais
+e novas ferramentas que venham a dar suporte à automatização de diversas atividades do processo de
+criação de um OA. Essas ferramentas devem explorar a fundo os conceitos de reusabilidade de conteúdos
+digitais na criação de OAs.
+Além disso, pelo fato de ser um veículo novo de comunicação e que deve chegar em breve no nosso
+país, acreditamos que devemos explorar mais a fundo a aplicabilidade dos OAs no suporte ao aprendizado
+via TVDi, pois, como descrito por [Gupta e Hutteman 2003], educar através da nova televisão vai exigir
+que educadores e comunicadores afrontem três grandes tarefas: a compreensão intelectual do meio, a
+leitura crítica de suas mensagens e a capacitação para a utilização livre e criativa dessa nova tecnologia.
+Esperamos que, com esse nosso trabalho, estejamos dando um passo no sentido de democratizar o acesso
+ao desenvolvimento de soluções educacionais para esse novo veículo de comunicação que em breve
+deverá ser uma realidade no Brasil.
+Referências Bibliográficas
+Adobe. Breeze Presenter. Disponível em: <http://www.adobe.com/br/products/breeze/>. Acessado em: 10
+de abril de 2007.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                           298
+
+
+
+
+Bates, P. J., "t-learning Study: A study into TV-based interactive learning to the home", Final Report, pjb
+Associates, UK, 2003.
+Bettio, R. W. de & Martins, A. Objetos de aprendizado: um novo modelo direcionado ao ensino a
+distância. In: 9o. Congresso Internacional de Educação a Distância, 2002, São Paulo - SP. Documento
+on-line, disponível em http://www.universiabrasil.net/materia/materia.jsp?id=5938. Acessado em  24
+de maio de 2006.
+BibVirt.  Biblioteca  Virtual  do  Estudante  de  Língua  Portuguesa                                             -  Universidade  São  Paulo(USP).
+Disponível em: <http://www.bibvirt.futuro.usp.br >. Acessado em: 05 de junho de 2007.
+Damásio, M.J., "Uses of Interactive Television on Educational Settings: Evaluating the Media Impact",
+European Conference on Interactive Television (EuroITV03), pp. 117-119, 2003.
+Fernandes, N.L.R. (2004) Professores e computadores: navegar é preciso, Porto Alegre: Mediação, pp.
+36-41.
+Ginga. Disponível em : <http://www.ginga.org.br/>. Acessado em: 5 de maio de 2007.
+Gupta,  M.,  Hutteman,  K,  "Education  with  iTV",  European  Conference  on  Interactive  Television
+(EuroITV03), pp. 111-112, 2003.
+Lytras, M., Lougos, C., Chozos, P., Pouloudi, A., .Interactive Television and e-Learning Convergence:
+Examining the Potential of t-Learning., In European Conference on e-Learning, 2002.
+Portal Domínio Público. Disponível em:<http://www.dominiopublico.gov.br>. Acessado em: 8 de junho
+de 2007.
+RIVED.  Secretaria  de  Educação  a  Distância,  Ministério  da  Educação,  Dez.2005.  Disponível  em:  <
+http://rived.proinfo.mec.gov.br/> Acessado em: 1 junho de 2007.
+Rodrigues R.  “Formatação e Controle de Apresentações Hipermídia com Mecanismos de Adaptação
+Temporal”, Tese de Doutorado. Departamento de Informática, PUC-Rio, Brasil, 2003.
+Saade, D.C.M.,   Soares, L.F.G. XConnector & XTemplate: Improving the Expressiveness and Reuse in
+Web Authoring Languages. The New Review of Hypermedia and Multimedia Journal. 2002.
+Shaw, M. and Clements, P. A Field Guide to Boxology: Preliminary Classification of Architectural Styles
+for Software Systems, 1996.
+Soares L.F.G., Rodrigues R.F., “Nested Context Model 3.0 - NCL (Nested Context Language)”, Relatório
+Técnico, Laboratório Telemídia, PUC-Rio, Brasil, 2006.
+Souza, C.T. Arquiteturas de Software e Estilos Arquiteturais Distribuídos  - Especificação, Validação,
+Análise e Implementação. Tese de Doutorado. Universidade Federal de Pernambuco, 2003.
+Souza, C.T., Cunha, P.R.F. Especificação Hierárquica de Estilos Arquiteturais Distribuídos. In XXXII
+Conferência Latino-Americana de Informática., Santiago do Chile, Chile, 2006.
+XleTView. Disponível em: <http://xletview.sourceforge.net/>. Acessado em: 07 de junho de 2007.
+Wiley, D.A. (2000), Connecting learning objects to instructional design theory: A definition, a metaphor,
+and a taxonomy in D. A. Wiley  (Ed.), The Instructional Use of Learning Objects. Versão online:
+http://reusability.org/read/chapters/wiley.doc , 15 de Fevereiro 2006
+Zhao,  Liang,  .Interactive  television  in  distance  education:  benefits  and  compromises.,  International
+Symposium on Technology and Society (ISTAS’02), pp. 255. 261, 2002.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                         299
+
+
+
+
+

@@ -1,0 +1,450 @@
+﻿Uma Proposta de Aplicação de Lógica Fuzzy para
+Modelagem do Processo de Raciocínio de um Assistente
+Virtual
+Vandor R. V. Rissoli1, Lúcia M. M. Giraffa2, Dante A. C. Barone3
+1Universidade Católica de Brasília (UCB)
+QS07 Lote 01 EPCT - fone: 61 33569306 -72002-900 Taguatinga - DF
+2
+Faculdade de Informática - Pontifícia Universidade Católica do Rio Grande do Sul
+(PUC-RS)
+3
+Programa de Pós-Graduação em Informática na Educação (PGIE) - Universidade
+Federal do Rio Grande do Sul (UFRGS)
+vandor@ucb.br, giraffa@pucrs.br, barone@inf.ufrgs.br
+Abstract.  This  paper  presents  a  proposal  to  build  an  Intelligent  Tutoring
+System  using  Fuzzy  Logic  to  model  the  student  in  order  to  handle  with
+qualitative aspects regarding his/her behavior. The domain module is modeled
+based on Conceptual Maps that allow teacher to better organize the contents
+in a hierarchical way. In this proposal the teacher works as an external agent
+which can interfere to modify or adjust the tutor module set of rules.
+Resumo. Este artigo apresenta uma arquitetura diferente de Sistema Tutor
+Inteligente, onde  se  inclui  o docente  como agente  externo,  organizador e
+interventor do processo de atendimento do aluno no contexto do sistema. O
+arcabouço  conceitual  usado  para  apoiar  esta  proposta  se  fundamenta  na
+Teoria  da  Aprendizagem  Significativa  de  Ausubel  e  no  uso  de  Mapas
+Conceituais como elementos para se organizar o conteúdo do domínio da
+aplicação. Na modelagem do aluno é incorporada a Lógica Fuzzy que permite
+representar informações do aluno associadas aos aspectos mais qualitativos e
+incertos.
+Palavras-chave: Aprendizagem Significativa, Lógica Fuzzy, Sistema Tutor
+Inteligente.
+1. Introdução
+A sociedade contemporânea está fortemente impactada pelo uso de tecnologias digitais
+promovendo modificações na forma como as pessoas vivem, interagem, aprendem e
+convivem umas com as outras.   Uma nova cibercultura baseada na informação e no
+conhecimento nos impelem a refletir e buscar alternativas para ampliar e compatibilizar
+o processo educacional.   Segundo  [Larson  1999], a Educação consolida-se cada vez
+mais como uma área crucial ao desenvolvimento desta sociedade e de cada indivíduo
+que  a  compõe.  Neste  contexto,  os  processos  educacionais  vêm precisando  de  uma
+adaptação cada vez mais sistematizada do ensino às características que identifiquem
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                  350
+
+
+
+
+preferências  de  aprendizado  nos  alunos,  efetivando  a  personalização  do  processo
+ensino-aprendizagem idiossincrático a cada indivíduo.
+Dentre as várias alternativas de construção para programas educacionais que
+possibilitem personalização do atendimento das necessidades do aluno, encontram-se os
+Sistemas Tutores Inteligentes (STI). Diversos pesquisadores nesta área, têm produzido
+uma  variedade  de  softwares  adaptativos  e inteligentes para educação, muitos deles
+incluindo a utilização de agentes como o trabalho de  [Chou 2003], [Viccari 2003] e
+[Yacef 2002].
+A pesquisa relatada neste artigo utiliza uma variante da tradicional arquitetura
+de STI, onde se inclui o professor como agente externo, organizador e interventor do
+processo de atendimento do aluno no contexto do sistema.   Esta inclusão resulta da
+limitação dos tradicionais STI em automatizar todo o processo de atendimento das
+necessidades  de  cada  aluno  de  forma  automática.    As  pesquisas  demonstraram  a
+necessidade da atualização da base de regras em função das características individuais
+de cada aluno. Ou seja, uma base criada com regras gerais para um aluno hipotético
+apresentava  muita  fragilidade  no  que  concerne  à  qualidade  das  decisões  do  tutor
+artificial.   Desta forma, a possibilidade do professor ter acesso aos resultados existentes
+no módulo do aluno (aprendiz), a fim de poder fazer os refinamentos nas regras que
+selecionam as atividades a serem sugeridas aos alunos, permitirá agregar mais qualidade
+na utilização de programas educacionais com esta característica.
+O arcabouço conceitual utilizado para suportar esta proposta se fundamenta na
+Teoria da Aprendizagem Significativa (TAS), proposta por [Ausubel 1968] e no uso de
+Mapas Conceituais propostos por  [Novak  1998] como elementos para se modelar e
+organizar o conteúdo que comporá a base de domínio da aplicação.   A estruturação do
+módulo do aluno, através da incorporação de recursos oriundos da Lógica Fuzzy [Zadeh
+1975],  permite  criar  uma  alternativa  para  se  representar  informações  do  aluno
+associadas a aspectos mais qualitativos e possibilitando o tratamento das incertezas.
+Esta modelagem apresentou resultados mais interessantes e com maior granularidade do
+que  simplesmente  utilizar  regras  de  produção  como  a  maioria  dos  módulos
+tradicionalmente o faz.
+Dessa forma, o projeto descrito neste artigo procura demonstrar que é possível
+utilizar  os  estructos  da  TAS                                                               (metodologia)  e  a  Lógica  Fuzzy  às  necessidades  do
+acompanhamento  cognitivo  de  cada  aprendiz.     Tais  recursos  propiciam  mais
+alternativas  de  interação  e  responsabilidades  aos  diagnósticos  efetuados  entre  os
+módulos  que  compõem a  arquitetura  tradicional  do STI  (Figura  1a), tendo estes  a
+incumbência de propiciar a interação do docente (novo usuário), com sua unidade de
+controle, além de auxiliar o aprendiz em seu ritmo de aprendizagem (Figura 1b).
+Figura 1. Representação da arquitetura do STI, sendo a) tradicional e b) ITA estendido.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       351
+
+
+
+
+Este artigo está organizado em 6 seções.   Na seção 2 são apresentados alguns
+conceitos para situar o leitor no que tange ao aporte educacional utilizado para modelar
+o ambiente construído como testbed de validação da arquitetura proposta.   Na seção 3
+são abordados os conteúdos da Lógica Fuzzy associados à teoria escolhida e como estes
+conteúdos  foram  programados  no  protótipo.    Na  seção  4  o  relato  do  experimento
+realizado e os indicadores obtidos.   Na seção 5 estão as considerações finais e alguns
+trabalhos  futuros  a  serem  realizados  na  seqüência  desta  proposta.  As  referências
+bibliográficas estão elencadas no final do texto, na seção 6.
+2.  Teoria da Aprendizagem Significativa   -TAS
+A elaboração de um projeto de software necessita de alguns componentes fundamentais:
+uma  teoria  educacional  que  suporte  as  concepções  pedagógicas  e  uma  equipe
+interdisciplinar composta por informatas e especialistas da área de domínio.   Sem estes
+elementos não é possível realizar um trabalho que atenda parâmetros de qualidade
+envolvendo a parte tecnológica e a educacional.
+Com  o  intuito  de  consubstanciar  esta  proposta,  buscou-se  uma  teoria
+consolidada por métodos e técnicas objetivas que pudessem “instrumentalizar” as ações
+necessárias  aos  objetivos  associados  à  inclusão  de  uma  nova  abordagem  para  a
+tradicional arquitetura de STI. De acordo com suas características foi adotada a Teoria
+da  Aprendizagem  Significativa                                                               (TAS),  que  contempla  as  exigências  requeridas
+[Ausubel 2000].
+No âmbito educacional, esta teoria propõe aprendizagem facilitada por meio da
+associação de novos conteúdos aos conhecimentos já existentes na estrutura cognitiva
+do  aprendiz                                                                                  (formação  do  conceito  subsunçor),  podendo  esta  aprendizagem  ser
+empregada  a  qualquer  área  de  conhecimento,  respeitando  suas  duas  hipóteses
+fundamentais:
+1ª  Maior facilidade dos seres humanos em entender aspectos diferenciados
+do todo mais inclusivo, do que de suas partes menos inclusivas;
+2ª  A mente humana consiste em uma estrutura hierárquica de conhecimento
+bem organizada, tendo as idéias mais inclusivas no topo desta estrutura
+que progressivamente incorpora novos dados menos inclusivos.
+A  aprendizagem  orientada  por  esta  teoria  promove  a  associação  dos  novos
+conhecimentos a seus respectivos subsunçores, transformando os significados lógicos,
+inerentes  ao  conteúdo  potencialmente  significativo,  em  significados  psicológicos,
+construídos e estruturados de maneira peculiar e diferente por cada aprendiz.    Esta
+associação, denominada subsunção, possibilita a agregação do novo conhecimento à
+estrutura  cognitiva  do  aprendiz,  acontecendo  de  forma  não-arbitrária  e  não-literal
+[Ausubel 1968].
+No  entanto,  para  que  ocorra  este  tipo  de  aprendizagem  é  necessário  o
+comprometimento responsável de todos os envolvidos e dois requisitos essenciais para
+obter-se êxito na sua utilização:
+   Elaboração e uso de material potencialmente significativo;
+   Pró-atividade do aprendiz para relacionar o novo com a sua estrutura
+cognitiva, de maneira substantiva, não-arbitrária e não-literal.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      352
+
+
+
+
+Este  primeiro  requisito  expõe  a  necessidade  do  empenho  do  docente  na
+elaboração de um material bem organizado para o apoio ao ensino dos alunos que o
+utilizarão  durante  seu  período  de  aprendizagem,  enquanto  que  o  outro  requisito
+esclarece a conduta pró-ativa do aprendiz em efetivar o processo de subsunção.
+Diante  destes  requisitos,  a  TAS  emprega  um  método  de  representação
+hierárquica  dos  conceitos  envolvidos  em  uma  aprendizagem,  sendo  este  bem
+representado  através  dos  Mapas  Conceitual  (MC)  criado por  [Novak  1998] com o
+objetivo de auxiliar na definição de seqüências instrucionais coerentes ao planejamento
+de currículos disciplinares.   Atualmente, este método tem sido empregado em diversas
+atividades de ensino-aprendizagem, pois permite representação diagramática de fácil
+manipulação  e  compreensão  das  estruturas  conceituais  envolvidas,  além  da  visão
+integrada do assunto abordado.
+A elaboração deste MC é realizada por especialistas responsáveis pelo domínio
+da  aplicação, ou seja,  de  conteúdo específico.    Sendo nele representada, de forma
+implícita, a expectativa de organização da aprendizagem esperada do docente acerca de
+seus alunos.   A crítica mais comum ao uso dos MC como estruturantes do processo de
+aprendizagem é que o docente acaba criando uma estrutura a partir da sua construção
+individual e induz o aluno a convergir para suas perspectivas pessoais acerca daquele
+conhecimento.   Isto é verdade em parte.   Tudo vai depender de como esta estrutura de
+base é utilizada pelo professor no trabalho do aluno.   Uma estrutura de base do tipo MC,
+permite organizar regras e orientações para verificar e auxiliar o aluno a construir
+conceitos  de  maneira  correta,  não  havendo  necessariamente  a  obrigação  de  que  o
+aprendiz siga exatamente toda a navegação prevista.
+Esta elaboração é relevante neste trabalho, uma vez que ela permite a criação de
+uma  aplicação  onde  cada  aprendiz  pode  ser  assistido  e  direcionado  conforme  as
+necessidades idiossincráticas identificadas pelo sistema.   Este tipo de estrutura capacita
+a programar um sistema que pode se adaptar às particularidades de cada aprendiz,
+promovendo  uma  interação  mais  adequada  ao  aluno  usuário  do  programa.  Estas
+possibilidades de adaptações conferem a este sistema aspectos de raciocino na base do
+conhecimento.
+Entretanto,  este  tipo  de  raciocínio  envolve  quantidade  de  incertezas  e
+imprecisões,  quando  realizados  também  pelo  especialista  humano,  pois  estas  são
+características inerentes às informações.   Diante disso, constata-se que o processo de
+inferência sobre estes dados será incompleto, pois existe um componente de incerteza
+com relação ao conhecimento e, dependo da área de aplicação, uma certa dose de
+inconsistência, tornando difícil organizar o conjunto de regras que podem selecionar
+conteúdos  e  atividades  a  ser  oferecido  ao  aluno-usuário  em  função  do  seu  perfil.
+Lembrando que todo sistema que emprega uma arquitetura de STI se caracteriza pela
+modelagem do usuário e sua respectiva utilização para seleção do comportamento do
+sistema.   Esta é a grande diferença de um programa educacional que se baseia numa
+arquitetura de STI: a possibilidade de adaptação do sistema as características inferidas
+do discente.
+O projeto aqui descrito propõe a organização da base de conhecimento usando
+MC associados às estruturas mentais oriundas da TAS e a Lógica Fuzzy como recurso
+para modelagem das características do aluno, buscando elementos para criação do perfil
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       353
+
+
+
+
+cognitivo do aluno, em dado momento de uso do sistema, permitindo acompanhamento
+cognitivo de cada aprendiz.
+3. Integração da Lógica Fuzzy com a Teoria da Aprendizagem Significativa
+A  aplicação  da  Lógica  Fuzzy  busca  identificar  comportamentos  observáveis  do
+estudante sobre o conteúdo e suas atividades de aprendizagem.    Algumas variáveis
+relacionadas ao comportamento observável de seus alunos são capturadas durante suas
+interações com o ambiente, sendo estas provenientes dos registros de acesso e dos
+resultados obtidos nas opções oferecidas e escolhidas pelos estudantes durante suas
+interações.
+Estes dados armazenados se constituem na parte significativa do conhecimento
+do assistente sobre cada aprendiz (construção do modelo do aluno), sendo os principais
+indicadores referentes ao esforço empregado pelo aluno na realização de atividades
+oferecidas pelo ambiente e nas solicitações de auxílio cooperativo a colegas, monitores
+ou ao docente.
+O raciocínio utilizado por este assistente emprega a Lógica Fuzzy, baseada na
+Teoria dos Conjuntos Fuzzy, para elaborar seu motor de inferência através de regras de
+produção,  termos  lingüísticos  e  funções  de  pertinência  relacionadas  aos  mapas
+conceituais. Assim, cada função de pertinência deve ser elaborada para representar a
+organização estabelecida no conteúdo envolvido por determinada aprendizagem, onde
+cada  novo  conteúdo  possui  seu  próprio  mapa  conceitual  e  conseqüentemente  suas
+funções de pertinência.
+A elaboração de um projeto usando Lógica Fuzzy necessita da definição de
+argumentos obtidos a partir de experimentos ou vivência de seus especialistas [Gomide
+1995].   Sua utilização tem se mostrado muito adequada ao tratamento de alguns tipos de
+imperfeições  inerentes  às  informações,  chegando  a  ser  definida  como  metodologia
+capaz  de  capturar  dados  "vagos",  geralmente  expressões  em  linguagem  natural,  e
+convertê-los em um formato matemático mais rígido [Rissoli 2001].
+Para  o  desenvolvimento  deste  projeto  foram  definidos  alguns  argumentos
+(metadados) baseados na experiência dos especialistas e docentes envolvidos com o
+mesmo,  além  das  hipóteses  e  requisitos  provenientes  da  TAS.     A  partir  desta
+experiência, e das pesquisas efetivadas na construção deste trabalho, foram definidas
+duas variáveis lingüísticas associadas aos comportamentos observáveis dos alunos e
+relevantes para averiguação de sua aprendizagem significativa.    Estas variáveis são:
+esforço                                                                                    (quantidade  e  recurso  do  ambiente  utilizado  pelo  aprendiz)  e  desempenho
+(resultados obtidos na interação com o ambiente).
+Esta  aquisição  é  inicialmente  planejada  por  seus  especialistas  através  da
+elaboração do mapa conceitual sobre o conteúdo desejado, organizando sua estrutura de
+tópicos hierarquicamente.   Com isso, são identificados os conteúdos relevantes a serem
+abordados  com  cada  aprendiz,  além  de  estabelecida  suas  respectivas  funções  de
+pertinência coerentes com os objetivos de seus tópicos e suas adequadas atividades
+interativas.
+A definição destas funções permite a identificação mais realista da situação
+cognitiva da aprendizagem de cada aluno sobre os tópicos que compõem o conteúdo do
+mapa conceitual.   Isso ocorre por meio da identificação do grau de pertinência sobre os
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   354
+
+
+
+
+resultados obtidos em cada tópico, sendo estes elementos reunidos em um conjunto
+fuzzy que representa sua aprendizagem por tópico.
+Cada  um  dos  elementos  deste  conjunto  fuzzy  é  definido  a  partir  do  Mapa
+Conceitual,  criado  pelos  especialistas.     Baseando-se  nestes  resultados  o  sistema
+promove recursos e orientações coerentes ao caminho de aprendizagem mais eficiente
+para cada aluno no decorrer de seu curso, sendo o docente e o assistente responsáveis
+pelo direcionamento adequado desta aprendizagem.
+Diante disso, as funções de pertinência para as variáveis lingüísticas de esforço
+(V)  e  desempenho  (U)  vão  sendo  aplicadas  sobre  cada  um  dos  tópicos  estudados,
+almejando  efetuar  o  acompanhamento  individual  de  cada  aprendiz  pelo  ITA.  Os
+respectivos termos lingüísticos destas duas variáveis são: T(V) = {baixo, médio, alto}   e
+T(U) = {fraco, razoável, bom}.
+Estes termos são encontrados conforme resultado obtido por suas respectivas
+funções  de  pertinência,  que  possibilitam  a  utilização  de  regras  de  produção  na
+inferência fuzzy aplicada sobre seus resultados. Estas regras consistem em proposições
+condicionais não qualificadas (SE... ENTÃO) e conferem "inteligência" ao assistente
+virtual de ensino na orientação de quais atividades interativas realizar e sobre qual
+conteúdo dedicar mais atenção no seu atual momento de aprendizagem.
+Cabe ressaltar um aspecto importante com relação ao uso de Fuzzy: o número de
+termos lingüísticos adequados para modelar o comportamento do aluno.   Quanto maior
+o número de variáveis lingüísticas maior é o poder de inferência do assistente.   A fim de
+validar esta proposta construiu-se um experimento com um número menor de variáveis
+para poder viabilizar a implementação e a pesquisa investigatória realizada.
+4. Exemplo da Aplicação desta Metodologia Integrada
+Procurando facilitar a compreensão desta proposta integrativa criou-se um primeiro
+experimento  cujo  domínio  trata  de  conteúdos  relacionados  à  disciplina  Algoritmo.
+Geralmente,  esta  disciplina  possui  seu  objetivo  focado  em  iniciar  o  estudante  na
+programação de computadores por meio do desenvolvimento de seu raciocínio lógico e
+sua capacidade de representação deste raciocínio para resolução de problemas onde um
+computador possa ser utilizado.
+Por  se  tratar  de  uma  das  principais  subáreas  na  formação  superior  em
+Informática  e  possuir  tradição  nas  dificuldades  de  efetivação  de  um  ensino-
+aprendizagem adequado as suas próprias necessidades educacionais, além das demandas
+da  sociedade  atual                                                                          [McKeown  1999],  este  exemplo  prático  está  fundamentado  na
+primeira aplicação desta metodologia como experimento de estudo e pesquisa.
+Vários são os trabalhos que empregam recursos computacionais no apoio deste
+ensino-aprendizagem  ([Almeida  2002];  [Mendes  2000];  [Esmin  1998]; entre outros),
+onde são encontradas diversas contribuições.   No entanto, poucos almejam modelar o
+aluno computacionalmente, sendo menor ainda a quantidade de ambientes que aplicam
+mecanismos inteligentes para uma adequação dinâmica das necessidades especificas de
+cada de seus aprendizes.
+Inicialmente,   nesta   proposta   exemplificada,   os   professores   especialistas
+definiram o mapa conceitual desta disciplina, conforme apresentado na Figura 1.   Por
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      355
+
+
+
+
+conseguinte,  estes  também  definiram  as  funções  de  pertinência  referentes  aos
+componentes deste mapa, além dos elementos que compõem o conjunto fuzzy completo
+e seus respectivos cortes mínimos satisfatórios para esta aprendizagem.
+Figura 2. Mapa conceitual da disciplina de Algoritmo.
+No  intuito  de  representar  os  elementos  deste  conjunto,  assim  como  seus
+respectivos cortes mínimos, será usado o conjunto fuzzy A para demonstração destas
+definições dos especialistas neste exemplo com Algoritmo.   Sua notação integrativa,
+entre o mapa conceitual e o conjunto fuzzy A, consiste em: U- Uso do Computador,
+R- Representação do Raciocínio, E- Instruções de Entrada e Saída de Dados, S- seleção,
+Rp-  repetição,  F-  função,  P-  procedimento,  N-  estrutura  numérica,  C-  estrutura  de
+caractere.
+Essa representação instrutiva do conjunto fuzzy A consiste em:     A = {0,5/U +
+0,6/R + 0,5/E + 0,7/S + 0,7/Rp + 0,6/F + 0,8/P + 0,5/N + 0,7/C}.
+A princípio todos estes cortes são estipulados sobre a nota mínima necessária
+para  aprovação  em  uma  disciplina.  A  coleção  dos  resultados  obtidos  por  um
+determinado aluno, para cada elemento do conjunto A, o transforma em um conjunto
+fuzzy  sig-psico  que  representa  a  aquisição  de  conceitos  significativos  para  um
+estudante, (seu significado psicológico por estudante).
+Conforme  o  acompanhamento  de  aprendizagem  para  cada  elemento  deste
+conjunto, que corresponde aos tópicos definidos na disciplina, o estudante segue seu
+caminho  de  estudo  recebendo  orientação  do  assistente  virtual  sobre  qual  atividade
+realizar e que conteúdo estudar na superação do corte mínimo de cada elemento do
+conjunto  fuzzy.  Esse  aconselhamento  acontece  por  meio  da  constatação  do  termo
+lingüístico mais adequado às variáveis esforço e desempenho.
+Supondo um esforço baixo e um desempenho razoável, ambos resultantes de
+suas respectivas funções, uma inferência será realizada sobre a base de conhecimento e
+a regra mais adequada será aplicada, como em: SE esforço é baixo E desempenho é
+razoável ENTÃO o elemento do sig-psico é insatisfatório.   Por meio deste “raciocínio”
+o sistema orientará o aprendiz a revisar o conteúdo de estudo e a realizar determinados
+tipos de atividades interativas mais condizentes com sua situação cognitiva atual.
+Somente   quando   o  aprendiz  obtiver  todos  os  elementos,  previamente
+estabelecidos no sig-psico, atendendo ao mínimo estipulado como satisfatório para esta
+disciplina, lhe será possível calcular o grau de disparo para a mesma, identificando
+assim o grau de confiança sobre a aprendizagem significativa efetivada neste conteúdo.
+Este tipo de análise também pode ser adotado na averiguação da assimilação de
+componentes  mais  inclusivos  representados  no  mapa  conceitual,  não  sendo  estes
+elementos  pertencentes  ao  conjunto  fuzzy  sig-psico.  Este  tipo  de  cálculo  permite
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       356
+
+
+
+
+apuração da aprendizagem significativa dos conceitos hierarquicamente superiores no
+mapa conceitual, assim como de sua estabilidade como conceito subsunçor.
+5. Resultados
+A realização do primeiro experimento em situação real (universidade) envolveu duas
+disciplinas que são lecionadas de maneira contínua durante o primeiro e o segundo
+semestres do curso presencial de Bacharelado em Ciência da Computação.   O uso do
+programa, denominado SAE (Sistema de Apoio Educacional), iniciou em abril de 2007
+e terminou com o fim deste semestre letivo (junho de 2007).
+Constatou-se, por meio de entrevistas próximas ao final deste semestre, e dados
+oriundos  das  atividades  com  o  sistema,  que  100%  dos  participantes  entrevistados,
+declaram que usar o sistema os auxiliou a entender os conteúdos e organizar seus
+estudos. Os resultados alcançados na aprovação destas disciplinas indicaram melhora
+média  em  torno  de                                                                         10%  entre  as   5  diferentes  turmas  que  participaram  deste
+experimento, sendo 3 de Algoritmo e 2 de Laboratório 1.
+Esta melhora foi obtida por meio da comparação dos resultados alcançados no
+semestre anterior (2006/2) ao uso do SAE, com as mesmas disciplinas e professores
+envolvidos  no  experimento  com  este  ambiente.    Na  Tabela  1  são  apresentados  os
+índices de aprovação alcançados por estas turmas nos dois semestres, sendo comparadas
+somente as turmas que tiveram o mesmo docente nestes dois semestres.
+Tabela 1. Síntese dos dados comparados entre os semestres 2006/2 e 2007/1.
+Índice   de Aprovação
+Disciplina                                                                                   Turma            2006/2                                            2007/1   Docente   Comparação
+Algoritmo                                                                                    T1               52,9%                                             70,0%    D1        17,1%
+                                                                                             T2               52,9%                                             48,1%    D1        -4,8%
+                                                                                             T3               58,3%                                             66,7%    D2        8,3%
+Laboratório 1                                                                                T4               46,4%                                             65,0%    D1        18,6%
+                                                                                             T5               44,8%                                             54,5%    D2        9,7%
+Na comparação em Algoritmo o docente D1 lecionou em duas turmas diferentes
+no semestre 2007/1, sendo estas comparadas com a única turma em que D1 lecionou no
+semestre anterior  (2006/2).    Apesar deste docente possuir o melhor aproveitamento
+nesta disciplina (17,1% em T1), sua outra comparação (T2) apresentou piora, ao invés de
+melhora  no  índice  de  aprovação.  Este  resultado  divergente,  envolvendo  o  mesmo
+docente na mesma disciplina, exigiu um estudo detalhado sobre a participação dos
+alunos nesta disciplina e identificou uma conduta divergente entre os estudantes das
+turmas comparadas entre T1 e T2 somente de 2007/1.
+Uma quantidade expressiva de alunos da turma T2 em 2007/1 usou o ambiente
+de apoio em um índice de acompanhamento menor que a média de utilização de todas
+as outras turmas do mesmo docente (T1 e T4), não caracterizando um esforço coerente
+dos aprendizes com a expectativa de sua aprendizagem significativa em Algoritmo.
+Além  disso,  foi  possível  observar  o  uso  mais  assíduo  dos  recursos  tecnológicos,
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     357
+
+
+
+
+disponibilizados no semestre 2007/1, muito próximo ao final do semestre letivo, porém
+não resultando em uma ação positiva para aprendizagem de grande parte dos estudantes
+desta turma (T2 em 2007/1).
+Dessa forma, os resultados obtidos neste primeiro experimento apresentaram
+uma situação positiva na aplicação desta metodologia integrada (TAS, Fuzzy e sistema),
+enfatizando ainda o melhor aproveitamento médio alcançado por cada turma entre uma
+atividade avaliativa anterior a inserção do ambiente em 2007/1 e outra posterior ao seu
+uso, com melhora em torno de 50% na média das notas alcançadas por todas as turmas
+participantes deste experimento.
+6. Considerações Finais e Trabalhos Futuros
+A  principal  contribuição  deste  trabalho  consiste  na  proposta  de  construção  de  um
+sistema, baseado numa arquitetura de STI, onde o modelo de aluno é construído a partir
+da  representação  das  variáveis  lingüísticas  associadas  à  Lógica  Fuzzy.     E,  a
+possibilidade do professor manipular a base de regras afim de ajustá-las conforme o
+perfil do aluno. Ou seja, em termos de arquitetura não existe a inclusão de um novo
+módulo ou grandes alterações estruturais. O que se realizou foi um STI utilizando uma
+metodologia de aprendizagem baseada na TAS, modelando a base de domínio através
+de Mapas Conceituais, os quais permitiram a criação de uma estrutura hierárquica de
+pré-requisitos e co-requisitos que organiza os conteúdos e permite a criação de uma
+base de regras associada ao módulo tutor, cuja seleção é feita através do resultado
+oriundo do módulo do aluno.   Sendo este constituído de um conjunto de informações
+estáticas e dinâmicas (estas provenientes da interação com o sistema) modeladas através
+de conceitos da Lógica Fuzzy.
+Apesar dos resultados positivos, foi expressiva a quantidade de sugestões, tanto
+de  alunos,  docentes  e  monitores,  para  o  uso  mais  freqüente  de  outros  recursos
+cooperativos no sistema SAE.   Isso reforçou a possibilidade de expansão do SAE com
+um ambiente de educação à distância, tornando-o mais abrangente por meio da inclusão
+de outras variáveis lingüísticas, possibilitando ainda uma averiguação mais ampla sobre
+a capacidade da Lógica Fuzzy como recurso para modelar o comportamento cognitivo
+do aluno em um determinado momento de interação com o sistema.
+7. Referências
+Almeida,  E.  S.  de.  et  al.                                                                    (2002)  AMBAP:  Um  Ambiente  de  Apoio  ao  Aprendizado  de
+Programação.  In:  Workshop  sobre  Educação  em  Computação.  Florianópolis.  Anais...
+Florianópolis: SBC, 2002. p. 691-700.
+Ausubel, D. P. ; Novak, J. P. ; Hanesian, H. (1968). Educational Psichology: A cognitive view.,
+New York, Holt, Rinehart and Winston.
+Ausubel,  D.  P.                                                                                  (2000)  The  acquisition  and  retention  of  knowledge:  A  cognitive  view.
+Dordrecht: Kluwer Academic.
+Chou, C. Y. ; Chan, T. W. ; Lin, C. J. (2003) Redefining the learning companion: the past,
+present, and future of educational agents, Computers and Education, v. 40, n. 3, p. 255-269.
+Esmin,  A.  A.  A.  (1998)  Portugol/Plus:  Uma ferramenta de  apoio  ao  ensino  da  Lógica de
+Programação baseado no Portugol. In: Congresso Iberoamericano de Informática Educativa.
+Brasília.                                                                                         Actas...                                                                        Brasília,                                                                         1998.   Disponível   em:
+                                                                                                                                                                                  <http://www.c5.cl/ieinvestiga/actas/ribie98/118.html>. Acesso em: 20 mar. 2005.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                          358
+
+
+
+
+Gomide, F. ; Gudwin, R. ; Tanscheit, R. (1995) Conceitos fundamentais da teoria de conjuntos
+fuzzy. Lógica fuzzy e aplicações. In: Proceedings  6th    IFSA World Congress, Tutorials,
+pp.1-38, São Paulo, Brasil.
+Larson,  R.                                                                                          (1999)  As  novas  realidades  e  os  desafios  da  educação  tecnológica  superior.
+Disponível  em:  <http://www.engenheiro2001.org.br/teleconferencia_3.htm#tele2>.  Acesso
+em: 15 junho 2007.
+McKeown,  J.  ;  Farrell,  T.                                                                        (1999)  Why  We  Need  to  Deve1op  Succcess  in  Introductory
+Programming Courses.   In: Central Plains Conference (CCSC), Maryville, MO, 1999.
+Mendes, A. J. N.  ; Gomes, A. J.  (2000)  Suporte à Aprendizagem da Programação com o
+Ambiente SICAS. In: Congresso Iberoamericano de Informática Educativa. Viña del Mar.
+Actas...                                                                                             Viña    del    Mar:    Universidad    de    Chile,                                     2000.                           Disponível    em:
+                                                                                                     <http://www.c5.cl/ieinvestiga/actas/ribie2000/papers/319/index.html>.  Acesso  em:                                     22  abr.
+2005.
+Novak, J.  (1998) Learning, Creating, and Using Knowledge: Concept Maps as Facilitative
+Tools in Schools and Corporations. Lawrence Erlbaum Associates, New Jersey.
+Rissoli, V. R. V. (2001) Sistema especialista fuzzy para avaliação de instituições educacionais.
+143p.  Dissertação                                                                                   (Mestrado  em  Inteligência  Artificial)                                               -  Faculdade  de  Ciência  da
+Computação, Universidade Federal de São Carlos, São Carlos.
+Viccari, R. M. ; Giraffa, L. M. M. (2003) Fundamentos dos Sistemas Tutores Inteligentes. In:
+Barone, D. (Org.). Sociedades Artificiais: A Nova Fronteira da Inteligência nas Máquinas.
+Porto Alegre: Bookman, p. 155-208.
+Yacef,  K.  (2002)  Intelligent  Teaching  Assistant  Systems.  In:  International  Conference  on
+Computers in Education. New Zeland. Proceedings... New Zeland: IEEE, 2002. v. 1, p. 136-
+140.
+Zadeh, L. A. (1975) Fuzzy Logic and Approximate Reasoning. Synthese, v. 30, n. 3-4,    p. 407-
+428.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                             359
+
+
+
+
+

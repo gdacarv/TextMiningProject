@@ -1,0 +1,264 @@
+﻿Uma abordagem para a descoberta flexível de serviços
+sensíveis ao contexto do negócio
+Aluno: Michel Antunes da Silva
+Orientadora: Flávia Maria Santoro
+Coorientador: Leonardo Guerreiro Azevedo
+Programa de Pós-Graduação em Informática - Departamento de Informática Aplicada -
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+{michel.silva,  flavia.santoro,  azevedo}@uniriotec.br
+Nível: Mestrado; Ano de Ingresso: 2009; Previsão de Conclusão: Dezembro de 2010;
+Etapas já concluídas: Defesa da Proposta.
+Resumo. As Organizações utilizam serviços para apoiar a execução de seu
+processo de negócio. A necessidade de consumo do serviço é levantada em
+tempo   de   projeto   e,   posteriormente,   desenvolvida   na   aplicação   que
+implementa  o  processo  de  negócio.  Isso  torna  o  processo  altamente
+dependente do  serviço  que o  apoia.  Além  disso,  o  serviço  pode não  mais
+atender  ao  processo,  pois,  ao  levantar  uma  necessidade  de  evolução  no
+processo  de  negócio,  pode  haver  informações  complementares  que  não  é
+vislumbrada  na  resposta  do  consumo  desse  respectivo  serviço.  Com  isso,
+haverá necessidade de adequar a aplicação que implementa o processo de
+negócio  para  consumir  outro  serviço  mais  adequado  à  sua  necessidade.
+Então, este artigo descreve uma abordagem de pesquisa para viabilizar a
+descoberta flexível de serviços contidos em um repositório de serviços e de
+acordo com o contexto do negócio. Essa abordagem visa descobrir o serviço
+mais adequado para atender aos requisitos provenientes do negócio.
+Palavras-Chave:  orientação  a  serviço,  contexto,  programação  orientada  a
+aspecto, processo de negócio
+1. Introdução
+A Computação Orientada a Serviço é o paradigma computacional que utiliza serviços
+como  elementos  fundamentais  para  o  desenvolvimento  de  aplicações.  Serviços  são
+pedaços  de  funcionalidades  auto-contidas  que  possuem  interfaces  expostas  e  são
+invocados via mensagens [Marks e Bell 2006]. [Papazoglou e Heuvel 2006] afirmam
+que o desenvolvimento de serviços está associado ao processo de negócio, ou seja,
+serviços devem expor funcionalidades pertinentes ao negócio. Dessa forma, levando ao
+alinhamento da Tecnologia da Informação aos objetivos do negócio [Hewitt 2009].
+As organizações estão propícias a sofrerem mudanças contínuas nos ambientes
+nos quais seus sistemas estão disponibilizados, bem como pela continuidade do serviço
+prestado por um dado fornecedor. [Truong e Dustdar 2009] indicam que ser conhecedor
+do contexto ajudará serviços a se adaptarem a mudanças; consumidores esperam que
+
+
+
+
+serviços sejam cientes de seus ambientes atuais ou de seus atributos contextuais [Keidl e
+Kemper 2004]. Conforme [Brézillon e Pomerol 1999], contexto é aquilo que limita algo
+sem intervir de forma explícita, ou seja, qualquer informação que pode ser utilizada para
+caracterizar a situação de um ator, que pode ser uma pessoa, lugar ou objeto. O foco
+estabelece o universo contextual; com a evolução do foco, o respectivo contexto evolui.
+Esta pesquisa visa aprimorar as características contextuais compartilhadas entre
+processo de negócio e serviço. Com o uso das informações de contexto, será possível
+que consumidores descubram serviços de forma automátiça.    Este artigo tem como
+objetivo descrever uma abordagem para estruturar a descoberta flexível de serviços
+sensíveis ao contexto do negócio. Constitui-se premissa deste trabalho que o serviço é
+desenvolvido de acordo com seu contexto de atuação em um determinado processo de
+negócio. Além disso, o paradigma da programação orientada a aspecto será utilizado
+para realizar a captura do contexto para a descoberta do serviço. Em [Kiczales et al.
+1997], a programação orientada a aspecto (POA) foi proposta como um mecanismo para
+permitir  a  implementação  modular  de  interesses  transversais.  Serviços  podem  ser
+consumidos por diferentes módulos de uma aplicação. Logo, a invocação do serviço
+será considerada como um interesse transversal.
+O artigo está organizado da seguinte forma. Na Seção 2, são apresentados os
+trabalhos relacionados com a manipulação de contexto em serviços. Na Seção  3, é
+discutido o foco de atuação da proposta de pesquisa. Na Seção 4, está estruturado como
+a pesquisa será conduzida. Por fim, na Seção 5, são apresentadas as conclusões.
+2. Trabalhos Relacionados
+[Prezerakos et al. 2007] propõem o desacoplamento da lógica principal do serviço da
+funcionalidade relativa ao contexto pela adoção de uma abordagem orientada a modelo
+que gera código em linguagem de programação aspectual. Esta abordagem é baseada
+em uma versão modificada do metamodelo ContextUML. Com isso, a separação dos
+interesses realizada no modelo é repassada, para o código. Todavia, o trabalho apenas
+apresenta  uma  solução  para  a  implementação  da  automatização,  sem  levar  em
+consideração  as  questões  sobre  os  atributos  necessários  para  identificar  o  serviço
+adequado a processos de negócio.
+Em  contrapartida,  [Martin  2006]  propõe  uma  separação  categórica  para  os
+elementos  envolvidos  com  serviços  web.  As  categorias  propostas  são:  disposição
+organizacional,  características  do  serviço,  características  do  usuário,  situação  do
+usuário, histórico transacional, estado do recurso e estado da transação. [Martin 2006]
+considera que a descoberta e seleção de serviços web podem depender de todas as
+categorias. [Martin 2006] apresenta apenas direcionamentos genéricos e desafios sobre
+quais questões arquiteturais atentar na contextualização de web services.D essa forma,
+existem  preocupações  em  questões  relacionadas  à  representação  do  conhecimento
+contextual, à segurança e privacidade, à escalabilidade, ao agrupamento e manipulação
+das informações contextuais, entre outros.
+[Han  et  al.  2008]  apresentam  uma  abordagem  para  comparar  serviços  web
+cientes do contexto do processo. Este trabalho visa descobrir o serviço adequado para o
+processo de composição de serviços. Esta abordagem utiliza a semântica do processo
+técnico  (no escopo do serviço) e a semântica do processo de negócio  (inerente ao
+domínio do negócio da empresa) de um serviço registrado. Os autores propõem que o
+
+
+
+
+(UDDI) seja estendido para apoiar a
+comparação  ciente  do  contexto  do  processo.  Porém,  concluem  que  utilizaram  um
+modelo simples de contexto e necessita de aprimoramento através do uso da OWL-S,
+para aumentar a capacidade semântica. Apesar de essa proposta assemelhar-se com a
+nossa, ela não apresenta uma representação contextual que garanta o alinhamento entre
+o processo e os serviços.
+3. Enfoque de Solução
+Um dos requisitos da proposta é especificar os elementos contextuais relevantes no
+contexto do processo e do serviço. Além disso, estabelecer os relacionamentos entre
+eles para aprimorar a qualidade da comparação entre o contexto do processo e do
+serviço.   Os   elementos   contextuais   levantados   serão   concebidos   e   agrupados
+fundamentados nas categorias propostas em [Martin 2006]. A semântica proposta em
+[Han et al. 2008] será analisada de acordo com as categorias de [Martin 2006]. Esta
+análise tem o intuito de verificar suas deficiências e aprimorá-las. Ontologias serão
+analisadas  para  averiguar  qual  atende,  ou  fornece  informações  suplementares,  aos
+contextos previamente categorizados. Um framework será estabelecido como resultado
+desse   trabalho.   O   framework  visa   padronizar   a   descoberta   semanticamente
+contextualizada de um serviço adequado para atender à demanda do processo.
+Um servidor de UDDI provê descoberta de serviços através de palavras chave.
+Entretanto,  o  UDDI  não  provê  artifícios  suficientes  para  lidar  com  requisições
+complexas de descoberta de serviços. Alguns exemplos de descoberta são: O serviço s
+apoia a atividade a em execução no escopo do processo de negócio?; Quais serviços
+apoiam  a  atividade  a que  está  sendo  executada  pelo  funcionário  f'?  Portanto,  será
+necessário  ajustar  o  UDDI para  garantir  que  o  serviço  está  disponibilizado  com  o
+contexto adequado para efetivar o processo de comparação e, assim, descobrir o melhor
+serviço para atender a solicitação.
+Uma linguagem de POA garantirá flexibilidade na captura do contexto inerente
+ao processo de negócio. E logo após disso, efetuar a comparação com o contexto do
+serviço. A linguagem adotada será o aspectj, pois possui característica de combinação
+aspectual estática e dinâmica  [Laddad  2009]. A combinação em tempo de execução
+possibilitará que o módulo aspectual seja tratado de forma modular. Isso garante que o
+processo de negócio tenha um baixo acoplamento e transparência com a camada que
+manipulará seu contexto. Dessa forma, a POA possibilita que ajustes para manipular o
+contexto do processo possam ser incorporados na execução do processo, sem este ser
+interrompido.O modelo lógico arquitetural da solução proposta é apresentado na Figura
+1  e  é  formado  pelos  seguintes  módulos:                                                   1-  Aplicação  do  Negócio:  ambiente  de
+execução  de  uma  aplicação  que  implementa  processos  de  negócio  da  empresa.;  2-
+Módulo  Aspectual:  componente  responsável  por  deter  a  implementação  sobre  a
+manipulação do contexto do negócio e a lógica para a descoberta de serviços; utiliza um
+modelo de contexto para efetuar a descoberta do serviço; 3- Funcionalidade do Negócio:
+representa uma implementação de um requisito apoiada por um serviço no âmbito da
+instância de um processo de negócio; 4- Combinação Aspectual: atividade na qual o
+interesse implementado no Módulo Aspectual é unificado a um ponto identificado na
+instância do processo de negócio, fornecendo, assim, um comportamento adicional a
+essa instância; 5- Modelo de Contexto: corresponde a metadados inerentes ao domínio
+do negócio e do serviço, utilizados para descrever o contexto do negócio e o contexto de
+
+
+
+
+serviços; 6- Contexto do Negócio: repositório que detêm o conhecimento do negócio da
+empresa, ou seja, os dados que descrevem o contexto do negócio;  7- Contexto do
+Serviço: repositório que detêm o conhecimento do serviço que está sendo oferecido, ou
+seja, os dados que descrevem o contexto do serviço;  8  - Repositórios de serviços:
+ambientes  disponíveis  na  internet  onde  os  serviços  são  oferecidos  para  serem
+consumidos.
+Figura 1. Modelo lógico da arquitetura
+O funcionamento dessa arquitetura terá seu início no momento da execução da
+funcionalidade do negócio. Em uma determinada aplicação do negócio, por exemplo, há
+uma funcionalidade que necessita obter informações de um cliente do tipo pessoa física.
+Porém, essas informações não estão disponíveis em seu ambiente de execução. Para
+obter as informações necessárias é preciso utilizar um serviço disponibilizado por outra
+aplicação. Esta segunda aplicação é a responsável pelo cadastro de clientes. Assim, é
+possível recuperar informações da pessoa através do consumo de serviços. Neste caso,
+as  informações  são  disponibilizadas  por  serviços  da  organização  e  por  serviços
+difundidos na internet. Em ambos os casos, os serviços devem estar preparados para
+receber  o  identificador  único  de  uma  pessoa,  o  CPF,  e  retornar  as  informações
+necessárias  para  subsidiar  a  execução  da  funcionalidade  do  negócio.  O  serviço  de
+acesso ao cadastro corporativo de pessoas pode não atender aos critérios necessários
+estabelecidos  no  contexto  do  negócio,  como,  por  exemplo:  a  disponibilidade,
+compatibilidade  com  os  atributos  de  retorno  desejados,  etc.  Logo,  seria  necessário
+reformular a implementação do módulo da aplicação que tem a responsabilidade de
+descobrir e consumir o serviço e retornar as informações sobre o cliente. Para evitar que
+isso ocorra, a execução do módulo responsável pelo consumo do serviço, acionado
+dentro do fluxo de execução da funcionalidade, seria interceptado pela programação
+orientada a aspectos, de acordo com os critérios definidos no módulo aspectual. Essa
+interceptação é realizada em tempo de execução, e resulta na combinação do módulo
+
+
+
+
+aspectual com a funcionalidade. O módulo aspectual determina outra implementação
+para o módulo da aplicação responsável pelo consumo do serviço. Portanto, a lógica de
+descoberta,  ordenação,  priorização  e  consumo  do  serviço  eleito,  dentre  prováveis
+elegíveis, são atribuídas ao módulo aspectual.
+Como  não  há  a  possibilidade  de  garantir  que  todos  os  serviços  elegíveis
+retornem o conjunto exato de informações de cliente e o mesmo tipo que é esperado
+pela funcionalidade de negócio, será necessário entender a semântica do retorno de cada
+serviço eleito. A partir deste entendimento, será possível transformar o conteúdo do
+objeto  retornado  pelo  serviço  eleito  de  acordo  com  o  esperado  no  retorno  à
+funcionalidade do negócio. Então, não haverá alteração na aplicação do negócio, mas o
+módulo responsável por obter o resultado, proveniente do consumo do serviço, será
+descartado, em tempo de execução, e o resultado será obtido pelo módulo aspectual e
+entregue para a aplicação do negócio da mesma forma que o módulo da aplicação faria.
+4. Método de Pesquisa
+Com  o  intuito  de  apresentar  “o  que”  e  “como”  fazer  para  o  processo  de  negócio
+descobrir o serviço adequado para suprir sua necessidade, o estudo de caso será adotado
+como  metodologia.  Estudo  de  caso  é  uma  investigação  empírica  que  investiga  um
+fenômeno  contemporâneo  em  profundidade  e  dentro  de  seu  contexto  da  vida  real,
+especialmente quando as fronteiras entre o fenômeno e o contexto não são claramente
+evidentes                                                                                     [Yin  2009].  De  acordo  com  esta  abordagem,  a  pesquisa  será  realizada
+seguindo  os  seguintes  passos:  levantamento  da  literatura  sobre  as  propostas  de
+estruturação  contextual  para  o  alinhamento  de  processo  de  negócio  e  serviços  e
+propostas  tecnológicas  para  viabilizar  a  descoberta  de  serviço;  estruturação  da
+representação  contextual  para  o  alinhamento  de  processo  de  negócio  e  serviços
+(framework de representação contextual); compreensão sobre a tecnologia envolvida na
+solução; desenvolvimentdo da solução; seleção de casos (processos de negócio que são
+apoiados por serviços); estudo preliminar; análise dos resultados obtidos no estudo
+preliminar; ajustes na solução; aplicação de estudo de caso; e análise dos resultados do
+estudo de caso. No momento atual, a parte que compete ao levantamento bibliográfico
+está em andamento, bem como as etapas de pesquisa e definição dos elementos para
+representar o contexto do alinhamento entre processo e serviço. O próximo passo é
+elaborar o framework e iniciar o desenvolvimento da solução. Na fase de seleção de
+casos, com intuito de dirimir riscos, pretende-se utilizar benchmarking de serviços web.
+5. Conclusões
+O desenvolvimento de serviços está diretamente associado ao processo de negócio, pois
+serviços   são   usados   para   fornecer   agilidade   ao   negócio   e   velocidade   ao
+desenvolvimento.  Empresas  necessitam  ter  agilidade  para  atender  a  requisitos  de
+mudança,  ou  seja,  precisam  ser  flexíveis  [Marks  e  Bell  2006].  Conforme  visto  no
+decorrer desse artigo, processos de negócio necessitam que os serviços que apoiam a
+sua execução, estejam, também, cientes do contexto do negócio.
+Uma abordagem para estruturar a descoberta flexível de serviços sensíveis ao
+contexto do negócio está sendo proposta. Esta abordagem utilizou a POA para garantir a
+flexibilidade na atuação da captura do contexto do processo de negócio, o qual será
+detalhado e interligado ao contexto de serviços pela formulação de um framework.
+Dessa forma, vislumbra-se que serviços devem estar cientes de seu contexto e, assim,
+
+
+
+
+serem capazes de apoiar os processos de negócio a partir de um processo de descoberta
+mais  coeso  e  completo.  Uma  das  contribuições  será  vislumbrada  ao  comparar  o
+universo  contextual  proposto  por  [Han  et  al.  2008]  com  os  resultados  obtidos  na
+pesquisa em andamento. Pretende-se, também, contribuir com melhorias no repositório
+de serviços, tornando-o adequado à manipulação semântica de seus componentes.
+Referências Bibliográficas
+Brézillon P. e Pomerol J-Ch. (1999) “Contextual knowledge sharing and cooperation in
+intelligent assistant systems”. Em: Le Travail Humain, v. 62, n. 3, pp. 223 - 246 .
+Han, W., Shi, X. e Chen, R.  (2008)  “Process-context aware matchmaking for web
+service composition”. Em: Journal of Network and Computer Applications, v. 31, n.
+4, pp. 559-576.
+Hewitt, E. (2009), Java SOA Cookbook, O’Reilly Media, Inc.
+Keidl, M. e Kemper, A. (2004) “Towards context-aware adaptable web services”. Em:
+Proceedings of the 13th international World Wide Web conference on Alternate track
+papers & posters, New York, NY, USA.
+Kiczales, G., Lamping, J., Mendhekar, A., Maeda, C., Lopes, C., Loingtier, J. and Irwin,
+J.,                                                                                           (1997)  “Aspect-oriented programming”. Em: European Conference on Object-
+Oriented Programming, pp. 220 - 242.
+Laddad,  R.                                                                                   (2009)  AspectJ  in  Action:  Enterprise  AOP  with  Spring  Applications.
+Segunda edição, Greenwich, CT: Manning Publications Co.
+Marks, E. A. e Bell, M. (2006), Service Oriented Architecture (SOA): A Planning and
+Implementation Guide for Business and Technology, Wiley.
+Martin,  D.                                                                                   (2006)                                                                       “Putting  Web  Services  in  Context”.  Em:  Electronic  Notes  in
+                                                                                              Theoretical Computer Science, v. 146, n. 1, pp. 3 - 16.
+Martin,  D.,  Burstein,  M.,  Hobbs,  J.,  Lassila,  O.,  McDermott,  D.,  McIlraith,  S.,
+Narayanan, S., Paolucci, M., Parsia, B., Payne, T., Sirin, E., Srinivasan, N. e Sycara,
+K.                                                                                            (2006)                                                                       “OWL-S:    Semantic    Markup    for    Web    Services”.    Em:
+http://www.ai.sri.com/daml/services/owl-s/1.2/overview/. Acesso em: 19/11/2009.
+Papazoglou,  M.  P.  e  Heuvel,  W.-J.  V.  D.                                                (2006)                                                                       “Service-oriented  design  and
+development methodology”. Int. J. Web Engineering and Technology, Vol. 2, No. 4,
+pp. 412 - 442.
+Prezerakos, G.N., Tselikas, N. D., Cortese, G. (2007) “Model-driven Composition of
+Context-aware  Web  Services  Using  ContextUML  and  Aspects”.  Em:  IEEE
+International Conference on Web Services, ICWS, pp. 320 - 329.
+Truong, H. e Dustdar, S. (2009) “A survey on context-aware web service systems”. Em:
+International Journal of Web Information Systems, v. 5, n. 1, pp. 5 - 31.
+Yin, R. K. (2009), Case study research : design and methods, Los Angeles, California,
+Sage Publications.
+
+
+
+
+

@@ -1,0 +1,479 @@
+﻿Análise de Log para Avaliação do Comportamento do Aluno
+em um Ambiente de EAD na Web
+Raquel   Weirich, Isabela Gasparini, Avanilde Kemczinski
+Departamento de Ciência da Computação - Centro de Ciências Tecnológicas - CCT
+Universidade do Estado de Santa Catarina - UDESC
+Campus Universitário Prof. Avelino Marcante s/n - Bairro Bom Retiro
+Joinville - SC - Brasil
+{dcc6rw,isabela, avanilde}@joinville.udesc.br
+Abstract.  The  increasing  use  of  e-learning  demands  more  and  more
+techniques for elaboration and application to assist in the stages of the use of
+an environment, also in the time to evaluate the knowledge acquired for the
+students. In intention to improve the quality of student´s interaction in a e-
+learning  environment  intitled  AdaptWeb                                                      (Teaching-Learning  Adaptative
+Environment  at  Web),  a  tool  of    log´s  analysis  was  implemented  to  get
+information  of  the  student´s  behavior  front  the  environment.  After  the
+implementation  of  the  tool  and  the  incorporation  of  the  same  one  in  the
+AdaptWeb environment was realized a case study with the log analysis in a
+group  of  computer  science  students  of  UDESC  (State  of  Santa  Catarina
+University).
+Resumo. A crescente utilização da Educação a Distância (EAD) exige cada
+vez mais a elaboração e aplicação de técnicas para auxiliar nas etapas da
+utilização  de  um  ambiente,  inclusive  na  hora  de  avaliar  o  conhecimento
+adquirido pelo aluno. No intuito de melhorar a qualidade da interação do
+aluno  em  um  ambiente  EAD  intitulado  AdaptWeb  (Ambiente  de  Ensino-
+Aprendizagem Adaptativo na Web), uma ferramenta de análise de log foi
+implementada para obter informações referente ao comportamento do aluno
+frente ao ambiente. Após a implementação da ferramenta e a incorporação da
+mesma no AdaptWeb, foi realizado um estudo de caso piloto com a aplicação
+da  análise  de  log  em  uma  turma  de  alunos  do  curso  de  Ciência  da
+Computação da UDESC (Universidade do Estado de Santa Catarina).
+1.                                                                                             Introdução
+A  Educação  a  Distância  (EAD)  surgiu  como uma  alternativa  de  educação  para  as
+pessoas, que pelas mais diversas razões, não podem estar presentes no mesmo local ao
+mesmo tempo. Atualmente a EAD está sendo amplamente empregada nos mais diversos
+segmentos, desde cursos de treinamento até cursos de pós-graduação.
+O  AdaptWeb                                                                                    (Ambiente  de  Ensino-Aprendizagem  Adaptativo  na  Web)
+(Brunetto et al, 2003) é um ambiente que possui como objetivo principal a adequação
+dos conteúdos às preferências individuais do usuário. Para assegurar a qualidade no
+aprendizado do aluno, torna-se necessário que o ambiente no qual o aluno vai navegar
+não tenha problemas de usabilidade, ou seja, o ambiente utilizado deve ser fácil de
+aprender  e  utilizar,  eficaz,  eficiente,  seguro,  satisfatório,  agradável,  atraente  e
+desafiador.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       510
+
+
+
+
+Para verificar a usabilidade dos sistemas existem várias técnicas de avaliação da
+usabilidade que podem ser utilizadas inclusive em diferentes etapas do desenvolvimento
+de  interfaces.  A  análise  de  log  é  uma  técnica  de  avaliação  que  além  de  apontar
+problemas de usabilidade pode ajudar a compreender o comportamento dos usuários
+com relação a interface do sistema (Winckler, 2001). A análise de log foi implementada
+seguindo  as  características  do  AdaptWeb,  e  foi  disponibilizada  como  mais  uma
+ferramenta no ambiente do professor (autoria do ambiente).
+Este  artigo  tem  como  objetivo  apresentar  a  ferramenta  de  análise  de  log
+desenvolvida  para o Ambiente AdaptWeb,  que verifica o comportamento do aluno
+frente ao ambiente, e detalha o estudo de caso piloto realizado com a ferramenta em
+uma disciplina de graduação  (Bacharelado em Ciência da Computação) da UDESC
+(Universidade do Estado de Santa Catarina). Este artigo está estruturado como segue. A
+seção 2 explora o ambiente AdaptWeb. A seção 3 explica sobre a técnica de análise de
+log. A seção  4 apresenta a ferramenta de análise de log implementada no ambiente
+AdaptWeb.  A  seção  5  mostra  o  estudo  de  caso  piloto  realizado  e  por  último  as
+considerações finais são verificadas na seção 6.
+2.  O Ambiente AdaptWeb
+Um dos aspectos mais importantes nos sistemas de EAD é encontrar a melhor maneira
+em que a informação possa ser apresentada aos alunos. Uma alternativa para aumentar a
+qualidade  dos  sistemas  de  EAD  via  web,  é  a  utilização  de  Sistemas  Hipermídia
+Adaptativos (SHA), que estão se popularizando nos últimos anos por serem ferramentas
+versáteis e poderosas para organização e acesso a informação (Boticario, 2000). SHA
+são sistemas, arquiteturas, métodos e técnicas capazes de promover a adaptação de
+sistema hipermídia em geral aos objetivos, necessidades, preferências e desejos de seus
+usuários (Brusilovsky, 1996).
+O AdaptWeb é um SHA de EAD baseado na web desenvolvido através de uma
+parceria da UFRGS (Universidade Federal do Rio Grande do Sul) e UEL (Universidade
+Estadual de Londrina) com colaboração do CNPq. Sua finalidade é adaptar o conteúdo,
+a apresentação e a navegação de acordo com o perfil do usuário. Seu grande diferencial
+é  o  ambiente  para  a  autoria  e  apresentação  de  cursos  na  web,  com  condições  de
+adaptabilidade. A sua adaptabilidade é suportada pela criação de um modelo flexível do
+estudante  (modelo do usuário), onde, para cada aluno, são armazenadas informações
+sobre  o  curso,  conhecimento,  ambiente  de  trabalho,  preferências  e  histórico
+navegacional (Palazzo et al, 2003), (Gasparini, 2003).
+O  objetivo  do  ambiente  é  permitir  a  adequação  de  táticas  e  formas  de
+apresentação de conteúdos para alunos de diferentes cursos de graduação e com estilos
+distintos  de  aprendizagem,  possibilitando  diversas  formas  de  apresentação  de  cada
+conteúdo, de forma adequada a cada curso e às preferências individuais dos alunos
+participantes                                                                                    (Palazzo  et  al,  2004).  O  AdaptWeb  é  composto por  um ambiente  de
+autoria,  onde  o  autor  organiza  e  cria  a  estrutura  de  conteúdo  de  suas  disciplinas
+adaptadas  aos  cursos  e  de  um  ambiente  para  o  aluno,  que  apresenta  o  conteúdo
+organizado através da sistemática de autoria adaptado ao curso do aluno (Brunetto et al,
+2003).
+3.  Avaliação de Usabilidade e Análise de Log
+A aceitação de um software está diretamente ligada à satisfação do usuário durante a
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                         511
+
+
+
+
+utilização  do  mesmo.  Interfaces  ergonomicamente  adequadas  tendem a  aumentar  o
+contentamento do usuário proporcionando maior conforto na operação do sistema. As
+pesquisas na área de Interação Humano-Computador (IHC) buscam avaliar a qualidade
+de  um projeto de  interface, tanto  ao  longo  do processo de  desenvolvimento como
+quando o software está pronto. Seu objetivo principal é a geração de sistemas com
+usabilidade, ou seja, facilidade de uso, aprendizagem, satisfação do usuário, eficiência e
+eficácia (Nielsen, 1993).
+As  atividades  da  engenharia  de  usabilidade  visam  identificar  problemas  de
+usabilidade em IHC e contribuir para a sua eliminação. Alguns objetivos apontados por
+Cybis  (2003) a serem atingidos pelas avaliações são: constatar, observar e registrar
+problemas durante a interação; calcular métricas objetivas para eficácia, eficiência e
+produtividade do usuário na interação com o sistema; diagnosticar as características do
+projeto que provavelmente atrapalhem a interação; prever dificuldades de aprendizado
+na operação do sistema e; conhecer a opinião do usuário em relação ao sistema.
+São  várias  as  classificações  para  as  técnicas  de  avaliação  de  interfaces
+existentes. Uma das mais conhecidas é a classificação de Cybis (2003). Nela as técnicas
+são  dividas  em  três  categorias  distintas:  técnicas  analíticas                           (também  chamadas  de
+preditivas, diagnósticas ou de inspeção) que são utilizadas sem a participação direta do
+usuário e tem como finalidade prever os erros de projetos de interfaces; as técnicas
+objetivas                                                                                      (ou  empíricas)  que  tentam  encontrar  problemas  na  interface  a  partir  da
+observação do usuário interagindo com o sistema; e as técnicas prospectivas  (ou de
+pesquisa de opinião), que buscam a opinião do usuário sobre a interação com sistema.
+As técnicas de avaliação de interface diferem entre si em vários aspectos. É
+preciso entender as diferentes características de cada uma, para se definir qual é a mais
+apropriada para se avaliar a interface. As principais diferenças entre as técnicas são as
+etapas em que as mesmas podem ser aplicadas, a maneira utilizada para coletar os
+dados,  os  tipos  de  dados  coletados,  e  ainda  o  tipo  de  análise  realizada  com  as
+informações obtidas (Preece, 2005).
+Após avaliações anteriores de usabilidade no ambiente AdaptWeb com algumas
+técnicas  analíticas                                                                           (avaliação  heurística,  checklist)  e  uma  técnica  prospectiva
+(questionários de satisfação), percebeu-se a necessidade de uma avaliação com usuários
+a partir da observação da interação com o ambiente. Neste sentido, deu-se início as
+pesquisas sobre a técnica de Análise de Log.
+A Análise de Log é uma técnica onde são analisadas as interações do usuário
+através de arquivos de log gerados durante a utilização do sistema (Winckler, 2001).
+Essa técnica permite coletar informações sobre como os usuários usam o sistema, essas
+informações ficam registradas em arquivos de log (Prates, 2003).
+A análise de log é o estudo dos registros da interação do usuário com a interface.
+A  aplicação  desta  técnica  requer  pouco  investimento,  entretanto,  analisar  a  grande
+quantidade de informações não é uma tarefa fácil e pode ser bastante custosa para
+avaliadores (Prates, 2003). Mesmo assim, a utilização dessa técnica tem apresentado
+experiências positivas, como a possibilidade de identificar como as pessoas chegavam
+ao site, os links mais visitados e locais da interface nunca explorados (Winckler, 1999).
+A análise de log pode ajudar a compreender o comportamento dos usuários com relação
+à interface, e a melhorar a qualidade das interações com o usuário.
+Uma característica que merece destaque é a de ser uma técnica discreta, uma vez
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       512
+
+
+
+
+que o usuário nem percebe que está sendo analisado, fato esse que muitas vezes levanta
+discussões éticas que precisam ser cuidadosamente avaliadas  (Preece,  2005). Outro
+ponto forte é o fato de que as informações obtidas a partir da aplicação dessa técnica
+geram dados estatísticos confiáveis relativos a várias questões, tais como padrões de
+uso, usabilidade de produtos, estratégias de integração e utilidade percebida de produtos
+que envolvam o uso de sistemas computacionais (Queiroz, 2006) (Winckler, 2001).
+A avaliação de ambientes educacionais via web deve levar em consideração
+outros detalhes uma vez que estes ambientes objetivam apoiar o ensino e aprendizado
+de um conteúdo, sua interface deve permitir não apenas a interação do usuário com o
+sistema, mas o aprendizado de um conteúdo. Assim sendo, métodos de avaliação para
+este domínio devem permitir não apenas a apreciação de qualidades de uso da interface,
+mas também se ela consegue atingir com qualidade seus objetivos educacionais (Prates,
+2003).
+Este trabalho optou por aplicar a técnica de avaliação objetiva  (ou empírica)
+análise de log no ambiente do aluno no AdaptWeb, pois, a análise de log pode trazer
+resultados positivos e inovadores como a avaliação do comportamento do aluno  (ou
+grupos de alunos) frente ao ambiente.
+4.  A ferramenta de Análise de Log no Ambiente do Aluno do AdaptWeb
+Após  o  estudo  do  ambiente  AdaptWeb,  das  técnicas  de  avaliação,  e,  mais
+especificamente da técnica de avaliação análise de log, foi possível identificar como a
+mesma  pode  ser  aplicada  para  a  avaliação  do  comportamento  do  aluno  durante  a
+utilização do ambiente AdaptWeb.
+O  ambiente  AdaptWeb  faz  uso  de  um  banco  de  dados                                    (BD)  onde  são
+armazenadas as informações referentes às disciplinas, aos cursos e aos usuários. Foi
+identificado  que  o  BD  armazena  informações  relevantes  para  a  análise  de  log
+principalmente na tabela log_usuario, onde são armazenadas, de maneira dinâmica, as
+informações referentes a toda navegação feita no ambiente. No ambiente AdaptWeb
+essas informações são utilizadas para realizar a adaptação navegacional no ambiente, de
+maneira a auxiliar o aluno na escolha do melhor caminho navegacional, acelerando
+assim  o  processo  de  aprendizagem.  A  análise  das  informações  contidas  na  tabela
+log_usuario  possibilitam  ao  professor  analisar  a  navegação  do  aluno  e  descobrir
+características sobre o mesmo, como por exemplo, os conceitos mais acessados pela
+turma,  ou  o  tipo  de  navegação  mais  utilizada.  Quando  o  ambiente  AdaptWeb  foi
+desenvolvido, os desenvolvedores já almejavam utilizar a tabela log_usuario para gerar
+relatórios sobre o comportamento da navegação do aluno e suas respectivas avaliações
+(Gasparini, 2003). Outros aspectos considerados para a escolha do BD como fonte de
+dados, o uso na implementação das mesmas tecnologias que foram utilizadas para o
+desenvolvimento do AdaptWeb, e a facilidade e compatibilidade que isso acarretaria
+para incorporar a análise de log ao ambiente.
+Na  literatura  encontram-se  diversas  experiências  referentes  à  utilização  da
+análise de log, inclusive algumas onde a mesma foi aplicada em ambientes de EAD.
+Maiores detalhes em (Cybis, 2005); (Druziani, 2004); (Chin, 2002); (Demartini, 2001).
+Alguns dos resultados atingidos com a aplicação dessa técnica são as páginas mais
+acessadas, os locais de maior acesso, os horários e dias da semana onde o site foi mais
+solicitado,  as  palavras  mais  utilizadas  para  pesquisa,  movimentações  na  navegação
+como, paradas bruscas, paradas longas, aceleração e desaceleração, mudanças bruscas
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     513
+
+
+
+
+de níveis, retroações e loopings, o tempo médio de utilização do ambiente, o percurso, o
+total  de  acessos,  o  total  de  páginas  acessadas  entre  outros.  Levando  em  conta  os
+resultados das experiências anteriormente realizadas com a análise de log bem como a
+disponibilidade de informações e a utilidade dos resultados para o professor foram
+definidas  quais  as  análises  que  poderiam  ser  úteis,  importantes  e  viáveis  em
+implementar no AdaptWeb.
+Independente da análise escolhida pelo professor, alguns parâmetros devem ser
+sempre informados como, por exemplo, o período em que a análise deve ser realizada, a
+maneira de exibição dos dados e o tipo de gráfico. O período é composto por dois
+campos de entrada de dados que servirão para delimitar o tempo em que será realizada a
+análise. A maneira de exibição dos dados é onde o usuário escolhe como serão exibidos
+os dados. As possíveis opções são apresentadas na tabela 1.
+Opções da                                                                                       Descrição
+Ferramenta
+Dias da semana                                                                                  a  exibição  é  feita  agrupando  os  dados  resultantes  de  acordo  com  os  dias  da
+                                                                                                semana
+Dias do mês                                                                                     a exibição é feita agrupando os dados resultantes de acordo com os dias do mês
+Meses do ano                                                                                    a exibição é feita agrupando os dados resultantes de acordo com os meses do ano
+Horas do dia                                                                                    a exibição é feita agrupando os dados resultantes de acordo com as horas do dia
+Agrupar por semana                                                                              a exibição é feita agrupando os dados resultantes de acordo com a semana que
+                                                                                                ocorreram
+Agrupar por mês                                                                                 a  exibição  é  feita  agrupando  os  dados  resultantes  de  acordo  com  o  mês  que
+                                                                                                ocorreram
+Agrupar por ano                                                                                 a  exibição  é  feita  agrupando  os  dados  resultantes  de  acordo  com  o  ano  que
+                                                                                                ocorreram
+Tabela 1- Opções da ferramenta Análise de Log
+Os  itens  curso  e  disciplina  são  opções  geradas  a  partir  do  BD  onde  são
+selecionados todos os cursos e disciplinas cadastradas pelo professor. A opção curso
+possibilita a seleção de um curso específico criado pelo professor ou mesmo a análise
+de todos os cursos em conjunto, de forma idêntica funciona a seleção da disciplina.
+Cabe ao professor escolher aquela que atende melhor a sua necessidade. A tabela  2
+apresenta as opções do tipo de análise disponibilizada na ferramenta de análise de log.
+Tipo de Análise                                                                                 Descrição
+Quantidade                                                                                      de                                                                                        com  essa  análise,  serão  exibidas  as  quantidades  de  acessos  aos  tópicos  de
+acessos                                                                                         acordo com as especificações anteriormente definidas.
+Tipo de navegação                                                                                                                                                                         exibe a quantidade de escolhas de cada um dos tipos de navegação tutorial e livre
+                                                                                                                                                                                          (de uma disciplina específica ou de todas no geral). Esse item possibilita apenas a
+                                                                                                exibição através do gráfico do tipo colunas e tipo linhas.
+Utilização de ajuda                                                                             mostra a quantidade de vezes que os alunos utilizaram a ajuda
+Utilização de mapa                                                                              mostra a quantidade de vezes que os alunos utilizaram a mapa
+Conceito   com   mais                                                                                                                                                                     mostra   os   cinco   conceitos   mais   acessados   pelos   usuários.   Essa   opção,
+acesso                                                                                                                                                                                    futuramente,  pode  ser  adaptada  para  permitir  que  o  professor  delimite  a
+                                                                                                quantidade de conceitos a serem visualizados.
+Conceito com menos                                                                                                                                                                        mostra  os  cinco  conceitos  menos  acessados  pelos  usuários.  Essa  opção,
+acesso                                                                                                                                                                                    futuramente,  pode  ser  adaptada  para  permitir  que  o  professor  delimite  a
+quantidade de conceitos a serem visualizados.
+Tabela 2- Opções do tipo de análise disponibilizada pela ferramenta
+Os  tipos  de  gráficos  disponíveis  são  três:  pizza,  colunas  e  linha.  A opção
+escolha do tipo do gráfico é o último item a ser escolhido pelo usuário, uma vez que
+depende dos parâmetros escolhidos pode não ser possível determinado tipo de gráfico.
+O professor  tem ainda a disposição uma ajuda específica explicando os resultados
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                        514
+
+
+
+
+obtidos com cada análise, a opção de imprimir e de gerar PDF (Portable Document
+Format) do resultado da análise.
+A interface desenvolvida levou em conta a já existente no ambiente. Primeiramente
+foi realizada a inclusão da opção “Análise de log” no ambiente de autoria (professor) e
+em seguida desenvolvida a interface para a entrada dos parâmetros de visualização dos
+resultados da análise de log. A análise de log no ambiente AdaptWeb é constituída pela
+tela apresentada na Figura 1, onde estão, destacadas pelo pontilhado, as alterações na
+interface do ambiente realizadas por este trabalho.
+Figura 1- Tela da ferramenta Análise de Log no Adaptweb
+Na  tela  apresentada  na  Figura  1,  é  possível  identificar  com  detalhes  como  o
+professor deve fazer a análise de log. Inicialmente, é solicitado que seja indicado o
+período para realizar a análise, e em seguida, ele deve escolher o tipo de exibição dos
+dados que deseja utilizar. Depois, ele deve selecionar o curso, a disciplina, o tipo de
+análise e o tipo de gráfico para exibir os resultados da análise de log. A ordem de
+posicionamento de cada elemento na interface foi definida para facilitar a compreensão
+do usuário, entretanto, não é obrigatória a entrada dos valores nessa mesma ordem, uma
+vez que eles estão sempre ativos na interface.
+A implementação da análise de log é uma combinação de muitas possibilidades.
+Fazendo rapidamente um cálculo, o usuário pode escolher 7 tipos de exibição de dados,
+7 tipos de análises e 3 tipos de gráficos, são mais de 140 possíveis combinações, isso
+sem  considerar  a  escolha  da  disciplina  e  do  curso,  que  dependem  da  quantidade
+cadastrada pelo professor.
+No desenvolvimento foram utilizadas, nas seleções do BD, algumas funções padrão
+de data e hora do MySQL e na geração das imagens utilizadas para construir os gráficos
+exibidos nos resultados foi utilizada uma biblioteca, que já está embutida no  PHP
+(Hypertext  Preprocessor)  a  partir  da  versão  4.3,  chamada  GD.  A  utilização  dessa
+biblioteca gráfica permite que sejam criadas imagens dinâmicas que podem ser enviadas
+diretamente ao navegador sem a necessidade de gravar a mesma em um arquivo.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     515
+
+
+
+
+A implementação da ajuda da análise de log seguiu mesmo padrão da ajuda
+geral existente no ambiente. O sistema de ajuda é constituído basicamente de um índice
+de links para textos, e nos textos tem um link que retorna ao índice. Os textos e imagem
+utilizados na ajuda visam auxiliar o professor na seleção das opções disponibilizadas
+para realizar a análise de log. A ajuda está disponível na página da análise de log, e
+pode ser acessada pelo professor, a qualquer momento, através do link “Ajuda sobre a
+Análise de Log”.
+Para implementar a opção Gerar PDF, foi utilizada a biblioteca FPDF, cuja
+grande vantagem é que ela está disponível, gratuitamente, em forma de uma classe PHP,
+dessa forma, não é necessário que nenhuma extensão seja instalada e configurada. Basta
+colocar os arquivos da classe no servidor e inserir uma chamada para ela no início dos
+arquivos que configuram o PDF. Esse arquivo é gerado dinamicamente de acordo com
+as opções selecionadas pelo usuário na interface da analise de log. A opção Gerar PDF
+transforma os resultados que estão sendo exibidos ao professor na tela para um arquivo
+PDF.
+Cabe ressaltar que a implementação da análise de log no ambiente Adaptweb
+tomou todos os cuidados necessários aos aspectos éticos envolvidos e para isso os
+resultados da ferramenta de análise de log não possibilitam a identificação de nenhum
+aluno em particular, deste modo as análises são realizadas em relação a uma turma, ou a
+várias turmas ao mesmo tempo. A seguir é apresentado o estudo de caso realizado.
+5.  Estudo de Caso
+O estudo de caso piloto para testar as funcionalidades da implementação da análise de
+log foi realizado no final do segundo semestre de 2006, com os alunos da disciplina de
+“Fundamentos   de   Interface   Humano-Computador”,   composta   por                         28   alunos.
+Especialmente para o estudo de caso, a professora da disciplina, desenvolveu uma aula,
+que foi previamente elaborada no ambiente de autoria, com o título  “Avaliação de
+Usabilidade”.
+O  cadastro  dos  alunos  e  a  liberação  da  disciplina  foram  realizados
+antecipadamente, para que os mesmos tivessem mais tempo para navegar no ambiente.
+Ao iniciar a aula os alunos receberam as instruções de como fazer o login no ambiente e
+após acessar a disciplina “Avaliação de Usabilidade”. Durante cerca de duas aulas os
+alunos navegaram pelo ambiente, eles acessaram os conceitos, exemplos e materiais
+complementares da disciplina, tinham ainda a disposição o mapa com as informações da
+disciplina  e  a  ajuda  do  ambiente  Adaptweb.  Os  eventos  dessa  navegação  foram
+registrados na tabela log_usuario e posteriormente utilizados para fazer a análise de log.
+Mesmo  com  restrito  registro  de  dados  gravados  na  tabela  log_usuario  foi
+possível, através da análise de log, chegar a considerações interessantes. Foi possível
+identificar  que  a  maioria  dos  alunos  acessaram  o  ambiente  utilizando  o  modo  de
+navegação tutorial, que é um modo de navegação do ambiente que guia o aluno pelo
+ambiente  baseado  nos  pré-requisitos  definidos  pelo  autor,  conforme  pode  ser
+visualizado na Figura 2a, onde é exibido o resultado da análise de log com o tipo de
+análise tipo de navegação por dia da semana. Fazendo a análise da quantidade de acesso
+por horas do dia é possível observar que todos os acessos dos alunos ocorreram durante
+o horário da aula, das 19:00 até as 20:59 (Figura 2b). Entretanto, certamente o tipo de
+análise mais interessante desde estudo de caso são os resultados do tipo de análise
+conceitos  mais  e  menos  acessados.  Utilizando  o  tipo  de  análise  conceitos  mais
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     516
+
+
+
+
+acessados e o tipo de exibição agrupados por mês, o resultado (Figura 2c), mostra que
+dentre os conceitos e sub-conceitos da disciplina os cinco mais acessados foram os
+conceitos “6.1.1 - Avaliação Heurística”, “6.1.2 - Listas de Verificação (Checklist)”,
+“6.1- Técnicas analíticas”, “1- Introdução” e “6 - Técnicas de Avaliação”. Alterando
+apenas o tipo de análise do resultado anterior, de conceito mais acessado para conceito
+menos acessado tem-se um novo resultado referente aos acessos aos conceitos. Na
+Figura  2d podem ser visualizados os conceitos que menos formam acessados pelos
+alunos, pode ser observado que o conceito “7” foi acessado uma única vez. Analisando
+os conceitos da disciplina utilizada para o estudo de caso, identifica-se que este conceito
+corresponde “as referências” da disciplina.
+Por se tratar de uma base que foi gerada a partir da navegação dos usuários em
+apenas um dia, as opções de exibição não apresentaram grande impacto, uma vez que
+não foi possível fazer comparações entre os dias da semana ou do mês, meses ou até
+mesmo anos. Mas, certamente, essas opções serão de grande utilidade, para a análise de
+dados gerados em um período maior.
+(a)                                                                                            (b)
+(c)                                                                                            (d)
+Figura 2: Gráficos dos resultados da análise de log
+Através do estudo de caso foi possível verificar qual o modo de navegação mais
+utilizado  pelos  alunos  e  os  conceitos  que  eles  mais  e  menos  acessaram  durante  a
+navegação na disciplina. A análise de log pode auxiliar o professor no desenvolvimento
+da  sua  disciplina.  Como  foi  observado  no  estudo  de  caso,  o  professor  pode,  por
+exemplo, verificar quais os conceitos estão sendo mais acessados e quais menos e a
+partir disso adaptar a sua aula para uma melhor navegação do aluno. O estudo de caso
+também foi importante para testar a análise de log, uma vez que apenas após o estudo de
+caso foi identificado que o acesso aos recursos de ajuda e mapa não estavam sendo
+armazenados na tabela log_usuario.
+6.  Considerações Finais
+A análise de log é uma técnica que, na maior parte dos casos, utiliza as informações
+referentes às interações do usuário com o ambiente para gerar dados estatísticos úteis no
+desenvolvimento de estratégias de melhorias constantes na implementação de web sites.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       517
+
+
+
+
+É uma técnica que apresenta um baixo custo na coleta de dados, entretanto, apresenta
+uma certa dificuldade associada à análise dos mesmos. Os resultados obtidos refletem o
+comportamento do usuário frente ao ambiente, sendo que as experiências onde a análise
+de log foi utilizada apontaram resultados positivos, inclusive às relacionadas a EAD.
+A  inclusão  da  opção  de  análise  de  log  no  ambiente  AdaptWeb  possibilita  ao
+professor uma alternativa de verificar a utilização da sua disciplina. Através da análise
+de log implementada no AdaptWeb o professor pode    verificar:  (i) a quantidade de
+acessos de uma disciplina específica, ou de todas; (ii) os conceitos que foram mais e
+menos  acessados;  (iii)  se  os  alunos  estão  acessando  a  aula  utilizando  o  modo  de
+navegação  livre  ou  tutorial,  que  são  os  dois  modelos  navegacionais  existentes  no
+ambiente (o primeiro propõe a navegação pelo ambiente de forma livre, independente
+dos  pré-requisitos  definidos  na  autoria  e  o  segundo  é  baseado  nos  pré-requisitos
+definidos pelo professor, e o aluno só pode acessar um conceito se o seus pré-requisitos
+já foram vistos); e (iv) quantas vezes os alunos acessaram   o mapa, a busca e a ajuda
+durante a navegação. Todas essas opções, podem ainda, ser exibidas, pelos dias da
+semana, dias do mês, meses do ano, horas do dia, agrupados por mês, agrupados por
+semana ou agrupados por ano. A análise de log disponibiliza ao professor também as
+opções de imprimir e gerar PDF da análise, bem como o acesso a um sistema de ajuda
+especialmente desenvolvido para esclarecer dúvidas referentes a análise de log.
+Na análise de log do AdaptWeb, são observadas algumas limitações, como por
+exemplo: a falta de personalização por parte do usuário, uma vez que o usuário não
+pode incluir, retirar, ou adicionar itens na análise, ou alterar as configurações do gráfico
+como  as  cores,  o  tamanho  do  título,  o  texto  da  legenda  entre  outras  opções  que
+poderiam ser definidas pelo usuário. O sistema de ajuda desenvolvido para auxiliar o
+professor na análise de log pode ser melhorado, uma vez que atualmente está bastante
+focado  na  definição  dos  parâmetros  da  análise  e  pode  ser  ampliado  para  auxiliar
+também na análise das informações contidas nos resultados da mesma.
+A análise de log, incorporada ao ambiente AdaptWeb, demonstrou ser uma opção
+útil, uma vez que através dela o professor pode monitorar uma disciplina, possibilitando
+que a adequação da mesma leve em consideração esses aspectos.
+Trabalhos futuros podem vir a melhorar a análise de log no ambiente Adaptweb.
+Modificações  no  banco  de  dados  otimizariam  as  informações  que  atualmente  são
+apresentadas ao professor para definição do período, por exemplo. A inclusão de mais
+tipos de análises, como a opção de visualizar os acessos aos exercícios, exemplos e
+material  complementar.  Outra  sugestão  importante  é  proporcionar  uma  maior
+flexibilidade na análise de log do ambiente AdaptWeb, possibilitando ao professor a
+definição de parâmetros que atualmente são estáticos como, por exemplo, a quantidade
+de conceitos mais e menos acessados.
+Estima-se que a implementação da análise de log possa ser facilmente adaptada e
+utilizada  em ambientes  similares  de  EAD. Todos os  materiais  produzidos  por este
+trabalho  foram  entregues  ao  Grupo  de  Pesquisa  em  Informática  na  Educação  da
+UDESC, e poderão ser consultados e utilizados.
+7.  Referências
+BOTICARIO,  J.  G.;  GAUDIOSO,  E.  Towards  a  Personalized  Web-Based  Educational
+System.In:    MEXICAN    INTERNATIONAL    CONFERENCE    ON    ARTIFICIAL
+INTELLIGENCE,  MICAI,  1,  2000,  Acapulco.  MICAI  2000:  Advances  in  Artificial
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                       518
+
+
+
+
+Intellignce:proceedings.  Berlin:  Springer,                                                     2000.  p.  729-740.  (Lecture  Notes  in  Artificial
+Intelligence 1793).
+BRUNETTO,  Maria  Angélica;  PALAZZO  M.  de  Oliveira,  J.;  PROENÇA  JR,  Mário  L;
+PIMENTA, Marcelo S; RIBEIRO, Cora Helena F P; LIMA, José Valdeni de; FREITAS,
+Veronice  de;  MARÇAL,  Viviane  P;  GASPARINI,  Isabela;  AMARAL,  Marília  A.
+AdaptWeb:  um  Ambiente  para  Ensino-aprendizagem  Adaptativo  na  Web.  Educação  em
+Revista, Curitiba, 2003.
+BRUSILOVSKY, Peter. Methods and techniques of adaptive hypermedia. User Modeling and
+User Adapted Interaction,  [S.l.], v.6, n.  2-3, p.  87-129,  1996. Special Issue on adaptive
+hypertext andhypermedia.
+CHIN, Lai Yu; Análise da Navegação Através de Log e Estrutura do Site. Trabalho de
+Diplomação. Universidade Federal do Rio Grande do Sul, 2002.
+CYBIS, Walter de Abreu; SCAPIN, Dominique; MORANDINI, Marcelo. ErgoManager: Um
+Sistema  Gerenciador  de  Interfaces  Com  o  Usuário  para  Sites  Web  Transacionais.  In.
+CLIHC'05, 2005, Cuernavaca, México. ACM 1-59593-224-0.
+CYBIS, Walter de Abreu. Engenharia de Usabilidade: Uma Abordagem Ergonômica, 2003.
+DEMARTINI, Giovani. Autenticação de Alunos e Geração e Análise de Log de Acessos em
+Cursos  de  Ensino  a  Distância.  Trabalho  de  Diplomação  em  Informática  Aplicada.
+Universidade Federal do Rio Grande do Sul, 2001.
+DRUZIANI, Cássio Frederico Moreira et al. Avaliação Apoiada pelo Monitoramento dos
+Hiperdocumentos em um Ambiente de Ensino-Aprendizagem na Web. Universidade Federal
+do Rio Grande do Sul. In. WorkComp Sul, Florianópolis, 2004.
+GASPARINI,   Isabela.   Interface   Adaptativa   no   Ambiente   AdaptWeb:   Navegação   e
+Apresentação  Adaptativa  Baseada  no  Modelo  do  Usuário.  Dissertação  de  mestrado,
+Universidade Federal do Rio Grande do Sul. Porto Alegre, 2003.
+NIELSEN, Jakob. Usability Engineering. Academic Press, 1993.
+PALAZZO M. de Oliveira, J.; WARPECHOWSKI, Mariusa; MUSA, Daniela L; BRUNETTO,
+Maria Angélica; PROENÇA JR, Mário L; PIMENTA, Marcelo S; RIBEIRO, Cora Helena F
+P; LIMA, José Valdeni de; FREITAS, Veronice de; MARÇAL, Viviane P; GASPARINI,
+Isabela; AMARAL, Marília A. AdaptWeb : Ambiente de Ensino-Aprendizagem Adaptativo
+na Web. In: 5 Forum Internacional de Software Livre, 2004, Porto Alegre. Anais, 2004. v. 1.
+PALAZZO M. de Oliveira, J.; SILVA, Lydia; FREITAS, Veronice de; MARÇAL, Viviane P;
+GASPARINI, Isabela; AMARAL, Marília Abrahão. AdaptWeb: an Adaptive Web-based
+Courseware. In: III Anual ARIADNE Conference, 2003, Leuven, 2003.
+PRATES, Raquel Oliveira; BARBOSA, Simone Diniz Junqueira. Avaliação de Interfaces de
+Usuário:  Conceitos  e  Métodos.  In:  Anais  do  XXIII  Congresso  Nacional  da  Sociedade
+Brasileira de Computação, 2003.
+PREECE, Jennifer; ROGERS, Yvonne; SHARP, Helen. Design de Interação: Além da Interação
+Homem-Computador; trad. Viviane Possamai. Porto Alegre: Bookman, 2005.
+QUEIROZ, José Eustáquio Rangel de. Abordagem Híbrida para a Avaliação da Usabilidade de
+Interfaces  com  o  Usuário,  IHM  -  material  didático.  Cap.  3  Métodos  de  Avaliação  de
+Interfaces Usuário-Computador, 2006.
+WINCKLER, Marco A. A. Avaliação da Usabilidade de Sites Web. Apostila do Minicurso. In:
+Workshop sobre Fatores Humanos em Sistema Computacionais, Florianópolis, 2001.
+WINCKLER, Marco A. A. Proposta de Uma metodologia para Avaliação de Usabilidade de
+Interfaces WWW. Dissertação de mestrado, Universidade Federal do Rio Grande do Sul.
+Porto Alegre, 1999.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                         519
+
+
+
+
+

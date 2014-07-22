@@ -1,0 +1,515 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Método Adaptativo de Programaç ão da Produç ão Apoiado por
+um Sistema de Mediç ão de Desempenho e Melhoria Contínua
+Helder Carlo Belan1, Jandira Guenka Palma1
+1Departamento de Computação - Universidade Estadual de Londrina (UEL)
+Caixa Postal 6001 - 86051-990 - Londrina - PR - Brazil
+hcbelan@gmail.com,  jgpalma@uel.br
+Abstract. This paper proposes a production scheduling method that adapts to
+the scenario production of each industry.  Named as MAP-Prod this method
+should incorporate characteristics of reactive and proactive approaches. Thus,
+the cycle of adaptation is characterized by improvement actions found through
+the gathering information and analysis of indicators in a performance mea-
+surement system. These actions are accompanied by a continuous improvement
+system to diagnose their effectiveness. A simulation is then performed with real
+data from an industry in order to verify the results that can be obtained with the
+method.
+Resumo. Este trabalho prop õe um método de programaç ão da produç ão que se
+adapte ao cen ário produtivo de cada ind ústria.  Denominado de MAP-Prod o
+método deve incorporar características das abordagens reativa e proativa, onde
+o ciclo de adaptaç ão ser á caracterizado por aç ões de melhoria encontradas
+através da coleta de informaç ões e an álise de indicadores em um sistema de
+mediç ão de desempenho. Estas aç ões ser ão acompanhadas por um sistema de
+melhoria contínua para diagnosticar a efic ácia das mesmas.  Uma simulaç ão
+ent ão é realizada com dados reais de uma ind ústria para averiguar os resulta-
+dos que podem ser obtidos com o método.
+1.                                                                                          Introduç ão
+A atividade de Planejamento, Programação e Controle da Produção (PPCP), na manu-
+fatura, desempenha um papel de extrema importância no ambiente de alta competição em
+que as empresas se encontram. Especificamente no sequenciamento de operaç ões, ativi-
+dade diretamente associada ao PPCP, no qual as decis ões que direcionam a ordem em
+que os produtos devem ser fabricados, respeitando prioridades e restriç ões impostas pelo
+processo, impactam consideravelmente nos prazos de entrega do produto para o cliente e
+nos custos.
+Apesar de ser considerada uma atividade complexa pela quantidade de variáveis
+que  devem  ser  consideradas,  existem  vários  métodos  e  técnicas  para  auxiliar  a
+programação da produção, in úmeros algoritmos conseguem em tempo hábil encontrar
+boas soluç ões para cada tipo de processo produtivo. Entretanto há um grande problema
+em ambientes reais, onde nem sempre a programação escolhida pode ser seguida à risca,
+pois eventos inesperados podem gerar discrepâncias entre o que foi planejado e o que
+realmente aconteceu.
+162
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Existe uma dinamicidade do ambiente, onde alteraç ões como mudanças de fun-
+cionários,  troca  de  ferramentas,  inserção  de  novos  produtos  e  mau  funcionamento
+de máquinas podem gerar uma necessidade de ajuste dos parâmetros e técnicas de
+programação utilizados; portanto um método adaptativo que se adeque a essas mudanças
+pode melhorar a programação com os novos parâmetros mais pr óximos do real.
+Pode-se então equiparar essas adaptaç ões do modelo da programação da produção
+a um processo de melhoria contínua onde objetiva-se encontrar os melhores parâmetros
+e as melhores técnicas de sequenciamento de atividades para a atual configuração do
+processo produtivo da empresa.
+A ideia de melhoria contínua está relacionada à capacidade de resolução de proble-
+mas por meio de pequenos passos, alta frequência e ciclos curtos de mudança. Esses ciclos
+de mudança são causados pela alternância de momentos de ruptura e de controle no de-
+sempenho [Bessant et al. 1994, Attadia and Martins 2003]. Para garantir que o processo
+de melhoria alcance seus objetivos tem-se a medição de desempenho como arma funda-
+mental para mensurar os avanços em cada adaptação e orientar corretamente as aç ões para
+convergência de um método de programação condizente com as realidades do ambiente
+produtivo da empresa.
+Neste trabalho  é proposto um método de programação da produção que aja de
+maneira adaptativa, ajustando os parâmetros e técnicas utilizadas para o sequenciamento
+de atividades de acordo com as orientaç ões de um sistema de melhoria contínua e medição
+de desempenho.
+Na continuação desta seção serão descritos algumas definiç ões e trabalhos semel-
+hantes; já na seção 2 será exemplificado o método proposto com a arquitetura entre os
+sistemas. Por último, na seção 3 serão mostrados os resultados obtidos com a aplicação
+do método proposto em uma ind ústria do setor moveleiro.
+1.1. Programando a produç ão em um ambiente cheio de incertezas
+Em vários segmentos da ind ústria a programação da produção  é uma tarefa altamente
+complexa que envolve in úmeras variáveis quanto  à  disponibilidade e capacidade de
+recursos, disponibilidade de materiais e principalmente restriç ões quanto ao processo
+de fabricação, com isso o uso de ferramentas avançadas de programação (APS - Ad-
+vanced Planning System) é quase obrigat ório para quem quer alcançar bons resultados na
+otimização dos recursos fabris.
+Devidamente configuradas as ferramentas APS utilizam algoritmos computa-
+cionais que de forma matemática ou heurística conseguem encontrar boas soluç ões para o
+sequenciamento das atividades no chão de fábrica. Este sequenciamento gerado durante a
+fase de planejamento é chamado de programação preditiva, pois é o que se espera ocorrer
+caso os parâmetros utilizados estejam em conformidade com o ambiente fabril. Porém é
+fato que durante a execução do planejamento a empresa ainda está sujeita as ocorrências
+inesperadas e imprevisíveis que podem impactar consideravelmente a programação como
+era prevista.  Esses problemas se devem a característica dinâmica do ambiente fabril e
+dificilmente consegue-se evitá-los.
+Dentre  as  causas  que  geram  essas  rupturas  no  planejamento  podemos  citar:
+atividades que duram mais ou menos tempo que o previsto; recursos podem ficar in-
+163
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+disponíveis; o fornecedor pode atrasar a entrega da matéria-prima; prazos de entrega po-
+dem mudar de acordo com a pressão de clientes ou estratégias da gerência; retrabalhos
+podem ser incorporados para arrumar falhas no produto; dependendo do segmento até
+alteraç ões no tempo podem trazer impactos na produção [Herroelen and Leus 2005].
+Pensando nisso, vários autores propuseram novos métodos para este ambiente
+dinâmico, os quais podem ser classificados em três família:  abordagem reativa, pro-
+gressiva e proativa [Aytug et al. 2005, Herroelen and Leus 2005, Bidot et al. 2009].  Na
+primeira família as decis ões podem ser tomadas à medida que os eventos vão ocorrendo no
+chão de fábrica, ou seja, o sistema deve ser hábil o suficiente para coletar as informaç ões,
+processá-las e retornar uma nova programação válida em tempo real.
+Já a segunda família utiliza-se de uma abordagem progressiva para gerar uma
+programação preditiva em pequenos espaços de tempo já predefinidos, onde o risco de
+incertezas é bem menor [Bidot et al. 2009].
+Por fim a família de métodos com abordagem proativa assemelha-se ao processo
+humano de aprendizado e melhoria, os métodos desta classe se utilizam de heurísticas e
+uma base de conhecimento para prever os eventos que podem ocorrer durante a execução
+da programação e com isso gerar um sequenciamento preditivo cada vez mais confiável e
+menos passível de rupturas [Bidot et al. 2009].
+1.2. Métodos Adaptativos
+Pode-se encontrar um bom exemplo de método adaptativo no trabalho de Mehta e Uz-
+soy (1998) onde foi montado um sistema proativo/reativo utilizando-se da estratégia de
+inserir tempos ociosos na programação para minimizar os efeitos de paradas de máquinas
+inesperadas. Com isso os autores conseguiram gerar soluç ões preditivas pr óximas ao ex-
+ecutado no que se refere ao tempo de lead time1  dos produtos.
+Os resultados obtidos no trabalho de Mehta e Uzsoy  (1998) mostram que as
+soluç ões preditivas obtidas com a adição do tempo ocioso ao tempo de processamento
+das atividades tiveram desempenho semelhante ao trabalho realizado na prática mesmo
+com a ocorrência de paradas imprevistas.
+Trabalho semelhante foi proposto por Lambrechts, Demeulemeester e Herroe-
+len  (2008) novamente utilizando a abordagem proativa e a reativa para maximizar a
+estabilidade das soluç ões geradas.   As estratégias utilizadas dão prioridade maior  às
+operaç ões com maior dependência e recursos com hist órico maior de paradas imprevistas,
+assim essas operaç ões ganham certa proteção quanto a indisponibilidades dos recursos
+necessários.
+O autor ainda prevê uma estratégia reativa utilizando o algoritmo de Busca Tabu
+para procurar uma nova programação que seja passível de execução e com o menor grau
+de alteração com a anterior visando a estabilidade do sistema. Os resultados mostrados
+por Lambrechts, Demeulemeester e Herroelen (2008) alcançam a marca surpreendente de
+melhoria de 96% de estabilidade com a utilização destas estratégias.
+A característica em comum destes trabalhos e de outros que utilizam a abor-
+dagem proativa é que a evolução do modelo de programação depende muito do entendi-
+1 Lead time é considerado o tempo de completude de uma tarefa, ou seja, o intervalo entre o início de
+sua primeira operação até o término da última
+164
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+mento sobre o processo produtivo e da influência das alteraç ões nos parâmetros inicias
+da programação na prevenção de rupturas do planejamento, ou seja, este processo muitas
+vezes é realizado de forma empírica e requerem certo cuidado quanto à extrapolação de
+prevenç ões aos riscos e subestimação da capacidade produtiva, fatos estes que motivam e
+dão sustentação ao uso de sistemas de apoio a gestão do processo como forma de men-
+surar e acompanhar as modificaç ões feitas no modelo. Os sistemas referidos aqui podem
+ser chamados de sistema de medição de desempenho e melhoria continua.
+1.3. Ciclo de melhoria e mediç ão de desempenho de sistemas din âmicos
+Segundo Bessant (1994) a ideia de melhoria contínua está relacionada à capacidade de
+resolução de problemas por meio de pequenos passos, alta frequência e ciclos curtos de
+mudança. Em modelos de programação com a abordagem proativa o processo de melhoria
+contínua será dado através de ciclos de acompanhamento com período igual ao horizonte
+de planejamento. Em cada fim de ciclo os indicadores serão calculados e as adaptaç ões
+sugeridas pelo método serão implementadas para a programação do pr óximo período.
+Categorizando as atividades dentro do ciclo PDCA (Plan, Do, Check, Act) temos
+as escolhas e alteraç ões do modelo de programação visando o aumento de desempenho em
+gerar soluç ões preditivas na etapa de planejamento (P). A definição dos novos parâmetros
+do sequenciamento de operaç ões como tempos, buffers e escolha das técnicas é tratada
+na etapa de execução (D). Ap ós o horizonte de plenejamento, os resultados são avaliados
+através dos indicadores de desempenho (C) e podem ser definitivos ou não de acordo
+com a evolução de desempenho mostrado (A). Então novas aç ões podem ser propostas e
+inicia-se outro ciclo.
+Para garantir que o processo de melhoria alcance seus objetivos tem-se a medição
+de desempenho como arma fundamental para mensurar os avanços em cada adaptação
+e orientar corretamente as aç ões para convergência de um método de programação con-
+dizente com as realidades do ambiente produtivo da empresa.  Para Savolainen (1999)
+a medição de desempenho  é uma arma poderosa para alcançar os objetivos de melho-
+ria contínua, e levando em conta o fato de que esse é um processo evolutivo, a medição
+de desempenho pode dar sustentação para o ciclo de aprendizado de melhoria contínua
+organizacional [Attadia and Martins 2003].
+Os principais indicadores relacionados a programação da produção referem-se ou
+a qualidade das soluç ões geradas ou quanto a sua execução. Muitas empresas têm difer-
+entes pontos de vista sobre o desempenho da programação da produção, existem diversos
+objetivos que podem ser adotados por cada uma, mas geralmente vão estar relacionados à
+utilização de recursos, prazo de entrega ou custo de produção.
+Existem ainda indicadores de desempenho relacionados à relação entre a solução
+programada e a sua execução, estes indicadores são essenciais para o processo de melhoria
+contínua do sistema em questão, por isso neste trabalho dá-se um destaque maior aos
+indicadores de estabilidade e robustez da solução.
+A estabilidade s ó pode ser medida ap ós a execução das atividades, já que a mesma
+está relacionada ao quão diferente foi a execução do planejamento.  Para Bidot et al.
+(2009) uma programação  é dita estável se as aç ões tomadas durante a execução estão
+pr óximas do planejamento no sequenciamento preditivo. A estabilidade de uma solução
+pode ser medida através da somat ória das diferenças entre o início planejado e o início real
+165
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+de cada atividade mais a diferença entre a sequência de atividades planejada e a ordem
+que foi realmente executada [Ouelhadj and Petrovic 2009].
+Provavelmente um dos indicadores mais utilizados para sistemas de ambiente
+dinâmico, a robustez mede o que deve realmente importar para as empresas: a relação
+entre a qualidade da programação preditiva e a qualidade da execução no chão de fábrica.
+Billaut et al. (2010) define como uma solução robusta aquela em que sua performance é
+bastante indiferente às incertezas relacionadas a sua execução.
+Por causa das características evolutivas dos métodos de programação da produção
+com abordagem proativa, a maioria das vantagens que os sistemas de medição de de-
+sempenho e melhoria contínua possibilitam são aplicáveis ao problema, como a maior
+visibilidade do processo, estabelecimento de metas e rastreabilidade entre aç ões.
+2. MAP-Prod - Um Método Adaptativo de Programaç ão de Produç ão
+da Produç ão com Apoio de um Sistema de Mediç ão de Desempenho e
+Melhoria Contínua
+Como foi descrito por vários autores o processo de adaptação do sistema de programação
+preditiva pode utilizar in úmeras estratégias para deixar as soluç ões cada vez mais estáveis
+e robustas [Mehta and Uzsoy 1998, Lambrechts et al. 2008]. Com isso os métodos adap-
+tativos minimizam os impactos de eventos inesperados no chão de fábrica e proporcionam
+uma importância maior à programação da produção já que aumenta a possibilidade de
+melhorias em seu processo, permitindo que a empresa entre em um processo de melhoria
+semelhante ao descrito por Merli (1993) .
+Assim, este trabalho desenvolveu um método de melhoria contínua da linha de
+produção, baseado em indicadores de desempenho que geram adaptaç ões constantes no
+planejamento da produção conforme a dinâmica do ambiente. A proposta foi denominada
+MAP-Prod (Método Adaptativo de Programação da Produção) e apresentada na Figura 1.
+O método prop õe integração dos sistemas ERP - Enterprise Resources Planning, APS,
+MES - Manufacturing Execution System e SMD/SMC - Sistema de Medição de Desem-
+penho e Melhoria Contínua com atualizaç ões constantes dos parâmetros empregados no
+sequenciamento pelo APS a partir dos indicadores colhidos pelo SMD/SMC.
+Para auxiliar o gerenciamento deste processo e garantir uma melhor aderência do
+modelo à realidade da empresa, este trabalho prop õe que todo o processo de melhoria
+do método de programação da produção seja acompanhado por um sistema de medição
+de desempenho e melhoria contínua com o intuito de mensurar, adaptar as realidades
+momentâneas (aplicar o método adaptativo) e rastrear as aç ões de melhoria (adaptaç ões
+no modelo) que ocorrem durante os ciclos de produção.
+O MAP-Prod emprega vários tipos de sistemas, os quais podem ser encontrados
+no mercado com diversos nomes e siglas, estes sistemas são classificados na literatura
+de acordo com o conjunto de funcionalidades definidas como padrão para cada categoria.
+Neste trabalho prop õe-se o incremento de algumas funcionalidades que estão em destaque
+na Figura 1, tal como a identificação e atualização de ordens durante uma ruptura para o
+sistema MES, a atualização da situação dos recursos em tempo real e atualização dos
+parâmetros a cada ciclo de melhoria no sistema APS, estas funcionalidades podem ser
+desenvolvidas internamente no produto ou através de interfaces de integração.
+166
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+ao”
+(diagrama de atividade em UML de cada horizonte curto de planejamento)
+167
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+O MAP-Prod é dividido em 4 fases: Planejamento, Execução, Análise e Aç ões de
+melhoria no texto a seguir foi desdobrado cada uma das fases para melhor entendimento
+do processo.
+2.1. Fase do Planejamento
+Durante esta fase são realizados todos os níveis de planejamentos e definiç ões dos
+parâmetros do processo de fabricação. Primeiramente são revistas as definiç ões do Plano
+Mestre de Produção (PMP) para que seja concretizado parte dele no pr óximo horizonte
+curto, as ordens então são geradas atendendo a demanda descrita no PMP.
+A parametrização da ferramenta APS deve sempre ser revista informando cor-
+retamente a capacidade e disponibilidade dos recursos fabris e caso haja mudanças nos
+processos as restriç ões do mesmo também devem ser atualizadas. Estabelecidos todos os
+parâmetros necessários, o PPCP inicia o processo de simulaç ões utilizando-se da ferra-
+menta APS e os algoritmos disponíveis na mesma. Além do processo computacional que
+envolve a execução dos algoritmos, a experiência dos usuários pode ajudar com ajustes
+manuais nas soluç ões obtidas.
+Nesta fase deve-se atentar para o fato que a execução dos algoritmos pode estar
+ocorrendo para o início de mais um ciclo de produção ou para montar uma programação
+parcial ap ós a ocorrência de uma ruptura. No primeiro caso tem-se somente a preocupação
+em gerar a melhor solução para o pr óximo nível aliada a revisão dos parâmetros da fer-
+ramenta, já no segundo caso o tempo dispendido na simulação é outro ponto importante
+para se preocupar, já que quanto mais rápido a nova solução é gerada, menores são os
+prejuízos com a ocorrência da ruptura.
+Um processo de divulgação deve ser estabelecido para que a solução escolhida
+na ferramenta APS seja passada para todos os responsáveis na empresa, é nesta fase em
+que os dados sobre o cronograma de produção é transmitido para os sistemas de gestão
+integrado (ERP) e o sistema que acompanhará a execução no chão de fábrica (MES).
+Como um dos prop ósitos da programação é servir de base para outros planejamentos e
+como forma de integração entre áreas cooperantes, com isso podem-se ressaltar algumas
+áreas onde a programação poderia ser útil como a logística e manutenção.
+2.2. Fase da Execuç ão
+O sistema MES  (Manufacturing Execution System)  é  o responsável por gerenciar a
+execução da programação no chão de fábrica.  Ele pode fazer uso de painéis para re-
+alizar a liberação das ordens de acordo com a sequência estabelecida além de gerenciar
+as máquinas e funcionários que estão executando as tarefas.
+Em posse da solução preditiva, o MES pode fazer o controle e liberação das or-
+dens de produção para as células de trabalho, supervisionando o trabalho em tempo real.
+Alertas podem ser gerados ap ós algum atraso significativo ou qualquer outro desvio do
+planejamento. Dependendo do desvio identificado pelo sistema MES, a solução preditiva
+pode deixar de ser factível, como a quebra de uma máquina, inserção de novas ordens
+devido a urgência de retrabalhos e reposiç ões de peças.  Por isso o sistema MES deve
+ter políticas pré-definidas para identificação de rupturas para que de forma automática
+ou de forma manual pelos operadores PPCP possam iniciar o procedimento reativo da
+168
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+programação, ou seja, atualizar o que foi feito até o momento e reprogramar as tarefas
+pendentes com o novo cenário.
+2.3. Fase de An álise
+Durante a Análise da Execução e Estratégia de Melhoria, ao fim do horizonte curto de
+planejamento chega-se ao fim de mais um ciclo de melhoria onde os resultados devem ser
+analisados e novas aç ões devem ser propostas para os problemas identificados.
+O desempenho da produção deverá ser medido de acordo com um conjunto de
+indicadores estipulados para cada empresa.  Esses indicadores devem representar os di-
+versos departamentos da empresa. Para garantir a utilização desses indicadores durante o
+processo de adaptação da ferramenta de programação é necessário adicionar indicadores
+de desempenho, tais indicadores informaram se a execução do plano pré-agendado sai
+como planejado.  Isso impedirá uma interpretação incorreta dos resultados obtidos, ou
+seja, o sistema deve saber se o planejamento não foi bom ou não foi feito conforme
+planejamento.  Portanto os indicadores principais para o processo de melhoria serão a
+estabilidade e robustez da solução preditiva, definidos na seção anterior.
+2.4. Fase de Aç ões de Melhoria
+Adotando a proposta de Gerolamo (2003), que prop õem um processo sistematizado para
+gestão de melhorias e mudanças de desempenho, o macroprocesso de melhoria segue
+uma sequência de atividades inseridas no ciclo PDCA. O processo de melhoria contínua
+será dado através de ciclos de acompanhamento com período igual ao horizonte curto
+de planejamento. Em cada fim de ciclo os indicadores serão calculados e as adaptaç ões
+sugeridas pelo método serão implementadas para a programação do pr óximo período.
+Categorizando as atividades dentro do ciclo têm-se as definiç ões dos parâmetros
+da programação na etapa de planejamento (P). A definição dos novos parâmetros do se-
+quenciamento de operaç ões como tempos, buffers e escolha das técnicas  é tratada na
+etapa de execução (D), então ap ós o período do horizonte curto, os resultados são avalia-
+dos através dos indicadores de desempenho (C) e podem ser definitivos ou não de acordo
+com a evolução de desempenho mostrado (A). Então novas aç ões podem ser propostas e
+inicia-se outro ciclo.
+2.5. Arquitetura e Interface entre Sistemas
+Como descrito por Liu et al.  (2002) a utilização deste método requer a implantação das
+várias ferramentas já mencionadas, para a proposta deste trabalho se tem que a integração
+entre os sistemas pode ser descrita conforme diagrama de colaboração apresentada na
+Figura 2.
+Semelhante ao diagrama apresentado pelo método MAP-Prod os sistemas desem-
+penham diferentes atividades no processo, por isso as informaç ões devem ser compartil-
+hadas pelas ferramentas para permitir a execução do método de forma correta e alinhada
+com todos os envolvidos.
+2.6. Consideraç ões do Métodos MAP-Prod
+Percebe-se no método MAP-Prod a adaptabilidade do processo de programação da
+produção através da combinação de características das abordagens proativa e reativa, que
+169
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+adaptativo
+juntas proporcionam um processo de adequação momentânea aos desvios do planeja-
+mento e em longo prazo através do processo de melhoria realizado entre os ciclos de
+planejamento.
+A capacidade de gerar soluç ões preditivas melhores e incorporar as aç ões de mel-
+horia sugeridas durante a atualização de parâmetros está fortemente ligado a quantidade
+de parâmetros e técnicas de sequenciamento implementadas na ferramenta APS. O de-
+sempenho de cada técnica pode estar atrelado ao sistema de produção adotado por cada
+ind ústria e o sucesso de cada simulação pode depender a quantidade de cenários e obje-
+tivos que se possa adotar na ferramenta.
+O  MAP-Prod  pode  se  tornar  um  método  de  difícil  implantação  devido  a
+combinaç ões  de  várias  ferramentas  e  a  necessidade  de  implementar  rotinas  para
+integração entre os sistemas. Mas é justamente a união das funcionalidades dos sistemas
+que torna o método um forte aliado na busca de um processo de fabricação eficiente. O
+processo de melhoria continua além de auxiliar no método de programação da produção
+pode gerar mudanças na cultura da empresa promovendo aç ões propostas pelos pr óprios
+funcionários.
+Durante o processo de melhoria contínua pesquisado na literatura não houve nen-
+huma menção sobre a utilização de ferramentas para auxiliar e dar maior visibilidade
+do mesmo, por isso neste trabalho prop ôs-se a utilização de um sistema de medição de
+desempenho e melhoria contínua para gerenciar este processo de adaptação.
+3. Estudo de Caso: Aplicaç ão do MAP-Prod na Ind ´ustria Moveleira
+Nesta seção serão demonstrados a aplicação da proposta, e os resultados que podem ser
+obtidos com a utilização do MAP-Prod através de um estudo de caso realizado em uma
+ind ústria do setor moveleiro.  O foco será na análise do comportamento das ferramen-
+tas e o grau da adaptação dos parâmetros utilizados no sequenciamento de operação.
+Os indicadores de desempenho organizacional mostrarão o avanço da empresa quanto
+170
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+tativo MAP-Prod
+à programação da produção com a aplicação do método adaptativo.
+Para a aplicação do método, é possível utilizar os sistemas existentes no mercado
+quando estes possam trabalhar de forma integrada conforme a arquitetura apresentada
+na Figura 2.As ferramentas utilizadas neste trabalho foram escolhidas pelo conhecimento
+adquirido pelo autor deste trabalho durante a participação nas equipes de desenvolvimento
+destas e por se tratar de sistemas que já apresentam alguma forma de integração conforme
+a arquitetura apresentada na Figura 2.
+O problema foi formulado com as ordens de produção geradas durante um mês
+em horizontes semanais de planejamento elaborando-se três simulaç ões, sendo a primeira
+uma simulação da aplicação das técnicas de sequenciamento através da ferramenta APS
+sobre as ordens de produção para a verificação de uma otimização do lead time dos pro-
+dutos.  Para a segunda procurou-se verificar a simulação dos parâmetros do método de
+programação às reais condiç ões dos recursos fabris da empresa, para tal optou-se uma
+comparação da evolução dos tempos de processamento padr ões conforme a análise sem-
+anal da produção para os tempos executados no horizonte seguinte.
+Já na terceira simulação verificaram-se os diferenciais na utilização do Sistema
+de Medição de Desempenho e Melhoria Contínua como ferramenta de apoio e gerencia-
+mento deste processo de melhoria do método de programação através da visualização de
+indicadores e acompanhamento do ciclo PDCA das aç ões de melhoria geradas durante a
+adaptação dos parâmetros da programação da produção.
+3.1. Resultados
+Como pode ser visto na Tabela 1, a produção durante as quatro semanas variaram bas-
+tante, pelo menos se analisarmos somente os n úmeros de peças e ordens de produção,
+porém como os produtos do setor moveleiro são de diferentes tamanhos e complexidade
+essa diferença pode ser justificada.  Contudo a otimização do lead time dos produtos
+é confirmada em todas as semanas de produção, fator esse já esperado devido a enorme
+quantidade de material parado no chão de fábrica da empresa e do método de programação
+aplicado para a execução das ordens. O ganho médio das quatro semanas ficou em torno
+de 36,62%, o que pode indicar fortemente um benefício na utilização da ferramenta APS
+pela empresa no que tange o estoque em processo e liquidez dos investimentos.
+Para averiguar e mensurar a adaptação dos tempos para a geração das soluç ões
+preditivas utilizou-se os indicadores de estabilidade e robustez.  Nos resultados pode-se
+verificar a aproximação dos valores referentes aos tempos padr ões ajustados com os tem-
+171
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+pos praticados nas semanas seguintes a adaptação, indicação mostrada através da ascensão
+do indicador de estabilidade que passou de 71,61% na primeira semana para 87,28% na
+quarta semana (Gráfico 1 da Figura 3). Para o indicador de robustez tem-se uma melhora
+constante durante o mês de análise saindo de um valor de 45,62% na primeira semana
+para 82,04% ao final do mês (Gráfico 2 da Figura 3).
+A evolução dos indicadores provavelmente deve tender para uma situação estável
+quando os parâmetros atingirem valores pr óximos aos ideais para utilização da ferramenta
+APS, provavelmente esta aproximação poderia ser verificada em um período maior de
+experimentação.
+Verificou-se também a inserção das ferramentas de medição de desempenho
+e melhoria contínua no processo adaptativo de programação da produção,  para isso
+parametrizou-se as ferramentas através do modelo BSC (Balanced Scorecard) proposto
+pela ferramenta escolhida com o cadastro de diferentes perspectivas e objetivos da em-
+presa.
+A ferramenta se demonstrou útil para a visualização dos resultados e análise dos
+dados coletados, além de gerenciar de forma colaborativa (alocação de responsáveis e
+acesso restrito por perfil de acesso) a coleta de indicadores quantitativos e qualitativos
+através de digitação manual ou importação de arquivos.Para facilitar a visualização dos
+valores, a ferramenta utiliza-se de gráficos e uso de cores indicativas de desempenho que
+são calculadas através do cadastro de limites inferiores e superiores e metas por período.
+4. Consideraç ões Finais
+A integração entre as ferramentas presentes no método MAP-Prod pode ser realizada com
+o intuito de viabilizá-lo, além de trazer in úmeros benefícios para a análise de informaç ões
+da empresa.   Porém a maioria das ferramentas disponíveis no mercado necessita de
+esforços adicionais para sua comunicação com as demais, já que envolvem muitas vezes
+a comunicação entre sistemas de diferentes tecnologias e diferentes direitos autorais,
+tornando-a assim uma tarefa complexa para as empresas que a adquirem.
+O uso das técnicas de sequenciamento através de sistemas APS e o método MAP-
+Prod se mostraram promissores através da análise do estudo de caso com resultados pos-
+itivos para a otimização dos recursos e aumento da estabilidade e robustez das soluç ões.
+O método adaptativo proposto pelo presente trabalho pode solucionar o problema da difi-
+culdade de parametrização dos métodos aplicando um ciclo de adaptaç ões nos dados de
+172
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+entrada para o sistema de programação da produção condicionando as técnicas de sequen-
+ciamento a gerar sempre soluç ões mais compatíveis com a situação produtiva da empresa.
+Outra grande vantagem do método adaptativo são as frequentes correç ões re-
+alizadas para adequar o método as mudanças normais de um processo fabril como:
+produção de novos produtos; aquisição ou troca de equipamentos; rotatividade de fun-
+cionários; e mudanças no processo de fabricação.
+Metodologias como a medição de desempenho e melhoria contínua são essenciais
+para acompanhar esse processo evolutivo, garantindo o gerenciamento do método. Além
+de trazer in úmeros benefícios inerentes às metodologias.
+References
+Attadia, L. C. d. L. and Martins, R. A. (2003). Medição de desempenho como base para
+evolução da melhoria contínua. Prod, 13(2):33-41.
+Aytug, H., Lawley, M. A., McKay, K., Mohan, S., and Uzsoy, R. (2005).  Executing
+production schedules in the face of uncertainties: A review and some future directions.
+European Journal Of Operational Research, pages 86-110.
+Bessant, J., Caffyn, S., Gilbert, J., R., H., and Webb, S. (1994). Rediscovering continous
+improvement. Technovation, 14.
+Bidot, J., Vidal, T., Laborie, P., and Beck, J. C. (2009). A theoretic and practical frame-
+work for scheduling in a stochastic environment. Journal of Scheduling, 10.
+Billaut, J. C., Moukrim, A., and Sanlaville, E. (2010).  Introduction to Flexibility and
+Robustness in Scheduling. ISTE.
+Gerolamo, M. C.  Proposta de sistematização para o processo de gestão de melhorias e
+mudanças de desempenho. Master’s thesis, São Carlos.
+Herroelen, W. and Leus, R. (2005).  Project scheduling under uncertainty: Survey and
+research potentials. European Journal Of Operational Research, pages 289-306.
+Lambrechts, O., Demeulemeester, E., and Herroelen, W. (2008).  Proactive and reactive
+strategies for resource-constrained project scheduling with uncertain resource avail-
+abilities. Journal of Scheduling, 11.
+Liu, W., Chua, T. J., Lam, J., Wang, F. Y., Cai, T. X., and Yin, X. F. (2002).  Aps, erp
+and mes systems integration for semiconductor backend assembly.  7th International
+Conference on Control, Automation, Robotic and Vision (ICARCV 2002), pages 1403-
+1408.
+Mehta, S. and Uzsoy, R. (1998).  Predictable scheduling of a job shop subject to break-
+downs. IEEE Transactions on Robotics and Automation, 14:365-378.
+Merli, G. (1993). EuroChallenge: TQM Approach to Capturing Global Markets. IFS.
+Ouelhadj, D. and Petrovic, S. (2009).  Survey of dynamic scheduling in manufacturing
+systems. Journal of Scheduling, 12/4:417-431.
+Savolainen, T. (1999). Cycles of continuous improvement: realizing competitive advan-
+tages through quality. International Journal of Operations & Production Management,
+19(11).
+173
+
+
+
+
+

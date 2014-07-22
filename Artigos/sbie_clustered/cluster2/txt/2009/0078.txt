@@ -1,0 +1,432 @@
+﻿Uma Ferramenta de Avaliação Automática para Mapas
+Conceituais como Auxílio ao Ensino em Ambientes de
+Educação a Distância
+Vanessa Martins Caldas¹, Eloi Luiz Favero¹
+¹Centro de Ciências Exatas e Naturais - Universidade Federal do Pará (UFPA)
+Belém - PA - Brasil
+{vanessam,  eloi.favero}@ufpa.br
+essment  for
+te students’ performance.
+ve  questions                                                                     (closed
+reate automated evaluation
+s lays in short essays.
+e  as  an  assessment
+methodology  that  allows  a  detailed  vision  about denuts’  learning,  where
+ched.  This  paper
+nce Techniques (n-grams and
+tive way and qualitative
+elated to humans experts
+tative  assessment  it’s
+created guide reports to students in order to hhep tm with the Conceptual Map
+construction.
+Resumo.     A  avaliação  automática  de  questões  abertas  é  caa rcterística
+rmite  ao  professor
+dante. Todavia, este tipo
+es  objetivas                                                                     (questões
+ito de criar ferramentas de
+principal  foco  destas
+s.  Dentre  as  questões
+a-se  como  uma
+visão mais detalhada
+do aprendizado do aluno, da qual propostas de açãoi  automática estão
+sta de ferramenta, que
+ramas e KNN), realiza uma
+Mapas  Conceituais.  Os
+% de acertos em relação
+tativa, enquanto que
+para a avaliação qualitativa relatórios são criadpara o aluno com o objetivo
+Conceitual.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+1.  Introdução
+A avaliação discente no contexto educacional é vista como um processo que tem como
+finalidade verificar o aprendizado de um aluno. O processo de avaliação geralmente é
+realizado através da aplicação de testes e exercícios com o objetivo de quantificar o
+desempenho do aluno. Entretanto, devido à sobrecarga que esta tarefa impõe, torna-se
+difícil  para  o  docente  acompanhar  de  maneira  efetiva  e  gradual  o  processo  de
+aprendizado do estudante. Essa preocupação é maior principalmente no que concerne a
+ambientes de educação à distância  (EAD) em larga escala, onde a complexidade no
+processo de avaliação aumenta, pois professor e estudantes se encontram distantes um
+do outro, tanto temporalmente quanto espacialmente.
+O ensino a distância é um paradigma em expansão dentro da educação, uma vez
+que o corpo discente que se encontra ambientado no ensino à distância tem mostrado
+uma taxa de crescimento (cerca de 20% ao ano) bem superior à modalidade presencial
+[Moodle                                                                                    2008],  reforçando  a  necessidade  de  estudar  metodologias  de  avaliação
+automática para ambientes de EAD. Ambientes Virtuais de Aprendizagem (AVA), tais
+como Teleduc [Teleduc 2008] e Moodle [Moodle 2008] têm apoiado o ensino em EAD
+através de serviços como correção automática de questões objetivas com o intuito de
+amenizar estes problemas de avaliação. Todavia, a avaliação automática de questões
+objetivas não fornece uma análise efetiva sobre o processo de aprendizado do aluno,
+pois não demonstra o que o estudante entendeu a respeito de um assunto e nem como
+construiu este conhecimento. As questões abertas demonstram de maneira mais clara o
+raciocínio do aluno [Novak 1984].
+Dentre  as  questões  abertas  encontram-se  os  Mapas  Conceituais                        (MCs),  cuja
+principal característica reside na habilidade de expressar o conhecimento individual de
+cada pessoa acerca de um assunto  [Cañas  1999]. Esta característica torna os Mapas
+Conceituais uma ferramenta importante em AVAs, pois possibilita o acompanhamento
+gradual da construção do conhecimento, mostrando ao professor o desenvolvimento e
+dificuldades do aluno acerca do tópico ministrado.
+O  desafio  encontra-se  no  desenvolvimento  de  ferramentas  que  automatizem  o
+processo de avaliação para questões abertas, sejam elas pequenas questões discursivas,
+ensaios ou Mapas Conceituais. Estudos neste sentindo ocorrem desde meados da década
+) foi desenvolvido para
+avaliar pequenas questões discursivas  [Page  1967]. Entretanto, com o surgimento de
+novas técnicas como PLN (Processamento de Linguagem Natural) e EI (Extração da
+Informação)  em  meados  da  década  de                                                    90,  retomaram-se  as  pesquisas  e  novas
+ferramentas  foram  desenvolvidas,  a  exemplos de  IEA  e  E-Rater,  [Hearst  2000].  A
+avaliação automática de questões fornece algumas vantagens em relação à avaliação
+manual, tais como:
+   Apresenta menor sobrecarga no que concerne à avaliação para o docente,
+onde este poderá dedicar-se a uma avaliação mais qualitativa e pontual de
+acordo com a necessidade de cada aluno;
+   Oferece maior visibilidade ao docente do desempenho dos alunos através de
+relatórios avaliativos, permitindo ao professor identificar problemas, como a
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+deficiência de um aluno em relação a um tópico ministrado de forma mais
+rápida e tomar decisões para solucioná-las de forma mais eficiente;
+   Possui retorno imediato dos resultados para os  estudantes, característica
+importante principalmente em ambientes EAD onde o professor não está
+sempre disponível ao aluno.
+Este artigo tem como objetivo mostrar uma ferramenta de avaliação quantitativa e
+qualitativa de Mapas Conceituais dentro de um ambiente EAD. São apresentadas  7
+seções: a seção 2 discorre sobre a relação entre Aprendizagem Significativa e Mapas
+Conceituais; a seção 3 cita os trabalhos relacionados à avaliação de Mapas Conceituais;
+a seção 4 descreve a ferramenta proposta; a seção 5 detalha os experimentos realizados,
+mostrando os resultados obtidos; a seção 6 apresenta as conclusões; a seção 7 relaciona
+as referências bibliográficas.
+valiação
+A metodologia de Mapas Conceituais (MCs) desenvolvida na década de 70 por Novak
+(1984) tem como princípio a teoria da Aprendizagem Significativa desenvolvida por
+David Ausubel (2000), a qual determina que a aprendizagem de um novo conhecimento
+deve estar relacionada a um conhecimento relevante e prévio do indivíduo.
+A ancoragem de um novo conceito a um conhecimento anterior ocorre quando um
+conceito mais específico e menos inclusivo é ligado a um conceito já existente e mais
+geral chamado subsunçor. A ancoragem de conceitos causa uma pequena mudança tanto
+no significado do conceito subsunçor como na informação já armazenada na estrutura
+cognitiva do indivíduo [Novak 1998]. Dentre as grandes vantagens da aprendizagem
+significativa podemos citar:
+   O  conhecimento  adquirido  é  retido  por  muito  mais  tempo,  ou  seja,  o
+estudante não esquece o conhecimento apreendido dentro de semanas;
+   A informação apreendida de forma significativa pode ser aplicada em uma
+grande  variedade  de  novos  problemas  ou  contextos;  a  transferência  de
+conhecimento é alta, sendo esta transferência importante para o pensamento
+criativo.
+MCs  foram  desenvolvidos  a  fim  de  colocar  em  prática  a  teoria  de  Ausubel,
+funcionam como externalizadores do conhecimento contido na estrutura cognitiva do
+indivíduo, refletindo o nível de seu conhecimento a respeito de determinado assunto
+[Ruiz-Primo et.al. 2001]. Este conhecimento é representado em forma de proposições.
+As proposições são compostas de conceitos interligados através de links    (palavras de
+ligação), que representam a natureza da relação entre estes conceitos. Devido ao fato de
+a  aprendizagem  significativa  realizar  ancoragem  de  conhecimento,  os  Mapas
+Conceituais  são  representados  de  forma  hierárquica  representando,  desta  forma,  a
+interdependência de conceitos [Novak 1984]. A Figura 1 mostra a representação de um
+Mapa Conceitual (MC).
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Figura 1: Mapa Conceitual definindo o conhecimento                                          a respeito da
+Aprendizagem Significativa [Novak 1998]
+Como pode ser observado na Figura 1, um MC é composto de nós e links, onde os
+nós  representam  os  conceitos  e  os  links  representam  o  relacionamento  entre  os
+conceitos. A composição entre conceitos e links  forma uma proposição. A proposição é
+a menor unidade de representação de significado em um MC, sendo usada para validar
+uma relação entre dois conceitos [Dochy 1996].
+3.  Trabalhos Relacionados
+Pesquisas relacionadas à avaliação de MCs são recentes e dentre elas podemos citar a
+proposta de Schaal  (2008), que realiza a avaliação de MCs dentro de um ambiente
+interdisciplinar de hipermídia voltado para aprendizagem, onde o resultado é um escore
+que é utilizado para avaliar o ganho de aprendizado interdisciplinar após a utilização do
+ambiente. Os MCs são avaliados contra um MC de um especialista e o retorno ao
+usuário  é  um  valor  de  similaridade  calculado  através  de  um  coeficiente  de
+correspondência, que é obtido baseado em uma matriz inter-relacional que considera os
+conceitos de acordo com as seguintes características no MC:
+   Conexão incorreta: quando o conceito não possui ligação no MC do aluno nem
+do MC do professor;
+   Falta de conexão: quando um conceito no MC do aluno não possui ligação,
+porém há uma ligação para ele no MC do especialista;
+   Conexão errônea: quando o conceito possui uma ligação no MC do aluno que
+não existe no MC do especialista;
+   Conexão correta: quando o conceito possui a mesma ligação tanto no MC do
+aluno quanto no MC do especialista.
+No  trabalho  de  Anohina  e  Grudspenkis                                                   (2007),  o  processo  de  avaliação  do
+conhecimento funciona através da interação do sistema com seus usuários: docente e
+estudante. O professor cria MCs de acordo com estágios de aprendizagem do curso, ou
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+seja,  para  cada  etapa  do  curso  há  um  MC  modelo  correspondente.  O  estudante
+desenvolve seu MC de acordo com o conhecimento da etapa em questão e ao final do
+desenvolvimento ele recebe o modelo desenvolvido pelo professor. Após a finalização
+do MC o aluno submete sua solução e um agente tenta adequar a solução a um dos
+cinco  padrões  de  solução  existentes  em  sua  base  de  conhecimento.  Em  seguida  à
+análise, é gerado um escore de comparação para o MC e este escore juntamente com o
+MC do aluno são salvos em uma base de conhecimento. Ao final o agente retorna um
+feedbackao aluno com as devidas correções do MC.
+A proposta de Rocha (2007) proporciona uma avaliação qualitativa, comparando o
+MC do estudante com uma Ontologia, o resultado é um relatório que evidencia se o
+conhecimento  do  estudante  é  compartilhado  com  a  Ontologia,  possibilitando  a
+utilização de inferências do MC do estudante. Entretanto, esta abordagem apresenta
+como  desvantagem  a  necessidade  de  gerar  uma  nova  Ontologia  para  cada  assunto
+abordado.
+As propostas abordadas acima têm como objetivo comum a avaliação adaptativa,
+focando na utilização de agentes como auxiliares no processo de desenvolvimento de
+MCs e às vezes relacionando o resultado final a um escore. Contudo, estes escores
+sempre são resultado de alguma métrica utilizada no processo de avaliação, nenhum
+deles detalha a abordagem de geração de um escore de modo que a escala seja a própria
+avaliação  do  aluno,  como  por  exemplo,  uma  escala  de                                  0  a                                                  10  ou  uma  escala
+classificatória como, por exemplo, Regular, Bom e Excelente. Além disso, as propostas
+de avaliação qualitativa geralmente visam apenas à correção do MC, necessitando de
+um refinamento que tenha como finalidade forçar o aluno a buscar pela resposta correta
+dentre várias informações, sendo elas corretas ou não.
+mbientes EAD
+A ferramenta relatada neste artigo tem como propósito realizar uma avaliação objetiva a
+fim de auxiliar estudante e docente dentro  de  um ambiente AVA. Entretanto, esta
+ferramenta de avaliação é independente e não se encontra vinculada a nenhum AVA
+específico, podendo ser integrada a um que ofereça tarefas que envolvam a utilização de
+Mapas Conceituais. A avaliação é realizada de duas maneiras:
+   Quantitativa através de um escore dado ao MC do estudante;
+   Qualitativa  através  de  um                                                             “relatório-guia”  fornecido  ao  estudante  após  o
+desenvolvimento de seu MC.
+A avaliação quantitativa é realizada através do processo de análise de similaridade
+utilizando  a  técnica  de  N-gramas                                                         [Lin,  Hovy                                           2003],  que  calcula  a  similaridade
+examinando duplas de conceito-link ou link-conceito, que seriam bi-gramas, e sobre os
+arcos de proposição conceito-link-conceito ou link-conceito-link, que seriam tri-gramas.
+Após  a  análise  de  N-gramas,  os  Mapas  e  os  valores  de  similaridade  obtidos  são
+submetidos ao processo de predição do KNN que atribui um escore para cada MC.
+A  avaliação  qualitativa  é  realizada  com  o  propósito  de  auxiliar  ao  aluno  no
+desenvolvimento do MC, este intuito é conseguido através da geração de relatórios que
+orientam o estudante no processo de construção do MC. A avaliação admite múltiplas
+submissões  para  um  mesmo  MC  com  a  finalidade  de  permitir  a  evolução  do
+conhecimento do estudante através da realização de melhorias sobre seu MC.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+Os relatórios são gerados após a submissão do MC do estudante que é avaliado
+qualitativamente, contando com o auxílio de um dicionário de sinônimos que realiza a
+comparação de conceitos e sentidos das palavras de ligação. Através da geração do
+relatório  o  estudante  tem  um  retorno  com  informações  que  concernem  ao  assunto
+abordado pela questão que respondeu. Entretanto, estes relatórios não apontam de forma
+explícita quais as informações corretas a respeito da construção do MC, uma vez que a
+eles  são  adicionados  “ruídos”  contendo  informações  que  ou  são  incorretas  ou  não
+pertencem ao escopo do assunto abordado, cabendo ao aluno selecionar os conceitos
+corretos de modo a aperfeiçoar seu MC.
+O processo de avaliação da ferramenta proposta consiste em quatro passos, cada um
+possuindo seu próprio processo. Este processo de avaliação envolve todos os níveis de
+análise sobre os MCs dos estudantes, ou seja, abrangem tanto a avaliação quantitativa
+como a qualitativa, sendo o terceiro passo aquele com a finalidade de gerar o relatório
+diagnóstico e o quarto com a finalidade de atribuir escore para o MC final do estudante.
+Os passos dividem-se na seguinte sequência:
+                                                                                            Primeiro: Os MCs desenvolvidos pelos alunos são comparados a um MC
+modelo de referência criado pelo docente ou especialista. Ao final deste sub-
+processo são selecionados, de acordo com os escores, os melhores e os piores
+MCs.
+                                                                                            Segundo: Um modelo de resposta com vocabulário expandido é criado a
+partir do mapa modelo de referência mais os  2 a  4 MCs escolhidos no
+processo anterior;
+                                                                                            Terceiro: Os relatórios de diagnóstico e orientação são gerados a partir dos
+seguintes passos:
+a)  O  MC  do  aluno  é  comparado  contra  o  modelo  com
+vocabulário expandido, identificando-se todos os bigramas e
+trigramas que estão num modelo e não no outro;
+b)    Os  piores  MCs  selecionados  no  primeiro  processo  são
+analisados e suas informações são extraídas;
+c)  As informações obtidas nas fases anteriores são mescladas e
+colocadas nos relatórios de diagnóstico.
+                                                                                            Quarto: Uma nota é gerada utilizando o método de classificação KNN (K
+vizinhos mais próximos). Cada MC de um aluno é comparado ao modelo de
+vocabulário expandido registrando-se as métricas de bigramas e trigramas; a
+partir  das  medidas  são  escolhidos  os  K-vizinhos  mais  próximos  para
+produzir a nota.
+5.                                                                                           Experimentos Realizados
+Foram realizados experimentos em que os MCs dos alunos foram submetidos à análise
+de N-gramas com a finalidade de identificar quais de suas métricas eram relevantes para
+a avaliação dos MCs. Ao final da análise de similaridade percebeu-se que dentre as
+métricas  obtidas,  as  mais  influentes  eram  bi-gramas  e  tri-gramas.  A  análise  de
+similaridade é responsável por determinar a atribuição de escores que é o produto final
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+da  avaliação  quantitativa,  portanto  bi-gramas  e  tri-gramas  são  responsáveis  pelo
+resultado da avaliação quantitativa.
+Para a realização destes experimentos, foram coletados aproximadamente 400 MCs,
+provenientes de respostas existentes no ambiente LabSQL (Lino, 2007), um ambiente
+virtual para ensino de programação SQL e Banco de Dados, o qual a ferramenta foi
+integrada. O experimento da avaliação qualitativa visava gerar relatórios de orientação
+ao aluno baseados em proposições existentes nos modelos de referência, tanto nos MCs
+com melhor desempenho como nos MCs com pior desempenho, e em proposições
+existentes apenas no MC desenvolvido pelo aluno.
+O produto final da avaliação qualitativa é a geração dos relatórios de orientação que
+apresentam  tanto  proposições  existentes  nos  modelos  de  referência  e  que  não  se
+encontram presentes no MC do aluno, como proposições existentes apenas nos MCs do
+aluno e que não são contempladas nos modelos de referência. Estas proposições são
+dispostas aleatoriamente, como em um quebra-cabeça, com o intuito de forçar o aluno a
+escolher combinações que satisfaçam a solução existente. O processo de geração do
+relatório pode ser observado a partir da Figura 2.
+Figura 2: Mapa Conceitual desenvolvido por um aluno
+O MC da Figura 2 é processado, retornado para o sistema e comparado com os
+modelos de referência já selecionados e processados, o resultado deste processamento
+para o sistema é visualizado na Figura 3.
+MODELO ALUNO  (Conceito -Link -Conceito )
+[Chave  primaria  e  identificador  exclusivo],  [Chave  primaria  e  agrupamento  de  atributos],
+[valores identificam tuplas], [Chave primaria e atributo], [Chave primaria deve possuir valor
+constante],  [identificador exclusivo de cada registro],  [agrupamento de atributos possuem
+valores], [cada registro na tabela], [Chave primaria deve possuir conteudo reduzido]
+MODELO REFERÊNCIA (Conceito- Link -Conceito)
+[valor  deve  ser  único],  [Chave  primaria  possui  valor  unico  para  cada  registro],  [Chave
+primaria pode ser composta], Chave primaria identifica cada registro], [valor nao pode ser
+nulo],                                                                                               [coluna  possui  clausula  not  null],  [Chave  primaria  informa,  valores],  [valores  nao
+podem  ser  nulos],  [Chave  primaria  e  coluna],  [registro  dentro  de  uma  tabela],  [Chave
+primária identifica registro]
+Figura 3: Resultado do processamento do MC do aluno                                                  e dos modelos de
+referência para o sistema.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+A Figura 3 mostra a forma como o sistema faz o reconhecimento de conceitos e
+links    existentes tanto no MC do aluno como nos MCs de referência, capturando-os
+separadamente. O sistema realiza a validação entre o modelo do estudante e o modelo
+de referência gerado, produzindo um relatório contendo as diferenças entre os modelos.
+Em  seguida,  os  MCs  selecionados  como  piores  são  processados  e  adicionados  ao
+relatório de diferenças criado anteriormente gerando o relatório final como apresentado
+na Figura 4.
+RELATÓRIO (Proposições I  nexistentes)
+[unico para cada registro], [valor deve ser unico], [coluna possui clausula not null], [valor nao
+pode  ser  nulo],  [valores  nao  podem  ser  nulos],  [Chave  primaria  informa  valores],  [coluna
+possui  clausula  not  null],                                                                          [Chave  primaria  e  coluna],  [Chave  primária  identifica  registro],
+[Chave primaria possui valor], [registros devem ter valor unico], [Chave primária é conjunto de
+atributos], [Chave primaria identifica cada registro], [Chave primaria informa valores], [registro
+dentro de uma tabela], [Chave primaria pode ser composta], [registro de tabelas]
+Figura 4: Relatório gerado através da comparação en    tre o MC do estudante e
+os modelos de referência, contendo proposições inex                                                    istentes no MC do aluno.
+O experimento da avaliação quantitativa teve como principal objetivo gerar escores
+que definissem o desempenho do aluno para aquele MC. Para alcançar este objetivo foi
+necessário  definir,  primeiramente,  as  métricas  que  estavam  diretamente  ligadas  ao
+desempenho do MC do estudante para em seguida realizar o processo de atribuição de
+escores.  As  métricas  de  bi-gramas  e  tri-gramas  foram  consideradas  como  as  mais
+influentes na análise de similaridade, uma vez que foi observado que são as métricas
+determinantes para a previsão de um escore na análise do KNN, onde o K variou entre 1
+a 4. Importante ressaltar que este experimento considerou, também, uma variação no
+número de MCs que compõem o modelo de referência, onde esse número varia de 1 a 4
+MCs. O melhor modelo obtido no experimento quantitativo possui 2MC formando o
+modelo de referência e um K=3. A média de erro entre a pontuação do especialista e a
+prevista pode ser observada na Figura 5.
+Figura 5: Média de erros para as questões 64 e 115,    variando-se o número de
+MC (1 até 4) para compor a reposta modelo e o valor     do K (1 até 4) para KNN:
+menor erro 1,08 com 2 MC e K=3.
+A Figura 5 mostra a média de erros variando-se o número de MC, de 1 até 4, para
+compor a resposta modelo. A partir de 4 MCs a taxa de erros cresce. Por outro lado, os
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+experimentos para o KNN mostraram que o melhor valor de K é 3, possuindo a menor
+média de erros com 1,08 pt. A média de acertos para os experimentos realizados foi de
+90% em relação à avaliação realizada por especialistas.
+6.  Conclusões
+A  avaliação  automática  tem  como  objetivo  o  auxílio  ao  docente  no  processo  de
+verificação do conhecimento adquirido pelo estudante. Entretanto, o tipo de avaliação
+utilizado atualmente é mais objetivo e direto, resultando apenas em um escore que o
+professor atribui ao trabalho de um aluno. Além disso, este tipo de avaliação tem como
+efeito um aprendizado voltado à memorização, que rapidamente é esquecido pelo aluno,
+e não à apreensão do conhecimento, que se sedimenta melhor na estrutura cognitiva do
+indivíduo.
+A utilização de Mapas Conceituais é interessante não somente como auxílio ao
+docente, mas como subsídio à melhoria no nível de aprendizado do estudante, pois sua
+utilização viabiliza uma alta transferência de conhecimento e resulta em um maior
+desenvolvimento  do  pensamento  criativo.  Por  outro  lado,  a  utilização  de  Mapas
+Conceituais   possibilita   ao   docente   um   melhor   acompanhamento   sobre   o
+desenvolvimento do estudante, evidenciando tanto os conceitos melhor apreendidos
+pelo aluno como suas principais dificuldades.
+A ferramenta proposta neste trabalho tem como objetivo realizar uma avaliação
+tanto quantitativa visando o auxílio ao docente como qualitativa visando o aprendizado
+do estudante. O produto final obtido foi uma ferramenta que realiza uma avaliação
+adaptativa, onde através das múltiplas submissões de resposta ocorre um refinamento do
+conhecimento do aluno. Este refinamento ocorre durante o processo de avaliação, cujo
+objetivo final é o direcionamento à melhor resposta através do relatório de diagnóstico
+que é gerado a cada submissão de resposta realizada por um discente. Além disso, os
+experimentos realizados para a avaliação quantitativa alcançaram uma média de 90% de
+acertos em relação a avaliadores humanos.
+As questões trabalhadas na ferramenta proposta são classificadas como fracamente
+dirigidas  (low-diretedness) [Ruiz-Primo 2004], onde o aluno constrói todo um Mapa
+Conceitual apenas com o conhecimento adquirido durante o curso. Uma proposta de
+trabalho futuro seria a extensão da ferramenta desenvolvida a fim de realizar avaliação
+sobre  questões  altamente  dirigidas                                                      (high-diretedness) que  envolvem  tarefas  como
+preenchimento de conceitos dentro de um dado Mapa Conceitual ou o complemento de
+um Mapa Conceitual semi-pronto com proposições.
+7.  Referências
+Ausubel, D.P. (2000) “The acquisition and retention of knowledge: A cognitive view”.
+Dordrecht: Kluwer Academic Publishers, p. 212.
+Anohina, A., Grudspenkis, J.  (2007).  “A Concept Map Based Intelligent System for
+Adaptive Knowledge Assessment”. Proceeding of the 2007 conference on Databases
+and Information Systems IV: Selected Papers from the Seventh International Baltic
+Conference.
+Cañas,  A.  J.,  Leake,  D.  B.,  &  Wilson  D.  C.                                        (1999)                                                                      “Managing,  Mapping  and
+                                                                                           Manipulating Conceptual Knowledge”. AAAI Workshop Technical Report WS-99-
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+10: Exploring the Synergies of Knowledge Management & Case-Based Reasoning,
+AAAI Press, Menlo Calif. July.
+Dochy, F. J. R. C. (1996). “Assessment of domain-specific and domain-transcending
+prior knowledge: Entry assessment and the use of profile analysis”. In M. Birenbaum
+& F. J. R. C. Dochy  (Eds.) Alternatives in assessment of achievements, learning
+process and prior knowledge p. 93-129. Boston, MA: Kluwer Academic Publishers.
+Gouli,  E.,  Gogoulou                                                                     ,  A.,  Grigoriadou,  M.                                                (2003).   “A  Coherent  and  Integrated
+Framework Using Concept Maps for Various Educational Assessment Functions”.
+University of Athens, Greece.
+Hearst  M.A.  (2000)  “The  Debate  on  Automated  Essay  Grading”.  IEEE  Intelligent
+Systems, 5th edition, no. 5, p. 22-37.
+Lin, C., Hovy E.  (2003).  “Automatic Evaluation of Summaries Using N-gram Co-
+Occurrence Statistics”. Proceedings of HLT-NAACL p. 71-78. Edmonton, Canadá.
+Lino, A. D. P., Silva, A. S., Santos, T.L.T., Harb, M.P.A.H., Favero, E.L., Brito, S.R.
+(2007)  “Avaliação automática de consultas SQL em ambiente virtual de ensino-
+aprendizagem”. In Conferencia Ibérica de Sistemas y Tecnologías de la Información.
+CISTI.
+Moodle (2008). Disponível em: <http://moodle.org/>. Acesso em: 18 abr.
+Novak,  J.  D.  and  Gowin,  D.  B.  (1984).  Learning  how  to  learn.  New  York  and
+Cambridge, UK: Cambridge University Press.
+Novak  J.D.                                                                               (1998)  Learning,  creating  and  using  knowledge  Concept  Maps  as
+Facilitative  Tools  in  Schools  and  Corporations.                                      2ª  ed.  Publicado  por  Lawrence
+Erlbaum Associates.
+Rocha, F. E. L.  (2007)  “Avaliação da Aprendizagem: Uma Abordagem Qualitativa
+Baseada em Mapas Conceituais, Ontologias e Algoritmos Genéticos”. PhD Thesis.
+Centro Tecnológico, Federal University of Pará, Brazil.
+Ruiz-Primo,  M.A.,  Schultz,  E.  S.,  &  Shavelson,  R.J.                                (1996)  “Concept  map-based
+assessments in science: An exploratory study”. In American Educational Research
+Association, New York, NY.
+Ruiz-Primo, M.A. (2004) “Examining concept maps as an assessment tool”. In A. J.
+Cañas, J. D. Novak, & F. M. González. (Eds), Concept Maps: Theory, Methodology,
+Technology. Proceedings of the First   Conference on Concept Mapping p. 555-562.
+Pamplona: Universidad Pública de Navarra.
+Teleduc (2008). Disponível em: <http://teleduc.nied.unicamp.br/teleduc>. Acesso em:
+23 mai.
+Schaal, S. (2008) “Concept Mapping In Science Education Assessment: An Approach
+To  Computer-Supported  Achievement  Tests  In  An  Interdisciplinary  Hypermedia
+Learning  Environment”.  Proceedings  of  the  Third  International  Conference  on
+Concept Mapping. Tallinn, Estonia & Helsinki, Finland.
+XX Simpósio Brasileiro de Informática na Educação (2009)
+
+
+
+
+

@@ -1,0 +1,470 @@
+﻿Resolvendo equações algébricas no STI PAT2Math
+Henrique Seffrin, Geiseane Rubi, Boris da Cruz,   Patrícia Jaques
+Programa Interdisciplinar de Pós-Graduação em Computação Aplicada (PIPCA)
+Universidade do Vale do Rio dos Sinos (UNISINOS) - São Leopoldo- RS - Brasil
+hseffrin@terra.com.br,  geiserubi@gmail.com,  borisdacruz@hotmail.com,
+pjaques@unisinos.br
+Abstract.  This  article  describes  the  analysis  of  the  solver  module  of  the
+Intelligent Tutor System PAT2Math. It is presented the theory that based the
+construction  of  the  system  and  its  cognitive  model,  the  whole  project
+architecture, classroom tests scope limit and analysis of gathered results.
+Resumo. Este artigo descreve a análise do módulo resolvedor de equações do
+Sistema Tutor Inteligente PAT2Math. É apresentada a teoria que embasou a
+construção do sistema e seu módulo cognitivo, arquitetura geral do projeto
+completo, bem como a delimitação do escopo de testes em sala de aula, a
+avaliação e os resultados obtidos.
+1.   Introdução
+Na  disciplina  de  Matemática,  a  Álgebra  é  um  dos  assuntos  mais  intrigantes  para
+professores  e  alunos.  Em  especial,  alunos  do  ensino  fundamental  e  professores
+apresentam dificuldades quanto ao processo de ensino e aprendizagem de equações
+algébricas, como equações de  1º e  2º grau com uma incógnita. Essas dificuldades,
+geralmente,  estão relacionadas ao  forte  conceito aritmético dos alunos  que acabam
+generalizando as equações aplicando esses mesmos conceitos  [Stacey & MacGregor
+2000]. Assim, a transição do pensamento aritmético para o pensamento algébrico é
+complexa. No entanto, os professores não têm tempo hábil para construir com os alunos
+o conceito algébrico, tendo em vista o currículo a ser cumprido. Por isso adotam um
+ensino  mecânico  e  memorístico.  Outro  problema  está  relacionado  a  esse  ensino
+mecânico das equações. Os alunos decoram e aplicam falsas regras gerando o erro; eles
+não compreendem o sinal da igualdade e nem o significado da incógnita. Dessa forma, é
+necessário desenvolver o conceito algébrico e um atendimento individual para uma
+aprendizagem significativa, em que o aluno construa o conhecimento e relacione com
+seus conhecimentos prévios.
+A  área  de  pesquisa  em  Inteligência  Artificial  aplicada  a  Educação  propõe
+alternativas computacionais que podem auxiliar no ensino, como os Sistemas Tutores
+Inteligentes (STIs). Esses sistemas se diferenciam por serem inteligentes, ou seja, por
+realizarem um atendimento individual ao aluno baseado em um perfil personalizado
+construído dinamicamente durante a interação deste com o sistema.
+STIs possibilitam ao aluno/usuário resolver problemas propostos. Estes tutores
+estão  aptos  a  ajudar  a  qualquer  momento  que  seja  necessário.  Portanto,  quando
+solicitada  ajuda  pelo  aluno,  esses  sistemas  podem  mostrar  como  solucionar  os
+problemas a partir de qualquer ponto da resolução. Essa é uma das características que os
+tornam „Inteligentes‟, pois podem resolver os mesmos problemas propostos aos alunos,
+o que é útil para identificar se a solução do aluno está correta ou não (em qualquer passo
+da resolução), assim como demonstrar ao aluno a resolução, bem como explicar o
+
+
+
+
+porquê das ações realizadas. No âmbito da matemática, em particular, no processo de
+ensino e aprendizagem de Álgebra, essa característica inteligente se concretiza com um
+sistema  que  possa  resolver  cada  passo  de  resolução  de  uma  determinada  equação,
+mostrando  ao  aluno  se está  correto  ou  não,  ou  seja,  corrigindo  simultaneamente  e
+acompanhando o desenvolvimento do aluno.
+Neste sentido, o projeto de pesquisa PAT2Math  (Personal Affective Tutor to
+Math) é um exemplo de STI com aplicação no ensino de álgebra elementar, mais
+especificadamente, no processo de ensino e aprendizagem de equações algébricas de 1º
+e 2º grau com uma incógnita, considerado conteúdo em que alunos possuem grandes
+dificuldades  de  aprendizagem                                                                [Stacey  &  MacGregor                                              2000].  Este  está  sendo
+desenvolvido  como  um  ambiente  web  capaz  de  considerar  as  emoções  do  aluno,
+fazendo  uso  de  um  agente  pedagógico  animado  que  aplicará  táticas  pedagógicas
+inteligentes para motivar o aluno e engajá-lo em sua interação com o sistema, baseando-
+se nas emoções inferidas do aluno e no seu desempenho. Como o projeto de pesquisa
+está em desenvolvimento, neste artigo é abordada a resolução de equações no sistema e
+as maneiras iniciais de auxiliar o aluno em suas dificuldades. Mais especificamente, é
+analisada a eficiência da resolução de equações, bem como, o auxílio inicial proposto
+como ajuda ao aluno construída através de uma avaliação qualitativa com 2 professores
+e 2 alunos do Ensino Fundamental. Uma descrição do sistema ou de outros módulos de
+PAT2Math podem ser encontradas em [Seffrin et al. 2009].
+O presente artigo está organizado conforme segue. Na seção  2 é abordada a
+aprendizagem da álgebra da perspectiva da teoria da aprendizagem significativa de
+Ausubel, seguida pela seção 3 em que é apresentada a arquitetura completa do projeto
+PAT2Math. A seção 4 contém as teorias e informações sobre implementações realizadas
+para a construção da funcionalidade que resolve equações do sistema, bem como, os
+modos de interação de demonstração e tutoramento. Na seção  5 é apresentado um
+cenário do sistema envolvendo os dois modos de interação. Posteriormente, a seção 6
+descreve a avaliação com professores para validação do PAT2Math e os resultados da
+avaliação. Finalmente, a seção 7 aborda as conclusões do artigo e os trabalhos futuros.
+2.   Aprendizado de Álgebra
+A Matemática é, em geral, considerada uma disciplina muito complexa. Inúmeras vezes,
+a aversão a esta disciplina está relacionada ao estudo da Álgebra [Fiorentini e Morin
+2001]. Os alunos enfrentam especial dificuldade em desenvolver o raciocínio algébrico
+devido à abstração necessária para lidar com valores incógnitos (variável), conforme já
+apontado por Cury e Konzen (2006). Esta dificuldade está diretamente ligada ao fato de
+os  aprendizes  iniciarem  os  estudos  algébricos,  apenas  após  terem  trabalhado  o
+raciocínio aritmético [Mcneil and Alibali 2004]. Quando os alunos iniciam os estudos
+algébricos ocorre a ruptura do pensamento aritmético para o pensamento algébrico. E é
+neste processo que professores e alunos caminham em estradas diferentes, já que os
+alunos  continuam  tentando  empregar  métodos  aritméticos,  no  lugar  de  métodos
+algébricos,   para   resolver   equações,   e   os   professores,   normalmente,   adotam
+metodologias de ensino tradicional com uma abordagem mecânica e memorística.
+Pensando  nesta  realidade  é  que  pesquisas  em  educação  matemática  têm  se
+destacado  com  o  intuito  de  criar  novas  estratégias  para  o  ensino  das  equações
+[Fiorentini  e  Morin                                                                         2001]  buscando  uma  aprendizagem  significativa.  Mais  ainda,
+quando deparados com este desafio, professores buscam metodologias diferenciadas
+
+
+
+
+para o ensino das equações, experiências de aprendizagem ricas e diversificadas, que
+permitam mobilizar e desenvolver competências [Abrantes et al. 1999 apud Gardete e
+César                                                                                        2006].  Isso  porque,  conforme  explica  Schliemann   (1995),  o  conhecimento
+matemático é construído tanto pela experiência como pela reflexão.
+O  computador  é  uma  ferramenta  interessante  e  atrativa  para  a  maioria  dos
+alunos. Este deve fazer parte da realidade escolar, pois além da curiosidade e interesse,
+segundo Cabeda (2004), aumenta a autoestima em aspectos de “poder saber”, ou seja,
+oferta a todos os alunos, sem distinção, a oportunidade de buscar o conhecimento,
+oportunizando  a  inclusão  digital  e  social  do  mesmo.  No  entanto,  o  sucesso  da
+aprendizagem  por  meio  de  um  software  educacional  depende  das  inovadoras  e
+diferenciadas  estratégias  de  ensino/aprendizagem  desenvolvidas.  Além  disso,  a
+linguagem do sistema deve condizer com a utilizada em sala de aula para não ocorrer
+ruptura  da  aprendizagem  no  sistema.  Assim  as  estratégias  devem                       “atender  as
+perspectivas atuais de interação, colaboração, autonomia, para que o ensino amplie suas
+possibilidades de promover e instigar o pensar crítico” [Oliveira et al. 2009, p.1]. Dessa
+forma, essas tecnologias computacionais educativas serão proveitosas de maneira que o
+aluno seja conduzido e incentivado durante toda a interação à reflexão, à investigação, à
+exploração e à aprendizagem.
+3.   O Sistema Tutor Inteligente PAT2Math
+Sistemas Tutores Inteligentes  (STI) são sistemas computacionais voltados ao ensino-
+aprendizagem de conteúdos de áreas especificas de conhecimento. Utilizam técnicas de
+inteligência artificial de modo a saber não apenas o “o que” ensinar, mas também “como
+ensinar”. Através da interação com o aluno, os STIs conseguem montar um perfil do
+mesmo, mapeando as suas habilidades e dificuldades, fornecendo assim um ensino mais
+individualizado, adaptando-se a cada perfil.
+Geralmente, a arquitetura de um STI é formada pelos seguintes componentes [Psotka
+and  Mutter  1988]:  (i)  Base  de  Domínio  (guarda  o  conhecimento  procedural  e/ou
+declarativo  que  representa  o  expertise  do  tutor),                                      (ii)  Modelo  do  Aluno                                (mantém
+informações  sobre  o  conhecimento  que  o  aluno  possui),                                 (iii)  Tutor                                           (aplica  um
+determinado conteúdo de acordo com a estratégia selecionada e a informação no modelo
+de aluno), e (iv) Interface com o Usuário (interface gráfica com o usuário).
+Como  PAT2Math  é  destinado  ao  ensino  de  equações  algébricas,  a  base  de
+domínio é formada por 2 componentes principais: (a) o modelo cognitivo (ou resolvedor
+de  problemas)  e  (b)  o  componente  declarativo  (que  conterá  todo  o  conhecimento
+“textual”,  tais  como  explanações,  exercícios,  exemplos,  entre  outros).  O  Modelo
+Cognitivo  foi  desenvolvido  como  um  sistema  especialista  baseado  em  regras  de
+produção,  o  que  tem  se  provado  mais  adequado  para  o  conhecimento  procedural
+matemático [Anderson, Corbett et al. 1992]. Uma regra de produção é um par condição-
+ação que descreve uma ação a ser tomada quando uma condição é satisfeita. Essas
+regras foram inseridas em JBoss Drools (http://www.jboss.org/drools), que é uma Shell
+de  sistema  especialista  implementada  em  Java.  Como  os  outros  módulos  do  STI
+também são implementados em Java, a utilização de Drools agiliza a implementação e
+permite uma melhor integração.
+O  Componente  Declarativo  da  Base  de  Domínio  contém  conjuntos  de
+problemas a resolver de acordo com seus níveis, bem como o conhecimento declarativo
+
+
+
+
+do conteúdo a ser aprendido  (textos de explanação). O conhecimento declarativo é
+representado em uma linguagem de marcação baseada em XML criada especificamente
+para representação de conhecimento matemático chamada de OMDoc [Kohlhase 2006].
+O  OMDoc  permite  tanto  representar  fórmulas  matemáticas  quanto  conhecimentos
+declarativos  associados  a  essa  fórmula,  como  nível,  tipo  e  outras  informações
+relevantes.
+O modelo de aluno do STI proposto foi implementado segundo duas principais
+técnicas, bastante utilizadas em se tratando de ambientes destinados a resolução de
+problemas,  como  é  um  tutor  destinado  ao  ensino  de  álgebra:  (i)  rastreamento  do
+conhecimento  (knowledge tracing) e o  (ii) rastreamento do modelo  (model tracing)
+[Anderson, Corbett et al. 1992]. O primeiro consiste em determinar o conhecimento do
+aluno, tanto o conhecimento correto do domínio, como seus erros. Este rastreamento é
+utilizado para a avaliação do aluno e a tomada de decisão na continuidade da interação.
+O model tracing tem por objetivo analisar o procedimento adotado pelo aluno para a
+resolução dos problemas. É utilizado por sistemas que têm por objetivo atender às
+solicitações de ajuda - para poder auxiliar, o sistema deve ter capacidade para analisar e
+criticar a solução apresentada pelo aluno e ter uma idéia do raciocínio utilizado.
+Para identificar as soluções do aluno na resolução de problemas, primeiramente,
+é necessário desenvolver um Modelo Cognitivo que seja capaz de resolver os problemas
+propostos do tutor. O sistema de regras de produção que compõe o modelo cognitivo irá
+tentar  encontrar  alguma  maneira  de  solucionar  o  problema  (regras  que  podem  ser
+disparadas), que seja compatível com a maneira como o aluno está resolvendo a tarefa.
+O STI é composto também pela interface gráfica de apresentação do conteúdo.
+Esta  interface  gráfica  é  implementada,  como  uma  aplicação  web,  nas  tecnologias
+Servlets/JSP da linguagem de programação Java. A vantagem de desenvolver um STI
+como  uma  aplicação  web  é  que  este  pode  ser  executado  em  qualquer  máquina,
+independente  de  sistema  operacional,  desde  que  esta  esteja  conectada  a  Internet  e
+possua um navegador web instalado. Uma outra vantagem é que não é necessária a
+instalação do STI nas  máquinas clientes  (dos alunos), visto que a aplicação  estará
+executando no servidor. Além disso, como as informações do aluno (modelo de aluno)
+estão armazenadas no servidor, não há a necessidade de que o aluno se conecte sempre
+na mesma máquina.
+Por último, o módulo tutor é responsável por escolher o próximo conteúdo a ser
+apresentado de acordo com a estratégia definida e a informação provida pelo modelo de
+aluno. Ele é também responsável por determinar qual a ajuda que será fornecida ao
+aluno durante a resolução de equações no PAT2Math.
+Um  dos  principais  módulos  do  PAT2Math  é  o  módulo  de  Resolução  de
+Equações. Neste módulo, o tutor fornece uma equação para o aluno desenvolver e o
+tutor acompanha o seu desenvolvimento, ou seja, ele verifica, a cada passo, qual foi a
+solução  intermediária  fornecida  pelo  aluno  e  qual  operação  algébrica  ele  utilizou.
+Através do Model Tracing, PAT2Math consegue identificar se a solução intermediária
+fornecida pelo aluno está correta ou não e fornecer um feedback ao aluno. Esse artigo
+visa focar principalmente esse módulo, que será explicado mais detalhadamente na
+próxima seção.
+
+
+
+
+4.   Auxiliando o aluno na resolução de equações
+PAT2Math é um STI e, por isso, é capaz de definir, baseado em um plano de ensino
+montado segundo o perfil cognitivo do aluno, o conteúdo a ser exibido, como e quando
+mostrá-lo, tipos de ajudas e quando fornecê-las, assim como auxiliá-lo na resolução dos
+exercícios propostos.
+Esse artigo visa descrever apenas o módulo de resolução de equações do tutor,
+parte central neste, chamado de PATequation. Na resolução de equações, o tutor exibe
+uma equação escolhida de acordo com as lacunas observadas na aprendizagem do aluno
+e  o  assiste  na  sua  resolução.  Para tanto,  ele  verifica se  as  soluções  intermediárias
+propostas  pelo  aluno  nos  passos  da  resolução  da  equação  estão  corretas  ou  não,
+fornecendo um feedback. Para que ele possa verificar se a solução proposta pelo aluno
+está correta, ele possui um módulo inteligente, chamado de resolvedor, que é capaz de
+resolver  qualquer  equação  fornecida  de                                                        1º  e             2º  grau  com  uma  incógnita   (mais
+informações sobre o resolvedor em [Seffrin et al. 2009]). O módulo cognitivo utiliza o
+resolvedor para verificar se a resposta fornecida pelo aluno é uma resposta possível e
+explicar qual seria a solução correta, no caso de passos incorretos providos.
+PATequation trabalha em conjunto com o resolvedor para atingir suas metas. O
+módulo resolvedor trabalha com regras de produção para resolver as equações. Cada
+regra  é  responsável  por  um  tipo  de  operação,  como,  por  exemplo,  aplicação  das
+operações de soma, subtração, multiplicação, potenciação e raiz quadrada, aplicação da
+operação inversa, simplificação de frações, cálculo do MMC dos denominadores das
+frações,  aplicação  da  fórmula  de  Bhaskara,  cálculo  do  fator  comum                        (termo  em
+evidência) e cálculo de raízes por meio de fatoração de termos. Uma vez que uma
+equação satisfaça as condições de alguma destas regras, esta regra é imediatamente
+aplicada sobre a equação, produzindo uma nova, e o processo se repete até não haver
+mais regras disponíveis, ou seja, quando o resultado final é obtido. Em caso de conflito,
+ou  seja,  mais  de  uma  regra  for  satisfeita,  a  regra  que  possuir  maior  prioridade  é
+disparada.  No  entanto,  existem  muitas  diferenças  entre  o  resolvedor  e  módulo  de
+resolução de equações (PATequation), foco deste artigo. Enquanto o resolvedor é capaz
+apenas resolver uma equação, descrevendo as operações utilizadas em cada passo da
+solução, PATequation pode: (1) permitir a entrada de uma solução intermediária pelo
+aluno, (2) verificar se a solução do aluno está correta ou não; (3) dar dicas ao aluno de
+como  resolver  a  equação,  caso  o  passo  provido  esteja  incorreto,                          (4)  demonstrar
+parcialmente  ou  totalmente  a  resolução,  caso  o  aluno  não  saiba  como  resolver  a
+equação.
+Para que fosse possível a verificação da solução apresentada pelo aluno (como
+correta ou incorreta), foi necessária a implementação de um novo conjunto de regras.
+Tais regras possibilitam, ao aluno, uma maior liberdade na ordem de resolução das
+operações, sendo necessárias, pois, sem elas, o aluno estaria limitado a resolver as
+equações de forma similar ao resolvedor, no sentido esquerda-direita. Por exemplo,
+considere  a  seguinte  equação:                                                                  3x                4                               4       1   6   x    ,  caso  o  aluno  optasse  por  realizar  a
+operação  de  soma,  as  únicas  equações  que  seriam  consideradas  válidas  seriam
+3x                                                                                                8                 1                               6       x   e   3x   9                                              6   x   .  Por  exemplo,  a  equação   3x   4   5   6   x   seria  considerada
+inválida. Em uma operação inversa, a única solução válida seria aplicar esta operação
+sobre o termo “3x”, pois no resolvedor os termos menores são movidos para o lado
+onde se localiza o termo maior (visando mostrar que a incógnita não necessariamente
+
+
+
+
+precisa estar localizada no lado esquerdo). O novo conjunto de regras elimina este
+problema, pois faz uso de uma equação adicional: a resposta do aluno. Com ela, é
+possível realizar uma comparação com a equação obtida do resolvedor, descobrir as
+diferenças entre elas e detectar qual operação foi realizada. A partir disto, aplicar esta
+operação sobre a equação do resolvedor, visando torná-la equivalente à equação do
+aluno. Por exemplo, considerando a equação inicial do exemplo anterior, digamos que o
+aluno aplicou a operação inversa sobre o termo  “6x”. Na verificação da validade da
+resposta, ao comparar as equações, será detectado que o termo “6x” estará em lados
+opostos nas equações (                                                                        3x                  4   4   1   6   x   e   6   x   3x   4   4   1   0   ) e, em cada uma, o termo
+estará realizando uma operação diferente, ou seja, operação inversa. Esta operação então
+é aplicada sobre a equação do resolvedor, tornando-a equivalente à resposta do aluno.
+O  módulo  de  resolução  de  equações  do  PAT2Math  possui  dois  modos  de
+interação: o modo de demonstração e o modo de tutoramento. A descrição de cada modo
+de interação é apresentada a seguir.
+4.1.  O modo de interação de Demonstração
+O  modo  de  demonstração  é  utilizado  para  auxiliar  o  aluno  a  resolver  a  equação
+apresentada pelo tutor. Este auxílio pode compreender a resolução de uma etapa da
+equação, ou a sua resolução completa, a partir da etapa em que o aluno pediu auxilio, ou
+ainda  uma  dica  do  que  deve  ser  realizado  no  passo  seguinte.  Estes  auxílios  são
+disponibilizados  ao  aluno,  respectivamente,  através  dos  botões                          “Próximo  Passo”,
+“Mostrar Passo” e “Dica” localizados na interface (ver Figura 1).
+Uma vez que é apresentada uma equação ao aluno, e este seleciona a opção
+“Próximo Passo”, a última equação apresentada é repassada ao módulo resolvedor, e
+este a compara com cada regra disponível. Aquela regra que satisfizer a equação é
+aplicada, produzindo uma nova equação. Esta, juntamente com a descrição da operação,
+é repassada à interface, que a exibe ao aluno.
+Caso o aluno decida selecionar a opção  “Mostrar Passo”,  a última equação
+exibida é repassada ao módulo resolvedor, e este irá utilizar as regras para resolver a
+equação até atingir o resultado da mesma. Uma vez que a resolução tenha terminado,
+todos os passos de resolução são repassados à interface, que os exibe ao aluno. O
+processo de resolução ocorre de forma similar ao que ocorre quando o usuário seleciona
+a opção  “Próximo Passo”, com diferença de que o módulo resolvedor repassará as
+equações apenas quando o resultado da equação for atingido.
+Se a opção selecionada for “Dica”, o módulo resolvedor irá obter todas as regras
+possíveis que podem ser aplicadas sobre a ultima equação apresentada. Aplicando cada
+uma delas sobre a equação, obtendo assim a descrição de cada operação. A aplicação
+das regras é necessária, visto que algumas regras são responsáveis por mais de uma
+operação, como por exemplo, a regra  “Calculo” que realiza as operações de soma,
+subtração, multiplicação, raiz quadrada e potenciação. Uma vez obtida a descrição de
+cada operação, esta é repassada à interface que as exibe ao aluno.
+4.2.  O modo de interação de Tutoramento
+O modo de tutoramento é o modo em que o aluno interage com o tutor. Neste modo de
+interação é apresentada ao aluno uma equação e este deve informar o próximo passo de
+resolução, bem como a operação a ser realizada. Com base nas respostas do aluno é que
+
+
+
+
+será possível o tutor identificar as suas habilidades e dificuldades.
+Para realizar a validação das equações, o módulo resolvedor deve encontrar um
+caminho de resolução que o leve a uma resposta equivalente a do aluno, resolvendo a
+equação de todas as formas possíveis até que o resultado esperado seja obtido. Este
+processo de validação ocorre conforme descrito a seguir.
+Inicialmente  o  módulo  resolvedor  recebe  da  interface  três  informações:  a
+equação que o aluno deve resolver, o próximo passo de resolução e a operação realizada
+neste próximo passo. As duas últimas informações são inseridas pelo aluno.
+As equações são, então, comparadas pelo resolvedor. Se forem equivalentes, é
+retornada  uma  mensagem  ao  aluno  informando  que  a  solução  está  correta,  e
+consequentemente, o aluno deve informar um novo passo para a equação dada. Se as
+equações não forem equivalentes, a equação inicial é inserida no resolvedor e, a partir
+dela, são obtidas todas as regras que podem ser aplicadas. A primeira destas regras é
+escolhida e aplicada sobre a equação, produzindo uma nova equação. Esta equação é
+então comparada com a equação do aluno. O processo se repete até que uma equação
+equivalente seja obtida, ou até não haver mais regras disponíveis. Neste ultimo caso é
+retornada uma mensagem ao usuário informando que o passo informado por ele está
+incorreto.
+Uma vez que seja encontrado um caminho que leve a uma equação equivalente a
+do aluno, é verificado se a operação informada pelo aluno foi utilizada neste caminho.
+Em caso negativo é realizada uma nova busca por outro caminho de solução, um que
+utilize a operação informada pelo aluno. Caso não seja encontrado, o aluno é notificado
+que a resposta está correta, porém com a operação selecionada não é possível atingir o
+resultado. Uma vez que o caminho correto seja encontrado, a equação é validada e o
+aluno é notificado.
+5.   Cenário
+A interface do módulo de resolução de equações (PATequation) disponibiliza ao usuário
+ferramentas para auxiliá-lo na resolução de equações matemáticas passo a passo. Cada
+passo consiste de uma solução intermediária para uma operação algébrica escolhida
+pelo usuário para ser realizada sobre um ou mais operandos. O PATequation, através de
+uma interação com o tutor, também retorna ao usuário informações sobre a correção de
+cada passo e disponibiliza funções que o aluno pode usar para auxiliá-lo na resolução.
+A fim de ilustrar o funcionamento de PATequation, essa seção descreve um
+cenário hipotético de utilização do mesmo, ilustrado na Figura 1, onde é apresentada
+uma resolução completa de uma equação de 1° grau. O item A da Figura 1 mostra uma
+equação que foi fornecida ao usuário pelo sistema quando ele pressionou o botão “Nova
+Equação”, e no item B está o primeiro passo fornecido pelo aluno. Para resolver este
+passo, o usuário pressionou o botão “I” (Operação Inversa), que insere uma nova linha
+no quadro contendo, nesta ordem, o identificador da operação, um campo de texto para
+reescrever a equação da linha anterior com o operando desejado na posição inversa, e
+um botão para verificar a correção do passo. Após o aluno ter inserido a solução na
+linha, fazendo uso do painel de operadores que está logo acima do quadro verde, ele
+pressionou o botão verificar. O sistema então verificou se o passo estava correto e
+notificou o usuário do resultado no próprio botão (ele muda para o sinal √) e também no
+campo de texto que está localizado logo abaixo do quadro verde.
+
+
+
+
+FIGURA 1: Interface do PATequation
+Ainda dentro do cenário hipotético, o usuário teve dúvidas de que operação usar
+para resolver o passo seguinte. Assim, ele pressionou o botão “Dica”, que imprime no
+campo de texto, já citado, sugestões de quais operações podem ser usadas para resolver
+aquele passo  (item D da Figura  1). Mas mesmo assim o usuário não soube como
+proceder, então ele pressionou o botão “Mostrar Passo”, que insere no quadro um passo
+resolvido (item C Figura 1). O próximo passo foi fornecido pelo usuário, onde foi usada
+a operação inversa, já citada. Finalmente, o usuário usou a operação de divisão para
+resolver o último passo. Para tanto ele teve de selecionar a fração “12/2”, clicando sobre
+ela com o mouse, e pressionando o botão de divisão. O sistema inseriu no quadro uma
+nova linha contendo, alem do identificador da operação (÷) e do botão para verificar a
+correção, uma cópia da linha anterior com um campo de texto no lugar da fração
+selecionada, que serve para inserir a resposta da fração. Se as dicas dadas pelo sistema
+não tivessem sido úteis, o aluno poderia ainda clicar no botão “Mostrar resolução” a
+partir de qualquer linha. Nesse caso, o sistema mostraria, a partir daquele ponto, a
+solução da equação passo-a-passo, indicado qual operação foi escolhida para realizar
+cada passo.
+6.   Avaliação do PAT2Math
+Uma  avaliação  qualitativa  foi  realizada  individualmente  com  dois  professores  que
+lecionam  o  conteúdo  de  álgebra  elementar,  em  uma  escola  municipal  de  ensino
+fundamental, na cidade de São Leopoldo/RS, e com dois alunos que estão na 6ª série do
+Ensino Fundamental das cidades de Porto Alegre e Canoas. Esta avaliação qualitativa
+teve como objetivo verificar com os professores a utilidade do PATequation   em sala de
+aula,  melhorias  a  serem  realizadas,  assim  como  estratégias  pedagógicas  que  os
+professores aplicariam utilizando o software. Já com os alunos, o objetivo era analisar a
+interação  dos  mesmos  com  o  sistema,  observando  suas  manifestações  diante  às
+equações propostas pelo sistema, as operações, verificações imediatas, bem como, a
+utilização dos botões dica, mostrar passo e mostrar resolução.
+Essa avaliação contou com o apoio de uma professora de matemática e seguiu a
+
+
+
+
+seguinte metodologia. Inicialmente, o professor ou aluno entrou em contato com o
+PATequation, quando foi mostrada a resolução de algumas equações pela entrevistadora.
+Após essa primeira etapa, ele foi convidado a manipular o software. Observações e
+comentários  resultantes  desta  avaliação  são  descritos  a  seguir.  Os  nomes  dos
+participantes são omitidos a fim de respeitar a confidencialidade da informação.
+6.1.  Resultados da avaliação qualitativa
+Os dois professores acharam o PATequation um software rico e interessante para o
+ensino de equações algébricas. Isso porque, segundo os mesmos, ele permite que o
+aluno resolva uma equação indicada pelo sistema, escolha a operação que irá realizar,
+mostre  a  resolução  e,  ainda,  verifique,  simultaneamente,  se  está  correta  ou  não  a
+resposta. Outros destaques foram os botões dica, mostrar passo e mostrar resolução que,
+de acordo com os professores, auxiliam o aluno quando apresentar dificuldade. Além
+disso,  observaram  melhorias  a  serem  realizadas,  tais  como  modificações  da
+nomenclatura de alguns botões como os referenciados ao produto notável, a raiz de
+qualquer índice, ao fator comum e a racionalização. Sugeriram a seguinte estratégia para
+uma melhor interação do aluno com os botões dica, mostrar passo e mostrar resolução.
+O  aluno  só  poderá  solicitar  que  o  sistema  mostre  o  passo  ou  a  resolução  se,
+anteriormente, já tenha solicitado uma dica para auxiliar a resolução da equação. Assim,
+a interação do aluno com o PATequation será mais construtiva.
+Para os alunos o software é interessante e o visual é atrativo. Destacaram como
+importante o botão dica, pois, muitas vezes, não sabem qual operação realizar, ou, por
+onde  iniciar  a  resolução  da  equação.  Outra  consideração  refere-se  a  restrição  do
+software ora para equação do 1º grau, ora para do 2º grau, pois para um aluno que não
+aprendeu equação do 2º grau é desinteressante o sistema apresentar equações que, no
+momento, não poderão ser solucionadas. Outro destaque é a correção simultânea do
+passo que estão resolvendo. Salientam que é desestimulante resolver uma equação para,
+somente no final, saber que está incorreta a resolução. Portanto, com o diferencial da
+correção imediata e o auxílio com dicas para a resolução das equações, os alunos
+afirmaram que os professores deveriam utilizar o sistema como apoio a sala de aula.
+7.   Trabalhos Relacionados
+Foram encontrados 2 principais trabalhos relacionados ao PAT2Math. Algebrain (Alpert,
+1999) é um STI web destinado a aprendizagem de equações algébricas do 1º grau. Ele
+também  apresenta  um  módulo  de  resolução  de  equações,  porém  este  é  bem  mais
+limitado em número de operações. Além disso, ele não é capaz de mostrar ao aluno a
+resolução  correta  do  exercício  quando  esse  estiver  em  dificuldade.  O  objeto  de
+aprendizagem  do  projeto  INTERRED  apresenta  explanações  sobre  o  conteúdo  e
+exercícios  de  múltipla  escolha,  sendo  o  gabarito  apresentado  apenas  ao  final  da
+resolução de uma série de exercícios propostos, bem como a explicação da solução
+(http://wiki.sj.cefetsc.edu.br/wiki/images/5/5f/Aula_nocoes_de_algebra_pronto1.swf).
+PAT2Math se difere deste pelos seguintes aspectos:  (i) por buscar uma melhoria na
+usabilidade  da  interface,  enriquecendo  a  experiência  do  usuário  através  de  páginas
+dinâmicas e execução de código em lado cliente; (ii) quanto a abordagem do conteúdo,
+pois a linguagem/nomenclatura apresentada pelo sistema visa adequar-se à realidade
+escolar brasileira. Além disso,  (iii) o PAT2Math é inteligente e capaz de corrigir em
+tempo real os passos da solução apresentada pelo aluno, bem como demonstrar a correta
+
+
+
+
+resolução. Desta forma, ele é capaz de ajudar o aluno através de dicas sobre quais são as
+operações possíveis de se realizar com a equação corrente, estas acessíveis através do
+botão dica, assim como exibir o próximo passo de resolução, ou mesmo a resolução
+completa.
+8.   Conclusões e Trabalhos Futuros
+Os resultados iniciais evidenciam melhorias para o software ser eficaz no processo de
+ensino e aprendizagem de álgebra, no entanto novos experimentos são necessários para
+validar a ferramenta.
+O PATequation está sendo integrado a outros agentes do STI PAT2Math, entre os
+quais: o agente modelo de aluno e o agente tutor. Isso permitirá ao STI identificar
+habilidades que o aluno adquiriu ou não e escolher exercícios e explanações adequadas
+para desenvolver essas habilidades. Pretende-se também incorporar regras relacionadas
+às  principais  misconceptions  dos  alunos,  a  fim  de  verificar  os  erros  mais  comuns
+realizados  pelos  alunos  e  fornecer  explicações  adequadas.  Futuramente  o  tutor
+trabalhará com a afetividade do aluno, adaptando o tutor ao estado emocional do aluno
+de forma a motivá-lo a continuar o estudo.
+9.   Agradecimentos
+O grupo agradece a UNISINOS, CNPq e FAPERGS pelo apoio através das bolsas de
+Iniciação Científica e de mestrado.
+Referências
+Alpert, S.; Singley, M.; Fairweather P. (1999) Deploying Intelligent Tutors on the Web:
+An Architecture and an Example. In IJAIED, 10(2), pp. 183-197.
+Anderson, J., Corbett, A. T., Fincham, J., Hoffman, D. and Pelletier, R. (1992) “General
+principles  for  an  intelligent  tutoring  architecture”.  In:  Cognitive  Approaches  to
+Automated Instruction. Mawah, NJ: Erlbaum.
+Cabeda, M. (2004) “Inclusão Digital e Educação On-line em Prol da Cidadania: pontos
+para reflexão”. In: Revista Brasileira de Aprendizagem Aberta e a Distância, SP.
+Cury, H. N.; Konzen, B.(2006) “Análise de resoluções de questões em matemática: as
+etapas do processo”. In: Educação matemática em revista, SP, v. 7, n. 7, p. 33-41.
+Fiorentini,  D.;  Morin,  M.  Â.                                                               (2001)(Org.).   “Por  trás  da  porta,  que  matemática
+acontece?” Campinas, SP: FE/Unicamp - Cemmpem.
+Gardete, C., César, M. (2006) “Equação (im)possível: Um caminho para a sua solução”.
+In: Actas do XVII seminário de investigação em educação matemática. APM.
+Mcneil,  N.M., Alibali,  M.W.  (2004)  “You'll  see  what  you  mean:  students  encode
+equations based on their knowledge of arithmetic”. In: Cognitive science, 28(3).
+Psotka, J.; Mutter, S. (1988). Intelligent Tutoring Systems: Lessons Learned. LEA.
+Schliemann, A. D. (1995)“Na vida dez, na escola zero. 10ª edição. São Paulo: Cortez.
+Seffrin, H., Rubi, G., Mello, G.  , Carlotto, T.; Jaques P.  (2009)  “Um resolvedor de
+equações algébricas como ferramenta de apoio à sala de aula no ensino de equações
+algébricas”. In: XV WIE - XXIX CSBC, Bento Gonçalves.
+Stacey, K. and MacGregor, M.  (2000)  “Learning the Algebraic Method of Solving
+Problems”. In: Journal of Mathematical Behavior.
+
+
+
+
+

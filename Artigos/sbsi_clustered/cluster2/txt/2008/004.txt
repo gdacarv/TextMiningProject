@@ -1,0 +1,550 @@
+﻿Um Método Branch & Bound para Maximizar o Valor de
+Projetos de Software para o Neg ócio
+Antonio Juarez Alencar, Eber Assis Schmitz,  ˆEnio Pires de Abreu
+1Departamento de Ciência da Computação e
+N úcleo de Computação Eletr ônica
+Universidade Federal do Rio de Janeiro
+Caixa Postal 68.530, 21941-590 - Rio de Janeiro - RJ, Brasil
+juarezalencar@br.inter.net,  eber@nce.ufrj.br,  enioabreu@gmail.com
+Abstract. This article presents a branch & bound approach that allows software
+managers to determine the optimum order for the development of a network of
+dependent software parts that have value to customers.  In many different cir-
+cumstances the method allows for the development of complex and otherwise
+expensive software from a relatively small investment, favoring the use of soft-
+ware development as a means of obtaining competitive advantage.
+Resumo. Este artigo apresenta uma abordagem branch & bound que permite
+aos gerentes de projeto determinar a melhor ordem de desenvolvimento de uma
+rede de m ódulos interdependentes de software que possui valor para os clientes.
+Em diversos casos, o método permite o desenvolvimento de software complexos
+e caros a partir de investimentos relativamente pequenos, favorecendo o desen-
+volvimento de software como meio para a obtenç ão de vantagem competitiva.
+1.                                                                                          Introduç ão
+Nos  mercados  altamente  competitivos  e  globalizados  que  marcam  este  início          de
+século,                                                                                     é  improvável  que  projetos  de  software  que  não  apresentem  riscos  conheci-
+dos  e  aceitáveis  para  o  neg ócio  sejam  sequer  considerados  para  desenvolvimento
+[McManus 2003]. Nestes mercados, os investidores clamam, cada vez mais e mais alto,
+por um rápido retorno de seus investimentos, períodos mais curtos para o desenvolvi-
+mento e comercialização de produtos, e uma arquitetura organizational  ágil e flexível
+[Lam 2004, Helo et al. 2004, Whittle and Myrick 2005].  Tudo isso requer o uso de no-
+vas abordagens nos projetos de desenvolvimento de software e ferramentas capazes
+de reduzir custos, agilizar processos e melhorar a performance de produtos e serviços
+[Jorgenson et al. 2003, Highsmith 2002].
+Para lidar adequadamente com esta situação, tanto acadêmicos quanto desenvolve-
+dores de software têm enfatizado a necessidade de métodos, conceitos e ferramentas
+que favoreçam a entrega rápida de funcionalidades que tenham valor para os clientes
+[Abacus et al. 2005, Nord and Tomayko 2006].  Neste contexto, uma abordagem de en-
+foque financeiro para a priorização de funcionalidades denominada Incremental Founding
+Method, ou IFM, surgiu como uma forma de aumentar o valor potencial dos projetos de
+software [Denne and Cleland-Huang 2004a, Denne and Cleland-Huang 2004b].
+No IFM, as funcionalidades do software são agrupadas em unidades auto-contidas
+que criam valor para os neg ócios em uma ou mais das seguintes áreas:
+
+
+
+
+• Criaç ão de diferencial competitivo - a unidade de software permite a criação de
+serviços e produtos que tem valor para os clientes e que são diferentes de tudo que
+é oferecido no mercado;
+• Aumento do faturamento - embora a unidade de software não ofereça nenhuma
+nova funcionalidade para os clientes, ela ajuda a aumentar o faturamento ao per-
+mitir que produtos com qualidade equivalente a dos concorrentes sejam oferecidos
+por um preço menor;
+• Reduç ão de custos - a unidade de software faz com que um ou mais processos de
+neg ócio tenham seu custo de execução reduzidos;
+• Projeç ão da marca - ao construir a unidade de software a empresa se projeta como
+sendo tecnologicamente avançada e
+• Aumento da fidelidade dos clientes - a unidade de software faz com que os clientes
+comprem mais, mais freq üentemente ou ambos.
+Obviamente,  o  valor  total  trazido  para  uma  organização  por  um  software
+constituído de várias unidades interdependentes  é fortemente influenciado pela ordem
+de implementação destas unidades, dado que cada uma possui seu pr óprio fluxo de caixa
+e restriç ões de precedência. Por este motivo, o IFM inclui um conjunto de estratégias de
+tempo polinomial que identificam um plano de desenvolvimento que aumenta o valor dos
+projetos, reduzindo os investimentos iniciais ou melhorando outras métricas de projeto
+tais como: o tempo necessário para se atingir o ponto de equilíbrio e o tempo de retorno
+do investimento [Denne and Cleland-Huang 2005].
+No entanto, o IFM é um método aproximativo, portanto nem sempre as estratégias
+identificadas pelo método levam ao melhor plano possível que, no caso geral, s ó pode
+ser descoberto em tempo exponencial.  Além disso, o IFM requer que cada unidade de
+software dependa de no máximo uma outra, para que o plano seja encontrado em tempo
+polinomial.
+Este artigo apresenta um método branch & bound para encontrar um plano de de-
+senvolvimento que maximize o valor de um projeto de software para o neg ócio.  Este
+método sempre encontra a solução  ótima e não imp õe restriç ões  às relaç ões de de-
+pendência que possam existir entre as unidades do software, o que o torna mais adequado
+às diversas estruturas de interdependência que ocorrem no mundo real. Embora o método
+seja exponencial, em muitas circunstâncias ele pode encontrar a melhor solução para o
+problema em tempo polinomial.  Veja [Liberti 2003, Hillier and Lieberman 2001] para
+uma introdução aos métodos branch & bound.
+O restante deste artigo está organizado da seguinte forma. Os fundamentos con-
+ceituais necessário a compreensão do método são introduzidos na Seção 2.  Na Seção
+3 o método  é apresentado com o auxílio de um exemplo inspirado no mundo real.  A
+formalização do método é feita na Seção 4.  A Seção 5 discute diferentes aspectos das
+implicaç ões do desenvolvimento do método. As conclus ões são apresentadas na Seção 6.
+2. Fundamentos Conceituais
+O IFM preconiza o particionamento dos projetos de software em unidades auto-contidas
+denominadas minimum marketable features, ou MMFs.  Esses pacotes agrupam fun-
+cionalidades que possam ser entregues em conjunto e que tenham valor para os clientes
+[Steindl 2005, Denne and Cleland-Huang 2004b]
+
+
+
+
+Apesar de todo MMF ser auto-contido, são comuns os casos em que um MMF s ó
+pode ser desenvolvido depois que outras partes do projeto tenham sido concluídas. Estas
+outras partes podem ser outros MMFs ou a infra-estrutura arquitetural, isto é, o conjunto
+dos ítens básicos do projeto que não oferecem nenhum valor direto aos clientes, mas são
+requeridos pelos MMFs. Por exemplo, a biblioteca de interfaces gráficas que permite que
+os diversos m ódulos que comp õem um software tenham a mesma identidade gráfica não
+têm nenhum valor direto para os clientes, entretanto o bom senso nos indica que nenhuma
+unidade de software deveria ser desenvolvida até que ela tenha sido criada.
+A pr ópria infra-estrutura arquitetural pode ser dividida em unidades auto-contidas
+passíveis de serem entregues separadamente. Estes elementos chamados de architectural
+elements, ou AEs, permitem que a infra-estrutura seja entregue conforme a necessidade,
+reduzindo o investimento inicial necessário para o desenvolvimento do projeto.
+2.1. Fluxo de Caixa
+Depois que os MMFs e os AEs são identificados, desenvolvedores e especialistas do
+neg ócio trabalham em conjunto para analisar cada MMF e AE, estimando os custos e
+os ganhos esperados para cada unidade no decorrer de uma janela de oportunidade. Estes
+custos e ganhos formam um fluxo de caixa que pode ser utilizado para estimar o valor
+total do software. Por exemplo, a Figura 1 apresenta um conjunto de MMFs e AEs de um
+projeto de software que dá suporte a atividades de marketing direto. Os n ós Start e End
+servem respectivamente para marcar o começo e o término do projeto, possuindo duração,
+custo e valor zero. A Tabela 1 identifica cada uma destas unidade de software e mostra os
+seus respectivos fluxos de caixa esperados.
+                                                                                                                                                                         PsS   LP
+Start                                                                                                                                                                               End
+GIL                                                                                            PdS                                                                       Pc    SC   CLM
+CD                                                                                             CP
+Figure 1. A rede de atividades de um projeto de software
+Observe que, na Tabela 1, o tempo decorrido entre o primeiro e o último período
+é a janela de oportunidade do projeto, isto é, o intervalo de tempo no qual o projeto tem
+valor para o neg ócio. Em termos formais, uma janela de oportunidade P  é um conjunto
+{p1, p2, ..., pk } de períodos de mesma duração. Neste caso, P = {1, 2, ..., 12}. O fluxo de
+caixa de uma unidade de projeto v é dado por fc(v) e o elemento do fluxo de v no período
+p ∈ P  é dado por fc(v, p). Na Tabela 1, fc(CD) no período 1, ou fc(CD, 1), é -70. Por
+sua vez, a rede de atividades de um projeto de software é um grafo direcionado acíclico
+G(VG, EG), no qual:
+• VG                                                                                           =  {v1, v2, · · · , vn}  é um conjunto de MMFs e AEs, onde cada uma das
+unidades do software possui uma duração prevista d(vi) e um fluxo de caixa asso-
+ciado fc(vi) avaliado para uma janela de oportunidade P , e
+• EG  é um conjunto de pares ordenados, tal que se (va, vb) ∈ EG, então vb depende
+de va.
+
+
+
+
+Unidades                                                                                   Tipo da   Atividade                                                                                                                            Períodos
+do Projeto                                                                                 Unidade                                 1                                                                                          2           3          · · ·   12
+GIL                                                                                        AE        Graphical Interface Library   -50                                                                                        0           0          · · ·   0
+PdS                                                                                        MMF       Product Selection             -40                                                                                        20          20         · · ·   20
+PsS                                                                                        MMF       Prospect Selection            -50                                                                                        30          30         · · ·   30
+Pc                                                                                         MMF       Pricing                       -30                                                                                        15          15         · · ·   15
+CD                                                                                         MMF       Catalog Design                -70                                                                                        20          20         · · ·   20
+LP                                                                                         MMF       Label Printing                -20                                                                                        5           5          · · ·   5
+SC                                                                                         MMF       Stock Control                 -200                                                                                       40          40         · · ·   40
+CP                                                                                         MMF       Catalog Printing              -50                                                                                        15          15         · · ·   15
+CLM                                                                                        MMF       Catalog Labeling & Mailing    -50                                                                                        200         200        · · ·   200
+Table 1.  Os Fluxos de Caixa das unidades do projeto em milhares de d ´olares
+americanos.
+No grafo apresentado na Figura 1, temos VG  = {Start, GIL, P dS, · · ·, CLM , End} e
+EG  = {(Start, GIL), (GIL, P dS), (P dS, P c), · · ·, (CP, CLM ), (CLM, End)}. Uma
+boa introdução à teoria de grafos pode ser encontrada em [Gross and Yellen 2005].
+2.2. Fluxo de Caixa Descontado
+Para que se possa comparar os valores de diferentes MMFs no decorrer do tempo é pre-
+ciso encontrar seus fluxos de caixa descontado (FCDs), já que não é apropriado executar
+operaç ões matemáticas em valores monetários em diferentes instantes de tempo sem con-
+siderar uma taxa de juros [Fabozzi et al. 2006]. A soma de um FCD é o seu valor presente
+líquido, ou VPL. Em termos formais, o VPL de uma unidade de software v, cujo desen-
+volvimento inicia no período t ∈ P  é dado por
+∑
+fc(v, j − t + 1)
+                                                                                                     vpl(v, t) =                                                                                                              ,
+                                                                                                                                                                                                                              (1 +  r
+                                                                                                                                   j=t                                                                                        100 )j
+                                                                                                                                   onde r é a taxa de desconto e n é o último período da janela de oportunidade P . Por ex-
+                                                                                                                                   emplo, se o desenvolvimento do MMF CD começar no período 1, então seu valor presente
+líquido é dado por
+                                                                                           −70                                     20                                                                                                     20
+vpl(CD, 1) =                                                                                         +                                                                                                                        + . . . +                      = $123
+                                                                                           2         1                             2                                                                                          2           2          12
+                                                                                           (1 +                                    (1 +                                                                                                   (1 +
+                                                                                           100 )                                                                                                                              100 )       100 )
+A Tabela 2 mostra o VPL de cada MMF da Figura 1, considerando o início do de-
+senvolvimento em diferentes pontos da janela de oportunidade P , a uma taxa de desconto
+de 2%. Note que a tabela s ó considera os nove primeiros períodos da janela de oportu-
+nidade, já que são nestes períodos que as unidades de software serão construídas.
+2.3. Valor Presente Líquido de um Projeto
+Naturalmente, o valor de um projeto depende da ordem em que as unidades do software
+são produzidas. Por exemplo, se as unidades de software da Figura 1 forem desenvolvidas
+na ordem GIL  → PdS  → Pc  → CD  → PsS  → SC  → CP  → LP  → CLM, então o
+retorno obtido será de
+
+
+
+
+Unidades                                                                                                                              Períodos
+do Projeto                                                                                      1             2         3      4      5          6     7     8     9
+GIL                                                                                             -49           -48       -47    -46    -45        -44   -44   -43   -42
+PdS                                                                                             153           134       116    98     81         64    47    31    15
+PsS                                                                                             239           211       184    157    131        105   80    55    31
+Pc                                                                                              115           101       87     74     61         48    35    23    11
+CD                                                                                              123           105       88     71     54         37    21    5     -10
+LP                                                                                              28            24        20     15     11         7     3     -1    -5
+SC                                                                                              188           153       119    86     53         21    -10   -41   -71
+CP                                                                                              95            81        68     55     43         30    18    6     -6
+CLM                                                                                             1870          1679      1491   1307   1127       950   777   607   441
+Table 2. VPLs das unidades considerando uma taxa de 2% por período.
+vpl(GIL, 1) + vpl(PdS, 2) + · · · + vpl(CLM, 9) = −$49 − $134 + · · · + $441 = $853
+No entanto, se a ordem de desenvolvimento for GIL → PdS → Pc → CD → PsS →
+LP → SC → CP → CLM, então o retorno será de $818.
+Em termos financeiros, a soma dos valores presente líquidos de uma seq ü ência S
+de MMFs e AEs correspondente a um dado projeto G é o “valor presente líquido de S”,
+ou vpl(S). Em linguagem formal
+                                                                                                ∑             ∑
+vpl(S) = vpl(s1, 1) +                                                                           vpl(si, 1 +   d(sj ))
+                                                                                                i=2           j=1
+onde S = s1, s2, · · · , sm  é uma seq ü ência de unidades de software pertencentes a V , |S|
+é o n úmero de unidades de software na seq ü ência, i é o período no qual si  é desenvolvido
+e d(sj ) é a duração do desenvolvimento da unidade de software sj .
+2.4. Métodos Branch & Bound
+De acordo com [Liberti 2003] os métodos branch & bound encontram-se entre os mais
+bem sucedidos e os mais utilizados na solução de problemas de otimização não linear.
+Se o tamanho e a complexidade do problema que se deseja resolver dificultam a solução
+direta, divide-se o problema sucessivamente em subproblemas cada vez menores até que
+apresentem tamanho e complexidade passíveis de solução direta.  Portanto, dividir para
+conquistar é o conceito básico por trás desta família de métodos
+A divisão (branch)  é feita particionando-se o conjunto de soluç ões válidas em
+subconjuntos cada vez menores. A conquista é feita calculando-se um limite (bound) de
+quão boa a melhor solução do subconjunto pode vir a ser. Subconjuntos são descartados
+quando seus limites indicam que não existe a possibilidade deles conterem uma solução
+ótima para o problema original.  Esta estratégia nos leva a um método composto por
+dois passos que geram uma árvore de busca para encontrar a solução  ótima.  Enquanto
+o passo do branch é responsável por fazer com que a árvore cresça, o passo do bound é
+responsável por limitar esse crescimento [Hillier and Lieberman 2001].
+
+
+
+
+3. Um Estudo de Caso
+Considere a existência de uma cadeia de lojas de m óveis que tem como prática o envio
+de catálogos para aumentar suas vendas. Em uma operação padrão, a empresa monta o
+catálogo com uma variedade de produtos pré-selecionados e o envia para um grupo de
+clientes potenciais, que são obtidos nos bancos de dados da empresa. Para obter um re-
+sultado satisfat ório, esta tarefa requer a execução de oito atividades em um curto intervalo
+de tempo, a saber
+1.  Product Selection - seleciona quais produtos serão anunciados no catálogo;
+2.  Prospect Selection - identifica os clientes potenciais para os quais os catálogos
+devem ser enviados;
+3.  Pricing - estabelece o preço promocional de todos os produtos que serão anunci-
+ados no catálogo;
+4.  Catalog Design - o aspecto gráfico e textual do catálogo, e a presença de outros
+materiais promocionais, são concebidos e reunidos;
+5.  Label Printing - as etiquetas contendo os nomes e endereços das pessoas que
+fazem parte do p úblico alvo são impressas e organizadas;
+6.  Stock Control - a disponibilidade dos produtos anunciados no catálogo, para que
+sejam entregues quando solicitados;
+7.  Catalog Printing - o catálogo é realmente impresso;
+8.  Catalog Labeling & Mailing  - os catálogos são etiquetados com os nomes e
+endereços das pessoas que fazem parte do p úblico alvo, e depois enviados para
+seus destinos pelo correio.
+Com  o  objetivo  de  aumentar  a  eficiência  das  campanhas  de  marketing  por
+catálogo, a companhia decidiu desenvolver um sistema baseado em ferramentas de soft-
+ware que, atuando em conjunto, fornecem o suporte adequado às atividades executadas
+durante as campanhas. Como cada atividade é apoiada por uma ferramenta diferente, um
+total de oito ferramentas deverão ser construídas de forma que as informaç ões disponibi-
+lizadas por cada uma possam ser utilizadas pelas outras.
+A Figura 1 apresenta a rede de atividades relativa ao desenvolvimento das ferra-
+mentas de software.  A biblioteca da interface gráfica (GIL) é um elemento arquitetural
+que disponibiliza os componentes utilizados para criar uma identidade visual única para
+todas as interfaces do software. A Tabela 1 mostra o investimento necessário e os ganhos
+esperados de cada ferramenta, enquanto que a Tabela 2 apresenta o valor que o desen-
+volvimento de cada ferramenta trará para a empresa.
+A competição acirrada no neg ócio de m óveis fez com que as margens de lucro da
+empresa caíssem nos últimos anos. Assim sendo, devido à falta de recursos apropriados,
+apenas uma ferramenta poderá estar em desenvolvimento a cada instante de tempo. Diante
+deste cenário, a empresa decidiu que todas as propostas de desenvolvimento de novos
+softwares devem estar acompanhadas de um relat ório discriminando a necessidade de
+cada m ódulo, juntamente com as estimativas de custo e retorno esperados.
+Ciente destes critérios e objetivando aumentar as chances de aprovação, o gerente
+responsável pelo projeto em questão decidiu que as ferramentas que comp õem o sis-
+tema devem ser desenvolvidas de forma que o retorno proporcionado pelo projeto seja
+máximo. Como o retorno financeiro do projeto é altamente dependente da ordem em que
+
+
+
+
+as unidades de software são desenvolvidas, é preciso encontrar a ordem de desenvolvi-
+mento que maximiza o VPL do projeto.
+Arvore de Busca
+Para encontrar essa ordem, optou-se por criar uma árvore de busca utilizando o método
+branch & bound. A seq ü ência escolhida será aquela que apresentar um VPL maior que
+todas as outras seq ü ências representadas na árvore.
+Passo 1: Inicializaç ão
+A construção da árvore é iniciada com a inserção do n ó Start na sua raiz. A esse
+n ó atribui-se o identificador zero. A Figura 2 mostra a composiç ões do n ó zero.
+Ordem de inserção na árvore                                                                Ferramenta
+0                                                                                          Start
+Limite superior
+LS: 943                                                                                    Valores em milhares
+Limite inferior                                                                            de dólares amerianos
+L I: 357
+ao da busca.
+Observe que o limite superior do n ó é a soma dos VPLs de cada unidade de soft-
+ware (MMF ou AE) da parte conhecida da seq ü ência com os VPLs máximos de cada
+unidade da parte desconhecida.  Neste caso, como o n ó zero  é o  único n ó da  árvore,
+o limite superior do n ó  é o somat ório dos maiores VPLs de cada unidade de software
+ao longo da janela de oportunidade, respeitada as precedência apresentadas na Figura 1.
+Portanto, de acordo com as informaç ões apresentadas na Tabela 2,
+ls(0) = vpl(GIL, 9) + vpl(PdS, 2) + vpl(PsS, 4) + vpl(Pc, 3) + vpl(CD, 4)+
+vpl(LP, 5) + vpl(SC, 5) + vpl(CP, 6) + vpl(CLM, 9)
+= −42 + 134 + 157 + 87 + 71 + 11 + 53 + 30 + 441 = 943
+Note que, para efeito do cálculo de ls(0), o maior elemento do fluxo de caixa
+descontado de Pc  é  $87, e não  $115  como poderia se supor.  Isso ocorre porque as
+restriç ões de precedência s ó  permitem que Pc seja desenvolvido a partir do terceiro
+período. Ver Figura 1.
+O limite inferior do n ó zero é o somat ório dos menores VPLs de cada unidade de
+software ao longo da janela de oportunidade, a partir do período mais cedo em que cada
+uma possa ser desenvolvida, considerando-se as restriç ões de precedência do projeto. Em
+conseq ü ência,
+li(0) = vpl(GIL, 1) + vpl(PdS, 9) + vpl(P sS, 9) + vpl(P c, 9) + vpl(CD, 9)+
+vpl(LP, 9) + vpl(SC, 9) + vpl(CP, 9) + vpl(CLM, 9)
+= −49 + 15 + 31 + 11 − 10 − 5 − 71 − 6 + 441 = 357
+
+
+
+
+Passo 2: Efetuando o branch inicial
+A busca da seq ü ência de unidades de software que maximiza o valor do projeto
+prossegue com a inserção na árvore dos n ós correspondentes às unidades de software que
+podem ser construídas em seguida.  Neste caso, a escolha  é obvia, dado que a  árvore
+possui apenas o n ó zero e a unidade GIL é a única que pode ser construída no momento.
+A Figura 3 mostra o estado da árvore ap ós a inserção do n ó correspondente à unidade
+GIL. O cálculo do limite superior e inferior do n ó 1, seguem os procedimentos descritos
+no Passo 1.
+0                                                                                           Start
+LS: 943
+L I: 357
+1                                                                                           GIL
+LS: 935
+L I: 357
+o da ´arvore de busca
+Passo 6: Escolhendo o n ó para o branch
+A busca prossegue de acordo com os passos já descritos até que a árvore atinja o
+estado descrito na Figura 4, quando uma escolha têm que ser feita:
+Qual n ó deverá ser expandido?
+Neste ponto o algoritmo utiliza a heurística do n ó com o maior potencial, selecionando o
+n ó que apresenta o maior limite superior para ser expandido, isto é o n ó 4.
+0                                                                                           Start
+LS: 943
+L I: 357
+1                                                                                           GIL
+LS: 935
+L I: 357
+2                                                                                           PdS
+LS: 935
+L I: 476
+3                                                                                           Pc
+                                                                                            LS: 935
+                                                                                            L I: 552
+4                                                                                           PsS        5          CD
+LS: 919                                                                                                LS: 873
+L I: 678                                                                                               L I: 633
+arvore de busca
+
+
+
+
+Passo 13: Identificando a soluç ão ótima
+A busca continua até que a  árvore atinja o estado descrito na Figura 5.  Neste
+instante, não existe nenhum n ó que ofereça uma solução melhor do que a do n ó              18, que
+não pode ser expandido.  Em conseq ü ência, a solução  ótima tem um VPL de $878             e
+corresponde à seq üencia
+GIL → PdS → Pc → PsS → SC → CD → CP → LP → CLM
+0                                                                                           Start
+LS: 943
+L I: 357
+1                                                                                           GIL
+LS: 935
+L I: 357
+2                                                                                           PdS
+LS: 935
+L I: 476
+3                                                                                           Pc
+                                                                                            LS: 935
+                                                                                            L I: 552
+4                                                                                           PsS        5          CD
+LS: 919                                                                                                LS: 873
+L I: 678                                                                                               L I: 633
+6                                                                                           CD         7          LP   8          SC
+LS: 882                                                                                                LS: 858         LS: 886
+L I: 743                                                                                               L I: 694        L I: 803
+11                                                                                          LP         12         SC   13         CP   9          CD   10         LP
+LS: 839                                                                                                LS: 866         LS: 847         LS: 882         LS: 858
+L I: 754                                                                                               L I: 835        L I: 778        L I: 850        L I: 814
+14                                                                                          LP         15         CP
+LS: 870                                                                                                LS: 878
+L I: 858                                                                                               L I: 874
+16                                                                                          LP
+LS: 878
+L I: 878
+17                                                                                          CLM
+LS: 878
+L I: 878
+18                                                                                          End
+LS: 878
+L I: 878
+etodo branch & bound
+E importante se observar que nem todos os n ós da árvore são expandidos durante
+o processo de busca pela solução  ótima.  Por exemplo, o n ó  5 jamais é expandido.  Na
+verdade, assim que o n ó  15 é inserido na árvore, o n ó  5 deixa de ser considerado para
+expansão.  Isso ocorre porque o seu limite superior (que indica o maior valor que uma
+seq üencia de unidades de software que inicie com GIL → PdS → Pc → CD pode atingir)
+é menor do que o limite inferior do n ó 15 (que indica o menor valor que uma seq üencia
+que inicie com GIL → Pds → Pc → PsS → SC → CD → CP pode propiciar).
+
+
+
+
+4. O Método Branch & Bound
+Em termos formais, o algoritmo branch & bound para a maximização do VPL de projetos
+de software é descrito da seguinte forma. Dado
+• Um  grafo  de  precedências  de  unidades  de  software  G(VG, EG),  composto
+pelo conjunto de unidades de software VG, e pelo conjunto das restriç ões de
+precedência entre as unidades EG;
+• Uma janela de oportunidade P e
+• Uma taxa de desconto r.
+                                                                                                                                                  A seq ü ência S de unidades de software vi                                              ∈  VG, que atende  às restriç ões de
+                                                                                                                                                  precedência descritas em EG e tal que vpl(S) é máximo, é dada por B&B(G, P, r), onde:
+                                                                                        
+                                                                                                                                                 ΩT  ← {Start}; ΘT  ← ∅; Q ← {Start};
+                                                                                        
+                                                                                                                                                 Repita:
+                                                                                        
+                                                                                                                                                 N ← q ∈ Q, tal que ls(q) = M áximo({ls(q′)|q′  ∈ Q}),
+                                                                                        
+                                                                                                                                                 ΩT  ← ΩT  ∪ eligible(N ),
+B&B(G, P, r) ←                                                                                                                                    ΘT  ← ΘT  ∪ {(N, e)|e ∈ eligible(N )},
+
+                                                                                       MaiorLI ← M áximo({li(v)|v ∈ ΩT }),
+
+                                                                                                                                                 Q ← {v ∈ ΩT |v ∈ (Q − {N }) ∪ eligible(N ) ∧ ls(v) ≥ MaiorLI},
+
+                                                                                       Até que Q = ∅;
+
+                                                                                        S ← pathT o(N ).
+onde:
+• S é a melhor solução encontrada entre os candidatos em Q;
+• ΩT  é o conjunto de n ós da árvore de busca;
+• ΘT  é p conjunto de arestas da árvore de busca;
+• MaiorLI é o maior limite inferior encontrado;
+• Q é a lista de n ós candidatos.
+4.1. A Heurística do Limite Superior
+A função do limite superior ls(N  ∈ ΩT ) → R avalia o VPL máximo que uma solução
+pode ter, considerando a seq ü ência parcial construída até o n ó N .
+∑
+ls(N ) ←                                                                                vpl(si, i) tal que si  ∈ pathT o(N )+
+∑
+vplMax(vj , when(N, vj )) tal que vj  ∈ (VG  − {vk |vk  ∈ pathT o(N )})
+4.2. A Heurística do Limite Inferior
+A função de limite inferior li(N ∈ ΩT ) → R avalia o VPL mínimo do subespaço de busca
+do n ó candidato N , considerando a seq ü ência parcial conhecida.
+li(N ) ← ∑ vpl(si, i) tal que si  ∈ pathT o(N )+
+vplMin(vj , when(N, vj )) tal que vj  ∈ (VG  − {vk |vk  ∈ pathT o(N )})
+4.3. Funç ões Auxiliares
+O método branch & bound também faz uso das seguintes funç ões:
+• A função eligible(N                                                                   ∈  ΩT ) →  VG  que informa o conjunto de n ós que estão
+habilitados para serem os sucessores imediatos de um n ó N na árvore de busca.
+• A função pathTo(N  ∈ ΩT ) → Seq VG  que informa a seq ü ência de unidades de
+software que leva até o n ó N da árvore.
+• A função when(vi  ∈ VG, N ∈ ΩT ) → P que informa o período mais cedo em que
+uma unidade vi pode ser desenvolvida, considerando a seq ü ência parcial até N.
+
+
+
+
+5. Discuss ão
+Abaixo encontram-se as respostas para quest ões chaves sobre as implicaç ões do desen-
+volvimento de um método branch & bound para encontrar a seq üencia de unidades de
+software que maximiza o VPL de um projeto de software.
+5.1. Por que utilizar um método branch & bound para maximizar o VPL?
+A quantidade de seq ü ências possíveis para o desenvolvimento das unidades de um pro-
+jeto de software tende a crescer exponencialmente com o n úmero de unidades em que
+o projeto está dividido. Conseq üentemente, s ó  é viável enumerar todas estas seq ü ências
+quando o projeto está dividido em poucas unidades. Isto faz com que o problema de en-
+contrar a seq ü ência que maximiza o VPL do projeto se beneficie da existência de métodos
+heurísticos como o branch & bound, que, na grande maioria dos casos, não precisa enu-
+merar todas as seq ü ências para encontrar a solução ótima [Liberti 2003].
+5.2. O que este método tem de melhor se comparado ao IFM?
+Existem duas grandes vantagens na utilização do método branch & bound em substituição
+ao IFM. A primeira vantagem é que este método garante uma solução ótima para o prob-
+lema, enquanto que o IFM se contenta com resultados inferiores. Em projetos que custem
+milh ões de d ólares americanos, uma diferença de cerca de 10% da solução propiciada
+pelo IFM para a solução ótima significa a perda de centenas de milhares de d ólares. Des-
+perdícios desta magnitude pode levar a perda de competitividade, favorecendo o cresci-
+mento da concorrência. A segunda vantagem é que o método pode ser aplicado à projetos
+que apresentem relaç ões de dependência m últiplas entre as unidades de software. Embora
+esta seja uma situação comum no universo dos projetos de software, tal construção não é
+suportada pelo IFM.
+5.3. Qual o impacto esperado nas negociaç ões das propostas de desenvolvimento?
+Diante da competição cada vez mais acirrada por espaço no mercado de bens e serviços,
+nos dias de hoje, muitas empresas terceirizam o desenvolvimento de software, em todo
+ou em parte, estabelecendo um ambiente competitivo saudável entre as empresas presta-
+doras de serviços, que passaram a competir entre si por contratos de desenvolvimento de
+software. Propostas que maximizem o retorno dos investimentos a serem efetuados pelos
+clientes tem uma vantagem competitiva óbvia sobre aquelas que adotam uma visão mais
+conservadora do desenvolvimento de software.  Nestas circunstâncias o método branch
+& bound proposto neste artigo sempre identifica a solução ótima, oferecendo o melhor
+retorno de investimento possível às empresas contratantes de serviço de desenvolvimento
+de software.
+6. Conclus ão
+Este artigo apresentou um método branch & bound que identifica um plano de desenvolvi-
+mento que maximize o valor de um projeto de software para as organizaç ões. O método
+sempre encontra a solução ótima e não imp õe restriç ões de precedência irrealistas entre
+as unidades de software, favorecendo o desenvolvimento de softwares complexos a partir
+de um investimento inicial reduzido.
+
+
+
+
+Referências
+Abacus, A., Barker, M., and Freedman, P. (2005). Using test-driven software development
+tools. Software, IEEE, 22(2):88-91.
+Denne, M. and Cleland-Huang, J. (2004a). The incremental funding method: data-driven
+software development. IEEE Software, 21(3):39-47.
+Denne, M. and Cleland-Huang, J. (2004b). Software by Numbers - Low-Risk, High-Return
+Development. Prentice Hall.
+Denne, M. and Cleland-Huang, J. (2005). Financially informed requirements prioritiza-
+tion.  In Roman, G.-C., Griswold, W., and Nuseibeh, B., editors, 27th  international
+conference on Software Engineering, pages 710-711, St. Louis, MO, USA. ACM.
+Fabozzi, F. J., Davis, H. A., and Choudhry, M. (2006). Introduction to Structured Finance.
+John Wiley.
+Gross, J. L. and Yellen, J. (2005). Graph Theory and Its Applications. Chapman & Hall
+and CRC, 2nd edition.
+Helo, P., Hilmola, O.-P., and Maunuksela, A. (2004). Managing the productivity of prod-
+uct development: a system dynamics analysis. International Journal of Management
+and Enterprise Development, 1(4):333-344.
+Highsmith, J. (2002). Agile Software Development Ecosystems. Addison-Wesley.
+Hillier, F. S. and Lieberman, G. J. (2001). Introduction to operations research. McGraw-
+Hill, New York, NY, 7th edition.
+Jorgenson, D. W., Ho, M. S., and Stiroh, K. J. (2003). Growth of us industries and invest-
+ments in information technology and higher education.  Economic Systems Research,
+15(3):279-325.
+Lam, H. (2004).  New design-to-test software strategies accelerate time-to-market.  In
+Goetz, M., editor, 29th  International Electronics Manufacturing Technology Sympo-
+sium, pages 140-143, San Jose, CA, USA. IEEE.
+Liberti, L. (2003).  Optimization and Optimal Control, chapter Comparison of Convex
+Relaxations for Monomials of Odd Degree, pages 165-174. Computers and Operations
+Research. World Scientific Publishing Company, Hackensack, NJ.
+McManus, J. C. (2003). Risk Management in Software Development Projects. Elsevier.
+Nord, R. and Tomayko, J. (2006). Software architecture-centric methods and agile devel-
+opment. Software, IEEE, 23(2):47-53.
+Steindl, C. (2005). From agile software development to agile businesses. In Matos, J. S.
+and Crnkovic, I., editors, 31st EUROMICRO Conference on Software Engineering and
+Advanced Applications, pages 258- 265, Porto, Portugal. Porto University.
+Whittle, R. and Myrick, C. B. (2005). Enterprise Business Architecture. Auerbach.
+
+
+
+
+

@@ -1,0 +1,417 @@
+﻿Integrando Técnicas de Planejamento apoiado em Inteligência
+Artificial e Workflow na geração de Modelos aplicados em
+Ensino a Distância
+Everton H. de Freitas1, 2, Carlos R. Lopes3.
+1,3 Programa de Pós-Graduação Ciência da Computação PPGCC
+Universidade Federal de Uberlândia (UFU) - MG - Brasil
+2Universidade Presidente Antônio Carlos (UNIPAC)
+Campus Araguari - MG - Brasil
+everton@pos.facom.ufu.br, crlopes@facom.ufu.br
+Abstract. The Workflow technology is an adequate alternative to model
+distance learning courses. This modeling process can be enhanced by
+using Artificial Intelligence Planning techniques. In this work, we apply
+a  conditional  planning  technique  in  the  creation  of  models  that
+represent the structure of distance learning courses allowing dynamic
+models with little human intervention. This technique is present in the
+SisMap system created by the authors. The description of the SisMap
+system and its use in distance learning are presented in this paper.
+Resumo. A tecnologia de Workflow apresenta-se como uma alternativa
+adequada na modelagem de cursos para o Ensino a distância. Para
+agilizar o processo de modelagem, propõe-se a integração de uma
+técnica  de  Inteligência  Artificial  conhecida  como  Planejamento
+Condicional.  Essa  técnica  é  aplicada  na  criação  de  modelos  que
+representam a estrutura de cursos para Ensino a Distância apoiado na
+Internet permitindo, assim, modelos dinâmicos com pouca intervenção
+humana. Essa técnica foi implementada no sistema SisMap criado pelos
+autores deste trabalho. A descrição desse sistema juntamente com a
+arquitetura  de  um  sistema  de  EAD  e  caso  de  uso,  bem  como  os
+resultados obtidos estão descritos neste artigo.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007    92
+
+
+
+
+1. Introdução
+O Ensino a Distância (EAD) é uma realidade e cresce cada vez mais. Essa modalidade
+de ensino e aprendizagem permite a disseminação do conhecimento por diversos meios
+de comunicação que alcancem populações dispersas geograficamente.
+A criação e a execução de um curso de EAD não são tarefas simples de serem
+realizadas. O processo de criação passa por inúmeras etapas, entre as quais se encontra a
+definição de todo o processo, até que ele esteja pronto para ser executado. Para facilitar
+o processo de criação, alternativas de integração entre EAD e  Workflow tem sido
+propostas [Medeiros 1999]. A pesquisa realizada por [Lin et al. 2002] desenvolveu um
+ambiente  de  ensino  flexível                                                                (Flex-eL)  criado  sobre  a  tecnologia  de  Workflow
+permitindo o gerenciamento, coordenação da aprendizagem, e avaliações das atividades
+do curso. Consta da pesquisa de [Medeiros 1999], a qual será utilizada como base das
+informações  e  comparações  contidas  nesse  trabalho,  a  realização  de  um  estudo
+aprofundado  sobre  o  âmbito  de  EAD,  tendo  como  resultado  uma  proposta  de  um
+modelo para um curso de ensino a distância. O modelo foi criado a partir de uma análise
+das diversas modalidades de EAD encontrada na World Wide Web (WWW) e aplicado
+na modelagem de autoria e execução de cursos de EAD. Para representação do modelo,
+utilizaram - se as técnicas de modelagem de Workflow (WF), pois "O Workflow tem se
+apresentado  como  uma  alternativa  adequada  à  modelagem  de  cursos  de  EAD,
+permitindo a definição de um curso, com a especificação clara de todas as atividades a
+executar,  com  seus  relacionamentos  e  agentes  responsáveis  pela  sua  execução”
+[Medeiros 1999].
+A criação de um modelo de Workflow exige um conhecimento detalhado de
+cada  atividade  dentro  do  sistema,  incluindo  pré-condições,  efeitos,  informações  de
+entrada e saída. A disponibilidade de um tempo considerável para realização desta
+tarefa é essencial. Em geral a tarefa de criação do modelo é realizada manualmente por
+meio de um editor de fluxos que permite conectar as diversas atividades do processo,
+tornando o processo de criação cansativo e propício a erros. Para facilitar e agilizar esta
+modelagem  propõe-se  a  utilização  de  uma  técnica  oriunda  da  área  de  Inteligência
+Artificial                                                                                    (IA)  conhecida  como  Planejamento.  Com  a  utilização  desta,  elimina-se
+parcialmente  a  sobrecarga  do  usuário  facilitando  a  criação  de  modelos.  A  técnica
+elimina a necessidade do uso de um editor para criação de modelos de Workflow
+automatizando  todo  o  processo.  A  técnica  também  traz  benefícios  no  processo  de
+recomposição do modelo quando alterado, por exemplo, a inserção de novas atividades,
+alteração  no  modelo  organizacional  e  outros,  passam  a  ser  feito  de  uma  forma
+automática.
+Esse  artigo  descreve  a  utilização  da  técnica  de  Planejamento  apoiado  em
+inteligência Artificial na fase de modelagem de Workflow viabilizando a criação de
+modelos aplicados no ensino a distância. Este artigo também apresenta a arquitetura de
+um sistema de EAD apoiado na WEB em conjunto com a técnica de planejamento, e
+proposta de trabalhos futuros em que a técnica se mostra viável. O modelo de Workflow
+é criado a partir do Software SisMap
+Esse artigo está organizado como descrito a seguir. A seção 2 descreve conceitos
+de Workflow e EAD juntamente com a sua integração. Na seção 3, serão apresentados
+conceitos sobre a técnica de Planejamento apoiado em Inteligência Artificial utilizada
+nesse trabalho. Na seção 4, será apresentada a integração da técnica de Planejamento e
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      93
+
+
+
+
+Workflow aplicada a EAD juntamente com a arquitetura de um sistema de EAD e caso
+de uso. Na seção 5, apresenta-se a conclusão deste trabalho.
+2. Modelagem de Workflow aplicado a Ensino a distância (EAD)
+Encontra-se na literatura diversos conceitos sobre EAD. Em geral tem-se que EAD é a
+modalidade   de   educação   em   que   os   processos   de   ensino-aprendizagem  são
+desenvolvidos sem que alunos e professores estejam presentes no mesmo ambiente e na
+mesma hora. Nesta seção será descrito o processo de modelagem de um curso de EAD
+usando técnicas de Workflow.
+A idéia básica de um Workflow é a divisão do processo como um todo em
+partes, conhecidas como atividades. As atividades (ou tarefas) devem ser executadas de
+forma  coordenada,  devendo  respeitar  as  pré-condições  existentes  entre  elas,  como
+também a seqüência prevista para sua execução [Casati et. al 1996].
+Um  Workflow  pode  ser  organizado  manualmente,  mas  na  prática  muitos
+Workflow  são  organizados  através  de  sistemas  de  Tecnologia  da  Informação  que
+fornecem   suporte   computadorizado   para   automação   de   todos   os   processos
+[Hollingsworth                                                                                          1995].  Os  WfMS  (Workflow  Management  System  -  Sistemas  de
+gerência de Workflow) fornecem tais suportes. Eles permitem a definição e modelagem
+do  processo  por  meio  de  ferramentas,  e  permitem  o  gerenciamento  do  processo  e
+alocação de recursos através do motor de Workflow1 que automatiza toda execução do
+modelo no ambiente operacional. A alocação de recursos pode ser associada a cada
+tarefa através de sistemas computacionais ou usuários (recursos humanos).
+Para  realização  da  modelagem  do  processo  pode-se  usar  algumas  técnicas
+modelos  visando  garantir  maior  clareza  e  padronização.  A  técnica  de  modelagem
+utilizada no modelo de EAD proposto por [Medeiros 1999] foi baseada no modelo de
+Casati/Ceri[Casati et. al 1996]. Uma descrição rápida de alguns símbolos que compõem
+o modelo de Casati/Ceri é apresentado a seguir e pode ser visto na figura 1:
+Figura 1. Representação dos símbolos proposto por Casati/Ceri.
+                                                                                                       Início e fim indica o início e o fim de uma instância2 de workflow.
+                                                                                                       Fork total indica a execução de todas as tarefas a seguir.
+                                                                                                       Fork  condicional  indica  que  uma  validação  será  feita  e  somente  as
+tarefas sucessoras com condições verdadeiras serão executadas.
+                                                                                                       Fork  condicional  com  exclusão  mútua  indica  que  somente  uma
+atividade será executada após uma determinada validação.
+1 Motor de Workflow - software que controla o gerenciamento de workflow, ou seja, responsável por
+controlar as atividades definidas no processo.[Hollingsworth 1995].
+2 Instância - representação de uma única execução (ocorrência) de um processo, ou uma atividade em um
+Processo.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                94
+
+
+
+
+                                                                                            Join total indica que a próxima tarefa será executada após a conclusão
+de todas as tarefas predecessoras.
+                                                                                            Supertarefa  é  a  modularização  das  tarefas  visando  a  diminuir  a
+complexidade.
+Para  realizar  a  modelagem  lógica  do  processo  pode-se  utilizar  editores
+específicos, tais como YAWL, Together Workflow Editor, e outros. Após a definição
+do  modelo  lógico,  o  mesmo  é  passado  para  o  motor  do  Workflow  para  que  seja
+realizada a gerência da execução.   O motor de Workflow é um sistema (software) que
+controla  a  execução  de  todas  as  atividades  definidas  no  modelo  do  processo
+lógico[Hollingsworth  1995]. Para modelar e executar o curso de EAD proposto por
+[Medeiros 1999], foi utilizado nesse trabalho a ferramenta YAWL - Editor e Motor de
+Workflow respectivamente.
+A modelagem do curso de EAD proposta por [Medeiros 1999] foi dividida em 2
+etapas: autoria e execução.
+O  modelo  de  autoria  engloba  as  tarefas  relacionadas  a  criação  dos  cursos
+(concepção,  planejamento,  definição  e  implementação  do  mesmo).  O  modelo  de
+execução envolve todas as tarefas e supertarefas operacionais inerentes ao curso, ou
+seja, todas as tarefas relacionadas à aplicação do curso em um ou mais alunos. Nesse
+trabalho a ênfase será dada na fase de autoria proposta por [Medeiros 1999] que pode
+ser visualizada na figura 2.
+Figura 2. Representação do modelo de autoria proposto por [Medeiros 1999].
+A fase de autoria foi dividida em 4 partes, sendo as três primeiras supertarefas, e
+a última, uma única atividade chamada ''liberar curso para execução''. Descreve-se nesse
+trabalho a supertarefa Definir critérios de Análise de Desempenho do Aluno por ela
+apresentar  na  modelagem  as  possibilidades  de  paralelismo  e  fluxo  condicional  das
+atividades.
+Analisando a  supertarefa  Definir  critérios  de Análise  de  Desempenho do
+Aluno da figura 2, observa-se que após o símbolo de início ocorre a execução de um
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     95
+
+
+
+
+Fork total direcionando o fluxo para  3 Fork Condicional que serão executados em
+paralelo, são eles: (1)Definir Nota como Critério de Desempenho(DNCD), (2)Definir
+Tempo como Critério de Desempenho(DTCD) e (3)Definir Freqüência como Critério
+de  Desempenho(DFCD)}.  Cada  ramo  (fork  condicional)  em  paralelo  escolherá  um
+fluxo para seguir, ou seja, o ramo identificado como ramo 1 (ou DNCD) seguirá uma
+das opções existentes: 'Definir patamares de notas como critério' caso seja escolhido a
+opção  'sim'  na  atividade  DNCD,  ou,  'Registrar  não  utilização  de  nota'  caso  seja
+escolhido a opção 'não'. Para cada fluxo em paralelo executado será escolhido uma das 2
+opções disponíveis, sendo necessário a finalização de todas as atividades paralelas para
+que a próxima atividade seja executada. A próxima atividade a ser executada dependerá
+das ações tomadas em cada fluxo, ou seja, se ‘algum Critério de Desempenho tiver sido
+definido’, a próxima tarefa a ser executada será Definir Forma de Apresentação da
+Trilha  de  Progresso  do  Aluno'(DFATPA),  caso  contrário,  será  executada  a  tarefa
+Registrar Não Apresentação da Trilha de Progresso do Aluno (RNATPA). Sendo assim,
+a  última  tarefa  Sinalizar  Conclusão  da  Tarefa'(SCSDCADA)  será  executada  e  o
+processo finalizado.
+3. Planejamento apoiado em Inteligência Artificial
+A técnica de Planejamento apoiado em Inteligência Artificial é utilizada para encontrar
+soluções para problemas. Ela envolve determinar um conjunto ordenado de atividades
+(ações/operadores) num plano que, quando executadas por um ou mais agentes3 a partir
+de um estado inicial que satisfaça as circunstâncias dadas, resulte num estado final que
+satisfaça a um objetivo  [Russell and Norvig  2003]. Um problema de planejamento
+geralmente é representado   da seguinte forma [Teixeira 2005]:
+                                                                                                   Conjunto de ações  (atividades/operações) que podem ser executadas.
+                                                                                                    Estas ações são compostas por pré-condições e efeitos. Pré-condições são as condições
+                                                                                                    necessárias para que uma determinada ação seja executada, e efeitos representam as
+alterações vindas da execução da ação.
+                                                                                                   Estado inicial: uma descrição da situação corrente do mundo.
+                                                                                                   Meta: uma descrição do objetivo a ser alcançado.
+Um exemplo ilustrativo para compreensão de planejamento pode ser visto na
+figura 3.
+Figura 3. Representação do domínio do problema [Teixeira 2005].
+3 Agente - é um componente que pode ser visto   como um observador de um ambiente através de seus
+sensores, e agir em cima desse ambiente através de seus efeitos[Russell and Norvig 2003]
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                            96
+
+
+
+
+O exemplo descreve configurações de caixas que podem ser alteradas por meio
+de ações do tipo: mover uma caixa que está em cima de uma outra caixa e colocá-la
+sobre a mesa (ou outra caixa). A figura apresentada descreve uma configuração inicial
+de  caixas  conhecidas  como 'estado  inicial' e  uma  configuração final que  se  deseja
+alcançar representado pela 'Meta'. O planejador4 realiza a procura de uma seqüência de
+ações (atividades) que, partindo do estado inicial, alcance o estado final. O plano gerado
+automaticamente pelo planejador pode ser visto na figura 3.
+O  plano  gerado  apresentado  na  figura                                                               3  representa  as  ações  que  quando
+executadas a partir do estado inicial, alcançam o estado final, ou seja, partindo do estado
+inicial onde a caixa C se encontra sobre a caixa A (representado por sobre(c,a)), e a
+caixa  A  e  B  sobre  a  MESA  (representado  por  sobre(a,mesa)  e  sobre(b,mesa)),  se
+executarmos as ações mover a caixa C de cima da caixa A para a MESA( representado
+por mover(c,a,mesa)), e mover a caixa B de cima da MESA para cima da caixa C
+(representado por mover(b,mesa,c)), e mover a caixa A de cima da MESA para cima da
+caixa  B  (representado  por  mover(a,mesa,b)),  alcançar-se-ia  o  estado  final  desejado
+tendo a caixa C sobre a MESA, a caixa B sobre a caixa C e a caixa A sobre a caixa B.
+Observe que a operação "MOVER(b,x,y)" (mover uma caixa B qualquer de cima de um
+X qualquer para cima de um Y qualquer) só pode ser realizada se B for uma caixa
+(bloco) e B estiver sobre X e B estiver sem nenhuma outra caixa por cima (representado
+por livre(b)). Desta forma o plano corresponde a um modelo em que tarefas devem ser
+executadas  numa  determinada  ordem  para  que  um  objetivo  maior  seja  alcançado.
+Percebe-se assim uma analogia entre planos e modelos de Workflow.
+O  foco  desta  pesquisa  é  a  criação  de  planos  com  fluxos  condicionais,
+característica existente no processo de modelagem de Workflow por meio de Fork's
+condicionais.  Portanto  utilizou-se  um  algoritmo  de  Planejamento  Condicional                      (ou
+Contingente).
+O  planejamento  condicional  é  aquele  no  qual,  planos  com  ramificações
+alternativas, podem ser gerados antecipadamente de acordo com situações, que possam
+ser antevistas. Planejamento Condicional não é, portanto, uma seqüência única de ações
+(atividades), mas uma definição completa de várias linhas de execuções possíveis para
+as situações que não se tem conhecimento completo sobre o resultado de uma ação ou
+do estado corrente do mundo.
+Para facilitar o raciocínio, apresenta-se a seguir um exemplo relacionado ao
+concerto de um pneu de um carro que se encontra vazio[Russell and Norvig 2003]. O
+nosso objetivo é deixar no eixo do carro um pneu cheio que é representado da seguinte
+forma: SobreEixo(x) e Cheio(x).
+O estado inicial do nosso domínio é descrito a seguir: Cheio(Sobressalente) e
+Intacto(Sobressalente) e ForaEixo(Sobressalente) e SobreEixo(Pneu) e Vazio(Pneu);
+Os  operadores  (atividades)  envolventes  na  busca  de  uma  solução  para  esse
+problema são os seguintes:
+4 Um planejador é um sistema que implementa um algoritmo de planejamento, ou seja, uma seqüência
+ordenada de ações que, quando aplicadas a um mundo que satisfaça o estado inicial, conduzem ao estado
+final, onde a meta é válida.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                97
+
+
+
+
+Utilizando a técnica de Planejamento Condicional pode-se criar um plano em
+que se verifica a integridade do pneu antes de tomar qualquer ação, garantindo maior
+flexibilidade através da identificação de situações que não se tem conhecimento. A
+figura 4 mostra o plano gerado com o Planejamento condicional.
+Figura 4. Plano condicional para o domínio do pneu.
+4. Integração de Planejamento e Workflow aplicado a EAD
+Diante das semelhanças encontradas entre Planejamento e Workflow, propõe-se o uso
+da ferramenta SisMap que implementa em seu núcleo um algoritmo de Planejamento
+Condicional  desenvolvido  pelos  autores  desse  trabalho.  O  SisMap  atua  na  fase  da
+concepção de um modelo que represente a estrutura de um curso de EAD.
+4.1Descrição do Software SisMap
+O SisMap é o software que permitirá definir operadores  (ações/atividades) os quais
+através de suas pré-condições e efeitos encontrará um plano, se existir, que partindo de
+uma situação inicial alcance uma situação desejada. SisMap foi desenvolvido para atuar
+em domínio independente, sendo necessário para seu funcionamento a modelagem de
+seus operadores de acordo com cada ambiente. A definição dos operadores é feita
+através  de  literais  proposicionais5,  tornando  sua  representação  mais  simples.  Uma
+descrição detalhada do SisMap e de seus fluxos pode ser encontrado em  [Teixeira
+2005].
+A  figura  5  apresenta  um  ScreenShot  do  sistema  Sismap.  Apresenta-se  na
+próxima seção exemplos de utilização do SisMap juntamente com Workflow mostrando
+a viabilidade da nossa proposta.
+5 Literais Proposicionais - forma de representação de conhecimentos, através da lógica Proposicional.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                98
+
+
+
+
+Figura 5. ScreenShot do sistema SisMap.
+5. Proposta de Modelagem de Workflow aplicada a EAD através do SisMap
+Realizou-se um estudo do domínio identificando todas as atividades envolvidas, para
+em  seguida  especificá-las  no  SisMap.  Após  as  especificações  das  informações
+necessárias,  o  algoritmo  de  planejamento  é  executado  em  busca  de  um  plano  que
+represente  o modelo de  um curso  de  EAD. Para  efeito  comparativo,  identificamos
+nossas atividades baseando-se no modelo proposto por [Medeiros 1999]. A modelagem
+encontrada foi a mesma. Isso demonstra que a proposta apresentada nesse artigo atingiu
+os objetivos desejados.
+A seguir encontram-se os operadores identificados para representação da fase de
+autoria da multitarefa Definir Critérios de Análise de Desempenho do Aluno que
+pode ser visualizado na figura 6. Os nomes dados aos operadores referem-se às iniciais
+de cada atividade (Exemplo: a atividade 'Definir nota como critério de desempenho' é
+identificada como DNCD).
+Figura 6. Operadores da Multitarefa Definir Critérios de Análise de Desempenho
+do Aluno
+O plano encontrado pelo SisMap representa o modelo lógico do curso de EAD e
+pode ser visto em forma de texto na figura  5 do lado direito da imagem. O plano
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                    99
+
+
+
+
+encontrado    é    exibido    a    seguir:                                                           [(INICIAR,DNCD),(*DNCD,RNUNCD),
+(RNUNCD,RNATPA),(RNATPA,SCSDCADA),(RNUFCD,RNATPA),(RNUTCD,RN
+ATPA),(DFATPA,SCSDCADA),(DPFA,DFATPA),(*DFCD,RNUFCD),(*DFCD,DPF
+A),(DPT,DFATPA),(*DTCD,RNUTCD),(*DTCD,DPFA),(*DNCD,DPNA),(DPNA,D
+FATPA), (INICIAR,DTCD), (INICIAR,DFCD)].
+As atividades que representam fluxos Condicionais aparecem com o símbolo *.
+Atualmente o SisMap exibe o plano gerado através de texto e na criação de um
+arquivo  XML6  para  que  o  motor  de  Workflow  possa  interpretá-lo.  Para  melhor
+entendimento e visualização, o modelo apresentado acima pelo SisMap pode ser visto
+na figura  7. Pode-se observar que o modelo gerado pelo SisMap é equivalente ao
+modelo apresentado na figura 2. Inicia-se o processo com a execução de 3 atividades em
+paralelo,são elas: DNCD,DTCD E DFCD. Cada atividade em paralelo segue seu fluxo
+de acordo com as informações que foram determinadas em si mesmas, caminhando
+assim para finalização do processo.
+Figura 7. Representação da modelagem do SisMap no YAWLEditor
+A arquitetura de um sistema de EAD utilizando a metodologia apresentada nesse
+trabalho aparece descrita na figura  8. A arquitetura foi dividida em  4 camadas para
+facilitar o processo de desenvolvimento e manutenção.
+Figura 8. Arquitetura do sistema de EAD
+6 A XML (eXtensible Markup Language, ou Linguagem de Marcação Estendida) é um subconjunto da
+SGML (Standard Generalized Markup Language, ou Linguagem de Marcação Padrão Generalizada) que
+permite que uma marcação específica seja criada para especificar idéias e compartilhá-las na rede.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                             100
+
+
+
+
+Analisando as camadas  (definidas na figura  8 como C1  .. C4) de baixo para
+cima, tem-se a ultima camada como responsável pela criação do modelo de Workflow
+do curso de EAD através do software SisMap. A terceira camada é composta pelo
+WfMS - Sistema de Gerência de Workflow, que após receber o modelo lógico gerado
+pelo  SisMap  passa  a  controlar  toda  a  execução  tendo  acesso  total  aos  recursos
+reservados (Web Services7, ou humanos) e banco de dados. A camada de aplicação e
+controle é responsável pela definição das regras de negócio, geração de conteúdos e
+outras  informações  que  auxiliarão  no  processo  de  aprendizagem.  A  camada  de
+'Apresentação' é responsável pela comunicação do sistema com os usuários e tutores
+através de interfaces Web, Chat e Fórum.
+Na prática, a execução do sistema ocorre como apresentado de forma sucinta na
+mesma figura, ou seja, figura 8. A primeira etapa (identificado pelo número 1 da figura
+8) tem início com a criação do modelo lógico de um curso de EAD através do software
+SisMap. Após a criação do modelo lógico, temos início a segunda etapa (identificado
+pelo número  2 da figura  8) onde o aluno deverá realizar um cadastro informando o
+curso desejado, e algumas informações que definirão seu perfil inicial. Observe que até
+o momento não foi criado nenhuma instância do processo de Workflow, os modelos dos
+cursos foram simplesmente criados e armazenados. Após a realização do cadastro, o
+aluno imprime um documento com as informações sobre o banco para que seja feito um
+depósito. Após o depósito, o aluno acessa o sistema de EAD informando o número do
+documento do depósito, e a partir daí, dá-se início a instância do Workflow direcionado
+a esse aluno através de seu login e senha de acesso ao sistema. A instância ocorre da
+seguinte  forma:  os  modelos  lógicos  foram  criados  de  forma  geral,  associando  as
+atividades a recursos default (padrão) para que no momento da instanciação fosse feito
+uma  atualização e os recursos  fossem associados  a cada aluno  matriculado. Sendo
+assim, cada aluno estará associado a um modelo e o Sistema de Workflow gerencia
+todas as instâncias. A execução do modelo lógico começa na terceira etapa (identificado
+pelo número 3 da figura 8) e tem início na atividade "inscrição" que é executada pelo
+Web Service (a comunicação está representada pela linha tracejada). O Web Service
+disponível para essa atividade tem a função de realizar uma busca no banco de dados
+sobre o curso desejado pelo usuário (aluno) para que se tenha continuidade no processo.
+Tendo  acesso  a  essa  informação,  a  próxima  atividade  a  ser  executada  chama-se
+"Questionário avaliativo" e sua finalidade é de permitir que o usuário realize um teste
+inicial para que o sistema tenha o conhecimento se o aluno se encontra preparado ou
+não  para  dar  continuidade  nos  módulos  que  compõem  o  curso.  Para  identificar  o
+conhecimento inicial do usuário, a próxima atividade a ser executada é a "correção do
+questionário"  que  é  feita  pelo  Web  Service.  Com  base  no  resultado  obtido  no
+questionário, o sistema executa a atividade "Nivelamento do Módulo" ou "M\_1" que
+indica apresentação do Módulo 1. A partir deste ponto o sistema de EAD apresenta o
+conteúdo programático (M\_1), execução e correção dos testes avaliativos (M\_1) para
+cada módulo. Todo esse processo é gerenciado pelo Motor de Workflow que trabalha
+em conjunto com a camada de aplicação e apresentação. Ao termino do módulo  3
+permite-se ao usuário a escolha de um dos fluxos para execução do módulo 4 e 5. Para
+finalizar a execução do processo, a atividade "Emitir Certificado" deverá ser realizada
+pela secretaria tendo assim a conclusão do curso de EAD.
+7 Web services é uma solução para integração de sistemas e na comunicação entre aplicações diferentes
+desenvolvidas em plataformas diferentes.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                101
+
+
+
+
+6. Conclusão
+Neste  artigo  descreve-se  uma  arquitetura  para  EAD  que  integra  técnicas  de
+Planejamento Apoiado em Inteligência Artificial e Workflow. Isto foi possível com o
+desenvolvimento do sistema SisMap que permite a geração de modelos de fluxos para
+EAD com base em Planejamento Condicional, um aspecto que diferencia nosso trabalho
+de outras propostas.
+Atualmente os autores estão envolvidos num processo de incorporar melhorias
+ao  sistema  que  permitam  a  geração  de  conteúdo  individualizado  para  alunos  com
+conhecimentos diferentes, adaptação do ambiente de estudo de acordo com o processo
+cognitivo  do  aluno,  reformulação  de  um  novo  plano  de  ensino  de  acordo  com  o
+conhecimento adquirido pelo aluno até o momento, dentre outros. Um trabalho análogo
+a essa idéia pode ser encontrado em  [Vassileva and Deters 1998], onde se propõe a
+criação de uma ferramenta (DCG - Dynamic CourseWare Generation) na geração de
+cursos dinâmicos com a técnica de Planejamento condicional baseado em grafos.
+Referências
+Casati,  F.,  Grefen,  P.,  Pernici,  B.,  Pozzi,  G.,  and  G.Sánchez                     (1996).  Wide
+workflow model and architecture. Technical Report 96-19, Centre for Telematics and
+Information Technology (CTIT), University of Twente, Netherlands.
+Hollingsworth,  D.                                                                         (1995).  Workflow  management  coalition  the  workflow
+reference model. page 54. Document Number TC00-1003. Document Status - Issue 1.1.
+19-Jan-95.
+Lin,  J.,  Ho,  C.,  Sadiq,  W.,  and  Orlowska,  M.  E.                                   (2002).  Using  workflow
+technology to manage flexible e-learning services. Journal of Educational Technology
+& Society, Volume 5, Issue 4, 2002. IEEE Learning Technology Task Force, October
+2002.
+Medeiros,  G.  R.  (1999).  Técnicas  de  modelagem  de  workflow  aplicadas  `a
+autoria  e  execução  de  cursos  de  ensino  `a  distância.  Dissertação  de  Mestrado    -
+Universidade Federal do Rio Grande do Sul - UFRGS - Porto Alegre.
+Russell, S. and Norvig, P. (2003). Artificial Intelligence A Modern Approach.
+Prentice Hall, 2nd edition.
+Teixeira,  J.                                                                              (2005).  Workflow  com  técnicas  de  planejamento  apoiado  em
+inteligência artificial. Dissertação de Mestrado - Universidade Federal de Uberlândia -
+UFU - Minas Gerais.
+Vassileva, J. and Deters, R.  (1998). Dynamic courseware generation on the
+www. Proceedings of the 8th World Conference of the AIED Society, Kobe, Japan.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   102
+
+
+
+
+

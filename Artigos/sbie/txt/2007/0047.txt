@@ -1,0 +1,435 @@
+﻿Tutoriais Inteligentes Baseados em Aprendizado por
+Reforço: Concepção, Implementação e Avaliação Empírica
+Weber Martins1, Ulisses R. Afonseca1, Lauro E. G. Nalini2, Viviane M. Gomes1
+1Grupo PIRENEUS - Escola de Engenharia Elétrica e de Computação - Universidade
+Federal de Goiás (UFG) - Praça Universitária s/n - Setor Universitário
+CEP 74605-220 - Goiânia - GO - Brazil
+2 Departamento de Computação/Psicologia - Universidade Católica de Goiás (UCG)
+Av. Universitária 1440 - Setor Universitário - CEP 74605-010 - Goiânia - GO - Brazil
+{weber,ulisses,viviane}@pireneus.eee.ufg.br, legn@ucg.br
+Abstract.  In  Intelligent  Tutoring  Systems                                            (ITS),  several  techniques  from
+Computational  Intelligence  have  been  employed  to  provide  individualized
+tuition and higher knowledge gains. This article presents the development of a
+novel Hybrid Intelligent Tutoring System based on Reinforcement Learning's
+Softmax  Algorithm:  proposal,  implementation  and  empirical  evaluation.
+Reinforcement Learning is used to determine a dynamic course plan that takes
+into account the student's personal navigation history and his performance.
+Empirical experiments have compared the proposed system to free navigation
+(where students choose how to navigate on the course contents without any
+external guidance). Statistical analysis of collected data has shown promising
+results compared to other more complex hybrid ITS based on Multilayer
+Perceptrons.
+Resumo.  Em  Sistemas  Tutores  Inteligentes                                             (STI),  várias  técnicas  de
+Inteligência  Computacional  têm  sido  empregadas  para  fornecer  ensino
+individualizado  e maiores ganhos de conhecimento ao aluno. Este artigo
+apresenta o desenvolvimento de um inédito Sistema Tutor Inteligente Híbrido
+baseado  no  Algoritmo  Softmax  de  Aprendizado  por  Reforço:  proposta,
+implementação e avaliação empírica. O Aprendizado por Reforço é usado
+para determinar um plano de curso dinâmico que considera a história de
+navegação pessoal do estudante e seu desempenho. Experimentos empíricos
+comparam o sistema proposto à navegação livre (onde o estudante escolhe
+como navegar no conteúdo do curso sem qualquer ajuda externa). A análise
+estatística dos dados coletados mostrou resultados promissores comparados a
+outros STI híbridos mais complexos, baseados em redes neurais perceptrons
+de multi-camadas.
+1. Introdução
+Sistemas Tutores Inteligentes (STI) proporcionam ensino individualizado onde o aluno é
+um agente ativo no processo de aprendizagem. Em STI, cinco grandes áreas (Psicologia
+[Graig et al. 2007], Lingüística, Inteligência Computacional [Russel and Norvig 1995],
+Neurociência, Antropologia e Filosofia) são naturalmente envolvidas com pesquisa e
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                 550
+
+
+
+
+desenvolvimento. A meta é criar modelos de ensino que considerem o conhecimento
+prévio do aluno, sua habilidade com o ambiente de ensino e suas capacidades/pré-
+disposições cognitivas.
+Aprendizado  por  Reforço                                                                                (RL,  do  Inglês,  Reinforcement  Learning)  é  uma
+técnica de aprendizado de máquina, bastante usada em controle de processos industriais,
+capaz de implementar o mecanismo de personalização do STI ao aprendiz. Em RL, um
+agente aprende por sucessivas interações com o seu ambiente e escolhe as ações que
+proporcionam os melhores resultados/ganhos. O ambiente apresenta, a cada interação,
+um novo estado (situação) e um valor numérico chamado reforço (reward) para avaliar a
+ação.
+Para a utilização do RL em STI, o ambiente de aprendizado foi modelado de
+forma  a  representar  as  respostas  dos  alunos  às  questões,  às  possíveis  opções  de
+navegação e à estratégia pedagógica. O principal objetivo é demonstrar que a aplicação
+da técnica pode selecionar um plano de ensino específico para cada aluno de forma
+dinâmica, no sentido de contribuir para um desempenho satisfatório. O plano de ensino
+é uma seqüência de informações,  como texto e imagens, que são apresentadas ao
+aprendiz de uma maneira que ele atinja a maior retenção de conhecimento possível.
+Outra meta secundária é a redução da quantidade de fragmentos de conteúdo necessária
+para o processo de aprendizagem.
+2. Problema, Hipóteses e Variáveis
+O problema pode ser sintetizado na questão:  “Como implementar Sistemas Tutores
+Inteligentes?”. A hipótese principal deste trabalho argumenta que o uso de Aprendizado
+por Reforço é uma solução digna de ser submetida ao teste empírico. Como hipóteses
+secundárias, supomos que há redução do tamanho do conteúdo estudado e do tempo
+consumido do aluno quando comparados à navegação livre  (sem controle externo).
+Portanto, a variável independente, que define grupos para posterior comparação, é a
+forma  de  controle                                                                                      (navegação  guiada  por  RL  ou  livre);  enquanto  as  variáveis
+dependentes,  verdadeiros  alvos  de  comparações,  são  o  ganho  normalizado  de
+aprendizagem (retenção de conhecimento, o tamanho do conteúdo estudado (número de
+fragmentos observados pelo aluno) e o tempo consumido do aluno.
+3. Fundamentação Teórica
+3.1. Sistemas Tutores Inteligentes
+As  Tecnologias  da  Informação  oferece  inúmeras  possibilidades  à  Educação.  As
+aplicações educacionais desenvolvidas com tais tecnologias foram classificadas como
+aplicações de Instrução Assistida por Computador (IAC)12, tendo sua origem na área
+educacional influenciada pela teoria comportamentalista de Skinner. Sua abordagem é
+1 A sigla CAI, do Inglês Computer-Assisted Instruction, é utilizada também. Estas ferramentas surgiram
+com base na Instrução Programada.
+2 Instrução Programada (IP) consiste em ensinar por pequenas lições onde cada uma deve ser aprendida
+para que o aluno possa avançar. Foi intensivamente estudada pelo psicólogo behaviorista B. F. Skinner.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                 551
+
+
+
+
+centrada no professor do qual o aluno deve receber explicações expositivas para depois
+exercitá-las no computador.
+Na década de 1970, teve início o uso de técnicas de Inteligência Artificial nos
+softwares de IAC dando origem aos softwares de Instrução Inteligente Assistida por
+Computador (ICAI3) ou Sistemas Tutores Inteligentes (STI) [Frigo et al. 2004]. Eles
+foram desenvolvidos em plataforma stand alone ou baseados em web [Prentzas and
+Hatzilygeroudis  2002]. Outro tipo é o Sistema Educacional Hipermídia Adaptativo4
+desenvolvido especificamente para a web que adicionam a característica de apresentação
+e navegação inteligente. Estas categorias de software para Educação são chamadas de
+Sistemas Educacionais Inteligentes (ou IES do Inglês Intelligent Educational Systems),
+sendo o termo “Sistemas Tutores Inteligentes” mais difundido e utilizado neste trabalho.
+Segundo Prentzas em  [Prentzas and Hatzilygeroudis  2002], e como representado na
+Figura 1, os principais componentes dos Sistemas Educacionais Inteligentes são:
+   domínio do conhecimento: é o conteúdo a ser aprendido e pode ser constituído
+de texto, imagens, sons, exercícios, etc;
+   modelo  do  usuário:  é  uma  representação  do  aprendiz  na  qual  podem  ser
+utilizadas  as  características  psicológicas,  o  perfil  de  aprendizagem,  o
+conhecimento prévio do conteúdo,  a diferença de seu conhecimento com o
+domínio de conhecimento do sistema, sua capacidade cognitiva e estado mental,
+seu histórico de navegação etc;
+   modelo pedagógico: é constituído pela estratégia pedagógica escolhida;
+   interface com  usuário:  um  mecanismo  para  apresentar  os diversos tipos de
+conteúdo ao usuário e de perceber suas interações com o sistema.
+Figura 1. Estrutura de um STI
+Dos novos STI surgidos nos últimos anos [Peres and Meira 2003] [Baldoni et al.
+2004] [Bolzan and Giraffa 2002] [Guelpeli et al. 2003] [Bennane 2002] [Cardoso et al.
+2004] [Sykes and Franek 2004], destacamos o STI Híbrido desenvolvido por Melo e
+Meireles [Martins et al. 2004], onde questionários extensos sobre Perfil Psicológico (79
+3 Intelligente Computer Assisted Instruction.
+4 É usual a sigla AEHS do Inglês Adaptive Educational Hypermedia Systems.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                   552
+
+
+
+
+questões) e Estilo de Aprendizagem (62 questões), respectivamente, foram empregados
+para realizar o treinamento prévio de redes perceptrons multi-camadas [Haykin 1998],
+responsáveis  pela  modelagem,  por  meio  de  distribuições  probabilísticas,  das
+preferências bem-sucedidas de cada tipo de aluno em relação aos níveis contextuais.
+3.2. Aprendizado por Reforço
+Aprendizado por Reforço é uma técnica de aprendizado de máquina onde um agente
+aprende por sucessivas interações em um ambiente dinâmico [Kaelbling et al. 1996]. Ele
+é responsável por selecionar possíveis ações para uma determinada situação apresentada
+pelo ambiente. O ambiente responde às ações e apresenta novas situações ao agente. A
+cada ação, é fornecida ao agente uma recompensa ou penalidade que indica o quanto o
+novo estado é desejado [Mitchell 1997].
+Segundo Sutton & Barto [Sutton and Barto 1998], a definição de RL baseia-se
+no problema e, não, no método de aprendizado. São problemas onde o agente deve
+aprender a escolher as ações disponíveis, que alteram o estado do ambiente e utilizam
+uma função de recompensa para definir a qualidade da seqüência de ações [Mitchell
+1997]. Neste caso, o agente pode ou não ter um conhecimento prévio sobre o efeito de
+suas ações sobre o ambiente.
+O agente está conectado ao ambiente via percepção e ação  [Kaelbling et al.
+1996]. O limite entre o ambiente é o agente é definido pelos limites de controle do
+agente. Tudo que o agente possui controle absoluto faz parte dele e o que ele não pode
+modificar arbitrariamente é considerado como parte do ambiente  [Sutton and Barto
+1998]. A definição completa do ambiente é chamada “tarefa” (task). Após cada escolha
+de ação, o ambiente fornece um sinal de retorno, chamado de reforço (ou recompensa),
+indicando a qualidade da ação escolhida (conforme representado na Figura 2). O agente
+aprende por suas próprias experiências ao interagir com o ambiente tentando atingir um
+objetivo. O estado do ambiente é um sinal com uma informação qualquer do ambiente
+como uma sensação imediata, uma versão processada desta sensação ou uma estrutura
+complexa. O agente deve descobrir quais ações têm maiores recompensas e seu objetivo
+é maximizar as recompensas em curto e longo prazo. Aprendizado por Reforço é
+aprender o que fazer: mapear situações às ações para maximizar o sinal de retorno.
+Figura 2. Interação entre agente e ambiente
+A principal diferença entre o Aprendizado por Reforço e outras técnicas de
+aprendizado de máquina é a utilização da avaliação das ações tomadas  [Sutton and
+Barto 1998]. Em outros métodos, são utilizados instruções ou exemplos, informando as
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                 553
+
+
+
+
+situações e as ações corretas que devem ser tomadas. O sistema pode, então, generalizar
+tais mapeamentos a situações não exemplificadas.   No RL, o agente tenta descobrir,
+dentre as possíveis ações, quais delas promovem melhores resultados, utilizando apenas
+sua própria experiência. A Função de Recompensa define, para o estado atual, qual a
+melhor ação imediata enquanto a Função de Valor permite a avaliação das possíveis
+ações em longo prazo. Estas funções não são alteradas durante as interações enquanto
+são utilizadas para atualizar a Política, definindo os melhores mapeamentos estado-ação.
+4. Sistema Proposto - Concepção e Implementação
+Em linhas gerais, foi desenvolvido um ambiente modular de tutoria com duas formas de
+tutoria, inteligente e livre. O módulo de tutoria inteligente guia automaticamente o aluno
+utilizando uma técnica de aprendizado de máquina enquanto o módulo de tutoria livre
+permite que o aluno escolha como estudar. O módulo de tutoria livre foi desenvolvido
+para ser utilizado com referência para avaliar o desempenho do tutor inteligente.
+4.1. Estratégia Pedagógica
+O sistema proposto utiliza a mesma estratégia pedagógica implementada por Martins et
+al. [Martins et al. 2004]. O curso é composto por uma seqüência de contextos e cada
+contexto, de cinco níveis. Cada contexto é um pequeno trecho do curso, um fato, um
+procedimento, um princípio ou um conceito a ser aprendido. Os níveis são diferentes
+formas de apresentar o conteúdo do contexto: três formas de exposição com texto e
+figura                                                                                       (facilitado,  intermediário  e  avançado)  e  dois  níveis  auxiliares   (exemplos  e
+perguntas freqüentes).
+Quando o aluno inicia o curso ele é direcionado ao nível intermediário do
+primeiro contexto. A cada nível é apresentado um exercício para avaliar o aluno. Após
+responder ao exercício o aluno é, no módulo inteligente, guiado automaticamente para
+outro nível do mesmo contexto ou para o contexto seguinte. Se estiver utilizando o
+módulo livre, é apresentado ao aluno um menu para escolher qual o próximo nível ou
+avançar para o próximo contexto.
+Algumas restrições de navegação são impostas em ambos os módulos tutores.
+Por exemplo, o aluno sempre inicia um contexto pelo nível intermediário. O aluno
+nunca pode retornar a contextos anteriores ou visitar um mesmo nível duas vezes. O
+esquema de navegação, utilizando esta estratégia pode ser visto na Figura 3 abaixo:
+F = facilitado
+I = intermediário
+A = avançado
+P = perguntas freqüentes
+E = exemplos
+* =  avaliação
+Figura 3. Estratégia de solução proposta
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     554
+
+
+
+
+4.2. Material/Conteúdo Pedagógico
+O conteúdo ensina “Introdução a Informática”, tendo sido gentilmente cedido por Melo
+e Meireles,  [Melo et al.  2005] e  [Meireles et al.  2005]. O conteúdo do curso foi
+composto com base em conhecimentos de Psicologia da Aprendizagem Humana. Em
+particular,  empregou-se Instrução  Programada,  técnica bastante criticada,  apesar de
+muito bem-sucedida [Skinner 1972], tendo sido defendida e avaliada por cientistas de
+Análise Experimental do Comportamento, um ramo da Psicologia   que, ao contrário de
+outras áreas mais filosóficas, norteia-se por procedimentos operacionais e pelo emprego
+do  método  científico  da  forma  utilizada  nas  Ciências  Naturais  (Física,  Química e
+Biologia).
+4.3. Modelo do Ambiente
+É  necessário  criar  um  modelo  do  ambiente  para  ser  utilizado  junto  à  técnica  de
+Aprendizado por Reforço. No sistema proposto, o modelo para o algoritmo representa a
+estratégia pedagógica. Os modelos mais simples podem considerar apenas as possíveis
+decisões e o acúmulo de recompensas. Nos mais complexos, podemos armazenar o
+histórico de todas as ações tomadas e considerar, para a tomada de decisão, todos
+possíveis caminhos e ganho acumulado para cada um deles até chegar ao último nível a
+ser visitado.
+Dentre  as  modelagens  realizadas,  seguindo  o  princípio  de  iniciar  pelas
+alternativas menos complexas, foi utilizada a alternativa mais simples, que representa
+apenas as possíveis opções (ações) para a navegação. O conjunto de ações que podem
+ser escolhidas é dinâmico: avançar para o próximo contexto é considerado somente após
+a visita de dois níveis e, ainda, um nível já visitado não é uma opção válida. O sistema
+inteligente tenta descobrir qual ação/destino pode produzir um maior reforço, isto é,
+fazer  com  que  o  aluno  obtenha  um  melhor  desempenho.  Nesta  modelagem,
+consideramos,  como  histórico  de  navegação,  apenas  o  acúmulo  de  resultado  das
+navegações anteriores.
+4.4. Avaliação do Aluno
+Antes da navegação no conteúdo do curso é aplicado um pré-teste com 15 questões, uma
+questão por contexto do curso. Após a navegação em todos os 15 contextos, o aluno
+passa por um teste final no mesmo formato do pré-teste. Ambos os questionários
+cobrem  todo o  conhecimento  abordado  no curso, focando principalmente no nível
+intermediário. Essas duas baterias de perguntas são utilizadas para avaliar o ganho
+normalizado da retenção de conhecimento do aluno após utilizar cada tutoria, livre e
+inteligente.
+O ganho normalizado [Lakdawala et al. 2002] é uma medida que permite avaliar
+o quanto o aluno aprendeu em relação ao que ele ainda poderia aprender. A Equação 1
+operacionaliza o cálculo do ganho normalizado. Assim, é possível comparar a retenção
+de conteúdo de alunos com diferentes níveis de conhecimento.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                      555
+
+
+
+
+Onde GN é o ganho normalizado, NF é a nota no teste final, NI é a nota no pré-
+teste e M é a nota máxima possível.
+4.5. Técnica de Aprendizado por Reforço
+A personalização do sistema ao aluno é realizada a partir da recompensa produzida
+pelas questões de cada nível.  Trata-se de questões objetivas com quatro possíveis
+alternativas: correta, errada, parcialmente correta e a opção  “não sei”. Cada tipo de
+resposta produz um reforço diferente. Este reforço é utilizado para individualizar o
+plano de ensino do aluno.
+Deve-se ressaltar que o reforço produzido para o sistema tutor é diferente do
+produzido para o usuário. O reforço para o sistema constitui-se em um número, utilizado
+pelo algoritmo para guiar o aluno. O reforço para o aluno5 é uma mensagem produzida
+pelo sistema que aparece na tela, informando: “Parabéns! Resposta correta.”, “Esta não
+é a resposta mais correta.”, “Resposta incorreta.” e “Obrigado pela sinceridade.” para
+cada um dos tipos de alternativa descrito.
+O algoritmo de aprendizado por reforço escolhido foi o softmax  [Dayan and
+Hinton  1993]. Os critérios para tal escolha foram a adaptabilidade ao problema e a
+simplicidade.  O  softmax  é  um  algoritmo  simples  que  necessita  apenas  manter  as
+informações das recompensas coletadas e as possíveis ações que podem ser tomadas.
+Ele atribui às ações uma probabilidade proporcional às suas estimativas de valor. A
+melhor  ação  continua  tendo  a  maior  probabilidade  enquanto  todas  as  outras  são
+distribuídas em um ranking de acordo com suas estimativas de valor. O método mais
+comum para calcular a probabilidade é a distribuição de Gibbs ou Boltzmann que
+escolhe a ação a no tempo t com a probabilidade:
+Onde τ  é uma parâmetro  chamado  “temperatura”,  que torna as ações mais
+equiprováveis quando possui valores altos e grandes diferenças de probabilidade quanto
+possui valores pequenos (para as ações que possuem diferenças em suas estimativas de
+valores).
+Para a escolha da temperatura foram realizadas simulações do ambiente de
+aprendizado considerando quatro situações: alunos que sempre acertam os exercícios,
+alunos que sempre escolhem a opção parcialmente correta, alunos que sempre erram e
+alunos que sempre respondem que não sabem. O valor 2 para a temperatura foi eleito
+por representar adequadamente as diferenças entre as probabilidades de escolha das
+ações apesar da pequena quantidade de reforços. Para o decaimento da temperatura
+também foram realizadas simulações. Como a quantidade de interações é pequena, o
+decaimento da temperatura afeta pouco as tomadas de decisões nesta implementação,
+tendo sido definido o valor de 3%
+5 Reforço é um termo da Psicologia Comportamental, utilizado na técnica de contingência de reforço que
+é considerado um controle eficaz do comportamento [Skinner 1972].
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                                 556
+
+
+
+
+5. Avaliação Empírica e Resultados
+No total, 124 alunos foram submetidos às navegações livre e inteligente. Destes, 26 não
+concluíram todas as etapas do curso, nove concluíram e apresentaram erro durante a
+coleta e 89 concluíram corretamente.
+O ganho normalizado obtido em [Melo et al. 2005] e [Meireles et al. 2005] é,
+respectivamente,                                                                                 9,32%  e  9,78%  superiores  ao  ganho  do  sistema  proposto  neste
+trabalho. Porém, a diferença entre ganhos normalizados do STI e do STL foi bem maior
+no sistema proposto, respectivamente, 62,92% e 62,03%.
+Conforme pode ser observado na Tabela 1, no sistema proposto, as notas iniciais
+no STI e no STL estão muito próximas, respaldando a suposição de que os grupos que
+realizaram  STI  e  STL  estavam,  antes  da  experiência  de  tutoria,  em  nível  de
+conhecimento semelhante. Para confirmar tal suposição, o teste t-Student foi escolhido,
+resultando no valor observado (calculado) de -0,49, claramente não significativo pois,
+com nível de significância de  5%, a zona crítica bicaudal tem valores significativos
+inferiores a -1,68 e superiores a +1,68. Uma vez constatada a semelhança entre os dois
+grupos, podemos aplicar testes inferenciais para determinar se, após a tutoria, houve
+diferenças significativas.
+Quanto  ao  ganho  normalizado,  a  estatística  t  apontou  um  valor  observado
+significativo de 2,85, tendo em vista que a zona crítica unilateral à direita inicia em 1,68
+(considerando nível de significância de  5%). Assim, podemos inferir que o sistema
+proposto realmente causou a diferença, pois atua não apenas na amostra coletada, mas
+em toda a população. Tal fato fortalece a hipótese básica inicial, que conjecturou um
+melhor  desempenho  dos  alunos  guiados  inteligentemente                                       (com  Aprendizado  por
+Reforço).
+Tabela 1. Análise descritiva dos dados
+Grandeza                                                                                         Situação                                                               Média   Desvio
+                                                                                                 STI                                                                    5,65    1,32
+Nota Inicial
+                                                                                                 STL                                                                    5,83    1,43
+                                                                                                 STI                                                                    8,04    1,43
+Nota Final
+                                                                                                 STL                                                                    7,01    1,65
+                                                                                                 STI                                                                    52,61   34,16
+Ganho
+Normalizado                                                                                      STL                                                                    23,32   41,63
+Quanto ao tamanho do conteúdo estudado pelo aluno, baseando-se no número de
+contextos visitados e, novamente, no emprego do teste t-Student, o valor obtido de t
+observado  igual  a  -20,19  é  claramente  significativo,  pois  a  zona  crítica  unilateral
+esquerda inicia em -1,74 quando o nível de significância de 5% é usado. Entretanto,
+quando  ao  tempo  consumido  do  aluno,  descontados  os  tempos  empregados  nas
+avaliações  iniciais  e  finais,  a  hipótese  nula                                              (que  supõe  não  existirem  diferenças
+significativas) não pode ser rejeitada uma vez que o valor observado da estatística t (-
+0,69) ficou fora da zona crítica (cujo inicio era -1,68). Assim, das hipóteses secundárias,
+apenas a hipótese de menos conteúdo estudado foi corroborada, sugerindo que o aluno
+gastou mais tempo em cada nível.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                         557
+
+
+
+
+6. Conclusão
+O  presente  trabalho  apresentou  o  desenvolvimento                                     (concepção,  implementação  e
+avaliação empírica) de um inédito Sistema Tutor Inteligente baseado em Aprendizado
+por Reforço. Quando comparado a modelos baseados em longos treinamentos de redes
+multilayer perceptrons e estruturados sobre complexas teorias de Perfil Psicológico
+(Psicologia da Personalidade) [Melo et al. 2005] e Estilo de Aprendizagem (Educação)
+[Meireles et al. 2005], o sistema proposto apresentou desempenho equivalente quanto ao
+ganho normalizado, mesmo sem recorrer aos longos questionários iniciais para levantar
+características pessoais, superando-os quando se analisou a diferença entre ganhos do
+sistema proposto e da navegação livre.
+No  sistema  proposto,  o  aluno,  além  de  navegar  por  conteúdos  de  modo
+individualizado e sensível ao seu desempenho, foi exposto a significativamente menos
+contextos, consumindo tempos semelhantes. Assim, podemos inferir que a adaptação ao
+aluno atraiu mais sua atenção, conduzindo-o ao melhor rendimento  (mostrado pelo
+ganho normalizado).
+A viabilidade da aplicação de técnicas de Aprendizado por Reforço foi, portanto,
+comprovada com este trabalho. Trabalhos futuros pretendem avaliar o efeito do sistema
+desenvolvido em cursos mais longos, não somente em uma única sessão. Podemos ainda
+substituir o modelo da estratégia pedagógica por uma versão mais informativa ou ainda
+utilizar outras estratégias pedagógicas. Com outros modelos ou estratégias, é possível
+também avaliar a aplicação de outras técnicas de RL, reutilizando toda a estrutura
+modular do sistema.
+7. Referências
+Baldoni, M., Baroglio, C. and Patti, V. (2004). Web-Based Adaptative Tutoring: An
+Approach Based on Logic Agents and Reasoning about Actions, Università degli
+Studi di Torino, Itália.
+Bennane, A. (2002). An approach of reinforcement learning use in tutoring systems,
+Lecture Notes in Computer Science 2363/2002: 775-782.
+Bolzan, W. and Giraffa, L. M. M. (2002). Estudo comparativo sobre Sistemas Tutores
+Inteligentes  Multiagentes,  Technical  Report  Series,  Number                           024.  Faculdade  de
+Informática, PUCRS, Brasil.
+Cardoso,  J.,  Postal,  A.,  Pozzebon,  E.,  Frigo,  L.  B.  and  Bittencourt,  G.        (2004).
+MATHTUTOR:  A  Multi-Agent  Intelligent  Tutoring  System,  IAIA-IFIP                     2004
+International Conference on Artificial Intelligence Applications and Innovations, IFIP
+World Computer Congress, Toulouse - França..
+Dayan, P. and Hinton, G. (1993). Feudal reinforcement learning, Advances in Neural
+Information Processing Systems 5: 71-278.
+Frigo, L. B., Pozzebon, E. and Bittencourt, G. (2004). O Papel dos Agentes Inteligentes
+nos Sistemas Tutores Inteligentes, World Congress on Engineering and Technology
+Education, São Paulo, Brasil.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                  558
+
+
+
+
+Graig, S. D., Hu, X., Gholson, B., Marks, W. and Graesser, A. C. (2007). The Tutoring
+Research Group. Department of Psychology, The University of Memphis, TN 38152,
+EUA, Disponível em http://psyc.memphis.edu/trg/trg.htm.
+Guelpeli, M. V. C., Ribeiro, C. H. C. and Omar, N. (2003). Utilização de Aprendizado
+por Reforço para Modelagem Autônoma de Aprendiz em um Tutor Inteligente, XIV
+Simpósio Brasileiro de Informática na Educação - UFRJ, Brasil.
+Haykin, S. (1998). Neural Networks: A Comprehensive Foundation, Prentice Hall PTR,
+Upper Saddle River, NJ, EUA.
+Kaelbling, L. P., Littman, M. L. and A, W. M. (1996). Reinforcemente Learning: A
+Survey, Journal of Artificial Intelligence Research.
+Lakdawala, V. K., Zahorian, S. A., González, O. R., Kumar, H. A. and Jr, J. F. L.
+(2002). An instrument for assessing knowledge gain in a first course in circuit theory,
+Department  of  Electrical  and  Computer  Engineering.  Old  Dominion  University,
+EUA.
+Martins, W., Melo, F. R., Meireles, V. and Nalini, L. E. G. (2004). A novel hybrid
+intelligent tutoring system and its use of psychological profiles and learning styles,
+Lecture Notes on Computer Science 3220: 830-832.
+Meireles,  V.,  Martins,  W.,  Melo,  F.  R.  and  Nalini,  L.  E.  G.                       (2005).  Análise  de
+funcionalidade da rede neural artificial em sistemas tutores inteligentes baseados em
+estilos de aprendizagem, Anais do VII Congresso Brasileiro de Redes Neurais, Natal,
+RN, Brasil pp. 452-457.
+Melo, F. R., Martins, W., Meireles, V. and Nalini, L. E. G. (2005). Rede neural artificial
+em  sistemas  tutores  inteligentes  híbridos  baseados  em  tipologia  psicológica          -
+implementação e análise empírica, Anais do VII Congresso Brasileiro de Redes
+Neurais, Natal, RN, Brasil pp. 411-416.
+Mitchell, T. M. (1997). Machine Learning, McGraw-Hill, EUA.
+Peres, F. and Meira, L. (2003). Avaliação de software educacional centrado no diálogo:
+interface, colaboração e conceitos científicos, Universidade Federal de Pernambuco,
+Departamento de Psicologia, Brasil.
+Prentzas,  J.  and  Hatzilygeroudis,  I.                                                     (2002).  Intelligente  educational  systems  for
+individualized   learning,   Workshop   on   Computer   Science   and   Information
+Technologies CSIT2002, Patras, Grécia .
+Russell,  S.  J.  and  Norvig,  P.                                                           (1995).  Artificial  intelligence:  a  modern  approach,
+Prentice-Hall, Inc., Upper Saddle River, NJ, EUA.
+Skinner, B. F. (1972). Tecnologia do ensino, Editora da Universidade de São Paulo. São
+Paulo, Brasil.
+Sutton, R. S. and Barto, A. G. (1998). Reinforcement learning: an introduction, MIT
+Press, Cambridge, Massachusetts, EUA.
+Sykes, E. R. and Franek, F. (2004). A Prototype for an Intelligent Tutoring System for
+Students Learning to Program in Java, IEEE International Conference on Advanced
+Learning Technologies, Joensuu, Finlândia.
+Simpósio Brasileiro de Informática na Educação - SBIE - Mackenzie - 2007                     559
+
+
+
+
+

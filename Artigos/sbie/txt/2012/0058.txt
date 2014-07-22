@@ -1,0 +1,446 @@
+﻿Rede de Ontologias: apoio semântico a linha de produtos
+de objetos de aprendizagem
+Fernanda Campos1, José Maria N. David1, Regina Braga1,
+Thiago Nery1, Neide Santos2
+1Núcleo de Pesquisa em Engenharia do Conhecimento (NEnC)
+Programa de Pós-graduação em Ciência da Computação
+Universidade Federal de Juiz de Fora - UFJF
+2Mestrado em Ciências Computacionais.
+Universidade do Estado do Rio de Janeiro - UERJ
+{fernanda.campos,  jose.david,  regina.braga,thiago.nery}@ufjf.edu.br,
+neide@ime.uerj.br
+Abstract. The complexity of teaching and learning processes demand a wider
+support  of  learning  objects                                                            (LO)  to  fulfill  both  students  and  teachers’
+requirements. This paper aims to describe a proposal to support, through
+reuse, learning objects construction in order to improve teaching and learning
+processes composition. A Learning Objects infrastructure, based on product
+line approach, named BROAD-PL, was built. Associated to this infrastructure,
+an ontology network was developed in order to semantically support searching
+and recover, as well as LO reuse. In order to evaluate the proposed solution
+an experimental study was carried out in the context of hypermedia tutorials
+construction to support Biology teaching.
+Resumo. A complexidade dos processos de ensino e aprendizagem demanda
+um suporte mais amplo de objetos de aprendizagem  (OA) para atender às
+necessidades dos professores e alunos. Este artigo tem como objetivo apoiar,
+através do reuso, a construção de objetos de aprendizagem voltados para a
+composição  de  processos  de  ensino  e  aprendizagem.  Para  tanto,  uma
+infraestrutura  baseada  na  abordagem  de  Linha  de  Produtos  de  OAs,
+denominada BROAD-PL, foi construída.   Associada a esta infraestrutura, uma
+rede de ontologias foi desenvolvida para oferecer apoio semântico à busca e
+recuperação, bem como ao reuso de OAs. Para avaliar a solução proposta um
+estudo  experimental  foi  conduzido  no  contexto  de  construção  de  tutoriais
+hipermídia para apoiar o ensino de Biologia.
+1. Introdução
+A reutilização é um conceito chave para Objetos de Aprendizagem (OA). Um OA deve
+ser granular, isto é, deve ser pequeno ou composto de pequenas partes. Quanto maior o
+grau de granularidade de um OA, maior será a sua possibilidade de reuso uma vez que
+um OA pode conter várias partes que podem ser extraídas formando vários outros OA
+granulares [Burbaite e Stuikys, 2011].  No  contexto  de  desenvolvimento  de  software
+para a área de Educação é importante a criação de mecanismos que agilizem o processo
+de construção de OAs reutilizáveis e que facilitem a sua integração e utilização em
+repositórios. O uso de abordagens de desenvolvimento de software tais como Linha de
+Produtos de Software (LPS) pode oferecer um suporte sistemático para a reutilização de
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+OAs. Os benefícios proporcionados são: maior agilidade e menor custo na reutilização e
+criação [Clements e Northrop, 2001][Silva et al., 2012].
+As  ontologias  vêm  sendo  apontadas  como  solução  para  a  semântica  de
+aplicações   computacionais   na   área   de   Educação,   prioritariamente   com   OAs,
+potencializando seu uso a partir de repositórios, na busca e cadastro, e também na
+composição  destes OAs para a formação de conteúdos educacionais. Em relação a
+ontologias  de  objetos  de  aprendizagem                                                        [Knight  et  al.,                            2006]  [Silva  et  al.,                                                  2012]
+[Cantelle, 2009] [Campos et al., 2012] a literatura converge para uma definição de itens
+que compõem disciplinas ou cursos, tipos de OA, mídias e padrões de metadados.
+Por outro lado, considerando o contexto de LPS, termos ontológicos podem ser
+mapeados para características (features) constantes do modelo de variabilidades da LPS,
+de forma a facilitar a geração de novos OAs. Algumas dessas features são mandatórias,
+considerando o contexto de objetos de aprendizagem, como autoria, título, idioma e
+versão,  mesmo  que  muitas  vezes  implícitas,  outras  são  alternativas,  que  podem
+representar  as  características  dos  diferentes  tipos  de  OA  como  exercício  e  prática,
+tutorial hipermídia, jogos, por exemplo, e outras características são opcionais. Nesse
+contexto, uma solução viável para a semântica das aplicações educacionais é a criação
+de  redes  de  ontologias  que  permitam  a  criação  de  ontologias  necessárias  a  uma
+aplicação e domínios específicos, mas também o reuso de ontologias existentes como o
+padrão OBAA  (2012), mapeados para o modelo de  features de forma a facilitar a
+geração de OAs a partir da LPS.
+O projeto BROAD busca a adoção de tecnologias como ontologias, serviços web
+semânticos, agentes e workflow para a construção de uma arquitetura para composição e
+sequenciamento de OA. O projeto avança em questões relativas a trabalhos anteriores
+como em arquiteturas como CelOWS [Matos, et al., 2009], SASAgent [Mendes et al.,
+2011], ComposerScience [Silva et al., 2011], BROAD [Braga et al., 2011] [Campos et
+al.,                                                                                             2012],  em  repositórios  semânticos  como                                                                            [Santos  et  al.,   2008]  e  objetos  de
+                                                                                                                                              aprendizagem [Campos et al., 2011] [Souza et al., 2010].  Considerando                                               que   a
+composição e sequenciamento de OA é uma atividade chave para o compartilhamento e
+reuso de conteúdos educacionais [Damaševičius and Štuikys, 2009], o objetivo deste
+artigo é relacionar o conceito de LPS para viabilizar o reuso sistemático de OAs. O
+enfoque do ponto de vista pedagógico se baseia na ontologia de OA (características,
+objetivos  e  estratégias  educacionais),  nos  metadados  educacionais  e  na  visão  do
+professor, e do ponto de vista tecnológico se baseia em tipos de OA, as mídias, entre
+outros. Como essa variabilidade de dados e contextos permite a personalização dos
+objetos de aprendizagem propomos uma arquitetura para LPS apoiada semanticamente
+em uma rede de ontologias, através do mapeamento dos elementos ontológicos (termos,
+restrições e relacionamentos) para as features especificadas na LPS. Adicionalmente um
+estudo experimental inicial foi realizado, com a intensão de validar e refinar a proposta,
+demonstrando a viabilidade da criação de objetos pelo processo de reutilização.
+Esse artigo está assim organizado: a primeira seção do artigo, após a introdução,
+apresenta  os  trabalhos  relacionados  ao  tema.  Na  sessão                                    3  a  rede  de  ontologias
+BROADNet  é  descrita.  Na  sessão  4  a  BROAD-PL  -  Infraestrutura  Baseada  em
+Ontologias e Linha de Produtos de Objetos de Aprendizagem é apresentada. A sessão 5
+
+
+
+
+relata o estudo experimental realizado para validar a proposta com uso da ferramenta
+EasyT. Finalmente, o artigo apresenta as conclusões e sugestões para trabalhos futuros.
+2. Trabalhos Relacionados
+Propostas para utilizar a abordagem de Linhas de Produtos de Software  (LPS) e o
+paradigma de Orientação a Serviços (OS) têm sido discutidas na literatura [Lee et al.
+2008] [Medeiros et al 2010]. Os resultados apresentados evidenciam que o reuso e a
+composição de componentes podem ser potencializados. Considerando-se que objetos
+de aprendizagem podem ser tratados como componentes de software, cabe investigar a
+utilização da combinação de LPS e OS no sequenciamento e composição de objetos de
+aprendizagem. Burbaite e Stuikys (2011) propõem a utilização do modelo de features
+para analisar e especificar objetos de aprendizagem. Através do modelo proposto, um
+conceito de um OA é associado a uma feature que poderá apoiar, posteriormente, a
+criação  de  novas  instâncias  de  OAs.  Entretanto,  os  autores  não  abordam  aspectos
+específicos da Linha de Produtos relacionados, por exemplo, à busca e à recuperação de
+OAs para compor as sequências. Além disso, a abordagem proposta neste artigo associa
+features mandatórias e alternativas para a geração e/ou reuso de OA, da forma como é
+proposto originalmente em LPS, e não associa uma única feature a um OA como é
+proposto no trabalho de Burbaite e Suiks (2011). Em [Damaševičius and Štuikys, 2009]
+o  modelo  de  features  é  utilizado  para  a  implementação  das  sequências  de  OAs
+utilizando o conceito de Objetos de Aprendizagem Generativos e meta-programação.
+Entretanto, não consideram diferentes contextos semânticos (redes de ontologias) para o
+desenvolvimento e reuso de OAs. A diferença dos trabalhos existentes em relação à
+proposta discutida neste artigo está na utilização de uma rede de ontologias para apoiar
+busca e a recuperação de objetos de aprendizagem, bem como na geração de objetos
+através da associação desta rede de ontologias e o modelo de feature da LPS.
+3. Rede de Ontologias BROADNet
+Quase quinze anos se passaram e apesar de vários usos e benefícios, as ontologias ainda
+apresentam  alguns  problemas,  dentre  eles  destaca-se  a  escolha  das  Ontologias
+adequadas  e  as  metodologias  para  criação  e  evolução  das  mesmas.  Em  relação  à
+adequação das ontologias e a necesidade de alinhamento das mesmas com ontologias já
+existentes no mesmo domínio ou subdomínios, as redes de ontologias [Pernas et al.,
+2011] podem significar uma solução interessante. A ligação de diferentes ontologias em
+rede, através de técnicas que garantam a interoperabilidade entre elas pode significar a
+inclusão de conteúdos já existentes ou complementares para ampliação da semântica nas
+aplicações computacionais.
+Para [dAquin et al. 2006] uma rede de ontologias é uma coleção de ontologias
+relacionadas  entre  si  através  de  uma  variedade  de  relacionamentos,  tais  como:
+alinhamento, modularização, versionamento e dependência. Segundo [Zhu X.-J., 2007]
+por  especificar  a  conceituação  de  um  domínio  específico  em  termos  de  conceitos,
+atributos e relacionamentos as ontologias podem desempenhar um papel crucial para
+permitir   a   representação,   processamento,   compartilhamento   e   reutilização   de
+conhecimento  entre  aplicações  de  e-learning  baseadas  na  Web.  Neste  contexto  é
+necessário  distinguir  entre  três  tipos  de  conhecimento,  e  consequentemente  de
+ontologias                                                                                   [Antoniou  e  Harmelen,  2008]:  (i)  Ontologia  de  conteúdo:  descreve  os
+
+
+
+
+conceitos  básicos  do  domínio  em  que  a  aprendizagem  ocorre;                            (ii)  Ontologia
+pedagógica: aborda questões pedagógicas, como a classificação, por exemplo, de um
+material em palestra, tutorial, exemplo, exercício, solução e assim por diante; e  (iii)
+Ontologia estrutural: define a estrutura lógica dos materiais de educação e geralmente
+inclui relações hierárquicas e de navegação como, previous, next, hasPart, isPartOf,
+requires, e isBasedOn.
+A  rede  de  ontologias  BROADNet  de  objetos  de  aprendizagem,  é  usada  no
+suporte semântico a aplicações. Para o desenvolvimento das ontologias foi usada a
+abordagem QDAontology  [Palazzi et al.,  2010] adaptada para os novos cenários de
+desenvolvimento  da  rede  de  ontologias:  reuso  do  conhecimento,  incorporação  de
+aspectos colaborativos no processo de desenvolvimento e evolução dinâmica das redes
+em ambientes distribuídos. Dessa forma as principais características do processo de
+desenvolvimento  da  rede  de  ontologias  BROADNet  são:                                     (i)  a  ontologia  de  topo
+(knowledge ontology) foi reutilizada a partir de uma ontologia já existente [Campos et
+al.                                                                                           2012];  (ii)  as  ontologias  de  domínio  foram  desenvolvidas  por  uma  abordagem
+sistemática ressaltando a etapa de alinhamento com outras do mesmo domínio [Palazzi
+et al., 2010]; (iii) reuso e reengenharia de recursos ontológicos para a construção da
+ontologia  de  metadados,  incorporando  modelos  já  existentes  e  disponíveis  como
+[OBAA, 2012]; e (iv) reestruturação de recursos ontológicos através da modularização,
+otimização, extensão e especialização.
+Figura 1. Classificação das principais ontologias da rede BROADNet
+Em termos de classificação geral  [Guarino,  1997 in Palazzi et al.,  2010] as
+ontologias que compõem a rede do projeto BROAD podem assim ser classificadas
+(Figura 1): objetos de aprendizagem e metadados são ontologias gerais, a ontologia Celo
+Human  Disease  (usada  para  ilustrar  esse  artigo)  é  uma  ontologia  de  domínio  e  a
+ontologia de conhecimento é de topo. Considerando a classificação de ontologias para
+ambientes  de  e-learning                                                                     [Antoniou  e  Harmelen,                                                                2008],  elas  podem  assim  ser
+classificadas:  objetos  de  aprendizagem  e  metadados  são  ontologias  pedagógicas,
+ontologia  Celo  Human  Disease  é  uma  ontologia  de  conteúdo  e  a  ontologia  de
+conhecimento é estrutural, pois ela define a navegação hierárquica.
+
+
+
+
+No contexto de uma LPS de OA, o uso de uma rede de ontologias é de grande
+importância uma vez que esta rede auxilia semanticamente na escolha das características
+necessárias para o desenvolvimento/reuso de um OA. É importante ressaltar que dada a
+diversidade semântica da rede de ontologias não é possível representá-la utilizando-se
+somente  o  modelo  de  features  (características)  da  LPS.  Desta  forma,  este  trabalho
+propõe a utilização do modelo de features em conjunto com a rede de ontologias para
+auxiliar no desenvolvimento/reuso de OAs.
+4. BROAD-PL: Infraestrutura Baseada em Ontologias e Linha de Produtos
+de Objetos de Aprendizagem
+A   localização   e   recuperação   de   OAs   exigem   que   eles   tenham   sido
+identificados/classificados  a  partir  de  um  modelo  robusto  de  metadados,  capaz  de
+descrevê-lo de forma completa e correta, com o objetivo de facilitar seu uso. Ocorre que
+há muitos padrões disponíveis, mas eles quase sempre são difíceis de serem adotados,
+além  de  serem  extensos,  complexos  e  muitas  vezes  negligenciarem  os  aspectos
+educacionais envolvidos no OA. O Projeto BROAD - Busca e Recuperação de Objetos
+de Aprendizado a Distância, trabalha com o desenvolvimento de infraestruturas para a
+gerência e composição de OAs distribuídos [Campos et al., 2011].
+A infraestrutura BROAD-WP é uma extensão a infraestrutura BROAD através
+da utilização de diferentes objetos de aprendizagem de acordo com as características do
+aluno. As especificações do padrão de metadados BROAD auxiliam o sequenciamento
+das atividades de aprendizagem e permitem identificar as preferências e características
+de  um  estudante.  A  infraestrutura  BROAD-WP  propõe  a  especificação  de  uma
+arquitetura para geração de workflow de conteúdos educacionais de forma a personalizar
+a oferta desses módulos. A personalização é feita pela geração de um workflow, que
+considera o conteúdo a ser estudado, o perfil do estudante e os diferentes artefatos
+educacionais disponíveis no repositório. Para a definição do workflow a proposta se
+apoia na rede de ontologias de objetos de aprendizagem, a qual busca promover a
+semântica do ambiente [Campos et al., 2011].
+A abordagem utilizada na BROAD-WP contempla a produção de objetos de
+aprendizagem no ciclo de vida da engenharia de software, com as complexidades para o
+gerenciamento das interdependências entre os artefatos. À medida que a quantidade de
+objetos aumenta torna-se mais difícil utilizá-los em domínios de aplicação específicos.
+De uma forma geral, esta abordagem limita a produção de OA, considerando-se as
+variabilidades que estão associadas aos diferentes contextos e aos requisitos específicos
+dos usuários. Nesta pesquisa, elementos de contexto estão relacionados à descrição do
+conhecimento  sobre  as  circunstâncias  nas  quais  as  atividades  educacionais  e  seus
+eventos ocorrem (objetivos, estratégias, recursos tecnológicos, entre outros), o perfil do
+estudante  em  termos  do  conhecimento  prévio,  estilo  preferido  de  aprendizagem,
+restrições físicas ou culturais e outros tipos de informação.
+Com o objetivo de potencializar o reúso de OA uma infraestrutura, denominada
+BROAD-PL (Figura 2), foi projetada buscando-se estender a infraestrutura BROAD-WP
+através  da  abordagem  de  Linha  de  Produtos  de  Software  e  da  utilização  de  uma
+arquitetura  orientada  a  serviços.  Considerando-se  os  mecanismos  que  apoiam  a
+construção  de  OA  e  que  facilitam  a  integração  com  Ambientes  Virtuais  de
+
+
+
+
+Aprendizagem,  a  abordagem  de  LPS  pode  oferecer  um  suporte  sistemático  para  a
+reutilização a partir das características e preferências do aluno.
+Figura 2. Visão Geral Arquitetura BROAD-PL (estendido de [Santos et al. 2012])
+De acordo com a Figura  2, o módulo Gerente de Processos e Composição é
+responsável pela criação de sequências/composição de objetos de aprendizagem para
+atender às necessidades específicas dos alunos. Neste contexto, diferentes processos
+poderão  ser  criados  e  deverão  ser  gerenciados.  Este  gerente  foi  desenvolvido  no
+contexto  do  BROAD-WP.  No  entanto,  sua  utilização  é  importante  no  contexto  do
+BROAD-PL uma vez que a partir da geração/reuso dos OAs, o passo seguinte é seu
+sequenciamento ou composição dos OAs de acordo com um dado conteúdo educacional.
+O  módulo  Gerente  de  Variabilidades  trata  da  análise  das  features  que
+diferenciam os objetos de aprendizagem em contextos específicos. Esta análise auxilia o
+projeto de OAs identificando “quando” e “como” as features são associadas ao objeto
+para atender às necessidades dos alunos  [Lee e Kang,  2004]. Como resultado, esses
+objetos poderão compor os processos para a infraestrutura BROAD-PL. Este gerente é
+responsável pela associação da rede de ontologias com o modelo de features. Esta
+associação é de suma importância, uma vez que a semântica de conteúdos específicos e
+os  diferentes  contextos  semânticos  do  OAs  somente  estão  detalhados  na  rede  de
+ontologias. O modelo de features possui uma semântica específica que é apresentar as
+variabilidades possíveis no domínio. Unindo as duas visões, ou seja, a variabilidade
+possível no domínio, dada pelo modelo de features, e a semântica dos conteúdos e
+contextos dos OAs, dada pela rede de ontologias, o desenvolvimento e/ou o reuso dos
+OAs poderão ser facilitados.
+O núcleo de artefatos, representado na Figura 2 pela camada backend, contém
+não apenas os objetos de aprendizagem e os seus metadados, mas também fornece as
+direções para identificá-los e derivar outros artefatos a partir das variabilidades, das
+redes de ontologias e das necessidades específicas dos usuários. O módulo Gerente de
+Armazenamento é o responsável pela gerência de versões dos objetos, bem como das
+configurações a eles associadas. Adicionalmente, a rede de ontologias oferece o suporte
+para as atividades de busca e recuperação de objetos no núcleo de artefatos. Cabe ao
+módulo Gerente de Ontologias realizar as buscas na rede de ontologias disponível. Estas
+atividades contam com o auxílio do módulo Gerente de Variabilidades o qual associa as
+features  de  cada  OA  e  as  informações  a  eles  associadas,  por  exemplo,  “como”  e
+“quando” elas poderão ser aplicadas ao contexto que está sendo trabalhado. Este módulo
+interage com o Gerente de Armazenamento com o objetivo de recuperar as informações
+associadas, por exemplo, ao contexto (tecnológico) de utilização do objeto.
+
+
+
+
+A camada Cliente é responsável pela interação com os usuários e implementa o
+padrão Facade. Seu propósito é fornecer uma interface única com os clientes do sistema,
+de forma que eles não tenham acesso à estrutura interna do BROAD-PL.
+A partir de um modelo de processo (educacional), do modelo de domínio e dos
+atributos  de  qualidade  associados  a  este  processo,  objetos  serão  selecionados  ou
+compostos  para  atender  às  demandas  específicas  dos  usuários.  Portanto,  existirão
+relações entre os processos, os modelos e os objetos que deverão ser persistidas no
+repositório da linha de produto.
+5. Estudo Experimental
+Para avaliar e refinar a arquitetura do BROAD-PL, através do processo de Wolhin
+(2000),  um  estudo  experimental  inicial  foi  realizado,  considerando-se  as  seguintes
+etapas: definição, planejamento, execução do estudo e análise dos resultados.
+Definição: essa etapa determina os fundamentos da experimentação e da condução do
+estudo.  O  primeiro  passo  para  a  definição  de  uma  linha  de  produtos  de  software
+educacional foi a criação de uma ferramenta Easy Tutorial E-learning - EasyT, integrada
+a infraestrutura BROAD-PL,  [Santos et al.,  2012]  -   baseada em mídias, contexto e
+competências, utilizada na etapa inicial   da automação do processo de criação de um OA
+a partir de outros objetos de aprendizagem, conforme interesses do aluno e de acordo
+com o plano de conteúdo especificado pelo professor. As questões de pesquisa que
+definiram o estudo foram:
+- É possível a criação de conteúdos educacionais personalizados, através da associação do modelo
+do estudante e do seu contexto?
+- Um modelo de OA hipermídia pode ser representado por conteúdos em diferentes mídias?
+- É possivel gerar composição semiautomática ou automática de conteúdos educacionais hipermídia?
+- Os professores são responsáveis pela organização de situações de aprendizagem que demandem a
+recomendação personalizada de conteúdos?
+-  O  que  LPS,  considerando  a  variabilidade  e  redes  de  ontologias,  contribui  para  o  reuso  e
+desenvolvimento dos objetos de aprendizagem?
+Planejamento: a etapa de planejamento consta de como o estudo será conduzido. Dessa
+forma foi definida a criação de OA usando a EasyT [Santos et al., 2012] no domínio da
+Biologia, no contexto do ensino superior.   Para modelar este objeto foi utilizado um
+modelo de features inicial (Figura 3). Conforme o diagrama de features, cada página
+possui a feature  <Metadados de Página>, a qual não é mandatória. Páginas também
+podem  conter  <Recursos>  que  poderão  conter  as  features  <Imagem>,<Áudio>  ou
+<Video>. Desta forma poderiam ser selecionadas diferentes OAs em diferentes mídias
+para compor o objeto de conteúdo sobre a Malária.  A   feature                                             <Metadados   EasyT>
+indica que a ferramenta EasyT deve conter metadados. Apesar do índice, indicado pela
+feature <Índice>, ser gerado automaticamente pela EasyT ele é mandatório.
+Ví
+Figure 3. Diagrama de Features do Easy Tutorial E-learning [Santos et al., 2012]
+
+
+
+
+Execução: nessa etapa o estudo experimental é realizado com o propósito de avaliar a
+ferrramenta EasyT. Para tanto, um tutorial foi criado a partir dos objetos disponíveis no
+repositório BROAD e na Web, seguindo a semântica definida na rede de ontologias.   A
+figura 4 apresenta a criação do OA Malária, do tipo tutorial hipermídia. É importante
+ressaltar que na execução, a ligação do modelo de features com a rede de ontologias foi
+utilizada,  mesmo  que  ainda  de  forma  manual,  realizada  pelos  desenvolvedores  do
+tutorial.
+Figura 4 - Objeto de aprendizagem Malária criado com a ferramenta EasyT e sua relação
+com a rede de ontologias BROADNet
+Análise qualitativa e resultados: apesar deste estudo ainda ser inicial, foram realizados
+outros experimentos de forma ad-hoc. Considerando este estudo inicial e resultados
+parciais dos outros podemos considerar que é possível criar conteúdos educacionais
+personalizados através de templates que facilitem o seu uso. O modelo do estudante e
+diferentes contextos podem ser contemplados se a ferramenta for flexível para tal. Os
+objetos de aprendizagem devem ser compostos por diferentes mídias e essa diversidade
+pode atender a diferentes perfis e contextos. Mesmo partindo de um único modelo de
+OA a criação semiautomática é viável e poderá colaborar para o reuso dos OA. As
+características pedagógicas devem ficar a cargo dos professores que irão definir as
+situações de aprendizagem.
+Pelo uso da ferramenta EasyT na criação do objeto de aprendizagem Malária, a
+estrutura permite a composição de outros OAs considerando: aderência ao conjunto de
+características definidas, ao perfil do aluno e à pouca necessidade de conhecimentos
+avançados  prévios  de  computação  para  criar  tutoriais.  Esse  template  atende  a
+heterogenidade  de  domínios  de  conhecimento  e  a  evolução  do  objeto  pode  ser
+facilmente implementada e os metadados atualizados.
+Considerando as características (features) mandatórias, a variabilidade permitida
+pela linha de produto proposta e a semântica da rede de ontologias, o desenvolvedor de
+
+
+
+
+objetos de aprendizagem tem a possibilidade de criar novos objetos a partir do núcleo
+comum (features obrigatórias do modelo) e selecionando as variações necessárias para
+cada novo OA, sempre com o suporte da rede de ontologias. O reuso de OA também é
+facilitado, a partir da seleção das características (features) mandatórias para o OA a ser
+selecionado dentre os OAs previamente armazenados no repositório. Cabe ressaltar que
+este é um estudo inicial e desta forma foi considerado um único tipo de OA, ou seja,
+tutorial hipermídia com suas variações conforme pode ser visto na figura 3.
+6. Conclusões
+O presente projeto é um trabalho em andamento, mas alguns passos importantes já
+foram finalizados. Essa pesquisa contribuirá para ampliar a utilização de objetos de
+aprendizagem através de uma sistematização do processo de reutilização e composição.
+Posteriormente a convergência dos resultados obtidos poderá acelerar a preparação e
+composição  de  cursos  à  distância.  Esperamos  especificar,  projetar,  implementar  e
+avaliar uma linha de produtos de software para objetos de aprendizagem. Queremos
+obter um ambiente para a realização de experimentos realísticos que possam avaliar a
+infraestrutura BROAD-PL, potencializar a construção de objetos de aprendizagem e
+depois  reutilizá-los  para  composição  de  conteúdos  contextualizados.  Os  resultados
+alcançados com o uso da ferramenta EasyT mostraram-se promissores à possibilidade de
+produção e reutilização em larga escala dos tutoriais hipermídias, para as diversas áreas
+do conhecimento e sua personalização para diferentes perfis de usuários. Entretanto, é
+necessária a definição das features mandatórias que contemplem diferentes tipos de
+objetos de aprendizagem. Reduzir o tempo de desenvolvimento e ampliar a qualidade
+dos OA é uma tarefa complexa. O sucesso da ampliação do uso e reuso de OAs apoia-se
+no sequenciamento e composição desses objetos para atingir objetivos educacionais
+explícitos. A linha de produto de software pode ser uma solução viável, apesar do
+escopo amplo da área.   Tratamos esse problema com a proposta de uma arquitetura para
+uma linha de produto de objeto de aprendizagem.
+Agradecimentos: Ao CNPq, FAPEMIG e UFJF pelo apoio à pesquisa.
+Referências Bibliográficas
+Antoniou, G., Harmelen, F. van. (2008) “A Semantic Web Primer”, Cambridge, MA, USA:
+MIT Press.
+Braga, R. et al.,  (2011)  “EFACTAGENT: Agent architecture for management, search and
+retrievel of e-learning artifacts”, Proceedings of the IADIS International Conference on
+WWW/Internet 2011, Rio de Janeiro, Brazil, pp.468-472.
+Burbaite, R., and Stuikys, V., (2011) “Analysis of Learning Object Research Using Feature-
+based Models”. In Information Technologies’ 2011, Proceedings of the 17th International
+Conference on Information and Software Technologies, Lithuania,  pp. 201-208.
+Campos, F. et alli. (2012) “BROAD Project: Semantic Search and Application of Learning
+Objects”, IEEE Technology and Engineering Education (ITEE), Dez., vol.7, n.3.
+Campos, F., Braga, R., Santos, N., Souza, A. C., Mattos, E. and Nery, T. (2011) “Applying
+Semantics for the Retrieval of Learning Objects on the Web”. In: 4th Brazilian Workshop on
+Semantic Web and Education in SBIE 2011, Aracaju, pp. 2374-2383.
+Cantelle, R. C. (2009) “Construindo ontologias a partir de recursos existentes: uma prova de
+conceito no domínio da educação”, Tese (Doutorado).
+Clements, P., Northrop, L. (2001) “Software product lines: practices and patterns”, Addison-
+Wesley, Boston.
+
+
+
+
+Damaševičius, R. and Štuikys, V., (2009) “Specification and Generation of Learning Object
+Sequences  for  E-learning  Using  Sequence  Feature  Diagrams  and  Metaprogramming
+Techniques” In: Advanced Learning Technologies, ICALT 2009. Ninth IEEE International
+Conference, July, pp. 572-576.
+dAquin, M., Gangemi, A., Haase, P. (2006) “Definition of Ontology Networks”, NeOn Book -
+NeOn Methodology in a Nutshell. [S.l.: s.n.].
+Knight, C., Gašević, D., Richards, G. (2006) “An Ontology-Based Framework for Bridging
+Learning                                                                                        Design                                        and                                                                                       Learning   Content”,   IEEE   Educational
+Technology & Society, Vol. 9, No. 1, pp. 23-37.
+Lee, J., Muthig, D., Naab, M. (2008) “An approach for developing service-oriented product
+lines,” In: SPLC’08: 12th International Software Product Line Conference. IEEE Computer
+Society, pp. 275-284.
+Lee,  J.,  Kang,  K.  C.                                                                        (2004)                                        “Feature  Binding  Analysis  for  Product  Line  Component
+                                                                                                                                              Development”, Software Product Family Engineering, Lecture Notes in Computer Science,
+pp. 266-276, Springer-Verlag.
+Matos, E. E. et al.  (2009)  “CelOWS: an ontology based framework for the provision of
+semantic web services related to biological models”, Journal of Biomedical Informatics, v.
+43, pp. 125-136.
+Medeiros, F. M., de Almeida, E. S., de Lemos Meira, S. R. (2010) “Designing a set of Service-
+Oriented Systems as a Software Product Line”,  2010 Fourth Brazilian Symposium on
+Software Components, Architectures and Reuse (SBCARS), pp. 70-79.
+Mendes, L. F. et al. (2011) SASAgent: An agent based architecture for search, retrieval and
+composition of scientific models, Computers in Biology and Medicine, v. 1, pp. 1-14.
+OBAA - Projeto de Objetos de Aprendizagem Baseado em Agentes (2012) Disponível em:
+http://www.portalobaa.org/. (Acesso 15/6/2012)
+Palazzi, D.; Matos, E. E. S.; Campos, F.; Braga, R  .  (2010)  “Development Approach for
+Modeling Biological Ontologies” In: Joint  5th International Workshop on Vocabularies,
+Ontologies and Rules for the Enterprise (VORTE), Vitória.
+Pernas, A. M., Diaz, A., Motz, R. (2011) “Situations and ontology networks to define adaptive
+actions  in  e-learning systems”,  Proceedings  of  the  IADIS International Conference on
+WWW/Internet 2011, Rio de Janeiro, Brazil, pp. 237-244.
+Santos, J., David, J. M. N., Campos, F., Braga, R. (2012) “EasyT: Apoiando a Construção de
+Objetos de Aprendizagem para uma Linha de Produtos de Software”, VII Confêrencia
+Latinoamericana de Objetos e Tecnologias de Aprendizagem, Guayaquil, pp. 1-11.
+Santos, N. et al. (2008) “Digital Libraries and Ontology”. In: Yin-Leng Theng; Schubert Foo;
+Dion Hoe-Lian Goh; Jin-Cheon Na.. (Org.). Handbook of Research on Digital Libraries:
+Design, Development, and Impact. Hershey, Pensilvania: Idea Group Inc, 2008, v. 1, pp.
+206-214.
+Silva, A. et al. (2012) “Uma Linha de Produto de Software baseada na Web Semântica para
+Sistemas Tutores Inteligentes”. RBIE V.20 N.1.
+Silva, L. et al. (2011) “Composer-Science: A semantic service based framework for workflow
+composition in e-Science projects”. Information Sciences, p. 186-208.
+Souza, A. C., et al., (2010) “Metadados Educacionais para Objetos de Aprendizagem: Projeto
+BROAD”.  In:  Congreso  Iberoamericano  de  Informática  Educativa,  Santiago.  Anais  do
+RIBIE 2010, v. 1. pp. 653-659.
+Wohlin,  C.,  et  alli.                                                                         (2000)                                        “Experimentation  in  Software  Engineering:  An  Introduction”.
+Springer.
+Zhu  X.-J.,  L.  X.-F.  W. G.                                                                   (2007)                                        “Ontology  based  sharing  and  services  in  e-learning
+                                                                                                                                              repository”, Proceedings  -  2007 IFIP International Conference on Network and Parallel
+                                                                                                Computing Workshops, NPC 2007, pp. 957-962.
+
+
+
+
+

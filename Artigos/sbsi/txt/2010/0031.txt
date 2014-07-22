@@ -1,0 +1,247 @@
+﻿Fragmentação de Data Warehouses para Carga de Dados
+Operacionais em Tempo Real
+Aluno: Diego Nolasco Souza Pereira
+Orientador: Asterio Tanaka
+Co-orientador: Leonardo Azevedo
+Programa de Pós-Graduação em Informática - Departamento de Informática Aplicada
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+Rio de Janeiro, RJ - Brasil
+{diego.pereira,tanaka,azevedo}@uniriotec.br
+Nível: Mestrado; Ingresso: Fevereiro de  2009; Conclusão: Dezembro de
+2010; Etapas Concluídas: definição da proposta; créditos necessários.
+Resumo. Este  artigo  apresenta  uma  proposta  de  arquitetura  de  Data
+Warehouse que busca resolver o desafio da carga de dados operacionais em
+tempo real introduzido  pelo ambiente de Business Intelligence  2.0  . Esta
+proposta se utiliza de técnicas de distribuição de bancos de dados, como
+fragmentação horizontal derivada e arquitetura shared nothing para criar
+fragmentos especialistas nos dados mais atuais e que sejam otimizados para a
+realização  de  inserções  contínuas,  permitindo  que  os  dados  do  Data
+Warehouse   sejam   atualizados   frequentemente   a   partir   das   fontes
+operacionais.
+Palavras-Chave:D ata Warehouse 2.0; Business Intelligence 2.0; Carga de
+dados em Tempo Real;
+1. Introdução
+(BI), termo criado no começo da década de 90 pelo Gartner Group
+[Watson e Wixon 2007], representa uma coleção de tecnologias, ferramentas e práticas
+de data warehousing, data mining, processamento analítico, geração de relatórios e
+visualizações  cujo  objetivo  é  de  coletar,  integrar,  limpar  e  minerar  informações
+empresariais  para  auxiliar  um  pequeno  número  de  especialistas  a  tomar  decisões
+estratégicas com base em dados históricos [Dayal 2009].
+
+
+
+
+Dados de diversas fontes operacionais, tais quais sistemas de processamento
+transacional  online                                                                       (Online   Transaction   Processing-  OLTP),  são  extraídos
+periodicamente através de ferramentas conhecidas como ETL (Extract, Transform and
+Load  - Extração, Transformação e Carga), onde são integrados e transformados para
+serem carregados em Data Warehouse(DW). Estes dados armazenados no DW são
+consultados por aplicações analíticas que facilitam a análise dos mesmos pelo analista
+responsável pela tomada de decisão.
+Data Warehousesão bancos de dados com características bastante peculiares.
+Por conter dados consolidados e históricos de diversas fontes operacionais, os DWs
+armazenam grandes volumes de dados  (gigabytes, terabytes ou mesmo petabytes de
+informações). Além disso, os requisitos das aplicações analíticas que os acessam são
+bastante distintos das aplicações transacionais, envolvendo consultas ad hoc complexas
+sobre grandes quantidades de registros e realizando diversas operações analíticas, tais
+como junções e agregações. [Chaudhuri 2001].
+Por sua popularização e pelo aparecimento de novos modelos de negócio, a
+arquitetura de BI necessita sofrer algumas evoluções, no que está sendo chamado hoje
+de BI 2.0. O acesso a dados operacionais o mais próximo possível do tempo real é uma
+das inovações apontadas para este cenário [Stodder 2007].
+O acesso a dados em tempo real refere-se às informações operacionais estarem
+disponíveis para análise pelas ferramentas de BI o quanto antes, e não apenas no fim do
+dia, como ocorre no cenário tradicional onde a atualização do DW é realizada fora dos
+horários produtivos. Tal necessidade é fundamental para a tomada de decisão em
+, bolsas de valores e telecomunicações. Além disso, com a
+globalização e o uso da web, negócios críticos necessitam que as fontes de dados para
+tomada de decisão estejam disponíveis 24 horas por dia, 7 dias por semana. Assim, as
+janelas de horário para o processo de carga de um DW se encontram cada vez menores.
+Dessa forma, um dos requisitos importantes para o sucesso de BI 2.0 é a evolução do
+processo de ETL e do DW tradicional para suportar um fluxo contínuo de dados,
+evitando ao máximo qualquer período de indisponibilidade.
+Este trabalho propõe uma arquitetura apoiada no uso de técnicas de paralelização
+e fragmentação na tabela fatos do DW   para solucionar o desafio de carga de dados em
+tempo real nos DWs. O objetivo é permitir que as escritas dos dados ocorram em
+tempos aceitáveis e sem prejudicar a execução das consultas. Além disso, este trabalho
+propõe um benchmarkpara DWs em tempo real baseado no Star Schema Benchmark
+[O'Neil et al 2007], que permitirá comparar a solução proposta com outras arquiteturas
+existentes.
+Este documento esta segmentado em sete capítulos, sendo o primeiro a presente
+introdução. No segundo capítulo, o problema de carga de dados em tempo real é
+apresentado. No capítulo 3, esta proposta é comparada com trabalhos relacionados. No
+capítulo                                                                                   4,  a  proposta  deste  trabalho  é  descrita.  No  capítulo   5,  os  experimentos
+realizados para comprovar a validade da proposta são demonstrados assim como o
+estado atual da pesquisa é descrito. No capítulo 6, as conclusões obtidas com o trabalho
+são apresentadas. Por fim, o capítulo 7 lista as referências bibliográficas utilizadas.
+
+
+
+
+2. Problema
+No cenário tradicional de BI, processos de ETL são executados em fontes de dados
+operacionais  diariamente  em  horários  de  baixa  utilização  para  carregar  o  DW.  A
+adaptação deste cenário para a disponibilização de dados em tempo real apresenta
+diversos problemas que podem ser agrupados em três áreas: Obtenção dos Dados,
+Transformação  dos  Dados  e  Armazenamento  dos  Dados  [Inmon  e  Strauss  2008]
+[Kimball e Caserta 2004].
+   A obtenção de dados geralmente ocorre em fontes do tipo OLTP, as quais são
+otimizadas para realização de grandes quantidades de pequenas escritas em
+curtíssimo tempo. A necessidade de leitura das mesmas para obtenção dos dados
+para o DW durante os períodos de maior atividade pode gerar impactos que
+elevem bastante o tempo de escrita das aplicações transacionais, impactando a
+execução do negócio da empresa.
+   As ferramentas de transformações de dados são construídas para a arquitetura
+tradicional de ETL, com execuções pouco frequentes em grandes massas de
+dados. No cenário de BI 2.0, as transformações possuem características opostas,
+sendo executadas constantemente em massas de dados pequenas.
+   As  soluções  tradicionais  para  armazenamento  dos  dados  utilizam  diversas
+técnicas, tais quais índices e visões materializadas, para diminuir o tempo das
+consultas realizadas nas grandes massas de dados. Porém, tais técnicas acabam
+por afetar o desempenho de inserções, as quais acabam sendo realizadas em lotes
+e fora do horário de execução das consultas. No cenário de BI 2.0, a realização
+de inserções constantes no DW se torna necessária.
+Dentre as áreas listadas acima como problemas em potencial no cenário de carga
+de dados em tempo real, esta proposta busca resolver os problemas relacionados ao
+armazenamento  de  dados  em  tempo  real  nos  DWs.  As  áreas  de  obtenção  e
+transformação  serão  abstraídas  através  da  utilização  do  benchmarkproposto  neste
+trabalho que simulará a etapa de inserção dos dados.
+3. Trabalhos Relacionados
+Diversas propostas vêm sendo apresentadas para a resolução do problema de cargas
+contínuas em DWs. [Inmon e Strauss 2008] apresentam as principais inovações que o
+DW necessita para se adequar ao cenário de BI  2.0. A simplicidade de acesso, a
+capacidade de realizar inserções frequentes e a separação dos dados de um DW pela sua
+atualidade  e  utilização  são  algumas  de  suas  propostas.  Para  eles  o  conceito  de
+envelhecimento dos dados permitirá que sejam criados ambientes específicos para cada
+necessidade. No caso do ambiente de tempo real, eles propõem que as estruturas das
+tabelas devem ser criadas semelhantes as das tabelas dos ambientes operacionais, ou
+seja, fugindo do modelo dimensional e evitando o uso de indexação excessiva.
+Em [Santos e Bernardino 2008] é proposta uma adaptação do modelo do DW.
+Novas tabelas devem ser criadas com a mesma estrutura das existentes no DW original,
+porém sem os mecanismos de otimização de leitura existentes nas tabelas originais.
+Estas tabelas são acrescentadas ao modelo tradicional e se tornam o destino dos dados
+obtidos das fontes operacionais em tempo real. Quando o desempenho de acesso aos
+
+
+
+
+dados armazenados nestas tabelas se torna inaceitável, tais dados são transportados para
+as tabelas tradicionais do DW que co-existem com este modelo novo.
+Em  [Thomsen  2008] é apresentado como solução um middleware capaz de
+armazenar em memória os dados recebidos das fontes operacionais e realizar consultas
+nos mesmos. Quando a quantidade de dados atinge um limite, é realizado um ETL para
+carregá-los no DW.
+De forma geral, estas propostas apresentam como solução a separação entre os
+dados inseridos em tempo real   dos previamente armazenados no DW. Dessa forma, as
+atualizações de índices de visões materializadas se tornam menos impactantes, pois
+ocorrem em massas menores de dados. Porém, por utilizarem objetos distintos para
+armazenar os dados obtidos em tempo real, as consultas realizadas pelas ferramentas de
+análise necessitam ser alteradas para acessar também estes novos repositórios de dados.
+Tal  tarefa gera diversos  impactos,  como  aumento  na complexidade das  consultas,
+influência nos planos de execução gerados pelos otimizadores de consultas dos bancos
+de dados e a reconfiguração de todos os dashboardş scorecardse cubos existentes em
+ambientes que já possuem um BI consolidado. Assim, uma solução ótima necessita não
+só de um desempenho aceitável durante as inserções contínuas, mas também que os
+dados mais atualizados possam ser acessados em conjunto com os dados históricos de
+forma transparente para as aplicações.
+4. Proposta
+Neste trabalho, busca-se utilizar técnicas de fragmentação e paralelização de
+bancos de dados para realizar a fragmentação horizontal derivada da tabela fatos do
+data  warehouseem  diferentes  nós  e  a  execução  de  inserções  sem  prejudicar  as
+consultas. A proposta é utilizar como critério para fragmentação a dimensão temporal,
+criando fragmentos da tabela fatos organizados pela data. Como os dados inseridos na
+tabela fatos do DW representam transações que ocorreram no negócio, a data associada
+aos dados em tempo real será sempre a do dia atual, permitindo assim que tais inserções
+ocorram exclusivamente em um fragmento. Este fragmento para dados em tempo real
+estará associado  exclusivamente a um  dos  nós  do  cluster,  configurado através  da
+arquitetura de bancos de dados distribuídos conhecida como shared nothing[Özsu e
+Valduriez 1999].
+A Figura 1 ilustra a arquitetura proposta. Nela o nó 1 é o responsável pelas
+inserções em tempo real, enquanto os outros nós possuem os dados históricos do DW
+distribuídos entre si. Todas inserções das transações realizadas serão encaminhadas pelo
+middleware ao nó 1, já que o fragmento criado para a data do dia estará alocado nele. As
+consultas realizadas serão particionadas pelo middleware e encaminhadas para todos os
+nós que possuam os dados necessários para atendê-las.
+Como a inserção de dados mais recentes ocorrerá em um nó cuja massa de dados
+será de apenas o fragmento do dia atual, os mecanismos de otimização de leitura
+existentes estarão apenas relacionados a uma pequena massa de dados, viabilizando a
+execução destas inserções em comparação com os cenários tradicionais onde existiria
+uma grande massa de dados associada a estes mecanismos. Além disso, as consultas aos
+dados não necessitam conhecer a localização dos fragmentos, sendo isto tarefa do
+middleware.
+
+
+
+
+Figura 1. Arquitetura de DW proposta
+No término do dia, os dados existentes no fragmento do dia atual necessitam ser
+transportados para os fragmentos históricos para que a massa de dados dele não cresça
+continuamente e interfira nas inserções dos dias posteriores. Estas tarefas de migração
+dos dados entre os fragmentos irão ocorrer mais rapidamente que um ETL obtendo os
+dados do dia na fonte operacional, já que todos os dados existentes no fragmento do dia
+atual passaram pelas transformações necessárias para compor o DW, dessa forma a
+janela de indisponibilidade do DW será bastante reduzida.
+5. Estado Atual da Pesquisa e Avaliação Experimental
+Inicialmente foi realizada uma revisão bibliográfica sobre o estado da arte da pesquisa
+em BI 2.0, apontando desafios a serem resolvidos, dentre eles o da carga de dados em
+tempo real. A seguir, uma nova revisão bibliográfica aprofundando o tema escolhido foi
+realizada,  identificando  propostas  e  questões  em  aberto.  Atualmente,  está  sendo
+construído  um  ambiente  para  validação  da  solução  proposta  e  permitir  o
+desenvolvimento de um benchmarkpara a carga de dados em tempo real baseado no
+Star Schema Benchmark (SSB) [O'Neil et al 2007] e que simulará inserção contínua.
+Os testes serão realizados em um clusterde 5 máquinas com bancos de dados
+PostgreSQL configurados em cluster shared nothinatravés do middleware[PGPOOL-
+II].   Os cenários de teste serão Data Warehouses configurados das seguintes formas: em
+cluster com fragmentação de dados randômica; em clustercom fragmentação de dados
+proposta;  de acordo com a proposta de [Santos e Bernardino 2008].
+A partir destes cenários serão realizadas análises quantitativas sobre:
+   Tempos de execução das inserções contínuas realizadas
+   Tempos de execução das consultas durante as inserções
+   Tempos de execução do ETL de distribuição de fragmentos e do ETL diário a
+partir de fonte operacional.
+6. Conclusões
+A  utilização  mais  ampla  de  ferramentas  de  BI  gerou  novos  desafios  para  esta
+arquitetura. Um deles é o uso de dados operacionais em tempo real, alvo desta proposta.
+
+
+
+
+Através do uso de técnicas de distribuição e paralelização de bancos de dados
+esta proposta busca não só resolver o problema de carga de dados em tempo real como
+também minimizar o impacto que as alterações acarretam nos ambientes de BI já
+existentes.
+Outro aspecto importante deste trabalho é o desenvolvimento de um benchmark
+que permitirá comparar o impacto das cargas contínuas em diversas arquiteturas de DW.
+Como as pesquisas sobre DWs em tempo real estão tendo um grande foco atualmente,
+tal benchmarkserá importante para análises de futuras propostas.
+Assim, esta proposta busca adicionar caminhos à pesquisa de carga de dados em
+tempo real, solucionando pontos não focados em propostas já existentes.
+7. Bibliografia
+CHAUDHURI,  S.;  DAYAL,  U.;  GANTI,  V.  Database  technology  for  decision
+support systems.Computer, v. 34, n. 12, p. 48-55, 2001.
+DAYAL, U.; CASTELLANOS, M.; SIMITSIS, A.; WILKINSON, K. Data integration
+flows for business intelligence.In: Proceedings of the  12th Intl. Conference on
+Extending Database Technology: Advances in Database Technology. p.1-11, 2009.
+INMON, W.; STRAUSS, D.; NEUSHLOSS, G. DW 2.0 - Architecture for the Next
+Generation of Data Warehousing. Morgan Kauffman, 2008.
+KIMBALL, R.; CASERTA, J. The Data Warehouse ETL Toolkit. John Wiley & Sons
+Inc, 2004.
+O'NEIL,  P.;  O'NEIL,  B.;  CHEN,  X.  The  Star  Schema  Benchmark                     (SSB).
+http://www.cs.umb.edu/~poneil/StarSchemaB.pd, 2007.
+ÖZSU, M. T.; VALDURIEZ, P. Principles of Distributed Database Systems.2nd ed.
+Prentice Hall, 1999.
+PGPOOL-II. What is pgpool-II? http://pgpool.projects.postgresql.org/ , 2009.
+SANTOS, R. J.; BERNARDINO, J. Real-time data warehouse loading methodology.
+In: Proceedings of the 2008 International Symposium on Database Engineering &
+Applications. p.49-58. Coimbra, Portugal, 2008.
+STODDER, D. Good BI, Cruel World? Network Computing, v. 18, p. 56-66, 2007.
+THOMSEN, C.; PEDERSEN, T.; LEHNER, W. RiTE: Providing On-Demand Data
+for  Right-Time  Data  Warehousing.     In:                                             24th  International  Conference  Data
+Engineering.  p.456-465, 2008.
+WATSON, H.; WIXOM, B. The Current State of Business Intelligence.Computer, v.
+40, n. 9, p. 96-99, 2007.
+
+
+
+
+

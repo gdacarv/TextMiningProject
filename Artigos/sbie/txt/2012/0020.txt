@@ -1,0 +1,496 @@
+﻿Dicas inteligentes no Sistema Tutor InteligentP AT2Math
+Henrique Seffrin¹, Geiseane Rubi¹, Cassio Ghilardi¹, Felipe Morais¹,
+Patricia Jaques¹, Seiji Isotani², Ig Ibert Bittencourt³
+¹ Programa Interdisciplinar de Pós-Graduação em Computação Aplicada (PIPCA)
+Universidade do Vale do Rio dos Sinos (UNISINOS)
+² Instituto de Ciências Matemáticas e de Computação (ICMC)
+Universidade de São Paulo (USP)
+³ Núcleo de Excelência em Tecnologias Sociais - Instituto de Computação (NEES/IC)
+Universidade Federal de Alagoas (UFAL)
+Abstract. This paper presents a module to assist the learners when solving
+PAT2Math. This module presents
+hints of how to solve equations or how to correct them, if a solving step is
+incorrect. It sorts the hints giving a level to each one: more specific hints
+comprise the low levels (4 and 5), otherwise less specific hints, which allow
+more reasoning, get the higher levels (1 and 2). As the student requests hints,
+the system increases the level of specificness, until it reaches the lowest level,
+containing the answer. The results of an experiment accomplished with  21
+students showed that there is evidence that students using the system with the
+hints  module  had  performance  gain.  Besides,  the  student's  answers  in  a
+questionnaire showed that they think the hints module help them to correctly
+solve equations in the system.
+Resumo.Este artigo apresenta um módulo de ajuda para auxiliar o aluno na
+T2Math, apresentando
+dicas de como resolver ou corrigir um passo. Este módulo organiza as ajudas
+em níveis: ajudas mais pontuais recebem níveis mais baixos (4 e 5), ajudas
+menos descritivas e que permitem um raciocínio maior recebem níveis mais
+altos                                                                                     (1  e        2).  Conforme  o  aluno  vai  requisitando  ajuda,  o  sistema  vai
+aumentando o nível de pontualidade da mesma, até que atinja o nível mais
+baixo, este contendo a resposta. Foi realizada uma avaliação da versão do
+PAT2Math com o módulo de ajuda com 21 alunos através de um pre-teste e
+um pós-teste. Uma análise com teste t pareado dos resultados mostra que
+houve  ganho  significativo  de  aprendizagem.  Além  disso,  foi  aplicado  um
+questionário em que os alunos, em sua maioria, afirmaram que as dicas os
+ajudaram a resolver equações corretamente no sistema.
+1.                                                                                        Introdução
+Sistemas tutores inteligentes (STI) são ferramentas de ensino inteligentes, voltadas ao
+ensino/aprendizado em áreas específicas do conhecimento. STIs fornecem um ensino
+individualizado no conteúdo e na forma, de acordo com as informações modeladas
+sobre o desempenho, perfil e estados afetivos do aluno. Esta capacidade de adaptação do
+sistema é o que o torna inteligente.
+O  PAT2Math  é  um  STI  voltado  para  o  ensino  de  álgebra  elementar,  com
+equações de 1º e 2º grau com uma incógnita. Seu principal componente, o PATEquation,
+é o módulo de resolução de equações que permite ao aluno resolver uma equação passo-
+a-passo. Por ser inteligente, o módulo provê ao aluno a correção e feedbackde cada
+passo fornecido pelo aluno em tempo real.
+Esse feedbackonline do sistema pode tornar a experiência com o tutor frustrante
+Anais do 23º Simpósio Brasileiro de Informática na Educação (SBIE 2012), ISSN 2176-4301
+Rio de Janeiro, 26-30 de Novembro de 2012
+
+
+
+
+com o passar do tempo, devido a sucessivas tentativas incorretas de resolução [Hume et
+al. 1996]. Dessa forma, como forma de auxiliar o aluno na resolução de equações foi
+implementado um sistema simples de dicas no tutor PAT2Math. Este, no entanto, não
+contribuía muito ao aprendizado, pois indicava diretamente qual operação deveria ser
+aplicada.
+Trabalhos como os de Aleven e Koedinger (2000) e Vanlehn (2006) apresentam
+uma alternativa baseada em níveis de abstração. Uma abordagem similar é utilizada em
+STIs  que  fazem  uso  de  técnicas  de  processamento  de  linguagem  natural  a  fim  de
+conduzir um diálogo com o aluno [Graesser et al. 2001; Hume et al. 1996; Zhou et al.
+1999]. Tais abordagens permitem que o aluno raciocine sobre o problema em questão,
+uma vez que não recebem a solução pronta. No entanto, esta alternativa apresenta duas
+principais lacunas que se opõem ao objetivo original de levar o aluno à reflexão:  o
+abuso de ajuda e a recusa de ajuda. Elas estão relacionadas ao modo como o aluno
+interage com o sistema tutor: requisitando ajudas em demasia ou recusando-as sob
+qualquer hipótese.
+A proposta deste trabalho é o desenvolvimento de um sistema de ajuda ao aluno
+no tutor PAT2Math utilizando a abordagem baseada em níveis de abstração. O sistema
+tem como objetivo auxiliar o aluno na resolução das equações, seja antes da resolução
+de um passo ou após um erro. Mecanismos são implementados a fim de que seja
+possível evitar ao máximo os problemas supracitados desta abordagem.
+Este artigo está organizado como segue: a seção 2 descreve o PAT2Math e os
+componentes que o compõem. A seção 3 apresenta o módulo de dicas proposto para o
+tutor  PAT2Math. A seção  4  apresenta  os  trabalhos  relacionados,  que  consistem  de
+módulos de ajuda implementados em reconhecidos STIs na literatura. A seção 5 relata a
+avaliação realizada e a seção 6 apresenta as conclusões e os trabalhos futuros almejados.
+2.  PAT2Math
+O PAT2Math é um STI voltado ao ensino de álgebra elementar, mais especificamente à
+resolução  de  equações  de  1º  e  2º  grau  com  uma  incógnita.  Este  foi  desenvolvido
+utilizando a linguagem de programação Java1, visando a capacidade multiplataforma da
+linguagem.
+O PAT2Math possui uma arquitetura cliente/servidor. No servidor encontram-se
+os módulos inteligentes do sistema, responsáveis pela correção e identificação dos erros
+do aluno, listados a seguir:
+•  Módulo Resolvedor  (PATSolver): Módulo que detém o conhecimento de como
+resolver uma equação. Implementado através de uma shell  de sistema especialista
+(SE), codifica a equação e as regras algébricas em fatos e regras na shell. Detalhes de
+sua implementação estão descritos em [Seffrin et al. 2009].
+•  Módulo de Resolução (PATEquation):M ódulo que realiza a comunicação com o
+aluno. Composto pela interface para resolução de equações passo-a-passo, provendo
+a correção de cada passo solucionado, na forma de um sinal indicando se a operação
+está correta ou não. Esta correção é realizada pelo PATSolver, que desenvolve vários
+caminhos de resolução até encontrar aquele que o leve a resposta do aluno. Se o
+caminho  for  encontrado,  o  sistema  considera  o  passo  correto,  caso  contrário  a
+resposta é considerada incorreta. Para detalhamento de sua implementação, consultar
+[Seffrin et al. 2010].
+•  Módulo de Falsas Concepções:Módulo responsável pela identificação dos erros
+mais  comuns  cometidos  por  alguns  alunos,  como,  por  exemplo,  fornecer  como
+resposta
+                                                                                                                                                      12 x=0 para  a  equação                                                                                    10+2 x =0 .  Seu  funcionamento  é  similar  ao
+                                                                                                                                                                                PATSolver e foi igualmente implementado utilizando uma shell  de SE. As regras
+                                                                                                                                                                                implementadas reproduzem estes erros mais comuns e, se alguma produzir uma
+1                                                                                             http://www.oracle.com/br/technologies/java/index.html
+
+
+
+
+resposta igual a do aluno, o tipo de erro é identificado. Este módulo é invocado
+apenas se o módulo de resolução considerar a resposta do aluno incorreta.
+No cliente, ocorre a interação do aluno com o sistema; é onde as equações são
+apresentadas e resolvidas pelo aluno. Para a correção de cada etapa do exercício (passos
+da  equação),  o  cliente  realiza  uma  consulta  no  servidor,  que  retorna  o  estado  do
+exercício (correto ou incorreto). Uma requisição é realizada também quando o aluno
+pede auxílio ao tutor. A comunicação cliente/servidor é realizada através da tecnologia
+Java Server Pages (JSP). O cliente, o PATEquation (Figura 1), foi implementado como
+um appletJava, suportada pela maioria dos navegadores web modernos.
+Figura 1: Interface do PATEquation
+Na interação com o sistema, o aluno recebe a equação em (a). O aluno pode
+então selecionar os termos que deseja operar e a operação a ser aplicada (b) e então o
+sistema abre um campo para edição  (c). Utilizando o teclado em conjunto com as
+ferramentas de edição (d), o aluno informa o próximo passo da equação. Ao pressionar o
+botão (e), o passo fornecido pelo aluno é enviado ao servidor para o PATSolver corrigi-
+lo. Se a nova equação fornecida como passo estiver correta, um símbolo apropriado é
+exibido (f). A equação, então, deixa de ser editável (g) e o processo se repete para o
+próximo passo. As operações aplicadas em cada passo são exibida em (h). Os botões em
+(i) permitem ao aluno solicitar ajuda. O texto das ajudas é exibido em (j).
+As  ajudas  apresentadas  até  a  implementação  deste  trabalho  consistiam  em
+informar quais eram as operações que poderiam ser aplicadas sobre o passo atual. No
+exemplo  apresentado  na  Figura                                                                1,  seria  exibido  o  texto   “#  Simplificação”  como
+mensagem de dica para o passo atual. O modelo proposto neste artigo consiste em
+substituir  estes  textos  por  textos  mais  elaborados,  que  permitem  com  que  o  aluno
+raciocine sobre o problema em questão. O modelo igualmente inclui textos de ajuda
+caso o aluno erre algum passo, que até então não existiam no sistema, fazendo uso do
+módulo de falsas concepções para a identificação do erro.
+3.  Dicas Inteligentes
+A interação com o PATEquation pode se tornar uma experiência frustrante, caso o aluno
+não consiga prosseguir na resolução da equação devido a um passo incorreto. Dessa
+forma, o sistema contava com um sistema de dicas simples de resolução. Uma vez
+invocado, o sistema informava ao aluno quais as possíveis operações que podem ser
+
+
+
+
+aplicadas sobre o passo corrente da equação  [Seffrin et al.  2010]. No entanto, este
+sistema não se mostrava eficiente pelo fato de fornecer ao aluno a solução, os passos de
+resolução, e não lhe permitir avaliar o passo corrente e chegar a uma conclusão por si
+mesmo sobre qual passo deve ser aplicado.
+Trabalhos  como  os  de  Aleven  (2000)  e  VanLehn  (2006)  apresentam  uma
+abordagem  baseada  em  níveis  de  abstração.  Para  cada  unidade  de  conhecimento
+abordada, há um conjunto finito de ajudas organizadas em níveis, e, para cada nível, um
+grau de granularidade de informações diferente. Por exemplo, considerando o nível 1
+como o mais alto e o nível 5 como o mais baixo, ajudas de nível 1 a 3 contextualizam o
+aluno em relação ao problema em questão. Ajudas de níveis 4 e 5 apresentarão dicas
+mais pontuais, havendo casos em que o nível  5 apresente exatamente a solução do
+problema. Quando o usuário requisita uma ajuda, a ajuda de nível mais alto lhe é
+exibida; caso ele decida requisitar outra ajuda, sobre o mesmo assunto, o nível seguinte
+é exibido, sucessivamente.
+O  trabalho  proposto  neste  artigo  consiste  em  aplicar  esta  abordagem  ao
+PATEquation. Para cada operação algébrica  (soma, subtração, multiplicação, divisão,
+simplificação, fórmula de Bhaskara, ...), um conjunto diferente de ajudas é aplicado. A
+Tabela 1 apresenta, como exemplo, os diferentes níveis de dicas para a operação de
+simplificação.
+Tabela 1: Dicas para a operação de simplificação
+Operação                                                                                   Nível   Descrição
+                                                                                           1       Há uma operação possível de ser aplicada sobre a fração <eq />.
+                                                                                                   Nesta situação há termos equivalentes. Qual operação aplicar para que
+                                                                                           2
+                                                                                                   esta fração se torne irredutível?
+Simplificação
+                                                                                           3       Os termos <eq t/> e <eq /t> possuem um número múltiplo em comum.
+                                                                                           4       Esta fração pode ser simplificada.
+                                                                                           5       Simplifique <eq t/> e <eq /t>, resultando em <PP>.
+O módulo inclui dicas de como resolver o passo corrente e dicas de como
+corrigir um erro cometido, ambas utilizando a abordagem de níveis. Para que o sistema
+seja capaz de identificar a operação (ou operações) que o passo corrente permite ou o
+erro cometido pelo aluno, os módulos PATSolver e o das Falsas Concepções serão
+utilizados respectivamente.
+3.1.  Desafios da abordagem e a solução proposta
+Nesta abordagem há dois desafios recorrentes em STIs e que devem ser tratados; são
+eles o abuso de ajuda  (help  abuse)e a recusa de ajuda  (help  refuse) [Aleven and
+Koedinger 2000; Roll et al. 2010; Vanlehn 2006]. O primeiro (help abuse)consiste no
+aluno requisitar ajudas até que o nível mais baixo, o nível que, geralmente, contém a
+resposta do exercício seja exibido. Desta forma, o aluno consegue resolver, sem muita
+dificuldade, o exercício. Já o help refuseocorre quando o aluno recusa qualquer tipo de
+ajuda.  Neste  caso,  ele  permanece  no  mesmo  exercício,  não  havendo  evolução  no
+processo de aprendizado.
+No PATEquation, a solução encontrada para o help abusefoi a implementação
+de bloqueios por operação, ou seja, para cada equação (passo), o aluno terá direito a
+uma ajuda para cada operação envolvida. Uma vez utilizada, a ajuda é bloqueada até
+que  dois  erros  sejam  cometidos  envolvendo  esta  operação.  Voltando  ao  caso  da
+simplificação, o aluno somente poderá pedir ajuda sobre simplificação se o mesmo
+realizar dois erros envolvendo esta operação. Para o help refuse,o processo é inverso:
+uma ajuda de correção é exibida, obrigatoriamente, a cada dois erros cometidos pelo
+aluno.
+
+
+
+
+3.2.  Seleção inteligente de ajudas
+De modo a oferecer um auxílio mais adequado às habilidades do aluno, o sistema é
+capaz  de  selecionar  as  ajudas,  a  serem  apresentadas,  de  acordo  com  o  nível  de
+conhecimento do mesmo. O conhecimento consiste em uma porcentagem de quanto o
+aluno sabe sobre uma determinada operação (unidade de conhecimento).
+Com bases nestes valores, diferentes níveis de ajudas são selecionados. Para
+operações com nível de conhecimento inferior a 50%, dicas mais específicas (níveis 3 a
+5) são apresentadas. Para operações com nível de conhecimento superior a 50%, dicas
+mais abstratas (níveis 1 a 3) são mostradas. No segundo caso, se o nível 3 for atingido e
+uma ajuda adicional for requisitada, o nível 5 é mostrado, permitindo que ele prossiga
+na resolução.
+Uma  vez  iniciada  a  resolução  de  uma  nova  equação,  a  seleção  de  nível
+apropriado é refeita levando em conta a possível atualização nos dados referentes ao
+conhecimento do aluno.
+3.3.  Templates e marcas
+Os  textos  das  ajudas  são  armazenados  no  sistema  em  forma  textual,  cada  uma
+relacionada a sua operação e ao seu respectivo nível. Como é possível observar na
+Tabela 1, alguns textos fazem referências a termos específicos da equação. O sistema
+utiliza um sistema de marcas (tags)para esta referência.
+A estrutura de uma marca emprega aspas angulares (“<” e “>”) para denotar o
+início  e  o  fim  da  mesma  e  é  composto  por  vários  símbolos  que  referenciam
+determinados termos e operações da equação tratada. O termo “eq” denota a equação
+corrente. O caractere “t” acompanhando uma operação indica qual dos termos deve ser
+exibido: um “t” antes do indicador de operação indica o termo à esquerda da operação,
+um “t” após a operação indica o temo à direita da operação, e um “t” em cada lado da
+operação, indica a operação inteira (equivalente a não utilizar o “t”).
+Para ilustrar este processo considere a equação 2x-7=5+2. Para se referenciar os
+termos desta equação são utilizadas as seguintes marcas:  <eq t+> exibe o número 5;
+<eq +t> exibe 2; e <eq t+t> ou <eq +> exibe 5+2. Como não é possível aplicar a
+operação de subtração do lado esquerdo da equação, as marcas <eq - >, <eq t- >, <eq
+-t> e <eq t-t> não são processadas pelo sistema. Todos os símbolos empregados são
+mostrados na Tabela 2.
+Tabela 2: Marcas utilizadas pelo sistema
+Valor                                                                                        Significado
+a                                                                                            Um valor inteiro + uma incógnita ao quadrado (Bhaskara)
+b                                                                                            Um valor inteiro + uma incógnita (Bhaskara)
+c                                                                                            Um valor inteiro (Bhaskara)
++ e -                                                                                        Soma e Subtração
+X ou *                                                                                       Multiplicação
+/ e ^                                                                                        Divisão e Potência
+R                                                                                            Raiz
+=                                                                                            Igualdade
+OI                                                                                           Lista 2 termos em lados opostos da equação que podem ser operados após a realização da
+                                                                                             operação inversa (apenas para dicas)
+                                                                                             Marcas que não utilizam o prefixo “eq”
+OP                                                                                           Identifica a operação relacionada a dica
+PP                                                                                           Mostra a equação do próximo passo
+
+
+
+
+É importante ressaltar que se uma operação não for possível de ser aplicada
+sobre determinada equação e existir uma marca correspondente, ela não será processada
+pelo sistema e, portanto, não será substituída.
+4.  Trabalhos Correlatos
+Nesta seção serão apresentados trabalhos relacionados ao tema de auxílio ao aluno em
+sistemas tutores. Para cada um destes sistemas será descrito o seu funcionamento e a
+forma como auxiliam o aluno no desenvolvimento de atividades pertinentes à área de
+conhecimento.  Finalmente,  é  realizada  uma  comparação  desses  com  o  trabalho
+proposto.
+4.1.  PACT - help abuse e help refuse
+O PACT Geometry Tutor [Aleven and Koedinger 2000] é um STI voltado ao ensino de
+geometria. As atividades providas por este sistema incluem calcular quantidades, medir
+ângulos  ou  segmentos.  O  sistema  oferece  duas  categorias  de  ajudas:  as  ajudas
+inteligentes,  que  são  os  hints                                                           (dicas  de  resolução)  e  os  error  feedbacks  (dicas  de
+correção de erros); e a ajuda não inteligente, compreendida pelo glossário de termos
+relacionados à geometria.
+Os hints e error feedbacksimplementam a abordagem de níveis. Como forma de
+incentivar o aluno a buscar a informação, algumas ajudas indicam consultar o glossário.
+Por exemplo, “Algumas regras que lidam com triângulos estão listadas no Glossário.
+Qual das razões é mais adequada? Você pode clicar em cada uma delas para saber
+mais.”.
+A proposta da trabalho [Aleven and Koedinger 2000] é permitir que o sistema
+tenha a capacidade de decidir quando mostrar uma ajuda ao aluno. Desta forma, evita
+que o aluno requisite ajudas até que o nível mais pontual, geralmente o que contém a
+resposta, seja exibido de imediato, caracterizando o help abuse. Mensagens como, por
+exemplo, “Ao invés de pedir ajuda por que você não olha no Glossário para saber mais
+sobre este assunto.”, são apresentadas quando o sistema detecta um número grande de
+requisições de ajuda. Este controle por parte do sistema também permite a ele exibir
+ajudas quando ocorre help refuse.
+De forma a permitir um melhor controle, foi proposto em [Aleven et al. 2004]
+um plug-in para STIs, o help tutor.Este plug-in analisa informações de uso do sistema, a
+fim de detectar comportamentos não desejáveis dos alunos, como help abuse, help
+refusal e “tentativa e erro”. Tais informações analisadas incluem: o tempo levado para
+responder a questão, o quanto o aluno sabe a respeito do assunto, se o aluno utilizou
+apropriadamente as ferramentas disponibilizadas pelo sistema, assim como a quantidade
+de tentativas.
+O help tutor foi avaliado em  [Roll et al.  2010], com alunos de escolas dos
+Estados Unidos (Pennsylvania). Foi avaliada a taxa de pedido de ajuda em 2 grupos: (i)
+os que utilizaram apanas o STI, (ii) e os que utilizaram o STI em conjunto com o help
+tutor. O grupo que utilizou o help tutor obteve um grau menor de uso de ajuda em
+relação  ao  grupo que  não  o utilizou.  Os índices  mais  relevantes  foram:  a  taxa de
+requisição de ajuda foi de 26% contra 36% e as requisições de ajuda, até o último nível,
+foram de 48% (grupo que usou o help tutor) contra 70% (grupo que não utilizou help
+tutor).
+
+
+
+
+4.2.  Auxílio baseado no diálogo
+O CIRCSim é um STI baseado em diálogo, voltado ao ensino de medicina, na área de
+controle de pressão sanguínea. O aluno interage com o sistema desenvolvendo um
+pequeno diálogo: o sistema faz perguntas e o aluno as responde. Caso o aluno não saiba
+a resposta correta, porém informou uma resposta que possa conduzir à resposta correta,
+o  tutor  apresenta  perguntas  relacionadas  a  essa  resposta.  Estas  permitem  ao  aluno
+chegar a conclusão da resposta correta [Zhou et al. 1999].
+Em [Hume et al. 1996] foram definidas três categorias de dicas para o tutor:
+•  Informação transmitida (CI - Conveyed Information): Apresenta textos que fazem
+o aluno pensar e inferir a resposta correta.
+•  Indicação (PT - Pointing): Utiliza uma estratégia similar a CI, porém induz o aluno
+a buscar informações em conteúdos aprendidos.
+•  Linha  de  raciocínio  dirigido                                                             ):  Guia  o
+pensamento do aluno em direção à resposta correta.
+Conforme o aluno vai interagindo com o tutor e respondendo às questões, este
+vai especificando cada vez mais as questões, ou seja, passando de dicas CI e PT para
+DLR. As dicas são armazenadas na base de dados do sistema em forma de templateş
+que são completados conforme o conteúdo abordado. Por exemplo [Zhou et al. 1999]:
+“Mas a minha pergunta é sobre  <variável>”, sendo  “<variável>” o conteúdo a ser
+substituído pelo assunto da questão.
+Avaliações de efetividade do STI foram realizadas no Rush Medical College,
+resultando em  656 erros e  97 pedidos de ajuda  (de  1700 questões), com a taxa de
+efetividade das dicas, variando entre 59% e 100%.
+Bremgartner e Netto (2011) apresentam um sistema multiagente de auxílio ao
+aluno baseado em diálogo entre os próprios estudantes de uma turma. Implementado
+como uma camada extra adicionada a ambientes virtuais de aprendizagem (AVA) on-
+line, o sistema mapeia as habilidades dos alunos com base nas atividades já realizadas
+no ambiente. Com posse destas informações, o sistema é capaz de recomendar alunos,
+que possuam um certo grau de conhecimento em uma habilidade específica, para alunos
+que não adquiriram ainda tal conhecimento.
+Para que um aluno possa ser selecionado, pelo sistema, ele deve satisfazer os
+requisitos mínimos de habilidades necessárias para realizar a atividade. Estes requisitos
+são informados pelo professor no momento do cadastro da mesma. Para uma mesma
+atividade, o sistema pode recomendar um aluno. Uma vez selecionados, os dois alunos
+passam a trocar mensagens, desta forma os dois alunos não necessitam estar ativos no
+sistema ao mesmo tempo. Outro critério utilizado pelo sistema para selecionar auxiliares
+é o tempo de acesso, alunos com mais de 20 dias sem acessar o AVA não são incluídos
+na seleção.
+4.3.  Comparação
+A Tabela 3 apresenta uma comparação entre os diferentes sistemas de auxílio ao aluno,
+apresentando como as formas de ajudas são selecionadas nestes sistemas.
+O  módulo  proposto  diferencia-se  por  operar  em  conjunto  com  um  módulo
+inteligente, o PATSolver. Isto possibilita ao módulo inferir que operações são possíveis
+de serem aplicadas no passo atual. Também permite a demonstração de um possível
+próximo  passo  de  resolução,  tornando  o  módulo  independente  da  equação.  Outro
+diferencial está no uso do nível de conhecimento do aluno como parâmetro na seleção
+das dicas. Assim dicas mais específicas são apresentadas para alunos que não possuem
+domínio na operação em questão. Por outro lado, dicas menos específicas atuam como
+uma  forma  de  relembrar  conceitos  já  esquecidos,  para  alunos  que  já  dominam  a
+operação.
+
+
+
+
+Tabela 3: Comparação entre os trabalhos relacionados e o PATEquation
+                                                                                               PACT             CIRCSIM                Bremgartner e         PATEquation
+                                                                                                                                       Netto
+Domínio                                                                                        Geometria        Medicina               Variado               Álgebra
+Idioma                                                                                         Inglês           Inglês                 Português do Brasil   Português do Brasil
+Tipos de                                                                                       Dica e Parecer   Dica e Parecer de      Ajudas oferecida      Dica e Parecer de erro
+ajuda                                                                                          de erro          erro                   por outros usuários
+Critério de                                                                                    Nível da Ajuda   Percentual de acerto   Nível de              Nível de conhecimento do
+seleção de                                                                                     e o Help Tutor   da questão anterior    conhecimento do       aluno e nível da ajuda
+ajuda                                                                                                                                  aluno
+Invocação da                                                                                   Através de um    Textual                Através de um         Através de um botão e
+ajuda                                                                                          botão e após X                          botão                 após X erros
+                                                                                               erros
+Ordem de                                                                                       Ordenado pelos   Sempre ajudas que      ---                   Maior o conhecimento do
+apresentação                                                                                   níveis de        levam o aluno a                              aluno, níveis mais
+                                                                                               abstração        resposta, vai                                abstratos são
+                                                                                                                depender da                                  selecionados. Menor o
+                                                                                                                resposta anterior do                         conhecimento, níveis mais
+                                                                                                                aluno                                        específicos
+5.  Avaliações
+O experimento de avaliação ocorreu em junho de 2012 em uma escola privada
+de Porto Alegre/RS. Neste experimento participaram  21 alunos de uma  7ª série do
+Ensino  Fundamental.  Considerando  a  faixa  etária  dos  mesmos,  12  e  13  anos,  foi
+solicitado que o termo de consentimento livre e esclarecido fosse assinado pelos pais.
+Inicialmente, os sujeitos foram informados sobre os objetivos do experimento,
+bem  como  o  caráter  voluntário  e  sigiloso  de  sua  participação.  O  experimento  foi
+realizado em  4 horas/aula de  50 minutos cada, totalizando  3 horas e  20 minutos de
+interação.  Na  primeira  aula,  foi  realizado  um  pré-teste  objetivando  identificar  os
+conhecimentos prévios dos sujeitos de pesquisa. Durante as duas aulas seguintes, os
+alunos interagiram com o sistema e na última aula prevista resolveram o pós-teste e
+responderam ao questionário. O questionário, de caráter objetivo, era composto por
+quatro perguntas referentes aos hábitos de estudo de matemática, seis questões sobre a
+percepção  da  interação  dos  alunos  com  o  sistema  e,  finalmente,  sete  questões
+abrangendo a análise dos alunos quanto ao sistema avaliado, em específico o auxílio
+prestado por meio de dicas.
+As notas dos alunos e a média e o desvio-padrão dos pré-teste e pós-teste podem
+ser observados na Tabela 4. O teste era composto com 5 questões, que valiam no total
+2,5 pontos.
+A  hipótese  do  experimento  é  que  o  sistema  de  dicas  auxilia  o  aluno  na
+aprendizagem de equações algébricas do 1º grau proporcionando um ganho significativo
+de aprendizagem aos alunos. As hipóteses nula e alternativa são:
+H0: µpos   ≤ µpre (hipótese nula)
+H1: µpos   > µpre (alegação)
+
+
+
+
+Tabela 4: Notas, Média e Desvio-Padrão dos Pré e Pós-testes.
+Aluno                                                                                        Pré-teste   Pós-teste
+1                                                                                            1,7         2,0
+2                                                                                            0,4         1,0
+3                                                                                            1,0         1,8
+4                                                                                            2,0         2,0
+5                                                                                            2,3         2,5
+6                                                                                            2,5         2,5
+7                                                                                            1,3         2,5
+8                                                                                            1,4         2,5
+9                                                                                            0,9         2,0
+10                                                                                           2,0         2,2
+11                                                                                           1,2         1,7
+12                                                                                           1,5         1,7
+13                                                                                           1,0         2,0
+14                                                                                           2,0         2,0
+15                                                                                           1,1         1,5
+17                                                                                           2,1         2,1
+18                                                                                           1,7         1,9
+19                                                                                           0,3         0,5
+20                                                                                           0,5         0,5
+21                                                                                           2,0         2,4
+Média                                                                                                    1,445       1,865
+Desvio Padrão                                                                                            0,642       0,599
+A hipótese nula (que se deseja negar) é que a média dos pós-teste é menor ou
+igual à média dos pré-testes. Por outro lado, a alegação visa saber se a média dos pós-
+testes foi significativamente maior que a média dos pré-testes, identificando um ganho
+na aprendizagem dos alunos utilizando o PATEquation com o sistema de dicas. Para
+tanto, foi utilizado um teste-t pareado, uma vez que a amostra tem tamanho menor que
+30. Com um grau de confiança de 95% (α=0.05), obtemos p=0.0001017   (t = -4.5826, df =
+19). Assim, como p < α, podemos negar a hipótese nula e concluir que há evidências
+para afirmar com 95% de confiança que o sistema de dicas auxiliou o sujeito em sua
+aprendizagem.
+Quanto ao questionário que os alunos responderam ao final da interação com o
+sistema, 22% afirmaram ser muito interessante resolver equações no PATEquation, 56%
+afirmaram ser interessante e 22% ser bom. Além disso, 42% dos alunos afirmaram que
+os  comentários  e  dicas  são  uteis  para  a  aprendizagem.  Por  fim,  52%  dos  alunos
+afirmaram que resolver equações no PATEquation com o auxílio das dicas sempre que
+necessárias incentivou o desenvolvimento do conhecimento de equações algébricas.
+6.  Conclusões e Trabalhos futuros
+Nesse  artigo  foi  apresentado  um  módulo  de  dicas  empregado  no  STI  de  álgebra
+PAT2Math. O sistema de dicas proposto apresenta como principal diferencial utilizar a
+informação do modelo de aluno (sobre unidades de conhecimento que o aluno domina
+ou não) na tomada de decisão de que dica apresentar.
+
+
+
+
+Foi realizado um experimento de avaliação com 21 alunos de uma turma de 7a
+série. O experimento foi realizado durante  4 seções de  50 minutos, onde os alunos
+realizaram pré-teste e pós-teste em papel e interagiram com o sistema. Após a sessão
+interativa, eles responderam a um questionário expressando percepções sobre o sistema,
+em especial, sobre as dicas. Os resultados de um teste de hipótese utilizando teste t
+pareado  mostraram  que  há  evidências  significativas  de  que  houve  ganho  de
+aprendizagem com um grau de confiança de 95%. Além disto, os alunos consideraram a
+interação positiva, tendo em vista o auxílio prestado por meio de dicas para a resolução
+de equações.
+Como  trabalhos  futuros  pretende-se  incluir  a  marca  de  “OI”  para  dicas  de
+correção  de  erro.  Atualmente,  esta  encontra-se  disponível  apenas  para  dicas  de
+resolução. Pretende-se também refinar o mecanismo de bloqueio das ajudas, visando um
+bloqueio mais eficiente, visto que algumas dicas são liberadas muito frequentemente,
+em contrapartida outras dicas, como a de simplificação, raramente são liberadas pelo
+sistema. Pretende-se igualmente disponibilizar uma interface para a adição de textos de
+ajuda, o que facilitará a inclusão de novas dicas.
+Referências
+Aleven, V. and Koedinger, K.  (2000). Limitations of Student Control: Do Students
+Know when They Need Help? In: Gauthier, G.; Frasson, C.; VanLehn, K.  (Eds.).
+Intelligent Tutoring SystemL.NCS. Springer. v. 1839 p. 292-303.
+Aleven, V., McLaren, B. M., Roll, O. and Koedinger, K. (2004). Toward Tutoring Help
+Seeking; Applying Cognitive Modeling to Meta-Cognitive Skills. Human-Computer
+Interaction Institute, p. 156.
+Bremgartner, V. and Netto, J. F. M.  (2011). Auxílio Personalizado a Estudantes em
+Ambientes Virtuais de Aprendizagem Utilizando Agentes e Competências. Anais do
+22o Simpósio Brasileiro de Informática na Educação.
+Graesser, A.,  VanLehn,  K.,  Rosé,  C.,  Jordan,  P. and  Harter,  D.  (2001).  Intelligent
+tutoring systems with conversational dialogue. AI magazin, v. 22, n. 4, p. 39-51.
+Hume, G., Michael, J., Rovick, A. and Evens, M. (1996). Hinting as a tactic in one-on-
+v. 5, n. 1, p. 23-47.
+Roll, I., Aleven, V., McLaren, B. M. and Koedinger, K. R. (2010). Improving students’
+help-seeking skills using metacognitive feedback in an intelligent tutoring system.
+Learning and Instruction,v. 22, n. 2, p. 267-280.
+Seffrin, H., Rubi, G., Carlotto, T., Mello, G. and Jaques, P. (2009). Um resolvedor de
+equações algébricas como ferramenta de apoio à sala de aula no ensino de equações
+algébricas. XV Workshop Sobre Informática na Escola.
+Seffrin, H., Rubi, G., Cruz, B. and Jaques, P. (2010). Resolvendo equações algébricas no
+STI PAT2Math. XXI Simpósio Brasileiro de Informática na Educação.
+Vanlehn, K. (2006). The behavior of tutoring systems. International Journal of Artificial
+Intelligence in Education,v. 16, n. 3, p. 227-265.
+Zhou, Y., Freedman, R., Glass, M., et al. (1999). Delivering hints in a dialogue-based
+h National Conference on Artificial
+h Innovative applications of Artificial Intelligence Conference
+Innovative Applications of Artificial Intelligen,p. 128-134.
+
+
+
+
+

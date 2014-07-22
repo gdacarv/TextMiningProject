@@ -1,0 +1,556 @@
+﻿RecRoute: Uma Proposta de Aplicativo para
+Recomendação de Rotas de Ônibus Utilizando Informações
+Contextuais dos Usuários
+Adriano de Oliveira Tito, Arley Ramalho Rodrigues Ristar, Luana Martins dos
+Santos, Luiz Antonio V. Filho, Patrícia Restelli Tedesco e Ana Carolina Salgado
+Centro de Informática - Universidade Federal de Pernambuco (UFPE)
+50.733-970 - Recife - PE - Brasil
+{aot,arrr2,lms7,lavf,pcart,acs}@cin.ufpe.br
+Abstract. The traffic in major cities has led public transportation to become
+inefficient, having as one of its characteristics the absence of information to
+users.  In  this  scenario,  Public  Transportation  User  Information  Systems
+emerge as a possible solution, aiming to provide information to passengers
+and support their decision-making. This work describes our proposal for a
+system  that  considers  contextual  information  of  both  users  and  traffic  to
+recommend bus routes and support passengers in their decision-making. Thus
+it is expected to provide information of great relevance for the users of urban
+public transportation, improving the quality of public transportation by bus.
+Resumo. O tráfego nas grandes cidades tem contribuído para a ineficiência
+do transporte público. Um dos principais problemas neste sentido é a ausência
+de  informações  aos  usuários.  Neste  cenário  surgem  como  uma  possível
+solução os Sistemas de Informação aos Usuários do Transporte Coletivo que
+tem por objetivo fornecer informações aos passageiros e apoiar suas decisões.
+Este trabalho apresenta a proposta de um sistema que considera informações
+contextuais dos usuários e do trânsito para recomendar rotas de ônibus a
+esses passageiros, apoiando-os em suas tomadas de decisão. Com isso espera-
+se prover informações de grande relevância para os usuários de transporte
+coletivo urbano, melhorando a qualidade do transporte público por ônibus.
+1. Introdução
+O trânsito nas grandes cidades, principalmente em países em desenvolvimento, vem
+piorando diariamente. Com o aumento do número de carros particulares nas vias, os
+congestionamentos tornaram-se cada vez mais frequentes. Segundo [Zhang et. al 2011]
+não será possível melhorar o trânsito alargando ruas, construindo viadutos ou fazendo
+rodízio de carros. Para isto, é preciso que o poder público e as empresas operadoras do
+transporte coletivo aprimorem o serviço prestado, fazendo com que os usuários utilizem
+o transporte público [Pilon 2009]. De acordo com [Cutolo 2003], as principais barreiras
+para  a  utilização  do  transporte  público  por  ônibus  são  a  ausência  de  informações
+relativas aos serviços e/ou sua baixa qualidade.
+Neste contexto, os Sistemas Inteligentes de Transporte - SIT têm por objetivo
+aplicar tecnologias para apoiar a infraestrutura e melhorar a qualidade dos sistemas de
+218
+
+
+
+
+transporte [Gómez et. al 2009]. Uma das subáreas dos SIT são os chamados Sistemas de
+Transporte  Público  Avançados,  voltados  ao  transporte  público.  Nesta  categoria  se
+inserem aplicações denominadas de Sistemas de Informação aos Usuários, que têm por
+objetivo prover informações aos passageiros como, por exemplo, o tempo de espera na
+parada e as rotas de ônibus. Estas informações ajudam os usuários a definir seus trajetos
+e planejar melhor os deslocamentos [Sussman 2005].
+Neste artigo é apresentada a proposta de um aplicativo, denominado RecRoute,
+para recomendação de rotas de ônibus aos usuários de transporte público, baseado em
+informações contextuais estáticas e dinâmicas dos usuários e do tráfego urbano. Esta
+ferramenta procura auxiliar o passageiro em seus deslocamentos, por meio de transporte
+público  coletivo  por  ônibus,  oferecendo  informações  em  tempo  real,  levando  em
+consideração o deslocamento dos veículos, características dos passageiros e os fatores
+dinâmicos que podem afetar o transporte como, por exemplo, a situação climática, entre
+outros.  Espera-se  que  este  aplicativo  possa  auxiliar  a  infraestrutura  do  transporte
+coletivo urbano, melhorando sua qualidade e incentivando pessoas a utilizar o ônibus
+como opção de transporte público.
+2. Conceitos Básicos
+Nesta seção são apresentados alguns conceitos de Sistemas Inteligentes de Transporte e
+de  Contexto  Computacional.  Este  referencial  teórico  é  necessário  ao  melhor
+entendimento desta proposta.
+2.1. Sistemas Inteligentes de Transporte
+Os SIT surgiram nos Estados Unidos no final dos anos 80, por intermédio de um grupo
+que almejava proporcionar uma nova visão aos sistemas de transportes do país. Os
+congestionamentos, a segurança, o meio-ambiente e a produtividade foram os principais
+temas considerados por este grupo [Sussman 2005]. Assim, o desejo de manter uma
+mobilidade urbana ascendente aliada a uma sustentabilidade ambiental e econômica fez
+surgir o conceito de Intelligent Vehicle-Highway Systems, posteriormente conhecidos
+como SIT.
+Estas ferramentas integram informação, métodos de comunicação e tecnologias a
+fim de subsidiar o sistema de transporte de determinada região, integrando pessoas,
+estradas e veículos, aumentando a eficiência, segurança e uso das vias das redes de
+transportes atuais. Outros benefícios, relacionados ao meio ambiente, podem ser obtidos
+através da utilização de SIT, tais como diminuição de congestionamentos e dos índices
+de  poluição  do  ar.  Com  a  melhor  fluidez  do  trânsito,  as  emissões  de  gases  serão
+diminuídas, reduzindo os impactos ambientais [Pilon 2009].
+De  acordo  com  os  conceitos  apresentados,  percebe-se  que  a  aplicação  de
+tecnologias  no  transporte  urbano  por  meio  de  sistemas  SIT  proporciona  benefícios
+diretos e indiretos para os passageiros, para as empresas operadoras, para os organismos
+gestores e para a sociedade em geral.
+2.2. Contexto Computacional
+Contexto computacional pode ser visto como um conjunto de condições e influências
+relevantes à aplicação e que tornam uma situação única e compreensível  [Brézillon
+219
+
+
+
+
+1999].  Os  Sistemas  Sensíveis  ao  Contexto  são  aplicações  que  se  adaptam  sem
+intervenção explícita do usuário, ou seja, levam em conta informações da situação onde
+o  usuário  está  inserido  para  oferecer  melhores  serviços,  aumentando  assim  sua
+usabilidade e efetividade [Baltrunas et. al 2011].
+Segundo [Vieira et. al 2009], o contexto da interação entre um agente e uma
+aplicação, para executar uma tarefa, é o conjunto de elementos contextuais instanciados
+que são necessários para apoiar a tarefa atual, e um elemento contextual é qualquer
+dado,  informação  ou  conhecimento  que  permite  caracterizar  uma  entidade  em  um
+domínio.
+Com o uso do contexto computacional, diversos aplicativos inteligentes podem
+ser criados, e serem capazes de se adaptar a determinada situação ou fornecer serviços
+mais relevantes, conforme o conjunto válido de informações contextuais dinâmicas,
+estáticas ou inferidas e suas interações [Baldauf 2007].
+3. A Proposta do Sistema RecRoute
+O RecRoute terá o objetivo de facilitar o dia a dia das pessoas que utilizam transporte
+público, recomendando rotas aos passageiros, em tempo real, baseadas em informações
+estáticas e dinâmicas de contexto relacionadas aos usuários e aos próprios meios de
+transporte.  A  Figura                                                                    1  representa  a  arquitetura  proposta  e  que  ainda  está  em
+desenvolvimento, mas já com alguns módulos em funcionamento. Após ser totalmente
+implementado o RecRoute fará parte do Middleware do projeto Ubibus [Vieira et al.
+2011].  O  Ubibus  é  um  Sistema  de  Transporte  Inteligente  que  oferece  acesso  a
+informações de transporte público, em tempo real, baseado em informações dinâmicas
+de contexto relacionadas aos próprios meios de transporte.
+RecRoute
+Figura 1. Arquitetura Proposta
+220
+
+
+
+
+Estão presentes na arquitetura do RecRoute três componentes que desempenham
+as funções principais ao fornecimento das recomendações são eles: o Gerenciador de
+Recomendações, o Módulo de Aprendizagem e o Classificador Contextual de Rotas.
+Outros  elementos  externos  ao  aplicativo,  mas  contidos  no  Middleware  do  projeto
+Ubibus, também serão utilizados nas recomendações das rotas.
+A  camada  superior  da  arquitetura  representa  as  interfaces  que  poderão  se
+comunicar com os outros módulos do RecRoute por meio da Web ou dispositivo móvel
+com sistema operacional Android. A interface Mobile tem o grande benefício de ser
+portátil, permitindo assim que o usuário possa tomar sua decisão sobre a rota a seguir de
+qualquer lugar, mesmo que não esteja na parada de ônibus ou em casa. Por esta interface
+é possível utilizar a posição georeferenciada do dispositivo para gerar mais informação
+contextualizada sobre o usuário.
+A arquitetura possui um Gerenciador de Recomendações, este componente será
+responsável  pela  integração  dos  demais  componentes  e  orquestração  do  fluxo  de
+execução do processo de recomendação, gerenciando assim, todas as ações do RecRoute
+como,  por  exemplo,  a  entrada  e  saída  de  informações,  o  acionamento  de  outros
+componentes da arquitetura do aplicativo e o acesso à serviços do Middleware Ubibus.
+Será por meio deste elemento que todas as requisições realizadas pelas Interfaces terão
+acesso às funcionalidades do RecRoute.
+O Módulo de Aprendizagem será responsável por gerar e manter um modelo de
+conhecimento que será utilizado na recomendação das rotas. A formação deste modelo
+consiste da utilização de técnicas de Aprendizagem de Máquina e Predição [Mitchell
+1997] e Algoritmos de Classificação. Inicialmente a aprendizagem foi realizada por
+meio  de  um  conjunto  de  registros,  denominado  conjunto  de  treinamento,  contento
+informações  sobre  as  preferências  e  perfis  de  usuários,  informações  temporais  e
+climáticas, opções de rotas, e seus rótulos de classes associados, estas informações
+foram adquiridas junto aos usuários do transporte público, por meio de questionário
+eletrônico.  A  aprendizagem  se  dará  de  forma  supervisionada  e  posteriormente  será
+mantida de forma incremental, de acordo com o Feedback dos usuários, durante as
+recomendações.
+O  Classificador  Contextual  de  Rotas  será  o  componente  responsável  pela
+ordenação   das   rotas   utilizando   o   modelo   do   conhecimento   produzido   pela
+aprendizagem. As rotas serão classificadas por suas características considerando o ponto
+de origem e destino escolhidos pelo usuário. Após a ordenação, as rotas seguirão para o
+Gerenciador de Recomendações para serem exibidas aos passageiros, neste caso as
+melhores rotas entre as opções serão ordenadamente apresentadas nas interfaces.
+Conforme descrito anteriormente outros serviços presentes no Middleware do
+projeto Ubibus serão utilizados pelo sistema de recomendação. Abaixo são descritos
+cada um deles:
+Gerador de Rotas: Este componente, presente no Middleware do Ubibus, tem o
+objetivo de gerar um conjunto de rotas de acordo com pontos de origem e destino
+passados pelo usuário. Elementos contextuais do estado atual do trânsito tais como,
+engarrafamentos, horários de tráfego intenso, acidentes, alagamentos, informações de
+redes sociais, entre outras informações são utilizadas para gerar as rotas.   Localizador
+221
+
+
+
+
+do  Usuário:  Tem  o  objetivo  de  obter  informações  contextuais  dinâmicas  sobre  a
+localização  geográfica  do  usuário  que  está  realizando  a  requisição  de  rota.  Estas
+informações serão utilizadas pelo RecRoute durante o processo de recomendação.
+Cenário Temporal e Climático: Informações contextuais sobre o tempo e o clima
+são importantes para o sistema de recomendação de rotas, pois algumas preferências dos
+usuários podem variar de acordo com estas informações. Este componente é responsável
+por fornecer informações climáticas e do tempo, que serão utilizadas pelo RecRoute
+durante as recomendações.
+Após a escolha da melhor rota por parte do usuário, o Módulo de Aprendizagem
+será acionado pelo Gerenciador de Recomendações, a fim de atualizar implicitamente o
+modelo  do  conhecimento  para  os  pontos  de  origem  e  destino  em  questão.  Tal
+funcionalidade utilizará técnicas de Realimentação de Relevância (do inglês, Relevance
+Feedback), bastante utilizadas em sistemas de recomendação e servem para atualizar
+automaticamente os interesses especificados no perfil do usuário ao longo do tempo, a
+partir das avaliações de itens recomendados ou por meio da interação entre o usuário e
+sistema [Cotter e Smyth, 2000]. Esta medida terá por objetivo tornar o sistema mais
+adaptativo e manter a qualidade das recomendações.
+4. Trabalhos Relacionados
+Foram encontrados na literatura alguns sistemas de recomendação de rotas de ônibus,
+como: PECITAS [Tumas e Ricci 2009] que considera as preferências dos usuários em
+suas indicações e UbibusRoute [Lima et al. 2012] que utiliza informações do trânsito
+oriundas de redes sociais como fonte de informações contextuais.
+Analisando os trabalhos citados observou-se que apenas um tipo de informação é
+considerada durante as indicações (preferências do usuário ou situação do trânsito), não
+utilizando  outras  informações  dinâmicas  importantes,  como  por  exemplo,  clima  e
+feedbacks dos usuários.
+O  RecRoute  contempla  a  captura  e  processamento  de  dados  dinâmicos  dos
+usuários, do trânsito e ambientais, a fim de prover informações e rotas de ônibus mais
+realistas e adaptadas às reais necessidades dos usuários do transporte público urbano por
+ônibus.
+5. Conclusão
+Atualmente os SIT estão sendo utilizados como forma de superar alguns desafios na
+área  de  transportes  das  grandes  cidades.  A  integração  entre  diversas  tecnologias
+modernas vem permitindo um avanço significativo nesses sistemas. Sendo assim, há
+uma crescente procura por sistemas cada vez mais dinâmicos e sensíveis ao contexto. A
+implementação de um SIT sensível ao contexto no provimento de informações aos
+usuários de transporte público urbano pode proporcionar maior atração dos passageiros
+e um melhor apoio à infraestrutura do serviço.
+Este  trabalho  teve  por  objetivo  apresentar  a  proposta  de  um  sistema  para
+recomendar  rotas  aos  usuários  de  transporte  público,  capaz  de  obter  e  processar
+informações contextuais dinâmicas e estáticas dos usuários e do trânsito.
+222
+
+
+
+
+O  RecRoute  está  em  fase  final  de  desenvolvimento  e,  após  concluído, será
+integrado ao projeto Ubibus, um Sistema Inteligente de Transporte que tem por objetivo
+fornecer aos usuários informações contextualizadas por meio de colaboração coletiva do
+conhecimento.
+Referências Bibliográficas
+Baldauf, M., Dustdar, S., Rosenberg, F. (2007) “A survey on context-aware systems”.
+International Journal of Ad Hoc and Ubiquitous Computing, 2(4): pp.263-277.
+Baltrunas, L. (2011) “Context-Aware Collaborative Filtering Recommender Systems”.
+172 f. Tese (Phd em Ciências da Computação), Universidade de Bolzano. Bolzano,
+Itália.
+Brézillon, P. (1999) “Context in Artificial Intelligence: IA Survey of the Literature”.
+Computer & Artificial Intelligence 18, pp. 321-340.
+Cotter,  P.,  Smyth,  B.                                                                    (2000)  “PTV:  Intelligent  Personalized  TV  Guides”.  In:  12th
+Innovative Applications of Artificial Intelligence Conference. Austin, Texas, USA,
+pp. 957-964.
+Cutolo,  F.  A.                                                                             (2003)  “Diretrizes  para  sistema  de  informação  ao  usuário”.  In:   3th
+Seminário Internacional PROMOTEO, Porto Alegre, RS, Brasil, 2003.
+Gómez, A., Diaz, G. Bousetta, K. (2009) “ITS Forecast: GIS Integration with Active
+Sensory  System”. In: Information Infrastructure Symposium, GlJS'09, pp. 1-6.
+Lima, V., Magalhães, F., Tito, A. O., Santos, R., Ristar, A., Santos, L., Vieira, V.,
+Salgado, A. C. (2012) “UbibusRoute : Um Sistema de Identificação e Sugestão de
+Rotas  de  Ônibus  Baseado  em  Informações  de  Redes  Sociais”. In:  8th Simpósio
+Brasileiro de Sistemas de Informação, São Paulo, Brasil. pp. 516-527.
+Mitchell, T.   (1997) “Machine Learning”. New York: McGraw-Hill.
+Pilon, J. A.  (2009)  “Sistema de Informação ao Usuário do Transporte Coletivo por
+Ônibus na Cidade de Vitória-ES”. 125 f. Dissertação (Pós-Graduação em Engenharia
+de Produção) - Universidade Tecnológica Federal do Paraná - Ponta Grossa-PR.
+Sussman, J. (2005), “Perspectives on Intelligent Transportation Systems”. New York,
+USA: Springer.
+Tumas, G., Ricci, F. (2009) “Personalized mobile city transport advisory system”. In:
+Information  and  Communication  Technologies  in  Tourism                                  2009,  Amsterdam,
+Netherlands, pp. 173-183
+Vieira,  V.,  Tedesco,  P.,  Salgado,  A.  C.                                               (2009)                                                                   “Modelos  e  Processos  para  o
+Desenvolvimento de Sistemas Sensíveis ao Contexto”. Jornadas de Atualização em
+Informática (JAI'09). Porto Alegre, RS, Brasil, pp. 381-431.
+Vieira,  V.,  Caldas,  L., Salgado, A. C.  (2011)  “Towards an ubiquitous and context
+sensitive  public  transportation  system”.  In                                             4th  International  Conference  on  Ubi-
+media Computing, São Paulo, SP, Brasil.
+Zhang,  J.,  Wang,  F.,  Wang,  K.,  Lin,  W.,  Xu,  X.,  Chen,  C.  (2011)  “Data-Driven
+Intelligent  Transportation  Systems:  A  Survey”.  IEEE  Transactions  on  Intelligent
+Transportation Systems, pp. 1624-1639.
+223
+
+
+
+
+Um Algoritmo Genético Paralelo Aplicado ao Problema de
+Cobertura de Conjuntos
+Francisco Jhonatas M. da Silva, Antonio C. de Oliveira, Rodrigo de M. S. Veras
+Departamento de Computação - DC
+Universidade Federal do Piauí (UFPI), Teresina - PI, Brasil
+jhonatasintelectus@yahoo.com.br,  costa@ufpi.edu.br,  rveras@ufpi.br
+Abstract.  The  set  covering  problem                                                       (SCP)  is  one  of  the  most  important
+problems in combinatorial optimization. The aim of this paper is to show the
+application of a Parallel Genetic Algorithm to the SCP. The parallelization of
+the  genetic  algorithm  was  based  on  the  island  model  with  migration
+unilateral.  The  preliminary  computational  results  show  that  the  proposed
+algorithm produces good quality solutions at a reduced computational time.
+Resumo. O problema de cobertura de conjuntos (PCC) é um dos problemas
+mais  importantes  de  otimização  combinatória.  O  objetivo  desse  artigo  é
+mostrar  a  aplicação  de  um  Algoritmo  Genético  Paralelo  ao  PCC.  A
+paralelização do Algoritmo Genético foi baseada no modelo de ilhas com
+migração unilateral. Os resultados computacionais preliminares mostram que
+o  algoritmo  proposto  produz  soluções  de  boa  qualidade  em  um  reduzido
+tempo computacional.
+1. Introdução
+Existem  nas  Organizações,  na  Indústria,  na  Automação,  na  Logística  e  na  própria
+Computação, vários problemas difíceis de otimização combinatória que são do tipo
+“NP-Completo”, ou seja, não é conhecido ainda um algoritmo polinomial para resolvê-
+los [Garey e Johnsom 1979]. Exemplos desses problemas são: o problema do caixeiro
+viajante, o problema de roteamento de veículos, o problema de cobertura de conjuntos,
+etc.  O  Problema  de  Cobertura  de  Conjuntos  (PCC)  possui  importantes  aplicações
+práticas, tais como: alocação de serviços de emergência [Benvenites 1982], recuperação
+de  informações  em  bancos  de  dados  [Balas  1980a],  escalonamento  de  tripulações
+[Bartholdi                                                                                   1981],  determinação  do  número  mínimo  de  policias  para  patrulhamento
+[Taylor e Huxley 1989], entre outras.
+O PCC é um problema que visa encontrar um subconjunto de colunas com custo
+mínimo que faça a cobertura de todas as linhas de uma matriz 0-1 (                           a                                                                             ), onde a matriz
+ij
+(                                                                                            a                                                                                                                                                                                                                                     ) é formada por m (linhas) e n (colunas). Diz-se que a linha                                                                                      a                                        é coberta pela coluna
+                                                                                                                                                                           ij                                                                                                                                                                                                                                                                                                            i
+j quando                                                                                                                                                                                                                        a                                                              = 1. Considere a variável binária                                                                                                  x                          associada à coluna j,                                                                    x       = 1 se a
+                                                                                                                                                                                                                                    ij                                                                                                                                                                                                j                                                                                                                   j
+                                                                                                                                                                                              coluna j (com custo                                                              c          0                                                                                                      ) está na solução e         x                                                          = 0 caso contrário. A modelagem do
+                                                                                                                                                                                                                                                                                   j                                                                                                                                              j
+                                                                                                                                                                                                                                         PCC é apresentada nas Equações 1-3.
+                                                                                                                                                                                                                                                                                                                                                                                                                                          n
+                                                                                                                                                                                                                    Minimizar                                                                                                                                                                                           Z =                    c                                                                                                                         (1)
+                                                                                                                                                                                                                                                                                                                                                                                                                                      !            j x   j
+                                                                                                                                                                                                                                                                                                                                                                                                                                      j   1
+224
+
+
+
+
+n
+Sujeito a:                                                                                                                                                    a                    !   1                   , i = 1,... , m   (2)
+                                                                                                                                                      !           ij x         j
+                                                                                           j                                                             1
+                                                                                           x                                                                  "         0 ,   1      ,    j = 1,..., n                     (3)
+j
+A restrição 2 garante que todas as linhas m serão cobertas por pelo menos uma
+coluna e, a restrição da 3 é uma restrição de integrabilidade 0-1.
+Na  literatura  encontram-se  vários  trabalhos  explorando  a  utilização  de
+algoritmos heurísticos aplicados ao PCC. Chvàtal  (1979) utiliza algoritmos gulosos
+(greedy). Balas e Ho (1980b) utilizaram algoritmos gulosos com novas funções gulosas.
+Vasko  e  Wilson  (1984)  também  utilizaram  algoritmos  gulosos  com  novas  funções
+gulosas  e  apresentaram  um  procedimento  de  remoção  de  colunas  redundantes  da
+solução  viável.  Beasley                                                                  (1990a)  propôs  um  algoritmo  baseado  em  heurísticas
+lagrangeanas.  Beasley  e  Chu  (1996)  desenvolveram  algoritmos  fundamentados  em
+algoritmos genéticos. Constantino et al (2003) utilizou algoritmos genéticos com uma
+nova abordagem da representação das soluções utilizando listas encadeadas e novos
+operadores genéticos. Solar et al  (2002) apresentou um algoritmo genético paralelo
+baseado no modelo mestre-escravo.
+Este  artigo  apresenta  um  Algoritmo  Genético  Paralelo                                 (AGP)  baseado  no
+modelo de ilhas aplicado ao PCC, estando organizado da seguinte maneira: na próxima
+seção apresentamos os conceitos de Algoritmos Genéticos e descrevemos o Algoritmo
+Genético Seqüencial  (AGS) desenvolvido; na  seção  3 apresentamos os  conceitos e
+fundamentos dos Algoritmos Genéticos Paralelos e mostramos o AGP desenvolvido; na
+seção 4 são apresentados os resultados computacionais e a análise de desempenho do
+AGP; na seção 5 são mostrados as conclusões e os trabalhos futuros.
+2. Algoritmos Genéticos
+Os fundamentos teóricos dos Algoritmos Genéticos (AG) foram apresentados por John
+Holland no final da década de 60 [Holland 1975]. Os AGs são uma poderosa ferramenta
+para a resolução de muitos problemas difíceis de otimização combinatória.
+Algoritmos Genéticos são técnicas estocásticas de busca, inspiradas no processo
+de evolução natural. Diferente dos algoritmos de busca local - busca tabu e simulated
+annealing  - que são baseados na manipulação de uma solução viável, um algoritmo
+genético  inicia  com  um  conjunto  de  soluções  inicial  chamada  população.  Cada
+indivíduo na população é chamado de cromossomo, representando uma solução do
+problema.  Um  cromossomo  é  usualmente,  uma  string  de  símbolos,  mas  não
+necessariamente uma string é formada por bits binários. Os cromossomos evoluem
+através  de  sucessivas  iterações,  chamada  gerações.  Durante  cada  geração,  os
+cromossomos são avaliados usando uma função de avaliação, também chamada fitness.
+Para  criar  a  próxima  geração  novos  cromossomos  chamados  prole  (offspring)  são
+formados  por:  a)  combinando  dois  cromossomos  da  geração  presente  usando  um
+operador de cruzamento(crossover) e/ou b) modificando um cromossomo usando um
+operador de   mutação. Uma nova geração é formada por: a) selecionando de acordo com
+os valores da função de avaliação alguns dos pais e/ou proles, e b) rejeitando outros de
+modo a manter o tamanho da população constante. Cromossomos com valores altos
+para as funções de avaliação possuem probabilidades maiores de serem selecionados
+(problema de maximização). Depois de diversas gerações, o algoritmo converge para o
+melhor cromossomo, o qual se espera que represente uma solução ótima ou sub-ótima
+225
+
+
+
+
+para o problema.
+2.1. Algoritmo Genético Aplicado ao PCC
+As características do AG implementado é mostrado na Tabela 1.
+Tabela 1. Características do AG
+População inicial                                                                             Guloso randomizado
+Codificação do cromossomo                                                                     String binária de tamanho n (número de colunas)
+Seleção dos pais                                                                              Torneio estocástico
+Crossover                                                                                     Crossover de um ponto
+Mutação                                                                                       Mutação variável
+Método de substituição da população                                                           Substituição total
+Tamanho da população                                                                          300
+Critério de parada                                                                            2.500 gerações
+2.1.1 Operador de Reparação
+Após o processo de cruzamento e mutação o indivíduo (solução) gerado pode
+violar  as  restrições  do  problema,  por  exemplo,  pode haver  na  solução  linhas  não-
+cobertas. É necessário que se faça uso de um operador de reparação. Este operador
+verifica se a solução contém todas as linhas cobertas, se isso não for o caso, o operador
+acrescenta na solução novas colunas (com o menor custo) que vão cobrir todas as linhas
+da matriz. Este operador além de garantir a viabilidade da solução, ele também retira da
+solução colunas redundantes de maior custo.
+3. Algoritmos Genéticos Paralelos (AGP)
+Com o avanço da tecnologia hoje se tem a disposição computadores mais velozes, que
+podem auxiliar na resolução de diversos problemas difíceis que exigem um grande
+esforço  computacional.  Com  a  computação  paralela  podem-se  utilizar  os  múltiplos
+processadores para  realizar uma tarefa, dividindo-as em subtarefas e  executando-as
+simultaneamente, com isso, pode-se ganhar melhoria no tempo de processamento e na
+qualidade de solução.
+Os  principais  de  modelos  de  paralelização  dos  AGs  são:  o  modelo  mestre-
+escravo, finely grained (modelo de vizinhança) e modelo de ilhas [Tanese 1989] [Alba e
+Troya 1999]. No modelo mestre-escravo, a população é mantida no processo mestre e
+este fica a cargo de realizar a seleção dos pais, o cruzamento e a mutação, ele também é
+encarregado de enviar aos processos escravos os indivíduos gerados para serem feitas as
+suas avaliações. No modelo de vizinhança (finely grained), cada indivíduo é colocado
+em uma célula (processo) e cada um deles só pode interagir (cruzamento) com células
+vizinhas.  No  modelo  de  ilhas  dividimos  a  população  em  subpopulações  que  são
+agrupadas  em ilhas  (processadores). Em cada ilha é executado um AGS  (todos os
+passos de AG: seleção, cruzamento, etc.). Neste modelo se faz necessário o uso de um
+novo operador: o operador de migração. Este operador define a taxa de migração e a
+quantidade de indivíduos que vão ser transferidos para as outras ilhas. Com esse modelo
+podem-se explorar diferentes regiões do espaço de busca.
+3.1 AGP Desenvolvido
+Dentre os vários modelos de paralelização, escolheu-se o modelo de ilhas com migração
+226
+
+
+
+
+unilateral.  Este  modelo  foi  o  escolhido  porque  é  o  que  tem  apresentado  melhores
+resultados no que diz respeito ao tempo computacional e a qualidade da solução. Foram
+utilizadas neste modelo quatro ilhas (processos). O período de migração foi a cada 250
+gerações e a quantidade de indivíduos migrados foi de 4% do tamanho da população de
+cada ilha.
+Utilizou-se o MPI (Message Passing Interface) para a implementação paralela.
+De acordo com Pacheco (1999), o MPI é um padrão para comunicação de dados em
+computação paralela. O MPI possui funções que permitem a comunicação  (envio e
+recebimento de mensagens) entre todos os processos envolvidos na paralelização.
+4. Resultados Computacionais
+Os algoritmos  (AGS e AGP) foram codificados na linguagem de programação C e
+executados  em  um  computador  com  Processador  Core2  Quad  2.66GHz  e  2GB  de
+Memória  RAM.  Os  algoritmos  implementados  (AGS  e  AGP)  foram  testados  com
+arquivos obtidos da OR-Library [Beasley 1990b] e foram executados 10 vezes para cada
+problema. Os detalhes dos problemas testes na Tabela 2.
+Tabela 2.   Detalhes dos problemas testes
+Conjunto                                                                                      Linhas   Colunas   Número
+de problemas                                                                                  (m)      (n)       de problemas
+4                                                                                             200      1000      10
+5                                                                                             200      2000      10
+6                                                                                             200      1000      5
+A                                                                                             300      3000      5
+B                                                                                             300      3000      5
+C                                                                                             400      4000      5
+D                                                                                             400      4000      5
+E                                                                                             500      5000      5
+F                                                                                             500      5000      5
+G                                                                                             1000     10000     5
+H                                                                                             1000     10000     5
+É apresentado na Tabela 3, para cada um dos algoritmos desenvolvidos (AGS e
+AGP), a melhor solução encontrada nos 10 testes realizados, o desvio  !  médio e a
+média do tempo de execução. O desvio !  médio é calculado da seguinte forma:
+10
+!  =                                                                                                                            (   S           S   )   /(   10   S       )   *100   %   ,   (4)
+                                                                                                       !                                Ti  "   0                     0
+                                                                                              i                 1
+onde STi é o valor da melhor solução encontrada no teste i, S0 é o valor da solução ótima
+ou melhor solução conhecida. Analisando a Tabela 3 é possível observar que o AGP
+conseguiu produzir em 2 casos soluções melhores que o AGS (sendo que em 1 desses
+casos, o AGP conseguiu encontrar soluções melhores que as conhecidas) e nos outros
+casos o AGP igualou-se ao AGS. É possível observar também na Tabela 3 que em todos
+os problemas o AGP conseguiu reduzir significativamente, ou no mínimo ficarem igual,
+os desvios  !  médios. O desvio  !  médio negativo no problema G.4 indica que foi
+encontrada solução melhor que a conhecida (as quais foram utilizadas como parâmetros
+para o cálculo do desvio pela equação 4). Observa-se também que em relação ao tempo
+227
+
+
+
+
+de execução, o AGP foi executado em aproximadamente 25% do tempo de execução do
+AGS. Na tabela 3 encontram-se os resultados para 10 problemas dentre os 56 problemas
+testados.
+Tabela 3. Resultados Computacionais
+                                                                                                                                                                             AGS                                                                                                   AGP
+                                                                                                  Solução   Melhor                                                                                                                                            Tempo de   Melhor            Tempo de
+                                                                                                                                                                             !                                                                                                     !
+Problema                                                                                          Ótima     Solução                                                                                                                                           Execução   Solução           Execução
+4.3                                                                                               516       516                                                              0,39                                                                             22,72      516       0,00    5,81
+5.7                                                                                               293       294                                                              1,40                                                                             44,10      293       0,14    10,09
+6.1                                                                                               138       138                                                              0,80                                                                             23,40      138       0,00    5,94
+A.3                                                                                               232       233                                                              1,03                                                                             58,61      233       0,69    14,96
+B.1                                                                                               69        69                                                               0,29                                                                             59,09      69        0,00    14,98
+C.4                                                                                               219       219                                                              1,19                                                                             76,35      219       0,32    19,42
+D.5                                                                                               61        61                                                               0,00                                                                             77,67      61        0,00    19,50
+E.4                                                                                               28        28                                                               1,43                                                                             99,68      28        0,36    25,09
+F.1                                                                                               14        14                                                               0,00                                                                             95,42      14        0,00    26,21
+G.4                                                                                               172       171                                                              -0,41                                                                            187,32     170       -0,58   48,08
+H.5                                                                                               55        55                                                               0,73                                                                             221,15     55        0,18    49,59
+                                                                                                                                                                             O speed-up avalia o ganho de processamento paralelo sobre o sequencial [Alba e
+                                                                                                            Luque 2005]. O cálculo do speed-up é realizado pela Equação 5:
+speed-up =                                                                                T       ,                                                                                                                                                                                        (5)
+                                                                                          s   T   p
+onde Ts é o tempo de execução do algoritmo seqüencial e Tp é o tempo de execução do
+algoritmo paralelo. Analisando a Tabela 3 podemos concluir que o speed-up do AGP é
+igual a 4,03, o que garante uma boa avaliação do AGP, pois o ideal é que o speed-up
+seja o mais próximo possível do valor da quantidade de processadores envolvidos no
+programa paralelo (nesse caso 4 processadores).
+5. Conclusões e Trabalhos Futuros
+Foi desenvolvido um Algoritmo Genético Paralelo, baseado no modelo de ilhas com
+migração unilateral, aplicado ao PCC. O algoritmo conseguir encontrar, na maioria dos
+problemas, a solução ótima ou a melhor solução conhecida. No problema G.4 o AGP
+encontrou uma solução melhor do que a melhor solução conhecida. Quanto à avaliação
+do desempenho do AGP, observando o valor do speed-up, conclui-se que o algoritmo
+desenvolvido teve um ótimo desempenho computacional, ficando próximo do ideal.
+Como possíveis trabalhos futuros, com a intenção de melhorar as soluções dos
+problemas em que o AGP não conseguiu chegar à solução ótima e reduzir ainda mais o
+tempo computacional e, assim, poder comparar com os trabalhos de Beasley e Chu
+(1996) e Constantino et al  (2003) que são os trabalhos que apresentam os melhores
+resultados utilizando algoritmos genéticos sequencial, podem-se apontar: adaptação do
+modelo  de  ilha  do  AGP  para  realizar  as  migrações  no  sentido  bidirecional  ou
+multidirecional; utilização de comunicação assíncrona para a troca de mensagens entre
+os processos; adaptação do AGP para outros tipos de paralelismo, como o modelo
+mestre-escravo ou modelos híbridos.
+228
+
+
+
+
+Referências
+Alba, E. e Troya, M. J. M. (1999). A survey of parallel distributed genetic algorithms.
+Complexity, 4(4), p.31-52.
+Alba, E. e Luque, G. (2005). Measuring the Performance of Parallel Metaheuristics. In
+Parallel  Metaheuristics:  A  new  Class  of  Algorithms,  John  Wiley  &  Sns,  Inc.,
+Hoboken, New Jersey, p.43-62.
+Balas, E. (1980a). Cutting Planes from Conditional Bounds: A New Approach to Set
+Covering. Mathematical Programming, v. 12, p. 19-36.
+Balas, E. e Ho, A. (1980b). Set covering algorithm using cutting planes, heuristics, and
+subgradient optimization: a computational study. Mathematical Programming, 12, p.
+37-60.
+Bartholdi,  J.                                                                             (1981).  A  Guaranteed-Accuracy  Round-off  Algorithm  for  Cyclic
+Scheduling and Set Covering, Operations Research, 29, p.501-510.
+Beasley, J. E. (1990a). A lagrangian heuristic for set-covering problem. Naval Research
+Logistic, 37, p.151-164.
+Beasley,  J.  E.                                                                           (1990b).  OR-Library:  distributing  test  problems  by  electronic  mail.
+Journal of the Operational Research Society, 41, p.1990-1072.
+Beasley, J. E. e Chu, P. C. (1996). A genetic algorithm for the ser covering problem.
+European Journal of Operational Research, 94, p.392-404.
+Benveniste, R. (1982). A Note on the Set Covering Problem. JORS 33, p. 261-265.
+Chvàtal,  V.                                                                               (1979).  A  greed  heuristic  for  the  set  covering  problem.  Management
+Science, 21, p.591-599.
+Constantino, A. A., Reis, P. A., et al. (2003). Aplicação de Algoritmos Genéticos ao
+Problema de Cobertura de Conjunto. Simpósio Brasileiro de Pesquisa Operacional.
+Garey, M.R.; Johnson. D.S. (1979). Computers and intractability: a guide to the theory
+of NP-completeness. San Francisco, Freeman.
+Holland,  J.  H.                                                                           (1975).  Adaptation  in  Natural  and  Artificial  Systems.  MIT  Press,
+Cambridge, MA.
+Pacheco,    S.    P.                                                                       (1999)                                                                        A    User’s    Guide    to    MPI.    Disponível    em:
+ftp://math.usfca.edu/pub/MPI/mpi.guide.ps. Acesso em 23 de janeiro de 2013.
+Solar, M., Parada, V., Urrutia, R. (2002). A parallel genetic algorithm to solve the set
+covering problem. Computers and Operations Research, v.29, p.1221-1235.
+Tanese,  R.                                                                                (1989).  Distributed  Genetic  Algorithms.  Proceedings  of  the  third
+International Conference on Genetic Algorithms. Schaffer J. D. Editors, Morgan
+Kaufmann Publishers, p.434-439.
+Taylor, P. e Huxley, S. (1989). A Break from Tradition   for the San Francisco Police:
+Patrol  Officer  Scheduling  Using  an  Optimization-Based  Decision  Support  Tool.
+Interfaces, v. 45, p.4-24.
+Vasko, F. J. e Wilson, G. R.  (1984). An Efficient Heuristic for Large Set Covering
+Problems. Naval Research Logistic Quarterly, 31, p.163-171.
+229
+
+
+
+
+
