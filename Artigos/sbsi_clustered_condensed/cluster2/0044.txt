@@ -1,0 +1,517 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Implementaç ão de um Sistema de Composiç ão Autom ática de
+Serviços Web (SCASW) Desacoplado: M ódulos Interface e
+Tradutor
+Juan Carlos Zu ñiga2, Felipe L. Pierin1, José J. Pérez-Alc ázar1,
+Sergio. T. Kofuji2, Adriano V. Fernandes1
+1
+Escola de Artes Ciências e Humanidades - Universidade de São Paulo (EACH - USP)
+Av. Arlindo Bettio, 1000 - CEP 03828-000, São Paulo, SP - Brasil
+2Escola Politécnica - Universidade de São Paulo (EP - USP)
+Avenida Prof. Luciano Gualberto, 158 - CEP 05508-900, São Paulo, SP - Brasil
+{juan.carlos,fepierin,jperez}@.usp.br,  sergio.kofuji@poli.usp.br
+Abstract. One of the goals in Semantic Web research has been to provide con-
+cepts, methods, and tools to combining several web services to provide a new
+value-added service which satisfy the user requests. Manual composition is an
+arduous and susceptible to errors task.  To avoid this problem, methods and
+tools have been proposed for automatic composition of web services. This pa-
+per aims to describe the implementation of a system of automatic composition
+of Web services, specifically, two loosely coupled modules: the interface and the
+translator. These modules were developed to obtain greater flexibility and also
+to be used by non-technical users, as recommended by the design principles for
+service-oriented systems.
+Resumo. Um dos objetivos da Web Sem ântica é fornecer conceitos, métodos e
+ferramentas para combinar diversos serviços web para gerar um novo serviço
+que satisfaça os requerimentos do usu ário.  Fazer este processo de forma ma-
+nual é uma tarefa árdua e suscetível a erros. Métodos e ferramentas têm sido
+propostos para compor serviços web de forma autom ática.  Este trabalho tem
+como objetivo descrever a implementaç ão de um sistema de composiç ão au-
+tom ática de serviços web, especificamente, a implementaç ão dos m ódulos: In-
+terface e Tradutor.  Estes m ódulos foram desenvolvidos de forma desacoplada
+para obter maior flexibilidade e orientado para usu ários n ão-técnicos, como
+recomendado pelos princípios de design para sistemas orientados a serviços.
+1.                                                                                      Introduç ão
+Sistemas de composição automática de serviços web podem ser vistos como uma evolução
+dos sistemas baseados em serviços web tradicionais [Rao and Su 2004], oferecendo di-
+versos benefícios em  áreas como:  e-business, e-government e bioinformática e gestão
+do conhecimento [Medjahed and Bouguettaya 2011]. O objetivo deste tipo de sistemas é
+compor (combinar), automaticamente, vários serviços web para produzir um novo serviço
+web que satisfaça as requisiç ões do usuário.
+                                                                                        Diversos  trabalhos  têm  proposto  ferramentas  para  compor  serviços  de
+forma   automática   nos                                                                últimos   anos                                                                [Sycara et al. 2003],   [Agarwal et al. 2005],
+444
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+[Digiampietri et al. 2007]  e                                                                  [Kuzu and Cicekli 2010].    No  entanto,  estas  propostas
+não  trazem  soluç ões  completas,  desacopladas,  interorganizacionais  e  utilizáveis  por
+usuários finais sem conhecimentos técnicos,  como recomendado pelos princípios de
+design para sistemas orientados a serviços [Erl 2009].
+Baseado na carência dessas características, este trabalho objetivou o estudo e de-
+senvolvimento de um Sistema de Composição Automática de Serviços Web Semânticos
+(SCASWS) seguindo esses princípios de design.  Para tal fim, foi estudada a arquite-
+tura apresentada em [Zu ñiga et al. 2010] e como contribuição foram implementados os
+m ódulos, de forma desacoplada, Interface (orientado para usuários não técnicos) e Tradu-
+tor (utilizando a ferramenta ANTLR [Espina 2011]).
+O restante deste artigo está organizado da seguinte forma.  A Seção 2 apresenta
+alguns conceitos básicos. A Seção 3 contém uma descrição dos sistemas de composição
+automática de serviços web.  A Seção 4 apresenta o desenvolvimento dos m ódulos In-
+terface e Tradutor.  A Seção 5 contém os trabalhos relacionados e finalmente a Seção 6
+apresenta as conclus ões e trabalhos futuros.
+2. Conceitos B ásicos
+Entre as soluç ões propostas para compor serviços web de forma automática destacam-se
+as baseadas em web semântica e planejamento.
+2.1. Web Sem ântica
+A Web Semântica procura associar um significado bem definido (descriç ões semânticas)
+às  informaç ões,  dados  e  aplicaç ões  da  web  (p.   ex.   paginas  web,  serviços  web,
+etc.)  para que possam ser automaticamente entendidos e processados pelos computa-
+dores [Berners-Lee et al. 2001].  A solução proposta para a estruturação de descriç ões
+semânticas é o uso de ontologias. Uma ontologia é uma descrição de conceitos e relaç ões
+entre conceitos que podem existir para um agente ou uma comunidade de agentes de soft-
+ware [Gruber 1993]. O uso de serviços web em conjunto com as ontologias têm sido uma
+área de intensa pesquisa, com objetivo de desenvolver modelos ontol ógicos que permitam
+a implementação dos chamados “Serviços Web Semânticos”.
+Dentre os modelos ontol ógicos mais citados na literatura estão:  OWL-S (Web
+Ontology Language for Services) [Martin et al. 2004], WSDL-S (Web Service Descrip-
+tion Language for Services) [Akkiraju et al. 2005] e WSMO (Web Services Modelling
+Ontology) [Lausen et al. 2005]. OWL-S é uma ontologia baseada em OWL (Web Onto-
+logy Language) [McGuinness and van Harmelen 2004] para a definição de serviços.  Já
+WSDL-S permite adicionar anotaç ões semânticas a documentos WSDL (Web Services
+Description Language) para descrever semanticamente as entradas, saídas e operaç ões de
+um serviço web. Finalmente, WSMO provê um framework mais completo e claro para a
+descrição de serviços web semânticos, o que possibilita a automatização (total ou parcial)
+de tarefas como: descoberta, seleção, composição, execução e monitoração da execução
+de serviços. Além disso, o WSMO oferece uma maior expressividade na descrição dos
+serviços web semânticos, fatos que justificam a escolha deste modelo ontol ógico para
+nossa implementação.  Nesse sentido, a continuação detalha-se os principais conceitos
+deste modelo ontol ógico.
+445
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+2.1.1. WSMO
+WSMO é um framework que implementa uma ontologia formal e conjunto de linguagens
+que permitem descrever todos os aspectos relevantes para acessar um serviço web de
+forma automática (total ou parcial). O modelo ontol ógico WSMO é composto por quatro
+elementos [Fensel et al. 2007]:
+Ontologia:  As ontologias fornecem a semântica formal das terminologias uti-
+lizadas por todos os outros elementos especificados no modelo ontol ógico WSMO;
+Serviços Web: Um serviço web está associado a uma determinada ontologia de
+domínio.  Serviços web são compostos de uma descrição formal que descreve: as fun-
+cionalidades do serviços, as propriedades não-funcionais e um método que permite inter-
+agir com o serviço web (interface). As funcionalidades do serviço web são descritas como
+capacidades (capabilities) e utilizam os seguintes conceitos para expressar restriç ões e
+relaç ões entre serviços web:
+• Pré-Condiç ões:  As pré-condiç ões especificam as informaç ões (parâmetros ou
+variáveis) requeridas antes da execução do serviço web, por exemplo, para com-
+prar uma passagem de avião precisa-se de que o cliente tenha um Id de usuário e
+uma senha validos;
+• Suposiç ões:  As suposiç ões descrevem o estado suposto do serviço web antes
+da sua execução.  Diferente das pré-condiç ões, suposiç ões não são necessaria-
+mente verificadas pelo serviço.  Por exemplo, para comprar uma passagem de
+avião suponha-se que o cliente já esteja logado no sistema;
+• P ós-condiç ões:  As p ós-condiç ões descrevem as informaç ões  (parâmetros ou
+variáveis) resultantes ap ós a execução bem sucedida do serviço web, por exem-
+plo, ap ós comprar uma passagem de avião o cliente deverá receber o n úmero do
+assento reservado;
+• Efeitos: Os efeitos descrevem o estado resultante do serviço web ap ós o sucesso
+da execução, por exemplo, ap ós comprar uma passagem de avião e confirmar a
+reserva do assento o cliente é desconectado do sistema.
+Metas (Goals): As Metas descrevem formalmente a funcionalidade desejada pelo
+usuário. Isto é, uma meta é o desejo do usuário que deveria ser satisfeito pelas funcional-
+idades de um serviço web ou pela combinação de diversos serviços web.
+Mediadores: Os mediadores são responsáveis por lidar com problemas de inter-
+operabilidade entre os diferentes elementos do WSMO. Mediadores podem ser de quatro
+tipos: ggMediator, mediador que liga duas metas. Esta ligação representa o refinamento
+de uma meta origem em uma meta alvo; ooMediator, mediador que importa ontologias e
+resolve possíveis combinaç ões entre estas; wgMediator, mediador que liga serviços web
+a metas, significando que um serviço Web satisfaz (totalmente ou parcialmente) a meta
+com a qual ele é ligado; e wwMediator, mediador que liga dois serviços Web.
+2.1.2. WSML
+A implementação formal dos elementos do WSMO é feita através do Web Service Model-
+ing Language (WSML), que é um conjunto de linguagens que foram projetados para de-
+screver os aspectos funcionais, comportamentais e não-funcionais de todos os elementos
+446
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+do WSMO [de Brujin et al. 2008]. O WSML é baseado em dois paradigmas: Description
+Logic e Logic Programming.  Estes paradigmas permitem ao WSML descrever diver-
+sas variantes da linguagem (WSML-Core, WSML-DL, WSML-Flight, WSML-Full), que
+diferem em grau de expressividade l ógica e complexidade computacional.
+Entre as variantes, o WSML-Core é a menos expressiva, porém, permite a mod-
+elagem de classes, atributos, relaç ões binárias, instâncias, hierarquias de classe e de
+relaç ões de hierarquias. O WSML-DL permite a interoperabilidade com ontologias OWL.
+Por sua vez, o WSML-Flight é uma extensão do WSML-Core e acrescenta suporte a meta-
+modelagem, restriç ões, negação não monot ônica e interoperabilidade com RDFS. Já o
+WSML-Rule é uma extensão do WSML-Flight com maior expressividade l ógica acres-
+centando suporte para a L ógica de Horn. Finalmente, o WSML-Full é a variante que gen-
+eraliza o WSML-DL e WSML-Rule, porém, a semântica desta variante ainda não foi com-
+pletamente especificada na versão atual do WSML [Medjahed and Bouguettaya 2011].
+2.2. Planejamento
+Entre as técnicas da inteligência artificial (IA) que permitem compor de serviços web
+podemos destacar a baseada em Planejamento, a qual estuda o processo de deliberação
+que escolhe e organiza aç ões, prevendo os efeitos da execução dessas aç ões buscando atin-
+gir da melhor forma possível alguns objetivos pré-definidos [Russel and Norvig 2003].
+Um planejador  é uma ferramenta de software que implementa uma técnica de
+planejamento.  Para construir um planejador que seja capaz de resolver um problema
+de planejamento,  é necessária uma linguagem formal para a representação:  das aç ões
+(domínio de planejamento); e do estado inicial e meta (problema de planejamento).  O
+domínio de planejamento descreve através de uma sintaxe formal a representação dos
+estados do mundo em aç ões dentro de um contexto específico. Já um problema de plane-
+jamento descreve um estado inicial do mundo, que é ponto de partida para chegar à meta
+especificada [Ghallab et al. 2004].
+A linguagem padrão na área de planejamento é PDDL (Planning Domain Def-
+inition Language) [GHALLAB et al. 1998].  A descrição de um problema de planeja-
+mento a partir da linguagem PDDL acontece a partir de duas entradas:  a definição do
+domínio e a definição do problema. A definição do domínio em linguagem PDDL é com-
+posto de requerimentos (requirements), tipos (types), constantes (constants), predicados
+(predicates) e aç ões (action). Os requerimentos são os subconjuntos de funcionalidades
+que um domínio demanda de suporte por parte dos planejadores. A importância dos re-
+querimentos são, de acordo com [GHALLAB et al. 1998], uma forma de permitir com
+que um planejador descarte rapidamente um domínio que ele não seja capaz de atender.
+Aç ões avaliam parâmetros, pré-condiç ões e efeitos a fim de determinar a execução das
+mesmas.  A definição do problema descreve um estado inicial do mundo, que é ponto
+de partida da deliberação que escolhe e organiza aç ões para chegar à meta especificada
+[Russel and Norvig 2003].
+3. Composiç ão Autom ática de Serviços Web
+Nesse sentido, este trabalho objetivou o estudo e desenvolvimento de um Sistema de
+Composição Automática de Serviços Web Semânticos (SCASWS) seguindo os princípios
+de design para sistemas orientados a serviços [Erl 2009].  Para tal fim, estudamos a ar-
+quitetura apresentada em [Zu ñiga et al. 2010] e descrita na figura 1.
+447
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figure                                                                                        1.   ao  de  Servic¸os  Web  proposta  em
+[Zu ˜niga et al. 2010].
+Cada caixa da figura 1 representa um m ódulo do sistema e as setas correspondem
+a interaç ões entre os m ódulos. O m ódulo Interface é responsável pela interação entre o
+usuário e o resto do sistema. Ele permite ao usuário especificar suas requisiç ões. Essas
+requisiç ões são modeladas na forma de metas ou goals utilizando a linguagem WSML.
+O M ódulo Descoberta, encarrega-se de procurar um serviço adequado para a meta
+especificada.  Este m ódulo executa algoritmos de casamento entre a goal e os serviços
+existentes no reposit ório de serviços.  Se algum serviço satisfaz a requisição, este é en-
+viado para o m ódulo de Execução. Caso contrario, a requisição é envida para o m ódulo
+Tradutor. O m ódulo Tradutor recebe a requisição do usuário e a traduz para a linguagem
+entendida pelo planejador, neste caso a linguagem PDDL, para construir a definição do
+domínio e definição do problema de planejamento.
+O Planejador  é o m ódulo de raciocínio do sistema.  Ele recebe a definição do
+domínio e do problema de planejamento e através do algoritmo de planejamento imple-
+mentado nele, raciocina para produzir um ou mais planos solução (que são compostos
+pelos serviços web satisfazem a requisição do usuário).  Caso nenhum plano seja ger-
+ado, solicita-se uma nova requisição ao usuário. Sempre que mais de um plano solução
+é produzido, o m ódulo Avaliador analisa as propriedades não-funcionais descritas nos
+serviços web que comp õem o plano, para determinar qual se adapta melhor à solicitação
+do usuário.
+O m ódulo Executor recebe o plano solução e faz o mapeamento para os serviços
+web (nível de invocação) a serem executados. Ap ós a execução, os resultados são apre-
+sentados para o usuário. Se uma falha ocorrer durante a execução dos serviços web, um
+processo de replanejamento pode ser solicitado pelo Executor ao Planejador.
+4. Desenvolvimento dos M ódulos Desacoplados
+A implementação do m ódulo Interface e Tradutor foi utilizada a linguagem Java, o ambi-
+ente de desenvolvimento ECLIPSE, o ANTLR IDE [Espina 2011] que é um plug-in para
+o ECLIPSE.
+448
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+4.1. M ódulo Interface
+O m ódulo Interface foi projetado para interagir de forma simples e dinâmica com usuários
+não técnicos, e como resultado dessa interação abstrair a funcionalidade desejada pelo
+usuário e transformá-la em uma requisição formalmente especificada (meta), que neste
+caso é feito através de linguagem de modelagem semântica WSML. Além disso, o m ódulo
+Interface deve interagir com os usuários de forma que permita:  gerenciar o sistema
+(usuário autorizado); e apresentar o resultado gerado pelo sistema para uma requisição
+solicitada.
+4.1.1. Interface Gr áfica de Gerenciamento
+Esta interface gráfica permite que um usuário autorizado (p.  ex.  administrador) faça o
+upload e armazenamento de documentos WSML (ontologias, serviços web e mediadores)
+nos reposit órios (banco de dados) do SCASW. Estes documentos WSML são associados
+a um domínio de aplicação (p. ex. viagens). Um domínio de aplicação é como um tema
+(categoria) de aplicaç ões que tratam informaç ões e funcionalidades similares.  Para fa-
+cilitar o uso do SCASW por usuários não técnicos, as ontologias submetidas devem ser
+associadas a ícones representativos, desta forma a interface gráfica de requisição de metas
+torna-se graficamente mais intuitiva.  A figura 2 representa a interface gráfica gerencia-
+mento.
+O armazenamento dos documentos WSML segue um processo de criação de ob-
+jetos Java que representam os tipos de dados dos conceitos, variáveis, propriedades fun-
+cionais e não funcionais, contidas nestes documentos WSML. Estes objetos Java são ar-
+mazenados no banco de dados, o que permite a criação dinâmica dos formulários das
+interfaces gráficas de requisição de metas e apresentação de resultados.
+Figure 2. Interface Gr ´afica de Gerenciamento
+4.1.2. Interface Gr áfica de Requisiç ão de Metas
+A interface gráfica de requisição de metas permite que qualquer usuário especifique uma
+requisição ao SCASW. Esta interface gráfica deve ser:  dinâmica, isto  é, o formulário
+449
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+apresentado deve corresponder ao domínio de aplicação escolhido; e com um alto grau de
+abstração, isto é, que usuários não técnicos possam especificar suas requisiç ões de forma
+simples e clara.
+Nesse sentido, a primeira tela (formulário) desta interface gráfica permite a es-
+colha de uma categoria (domínio de aplicação).  A escolha da categoria gera uma lista
+de ícones representativos das ontologias e serviços web associados a esta categoria, como
+representado na figura 3A. A seleção destes ícones representa o refinamento da requisição
+do usuário. Por exemplo, para descrever que o usuário quer viajar, ele escolhe a categoria
+correspondente e entre os ícones associados ele pode refinar seu desejo indicando que
+quer pagar com cartão de credito, que o médio de transporte seja de trem e que as pas-
+sagens sejam enviadas pelo serviços de postagem local, como pode ser observado na parte
+superior central da figura 3A.
+Ao ser selecionado o botão “Next Step”, o m ódulo Interface gera uma segunda tela
+(formulário) a qual permite especificar (escolher em alguns casos) os valores (instâncias
+das ontologias) dos tipos de dados associados aos ícones escolhidos. Por exemplo, para o
+domínio de aplicação “Viajar”, e a seleção dos ícones viagem de trem e modo de entrega
+das passagens, o formulário gerado contem informaç ões como a cidade origem, cidade
+destino, horário da viagem e serviço de entrega das passagem, como pode ser observado
+na figura 3B.
+Este segundo formulário é gerado de forma dinâmica em base aos objetos Java as-
+sociados ao domínio de aplicação e as ontologias (neste caso representadas pelos ícones)
+escolhidos.  Finalmente, ao selecionar o botão “Next Step” o processo de composição
+é iniciado, uma meta (requisição do usuário) é formalmente especificada na linguagem
+WSML gerando um documento WSML do tipo meta (goal).  Note-se que a cada ícone
+selecionado, o refinamento da requisição cresce e consequentemente a complexidade do
+serviço web a ser composto.
+¸ ˜oes de Metas
+4.1.3. Interface Gr áfica de Resultados
+Em base  à arquitetura do SCASW, a interface gráfica de resultados  é responsável por
+apresentar ao usuário o resultado gerado pelo m ódulo Executor.  A construção da tela
+450
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+(formulário) que contem as informaç ões dos serviços web executados, segue o mesmo
+conceito da interface gráfica de requisição de metas, isto é, são utilizados os objetos Java
+associados às p ós-condiç ões e efeitos dos serviços web inclusos no plano solução e exe-
+cutados pelo m ódulo Executor.
+Para o exemplo da subseção anterior, o resultado gerado informa as cidades de
+origem e destino, o horário da viagem, o valor e forma de pagamento da passagem, e o
+valor e o forma de entrega das passagem, como pode ser observado na figura 4. Caso o
+m ódulo Planejador ou Executor não consigam gerar ou executar o plano, respectivamente,
+o fluxo do processo é devolvido à interface gráfica de requisição de metas.
+Figure 4. Interface Gr ´afica de Resultados
+4.2. M ódulo Tradutor
+O m ódulo Tradutor permite que especificaç ões semânticas em WSML  (ontologias e
+metas) sejam traduzidas para a linguagem PDDL. Este m ódulo foi desenvolvido baseado
+no conceito de compiladores através do uso da ferramenta ANTLR [Parr 2007].  Nesse
+contexto, três gramáticas foram construídas: a de representação da linguagem WSML, a
+de representação do mecanismo de tradução e a de representação da linguagem PDDL.
+A gramática capaz de representar a linguagem WSML foi construída para que,
+quando interpretada pelo compilador de compiladores (ANTLR), gere o analisador léxico
+e sintático para a linguagem WSML. Quando um documento WSML (neste caso uma
+ontologia ou uma meta)  é submetido  à gramática construída, a ferramenta Antlr IDE
+constr ói uma representação gráfica da árvore sintática em conformidade com a entrada
+recebida, validando a gramática construída.
+A gramática de representação do mecanismo de tradução mapeia a equivalência de
+termos de uma linguagem para a outra, definindo as regras da gramática WSML e a forma
+como elas deveriam ser traduzidas. Essa gramática, junto ao ANTLR é responsável pela
+criação do analisador semântico e a tradução de uma ontologia para um domínio PDDL e
+a tradução da meta para uma especificação de um problema de planejamento.
+Para validar os arquivos PDDL gerados, foi projetada uma gramática que repre-
+senta a linguagem PDDL. Assim, os arquivos PDDL gerados são submetidos à ferramenta
+451
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Antlr IDE, a qual produz uma árvore sintática em conformidade aos arquivos submeti-
+dos, validando a tradução realizada. Todo este fluxo de processamento é representado na
+figura 5.
+ao do m ´odulo tradutor.
+5. Trabalhos Relacionados
+Diversos  trabalhos  têm  estudado  o  processo  de  composição  automática  serviços
+web                                                                                        [Sycara et al. 2003],                                     [Agarwal et al. 2005],                               [Digiampietri et al. 2007]    e
+[Kuzu and Cicekli 2010].  Estes trabalhos focaram seus esforços no desenvolvimento e
+otimização de diversos tipos de algoritmos e procedimentos para tratar, especificamente,
+o processo de composição, desconsiderando a importância da interface do sistema.
+Já  em                                                                                     [Chahoud 2006]  e                                         [Silva 2008]  apresentam-se  duas  ferramentas  de
+composição automática de serviços web com interfaces gráficas. Estas interfaces gráficas
+requerem que os usuários tenham conhecimento técnico da ferramenta, o que limita o
+uso deste tipo de ferramentas por usuários comuns. Além disso, estas interfaces gráficas
+foram projetas, em ambos casos, para especificar a requisição do usuário (meta) para um
+único estudo de caso específico.
+Em  [Santos et al. 2011]                                                                   é  apresentada  uma  ferramenta  que  traz  as  devidas
+preocupaç ões para interação com usuários não técnicos,  porém,  esta ferramenta foi
+projetada para prover serviços web de forma dinâmica, apresentando os serviços web
+disponíveis para uma dada situação, nesse sentido, não proporciona nenhuma solução a
+nível de composição.
+Já entre as poucas ferramentas que permitem a tradução de linguagens semânticas
+(como OWL-S e WSML) para a linguagem PDDL, entre elas destacam-se o OWLSX-
+Plan [Klusch et al. 2005] que é uma ferramenta de composição que implementa um com-
+ponente chamado OWLS2PDDL [Gerber and Klusch 2009] que faz a tradução entre a
+linguagem OWL-S e a linguagem PDDL (entendida pelos planejadores).
+Já em [Sirin et al. 2004] é apresentado um algoritmo que permite a tradução da
+linguagem OWL-S para a sintaxe de planejamento hierárquico ou Hierarchical Task Net-
+work  (HTN)  [Sirin et al. 2004] entendida pelo planejador JShop2  [Ilghami 2006].   O
+AIMO Translator [Tabatabaei et al. ]  é uma ferramenta que permite a tradução da lin-
+guagem WSML para a sintaxe HTN. Em [Zu ñiga et al. 2010] é implementado um pro-
+cedimento que permite a tradução da linguagem WSML para PDDL.
+No entanto, todas estas ferramentas implementam algoritmos que fazem a leitura
+da sintaxe de uma linguagem semântica (OWL-S e WSML) e a traduzem linha por linha,
+452
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+utilizando tabelas de equivalências, para gerar o documento equivalente na linguagem de
+planejamento especificada (HTN e PDDL).
+6. Conclus ões e Trabalho Futuros
+O objetivo deste trabalho foi atingido ao descrever, desenvolver e avaliar os m ódulos In-
+terface e Tradutor de forma desacoplada. Nesse sentido, este trabalho estimula e contribui
+com os esforços de pesquisa sobre sistemas de composição automática de serviços web.
+Ao compararmos as interfaces propostas nos trabalhos correlatos com o nosso
+m ódulo Interface, n ós apresentamos uma contribuição em base ao nível de abstração da
+interface gráfica, sendo esta mais intuitiva e simples para usuários sem conhecimentos
+técnicos, e mais dinâmica no sentido que nossa interface gráfica pode construir de forma
+automática as telas (formulários) para os diversos domínios de aplicação suportados pelo
+sistema, não ficando pressa a um único estudo de caso e nem precisando de implementar
+interfaces gráficas especificas para cada estudo de caso.
+Além disso,  nosso m ódulo Interface  é  composto por três interfaces gráficas,
+as  quais  dividem,  claramente,  a  interação  para  atendam  usuários  finais               (incluindo
+usuários não-técnicos) e a usuários autorizados que são os encarregados de dar suporte e
+manutenção ao SCASW. O resultado gerado por nosso m ódulo Interface é uma especiação
+formal, na linguagem semântica WSML, da requisição ou meta feita pelo usuário de
+forma visual e intuitiva.
+A construção do nosso m ódulo Tradutor em base à abordagem de compiladores,
+demonstrou que  é possível realizar a tradução de uma linguagem semântica para uma
+linguagem de planejamento de forma diferente  à abordagem utilizada pelo trabalhos
+correlatos, que utilizam tabelas de equivalências.  Esta abordagem permite que além
+da tradução dos documentos, também, seja feita uma validação dos mesmos através da
+análise léxica e sintática.
+Além disso, o uso de gramaticas permite o re úso das mesma para a extensão do
+m ódulo de forma que possa suportar a tradução de linguagem semântica OWL-S e de
+extens ões do PDDL como o PPDDL que da suporte para problemas de planejamento
+não-determinístico.
+O  resultado  do  m ódulo  Tradutor  são  os  documentos  especificados  na  lin-
+guagem de planejamento PDDL. A disponibilização m ódulo de forma online1  permite a
+experimentação da ferramenta. Nesse sentido, podem ser utilizados documentos WSML
+(ontologias e goals) disponíveis de forma online no site oficial 2  dos criadores da modelo
+ontol ógico WSMO e da linguagem semântica WSML.
+A continuidade do presente trabalho foca o interesse em aperfeiçoar o m ódulo
+Interface para suportar de forma simples e intuitiva a representação de axiomas, que são
+express ões logicas que permitem refinar a especificação de conceitos e relaç ões entre
+conceitos em uma ontologia.  Além disso, o m ódulo Tradutor deve ser estendido para
+suportar a tradução para a linguagem de planejamento PPDDL, desta forma teríamos o
+suporte para criar domínios de aplicação mais complexos que abordem aspectos de não-
+1 Acessível em: http://wsml2pddl.appspot.com
+2 Acessível em: http://wsmo.org
+453
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+determinismo como observabilidade parcial e nula, já que estes modelos representam de
+melhor forma a característica dinâmica dos serviços e aplicaç ões web.
+References
+Agarwal, V., Chafle, G., Dasgupta, K., Karnik, N., Kumar, A., Mittal, S., and Srivas-
+tava, B. (2005).  Synthy: A system for end to end composition of web services.  Web
+Semantics: Science, Services and Agents on the World Wide Web, 3(4):311 - 339.
+Akkiraju, R., Farell, J., Miller, J., Nagarajan, M., Sheth, A., and Verma, K. (2005). Wsdl-
+s: Web service semantics. Technical report, World Wide Web Consortium - W3C.
+Berners-Lee, T., Hendler, J., and Lassila, O. (2001). The semantic web. Scientific Ameri-
+can, 284(5):35-43.
+Chahoud, J. J. (2006).  Planejamento para serviços web semânticos.  Master’s thesis,
+Instituto de Matemática e Estatística da Universidade de São Paulo.
+de Brujin, J., Fensel, D., Kerrigan, M., Keller, U., Lausen, H., and Scicluna, J. (2008).
+Modeling Semantic Web Services. Springer-Verlag, Berlin, Heidelberg.
+Digiampietri, L. A., Pérez-Alcázar, J. J., and Medeiros, C. B. (2007).  Ai planning in
+web services composition: A review of current approaches and a new solution. In VI
+Encontro Nacional de Inteligência Artificial, Anais do XXVII congresso da SBC.
+Erl, T. (2009). SOA Design Patterns. Prentice Hall PTR.
+Espina, E. (2011). Antlr ide. Disponível em: <http://antlrv3ide.sourceforge.net/> Acesso
+em Outubro, 18.
+Fensel,  D.,  Lausen,  H.,  Polleres,  A.,  Bruijn,  J. d.,  Stollberg,  M.,  Roman,  D.,  and
+Domingue, J. (2007).  Enabling Semantic Web Services: The Web Service Modeling
+Ontology. Springer-Verlag New York, Inc., Secaucus, NJ, USA.
+Gerber,   A.  and  Klusch,   M.                                                                  (2009).   Owls2pddl.   Technical  Report  URL:
+http://projects.semwebcentral.org/projects/owls2pddl/, Sem Web Central.
+GHALLAB,  M.,  HOWE,  A.,  KNOBLOCK,  C.,  MCDERMOTT,  D.,  RAM,  M.,
+VELOSO, M., WELD, D., and WILKINS, D. (1998).  Pddl - the planning domain
+definition language. In AIPS-98 Planning Committee.
+Ghallab, M., Nau, D., and Traverso, P. (2004). Automated Planning, Theory and Practice.
+Morgan Kaufmann Publishers, Elsevier.
+Gruber, T. R. (1993). A translation approach to portable ontology specifications. Techni-
+cal Report KSL 92-71, Knowledge Systems Laboratory, Stanford University.
+Ilghami, O. (2006).  Documentation for jshop2.  Technical report, Department of Com-
+puter Science University of Maryland.
+Klusch, M., Gerber, A., and Schmidt, M. (2005).  Semantic web service composition
+planning with owls-xplan.  In Proceedings of the 1st Intl. AAAI Fall Symposium on
+Agents and the Semantic Web, Arlington VA, USA, AAAI Press.
+Kuzu, M. and Cicekli, N. K. (2010).  Dynamic planning approach to automated web
+service composition. Applied Intelligence, pages 1-28.
+454
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Lausen, H., Polleres, A., and Roman, D. (2005). Wsmo: Web service modelling ontology.
+Technical report, World Wide Web Consortium - W3C.
+Martin, D., Burstein, M., Hobbs, J., Lassila, O., McDermott, D., McIlraith, S., Narayanan,
+S., Paolucci, M., Parsia, B., Payne, T., and Sirin, E. (2004). Owl-s: Semantic markup
+for web services. Technical report, World Wide Web Consortium - W3C.
+McGuinness, D. L. and van Harmelen, F. (2004). Owl: Web ontology language. Technical
+report, World Wide Web Consortium - W3C.
+Medjahed, B. and Bouguettaya, A. (2011).  Service Composition for the Semantic Web.
+Springer New York.
+Parr, T. (2007).  The definitive ANTLR reference:  building domain-specific languages.
+Pragmatic Bookshelf Series. Pragmatic.
+Rao, J. and Su, X. (2004).  A survey of automated web service composition methods.
+In Proceedings of The 1st International Workshop on Semantic Web Services and Web
+Process Composition (SWSWPC), San Diego, USA. Springer.
+Russel, S. and Norvig, P. (2003). Artificial Intelligence: A Modern Approach. Prentice-
+Hall, 2nd edition edition.
+Santos, L., Sorathia, V., Pires, L., and Sinderen, M. (2011). Towards a conceptual frame-
+work to support dynamic service provisioning for non-technical service clients. Jour-
+nal of Software, pages 564-573.
+Silva, M. V. A. (2008).  Transplan: Uma solução para mapear e planejar serviços web
+semânticos. Master’s thesis, Universidade Federak da Bahia, Laborat ório de Sistemas
+Distribuídos.
+Sirin, E., Parsia, B., Wu, D., Hendler, J., and Nau, D. (2004).  Htn planning for web
+service composition using shop2. Journal of Web Semantics, 1(4):377-396.
+Sycara, K., Paolucci, M., Ankolekar, A., and Srinivasan, N. (2003).  Automated discov-
+ery, interaction and composition of semantic web services.  Web Semantics: Science,
+Services and Agents on the World Wide Web.
+Tabatabaei, S. G. H., Kadir, W. M. N. W., Ibrahim, S., and Dastjerdi, A. V. Aimo trans-
+lator: Bridging the gap between semantic web service discovery and composition. In
+Proceedings of the 2010 Fifth International Conference on Internet and Web Applica-
+tions and Services, pages 268-273. IEEE Computer Society.
+Zu ñiga, J. C., Perez-Alcazar, J. J., and Digiampietri, L. (2010).  Implementation issues
+for automatic composition of web services. In Proceedings of the 2010 Workshops on
+Database and Expert Systems Applications, DEXA ’10, pages 201-205.
+455
+
+
+
+
+

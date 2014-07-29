@@ -1,0 +1,517 @@
+﻿VII Simpósio Brasileiro de Sistemas de Informação
+Uso de uma Ontologia de Fundamentação para Dirimir
+Ambiguidades na Modelagem de Processos de Negócio
+Aline F. Martins, Ricardo A. Falbo, Giancarlo Guizzardi, João Paulo A. Almeida
+Núcleo de Estudos em Modelagem Conceitual e Ontologias (NEMO) - Departamento
+de Informática - Universidade Federal do Espírito Santo (UFES)
+Av. Fernando Ferrari s/n, Campus de Goiabeiras - 29.060-900 - Vitória - ES - Brasil
+{falbo,  gguizzardi,  jpalmeida}@inf.ufes.br
+Resumo. Modelos de processos de negócio são usados, dentre outros, para
+aperfeiçoar a operação das empresas e para apoiar o desenvolvimento de
+sistemas de informação. Neste contexto a qualidade dos modelos é essencial.
+Modelos de processo ambíguos e mal formados podem levar a problemas de
+entendimento,  comprometendo  seu  uso.  Um  aspecto  importante  para  a
+qualidade  de  modelos  é  a  clareza  e  expressividade  da  linguagem  de
+modelagem   utilizada.   Este   artigo   explora   o   uso   da   Ontologia   de
+Fundamentação  Unificada  (Unified  Foundational  Ontology  -  UFO)  para
+adicionar semântica a alguns elementos de modelo de diagramas de atividade
+da UML, de modo capturar distinções importantes e tornar a linguagem mais
+expressiva e clara. Como resultado, é proposto E-OntoUML, um perfil UML
+para  a  modelagem  de  processos  usando  diagramas  de  atividades,  que  é
+fundamentado semanticamente em UFO.
+Abstract.  Process  models  are  used,  among  other  things,  to  improve  the
+operation and support of information systems development in organizations.
+In this context, the quality of the business process models is essential. Process
+models which are ambiguous and poorly formed can lead to problems of
+understanding and jeopardize their use. An important aspect for model quality
+regards the clarity and expressivity of the adopted modeling language. This
+paper explores the use of the Unified Foundational Ontology (UFO) to add
+real-world  semantics  to  some  model  elements  present  in  UML  activity
+diagrams. As a result, we developed E-OntoUML, a UML profile for process
+modeling using activity diagrams that are semantically founded on UFO.
+1. Introdução
+A Gerência de Processos de Negócio (Business Process Management - BPM) baseia-se
+na observação de que produtos e serviços oferecidos pelas organizações são resultantes
+de processos de negócio. Ela tem recebido considerável atenção tanto da comunidade de
+administração  quanto  da  comunidade  de  sistemas  de  informação:  a  primeira  está
+interessada em aperfeiçoar a operação das empresas, levando em consideração aspectos
+como aumento da satisfação dos clientes, redução de custos e provimento de novos
+produtos e serviços a custos mais baixos; a segunda está interessada em prover sistemas
+de software robustos e escaláveis para apoiar processos de negócio [Weske 2007].
+129
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Sistemas de Informação (SIs) desempenham um importante papel na gerência de
+processos de negócio, já que cada vez mais atividades das organizações são apoiadas
+por sistemas desse tipo [Weske 2007]. Os SIs habilitam os processos de negócio e, se os
+processos de negócio e os sistemas não estiverem alinhados, então os SIs não atenderão
+às expectativas de seus usuários. Essa falta de alinhamento é apontada como sendo uma
+das principais causas de fracasso de projetos de desenvolvimento de SIs [Frye, Gulledge
+2007].
+Neste contexto, a qualidade dos modelos de processos de negócio é fundamental.
+Modelos de processo ambíguos e mal formados, por exemplo, podem levar a requisitos
+inconsistentes e, por conseguinte, a SIs que não atendam às necessidades do negócio.
+O uso de notações gráficas para representar modelos de processo é reconhecido
+como essencial para sua apresentação de forma clara e concisa [Weske et al. 2004] e,
+por conseguinte, para o entendimento e comunicação do conhecimento nele expresso.
+Contudo, mesmo algumas das notações de modelagem de processos de negócio mais
+usadas na atualidade, como os diagramas de atividades da UML e BPMN [Ko et al.
+2009], deixam margem para ambiguidades.
+Este artigo explora o uso de uma ontologia de fundamentação para adicionar a
+chamada semântica de mundo real (ontological semantics ou real-world semantics) a
+alguns elementos de modelo de diagramas de atividade da UML, com vistas a deixar
+mais claros e menos ambíguos os modelos de processo de negócio elaborados utilizando
+essa  notação.  Uma  ontologia  de  fundamentação  é  um  sistema  de  categorias
+filosoficamente bem fundamentado e independente de domínio [Guizzardi et al. 2008].
+Ontologias de fundamentação servem como base para o estabelecimento de consenso e
+negociação  entre  humanos,  e  têm  sido  utilizadas  para  melhorar  a  qualidade  de
+linguagens  de  modelagem  e  modelos  conceituais  [Guizzardi  2005].  Neste  trabalho,
+utiliza-se  a  ontologia  de  fundamentação  UFO                                           (Unified  Foundational  Ontology)
+[Guizzardi  2005]  [Guizzardi et al.  2008], que possui conceitos relativos a eventos,
+objetos e agentes e, portanto, pode ser utilizada no contexto da modelagem de processos
+de negócio para prover semântica aos modelos que capturam o conhecimento dinâmico
+sobre processos. Consideramos a definição da semântica de mundo real complementar à
+definição de semântica formal de execução (como por exemplo aquela apresentada em
+[Eshuis  2002]).  Enquanto  a semântica de mundo real descreve uma linguagem em
+termos dos fenômenos que podem ser representados pelos elementos da linguagem, a
+semântica formal de execução define as possíveis execuções de um processo de negócio
+através de um mapeamento dos elementos da linguagem para um domínio semântico
+matemático (por exemplo, “tokens”, “lugares”, “transições” de uma rede de Petri).
+Este artigo está organizado da seguinte forma. A seção 2 aborda a modelagem de
+processos de negócio e a qualidade de linguagens de modelagem para este propósito,
+bem como o papel de ontologias de fundamentação neste contexto. A seção 3 apresenta
+parcialmente E-OntoUML, um perfil UML para a modelagem de processos usando
+diagramas de atividades, que é fundamentado semanticamente em UFO. Conceitos de
+UFO e elementos de modelo da UML analisados são também apresentados nesta seção,
+de modo a mostrar a fundamentação usada no desenvolvimento do perfil proposto.
+Finalmente,  as  seções  4  e  5  apresentam, respectivamente, trabalhos correlatos e as
+conclusões deste trabalho.
+130
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+2. Modelagem de Processos de Negócio
+Um  modelo  de  processos  de  negócio  descreve  as  atividades  que  uma  organização
+executa para atingir os seus objetivos. Tipicamente, uma notação ou linguagem de
+modelagem de processos de negócio tem primitivas para descrever a ordenação e/ou
+causalidade entre eventos e atividades, assim como a participação de atores e recursos
+organizacionais nas atividades executadas.
+De acordo com Ko et al. (2009), duas das notações mais amplamente utilizadas
+para representar modelos de processos de negócio são os diagramas de atividades da
+UML [OMG 2007] e diagramas de processos de negócio da BPMN (Business Process
+Modeling Notation) [OMG 2006].  White                                                        (2004)   examinou   esses   dois   tipos   de
+diagramas considerando 21 padrões de workflow e concluiu que ambas as notações são
+adequadas para modelar a maioria dos padrões analisados. De acordo com White, as
+linguagens  proveem  soluções  similares,  compartilhando,  inclusive,  muitos  símbolos
+comuns para o mesmo propósito. Russel et al. (2006) também examinaram a utilização
+de  diagramas  de  atividades  da  UML  para  a  modelagem  de  processos  de  negócio,
+concluindo que os diagramas de atividades podem ser utilizados para a modelagem de
+processos de negócio, ainda que eles não sejam adequados a todos os aspectos desse
+tipo de modelagem. Segundo esses autores, diagramas de atividades oferecem um bom
+suporte para as perspectivas de controle de fluxo e de dados, ainda que eles modelem
+aspectos organizacionais e relativos a recursos de forma limitada. Contudo, ainda de
+acordo com Russel et al. (2006), essas limitações são compartilhadas pela a maioria das
+linguagens de modelagem de processos de negócios e refletem a grande ênfase que tem
+sido dada ao controle de fluxo e à perspectiva de dados nas notações de modelagem de
+processos.
+Neste trabalho optou-se por explorar os diagramas de atividades da UML como
+instrumento de modelagem de processos de negócio, tendo em vista que a UML é uma
+linguagem de modelagem amplamente utilizada no desenvolvimento de sistemas de
+informação. É importante realçar, contudo, que a modelagem de processos de negócios
+independe do desenvolvimento de sistemas e pode ser conduzida independentemente
+para a construção de uma arquitetura organizacional (enterprise architecture).
+Um diagrama de atividades enfatiza a sequência e as condições que regem um
+comportamento, definindo seus fluxos de controle e de objetos  [OMG  2007]. Para
+representar  esses  fluxos,  a  UML  provê,  dentre  outros,  elementos  de  modelos  para
+representar ações, objetos, estados de objetos, fluxos de ações e de objetos, condições,
+eventos, início e fim de fluxo, exceções e agrupamento de ações.
+Segundo Guizzardi (2007), um dos principais fatores de sucesso no uso de uma
+linguagem  de  modelagem  reside  na  habilidade  da  linguagem  prover  aos  usuários
+primitivas  de  modelagem  que  sejam  capazes  de  expressar  diretamente  conceitos
+relevantes de um domínio, ou seja, de expressar a conceituação desse domínio. Assim,
+uma linguagem é o meio pelo qual se representa em símbolos (conjunto de elementos
+que compõem um vocabulário) as conceituações de uma realidade (ou de parte dela).
+Para um modelo representar fidedignamente uma abstração, as primitivas de
+modelagem  da  linguagem  usada  para  produzir  esse  modelo  devem  representar
+fidedignamente a conceituação usada para articular essa abstração. Quanto mais forte a
+131
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+correspondência entre uma abstração da realidade e seu modelo de representação, mais
+fácil é comunicar e raciocinar sobre esse modelo. A força dessa correspondência está
+diretamente ligada à qualidade da linguagem de modelagem usada [Guizzardi 2007].
+Uma linguagem de modelagem delimita os possíveis modelos que podem ser
+construídos e, portanto, pode-se dizer que uma linguagem de modelagem ideal é aquela
+fiel ao seu domínio, ou seja, que tem como modelos válidos (gramaticalmente corretos)
+apenas os modelos que representam abstrações admissíveis pela conceituação daquele
+domínio.  Isso  é  possível  quando  o  metamodelo  da  linguagem  de  representação  é
+isomórfico à ontologia ideal de domínio [Guizzardi 2007].
+Tomando por base a argumentação de Guizzardi  (2007), uma linguagem de
+modelagem de processos de negócio ideal deveria ter um metamodelo isomórfico a uma
+ontologia de fundamentação do domínio de processos. A UML, e por conseguinte seu
+diagrama  de  atividades,  não  foi  construída  com  base  em  uma  ontologia  de
+fundamentação.  Assim,  seu  metamodelo  possui  muitos  conceitos  estranhos  a  uma
+ontologia de fundamentação de processos.
+Não  é  propósito  deste  trabalho  propor  uma  linguagem  de  modelagem  de
+processos ideal e, portanto, não se busca o isomorfismo em relação a uma ontologia de
+fundamentação. Busca-se apenas adicionar algumas distinções ontológicas consideradas
+importantes para a modelagem de processos de negócio, criando um perfil UML. Assim,
+utilizam-se  os  mecanismos  de  extensão  da  UML  para  adicionar  parcialmente  a
+semântica de uma ontologia de fundamentação a elementos de modelo de diagramas de
+atividades da UML. Dessa forma, busca-se estabelecer uma semântica de mundo real
+clara para esses elementos de modelo, por se comprometerem ontologicamente com
+uma ontologia de fundamentação. A ontologia de fundamentação usada é a Ontologia de
+Fundamentação Unificada (Unified Foundational Ontology - UFO) [Guizzardi 2005]
+[Guizzardi  et  al.                                                                            2008].  A  UFO  foi  escolhida  por  unificar  diversas  ontologias  de
+fundamentação  e  por  estar  sendo  aplicada  com  sucesso  para  avaliar,  (re)projetar  e
+integrar  modelos  de  linguagens  de  modelagem  conceitual, assim como para prover
+semântica de mundo real para suas primitivas de modelagem [Guizzardi et al. 2008].
+Alguns exemplos de uso de UFO para esses propósitos são apresentados na Seção 4,
+quando os mesmos são comparados com o presente trabalho.
+A UFO é dividida em três partes complementares: a UFO-A é uma ontologia de
+indivíduos duradouros (endurants) e é o cerne da UFO; a UFO-B é uma ontologia de
+eventos (perdurants); por fim, a UFO-C é uma ontologia de entidades intencionais e
+sociais, construída sobre as partes A e B da UFO.  As partes B e C da UFO tratam de
+conceitos relativos a eventos e entidades sociais, respectivamente, e, portanto, definem
+uma gama de conceitos importantes para a modelagem de processos. Uma vez que o
+enfoque  deste  trabalho  é  a  modelagem  de  processos  de  negócio,  em  essência,  são
+utilizadas essas partes de UFO. Os conceitos de UFO relevantes para este trabalho são
+apresentados na próxima seção, que discute o perfil UML proposto, de modo a mostrar a
+fundamentação usada no desenvolvimento do mesmo. Todas as definições da UFO
+usadas neste trabalho foram extraídas de [Guizzardi et al. 2008].
+132
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+3. E-OntoUML: Perfil UML para Diagramas de Atividades Fundamentado
+em UFO
+Um diagrama de atividades permite capturar o fluxo de controle entre atividades de um
+processo, isto é, a ordem de atividades, e suas condições de execução. Ele também
+permite  modelar  agentes  que  são  responsáveis  por  executar  essas  atividades  e  as
+entradas e saídas das mesmas, especificando os estados anteriores e posteriores de cada
+objeto  que  participou  de  uma  atividade.  Entretanto,  a  UML  é  uma  linguagem  de
+especificação carente de uma semântica de mundo real bem definida. Os significados
+dos  seus  elementos  de  modelo  são  dados  por  descrições  textuais  e  modelos  que
+descrevem  sua  sintaxe  abstrata.  Assim,  são  frequentemente  atribuídos  diferentes
+significados  a  um  mesmo  elemento  de  modelo  em  diferentes  situações.  Em  outras
+palavras, não há compromisso com distinções ontológicas importantes como as feitas
+em uma ontologia de fundamentação.
+Visando tratar algumas distinções ontológicas importantes, foi desenvolvido E-
+OntoUML,  um  perfil  UML  para  a  modelagem  de  processos  usando  diagramas  de
+atividades,   que   é   fundamentado   semanticamente   em   UFO.   E-OntoUML   foi
+desenvolvido em partes, tratando dos seguintes aspectos da modelagem de processos:
+   Ações: esta parte do perfil concentra-se em distinções relacionadas a diferentes
+tipos de atividades.
+   Objetos:  esta  parte  do  perfil  trata  de  tipos  de  objetos,  estados  dos  objetos,
+entradas, saídas e tipos de participações de objetos em atividades.
+   Agentes: esta parte do perfil aborda tipos de agentes e os tipos de participações
+de agentes em atividades.
+   Fluxo  de  Controle:  esta  parte  do  perfil  explora  aspectos  relacionados  à
+ordenação e à sincronização de atividades.
+Devido a limitações de espaço, não é possível discutir neste artigo todas as
+partes de E-OntoUML. Assim, a seguir discutem-se as partes relativas a ações e fluxo de
+controle.
+Ações
+Uma  importante  distinção  ontológica  de  UFO  é  aquela  entre  indivíduos
+duradouros  (Endurant)1  e    eventos                                                                    (Perdurant  ou  Event).  Diz-se  que  indivíduos
+duradouros  estão  inteiramente  presentes  em  qualquer  instante  do  tempo  em  que
+estiverem presentes, enquanto eventos são indivíduos compostos de partes temporais.
+Em  UFO,  ações  (Action)  são eventos que tem o propósito específico de satisfazer
+alguma  intenção  de  um  agente.  Ações  podem  ser  atômicas                                           (Atomic  Action)  ou
+complexas                                                                                                (Complex  Action).  Ações  complexas  são  compostas  de  duas  ou  mais
+participações  (Participation). Participações intencionais de agentes são denominadas
+participações de agentes2  (Agent Participation) e uma ação complexa composta de
+participações de diferentes agentes é denominada uma interação (Interaction). Já uma
+1 Neste texto, conceitos da UFO aparecem destacados em negrito e itálico, enquanto elementos de modelo
+da UML são escritos em negrito e elementos do perfil E-OntoUML aparecem em negrito e sublinhados.
+2 O  termo  originalmente  empregado  em  [Guizzardi  et al.  2008] para uma participação de agente é
+contribuição de ação (Action Contribution).
+133
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+participação de um objeto em uma ação é chamada de participação de objeto3 (Object
+Participation).
+A  UML,  por  sua  vez,  define  ação  como  um  elemento  que  é  uma  unidade
+fundamental para a execução de uma funcionalidade e atividade como uma sequência
+coordenada de ações [OMG 2007]. Para representar ações, a UML provê os símbolos
+mostrados na Figura  1. O primeiro é usado para representar uma ação (Action), que
+representa um único passo em uma atividade, isto é, algo que não é mais decomposto.
+Uma  ação  é  simples  do  ponto  de  vista  da  atividade  que  a  contém,  mas  pode  ser
+complexa em seu efeito [OMG 2007]. Já o segundo símbolo corresponde a uma Ação
+de   Chamada   de   Comportamento                                                             (CallBehaviorAction),   o   qual   invoca   um
+comportamento diretamente. Quando trata da chamada de uma atividade  (Activity),
+está-se indicando que a mesma ocorre naquele ponto do fluxo e que suas ações são
+modeladas em outro diagrama, sendo a atividade, portanto, de natureza complexa e
+composta de ações ou outras atividades.
+Figura 1 - Elementos de modelo que representam ações e atividades na UML
+Considerando  a  UFO  e  o  metamodelo  da  UML,  foram  definidos  em  E-
+OntoUML elementos de modelo capazes de capturar algumas das distinções ontológicas
+de UFO. A Figura 2 mostra uma visão parcial do metamodelo de E-OntoUML que trata
+de ações. Nesse modelo, conceitos da UFO são apresentados com o fundo cinza escuro,
+enquanto os elementos do metamodelo da UML estão em cinza claro. Os elementos de
+modelo do perfil E-OntoUML têm o fundo branco.
+Conforme  mostra  a  figura,  o  metamodelo  da  UML  só  permite  capturar  a
+distinção entre ações simples (não passíveis de decomposição) e atividades (as quais são
+decompostas em ações). Em outras palavras, o ponto de vista da UML é puramente
+mereológico. Outras distinções importantes feitas em UFO não são capturadas. Assim,
+em  E-OntoUML  foram  criados  outros  elementos  de  modelo  para  capturar  essas
+distinções.
+Ação de agente (AgentAction) é uma especialização de ação (Action) da UML,
+assumindo a semântica definida em UFO, ou seja, uma ação de agente é representada
+pelo elemento de modelo ação (Action) da UML e é definida como um evento que muda
+o estado do mundo e é guiado pela intenção de um agente, conforme definido em UFO.
+Uma  ação  (Action)  em  UFO  pode  ter  um  efeito  complexo  ou  atômico,
+dependendo do número de participações  (de agentes e de objetos) envolvidas nessa
+ação.   Assim,   foram   criadas   as   especializações   Ação   de   Agente   Atômica
+(AtomicAgentAction)  e  Ação  de  Agente  Complexa                                            (ComplexAgentAction)  para
+capturar essas distinções da UFO. Uma ação de agente atômica (AtomicAgentAction)
+3  O  termo  originalmente  empregado  em  [Guizzardi  et  al.                                2008]  para  participações  de  objetos  é
+participação de recurso (Resource Participation).
+134
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+especifica uma ação que envolve apenas uma participação de agente. Já uma ação de
+agente complexa (ComplexAgentAction) inclui ações que são complexas em efeito ou
+que podem ser divisíveis, podendo ser de dois tipos principais: interação (Interaction) e
+ação de agente com objeto (ObjectAgentAction). Uma interação (Interaction) envolve
+a participação de mais de um agente, sendo considerada de efeito complexo por agregar
+participações de vários agentes. Uma ação de agente com objeto (ObjectAgentAction),
+por sua vez, envolve a participação tanto de agentes quando de objetos. Logo, ela
+especifica uma ação complexa (ComplexAction) que é obrigatoriamente composta de
+pelo menos uma   participação de objeto (ObjectParticipation) e de pelo menos uma
+participação de agente  (Agent Participation). Vale observar que esses dois últimos
+elementos de E-OntoUML (interação e ação de agente com objeto), apesar de serem de
+natureza complexa, podem ou não envolver a decomposição de uma ação em subações
+(no sentido mereológico).
+Figura 2 - Elementos de modelo de E-OntoUML para representar ações
+Para  representar  ações  que  são  decompostas  em  subações  no  sentido
+mereológico,   o   perfil   E-OntoUML   define   o   elemento   atividade   de   agente
+(AgentActivity), o qual representa uma ação complexa não só no efeito, mas também
+pelo fato de ser decomposta em subações. Uma atividade de agente é composta de pelo
+menos duas ações de agente (AgentAction). Como citado anteriormente, uma atividade
+em um diagrama de atividades é graficamente representada pelo elemento de modelo
+ação  de  chamada  de  comportamento  (CallBehaviorAction),  logo  foi  necessário
+estender esse elemento para representar uma chamada a uma atividade de agente,
+sendo  criado  o  elemento  ação  de chamada de atividade  (CallActivityAction), que
+representa uma chamada a uma atividade de agente (AgentActivity).
+135
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+A  Figura  3  mostra  a  notação  gráfica  de  E-OntoUML para  os  elementos  de
+modelo adicionados que possuem uma representação nos diagramas de atividades. A
+distinção  entre  ações  decomponíveis  e  não  passíveis  de  decomposição,  no  sentido
+mereológico, mantém-se inalterada em relação à UML e, portanto, os símbolos usados
+para   ação   de   agente                                                                    (AgentAction)   e   ação   de   chamada   de   atividade
+(CallActivityAction)  são  os  mesmos  de  ação                                              (Action)  e  ação  de  chamada  de
+comportamento (CallBehaviorAction). Entretanto, para capturar a distinção entre uma
+ação complexa não passível de decomposição, no sentido mereológico, e uma ação
+atômica no sentido de UFO, i.e., que envolve uma e somente uma participação de
+agente, E-OntoUML propõe o estereótipo <<atomic>> para representar a segunda, ou
+seja, para representar uma ação de agente atômica (AtomicAgentAction).
+Para capturar a distinção entre uma ação de agente realizada por um único agente
+e uma interação (Interaction), envolvendo a participação de dois ou mais agentes, E-
+OntoUML propõe o estereótipo <<interaction>>. Esse estereótipo pode ser usado tanto
+para ação não passível de decomposição, quanto para uma atividade. Ou seja, uma ação
+não passível de decomposição pode envolver a participação de vários agentes, assim
+como uma atividade decomposta em ações.
+Por fim, uma ação de agente com objeto (ObjectAgentAction) é indicada pelo
+fato de envolver a participação de algum objeto, o que é representado por uma aresta
+ligando a ação a um nó de objeto (ObjectNode).
+Figura 3 - Elementos de modelo representando ações e atividades em E-OntoUML
+A Figura 4 ilustra um exemplo de uso do perfil E-OntoUML para o caso de um
+processo  de  negócio  de  locação  de  carros.  Este  processo  possui  duas  atividades
+principais (Locar Carro e Devolver Carro), as quais são ações complexas envolvendo
+subações. Assim, ambas as atividades são representadas usando a notação de chamada
+de  atividade.  Além  disso,  essas  duas  atividades  envolvem  a  participação  de  dois
+agentes interagindo (o locatário e o locador) e de um objeto (o carro). Assim, ambas as
+ações são também interações e ações de agente com objeto.
+Figura 4 - Exemplo de uso do perfil E-OntoUML
+136
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Fluxo de Controle
+O fluxo de controle em diagramas de atividades da UML é modelado por arestas
+de  atividades  (ActivityEdge)  denominadas  fluxos  de  controle  (ControlFlow).  Um
+fluxo  de  controle  (ControlFlow)  indica  o  início  de  um  nó  de  atividade  destino
+(ActivityNode - target) após a conclusão de outro, dito origem (source), e é representado
+graficamente por uma seta ligando o nó origem ao nó destino. Assim, ele define a ordem
+de execução das ações que conecta. Contudo, ele não trata a relação temporal entre elas.
+É possível aperfeiçoar este aspecto dos diagramas de atividades adicionando
+informações sobre as relações temporais existentes entre ações. A UFO, seguindo as
+definições de Allen  (1983), estabelece sete relações temporais entre dois eventos, a
+saber: precede (before), encontra (meets), sobrepõe (overlaps), inicia (starts), durante
+(during), termina (finishes) e equivale (equals). A Figura 5 ilustra essas relações. As
+duas primeiras tratam de eventos sequenciais e as demais de eventos paralelos.
+Event A
+before
+meets
+overlaps
+starts
+during
+                                                                                               finishes
+equals
+Figura 5 - Relações de Allen.
+Para adicionar algumas dessas distinções ontológicas ao perfil E-OntoUML, a
+classe fluxo de controle (ControlFlow) do metamodelo da UML foi especializada para
+capturar a semântica das relações temporais, tendo sido criados os elementos de modelo
+mostrados na Figura 6.  O   elemento   de   modelo   fluxo   de   controle   de   tempo
+(TimeControlFlow)  trata  de  maneira  geral  uma  relação    temporal  da  UFO  (Time
+Interval Relation). Esse elemento foi especializado em fluxo de controle sequencial
+(SequencialControlFlow),  para  tratar  as  relações  sequenciais  entre  ações,  as  quais
+podem ser de dois tipos: (i) fluxo de controle de precedência (BeforeControlFlow)   e
+(ii) fluxo de controle de encontro (MeetsControlFlow), que definem, respectivamente,
+as  relações  precede  (before)  e  encontra  (meets)  de  Allen.  A  representação  desses
+elementos é feita pela adição de um estereótipo ao fluxo de controle (ControlFlow),
+indicando  qual  a  relação  temporal  que  está  sendo  considerada                           (<<before>>  ou
+<<meets>>). No exemplo da Figura  4, a relação temporal entre as atividades Locar
+Carro  e  Devolver  Carro  é  de  precedência  e,  portanto,  foi  utilizado  o  estereótipo
+<<before>>.
+As cinco demais relações temporais citadas envolvem paralelismo entre ações e
+a UML não possui uma primitiva de modelagem capaz de representá-las diretamente.
+Para representar ações que ocorrem em paralelo na UML, é necessário utilizar nós de
+137
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+controle                                                                                         (ControlNode),  um  tipo  de  nó  de  atividade   (ActivityNode)  usado  para
+coordenar o fluxo de controle entre outros nós [OMG 2007]. Contudo, mesmo usando
+nós  de  atividade,  não  é  possível  capturar  as  distinções  entre  as  relações  sobrepõe
+(overlaps), inicia (starts), durante (during), termina (finishes) e equivale (equals). Um
+perfil (lightweight extension), como é o caso de E-OntoUML, não tem como adicionar
+as restrições necessárias, sendo necessária uma revisão do metamodelo da UML.
+Figura 6 - Elementos de modelo de E-OntoUML relativos a fluxos de controle
+4. Trabalhos Correlatos
+Há diversos trabalhos relacionados ao uso de ontologias de fundamentação para avaliar
+e reprojetar modelos de linguagens de modelagem conceitual, bem como para prover
+semântica  de  mundo  real  para  seus  elementos  de  modelo.  Guizzardi                        (2005),  por
+exemplo, utilizou a ontologia de fundamentação UFO-A para avaliar o metamodelo da
+UML relativo à parte que trata das primitivas de modelagem usadas na construção de
+diagramas  de  classes  e  definir  o  perfil  OntoUML.  Este  trabalho  seguiu  estratégia
+análoga, no sentido de analisar o metamodelo da UML (a parte comportamental relativa
+a diagramas de atividades) e propor um perfil UML.
+Na área de modelagem de processos de negócio, Almeida, Guizzardi e colegas
+têm diversos trabalhos enfocando, entre outros, a fundamentação semântica de conceitos
+relacionados a papéis  [Almeida et al.  2009] e a análise ontológica de linguagens de
+modelagem propostas pelo método ARIS, dentre elas a linguagem de modelagem de
+processos EPC (Event-driven Process Chain) [Santos Jr. et al. 2010]. Em todos esses
+trabalhos é utilizada como base para a análise ontológica a Ontologia de Fundamentação
+Unificada (UFO) e, neste sentido, o presente trabalho está bastante em linha com os
+trabalhos  citados.  Em  especial,  o  trabalho  de  Santos  Jr.  et  al.                        (2010)  é  bastante
+relacionado  ao  presente  trabalho,  uma  vez  que  ambos  tratam  de  linguagens  de
+modelagem de processo. Contudo, em [Santos Jr. et al. 2010] é feita apenas uma análise
+138
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+ontológica  para  prover  uma  interpretação  ontológica  dos  elementos  de  modelo  em
+diagramas EPC em termos da UFO. Este trabalho segue uma linha um pouco diferente e
+utiliza os mecanismos de extensão da UML para desenvolver um perfil UML para
+diagramas de atividades, o qual é fundamentado em conceitos da UFO.
+Outros trabalhos têm usado outras ontologias de fundamentação para efetuar
+análise ontológica de linguagens de modelagem de processos, como é o caso de [Green,
+Rosemann 2005], em que os autores fazem uma análise ontológica de diagramas EPC
+em  termos  de  uma  ontologia  de  fundamentação  denominada  BWW  (Bunge-Wand-
+Web). Porém, no melhor de nosso conhecimento, para a parte comportamental da UML,
+mais especificamente no que se refere à parte que trata de diagramas de atividades, não
+foram  encontrados  análises  ontológicas  ou  perfis  estabelecidos  com  base  em  uma
+ontologia de fundamentação.
+5. Conclusões
+Atualmente,  reconhece-se  a  Gerência  de  Processos  de  Negócio  como  uma  área  de
+grande importância tanto para a melhoria das organizações quanto como uma ferramenta
+útil  para  o  desenvolvimento  de  sistemas  de  informação.  Neste  contexto,  cresce  o
+interesse na questão da qualidade dos modelos de processos e, por conseguinte, das
+linguagens  de  modelagem  usadas  para  representá-los.  Este  trabalho  apresentou
+parcialmente um perfil UML para a modelagem de processos usando diagramas de
+atividades   fundamentado   na   Ontologia   de   Fundamentação   Unificada                  (Unified
+Foundational Ontology - UFO). Esse perfil adiciona semântica de mundo real a alguns
+elementos de modelo de diagramas de atividade da UML, com vistas a deixar mais
+claros e menos ambíguos os modelos de processo de negócio elaborados utilizando essa
+notação.
+Agradecimentos
+Este trabalho foi financiado pelas agências de fomento à pesquisa FAPES  (Processo
+Número 45444080/09) e CNPq (Processos Número 481906/2009-6, 309059/2008-9 e
+483383/2010-4).
+Referências
+Allen,    J.F.                                                                               (1983)                                                     “Maintaining    Knowledge    about    Temporal    Intervals”,
+                                                                                             Communications of the ACM, v. 26, issue 11, pp. 832-843.
+Almeida, J.P.A., Guizzardi, G., Santos Jr., P.S.  (2009).  “Applying and Extending a
+Semantic Foundation for Role-Related Concepts in Enterprise Modelling”. Enterprise
+Information Systems, v. 3, p. 253-277, 2009.
+Eshuis, H. (2002) Semantics and Verification of UML Activity Diagrams for Workflow
+Modelling. Ph.D. Thesis, University of Twente, The Netherlands.
+Frye,  D.  W.,  Gulledge,  T.  R.                                                            (2007)                                                     “End-to-end  Business  Process  Scenarios”.
+Industrial, Management & Data Systems, v. 107, n. 6, pp.749-761.
+Green, P.F., Rosemann, M. (2005) Ontological Analysis of Business Systems Analysis
+Techniques: Experiences and Proposals for and Enhanced Methodology. In Business
+Systems Analysis with Ontologies, IGI Global, pp 1- 27.
+139
+
+
+
+
+VII Simpósio Brasileiro de Sistemas de Informação
+Guizzardi,  G.                                                                         (2005)  Ontological  Foundations  for  Structural  Conceptual  Models,
+Universal Press, The Netherlands.
+Guizzardi,  G.                                                                         (2007)                                                                   “On  Ontology,  ontologies,  Conceptualizations,  Modeling
+Languages, and (Meta)Models”, Frontiers in Artificial Intelligence and Applications,
+Databases  and  Information  Systems  IV,  Olegas  Vasilecas,  Johan Edler, Albertas
+Caplinskas (Editors), IOS Press, Amsterdam.
+Guizzardi, G., Falbo, R.A. Guizzardi, R.S.S. (2008) “A importância de Ontologias de
+Fundamentação para a Engenharia de Ontologias de Domínio: o caso do domínio de
+Processos de Software”, IEEE Latin America Transactions, v. 6, no. 3, p. 244-251.
+Ko, R.K., Lee, S.S., Lee, E.W. (2009) “Business process management (BPM) standards:
+A survey”, Business Process Management Journal, vol. 15, Issue 5, pp.744 - 791.
+Lu,  R.,  Sadiq,  S.                                                                   (2007)                                                                   “A  survey  of  comparative  business  process  modeling
+approaches”, In: Abramowicz, W., editor, Business Information Systems, Lecture
+Notes in Computer Science, vol. 4439, p. 82-94, Springer Berlin / Heidelberg.
+OMG  (2006)  Business  Process  Modeling  Notation  Specification,  Final  Adopted
+Specification, February.
+OMG (2007) OMG Unified Modeling Language (OMG UML), Superstructure V2.1.2,
+formal/2007-11-02, November.
+Russell, N., Van der Aalst, W.M.P., Ter Hofstede, A.H.M., Wohed, P. (2006) “On the
+suitability  of  UML                                                                   2.0  activity  diagrams  for  business  process  modeling”,
+Proceedings of the  3rd Asia-Pacific Conference on Conceptual Modeling, Hobart,
+Australia, pp. 95-104.
+Santos Jr., P.S., Almeida, J.P.A., Guizzardi, G. (2010) “An Ontology-based Semantic
+Foundation  for  ARIS  EPCs”,  In:  Proceedings  of  the  25th  ACM  Symposium  on
+Applied Computing (Enterprise Engineering Track), 2010, Sierre, Switzerland.
+Wand, Y., Weber, R. (1989) “An ontological evaluation of systems analysis and design
+methods”. In: Information System Concepts: An In-Depth Analysis. Elsevier Science
+Publishers B.V., North-Holland.
+Weske, M. (2007) Business Process Management: Concepts, Languages, Architectures.
+Springer, 1st edition.
+Weske, M., Van der Aalst, W.M.P., Verbeek, H.M.W. (2004) “Advances in business
+process management”. Data & Knowledge Engineering, 50(1):1-8.
+White, S.A. (2004) Process Modeling Notations and Workflow Patterns, BPTrends.
+140
+
+
+
+
+

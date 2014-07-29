@@ -27,14 +27,6 @@ public class PaperClusterer {
 				7, 1000, true, 0.0001d);
 		Set<Set<CharSequence>> clusters = clusterer.clusterAndSave();
 		System.out.println("Clusters = " + clusters.size() + " Total documents: " + clusterer.getDataSetSize());
-		int sameDocuments = 0;
-		for(Set<CharSequence> set : clusters){
-			System.out.println("Cluster size = " + set.size());
-			for(CharSequence doc : set) for(CharSequence doc2 : clusterer.mDocuments)
-				if(doc == doc2)
-					sameDocuments++;
-		}
-		System.out.println("Same documents = " + sameDocuments);
 	}
 
 	private Set<CharSequence> mDocuments = new HashSet<CharSequence>();

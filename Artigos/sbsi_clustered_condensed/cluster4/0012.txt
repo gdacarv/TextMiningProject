@@ -1,0 +1,489 @@
+﻿Carolina Chiao1, Lucinéia Heloisa Thom2, Cirano Iochpe1, Manfred Reichert3
+1Institute of Informatics - Federal University of Rio Grande do Sul
+Av. Bento Gonçalves, 9500,   91501-970 - Porto Alegre, RS, Brazil
+2Institute of Database and Information Systems - University of Ulm
+Oberer Eselsberg, Geb. O27, 89069 - Ulm, Germany
+3Faculty of Electrical Engineering Mathematics and Computer Science -
+University of Twente - 7500 AE Enschede, The Netherlands
+{cchiao,  ciochpe}@inf.ufrgs.br,  lucineia.thom@uni-ulm.de,
+m.u.reichert@cs.utwente.nl
+workflow activity
+functions (e.g., notification,
+discuss  three  pattern
+rns). Moreover we gather
+ide set of real process
+only enough but also
+ere subject  of  the
+nces or combination of
+ess models analyzed. In
+larger research we apply these patterns as wetlhes analyses results in the
+development of a suite for process modeling anm alziation.
+1. Introduction
+During the last years, companies have been exploring numerous techniques for
+business process management (BPM) in order to align their information systems in a
+process-oriented way and to stay competitive in their market. Accompanying this trend
+the  significance  of  BPM  has  increased  and  new  quality  standards  have  emerged.
+According to the quality standard ISO 9001:200, for example, an organization should
+be mainly represented by its core business processes rather than by its organizational
+chart. If BPM is associated with Information Technology (IT), it will become possible to
+offer  additional  benefits  to  the organization, such as:  (a) precise and unambiguous
+description of the existing business processes; (b) improvements regarding the definition
+of new processes; (c) effectiveness regarding the work coordination between different
+agents; (d) real time gathering of precise information about process executions; and (e)
+standardization of business processes.
+For (computerized) business processes there exists a variety of fragments which
+can  be  understood  as  self-contained  activity  blocks  with  a  well-defined  semantics
+[Thom 2006a], [Thom 2006b]. In particular, a certain process fragment(or recurrent
+business  function) may  occur  several  times  within  one                                   (or  different)  process
+
+
+
+
+definition(s). As an example, consider the evaluation process for price adjustment as
+depicted in Figure 1. This process includes activities with the following partial order: (a)
+a decision activity (to fix whether the input is a shopping order or not) (b) activity ‘send
+e-mail to manager informing about price adjustment’; (c) activity ‘evaluate request of
+price adjustment’;  (d) activity  ‘notify managers about conclusion of evaluation;  (e)
+activity ‘notify managers about automatic approval’; and (f) activity ‘prepare request to
+be sent’. Altogether this process comprises fragments having generic semantics that can
+be described as patterns such as decision (activity a), notification (activities b, d and e),
+and task execution request (activities c and f).
+Figure 1: Evaluation process for price adjustment
+Recently, research on workflow patterns has emerged in order to increase the
+reuse of recurring workflow structures. More precisely, different workflow patterns have
+been proposed for control flow modeling [Aalst 2003], resource management [Russell
+2004],  data  modeling  [Russell                                                                2005],  service  interaction   [Barros   2005],  workflow
+exception handling [Russell 2006]. All these pattern sets have in common that they are
+relevant for implementing a workflow modeling tool, or for defining or evaluating a
+particular process description language. However, these structural patterns provide only
+a partial answer to the question what business functions a modeler has to consider
+repeatedly in various process models.
+Usually, such process fragments[Flores 1998], [Medina-Mora 1992], [Malone
+2004], [Muehlen 2002] are re-designed for each workflow application. Of course, this
+lack of reusing model fragments and process knowledge has resulted in high costs and
+error rates regarding the modeling and maintenance of process-oriented applications.
+While there is some research reported on how metadata can be organized to manage
+large-scale modeling projects (cf. [Thomas and Scheer 2006]), to our best knowledge
+there exists no (empirical) work evidencing the existence of recurrent patterns in real
+workflow applications. Furthermore, there is no work on which patterns are needed and
+how  good  they  may  support  the  modeling  of  at  least  specific  kinds  of  business
+processes.  Beyond  that,  contemporary  workflow  modeling  tools  do  not  provide
+functionalities that enable users to define, query, and reuse such patterns in a proper
+way.
+Concerning this problematic in an earlier work we presented a first approach
+towards the implementation of workflow activity patterns based on an Event-driven
+Process Chains (EPCs) tool [Thom 2007a], [Keller 1992]. Recently we proposed a suite
+for both process modeling and normalization based on the reuse of semantic process
+patterns  (see  [Thom  2007b]). In this paper we gather samples of workflow activity
+
+
+
+
+patterns. However, the main contribution of this paper is the description of a case study
+where we analyzed  190 real process models from different organizations as well as
+application domains. We had analyzed not only the frequency of each pattern frequency,
+within the set of process models, but the frequency of specific sequences of them.
+Taking the results of the case study we show that the workflow activity patterns do not
+only exist in real workflow applications, but are also necessary and sufficient to model
+all the workflow processes which were subject of our investigation. We believe that the
+use of these patterns together with other existent patterns (e.g., control flow patterns
+[Aalst 2003]) might not only reduce design effort (e.g., it is a small set of patterns that
+seems to require little effort to learn) but also optimize and improve the quality of it
+(e.g., the user can reuse design solutions stored in a knowledge database). This database
+is part of a larger research where we propose a suite for workflow design based on
+patterns reuse (cf. [Thom 2007a], [Thom 2007b]).
+The outline of this paper is organized as follows: Section 2 gives an overview of
+the workflow activity patterns. In particular, we discuss the approval, notification and
+unidirectional as three examples. Section 3 gathers the results of an extensive case study
+where we investigated the existence of the patterns in  190 process models. In this
+section we also show how complete is the set of patterns for the design of the  190
+processes. In Section 4 we present some patterns combinations by dividing the set of
+process models in System-Intensive and Human-Intensive processes. This classification
+is useful to obtain more precise results concerning the kind of processes the patterns are
+more suitable to be found. Moreover, this information will be used in the development
+of a knowledge database of patterns. Finally, Section 5 concludes the paper and gives an
+outlook on future research.
+2.   Workflow Activity Patterns
+A WORKFLOW ACTVITY PATTERN refers to the description of a recurrent business function
+frequently  found  in  business  processes                                                    (e.g.,  notification,  decision,  approval).  We
+derived a set of 7 patterns from an extensive study based on the literature (cf. [Thom
+2006a]   and                                                                                  [Thom                                              2006b]).   The   patterns   are   approvaļ   question-answering,
+unidirectional and bi-directional performati,einformation, notification  and decision
+patterns.
+A block activity is suitable to represent each pattern according to [WfMC 2005].
+The block activity concept is particularly suited because it allows to encapsulate the
+well-defined semantics and to represent their atomic characteristics. This means that all
+activities  defined  inside  a  block  activity  pattern  must  be  completed  before  the
+superordinated workflow can continue its execution.
+We  describe  three  example  patterns  with  the  Business  Process  Modeling
+Notation (BPMN). The complete set of patterns can be found in [Thom 2006a]. For each
+pattern  we  describe                                                                         “context”,                                         “problem”,                                                         “forces”  and   “Solution”.  The  solution
+includes one  “design choice”. Currently we are working on the improvement of the
+patterns documentation. We are giving examples of the patterns use, defining desigh
+choices and describing how they can be implemented.
+
+
+
+
+Pattern1:  APPROVAL
+Context: A document must be evaluated by one or more organizational role.
+Problem: How to model a human decision-making in the workflow process?
+Forces:
+-                                                                                              In  case  of  multi-approvals                                                                                                                                                                            (concurrent),  the  number  of  times  that  the
+                                                                                                                                                                                                                      decision-making activity is repeated may vary depending on the level of
+                                                                                                                                                                                                                      centralization of authority (less or more) as well as the direct supervision of
+                                                                                                                                                                                                                      work existent in the organizational unit(s) where the process is executed.
+-                                                                                                                                                   The decision-making activity is generally performed by a human.
+-                                                                                                                                                                                                                     The decision-making activity must have more than one kind of response (e.g.
+approval and reproval).
+Solution: To include in the workflow, a human activity that characterizes a point of
+decision-making on the sub-product in question (e.g. a document requiring approval).
+This decision-making activity will be repeated according to the level of centralization
+existent  in  the  organizational  units  where  it  is  executed.  Figure                     3  shows  a  single
+approval.
+Figure 3: Approval pattern
+In Fig.  3 an organizational role reviewer performs a document review either
+resulting  in  an  approval  or  disapproval.  In  case  of  multi-approvals,  it  would  be
+necessary  concurrent  activities.  The                                                        “Make  final  decision”(cf.  Figure  3)  would  be
+executed only when all reviewers had performed their revisions The revisions would be
+then  performed  multiple  times  in  parallel                                                 (concurrent)  or  in  sequence                       (iterative)
+according to the number of organizational roles specified or until disapproval occurs.
+Generally, the number of organizational roles is connected to the level of centralization
+(in high positions of the organization) with respect to decision-making.
+Pattern 2: UNIDIRECTIONAL PERFORMATIVE
+Context: In a workflow, there is a moment that the process must request the execution
+of an activity to the system or to an organizational role involved in the process.
+
+
+
+
+Problem: While modeling the workflow, how to send a request without waiting for the
+result of the activity execution?
+Forces:
+-                                                                                            The receiver’s response is not required.
+-                                                                                            The process must keep its execution without waiting for the activity to be
+completed.
+-                                                                                            The request can be done to the system or a human.
+Solution: To include in the workflow model the sequence of activities  (see Fig.  4)
+representing  the  unidirectional  performative  message.  The  sequence  of  activities
+comprises  the  generation  of  a  work  item  in  the  receiver  worklist.  However,  the
+workflow does not wait for a receiver response to continue execution.
+Figure 4: Unidirectional Performative Pattern
+A  sender uses unidirectional performative messages to request the execution of an
+activity from a receiver. As shown in Fig. 4, an activity execution request results in a
+work item being assigned to a receiver (i.e., a specific workflow participant responsible
+for  the  activity execution).  After  that,  the  process  may continue execution without
+waiting for a response.
+Pattern 3.    NOTIFICATION
+Context: During the process execution, some specific events have more relevancy such
+that the process must inform some organizational roles about them.
+Problem: While modeling the workflow, how can we keep the involved roles informed
+about some process instance events?
+Forces:
+-T he notification must be sent by an electronic way.
+-T he process does not have to wait for a reading response to continue execution.
+-T he notification generally contains the status of a process activity (e.g., completed,
+document approved, rejected).
+Solution: To include in the workflow the structure concerning the notifying and do not
+wait for response. Figure 5 shows how this structure works. There’s the sending of the
+notification and its receiving. These activities must inform the involved roles in the
+
+
+
+
+process about news inherent to the respective workflow, such as, for example, the
+approval (or reproval) of a document, or a task that has achieved its timeout.
+Figure 5: Notification Pattern
+3. Evidencing the Existence of Workflow Activity Patterns by Analyzing
+Real-World Process Models
+With the goal to search for the existence of the workflow activity patterns in real-world
+applications we analyzed  190 process models. These workflows have been modeled
+with the Oracle Builder tool and have stemmed from 12 different organizations related
+to  different  application  domains.  Notice  that  we  analyze  process  models  and  not
+instances or logs generated by the execution of them. We do that because the semantic
+of the activities is important to the identification of the processes. Table 1 characterizes
+the process models subject of our analyses.
+Size of the                                                                                    Kind of decision-making   Examples of process models we       Number of   process
+company                                                                                                                  analyzed                            models analyzed
+1 small                                                                                        Decentralized             Management of internal activities   17
+1 large                                                                                        Decentralized             TQM and management of activities    11
+6 large                                                                                        Centralized               TQM; control of software access;    133
+                                                                                                                         document management
+4 large                                                                                        We had no access to       Help Desk, User feedback;           29
+                                                                                               information about these   document approval
+companies
+Table 1: Core characteristics of the analyzed proce     ss models
+We have obtained the following results from the case study, i.e. the process models
+analyses:
+a)   evidence with high probability that the workflow activity patterns exemplified
+in this paper exist in real workflow applications;
+b)   evidence that the set of patterns is both necessary and sufficient to model all
+190 process models analyzed; and
+c)   identification of sequence of patterns based on the classification of the process
+[Le Clair 2007].
+
+
+
+
+3.1. Method Used to Analyze the Workflow Processes
+For each activity pattern we calculated its support value (S). In the context of this paper,
+S  represents the number of occurrences of each pattern  (P) in a set of  190 process
+models. For those models comprising more than one occurrence of the same pattern just
+one was considered. The following formula was considered to calculate the support:
+Where:
+S                                                                                              =      F (P)
+F(P) = frequency of a specific workflow activity
+pattern   in   the total set of process models
+TT
+TT = total number of process models
+Initially, we identified and annotated workflow activity patterns in all process
+models we analyzed. Afterwards, for all process models we counted the number of
+occurrences of each pattern. The obtained result then was divided by the total number of
+analyzed process models (i.e. 190 in our case). Accordingly, the (P) for this calculation
+corresponds to a specific pattern while TT means the set of process models.
+3.2. Frequency of Workflow Activity Patterns in Real-World Process Models
+The UNIDIRECTIONAL and BI-DIRECTIONAL PERFORMATIVE PATTERNS, DECISION PATTERN, NOTIFICATION
+PATTERN and INFORMATIVE PATTERN are not dependent on specific application domains or
+organizational structure aspects. This fact mainly explains why they were identified with
+high-probability in practically all process models analyzed. The same applies to the
+APPROVAL PATTERN. This can be explained by the high degree of centralization on decision-
+making existing in the organizational units for which we analyzed their processes. This
+high centralization implies the use of approval activities. Besides that, several process
+models belong to applications related to approval contexts. By contrast, most of the
+analyzed  process  models  do  not  comprise  QUESTION-ANSWERING  activities.  The  use  of
+question-answering activities depends on the kind of process model being modeled. It is
+used in those processes where some question can occur. Figure 6 graphically illustrates
+the frequency of each activity pattern in the set of process models analyzed.
+                                                                                               Frequency of each pattern in the set of 190 workflo                  w models
+90%
+83%
+80%
+70%                                                                                            65%                                                   64%
+60%
+60%                                                                                            54%
+50%
+Support
+40%
+30%
+20%                                                                                                                                                                            16%
+10%
+                                                                                                                                                                                             2%
+0%
+Unidirectional                                                                                 Bi-directional                                        Notification   Decision   Informative   Question-   Approval
+Performative                                                                                   Performative                                                                                  answering
+Figure 6: Frequency of the workflow patterns in rea                                            l-world process models
+
+
+
+
+                                                                                               tivity Patterns for Workflow
+Modeling
+The main goal of the study case presented in this paper is the measurement of the
+frequency which each one of the workflow activity patterns happens in the set of process
+models that has been analyzed. This was done in order to verify whether these business
+functions                                                                                      (e.g.,  task  execution  request,  notification)  could  really  be  considered  as
+activity patterns with high probability of reuse in business as well as workflow process
+design at least those with similar characteristics of the processes we analyzed.
+While some activity patterns are identified only by the analysis of the activity
+description (e.g., decision, approval and notification patterns), others required a more
+detailed analysis. For instance, the INFORMATIVE PATTERN is identified in activities where
+the user provides an information to the system (e.g., by the fulfillment of a field in the
+context of an activity)  (cf.[Thom  2006a]). In the case of the UNIDIRECTIONAL  and BI-
+DIRECTIONAL PERFORMATIVE PATTERNS, both the activity description and its execution result
+(i.e., mandatory or not to trigger the next activity in the process) are important to
+measure how often the patterns occur.
+What really surprised us is the fact that all analyzed workflow processes can be
+defined as a composition of the investigated patterns (cf. Figure 7 for an example). That
+is, the set of workflow activity patterns is necessary and sufficient to design all 190 real
+process models that were subject of our analyses. In each process, a specific activity
+pattern may appear zero or more times combined with other patterns.
+This fact can be considered as a very important one which points out to new
+questions to be investigated as part of a future work. For instance, how much could this
+set of patterns be helpful if it was to be integrated into a workflow design tool? One
+could think of an intelligent software module which relies on both a workflow activity
+patterns repository in order to help designers to complete their workflow design. First
+initiative in this approach we present in [Thom 2007a] and [Thom 2007b]. Figure 7
+shows a process model sample where all activities match to some activity pattern.
+Notification
+Unidirectional
+Bi-directional                                                                                 pattern
+                                                                                                                                                                                     Performative
+pattern
+pattern
+Notification
+pattern
+Notification
+pattern
+Decision
+Unidirectional
+Informative                                                                                    pattern                                                                               Performative
+Approval
+pattern                                                                                        pattern
+pattern
+Figure 7: A payment process built up exclusively fr                                            om the combination of
+workflow activity patterns
+
+
+
+
+4. Identifying Sequences of Workflow Activity Patterns in Real Process
+Models
+Some process fragments can occur many times in the same process definition [Thom
+2006a].  Each  time  a  specific  fragment  occurs,  there  may  have  successive  process
+fragments that can also occur with more frequency than other fragments.
+With the objective of evidencing which are the workflow activity patterns that
+succeed with more frequency one specific pattern, we analyzed 151 of the 190 process
+models, which were subject of our case study. Again we analyzed the process models
+and not the execution logs.
+Initially we made a preliminary investigation where we analyze, for each process
+activity  and  its  respective  workflow  activity  pattern  associated,  what  was  the
+subsequent(s) pattern(s) that follow them. By doing that, we noticed that most of the
+patterns pairs had low support value and confidence. Figure  8 illustrates one of the
+obtained results of this first analysis. Notice that even the most frequent pair of this
+example (DECISION PATTERN  NOTIFICATION PATTERN) has a low probability (29%).
+Figure 8: Decision Pattern Subsequent Patterns on t     he preliminary analyses
+By  analyzing  the  process  models,  we  observed  that  some  kinds  of  activity
+patterns, and their respective pairs, appear with more frequency in determined types of
+processes. We noticed that process including decision-making activities (i.e., approvals)
+present higher probability of being followed by the NOTIFICATION PATTERN. This fact is
+mainly explained because the organizational roles involved in the processes must be
+notified about the result of the approval process.
+In order to increase the support and confidence of the pattern pairs, we decided
+to classify the processes into business process categories. For that, we studied some of
+the  main classifications found in the literature  [Hammer  2001],  [Harrington  1991],
+[Dowson  1987],                                                                              [Leymann  1999].  However,  most  of  them  classify  processes  by
+application domains. Accordingly, those approaches were not feasible to our analyses
+because the set of processes we were investigating do not cover all the categories
+described on these works. We chose then the classification proposed by Le Chair where
+and human-intensive[Le Clair 2007].
+The system-intensive processes are characterized by being handled on straight-
+through  basis,  which  means  that  there  is  minimal  or  no  human  touch  and  few
+
+
+
+
+exceptions. The human-intensive processes require people to get work done by relying
+on and interacting extensively with business applications, databases, documents and
+other people. This type of process requires human intuition or judgment for decision-
+making during individual steps.
+Having this clear separation between the processes, we divided the set of studied
+process models into processes that have human interaction and processes that don’t have
+human interaction. The result of this classification is 31 processes system-intensive and
+120 processes human-intensive. Figure  9 shows the results of this investigation over
+decision patterns in system-intensive processes. Notice that the probability of having a
+DECISION PATTERN  NOTIFICATION PATTERN pair has increased to 50%.
+Figure 9: Decision pattern subsequent patterns by a                                           nalyzing only the system-
+intensive processes
+5. Conclusions
+In this paper we presented examples of workflow activity patterns which can be used to
+design business process and workflow models respectively. In particular we reported the
+results of empirical studies we had performed in order to measure the frequency with
+which each workflow activity pattern occurs within a set of 190 process models. This
+analysis  was  accomplished  in  order  to  verify  whether  specific  business  functions
+frequently  found  in  business  processes                                                    (e.g.,  task  execution  request,  notification,
+approval)  may  be  considered  as  patterns  with  high  probability for  reuse.  We  also
+showed that by dividing the processes we analyzed into system-intensivand human-
+intensiveit was possible to identify pairs of patterns which were more frequently present
+in the processes.
+The main advantages of this approach can be summarized as follows: (a) the
+completeness and necessity of the workflow activity patterns has been evidenced at least
+for the design of the process models subject of our analyses; (b) the patterns are tool-
+independent, which make them easier to be adapted for any business process modeling
+tool; (c) it is a small set of patterns which may reduce complexity in user learning;
+The result of the case study we presented in this paper will be used in the
+development  of  a  suite  to  the  analysis  and  properties  verification  in  workflow
+specification (e.g., correctness, completeness, deadlock, processes equivalence, livelock,
+model checking). This suite will have a knowledge database that will store the workflow
+
+
+
+
+activity patterns as well as the results of our case study. We consider that this knowledge
+database will help on matching the patterns with business process extracted from legacy
+code and will help the user on designing the business process from scratch. By using the
+pattern pairs, we can help the user by suggesting which pattern is better combined with
+the one that he/she has already modeled.
+As future work we intend to perform additional analyses considering process
+models from different application domains (e.g., health insurance and automotive).   Our
+goal is to identify not only pairs of co-related patterns but also sequences of workflow
+activity patterns, including more than three patterns in sequence. In this context we also
+intend  to  continue  studying the  workflow  classifications  so  that we can find more
+specific classification and with smaller granularity to divide the set of processes. A less
+generic classification will be useful when we try to converge on the user needs using
+just a few steps. Finally we consider making an experiment for comparing process
+modeling with and without workflow activity patterns support.
+Acknowledgements
+The  authors  would  like  to  acknowledge  the  Coordination  for  the  Improvement  of
+Graduated  students                                                                           (CAPES),  the  Institute  of  Databases  and  Information  Systems
+of  the  University of  Ulm  (Ulm,  Germany)  and  the  Informatics  Institute  of  Federal
+University of Rio Grande do Sul (Porto Alegre, Brazil).
+References
+Aalst,  W.M.P.  van  der.                                                                     (2003)                                                               “Workflow  Patterns”.  In  Distributed  and  Parallel
+Databases, 14(3), pages 5-51.
+Bernstein,  P.  A.;  Hadzilacos,  V.;  Goodman,  N.  (1987)  “Concurrently  Control  and
+Recovery in Database Systems”. Reading: Addison-Wesley. 370p.
+Barros, A.; Dumas, M.; Hofstede, ter A. (2005) Service Interaction Patterns. In W.M.P.
+usiness
+Process Management,v. 3649 of Lecture Notes in Computer Scienpp. 302-318.
+Springer-Verlag.
+Dowson, M. (1987) Interation in the Software Process Review of the 3rd International
+Software Process Workshop. In Proceedings of the 9th international Conference on
+Software   Engineering (Monterey,   California,   United   States).   International
+Conference on Software Engineering. IEEE Computer Society Press, Los Alamitos,
+CA, 36-41.
+Flores, F.; Graves, M.; Hartfield, B.; Winograd, T. (1988) “Computer Systems and the
+6,
+2 (Apr. 1988), 153-172.
+Hammer, M.; Champy, J.  (2001)  “Reengineering the Corporation: A Manifesto for
+Business Revolution”. HarperBusiness. 257p.
+Harrington, H. J. (1991) “Business Process Improvement: The Breakthrough Strategy
+for Total Quality, Productivity, and Competitiveness”. McGraw-Hill. 274p.
+
+
+
+
+                                                                                            Keller, G.; Nüttgens, M.; Scheer; A.-W. (1992) Semantische Prozessmodellierung auf
+der  Grundlage                                                                              “Ereignisgesteuerter  Prozessketten                                                  (EPK)”.  Heft           89,  Institut  für
+Wirtschaftsinformatik, Saarbrücken, Germany.
+Le Clair, C.; Teubner, C. (2007) The Forrester Wave: Business Process Management
+For Document Processes, Q3 2007.
+Leymann, F.; Roller, D.  (1999)  “Production Workflow: Concepts and Techniques”.
+Prentice Hall. 479p.
+Malone,  T.  W.;  Crownston,  K.;  Herman,  G.  A.                                          (2003)                                                                               “Organizing  Business
+Knowledge: The MIT Process Handbook”. MIT Press.
+Medina-Mora, R.; Winograd, T.; Flores, R.; Flores, F.  (1992)  “The action workflow
+approach to workflow management technology”. In Proceedings of the 1992 ACM
+Conference on Computer-Supported Cooperative .81k2-288.
+Muehlen, M. zur. (2002) “Workflow-based process controlling”: foundations, design,
+and  application  of  workflow-driven  process  information  systems.  Berlin:  Logos
+Verlag.´299 p.
+Russell,  N.;  Aalst,  W.M.P.  van  der;  Hofstede,  A.;  Edmond,  D.  (2004)  “Workflow
+Resource  Patterns:  Identification,  Representation  and  Tool  Support”.  In  Lecture
+Notes in Computer Scienc2,(005), 216-232.
+Russell, N.; Hofstede, A. H. M Ter; Edmond, D. (2005) “Workflow Data Patterns”. In:
+Proceedings of the 24th ER, pp. 353-368.
+Russell, N.; Aalst, W.M.P. Van Der; Hofstede, A. Ter. (2006) “Workflow Exception
+Patterns”. In: Proceedings of 18th CAiSE, 18, p.288-302.
+Thom, L. H.;   Iochpe, C.;   Amaral, V. L. do;   Viero, D. M.  (2006a)  “Toward block
+activity patterns for reuse in workflow design”. In: Workflow Handbook of WfMC,
+pp. 249-260.
+Thom, L. H.                                                                                 (2006b)  “A Pattern-based Approach for Business Process Modeling”.
+PPGC: Porto Alegre. Available at: http://www.biblioteca.ufrgs.br/bibliotecadigital/.
+(Thesis).
+Thom, L. H; Lau, J.M.; Iochpe, C.; Mendling, J. (2007a) “Extending Business Process
+Modeling Tools with Workflow Pattern Reuse”. In: Proceedings of 9th International
+Conference on Enterprise Information Systems, Funchal, Madeira, Portugal.
+Thom, L. H., Chiao, C. M., Iochpe, C., Hess, G. N., Nascimento, G. S., Reichert; M
+(2007b):                                                                                    “Towards  an  Intelligent  Designer  based  on  the  Reuse  of  Workflow
+Patterns”. In: 1st Brazilian Workshop on Business Process Management to be held in
+conjunction with WEBMEDIA 2007, Gramado, Brazil.
+Thomas,  O.;  Scheer,  A.-W.  (2006)  “Tool  Support  for  the  Collaborative  Design  of
+Reference Models - A Business Engineering Perspective”. In: 39th HICSS-39, CD-
+ROM / Abstracts Proceedings. .
+Workflow Management Coalition, 2005. “Process Definition Interface”: XML Process
+Definition Language. Doc. Number: WFMC-TC-1025. (2005).
+
+
+
+
+

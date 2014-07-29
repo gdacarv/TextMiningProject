@@ -1,0 +1,401 @@
+﻿Arquitetura baseada em Web Semântica para aplicaçse
+de Hipermídia Adaptativa
+2
+1Universidade do Vale do Rio dos Sinos (UNISINOS)  São Leopoldo - RS - Brasil
+rigo@unisinos.br, everton.schneider@gmail.com
+2Instituto de Informática - Universidade Federal do Rio Grande do Sul (UFRGS)
+Porto Alegre - RS - Brazil
+palazzo@inf.ufrgs.br*
+Abstract. This  paper  describes  an  architecture  for  Adaptive  Hypermedia
+applications based on Semantic Web. The main goal of this proposal is to
+evaluate experimentally the advantages that could be obtained with a semantic
+based application description and with improved interaction possibilities. The
+high  flexibility to  generate  adaptations and  facilities  for  semantic content
+annotation are some of the advantages of this architecture.
+Resumo. Este  documento  descreve  uma  arquitetura  para  aplicações  de
+Hipermídia Adaptativa baseada em Web Semântica. O principal objetivo da
+proposta é avaliar experimentalmente as vantagens que podem ser obtidas a
+partir  da  descrição  da  aplicação  com  recursos  de  semântica  e  com
+possibilidades  maiores  de  interação.  Algumas  destas  são  a  grande
+flexibilidade para a geração de adaptações e facilidades para a anotação
+semântica de conteúdos.
+1. Introdução
+A Internet está em crescimento há vários anos, fato que vêm gerando uma
+demanda  pela  personalização  de  conteúdos  das  páginas  Web,  visando  evitar  a
+sobrecarga cognitiva [1] existente atualmente.    Esta  melhoria  pode  ser  obtida  com
+técnicas de Hipermídia Adaptativa, a partir das quais são relacionadas informações
+sobre o domínio da aplicação com informações sobre o perfil de usuários, o que permite
+a geração de resultados mais adequados ao contexto de uso para cada usuário ou grupo
+de usuários.
+A Hipermídia Adaptativa aborda o desenvolvimento de sistemas capazes de
+promover a adaptação de conteúdos e recursos hipermídia oriundos de diversas fontes
+(banco de dados, documentos na Internet, serviços Web) e apresentados em diversos
+formatos  (por exemplo, texto, áudio, imagens). Esta adaptação se dá em relação às
+* Agradecimentos. Este trabalho foi parcialmente suportado pelos projetos Pronex FAPERGS, grant
+0408933 e CTInfo CNPq, grant 550.845/2005-4. O último autor é parcialmente apoiado pelo CNPq
+
+
+
+
+informações conhecidas de um determinado usuário, que descrevem suas preferências,
+objetivos, conhecimentos prévios e necessidades. É possível encontrar aplicação direta
+para esta abordagem em áreas como educação, sistemas de informação para ajuda on-
+line, comércio eletrônico e marketing, entre outros. O resultado almejado é proporcionar
+a  cada  usuário  uma  interface  onde  estilo,  conteúdo,  recursos  e  hyperlinks são
+apresentados conforme seus objetivos e preferências  [1,  2]. Este resultado pode ser
+obtido com técnicas como a apresentação adaptativa ou a navegação adaptativa, com o
+objetivo de adaptação de conteúdo e de adaptação de hyperlinks, respectivamente.
+Apesar de serem conhecidos estudos sobre área de Hipermídia Adaptativa desde
+a década de 90 [3], alguns trabalhos mais recentes sinalizam uma falta de padrões para a
+área, o que pode levar a problemas de interoperabilidade. Estes podem ser solucionados
+com o uso da Web Semântica, cujo papel é permitir que sistemas computacionais
+possam realizar melhor uso dos dados presentes na Web [4], a partir da aplicação de
+ontologias, com linguagens como OWL2. Ontologias são usadas como uma forma de
+representar conhecimento sobre domínios diversos e descrevem normalmente indivíduos
+(instâncias), classes                                                                        (conjuntos, coleções, tipos de objetos), atributos   (propriedades,
+características), relações e eventos (mudança de atributos ou relações) [5, 6]. Além de
+ontologias a Web Semântica permite a descrição de recursos, por exemplo, com a
+linguagem RDF3, que provê uma especificação padrão para descrição de metadados
+sobre recursos na Web.
+Em geral as aplicações de Hipermídia Adaptativa são descritas por modelos que
+indicam,  por  exemplo,  informações  do  domínio,  apresentação  de  conteúdos  ou
+características  de  usuários.  As  adaptações  são  geradas  com  base  em  regras  e  na
+aquisição de informações do usuário. A utilização dos recursos da Web Semântica neste
+contexto possibilita a descrição de modelos mais flexíveis e abrangentes, de modo a
+facilitar a tarefa de adaptação [7, 8]. Entretanto uma dificuldade observada na aplicação
+de recursos de Web Semântica é a inerente necessidade de especialização dos usuários
+responsáveis pela geração das relações, o que torna proibitivo a utilização em larga
+escala, por exemplo, de editores de ontologias ou a anotação semântica.
+Este  trabalho  descreve  uma  arquitetura  para  aplicações  de  Hipermídia
+Adaptativa que incorpora recursos semânticos. A utilização das tecnologias da Web
+Semântica  permite  maior  flexibilidade  na  descrição  dos  modelos  para domínio  da
+aplicação e apresentação de conteúdos. A proposta também facilita a interação dos
+usuários responsáveis pela geração de conteúdo Web, de modo que estes não precisem
+de conhecimentos profundos sobre tecnologias ou linguagens de desenvolvimento para
+Internet e nem sobre publicação de conteúdo na Web ou sobre Web Semântica. Deste
+modo um dos principais diferenciais do trabalho consiste na abordagem privilegiando o
+usuário responsável pela criação e manutenção do conteúdo, evitando a necessidade de
+conhecimento aprofundado da área de Web Semântica. O outro diferencial do trabalho
+consiste em uma abordagem simplificada para a descrição e utilização de modelos
+necessários para a geração de adaptações. Foi utilizado um conjunto de ontologias que
+permite a descrição da estrutura do site  Web e os formatos gerais de apresentação de
+conteúdos, que podem ser relacionados a partir de regras baseadas no comportamento e
+2 http://www.w3c.org/owl
+3 http://www.w3c.org/rdf
+
+
+
+
+nas informações do perfil dos usuários. Por fim, o trabalho foi desenvolvido de forma
+que  as  adaptações  não  necessitem  da  identificação  pessoal  dos  usuários,  em  uma
+abordagem onde a identificação de classes de comportamento a partir das sessões típicas
+dos usuários origina a informação necessária para as adaptações. Todo o processamento
+destas informações é realizado continuamente e integrado ao funcionamento do sistema,
+sem necessidade de etapas adicionais para geração de padrões.
+2. Análise de trabalhos relacionados
+Vários sistemas adaptativos foram desenvolvidos sem a utilização de recursos de
+semântica e baseiam-se em modelos e regras. Nestes casos não existem possibilidades
+mais flexíveis em relação à geração das adaptações, como o uso de inferências ou o
+compartilhamento   de   informações                                                           (por  exemplo,  do  perfil  de  usuários).  O
+AHA(Adaptive Hypermedia Architectur[)9] mantém um modelo de usuários baseado
+em conhecimento sobre conceitos e oferece recursos de adaptatividade de conteúdo e
+hyperlinks  através do uso de fragmentos inseridos no código HTML4. O sistema Elena
+PLA [10], com foco principal no suporte para personalização em ambiente distribuído,
+utiliza  modelo  de  usuários,  repositórios  de  conteúdos,  serviços  de  anotação  e  de
+recomendação.
+A aplicação da linguagem XML5 para a descrição de estruturas e conteúdos,
+indicações de anotações ou descrição de perfil de usuários pode ser acompanhada a
+partir de exemplos como AdaptWeb [11], ambiente adaptativo para aprendizagem, onde
+são  observados  o  programa  de  aprendizado,  o  conhecimento  do  aluno  e  suas
+preferências  de  interação.  Nele  pode-se  observar  a  interação  de  recursos  como  a
+anotação  semântica,  a  descrição  de  estrutura  de  conteúdos  e  a  adaptação  de
+características dos conteúdos, de acordo com o contexto do usuário. Um ambiente de
+autoria permite a descrição de metadados associados ao material sendo publicado e uma
+descrição  do  modelo  do  usuário  é  utilizada  a  partir  de  uma  ontologia,  prevendo
+operações de personalização.
+Outros sistemas baseados em Web Semântica foram desenvolvidos a partir de
+abordagens inicialmente descritas sem propósito de adaptação, tal como a proposta do
+)                                                                                             [15], descrito a
+) [12], método de modelagem
+que busca representar tanto um projeto conceitual como projeto navegacional utilizando
+linguagens de descrição de ontologias, possibilitando o desenvolvimento de sites Web a
+partir de características semânticas.
+Alguns  exemplos  tratam  da  integração  de  recursos  de  Web  Semântica  e
+Hipermídia Adaptativa. O OntoWeaver [13] é uma proposta baseada em ontologias para
+desenvolvimento de sites na Web, incluindo funcionalidades de adaptação. Utiliza-se
+uma ontologia de visualização, para modelar a estrutura de páginas Web e a interface do
+usuário,  e  uma  ontologia  de  apresentação,  definida  para  descrever  os  estilos  de
+apresentação e os formatos para as páginas [14]. Realiza a adaptação de informações
+com um modelo de usuários e um modelo de customização baseados nas preferências de
+4 http://www.w3c.org/MarkUp
+5 http://www.w3c.org/XML
+
+
+
+
+cada usuário. O OntoWebber [16] utiliza ontologias para composição da interface a
+partir dos seguintes elementos: “cards”, “links” e “pages”. Um elemento “page” integra
+os demais elementos, que podem ser dinâmicos, utilizando mecanismo de inferência
+TRIPLE  [17]. A modelagem de personalização permite a identificação de recursos
+adequados para grupos ou para usuários, com características e propriedades indicando
+interesses e condições de navegação desejadas. A proposta do SEAL [18] também é
+baseada em ontologias e voltada para a descrição de portais Web. As etapas para a
+construção destes portais Web são o projeto de ontologia, integração de dados, projeto
+de site  Web e implementação. O projeto de site  envolve a construção do modelo de
+navegação, modelo de entrada e modelo de personalização. Para sua implementação é
+utilizado o frameworkKAON6, que possui ferramentas integradas para a descrição de
+ontologias,  integração  de  dados  e  geração  personalizada  do  portal,  a  partir  da
+identificação de usuários e seu contexto.
+Desta forma, observa-se que a utilização de ontologias para a descrição de
+estruturas, modelos e informações do perfil de usuários facilita a geração de adaptações
+e sua manutenção. Entretanto estas construções tendem à geração de uma estrutura de
+difícil manuseio pelos usuários responsáveis pela edição dos conteúdos. Em geral as
+adaptações  são  geradas  com  base  no  conhecimento  de  preferências  de  usuários,
+demandando a sua identificação.
+3. Detalhamento da arquitetura desenvolvida
+A arquitetura proposta tem como objetivo apresentar aos usuários páginas com
+características adaptativas em um ambiente semântico. Foi tomada como premissa a
+geração de adaptações sem a identificação do usuário. Para isso as informações de uso
+são aproveitadas como base, junto com informações de perfis de grupos de usuários
+obtidos  com  o  acompanhamento  do  uso.  São  empregadas  duas  ontologias,  uma
+contendo informações e hierarquia das páginas pertencentes ao site Web (Ontologia da
+Aplicação) e a outra com a definição da interface gráfica que cada página pode possuir
+(Ontologia de Apresentação).  O sistema mantém uma base de dados para os conteúdos
+das páginas, que armazena todos os conteúdos em formato textual, relacionando-os a
+partir da Ontologia da Aplicação e permitindo representar diferentes conteúdos para
+uma mesma página, com informações que podem ser usadas na tarefa de adaptação.
+Todos os acessos dos usuários são mantidos de forma resumida em uma base de dados.
+As regras de adaptação baseiam-se na utilização do site  e na estrutura descrita nas
+ontologias. Elas relacionam informações do perfil do usuário com a estrutura do site,
+indicando  possibilidades  de  adaptação  utilizadas  em  conjunto  com  informações
+descritas na Ontologia de Apresentação. As possibilidades de adaptação implementadas
+foram definidas como acréscimos à estrutura do site, na forma de hyperlinksadicionais,
+e como ajustes de conteúdos, na forma de exibição de material adicional.
+Para proporcionar flexibilidade na implementação da arquitetura, a mesma foi
+separada em dois módulos: validação e adaptação. Seu funcionamento geral, descrito na
+figura 1, pode ser resumido como: recebimento de solicitação de acesso e gravação da
+informação correspondente ao modelo do usuário; consulta da página solicitada na
+Ontologia  da  Aplicação;  consulta  do  template correspondente  na  Ontologia  de
+6 http://kaon.semanticweb.org/
+
+
+
+
+Apresentação; montagem do resultado intermediário (ainda sem adaptação) em código
+HTML; verificação do padrão comportamental através do modelo do usuário; aplicação
+de regras de adaptação; geração do código final (com adaptações) em HTML; envio da
+resposta para o usuário.
+Figura 1 - Funcionamento geral da arquitetura desenvolvida
+O mecanismo de validação é responsável pela montagem inicial do código
+HTML  da  página  requisitada  e  pela  gravação  de  informações  que  possibilitam
+adaptações de conteúdo em requisições futuras. Utiliza-se um cookie para identificar
+acessos  da  sessão  de  um  usuário.  Esta  abordagem  foi  escolhida  por  facilitar  a
+identificação  de  informações  da  sessão,  apesar  de  sua  desvantagem  no  caso  de
+desativação junto ao navegador do usuário. Cada acesso gera um registro que compõe o
+modelo de usuários, contendo dados sobre a navegação, tais como a página acessada e o
+tipo de conteúdo.   Algumas destas informações são geradas pela requisição recebida e
+outras são complementadas com uma consulta à ontologia da aplicação. Nela estão
+descritas  a  estrutura  da  aplicação  e  os  detalhes  de  cada  página,  permitindo  a
+categorização do acesso com informações semânticas como o tipo de conteúdo e as
+relações desta página com as demais.
+Estas ontologias foram descritas manualmente por especialistas no domínio da
+aplicação, com uso do editor de ontologias Protege7, tendo sido utilizada a linguagem
+OWL para sua representação. Parte da Ontologia da Aplicação está descrita brevemente
+na figura 2, na qual podem ser observadas algumas relações, como a “possuiSubpagina”.
+Além destas relações são mantidos alguns atributos definidos nesta ontologia, como
+7 http://protege.stanford.edu
+
+
+
+
+“tipoConteudo” e “template”, e outros reutilizados de outras terminologias conhecidas,
+como o Dublin Core8, no caso de “dc:description” e “dc:creator”.
+Figura 2 - Trecho da estrutura da Ontologia da Aplicação
+A Ontologia de Apresentação descreve características da interface a ser definida.
+Cada elemento desta ontologia indica especificamente um tipo de formato, no elemento
+“template”. Estes formatos são descritos, na ontologia de apresentação, a partir dos
+conceitos “template”, “elemento” e “sub-elemento”, que permitem a descrição de dados
+da página e possibilitam a geração do código HTML básico com anotações de conteúdo
+para  substituições.  Nas  seções  onde  devem  ser  feitas  substituições  por  conteúdos
+adaptados são utilizados marcadores específicos. A figura 3 ilustra a descrição de uma
+típica área de interface, descrita como “TPL01conteudo” e composta por elementos com
+informações  para  a  geração  do  HTML                                                      (“tag”)  e  informações  para  substituição
+(“swah:text”). Estas informações são utilizadas em conjunto com outros elementos da
+codificação padrão necessária para a montagem de uma página em HTML.
+Figura 3: Parte da ontologia de apresentação
+O mecanismo de adaptação realiza a análise da codificação HTML gerada pelo
+mecanismo de validação e substitui suas anotação por conteúdos. Para determinar os
+conteúdos correspondentes a cada anotação é feita uma análise entre o modelo de
+usuário e as regras de adaptação, em busca de um padrão adequado. As regras são
+descritas a partir de condições e ações. As condições correspondem às informações do
+comportamento percebido do usuário e   as ações correspondem à utilização do conteúdo
+para substituições. Estas regras são geradas pelo acompanhamento do comportamento
+8 http://dublincore.org/
+
+
+
+
+dos  usuários  do  site   Web.  Foram  definidos  três  tipos de regras, para  o menu  de
+navegação, associadas ao perfil do usuário e ao conteúdo. As regras de menu são as
+mais simples e são compostas de uma condição indicando a página acessada e diversas
+ações, que correspondem às páginas sugeridas em hyperlinks junto ao menu gerado pela
+aplicação. As regras associadas ao perfil do usuário são descritas com condições onde
+são indicadas as páginas mais acessadas por determinado grupo de usuários. As regras
+de conteúdo integram informações do perfil do usuário, página acessada e conteúdo a
+ser adaptado. São compostas de condições associadas ao tipo de perfil e à página
+acessada. As ações são associadas às áreas da interface que possibilitam adaptação,
+como por exemplo, o topo da página, o   conteúdo   principal   e   a   área   destinada   a
+conteúdos complementares.  A  definição  do  tipo  de  perfil  do  usuário  leva  em
+consideração o número de vezes que cada página associada às regras que definem este
+perfil foi acessada. A geração do perfil pode ser feita de forma manual, com a edição de
+regras que o definem, ou de forma semi-automática, com a análise das sessões dos
+usuários.  A  cada  perfil  de  usuário  definido  correspondem  um  grupo  com
+comportamentos similares e são associadas sugestões de hyperlinkspara o menu e a
+substituição de conteúdo por informações adaptativas. Caso nenhuma regra válida seja
+encontrada, a página a ser apresentada ao usuário será montada com seu conteúdo
+padrão.
+Para facilitar a criação e publicação de páginas por usuário sem conhecimentos
+em tecnologias da Web Semântica, foi desenvolvida uma ferramenta de administração
+de  conteúdos  criados  através  da  arquitetura,  denominada  SWAH  (Semantic  Web/
+. A interface disponibiliza telas de cadastros de páginas e inserção
+de conteúdos, telas para upload de imagens e regras, além de telas de configuração geral
+dos parâmetros do ambiente.  A  Figura                                                        4  exibe  algumas  telas  do  ambiente  de
+administração.
+Figura 4: Telas da interface SWAH
+O item à esquerda da Figura  4 apresenta a tela de criação de páginas, que
+mantém a Ontologia da Aplicação atualizada com cada página atualizada pelo usuário.
+Nesta tela constam informações de cadastro como nome do arquivo, título da página,
+autor, descrição e tipo de conteúdo, templateescolhido, tipo de menu a ser utilizado
+(adaptativo, inferido ou fixo) e página superior na hierarquia (página “pai”). Após o
+cadastro de uma página é necessário inserir conteúdo para a mesma. O item à direita da
+Figura 4 mostra a tela de inserção de conteúdos, onde é editado o conteúdo padrão da
+página, ou seja, conteúdo que é apresentado caso não existam regras de adaptação para a
+mesma. Nesta tela podem ser observadas as informações gerais obtidas da tela anterior,
+no cadastro da página, seguida pela área de edição do conteúdo onde está disponível
+
+
+
+
+uma barra de ferramentas que busca facilitar a interação entre os usuários e a edição de
+páginas.   No  caso  da  inserção  de  conteúdo  adaptativo,  além  destas  informações  é
+indicado um nome para o tipo de conteúdo da página (que também deverá ser usado na
+montagem  das  regras),  bem  como  inserido  o  conteúdo  correspondente.  Os  dados
+cadastrados pela interface SWAH são armazenados em um banco de dados MySQL9,
+sendo que o acesso às ontologias é realizado com uso da biblioteca RAP10, sendo
+utilizada a linguagem PHP 511 para a implementação dos sistema.
+4. Análise da experimentação
+Para  a  aplicação  das  funcionalidades  implementadas  na  arquitetura  foi
+desenvolvido um caso de uso com base nos requisitos para uma tabacaria, possuidora de
+três  categorias  de  produtos:  livros,  revistas  e  DVDs.  Devido  à  facilidade  de
+relacionamento de áreas entre essas categorias, foram feitos testes com regras para
+sugestão  de  hyperlinks no  menu  de  páginas  distintas  e  com  a  substituição  ou
+complementação de conteúdos. Para o teste foram criados quatro perfis de usuários,
+identificados como adulto, jovial, infantil e técnico. A primeira etapa para a criação do
+site    foi  o  cadastro  de  suas  páginas,  tendo  sido  criadas  dezessete  páginas,  todas
+relacionadas às três categorias de produtos citadas. Foram criadas várias subcategorias
+para distinguir os tipos de produtos, como por exemplo, livros técnicos, revistas infantis,
+DVDs de filmes, entre outros. A seguir foram inseridos os conteúdos das páginas e
+criados conteúdos adaptativos.
+Figura 5: Página com conteúdos adaptados
+O exemplo apresentado na figura 5 é de uma página de revistas técnicas. Essa
+página  teve  todas  suas  áreas  adaptadas  devido  às  regras  de  adaptação  e  o
+comportamento do usuário em sua navegação entre as páginas do portal, o que resultou
+na avaliação de seu perfil como perfil técnico. Segundo as regras criadas para a o site de
+9 http://www.mysql.com/
+10 http://sites.wiwiss.fu-berlin.de/suhl/bizer/rdfapi/
+11 http://www.php.net/
+
+
+
+
+experimentação, um usuário de perfil técnico acessa com maior freqüência categorias
+como livros de auto-ajuda e livros técnicos, revistas de filmes, jogos e de assuntos
+técnicos, além de DVDs de jogos. Estas informações podem ser observadas na figura 6,
+onde a regra descrita com ao atributo type=’profile’ e name=’tecnico’ descreve estas
+possibilidades de adaptação.
+As regras cadastradas podem ser verificadas na Figura 6. É importante observar
+a indicação dos conteúdos adaptativos nas regras com atributo type=’content’. A regra
+indica que se o usuário possui o perfil técnico e estiver acessando a página com nome
+“tabacariaRevistasTecnicas”, o topo deve usar o conteúdo “topRevTecnicasPT”, a área
+central o conteúdo “dcRevTecnicaPT” e a área lateral o conteúdo “ocRevTecnicaPT”.
+Esses nomes  são atribuídos aos conteúdos  na sua  criação,  através da interface de
+administração, na tela de inserção de conteúdos adaptativos. Também é possível ver na
+Figura 5 a adaptação de hyperlinks do menu de acordo com as regras anotadas com
+atributo type=’menu’. As regras de menu indicam que, ao acessar a página com nome
+“revistasTecnicas”,  sejam  mostrados  os  hyperlinks das  páginas  de  livros  técnicos,
+revistas de jogos, DVDs de filmes e DVDs de jogos.
+Figura 6: Regras para adaptação de conteúdo
+A arquitetura SWAH possibilita esse tipo de comportamento para qualquer
+página  criada  com  base  em  sua  estrutura,  utilizando  suas  ontologias  e  regras  de
+adaptação.
+5. Conclusões
+O sistema apresentado permite a descrição de um site  web a partir de dois
+modelos  armazenados  em  ontologias  e  implementa  o  acompanhamento  de  sua
+utilização.  Este  acompanhamento  possibilita  a  utilização  de  regras  de  adaptação,
+baseadas na informação semântica descrita nas ontologias. Assim é possível a geração
+de adaptações de estrutura e de conteúdo, sem necessidade de identificação de usuários
+individualmente, a partir de tarefas realizadas em uma sessão do usuário. Além disso, o
+sistema permite ao usuário responsável pela geração e manutenção de conteúdo um
+acesso facilitado e não requer o conhecimento de conceitos de Web Semântica, o que
+facilita a sua adoção.
+
+
+
+
+Foi realizada a utilização do sistema para a montagem de um site  Web e a
+realização de testes. A partir desta experiência foram comprovadas as facilidades de
+edição de conteúdos e também a efetividade das adaptações.
+Alguns trabalhos futuros estão sendo encaminhados, no sentido de proporcionar
+maiores facilidades à edição de conteúdos. A edição de regras de adaptação também está
+sendo  melhorada  para  que  seja  facilitada  e  acrescentada  ao  módulo  de  edição  de
+conteúdo. Por fim, a descrição dos formatos de tela deve ser gerada a partir de uma
+ferramenta mais amigável, baseada em interface Web, de modo a completar o ciclo de
+ferramentas para que o sistema possa ser completamente utilizado por usuário sem
+conhecimento em Web Semântica ou desenvolvimento Web.
+6. Referências
+[1] Brusilovsky, P., Karagiannidis, C., and Sampson, D. (2004) Layered evaluation of adaptive learning
+systems. International Journal of Continuing Engineering Education and Lifelong Learning 14 (4/5),
+402 - 421. 2004.
+[2] De Bra, Arroyo, L., Chepegin, V., The next big thing: adaptive web-based systems. Journal of Digital
+Information, V(5)N(1). 2004.
+[3] Brusilovsky, P. “Adaptive hypermedia”. User Modeling and User-Adapted Interaction, 11:87-110,
+2001.
+[4] Kravčík, M., Gašević, D.. Adaptive hypermedia for the semantic web. Conference on Hypertext and
+Hypermedia. Pages 3-10, Odense, Dinamarca, 2006.
+[5] Freitas, F. L. G.,  “Ontologias e a Web Semântica”. XXIII Congresso da Sociedade Brasileira de
+Computação. JAI. Campinas, São Paulo, Junho de 2003.
+[6] Fensel, D. Ontology-Based Knowledge Management. IEEE Computer, 35(11) pages 56-59, 2002.
+[7] De Bra, Arroyo, L., Chepegin, V., The next big thing: adaptive web-based systems. Journal of Digital
+Information, V(5)N(1). 2004.
+[8] Aroyo, L., et al. Ontology-based personalization in user-adaptive systems. 2nd International Workshop
+on Web Personalization, Recommender Systems and Intelligent User Interfaces (WPRSIUI'06), 2006.
+[9] BRA, Paul De, CALVE, Licia. AHA: A Generic Adaptive Hypermedia System. 2nd Workshop on
+Adaptive Hypertext and Hypermedia, Pittsburg, EUA, 20/06/1998 - 24/06/1998.
+[10] Dolog, P. et al. Personalization in distributed e-learning environments. In Proceedings of WWW2004
+- The Thirteen International World Wide Web Conference, New York, May 2004. P.85-94. ACM
+Press.
+[11] Oliveira, J. P. M., Muñoz, L.,  “Adaptative web-based courseware development using metadata
+standards and ontologies”. CAise conference, Riga, Latvia, June 7-11, 2004.
+[12]  LIMA.  Fernanda.  Modelagem  semântica  de  aplicações  na  WWW.  Rio  de  Janeiro:  PUC,
+Departamento de Informática, 2003.
+[13] Ontoweaver - An ontology based approach to web site design and development. Disponível em:
+<http://kmi.open.ac.uk/projects/akt/ontoweaver>. Acessado em: 14 jun 2007.
+[14] LEI, Y., MOTTA, E., DOMINGUE, J.. Modelling Data-Intensive Web Sites with OntoWeaver. In
+Proceedings The International Workshop on Web Information System Modelling (WISM 2004), pages
+pp. 106-121, Riga, Latvia.
+[15] Assis, P. S., Schwabe, D.   Nunes, D. A.,: ASHDM - Model-Driven Adaptation and Meta-adaptation.
+Adaptive Hypermedia and Adaptive Web-Based Systems, 4th International Conference, AH  2006,
+Dublin, Ireland, June 21-23, 2006, Proceedings. Lecture Notes in Computer Science 4018 Springer
+2006.
+[16] Jin, Y., Xu, S., and Decker, S. Ontowebber: Model-driven ontology-based web site management.
+(SWWS 2001), pages 529-547. Stanford University.
+[17] Sintek, M. and Decker, S. (2002). Triple - an rdf query, inference, and transformation language. In
+First  International  Semantic  Web  Conference                                                             (ISWC  2002),  volume  2342  of  Lecture  Notes  in
+Computer Science, p. 364-378. Springer.
+[18] Maedche, A., Staab, S., Stojanovic, N., Studer, R., and Sure, Y. (2003). Semantic portal: The seal
+approach. In Spinning the Semantic .pages 317-359. MIT Press.
+
+
+
+
+

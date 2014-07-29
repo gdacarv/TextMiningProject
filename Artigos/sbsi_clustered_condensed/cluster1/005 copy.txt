@@ -1,0 +1,414 @@
+﻿Proposta e An álise de Desempenho de Dois Métodos
+de Seleç ão de Características para Random Forests
+Denise G. D. Bastos1, Patricia S. Nascimento1, Marcelo S. Lauretto1
+1
+Escola de Artes, Ciências e Humanidades - Universidade de São Paulo (EACH-USP)
+Rua Arlindo Bettio, 1000 - 03828-000 - São Paulo - SP - Brazil
+{denise.bastos,marcelolauretto}@usp.br,  poulain.patricia@gmail.com
+Abstract. In supervised learning, it is very usual the ocurrence of datasets con-
+taining irrelevant attributes.  Under such circumstances, it is crucial to apply
+some feature selection criterion, mainly in learning problems where data ac-
+quisition costs are proportional to the number of attributes.  In this paper, we
+introduce two attribute selection criteria designed for Random Forests, named
+Incidence Factor (IF) and Depth Factor (DF). Comparative tests indicate that
+DF is a robust criterion, outperforming the Error-Based Importance (EI) and
+performing similarly to the Gini Importance (GI), the two main criteria for Ran-
+dom Forests currently in use.
+Resumo. Em aprendizado supervisionado, é comum a ocorrência de bases de
+dados contendo atributos irrelevantes.  Sob tais circunst âncias, a adoç ão de
+critérios de seleç ão de características relevantes para a classificaç ão é funda-
+mental, principalmente nos problemas em que os custos de coleta de dados s ão
+proporcionais à quantidade de atributos. Neste artigo, propomos dois critérios
+de seleç ão de atributos voltados para Random Forests, denominados Fator de
+Incidência (FI) e Fator de Profundidade (FP). Testes comparativos indicam que o
+FP é um critério robusto, com desempenho superior ao da Importância Baseada
+no Erro (IE) e equivalente ao da Importância de Gini (IG) - os dois principais
+critérios para Random Forests atualmente em uso.
+1.                                                                                          Introduç ão
+Em aprendizado supervisionado, é bastante frequente a ocorrência de bases de dados con-
+tendo grande n úmero de atributos, muitos dos quais irrelevantes ou com alta correlação
+entre si. O primeiro impacto imediato do treinamento de algoritmos de aprendizado com
+essas características é o fen ômeno de overfitting - um ajustamento excessivo dos modelos
+ao conjunto de treinamento, que compromete a acurácia na classificação de novos casos.
+O segundo aspecto a ser considerado é que, em diversos domínios, tais como diagn ósticos
+médicos baseados em exames clínicos/genéticos ou problemas de decisão baseados em
+entrevistas, existem custos associados à obtenção dos atributos, muitas vezes variáveis
+[Mitchell 1997, He et al. 2012].
+Sob tais circunstâncias, a adoção de critérios de seleção de características relevan-
+tes para a classificação é fundamental no processo de aprendizado computacional. Assim,
+a adoção de procedimentos de seleção de atributos podem trazer diversas vantagens a um
+sistema de classificação supervisionada, tais como o aumento da acurácia do sistema, a
+49
+
+
+
+
+diminuição dos custos de aquisição, o aumento da simplicidade e entendimento do mo-
+delo de classificação e uma maior compreensão dos processos que originam os dados
+[Inza et al. 2010].
+Neste artigo,  nosso interesse se concentra nos métodos de seleção de carac-
+terísticas baseadas no algoritmo Random Forests, proposto por [Breiman 2001].  Uma
+Random  Forest  (RF)                                                                             é  um  classificador  formado  por  uma  coleção  de   árvores  de
+classificação, cada qual construída a partir de uma reamostra aleat ória do conjunto de
+treinamento original. A classificação de um vetor de características x é feita por votação,
+submetendo-se o vetor às árvores da floresta e atribuindo-se a x a classe mais votada.
+[Breiman 2001] prop ôs duas medidas de importância de atributos para utilização
+com florestas aleat órias.  O primeiro, aqui denominado Import ância Baseada no Erro
+(IE), mede o aumento do erro quando se permutam os valores do atributo de interesse.
+O segundo, denominado Import ância de Gini (IG), é baseado na soma dos decréscimos
+do índice de Gini em todos os n ós rotulados pelo atributo.  Cada uma dessas medidas
+pode ser utilizada como um critério de seleção de características, através do qual são
+selecionados os atributos com maior importância [Guyon and Elisseeff 2003].  Por essa
+razão, adotaremos nesse trabalho os termos medida de import ância e critério de seleç ão
+indistintamente.
+Neste artigo, propomos duas novas medidas de importância de atributos, com-
+putadas sobre Random Forests, e comparamos empiricamente seu desempenho com as
+medidas IE e IG no contexto de seleção de características.
+Na construção das árvores em uma RF, atributos com maior relevância global ten-
+dem a ser escolhidos antes dos atributos com relevância local. Logo, tendem a aparecer
+nos n ós mais pr óximos à raiz, sobre os quais incidem as maiores quantidades de exem-
+plos.  Com base nessas premissas, a primeira medida proposta, aqui denominada Fator
+de Incidência (FI), busca medir a quantidade relativa de exemplos do conjunto de treina-
+mento que incidem sobre n ós rotulados por cada atributo; a segunda medida, denominada
+Fator de Profundidade (FP), busca medir as profundidades relativas dos n ós rotulados
+pelo atributo, ou seja, suas distâncias em relação à raiz.
+O artigo está organizado da seguinte maneira.  Na Seção 2 apresentamos breve-
+mente as definiç ões de Random Forests e seu método básico de construção.  A Seção 3
+descreve as medidas de importância de atributos, sendo que as duas primeiras subseç ões
+descrevem as medidas definidas por [Breiman 2001], e as duas  últimas apresentam as
+novas medidas propostas. Na Seção 4 descrevemos os experimentos numéricos e os re-
+sultados obtidos, e na Seção 5 apresentamos nossas conclus ões.
+2. Random Forests
+As Random Forests (RFs) são obtidas através de  bootstrapping aggregating (ou sim-
+plesmente bagging), um método utilizado para gerar m últiplas vers ões de um preditor
+[Breiman 1996a]. Tais vers ões são construídas a partir de reamostras do conjunto origi-
+nal, obtidas via sorteio simples com reposição.
+Apresentamos a seguir a notação sugerida por [Breiman 2001]. Um conjunto de
+treinamento é denotado por L  =  {(xn, yn), n  =  1, 2, . . . , N }, onde N  é a quantidade
+de exemplos, xn  é o vetor de atributos e yn   ∈  {1, 2, . . . , C }  é a classe verdadeira do
+50
+
+
+
+
+n−ésimo exemplo. Os atributos são indexados por m = 1, 2, . . . , M , e assim o vetor de
+atributos do n−ésimo exemplo é denotado por xn  = (xn,1, xn,2, . . . , xn,M ).
+Denote por ψ(x, L) um preditor para a classe de x construído a partir do con-
+junto de treinamento L.  Suponha que exista uma seq ü ência finita de conjuntos de trei-
+namento {L(k)}, k = 1, 2, . . . , K , cada um consistindo de N observaç ões independentes
+provenientes da mesma distribuição subjacente ao conjunto L.  A idéia central  é usar
+{L(k)} para obter um preditor melhor do que o preditor simples ψ(x, L), tendo como
+restrição utilizar apenas a seq ü ência de preditores ψ(x, L(k)).  Indexando-se as classes
+por c = 1, 2, . . . , C , um método de agregar os preditores ψ(x, L(k)) é através de votação,
+escolhendo para x a classe mais votada entre os preditores. Formalmente, denotando por
+Nc  = |{k ∈ {1 . . . K } : ψ(x, L(k)) = c}| o n úmero de “votos” na classe c, o classifica-
+dor agregado pode ser definido por ψA(x) = arg maxc Nc. O subscrito A em ψA  denota
+agregação.
+A obtenção de {L(k)}, k  = 1, 2, . . . , K  é feita tomando-se reamostras bootstrap
+de L, via sorteio com repetição, cada qual de tamanho N .
+Em  cada  reamostra  de  treinamento  bootstrap,  aproximadamente                                  37%  das
+instâncias do conjunto original não são utilizadas para o treinamento [Breiman 1996b].
+Essas instâncias são usadas como um conjunto de teste, para estimar o erro de cada clas-
+sificador e, a partir deste, o erro do classificador agregado.  O erro out-of-bag de cada
+classificador ψ(x, L(k)) é definido como o percentual do conjunto de teste (constituído
+por L \ L(k)) classificado erroneamente.
+Na  formulação  das  RFs  propostas  por  [Breiman 2001],  o  algoritmo  básico
+de  construção  das                                                                                árvores                   é  o  CART   -  Classification  and  Regression  Trees
+[Breiman et al. 1984]. As árvores são expandidas ao máximo, sem poda. Para a divisão
+de cada n ó , um subconjunto de tamanho fixo dos atributos de entrada é selecionado alea-
+toriamente, escolhendo-se a divisão ótima dentro desse subconjunto.
+Índices de Import ância de Atributos
+3.
+Nos algoritmos de construção de árvores de classificação tradicionais, os atributos mais
+relevantes para classificação são selecionados graças aos procedimentos de pré e p ós poda
+[Breiman et al. 1984]. Nas RFs, por sua vez, a identificação dos atributos relevantes não
+é imediata, devido ao grande n úmero de árvores geradas e devido à ausência de procedi-
+mentos de poda na construção das árvores.
+Assim, são adotadas algumas métricas de avaliação da importância de cada atri-
+buto.  [Breiman 2001] sugere duas medidas de importância, descritas nas pr óximas sub-
+seç ões.
+Neste artigo, apresentamos a notação a seguir.  Denotamos por K o n úmero de
+árvores da floresta, M o n úmero de atributos e C o n úmero de classes. As árvores são in-
+dexadas por k = 1, 2, . . . , K ; os atributos avaliados são indexados por m = 1, 2, . . . , M ;
+as classes são indexadas por c  =  1, 2, . . . , C .  Ik  denota o n úmero de n ós da k-ésima
+árvore.
+• O par  (k, i) denota o i-ésimo n ó  da k-ésima  árvore,  k                                       =  1, 2, . . . , K ,  i   =
+1,2, . . . , Ik .
+51
+
+
+
+
+• Tk  = {(k, 1), (k, 2), . . . , (k, Ik )} denota o conjunto dos n ós da árvore k.
+• Tk (m) ⊆ Tk denota o subconjunto dos n ós de Tk rotulados pelo atributo m:
+Tk (m) = {i ∈ Tk |r(k, i) = m}                                                                  (1)
+• n(k, i) é o n úmero de exemplos do conjunto de treinamento que incidem sobre o
+n ó i da árvore k.
+• n(k, i, c)  é o n úmero de exemplos de classe c do conjunto de treinamento que
+incidem sobre o n ó i da árvore k.
+• r(k, i) denota o atributo que rotula o i-ésimo n ó da k-ésima árvore. Para os n ós
+terminais, define-se r(k, i) = 0.
+• d(k, i) denota a profundidade do i-ésimo n ó da k-ésima árvore, ou seja, o compri-
+mento do caminho da raiz da árvore k até o n ó (k, i). Por definição, a profundidade
+da raiz de uma árvore é 0.
+3.1. Import ância Baseada no Erro (IE)
+Essa técnica consiste em, uma vez construída a floresta aleat ória, permutar aleatoriamente
+os valores do atributo m entre os exemplos do conjunto de teste. Aplicam-se os exemplos
+com o m−ésimo atributo permutado sobre as árvores, analisando-se os erros resultan-
+tes.  O aumento do erro de classificação sobre os exemplos permutados em relação aos
+exemplos originais fornece a medida de importância do atributo.
+Formalmente, denotemos por errk  e por errk  o percentual de exemplos out-of-
+bag classificados incorretamente pela árvore k, respectivamente antes e ap ós a permutação
+dos valores do atributo m. O índice de importância do atributo m baseado no erro (IE) é
+dado por :
+￿                                                                                               errk  − errk
+IE(m) = 1                                                                                                                                                   (2)
+q                                                                                               errk
+k=1
+3.2. Import ância de Gini (IG)
+Na  metodologia  CART  para  construção  de                                                     árvores  de  classificação,  a  escolha
+das  partiç ões                                                                                 ótimas  dos  n ós  utiliza  como  critério  de  pureza  o   Índice  de  Gini
+[Breiman et al. 1984]. Esse índice é utilizado para avaliar a distribuição das classes em
+cada n ó . A divisão de cada n ó é feita de maneira a resultar em n ós filhos mais “puros” do
+que o pai original, ou seja, com maiores concentraç ões de exemplos em certas classes.
+Dado  um  n ó  i  de  uma  árvore  k,  denotemos  por  pc                                       =  n(k, i, c)/n(k, i)  as
+proporç ões de exemplos de i pertencentes  à classe c.  O índice de diversidade Gini  é
+definido como
+￿
+G(k, i) =                                                                                       pc                                                          (3)
+1 pc2 .
+c1 =c2
+Note que esse índice tem seu valor máximo quando todas as classes são equi-
+prováveis, ou seja, quando pc  =  1
+C , c = 1 . . . C ; e é igual a zero quando uma das classes
+tem proporção 1 (e conseq üentemente as demais têm proporção 0).
+Para escolher a divisão de um n ó i de uma árvore k, o índice de Gini é utilizado
+como segue. Seja (m, s) uma divisão candidata representando uma restrição xm  ≤ s, onde
+s é um n úmero real. Suponha que (m, s) divide o n ó em dois n ós filhos, iv (correspondente
+52
+
+
+
+
+às instâncias que obedecem à restrição) e if  (correspondente às demais instâncias).  A
+qualidade da divisão de (m, s) é medida pelo decréscimo no índice de Gini:
+∆G(k, i, m, s) = G(k, i) − n(k, iv )                                                         (4)
+n(k, i) G(k, if ).
+Para expandir o n ó i, escolhe-se a divisão (m∗, s∗) que maximiza ∆G(k, i, m, s).
+A medida de importância de cada atributo a em uma Floresta Aleat ória pode ser
+dada pela soma dos decréscimos nos índices de Gini de todos os n ós rotulados por a:
+                                                                                             ￿                             ￿
+IG(m) = 1                                                                                                                        ∆G(k, i, m, s∗)   (5)
+q
+k∈K                                                                                          i∈Tk (m)
+3.3. Fator de Incidência (FI)
+A primeira medida de importância proposta nesse artigo leva em consideração o n úmero
+relativo de exemplos que são afetados pela presença de cada atributo, ou mais especifi-
+camente, o n úmero relativo de exemplos incidentes sobre os n ós rotulados pelo atributo.
+Como essa medida é, em média, proporcional à freq ü ência do atributo nos n ós das árvores
+geradas e inversamente proporcional à profundidade do atributo nas árvores, essa é uma
+medida baseada (indiretamente) na topologia das árvores geradas.
+A soma das quantidades de exemplos incidentes sobre os n ós da k−ésima árvore
+rotulados pelo atributo m é denotado por Nk (m): Nk (m) = ￿                                  i∈Tk (m) n(k, i). Note que,
+na soma acima, um exemplo pode ser computado mais de uma vez.
+Definimos o Fator de Incidência Local (FIL) do atributo m na k-ésima árvore por
+FILk (m) = Nk (m)/Nk ,                                                                       (6)
+onde Nk  =  ￿
+i∈Tk  n(k, i) denota a soma das quantidades de exemplos incidentes sobre
+todos os n ós da árvore k.
+O Fator de Incidência (FI) do atributo m é definido como a média de seus fatores
+de incidência locais sobre todas as árvores:
+￿
+FI(m) =  1                                                                                   FILk (m).                     (7)
+K
+k=1
+3.4. Fator de Profundidade (FP)
+A segunda medida de importância proposta parte do princípio de que os atributos mais
+relevantes tendem a rotular os n ós que estão mais pr óximos à raiz, e portanto de menor
+profundidade. Assim, definimos uma função de importância inversamente proporcional
+às profundidades dos n ós rotulados pelo atributo na Random Forest.
+Denotamos por d(k, i) a profundidade do i−ésimo n ó da k−ésima árvore da flo-
+resta. Dada uma árvore k, Hk (m) representa a soma das inversas das profundidades dos
+n ós da k−ésima árvore rotulados pelo atributo m:
+￿                                                                                            1
+Hk (m) =                                                                                                                   (8)
+d(k, i) + 1 .
+i∈Tk (m)
+53
+
+
+
+
+(A adição d(k, i) + 1 no denominador é utilizada para tratar a raiz, que tem pro-
+fundidade zero.)
+                                                                                             Definimos o Fator de Profundidade Local (FPL) do atributo m na k−ésima árvore
+por
+                                                                                             FPLk (m) = Hk (m)                                                               ,      (9)
+Hk
+onde Hk  = ￿                                                                                 i∈Tk  Hk (m).
+O Fator de Profundidade (F P ) do atributo m é definido como a média de seus
+fatores de profundidade locais sobre todas as árvores:
+￿
+FP(m) =  1                                                                                   FPLk (m).                                                                       (10)
+K
+k=1
+4. Experimentos Numéricos
+Os experimentos numéricos foram baseados em nove datasets p úblicos obtidos da UCI
+Machine Learning Repository [Frank and Asuncion 2010], todos com 15 ou mais atribu-
+tos, mais de 100 exemplos e sem valores faltantes.  Os datasets de testes selecionados
+foram Dermatology, Image Segmentation, Ionosphere, Letter Recognition, Landsat Satel-
+lite, Sonar, Vehicle Silhouette, Wave and WDBC (Wisconsin Diagnostic Breast Cancer),
+cujas descriç ões detalhadas estão disponíveis em [Frank and Asuncion 2010].
+O primeiro passo consistiu em construir uma RF para cada dataset completo (com
+todos os atributos), e calcular as importâncias dos atributos sob cada um dos quatro
+critérios estudados (IE, IG, FI, FP). Dessa forma, para cada critério se obteve um ran-
+king dos atributos do dataset, em ordem decrescente de importância.
+O segundo passo consistiu em selecionar os atributos mais relevantes sob cada
+critério e comparar os erros out-of-bag obtidos pelas RFs sobre os subconjuntos gerados.
+Mais especificamente, para cada dataset foram definidos de 8 a 10 valores distintos de M
+(sendo M a quantidade de atributos selecionados), dentro da faixa de 15% a 67% da quan-
+tidade original de atributos, espaçados 2 a 2. Por exemplo, para o dataset Dermatology,
+os valores de M definidos foram M ∈ {5, 7, 9, 11, 13, 15, 17, 19, 21, 23}. Para cada valor
+de M e para cada critério, foram geradas 500 sub-amostras aleat órias, cada uma por sor-
+teio simples sem reposição, contendo 60% dos exemplos do dataset original e composta
+apenas pelos M atributos mais relevantes. Para cada sub-amostra gerada, foi construída
+uma Random Forest e calculado seu respectivo erro out-of-bag. O desempenho de cada
+critério de seleção foi então avaliada pela média dos erros obtidos nas 500 sub-amostras
+contendo os M atributos mais relevantes.
+O ambiente de teste foi implementado na linguagem R  [R Core Team 2012],
+e  para  a  construção  e  aplicaç ões  das  RFs  utilizou-se  o  Pacote  randomForest
+[Liaw and Wiener 2002].
+Nas Figuras 1, 2 e 3 são apresentados os gráficos dos erros out-of-bag médios
+obtidos pelos quatro critérios de seleção, em função da quantidade M de atributos se-
+lecionados.  Nas legendas dos gráficos também são apresentados os erros médios finais
+obtidos pelos critérios, calculados sobre todos os valores de M .
+54
+
+
+
+
+onados. Datasets: Dermatology, Image Segmentation e Ionosphere
+55
+
+
+
+
+onados. Datasets: Landsat Satellite, Letter Recognition e Sonar
+56
+
+
+
+
+onados. Datasets: Vehicle Silhouettes, Waveform e WDBC
+57
+
+
+
+
+Nos datasets Dermatology,  Ionosphere e Sonar,  os desempenhos dos quatro
+critérios são bastante similares entre si, com ligeira vantagem do FI no Dermatology.
+No dataset Image Segmentation, foram observadas diferenças mais acentuadas entre os
+erros médios, na seguinte ordem de desempenho: FP, IG, IE, FI. No dataset Landsat Sa-
+tellite, o FI e o IG obtiveram os melhores resultados, enquanto o IE obteve os maiores
+erros médios para alguns valores de M . No dataset Letter Recognition também se obser-
+varam significativas diferenças de erros entre os quatro critérios, sendo o ranking: FP, FI,
+IG, IE. Nos datasets Vehicle Silhouetes e Waveform, o IE e o IG obtiveram os menores
+erros médios.  No dataset WDBC, o critério FP apresentou erros médios inferiores aos
+demais, para quase todos os valores de M ..
+A partir dos gráficos não é possível observar uma hegemonia clara de um critério
+sobre os demais, já que se verificam alternâncias dos desempenhos relativos dos critérios
+nos diferentes datasets. Para uma comparação mais ampla dos desempenhos, a Tabela 1
+apresenta o erro médio final de cada critério sobre cada dataset. As células sombreadas
+em cinza escuro e cinza claro indicam, respectivamente, o primeiro e segundo menores
+erros médios para cada dataset.
+A partir da Tabela 1, são computados:
+• MD: N úmero de datasets em que cada critério obteve o melhor desempenho;
+•  2MD: N úmero de datasets em que cada critério ficou entre os dois de melhores
+desempenhos;
+• PD: N úmero de datasets em que cada critério obteve o pior desempenho.
+Esses indicadores são apresentados na Figura 4. Nota-se que o IE obteve resulta-
+dos piores do que o FI e o FP, nos três quesitos. Além disso, embora o IE tenha pequena
+vantagem sobre o IG no quesito MD, apresenta resultados consideravelmente piores nos
+demais quesitos.  Assim, consideramos o IE como o critério de pior resultado entre os
+quatro.  O critério FP é superior ao FI, já que obteve resultados melhores nos quesitos
+2MD e PD e apresentou um empate no quesito MD. Os dois critérios com melhores de-
+sempenhos parecem ser o IG e o FP. Ambos empatam no critério PD, e cada um apresenta
+ligeira vantagem sobre o outro nos critérios MD (3 para o FP, 1 para o IG) e 2MD (6 para
+o IG, 5 para o FP).
+Assim, os resultados obtidos neste trabalho indicam que o FP é um bom com-
+petidor entre os critérios de seleção, com desempenho superior ao IE e equivalente ao
+IG. O critério FI, embora tendo apresentado desempenho inferior ao FP e ao IG, obteve
+resultados ainda superiores ao critério IE, nos três quesitos analisados.
+5. Conclus ões
+Neste trabalho, foram propostas e avaliadas duas medidas de importâncias de atributos de-
+senvolvidas para Random Forests (RFs), dentro do contexto de seleção de características
+em aprendizado supervisionado. Essas medidas, denominadas Fator de Incidência (FI) e
+Fator de Profundidade (FP), são inspiradas em uma propriedade fundamental do processo
+de construção das árvores de decisão: atributos mais relevantes tendem a rotular n ós com
+mais exemplos incidentes e mais pr óximos à raiz.
+Foram  realizados  experimentos  numéricos  baseados  em  nove  problemas  de
+classificação, para comparar o desempenho dessas duas medidas com os desempenhos
+58
+
+
+
+
+ao de atributos
+sobre cada dataset
+erio obteve o melhor desem-
+penho (MD), um dos dois melhores desempenhos (2MD) e o pior desempenho
+(PD)
+da Import ância Baseada no Erro (IE) e da Import ância de Gini (IG), ambas propostas
+por [Breiman 2001]. Os resultados obtidos sugerem que o critério FP é bastante robusto,
+tendo apresentado resultados superiores ao IE e comparáveis ao IG. O critério FI apre-
+sentou resultados inferiores ao FP e ao IG, porém superiores ao IE. Ou seja, o IE, embora
+intuitivo e um dos critérios mais utilizados atualmente, foi o que apresentou o pior de-
+sempenho entre os quatro.
+Os critérios FI e FP são facilmente computáveis, com custo linear no n úmero total
+de n ós das árvores (custo equivalente ao do IG), não trazendo nenhum impacto significa-
+tivo no custo computacional de treinamento.
+Os resultados obtidos motivam a realização de diversos estudos futuros, dentre
+os quais: comparaç ões envolvendo um n úmero maior de datasets; análises de desempe-
+nho em outros contextos além do aprendizado supervisionado, tais como problemas de
+regressão e aprendizado não supervisionado; comparação dos critérios propostos com ou-
+59
+
+
+
+
+tros critérios desenvolvidos para RFs [Altmann et al. 2010]; análise de associação entre o
+desempenho dos critérios e as características dos datasets.
+Os autores são gratos pelo apoio e financiamento recebidos da EACH-USP, da
+Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES), do Conselho
+Nacional de Desenvolvimento Científico e Tecnol ógico (CNPq) e da Fundação de Apoio
+à Pesquisa do Estado de São Paulo (FAPESP).
+Referências
+Altmann, A., Tolosi, L., Sander, O., and Lengauer, T. (2010). Permutation importance: a
+corrected feature importance measure. Bioinformatics, 26(10):1340-1347.
+Breiman, L. (1996a). Bagging predictors. Machine Learning, 24:123-140.
+Breiman, L. (1996b). Out-of-bag estimation. Technical report, Technical report, Statisti-
+cal Department, University of California Berkeley, Berkeley CA.
+Breiman, L. (2001). Random forests. Machine Learning, 45:5-32.
+Breiman, L., Freadman, J., Olshen, R., and Stone, C. (1984). Classification and Regres-
+sion Trees. Wadsworth International, CA.
+Frank, A. and Asuncion, A. (2010). Uci machine learning repository.
+Guyon, I. and Elisseeff, A. (2003).  An introduction to variable and feature selection.
+Journal of Machine Learning Research, 3:1157-1182.
+He, H., III, H. D., and Eisner, J. (2012).  Cost-sensitive dynamic feature selection.  In
+International Conference on Machine Learning (ICML) workshop on Inferning: Inte-
+ractions be- tween Inference and Learning, Edinburgh, Scotland.
+Inza, I., Calvo, B., nanzas, R. A., Bengoetxea, E., naga, P. L., and Lozano, J. A. (2010).
+Machine learning: An indispensable tool in bioinformatics. In Matthiesen, R., editor,
+Bioinformatics Methods in Clinical Research, volume 593 of Methods in Molecular
+Biology, chapter 2, pages 25-48. Humana Press.
+Liaw, A. and Wiener, M. (2002). Classification and regression by randomforest. R News,
+2(3):18-22.
+Mitchell, T. M. (1997). Machine Learning. McGraw-Hill, Redmond, WA.
+R Core Team (2012).  R: A Language and Environment for Statistical Computing.  R
+Foundation for Statistical Computing, Vienna, Austria. ISBN 3-900051-07-0.
+60
+
+
+
+
+

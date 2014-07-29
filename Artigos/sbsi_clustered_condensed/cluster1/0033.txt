@@ -1,0 +1,259 @@
+﻿Otimização de Consultas sobre Dados Espaciais em
+Clusters de Bancos de Dados
+Aluno: Marcos Souza Veloso
+Orientador: Leonardo Azevedo
+Co-orientadora: Fernanda Araujo Baião
+Programa de Pós-Graduação em Informática (PPGI) - Núcleo de Pesquisa e Prática
+em Tecnologia (NP2Tec) - Departamento de Informática Aplicada (DIA)
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+Av. Pasteur 485, Urca - CEP 22290-240 - Rio de Janeiro - RJ - Brasil
+{marcos.veloso;fernanda.baiao;azevedo}@uniriotec.br
+Nível: Mestrado; Ingresso em: Março de 2009; Conclusão: Março de 2011;
+Etapas já concluídas: Definição da proposta.
+Abstract. Geographical Data management is more time consuming than its
+relational counterpart, due to the complexity of the data structures and the
+large amount of data that is typical of Geographical information systems. In
+these  applications,  a  long  query  execution  time  may  compromise  the
+usefulness of the retrieved data. This research work aims at optimizing the
+performance of queries over geographic data through the use of distributed
+and parallel processing, using spatial indexes to balance the workload
+among the nodes of a database cluster. We propose a generic framework for
+spatial queries that will act as a middleware in parallel environments - such
+as a database cluster. The middleware will be responsible for managing
+query partitioning among the nodes, thus achieving workload balance and
+performance speedup.
+Resumo. A manipulação de dados geográficos consome um tempo maior
+que a de relacionais, devido à complexidade das estruturas de dados e
+grande volume de dados tipicamente encontrado em sistemas de informação
+geográfica.  Nestes  aplicativos,  um  longo  tempo  de  execução  de  uma
+consulta pode comprometer a utilidade dos dados recuperados. O objetivo
+do trabalho é otimizar o desempenho de consultas geográficas através da
+aplicação de processamento distribuído, usando os índices espaciais para
+equilibrar a carga de processamento entre nós de um cluster de bancos de
+dados.  A  proposta  consiste  em  um  framework  genérico  para  consultas
+espaciais que atuará em um nível intermediário (middleware) em ambientes
+paralelos  como  um  cluster  de  banco  de  dados.  O  middleware  será
+responsável pela gerência da divisão das consultas entre os nós, buscando o
+balanceamento de carga e a redução do tempo de execução da consulta.
+Palavras-chave: Sistemas de informações geográficas, SGBDs, sistemas distribuídos,
+indexação em bancos de dados espaciais
+
+
+
+
+1.  Introdução
+Um SGBD (Sistema Gerenciador de Banco de Dados) espacial é um SGBD   que
+possui a capacidade de manipular dados complexos, que representam objetos no
+espaço  [Papadopoulos, Manolopoulos,  2003]. Exemplos de objetos espaciais são
+pontos, linhas, polígonos ou poliedros, no caso de representações geométricas, ou
+ainda,  tipos  complexos  e  hierarquizados  como  peças  e  componentes  de  CAD
+(Computer-Aided Design) ou cadeias de proteínas [Güting, 1994].
+Uma função essencial de todo banco de dados, relacional ou espacial, é a
+execução eficiente de consultas. A tarefa de lidar com a complexidade inerente aos
+dados espaciais, porém, é tipicamente mais custosa que a manipulação de dados
+relacionais, pois exige algoritmos computacionais complexos [Brinkhoff et al, 1994].
+O tempo exigido para a execução de uma consulta é tradicionalmente reduzido
+através do uso de estruturas de indexação.
+No  modelo  relacional,  a  indexação  é  realizada  através  da  ordenação  de
+registros segundo valores de seus atributos. Por definição, os atributos são de tipos
+escalares, e não multidimensionais como os existentes em um banco espacial. Logo,
+no caso do banco de dados espaciais são necessárias novas estratégias de indexação,
+específicas e também eficientes. Como exemplo, podemos mencionar os diversos
+algoritmos  para  indexação  espacial,  como  apresentado  por  Samet                   [1990].  Uma
+estrutura de indexação importante e utilizada neste trabalho é o GiST (Generalized
+Search  Tree)  [Hellesrstein,  Naughton,  Pfeffer,                                      1995],  que  oferece  uma  interface
+genérica para a implementação de árvores de indexação. Uma variação do GiST foi
+desenvolvida com foco em índices voltados para a divisão do espaço em bancos de
+dados espaciais, o SP-GiST  (Space Partitioning-GiST)  [Walid, Ihab,  2001]. Este
+framework permite a criação de índices através de parametrização da estrutura e do
+comportamento das árvores de busca.
+Outra maneira de se reduzir o tempo de execução de consultas é através do
+uso de computação distribuída e paralela. Estas técnicas têm sido utilizadas com
+sucesso para otimização de operações de manipulação de dados em bancos de dados
+[Baião, Mattoso, Zaverucha, 2004; Mattoso et al., 2005; Furtado et al, 2008]. Para
+SGBDs espaciais, a distribuição também se apresenta como uma alternativa eficaz
+[Tamura et al., 2001; Wang, Sun, 2002; Wei, Wei, Yin, 2008]. O tempo de execução
+das consultas pode ser ainda menor se, além de bancos de dados distribuídos, técnicas
+de balanceamento de carga de processamento forem aplicadas, fazendo com que os
+processadores distribuam suas tarefas. Aplicando esta combinação de técnicas, reduz-
+se a chance de ociosidade e sobrecarga de um nó em relação aos demais, e o tempo
+total da execução da consulta.
+No caso de bancos de dados espaciais, diversas propostas são sugeridas para o
+uso de técnicas de distribuição. Por exemplo, Hu, Zhu e Lee [2003] propõem o uso de
+árvores-R para dividir a janela de consulta e a execução paralela das partes, sem a
+preocupação com o balanceamento de carga entre processadores. Yan e Rhodes
+[2000] propuseram a distribuição uniforme do espaço envolvido na consulta e o
+processamento paralelo de cada fragmento em um processador; como a distribuição
+dos objetos no espaço não é uniforme, esta estratégia pode provocar o desequilíbrio
+do processamento paralelo. Papadopoulos, Manolopoulos [2003] sugerem o uso de
+cargas em lote realizadas em paralelo, dividindo os lotes de acordo com a mesma
+regra usada para indexação para favorecer a execução de buscas nos nós de um
+
+
+
+
+cluster de bancos de dados; um risco desta abordagem é que a ausência de um nó gera
+indisponibilidade dos dados, pois não há replicação destes.
+2.  Proposta de distribuição através de índices espaciais
+A abordagem aqui proposta busca conciliar duas técnicas - indexação e distribuição -
+para reduzir o tempo de execução de consultas em bancos de dados espaciais. As
+consultas que envolvem operações espaciais são divididas de acordo com o índice,
+criando  subconsultas  e  permitindo  que  estas  sejam  executadas  em  paralelo.  A
+indexação espacial também é utilizada como base para o balanceamento de carga de
+processamento, permitindo um equilíbrio no número de objetos espaciais processados
+por cada processador. Este número é reduzido previamente ao percorrer o índice com
+a consulta principal, usando somente as representações aproximadas  (MBR’s ou
+rasterização) dos objetos espaciais. A redução permite que a divisão seja realizada a
+partir de um subconjunto de objetos do espaço, fazendo a média pelo número de nós
+do cluster. Como o tempo para percorrer o índice usando as aproximações, é menor
+que o necessário para efetuar a consulta com os objetos reais, esta tarefa inicial
+oferece a vantagem de reuduzir o total de objetos a serem divididos sem aumentar o
+tempo  total.  De  fato,  é  esperado  que  o  tempo  total  da  consulta  seja  reduzido,
+juntamente com o número de objetos, através da execução das partes da consulta
+espacial em paralelo, e usando indexação espacial para balanceamento das partes
+processadas. Isto não somente em relação à execução monoprocessada, mas também à
+execução distribuída não balanceada.
+Como o trabalho lida com bancos de dados espaciais, as seguintes etapas são
+necessárias para que a divisão da consulta ocorra: a identificação de uma operação
+espacial presente na consulta; a comparação com o índice espacial para que a divisão
+ocorra e; a combinação dos resultados encontrados por cada subconsulta (agregação
+dos resultados). A primeira etapa consiste em procurar palavras-chave na consulta que
+correspondam  a  operadores  espaciais,  logo  se  faz  necessário  conhecer  esses
+operadores. No trabalho, optou-se por usar o padrão recomendado pelo OGC1 (Open
+Geospatial Consortium). O OGC propõe uma série de operadores espaciais, incluindo
+a junção espacial. Um exemplo de uma junção espacial em OGC é apresentada na
+Consulta SQ01.
+SELECT  G.G_CITY,  G.G_STATE,  ST_ASTEXT(G.G_MAP)  AS  COORDENADAS
+FROM  D_GEOMETRY  G
+WHERE  G.G_MAP  &&  ST_MAKEBOX2D(ST_POINT  (1095,  -2560),  ST_POINT(1100,
+-2570)  )
+Consulta SQ01 Consulta usando uma janela espacial como filtro
+A proposta pressupõe o uso de nós anônimos, ou seja, todos os nós presentes
+são capazes de atender qualquer consulta. Esta requisito é atendido pelo uso de um
+cluster de banco de dados. De acordo com Röhm [2002], um cluster de banco de
+dados é um cluster que possui um SGBD em cada um dos nós, sem nenhuma
+modificação para adequar o comportamento dos SGBDs para o processamento em
+paralelo.
+!"http://www.opengeospatial.org/"
+
+
+
+
+3.  Implementação da proposta
+Buscando  confirmar  a  hipótese  de  redução  do  tempo  de  consulta,  o  trabalho
+contempla a implementação de um middleware, intermediando consultas espaciais em
+um cluster de bancos de dados. O conteúdo dos SGBDs presentes nos nós do cluster é
+replicado, para manter o anonimato dos nós. A arquitetura proposta, denominada CG-
+OLAP, estende a arquitetura do ambiente ParGRES [Mattoso et al., 2005] a fim de
+tratar  a  divisão  de  consultas  segundo  critérios  espaciais.  Desta  forma,  o  nó
+centralizador deve ser estendido de modo a identificar os operadores espaciais nas
+consultas e gerenciar a sua execução, para dividir uma consulta em partes buscando o
+balanceamento de carga entre os nós.
+A  arquitetura  CG-OLAP,  ilustrada  na  Figura                                           1,  possui  um  elemento
+centralizador, responsável por capturar e analisar cada consulta recebida, e quando
+indicado, dividi-la em partes que possuam um número de objetos aproximado, para
+equilibrar o processamento. Cada nó possui um elemento local que recebe uma parte
+da consulta e a submete ao respectivo SGBD.
+Figura 1 - Arquitetura CG-OLAP
+Duas  possibilidades  de  paralelismo  são  possíveis  nesse  ambiente:  o
+interconsulta - mais de uma consulta sendo executadas em paralelo, cada uma em um
+nó;  e  o  intraconsulta                                                                  -  partes  de  uma  mesma  consulta  são  executadas  em  nós
+diferentes. O segundo caso é o alvo real deste trabalho, pois tem como objetivo
+reduzir o tempo de execução de cada consulta individualmente.
+Um exemplo da aplicação da abordagem é dado a seguir. Suponha a Consulta
+SQ01 apresentada anteriormente. Ao identificar esta consulta, o nó centralizador do
+cluster avalia se a consulta deve ser particionada e a divide em partes de acordo com
+os identificadores dos objetos retornados a partir da aplicação da consulta sobre o
+índice existente. Cada nó do cluster receberá um conjunto de identificadores de
+objetos para processar a consulta exata, operação mais custos na execução de uma
+consulta espacial [Brinkhoff et al., 1994]. Após a execução dos testes exatos, o nó do
+cluster retorna o resultado para o componente centralizador. Ao receber todas as
+respostas, o componente centralizador as consolida e retorna para o usuário que
+emitiu a consulta.
+
+
+
+
+4.  Estado atual do trabalho
+Como resultado deste trabalho foi realizado um estudo sobre indexação espacial que
+originou um relatório técnico sobre árvores de quadrantes, árvores-R e o uso de
+aproximação raster em bancos de dados espaciais [Veloso, Baião, Azevedo, 2009].
+Simultaneamente,  a  arquitetura  encontra-se  em  desenvolvimento  para  avaliar  a
+proposta e observar seu comportamento em SGBDs geográficos. Foi constatada a
+capacidade do paralelismo interconsulta e encontradas evidências da ausência do
+paralelismo  intraconsulta  para  consultas  geográficas.  Atualmente,  está  sendo
+implementado o reconhecimento de uma consulta geográfica segundo o padrão OGC.
+Futuramente,   serão   realizados   testes   de   desempenho   da   arquitetura
+considerando os seguintes cenários de execução: sem o paralelismo intraconsulta, sem
+índices balanceados, com cada uma das características e com ambas. O objetivo é
+comparar os resultados entre estes cenários, e quantificar os ganhos de desempenho
+observados. Esses testes utilizarão um benchmark criado para avaliar o desempenho
+de  datawarehouses  geográficos,  baseando-se  no  TPC-H  [TPC,  2008]  que  é  um
+benchmark  próprio  para  datawarehouses.  Os  testes  com  a  divisão  de  consultas
+ocorrerão após a conclusão da implementação completa dos três passos relacionados.
+Finalmente, com os resultados de todos os cenários, os tempos serão confrontados e
+será possível mensurar a esperada vantagem da aplicação da distribuição balanceada
+das subconsultas.
+Agradecimentos
+Este trabalho é parcialmente financiado pela CAPES.
+Referências
+Baião, F.,Mattoso, M. L. Q., Zaverucha, G., “A Distribution Design Methodology for
+Object DBMS.” Distributed and Parallel Databases, v. 16, n. 1, p. 45-90, 2004.
+Brinkhoff, T., Kriegel, H. P., Schneider, R., et al. “Multi-step Processing of Spatial
+Joins”, In: 1994 ACM-SIGMOD Conference, Proceedings of. Minneapolis, USA,
+p. 197-208, Maio 1994.
+Furtado, C., Lima, A.A.B., Pacitti, E. et al., “Adaptive hybrid partitioning for OLAP
+query processing in a database cluster.” International Journal of High Performance
+Computing and Networking, v. 5, n. 4, p. 251-262, 2008.
+Güting, R.H., “An Introduction to Spatial Database Systems.” The VLDB Journal,
+Berlin, v. 3, n. 4, p. 355-399, Setembro 1994.
+Hellerstein, J.M., Naughton, J.F., Pfeffer, A. “Generalized Search Trees for Database
+Systems.”  In:                                                                           21th  International  Conference  on  Very  Large  Data  Bases
+(VLDB’95), Proceedings of.  Zurich, Switzerland, p. 562-573, Setembro 1995
+                                                                                         Hu, H., Zhu, M., Lee, D. L.  “Towards Real-time Parallel Processing of Spatial
+Queries.”  In:                                                                           32nd  International  Conference  on  Parallel  Processing                        (ICPP'03)
+Kaohsiung, Taiwan, p. 565-572, Outubro 2003
+
+
+
+
+Mattoso, M. L. Q., Zimbrão, G., Lima, A. A. B. et al. “ParGRES: uma camada de
+processamento  paralelo  de  consultas  sobre  o  PostgreSQL.”  In:                     6º  Workshop
+Software Livre (WSL2005). 6º Fórum Internacional Software Livre, Porto Alegre,
+Brasil, p. 259-264, Junho 2005
+Papadopoulos, A., Manolopoulos, Y., “Parallel bulk-loading of spatial data.” Parallel
+Computing, v.29, n.10, p. 1419-1444. 2003
+Röhm, U., Böhm, K., Schek, H.J., et al.  (2002),  “FAS  - A Freshness-Sensitive
+Coordination Middleware for a Cluster of OLAP Components.” In: International
+Conference on Very Large Data Bases (VLDB 2002), Proceedings of. Hong Kong,
+China, p. 754-765.
+Samet, H. The Design and Analysis of Spatial Data Structures. Addison-Wesley,
+1990. 510p.
+Tamura, K., Nakano, Y., Kaneko, K. et al.  “The Parallel Processing of Spatial
+Selection for Very Large Geo-spatial Databases”. In: International Conference on
+Parallel and Distributed Systems (ICPADS 2001), Proceedings of. Kyongju City,
+Korea. p. 721-726. Junho 2001.
+                                                                                        TPC,  TPC  benchmark  H  Standard  Specification  Revision                                        2.8.0  Transaction
+Processing                                                                              Performance                                                  Council,            2008.            Disponível           em:
+http://www.tpc.org/tpch/spec/tpch2.8.0.pdf . Acesso em: 26-04-2010
+Veloso,  M.  S.,  Baião,  F.  A.,  Azevedo,  L.G.,  “Indexação  em  Bancos  de  Dados
+Espaciais”  Rio  de  Janeiro:  UNIRIO.  Relatórios  Técnicos  do  DIA/UNIRIO
+(RelaTe-DIA),   RT-0018/2009,                                                           2009.                                                        14p.   Disponível   (também)   em:
+http://seer.unirio.br/index.php/monografiasppgi .
+Walid G. A., Ihab F. I.  “SP-GiST: An Extensible Database Index for Supporting
+Space Partitioning Trees.” Journal of Intelligent Information Systems (JIIS), v. 17,
+n. 2/3, p. 215 -240, 2001
+Wang, F., Sun, Y. “Spatial Object Clustering and Buffering.” IEEE MultiMedia, v.9,
+n. 1, p. 26-42. 2002
+Wei,  H.-J.,  Wei,  Z.-J.,  Yin,  Q.                                                    “A  New  Parallel  Spatial  Query  Algorithm  for
+Distributed Spatial Databases.” In: International Conference on Machine Learning
+and Cybernetics  (ICMLC  2008) Proceedings of. Kunming, China v.3 p.  1570-
+1574, Julho 2008
+Yan, B., Rhodes, P. J. “Toward automatic parallelization of spatial computation for
+computing  clusters”  In:                                                               17th" international  symposium  on  High  performance
+distributed computing, Proceedings of. Boston, USA,"p. 45-54, 2008.
+
+
+
+
+

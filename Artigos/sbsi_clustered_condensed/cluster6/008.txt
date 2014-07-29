@@ -1,0 +1,554 @@
+﻿!"#$%&'()*$%+",%*$%(-%(./0"0(1(.*2+"#%(345                                           $"6'(-'(.$7'890(
+-0(304/0(:'4+'&%*$'4(
+;7'*(<47*0(-%(!07='>(?%*-4"@(A%"B%"4'(C'6%-0(
+!"#$%&$'"(&)*+"*,)'#-&$./)*±*0(12"%31+$+"*4"+"%$5*+"*6"%71#"*80469***
+:;<=>>?>>>*±*6/)*,%13&@2/)*±*6A*±*B%$315*
+!"#$%&"$'()*+#,!-.'+/012$3&,4)"5(-%&
+!
+"#$%&'(*Neste trabalho é proposto um método para análise e processamento
+das notícias divulgadas pelo sítio Web da Assembleia Legislativa do Estado
+de Sergipe utilizando um processo de mineração de texto e sendo re-aplicável
+a câmaras de outros estados da federação. O objetivo é facilitar ao eleitor a
+documentação  dessas  notícias  e  fornecer  apoio  à  decisão  sobre  qual
+candidato a deputado estadual depositar seu voto. A análise consiste na
+categorização  automática das notícias  em rótulos  pré-determinados  que,
+alinhado a outros dados, medem a atuação do parlamentar ao longo do seu
+mandato através da formalização de um índice de avaliação, denominado de
+QoP  (Quality  of  Parlamentarian).  Diferentes  técnicas  de  categorização
+foram utilizadas e o algoritmo Naive Bayes Multinomial com frequência
+mínima de corte igual a 0 (zero) obteve a maior taxa de acerto, na ordem de
+84%. O índice QoP mostrou-se eficaz para o ranqueamento dinâmico de
+deputados  de  acordo  com  a  aferição  de  sua  qualidade  em  termos
+quantitativos e qualitativos. Uma aplicação Web foi desenvolvida e permite
+que  eleitores  visualizem  o  ranqueamento  padrão,  bem  como  gerar
+ranqueamentos alternativos e personalizados através de uma interface para
+modificação de pesos da fórmula de cálculo do índice.
+Palavras-chave: Atuação parlamentar, Assembleia Legislativa, Categorização
+de textos.                                                                           !!
+.D#$4'6$E*In this work, we propose a method for analyzing and processing
+textual news from the Legislative Assembly of Sergipe State website, by
+means of a text mining process which can be applied to legislative chambers
+from  different  states.  The  main  goal  is  to  facilitate  to  the  voter  the
+documentation  of  such  news,  and  provide  decision  support  on  which
+candidate to vote for state representative. The analysis consists mainly in the
+automatic categorization of news on predetermined labels that, aligned with
+other data, measure the performance of parliament during its mandate by
+generating  an  index,  the  QoP                                                     (Quality  of  Parlamentarian).  Different
+techniques have been used to categorization and Multinomial Naive Bayes
+algorithm with a minimum cutoff frequency equal to 0 (zero) has obtained the
+highest success rate, in the order of 84%. The QoP index was effective for the
+dynamic ranking of deputies according to the assessment of their quality in
+both quantitative and qualitative terms. A Web application was developed
+and  allows  the  voters  to  view  the  default  ranking  as  well  as  generate
+alternative  rankings  through  a  custom  interface  where  they  can  modify
+weights used to calculate the index.*
+!"#$%&'()*+,-'./-0"12-'#+-32/&14+5"6/).-2/7"+8))"09.#4+:";2+<-2"6&'/=-2/&1>++
+85
+
+
+
+
+!"#$%&'()*+,(
+A democracia brasileira permite que o eleitor escolha através do voto direto seus
+representantes nos parlamentos federal, estadual e municipal. Campanhas são feitas em
+época eleitoral para a conscientização da população de que o voto deve ser algo
+consciente e invendável. Sem informação apropriada, entretanto, é dificultoso para o
+eleitor selecionar um dentre vários candidatos disponíveis.
+Aproveitando a facilidade de disseminação de informação da Web, assembleias
+legislativas estaduais divulgam informações a respeito da postura parlamentar. Uma
+dessas informações são as notícias diárias divulgadas no sítio Web da instituição. Uma
+equipe técnica interna diariamente edita e publica notícias referentes à atividade dos
+parlamentares. De posse de tais informações, o eleitor estaria mais apto a selecionar o
+candidato que mais lhe agradasse em termos de atuação, postura política, opiniões e
+ideias.
+O  volume  de  dados   disponibilizado  pelas  assembleias,   entretanto,  é
+consideravelmente  alto.  Tomando-se  como  exemplo  a  Agência  de  Notícias  da
+Assembleia Legislativa do Estado de Sergipe (ALESE), verifica-se a divulgação de uma
+média de  115 notícias mensais, totalizando mais de 5.500 notícias ao longo de um
+mandato de quatro anos. Tal volume de dados pode se tornar de difícil interpretação
+para um eleitor, mesmo que seja feito de forma gradativa.
+Um outro problema está relacionado ao tipo de dado. Dados textuais carecem de
+um  esforço  de  processamento  consideravelmente  maior  em  virtude  da  dificuldade
+inerente que existe em se interpretar adequadamente o significado (semântica) do texto
+em questão.
+Para solução do problema, o presente trabalho visa prover uma estrutura para a
+análise desse volume de dados textuais, facilitando ao eleitor a documentação dessas
+notícias e, em seguir, fornecer apoio à decisão para escolha do melhor candidato a
+deputado estadual além de permitir verificar aqueles que não estariam aptos a uma
+possível  reeleição.  A  abordagem  consiste  de                                           (1)  etapas  de  pré-processamento  das
+notícias publicadas pela ALESE, alinhado a uma abordagem estatística para Mineração
+de Textos [LEHAL e GUPTA 2009] responsável pela representação de um texto como
+vetor de atributos (pesos), (2) uma etapa de categorização de dados aplicada sobre este
+vetor [RIZZI et al. 2000], e (3) a elaboração de um índice para aferição da qualidade de
+um parlamentar a partir do quantitativo e qualitativo de sua atuação, obtidos na etapa
+anterior.!
+!                                                                                          Categorização  automática  de  textos  é  um  objeto  de  estudo  e  investigação
+científica recorrente atualmente, claramente impulsionado pelo aumento significativo do
+volume de dados textuais disponíveis na Internet. A""#$%&"%!'!%()"*+,-)'!.% um rótulo
+(ou classe), pertencente a um conjunto de rótulos pré-definidos, para qualquer texto
+existente do domínio em questão. Baseado em um conjunto de treinamento, onde textos
+com categorização conhecida estão manualmente rotulados, busca-se descobrir de forma
+automática  o  rótulo  mais  apropriado  para  um  novo  texto  fornecido  e  ainda  não
+devidamente  categorizado.  Em                                                             [PAK                                                                                2010],  o  autor  aborda  o  problema  de
+categorização automática de mensagens eletrônicas recebidas no Centro de Tratamento
+de Incidentes de Segurança em Redes de Computadores da Administração Pública
+Federal (CTIR Gov). Ele afirma que relatos de incidentes reportados têm crescido a um
+ritmo preocupante, decorrendo uma necessidade por formas de tratar grandes volumes
+de  notificações  de  incidentes.                                                          [CHAN  et  al.  2001]  construíram  um  classificador
+utilizando  um  mecanismo  automatizado  de  classificação  personalizada  de  notícias
+online através de SVM (Support Vector Machine).   Na classificação personalizada, o
+usuário pode definir suas próprias categorias utilizando algumas palavras-chave e fica a
+86
+
+
+
+
+cargo do próprio classificador obter o conjunto de treinamento. Esta liberdade dada ao
+usuário  de  criar  suas  próprias  classes  é  aplicável  principalmente  a  soluções  mais
+genéricas, como é o caso do trabalho de CHAN. [STEINBRUCH 2006] propõe dois
+algoritmos de classificação automática de textos baseados no algoritmo multinomial
+Naïve Bayes e sua utilização em um ambiente on-line de classificação automática de
+textos com realimentação de relevância pelo usuário. O autor aponta a classificação
+automática de textos como solução para o problema de organização e aquisição de
+informação.
+O  trabalho  descrito  acima se assemelha com  o presente trabalho  proposto.
+Entretanto, por se tratar de uma solução genérica, a solução de STEINBRUCH não
+aborda quesitos específicos do problema em questão, como por exemplo, a associação
+das notícias a um determinado parlamentar.
+O restante do artigo está organizado como se segue. A seção 2 descreve o sítio
+Web da ALESE, como se dá o pré-processamento das notícias divulgadas e a confecção
+do classificador. Na seção 3 são apresentados e discutidos os índices propostos para
+representação numérica da atividade parlamentar. Experimentos realizados para cada
+uma das etapas são apresentados e os resultados discutidos na seção 4. A seção 4 traz
+ainda o sistema Web desenvolvido segundo a abordagem proposta neste trabalho. Por
+fim, a seção 5 traz conclusões do trabalho.!
+"#!$%&'()*+,%-.)!/0&)12&+3%!4'!5)&63+%7
+A ALESE é formada por uma equipe interna que diariamente divulga no sítio Web da
+assembleia notícias referentes à atividade parlamentar. O sítio também disponibiliza
+informações como contratos, licitações, processos, informações sobre os parlamentares,
+bancadas e outros. São disponibilizadas em torno de 4 notícias diárias, totalizando mais
+de                                                                                               5.500  notícias  durante  um  mandato  de         04   (quatro)  anos.  Em  Assembleias
+Legislativas  de  outros  estados,  essa  quantidade  chega  a  ser  bem  maior.  Em
+levantamento feito entre os dias                                                                 05  e  09 de março de  2012, em  12 Assembleias
+Legislativas, obteve-se uma média de 14 notícias diárias, ou 15.400 notícias em um
+mandato de 04 anos. A estrutura de análise a ser apresentada é aplicável também a esses
+outros sítios.
+Para devida extração das notícias do sítio da ALESE, um focused crawler
+[KONCHADY 2006] implementado. No nível 0 (zero) é determinada a URL base do
+sítio da ALESE. O último link de cada nível é a página de notícias mais antigas. A partir
+deste, o crawler busca o conteúdo das notícias. Esta estrutura, assim como a URL base,
+é correspondente à estrutura do site da ALESE e poderá sofrer alterações de acordo com
+o site da assembleia de cada estado. Após a notícia ser encontrada, ela é pré-processada
+e categorizada apropriadamente em um dos rótulos a serem descritos.!
+"#8!9*:;<*)3'77%1'=&)!4%7!=)&63+%7
+As notícias que são extraídas pelo crawler passam por duas etapas de pré-processamento
+importantes. Primeiramente, palavras que não agregam significado relevante no texto
+são removidos (eliminação de stopwords). Por fim, as palavras restantes selecionadas
+são reduzidas ao seu radical (atividade de stemming).
+O vetor de palavras resultantes relativo a cada notícia original é então indexado
+em um !"#$%& '"& (#%)*+#$,!" #$%&" '(%(" ()*+,-)#" ." *&/*&0&$)(%#" /#*" -1(" /(2(3*(" &" 0-("
+*&0/&')+3("#'#**4$'+("$#")&5)#6"7(*("&3+)(*"8-&"/(2(3*(0"'#1-$0"(")#%#0"#0")&5)#0"0&9(1"
+'#$0+%&*(%(0!" :#+" -)+2+;(%#" #" 1.)#%#" %&" +$%&5(<=#" -"%.& /%"0+"123& 41!"%,"& 5$2+."1#&
+/%"0+"123& >?@ABC@D6"E0)&" 1.)#%#" *&%-;"#"/&0#"%&")&*1#0"8-&"0=#"/#/-2(*&0"&1")#%#0"
+#0")&5)#0"%#"'#*/-0"'#$0+%&*(%#!"(+$%("8-&"("8-($)+%(%&"%&"#'#**4$'+(0"%&0)&")&*1#"0&9("
+(2)("&1"-1")&5)#"8-(28-&*6"F":-$%(1&$)(<=#"2GH+'("."8-&")&*1#0"8-&"0=#"/#/-2(*&0"&1"
+87
+
+
+
+
+!"#$%$%&"'()*"%+",,-(.%/$01"%+"#(2%+$2                                                       $%&$2$&!(203                                                                    $2%-40&$.(4!(%-.%#(!(2.04$#"%!(1!"%
+GHVWD FROHomR                                                                                7HUPRV FRPR ³GHSXWDGR´  ³FkPDUD´ H ³6HUJLSH´  SRU H[HPSOR  SRVVXHP
++"-&$%2('(564&0$7%$+(,$2%#(%"&"22(2(.%&".%82                                                 $4#(%92(:-;4&0$<%
+%                                                                                            =.$% 5(3% &$!(8"203$#"7% o texto passa por um reconhecimento da autoria, para
+determinar  qual  o  parlamentar  responsável  pela  ação  descrita  na  notícia.  Este
+reconhecimento é feito através do uso de expressões regulares (regex) aplicadas ao título
+da notícia. Em um teste feito com  365 títulos de notícias, o reconhecedor descrito
+obteve uma porcentagem de acerto de 98,63%.
+2.2 Treinamento do classificador
+As notícias do sítio Web da ALESE foram categorizadas em quatro rótulos (classes). A
+escolha dos rótulos foi tomada com base na análise das notícias da própria ALESE,
+tendo como preocupação uma clara delimitação dos tipos de atividade:
+LAD (Lançamentos, aprovações e defesas): descreve a participação ativa do
+parlamentar na construção e defesa de projetos. Inclui lançamento de ideias, sugestões,
+pedidos, aprovações e apoios a projetos de autoria própria ou de outros parlamentares.
+ACP (Acusações, críticas e protestos): descreve a participação do parlamentar
+na  forma  de  acusações.  Inclui  críticas  e  protestos  a  projetos,  comportamento  de
+terceiros, ideias e fatos.
+PNC  (Participação  na  comunidade):  descreve  as  ações  populares  do
+parlamentar.  Inclui  a promoção, participação ou simples apoio em inaugurações,
+homenagens, dias especiais e outros eventos.
+NEU (Neutro): notícia que não descreve uma ação parlamentar, ou descreve
+uma ação parlamentar coletiva. Não será considerada no cálculo do índice.
+Um conjunto de treinamento composto por 365 notícias foi criado e essas foram
+manualmente rotuladas. A distribuição do conjunto para as classes LAD, ACP, PNC e
+NEU foram, respectivamente, 119, 93, 109 e 44 notícias.
+A verificação da qualidade do classificador foi feita utilizando-se validação
+cruzada com a base sendo dividida em n folds, sendo n um número especificado. Cada
+fold é utilizado como conjunto de teste enquanto os outros n-1 folds são utilizados para
+construção do classificador. O processo é repetido n vezes e a precisão do classificador
+para cada classe juntamente com a matriz de confusão são obtidos [WITTEN, FRANK e
+HALL 2011].!
+"#!$%&'()!*+,+!-)&'./0!&)!12+3'&+&)!&0!4+,3+5)%6+,
+É importante destacar que cada notícia pode possuir um peso diferente a depender do
+eleitor.  Se  um  parlamentar,  por  exemplo,  proferir  um  discurso  na  assembleia
+defendendo um projeto de reforma agrária, a notícia gerada por este discurso terá uma
+importância diferenciada para um trabalhador rural. Com isso, como aditivo ao processo
+de classificação, o eleitor poderá determinar para cada notícia um peso especial, um
+valor que dê uma maior relevância àquela notícia e, consequentemente, ao parlamentar
+autor.
+Definição 1. Relevância (Ȝ) é associada ao valor mensurado pelo usuário para
+representar numericamente a importância de uma notícia, onde Ȝ ࣅ [0,5].
+A média das relevâncias  (    sempre será vista levando em consideração um
+parlamentar autor específico e uma classe de notícias específica. Sendo assim, tendo
+disponível dados como quantidade de notícias, classe e relevância de cada notícia, será
+calculado um índice, denominado QoP (Quality of Parliamentarian).
+88
+
+
+
+
+Definição                                                                               2.  Quality  of  Parliamentarian                                                 (QoP)  é  o  índice  que  expressa
+                                                                                        numericamente o nível de atuação parlamentar de cada deputado, e é dado por:
+QoPc  =                                                                                                                                                                  , onde c é o índice que indica a qual classe o QoP está
+relacionado  (1,                                                                        2  ou  3),                                                                       é a quantidade de notícias de um determinado
+deputado na classe em  questão,  qmc     é a quantidade do deputado que mais
+publicou na classe em questão e     representa a média das relevâncias para o
+mesmo deputado na mesma classe.
+O índice QoP pode ser utilizado para gerar um sistema de ranqueamento, onde
+parlamentares são ordenados de acordo com sua atividade exercida e perfil do eleitor.
+Este, por sua vez, poderá demonstrar preferência por um determinado tipo de atividade
+parlamentar, representado pelas classes rotuladas. O QoP seguirá duas vertentes, a
+saber: (1) Personal QoP e (2) General QoP.
+O Personal QoP refere-se aos dados de cada usuário e remete a opinião pessoal do
+eleitor, ou seja, para cada deputado, os valores podem diferir. Cada usuário definirá
+pesos às classes (1-LAD, 2-ACP e 3-PNC). Esses pesos determinam a preferência do
+mesmo em relação aos tipos de atividades parlamentares, de modo que:
+pc=1 + pc=2 + pc=3 = 1
+Definição                                                                               3.  Personal  Quality  of  Parliamentarian                                       (p-QoP)  é  o  índice  QoP
+                                                                                        calculado    a partir dos  dados de um  determinado eleitor, e calculado como
+p-QoP = p-QoP1 * pc1                                                                    +    p-QoP2 * pc2    +    p-QoP3 * pc3 ࣅ [0,100],
+onde   p-QoPc =                                                                                                                                                                                                                                                       e c   é o índice que indica a qual classe o p-QoP está
+relacionado                                                                             (1,                                                                              2  ou                                                     3).  Na  média  das  relevâncias                                                            (   ),  são  levadas  em
+consideração apenas as relevâncias definidas pelo eleitor, para o deputado em
+questão e classe em questão. Os quantitativos qc e qmc são, obviamente, comum a
+todos os usuários.
+O General QoP refere-se ao agrupamento dos dados de relevâncias definidos por
+todos os usuários, ou seja, o g-QoP será único para todos os eleitores. Este índice
+remete a opinião geral dos eleitores.
+Definição                                                                               4.  General  Quality  of  Parliamentarian                                        (g-QoP)  é  o  índice  QoP
+                                                                                        calculado   a partir dos dados de todos os eleitores usuários e calculado como
+g-QoP =                                                                                                                                                                  ׫ [0,100],
+onde g-QoPc =                                                                                                                                                            e c é o índice que indica a qual classe o p-QoP está
+relacionado (1, 2 ou 3). Na média das relevâncias (                                     ), é levada em consideração as
+relevâncias definidas por todos os eleitores, para o deputado em questão e classe
+em questão. É adicionado 1 (uma) unidade à cada q-QoPc para evitar que o                g-
+QoP assuma valor 0 (zero) se apenas um dos g-QoPc for igual à 0 (zero).
+A média harmônica possui a característica de penalizar valores discrepantes, ou
+seja, o candidato que obteve valores de g-QoPc com menor variação possuirão vantagem
+em relação ao candidato que obteve g-QoPc com valores de maior variação.
+89
+
+
+
+
+A partir das definições de p-QoP e o g-QoP, é possível extrair as seguintes
+informações:
+i.  O QoP busca o equilíbrio qualitativo e quantitativo. Qualitativo, porque leva
+em consideração a média das relevâncias e médias (ponderada e harmônica) dos
+QoPs das classes de uma forma geral. Quantitativo, porque leva em consideração a
+quantidade de notícias publicadas. Um fator poderá penalizar ou não o outro.
+ii. A divisão                                                                                  retorna valores entre                                                                     0  (zero) e  1  (hum). Na melhor das
+hipóteses, para uma determinada classe, o candidato foi aquele que publicou mais
+notícias.  Neste  caso,  a  divisão  retornará  o  valor                                       1  (hum),  e  seu  QoP  será
+determinado pela média das relevâncias. Considerando que as relevâncias atingem
+valores inteiros entre 0 (zero) e 5 (cinco), a fórmula                                         atingirá valores reais
+entre 0 (zero) e 100 (cem).
+iii.  Em um cenário ideal, um parlamentar terá seu QoP (Personal ou General)
+igual à 100 (cem) (valor máximo) se:
+a. o mesmo foi aquele que mais publicou notícias em todas as classes, e
+b. todas as notícias (pessoais para p-QoP ou totais para o g-QoP) tiveram suas
+relevâncias definidas como 5 (cinco).
+iv. O QoP também pode ser visto como um índice parcial: a escala (de 0 a 100)
+não muda com o passar do tempo. Ou seja, a avaliação dos índices dos deputados
+poderá ser feita de forma gradativa, numa análise com frequência periódica.
+!"#$%&'()*+,&#%#+-&.'&&/,
+O  trabalho  produziu  resultados  em  três  diferentes  linhas:                               (1)  confecção  de  um
+mecanismo para categorização automática de notícias em formato textual natural sobre
+atuação parlamentar disponibilizadas em sítios Web, (2) formalização de um índice para
+avaliação da qualidade de atuação de um parlamentar e (3) desenvolvimento de uma
+aplicação Web que permite o ranqueamento dinâmico de deputados segundo seu índice
+de atuação.
+4.1 Categorização automática dos textos da ALESE
+Na confecção do módulo de categorização, diferentes algoritmos de classificação foram
+considerados e a frequência de corte, denominada frequência mínima de termo, também
+sofreu variações. Os algoritmos utilizados foram Naive Bayes, Árvore de decisão e IBk.
+Para  seleção  do  algoritmo  Naive  Bayes,  foram  executados  testes  com  as
+variações Naive Bayes, Naive Bayes Multinominal, Naive Bayes Updateable e Naive
+Bayes Multinominal Updateable. Sem o uso da frequência de corte, os percentuais de
+rótulos   classificados   corretamente   foram                                                 72,6%,                                                                                    83,56%,                                72,6%,   83,56%,
+respectivamente.!"! #$%&'()*&! !"#$%&'"(%)& *+,-#./0#.",!&+),-,! #.! *,$/&',.! )#0#.! 1,!
+2$#..(3(2#45&!,!,''&!*61(&7!#$6*!1,!*,8&'!),*9&!1,!9'&2,..#*,8)&:!
+!                                                                                              ".! #$%&'()*&.! 1,! ;'-&',! 1,! 1,2(.5&! <)($(=#1&.! 3&'#*!&! 1".2/0& 3/4%)-5& 6789& %&
+1:;<4%%7! &+),81&! &.! .,%<(8),.! percentuais  de  rótulos  classificados  corretamente:!
+>?7@AB7!>?7C?B!,!>D7>>B:!E&(!9&..F-,$!9,'2,+,'!G<,7!1,8)',!&.!#$%&'()*&.!1,!;'-&',!1,!
+1,2(.5&7!&!HIJK',,!&+),-,!#!*,$/&'!)#0#!1,!2#),%&'(=#45&:!
+!                                                                                              "! #$%&'()*&!LMN! 3&(! ),.)#1&! 2&*! 1(3,',8),.! -#$&',.! 9#'#!&! 8O*,'&! 1,! -(=(8/&.!
+*#(.! 9'P0(*&.! Q2#*9&! NR:! "! #$%&'()*&! LMN! 2&*! NSA! &+),-,! &! *,$/&'! 9,'2,8)<#$! 1,!
+2$#..(3(2#45&!2&'',)#7!8#!&'1,*!1,!D@7TTB:!!
+!                                                                                              J#'#! 2#1#! )(9&! 1,! #$%&'()*&7! 3&(! .,$,2(&8#1&! #G<,$,! 2&*! *,$/&'! 1,.,*9,8/&! ,!
+,8)5&! (*9$,*,8)#*&.! -#'(#45&! 8#! 3',G<U82(#! 1,! 2&'),:! ".! ',.<$)#1&.! 9&1,*! .,'!
+90
+
+
+
+
+!"#$%&"'%()#* +)* ,-./"0)* (%* /",$-%* 12* 3$4* -4&%0")+%* %* /-43                        $5+0"%* 67+"6%* (4* 0)-84* 0)6*
+9)-04+8%,46*  (4*  0%84,)-"'%:;)*  0)--48%<*                                              =>#4-!4* que  o  algoritmo  Naive  Bayes
+Multinominal  com  frequência  mínima  de  corte  igual  a  0                             (zero)  obteve  a  melhor
+porcentagem de categorização. *
+*                                                                                         A tabela 1 traz a matriz de confusão obtida para os rótulos LAD, ACP, PNC e
+NEU,  especificados  para  as  notícias da ALESE.  A partir dessa matriz  é possível
+observar que:
+i.  Há um alto índice de confusão entre as classes a e b. No contexto da natureza
+das notícias, no âmbito político, essa confusão pode ser explicada considerando
+que ao realizar uma crítica, um deputado usualmente sugere uma mudança logo a
+seguir,  lançando  uma  nova  ideia.  Nesses  casos,  é  tolerável  que  ocorra  a
+categorização do texto como quaisquer umas das classes a e b.
+ii. Há também um alto índice de confusão entre as classes a e c. No âmbito político,
+essa confusão também possui uma fundamentação lógica. Em alguns casos, um
+deputado visita um determinado local onde funciona um projeto empenhado pelo
+próprio, por exemplo. Nesses casos, é tolerável que ele classifique o texto como
+quaisquer umas das classes a e c.
+"""< Apesar  de  não  ser  aceitável,  salvo  em  casos  bastante  específicos,  que  o
+classificador classifique como a, b ou c textos que estão rotulados com a classe d
+±  NEU  (Neutro),  essas  falhas  não  terão  influência  na  qualificação  de  um
+deputado,  pois  textos  por  natureza  neutros  não  possuem  a  autoria  de  um
+deputado específico, e mesmo sendo classificado como a, b ou c, este será
+descartado. *
+                                                                                                                                                                        *                                                                                                     *
+                                                                                                                                                                                            ?",$-%*1@*?-43$5+0"%*67+"6%*(4*0)-84*!#<*A)-04+8%,46*0)--48%*(4*0%84,)-"'%:;)<*
+                                                                                                                                                                                            Tabela 1: Matriz de confusão entre rótulos!
+!                                                                                         "#!$%&!                                                                       '#!%()!   *#!)+(!   ,#!+-.!
+"#!$%&!                                                                                   "#!                                                                           /0!       1!        2!
+'#!%()!                                                                                   1!                                                                            $#!       3!        4!
+*#!)+(!                                                                                   /3!                                                                           2!        "%!       0!
+,#!+-.!                                                                                   5!                                                                            /!        2!        &'!
+*
+"#$!%&'!±!%()*+,-!&.!')/*+)012,)/+)2
+Para os testes de validação do índice QoP, foi implementado um sistema com as
+funcionalidades  básicas  descritas  pelo  trabalho  em  voga,  sendo  que                460  notícias
+divulgadas entre os dias  12 de dezembro de                                               2011 e  08 de julho de  2012 foram
+carregadas. As notícias foram classificadas e seus respectivos autores, determinados.
+Após esse processo, pode-se perceber a discrepância entre as quantidades de notícias
+divulgadas para cada deputado. Nesse período, as quantidades totais de cada deputado
+oscilaram entre 0 e 58 notícias, o que por certo afeta seus índices.
+91
+
+
+
+
+À medida que as notícias eram carregadas pelo crawler, um grupo de voluntários
+colaboradores realizavam a leitura de tais notícias e definiam para cada uma delas um
+valor  de  relavância.  Ao  todo,                                                          1124  relevâncias  foram  definidas  pelo  grupo  de
+voluntários, distribuídas entre as 460 notícias. A média da relevância dentre todas as
+notícias foi igual a 2,60. As dez primeiras posições do g-QoP resultante dos dados
+obtidos é representado na tabela 2.
+Tabela 2 : G-QoP experimental!
+"#$!                                                                                       %&'()*+#!                                                !"#$%&'!   !"#$&(#!                                                                           !"#$#)(!   *+!"#$
+,$                                                                                         &-...$/...$                                              ,0.12$     31.45$                                                                             ,6.73!     ,-./$
+6$                                                                                         8...$'...$                                               01.60$     0.51$                                                                              35.51!     ,0.12$
+0$                                                                                         (...$9...$                                               4.00$      06.31$                                                                             0.24!      3.04$
+3$                                                                                         &...$9.$                                                 17.25$     0.,0$                                                                              ,,.:5!     -.21$
+:$                                                                                         ;...$;...$                                               02.76$     6.16$                                                                              ,1.,:!     -.53$
+5$                                                                                         <...$;...$                                               ,5.7$      6.46$                                                                              2.:4!      4.,-$
+1$                                                                                         =...$>...$                                               6.51$      01.,5$                                                                             3.33!      5.//$
+2$                                                                                         &...$<...$                                               3.51$      6.:1$                                                                              ,3.45!     1.--$
+4$                                                                                         <"...$?...$                                              0.,,$      0.6,$                                                                              5.36!      6.33$
+,7$                                                                                        (...$=...$                                               2.7$       ,.05$                                                                              4.30!      6.-4
+Um exemplo claro da implicação do uso da média harmônica dos g-QoPcs para o
+cálculo do g-QoP é visto nas duas primeiras posições do ranking ilustrado na tabela 2. O
+deputado Au... B... possui g-QoP1, g-QoP2 e g-QoP3 respectivamente iguais à 13.78,
+47.96 e 12.04, com média harmônica igual a 17.2. Para o deputado J... D..., por sua vez,
+estes valores são respectivamente iguais à 37.23, 3.67 e 46.67 com média harmônica de
+10.49. O uso da média aritmética ocasionaria uma inversão de posição entre estes dois
+deputados.
+Para análise do p-QoP, tomemos como base um dos usuários do sistema. Como
+descrito anteriormente, cada usuário define pesos para cada classe, e o p-QoP é obtido
+calculando-se a média ponderada dos p-QoPcs. Para uma melhor análise, assumamos
+três grupos de pesos  distintos  para o mesmo  usuário. Chamaremos de  p1  o peso
+associado à classe 01-LAD (Lançamentos, aprovações e defesas), p2 o peso associado à
+classe 02-ACP (Acusações, críticas e protestos) e p3 o peso associado à classe 03-PNC
+(Participação na comunidade).
+Para o grupo 1, assumamos p1 = 0.5, p2 = 0.3, e p3 = 0.2. A tabela 3 apresenta
+as cinco primeiras posições do resultado da média ponderada dos p-QoPc¶V SDUD R JUXSR
+1.
+Tabela 3 : P-QoP experimental para o grupo 1!
+"#$!                                                                                       %&'()*+#!                                                !"#$%&'!   !"#$&(#!                                                                           !"#$#)(!   @+!"#$
+,$                                                                                         &...$9...$                                               27.7$      7.7$                                                                               3.33!      10.32$
+6$                                                                                         &-...$/...$                                              ,5.7$      02.1:$                                                                             ,3.2,!     //.52$
+0$                                                                                         8...$'...$                                               65.3$      6.3:$                                                                              03.64!     /0.-2$
+3$                                                                                         9...$&...$                                               37.7$      ,.66$                                                                              7.13!      /0.5/$
+:$                                                                                         ;...$;...$                                               65.51$     7.7$                                                                               ,3.2,!     ,4.6
+                                                                                                                                                               Para o grupo 2, assumamos p1 = 0.2, p2 = 0.5, e p3 = 0.3. A tabela 4 apresenta o
+                                                                                           resultado da média ponderada dos p-QoPc¶V SDUD R JUXSR
+                                                                                                                                                               Tabela 4 : P-QoP experimental para o grupo 2!
+"#$!                                                                                       %&'()*+#!                                                !"#$%&'!   !"#$&(#!                                                                           !"#$#)(!   @+!"#$
+,$                                                                                         &-...$/...$                                              ,5.7$      02.1:$                                                                             ,3.2,!     /-.0/$
+6$                                                                                         =...$>...$                                               7.7$       04.,,$                                                                             7.7!       ,2.55$
+0$                                                                                         &...$9...$                                               27.7$      7.7$                                                                               3.33!      ,-.66$
+3$                                                                                         8...$'...$                                               65.3$      6.3:$                                                                              03.64!     ,4.-2$
+:$                                                                                         (...$9...$                                               7.7$       63.15$                                                                             6.66!      ,6.05
+92
+
+
+
+
+Para o grupo 3, assumamos p1 = 0.2, p2 = 0.3, e p3 = 0.5. A tabela 5 apresenta o
+resultado da média ponderada dos p-QoPc¶V SDUD R JUXSR
+Tabela 5: P-QoP experimental para o grupo 3!
+"#$!                                                                                       %&'()*+#!                                                             !"#$%&'!            !"#$&(#!  !"#$#)(!   *+!"#$
+,$                                                                                         -...$'...$                                                            /0.1$      /.12$    31./4!               ,-./0$
+/$                                                                                         &5...$6...$                                                           ,0.7$      38.92$   ,1.8,!               ,,.,-$
+3$                                                                                         &...$:...$                                                            87.7$      7.7$     1.11!                /1.,,$
+1$                                                                                         ;...$;...$                                                            /0.09$     7.7$     ,1.8,!               /,.23$
+2$                                                                                         <...$=...$                                                            7.7$       34.,,$   7.7!                 //.2-
+É  possível  perceber  que  a  atribuição  de  pesos  às  classes  possibilita  um
+ranqueamento diferenciado. Para cada grupo de pesos atribuído, obtem-se uma diferente
+ordem de ranqueamento. O parlamentar A... S... foi o que atingiu um melhor p-QoP no
+grupo pesos 1, onde deu-se uma maior preferência à classe 01-LAD. Para o grupo de
+pesos 2, onde deu-se maior preferência para a classe 02-ACP, o parlamentar Au... B...
+foi o que obteve um melhor índice. O parlamentar J... D... foi o que atingiu um melhor
+p-QoP no grupo de pesos 3, onde deu-se uma maior preferência à classe 03-PNC. O
+cálculo  da  média  ponderada  mostrou-se,  portanto,  eficiente  na  representação  da
+preferência do usuário em relação a um tipo de atividade parlamentar.!
+"#$!%&'()*+!,)-./*
+Baseado na estrutura descrita no presente trabalho, foi desenvolvido um sistema Web de
+gerenciamento das notícias publicadas pela ALESE, denominado ZeroUm. O sistema
+desenvolvido importa as notícias da ALESE através do crawler, classifica-as, determina
+os respectivos parlamentares envolvidos e armazena as notícias em um banco de dados.
+Cada usuário do sistema pode, então, visualizar a notícia e seu conteúdo e determinar
+VXD UHOHYkQFLD                                                                             2 =HUR8P FDOFXOD RV 4R3¶V H GLVSRQLELOL]D R VLVWHPD GH UDQTXHDPHQWR
+dos parlamentares.
+O sistema foi desenvolvido seguindo o padrão MVC (Model View Controller),
+que divide as classes em três camadas distintas: interface, negócio e dados. Além dessas
+três camadas, o ZeroUm possui também a camada de integração, que contém o crawler
+que realiza a interface do sistema com o site da ALESE. O ZeroUm possui, ao todo, 23
+classes e  7 arquivos de interface e seu banco de dados possui  5 tabelas. A página
+principal do ZeroUm é mostrada na figura 2.
+Na página inicial, o usuário pode ter acesso às notícias que ainda não foram
+visualizadas, além dos menus de acesso às notícias que já foram lidas, visualização dos
+4R3¶V  DOWHUDomR GH GDGRV SHVVRDLV H REWHQomR GH LQIRUPDomR D UHVSHLWR GR SURFHVVR
+envolvido. A figura 3 descreve a interface do sistema quando uma notícia é selecionada
+para visualização.
+Na visualização de uma notícia, o sistema exibe seu título, autor, data, classe,
+relevância e conteúdo da notícia, além da média de relevâncias que outros usuários
+atribuíram à mesma. Ainda nesta página, o usuário deverá definir a relevância da notícia
+HP TXHVWmR &RPR PHQFLRQDGR DQWHULRUPHQWH R VLVWHPD FDOFXOD RV 4R3¶V H H[LEH-os na
+tela ilustrada na figura 4.
+Nesta mesma tela, é possível ao usuário visualizar o p-QoP e o g-QoP. Os
+parlamentares são, por padrão, ordenados pelos índices finais. Entretanto, o usuário
+pode,  para  cada  QoP,  ordenar  os  parlamentares  de  acordo  com  o  QoP  de  uma
+determinada classe.!
+93
+
+
+
+
+Figura 2 : Página inicial do ZeroUm!
+Figura 3 : Visualização de uma notícia!
+Figura 4 : Tela de QoPs                                                                   !
+!"#$%&'()*+,*#
+"#$%#!&'%()*! +!,'*,*$%&!-.&!&/*'0&)#.!,&'&!&1#'(23*!0&!4-&5(0&0#!0#!-.!,&'5&.#6%&'7!
+#.! %#'.*$! 4-&6%(%&%(8*$! #! 4-&5(%&%(8*$7! /&$#&0&! #.! (61*'.&29#$! &-%*.&%(:&.#6%#!
+#;%'&<0&$!0#!6*%<:(&$!0#!$<%(*$!=#/!*1(:(&($!0#!&$$#./5#(&$!5#)($5&%(8&$>!!
+!                                                                                         ?3*!%'@$!&$!5(6A&$!0#!:*6%'(/-(23*!0*!%'&/&5A*B (1) confecção de um mecanismo
+para categorização automática de notícias em rótulos pré-definidos, (2) formalização de
+um  índice  para  avaliação  da  qualidade  de  atuação  de  um  parlamentar  e           (3)
+94
+
+
+
+
+desenvolvimento de uma aplicação Web que permite o ranqueamento dinâmico de
+deputados segundo seu índice de atuação.
+Resultados da avaliação do classificador mostraram ser !"##$%&'()(*)+&,"-./)01"(
+)2+"34+.*)( 5&( 6"+$*.)#( #"7-&( )( )+2)01"( 5&( 5&!2+)5"#(&#+)52).#( *"3( 23( !&-*&6+2)'( 5&(
+)*&-+"(&3(+"-6"(5&(89:;((
+(                                                                                                <(sistema(=&7(5&#&6%"'%.5"(#2-,&(*"3("(.6+2.+"(5&(>"-+)'&*&-()#(>&--)3&6+)#(5&(
+&?,"%@( A2&( #1"( -&#!"6#4%&.#( !&')( 5.##&3.6)01"( 5"#( *"6+&B5"#( ,"%&-6)3&6+).#( !)-)( )(
+!"!2')01"@( 3).#(&#!&*.>.*)3&6+&@( 23)( 3)."-( 5.%2',)01"( 5)#( )+.%.5)5&#( !)-')3&6+)-&#;(
+<(+-)+)3&6+"(5)#(6"+$*.)#(5)#(C##&37'&.)#(D&,.#')+.%)#(#2,&-.5)#(6&#+&(+-)7)'E"(5&%&-4(
+3&'E"-)-()(>.#*)'./)01"(5"#(!)-')3&6+)-&#(&3(&F&-*$*."(!"-(!)-+&(5)(!"!2')01"@()'G3(5&(
+)H25)-(6)(#&'&01"(5&(23(!)-')3&6+)-(6)(E"-)(5"(!'&.+"(&@(*"6#&A2&6+&3&6+&@()(3&'E"-)(
+6)(A2)'.5)5&(5"#(!)-')3&6+)-&#(&'&.+"#;(
+Uma das limitações do trabalho é consequência de uma característica inerente
+aos sítios Web: de fato, não cabe às assembleias legislativas conceder notícias sobre
+prováveis candidatos na eleição seguinte. As notícias estão, obviamente, restritas aos
+parlamentares em exercício. O eleitor deverá então considerar o fato de que há outros
+candidatos pleiteando uma vaga na assembleia. Uma possível extensão é considerar o
+cruzamento de informação com outras fontes de dados. Deste modo, não só informações
+sobre novos candidatos estariam disponíveis, mas também outras informações sobre os
+parlamentares atuais seriam adicionadas as notícias da assembleia. O problema dessa
+solução é escolher tais fontes de dados, já que não podemos garantir que toda e qualquer
+mídia seja totalmente imparcial.
+Uma outra limitação do trabalho é que algumas notícias possuem características
+de mais de um rótulo. Nesses casos, é tolerável que o classificador categorize o texto
+como quaisquer umas das classes aceitas. Como solução a esse problema, sugere-se uma
+classificação multi-classe, que daria ao classificador a liberdade para rotular um texto
+com mais de um rótulo, se assim for conveniente.
+Como adicional ao processo definido nesse trabalho, o usuário poderá fazer uso
+de outras ferramentas para apoio à decisão do voto. Um delas é o sítio Web Repolítica
+[REPOLITICA].  Enquanto  o  presente  trabalho  busca  a  coleta  de  informações  de
+maneira  gradativa,  o  Repolítica  recomenda  um  candidato  com  base  na  coleta  de
+opiniões pessoais, e nas opiniões pessoais de outros usuários sobre o perfil geral que o
+eleitor espera de um parlamentar.
+Finalmente, é importante ressaltar que o presente trabalho não se restringe à
+Assembleia  Legislativa  do  Estado  de  Sergipe.  Todas  as  assembleias  legislativas
+estaduais brasileiras possuem sítios e divulgam diariamente suas movimentações. Da
+mesma maneira, as notícias não são a única fonte de informação presente nesses sítios,
+que contêm também informações sobre trâmites de processos, informações sobre os
+parlamentares, pautas diárias, entre outras. Dessa forma, outras técnicas de mineração de
+dados e de texto poderão ser integradas à técnica apresentada, ampliando e facilitando o
+assimilamento das informações disponíveis.(
+!"#"$%&'()*+
+IJCK@(  IE&&?J"6,L(  MNK@(  C.F.6L(  DOP@(  Q&?R&6,;(  C2+"3)+&5(                                <6'.6&(  K&S#(
+I')##.>.*)+."6( S.+E( R&-#"6)'./)+."6;( !"#$ %&"'(&)"*+&),$ -+&.'('&/'$ +.$ 01*)&$ 2*3*"),$
+4*5()(6@(M.6,)!2-)@(TUUV;
+KONCHADY, Manu. Text Mining Application Programming. Boston: Ed. Thomson,
+2006. 412 p.
+95
+
+
+
+
+                                                                                                LEHAL, Gurppreet S. GUPTA, Vishal. A Survey of Text Mining Techniques and
+Applications.                                                                                   Journal of Emerging Technologies in Web Intelligence, Vol 1, No 1,
+60-76,                                                                                          2009.!
+"#$%! #&'()*! +)(,()-./! ,(! 0(1(2(3! 4&5! #6&-.789/! ,(! :;.1-.73! ,(! 0-1()789/! ,(! :(<*/!
+67)7! =7*(>/)-2789/! ,(! ?@(1*/3! ,(! A(>B)7187! 1/! =:4C! D/@5! EFGF5! H-%! IG! J5!
+!"##$%&'()*+,-$#&%'.*+$/+012*%/3&"4'5+±+61"7 $%#".'.$+8                                         $.$%'9+.$+:%'#;9"'%!K)73L&-7%!
+EFGF5
+RIZZI, Claudia Brandelero (2000). et al. Fazendo uso da categorização de textos em
+atividades                                                                                      empresariais.                                                               Disponível    em:   <http://leandro.wives.nom.br/pt-
+br/publicacoes/iskmdm2000-2.pdf>. Acesso em: 29 mar. 2011.!
+OLIVEIRA, C. J. S. & ARAÚJO, A. de A. Classificando Imagens Coletadas na World
+Wide Web em duas Classes Semânticas: Imagens Gráficas e Imagens Fotográficas,
+Relatório  Técnico  RT.DCC.006/2002,  DCC/ICEx/UFMG,  Belo  Horizonte,  MG,
+Brasil, Dezembro, 2002, 29p.
+STEINBRUCH, David. Um estudo de Algoritmos para Classificação Automática de
+Textos Utilizando naive-Bayes. Pontifícia Universidade Católica, Rio de Janeiro, RJ,
+2006.!
+:M0#N?O#%! 07)-7! ,73! D)7873! P5! 05Q! R#S4?O%! OB-2! #1*T1-/5! UV7! ?3*)7*;>-7! ,(!
+")(67)789/! ,(! R7,/3! 67)7! #BV(1*/! ,(! ")(.-39/! ,(! 0/,(&/3! ,(! =&733-J-.789/! ,7!
+")/,B*-@-,7,(!                                                                                  ,(!                                                                         =717W,(W78B.7)5!    8'4<9.'.$+                         .$+   =$41*9*>"'+   .$+   01.'"'&<?'@!!
+41,7-7*B'7%!A"%!EFGG5
+WITTEN, Ian H.; FRANK, Eibe; HALL, Mark A. Data Mining: Practical Machine
+Learning Tools and Techniques. 3rd edition. Hamilton, New Zealand: Ed. Morgan
+Kaupmann,                                                                                       2011.
+96
+
+
+
+
+

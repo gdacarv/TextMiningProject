@@ -1,0 +1,353 @@
+﻿Descoberta Dinâmica de Serviços: Um Modelo de Seleção
+Semântica de Serviços para ambientes BPM&SOA
+Alexandre Perin de Souza, Ricardo J. Rabelo
+Departamento de Automação e Sistemas - Universidade Federal de Santa Catarina
+Florianópolis - SC - Brazil
+{perin,rabelo}@das.ufsc.br
+Abstract. Integrating BPM & SOA has challenges, especially those associated
+with the composition of applications and sub-problems related to it, such as
+the discovery of web services. This paper addresses the problem of discovery
+through the development of a model. The model integrates the BPM and SOA,
+whereas semantics and QoS, the distribution and variety of providers, aligned
+to the business model of SaaS software. The article discusses the issue of
+discovery, summarizes the state of the art, introduces and shows preliminary
+results of the implementation of the model.
+Resumo.  A  integração BPM&SOA  possui desafios, principalmente aqueles
+associados à composição de aplicações e aos subproblemas relacionados a
+ela, tal como a descoberta de serviços web. Este trabalho ataca o problema da
+descoberta através da concepção de um modelo. O modelo integra os níveis
+BPM   e   SOA,   considerando   semântica   e   QoS,                                       a   distribuição   e
+heterogeneidade de provedores, alinhado ao modelo de negócios de software
+SaaS  . O artigo discute a problemática da descoberta, resume o estado da
+arte, introduz e mostra resultados preliminares da implementação do modelo.
+1. Introdução
+A combinação  de BPM&SOA tem sido  defendida como  melhor estratégia para que
+empresas  obtenham  um  alinhamento  mais  próximo  entre  processos  e  recursos
+tecnológicos e, com isto, consigam projetar aplicações que respondam efetivamente às
+mudanças dos requisitos dos negócios [BPMINSTITUTE 2006]. Nesta junção, de um
+lado, BPM (Business Process Management) trata da especificação, simulação, execução
+etc de processos de negócio. Do outro lado, SOA (Service-oriented Architecture) como
+um paradigma de construção de aplicações a base de serviços web [W3C 2004].
+Em ambientes BPM&SOA “tradicionais”, quando da composição de aplicações,
+analistas de negócios especificam processos analisando como a empresa funciona, para
+então desenvolver e associar serviços web a eles. Iniciar a especificação de um processo
+sem aproveitar  o  conhecimento  adquirido  ou  sem reusar  componentes baseados em
+especificações já prontas, padronizadas e consolidadas, como UBL (Universal Business
+Language) [OASIS 2006] ou RosettaNet [RosettaNet 2008], impacta negativamente na
+necessidade de responder rapidamente e com menor custo aos requisitos do negócio.
+Na  composição  de  aplicações  SOA  duas  formas  de  descobertas  podem  ser
+consideradas: estática e dinâmica. Ambas não garantem a execução do serviço em si;
+todavia, a dinâmica permite substituir serviços, conforme preferências do momento. Este
+trabalho foca na composição dinâmica. O objetivo é potencializar a chance de se escolher
+o serviço mais adequado, em tempo de execução da aplicação, considerando a dinâmica
+
+
+
+
+dos  negócios  e  dos  seus  processos.  Porém,  a  descoberta  é  complexa,  devido  a
+heterogeneidade tecnológica, diferenças entre domínios de aplicações e limitações das
+tecnologias usadas para projetar serviços [Garofalakis et al. 2006].
+Destaca-se ainda a não integração dos níveis BPM e SOA para fins de captura e
+compreensão dos contextos dos processos de negócios envolvidos. A complexidade da
+descoberta aumenta na medida em que os serviços web a serem descobertos podem estar
+publicados e disponíveis em diversos provedores de serviços de software, autônomos,
+largamente distribuídos na Internet e heterogêneos entre si. Além disso, verifica-se uma
+baixa atenção - tanto no cliente, como no provedor - com a semântica dos (nomes dos)
+serviços e desconsideração de informações de qualidade de serviço (QoS - Quality of
+Service)  requeridas  para  o  negócio  em  questão  e  para  o  ambiente  computacional
+disponível no momento. Isso requer uma intensa e experiente intervenção humana para
+selecionar qual serviço melhor se adapta aos requisitos exigidos por uma aplicação. De
+um lado, o processo geral de composição de aplicações SOA torna-se pouco eficiente e
+sujeito a variações de qualidade de seleção. Por outro, faz com que se tire a flexibilidade
+de se escolher o mais adequado serviço e provedor  (modelo de negócio  - incluindo
+preço) para o dado momento e contexto de execução da aplicação SOA.
+Com o  intuito  de contribuir para a solução  do problema de descoberta, este
+artigo apresenta os resultados atuais de um modelo de descoberta dinâmica de serviços,
+completamente integrado ao nível BPM, baseado em padrões abertos, que considera a
+semântica dos processos e os aspectos de QoS requeridos pelas aplicações BPM&SOA.
+Além desta seção introdutória, o artigo está organizado da seguinte forma. A
+seção  2 resume o estado da arte em descoberta de serviços. A seção  3 apresenta o
+modelo de descoberta. A seção 4 mostra aspectos da implementação do modelo. A seção
+5 registra contribuições do modelo e considerações acerca do trabalho.
+2. Descoberta de Serviços
+De acordo com a especificação da Web Services Architecture (WSA), descoberta é ação
+de localizar a descrição de um serviço web que atende critérios funcionais [W3C 2004].
+Como  comentado  na introdução,  as abordagens estática e dinâmica não  garantem a
+execução do serviço em si, pois o serviço escolhido pode estar inacessível no momento
+do  seu  uso.  Entretanto,  a  dinâmica  se  destaca  porque  serviços  são  selecionados  e
+vinculados (binding) às aplicações em tempo de execução (on demand). Isto requer do
+mecanismo de descoberta uma "inteligência" para capturar o que se deseja encontrar e
+selecionar provedores e seus serviços, e usualmente relaxar critérios até achar um que
+respeite o conjunto de requisitos da aplicação.
+2.1. Trabalhos Relacionados
+Em razão da complexidade da descoberta, [Garofalakis et al. 2006] registra uma série de
+dimensões de análise do problema de descoberta: Recuperação da Informação, QoS,
+Padrões e Arquitetura. A articulação entre elas permite a criação de mecanismos de
+descoberta robustos e consistentes, embora na literatura esta articulação não tenha sido
+observada.  Com  freqüência,  encontram-se  trabalhos  que  preferem  privilegiar  uma
+dimensão, principalmente quando o interesse está na criação de projetos com finalidades
+específicas, tal como o tratamento de QoS  [Kokash  2005] e  [Tran e Tsuji 2008] ou
+semântica [Friesen e Börger 2006]. Destacam-se os trabalhos que usam padrões (UDDI
+
+
+
+
+[OASIS  2004], SOAP  [W3C  2007a],  WSDL  [W3C  2007b])  e recomendações, pois
+viabilizam um alicerce para a criação de novos padrões ou aplicações.
+Embora exista uma série de trabalhos que promovam a integração BPM e SOA
+[Adam e Doerr 2008] e [Inaganti e Behara 2007], observa-se que ainda não existe uma
+solução  que  tome  como  ponto  principal a  descoberta,  considerando  a semântica de
+processos  e  serviços,  QoS,  a  distribuição,  escalabilidade  e  heterogeneidade  dos
+provedores, em um único framework.
+3. Modelo de Descoberta Dinâmica de Serviços
+3.1. Problemas
+Há quatro subproblemas a serem considerados na descoberta para fins de composição de
+aplicações. O primeiro se refere a o que expressar, ou seja, quais informações devem ser
+expressas para especificar um serviço desejado. No modelo proposto, isto envolve: i)
+aspectos funcionais; ii) entradas e saídas; iii) aspectos de qualidade do serviço e; iv)
+contexto da aplicação. O segundo ponto trata de como expressar o serviço desejado, dos
+componentes e das relações existentes entre eles. Dentre as diversas formas existentes,
+ontologias [Friesen e Börger 2006] foram escolhidas. Elas criam um vocabulário comum
+para ser usado no modelo, definem uma inter-relação entre contextos de processo de
+negócio e permitem uma maior precisão na descoberta.
+Quem expressa o serviço desejado é o terceiro ponto. Classicamente, o projetista
+da aplicação é quem explicitamente especifica os elementos sobre o serviço desejado.
+Considerando  o  contexto dos ambientes BPM, o potencial papel das ferramentas de
+suporte e  a proposta deste trabalho, há quatro  abordagens a serem consideradas na
+concepção  de  modelos  para  descoberta:  Automática,  Semi-automática,  Fortemente
+Baseada  no  Projetista  e  Assistida.  Na  Automática,  o  controle  da  descoberta  é  do
+ambiente BPM. Ele identifica necessidades, faz modificações na expressão da descoberta
+e determina qual serviço será escolhido e vinculado a uma aplicação; isto sem qualquer
+intervenção humana. Na Fortemente Baseada no Projetista, ele interage com o ambiente
+BPM  para  determinar  resultados  mais  adequados,  através  de  sucessivas  entradas  e
+verificações  de  resultados.  Na  abordagem  Semi-automática,  o  ambiente  BPM,
+automaticamente, identifica necessidades, faz modificações nos requisitos e verifica se o
+que se deseja está ou não em conformidade com o que se encontra. Quando o ambiente
+encontra dificuldade  (conformidade entre o que se deseja e o que se encontra não é
+total), entra em cena o projetista, que interage com o ambiente para relaxar ou refinar
+critérios com objetivo de possibilitar a descoberta. Na abordagem Assistida, o projetista
+informa requisitos, enquanto o ambiente BPM informa o contexto das aplicações. Em
+relação  à  avaliação  do  resultado  da  descoberta,  ambos  participam  do  processo,
+analisando as respostas advindas da descoberta.
+O quarto ponto, quem e como avaliar resultados, implica determinar quem avalia
+o resultado da descoberta e como esta avaliação ocorre (assistida, sem participação do
+Projetista,  etc.).  Na  avaliação,  há  que  se  considerar:  i)  vários  serviços           “perfeitos”
+(conformidade total entre desejo e resultado obtido) e o como estabelecer um ranking
+para escolher o serviço mais adequado; ii) 1 (um) serviço perfeito; iii) nenhum serviço;
+iv) 1 (um) serviço parcial (não se atinge 100% de conformidade entre o que se deseja e o
+que se encontra); e v) vários serviços parciais.
+
+
+
+
+3.2. Funcionamento
+O modelo aborda o problema da descoberta dinâmica de serviços separando-o em duas
+fases: projeto (Figura 1 - esquerdo) e execução de aplicações (Figura 1 - direito).
+Na  fase  off-line ou  fase  de projeto  de aplicações SOA,  o  projetista usa um
+ambiente BPM para compor sua aplicação  (passo  1). No passo  2, o ambiente BPM
+oferece  acesso  a  um  catálogo  de  processos  de  negócios  padrão,  como  o  UBL.  O
+projetista usa processos de negócios UBL prontos para a composição da sua aplicação.
+Isto agiliza a concepção da aplicação e dá maior riqueza semântica à descoberta, uma
+vez que a ontologia UBL (ver seção 4 para detalhes da concepção da ontologia UBL)
+servirá para definir os serviços em termos funcionais utilizados no contexto do modelo.
+No passo  3, o projetista associa QoS às tarefas a serem executadas por serviços web,
+usando uma ontologia QoS para informar critérios de qualidade. De posse da expressão
+da  descoberta,  um  crawler  é  acionado                                                      (passo        4)  para  pesquisar  por  serviços  em
+“background”. O crawler inicia a busca nos repositórios de serviços visando montar uma
+lista de serviços candidatos (passo 5). O resultado é uma lista de serviços candidatos,
+ordenada com base na reputação do provedor de serviço (passo 6.1). A reputação de
+cada  provedor  de serviço  é a média  ponderada,  obtida a partir  de um conjunto  de
+aspectos  associados  a  cada  provedor,  gerenciados  pela  Federação                         (ver  seção   3.3
+Pressupostos), tais como: penalidades sofridas, total de serviços escolhidos em 10 lugar
+etc. Esta busca preliminar feita pelo crawler faz com que, em tempo de execução, não se
+realize sempre uma busca exaustiva por serviços.
+Figura 1 - Visão geral do Funcionamento do Modelo.
+No passo 7, caso a lista de serviços candidatos retornada pelo crawler tenha um
+(1) serviço, passa-se para o passo 8. Senão, duas situações devem ser consideradas: a)
+nenhum serviço: o crawler sugere ao projetista que relaxe requisitos para que a lista de
+candidatos  seja  formada;  b)  n  serviços  “perfeitos”,  o  crawler  faz  um  ranking  dos
+serviços em função  da reputação  do  provedor.  No  passo  8, a lista de serviços web
+
+
+
+
+candidatos é passada ao ambiente BPM e, no passo  9, a aplicação SOA é composta,
+convertida no formato BPEL e disponibilizada para posterior execução.
+Na fase on-line de execução de aplicações (Figura 1 - direita), um usuário final
+(não  o  projetista)  de  aplicações  usa  um  ambiente  BPM,  navega  no  repositório  de
+aplicações BPEL e identifica a aplicação  que deseja executar  (passos  10 e  11).  No
+momento da carga da aplicação (passo 11), antes da execução da aplicação, o ambiente
+BPM  verifica  se  cada  um  dos  serviços  web  pré-selecionados  pelo  crawler  estão
+efetivamente  acessíveis.  Neste  ponto,  algumas  situações  podem  ocorrer:  a)  serviço
+acessível: passa-se para o próximo serviço  (repete até que não haja mais serviços a
+verificar); e b) serviço  inacessível: usa a lista de serviços candidatos e verifica qual
+serviço está acessível (lista obtida no passo  6). Caso nenhum serviço esteja acessível,
+invoca-se novamente o mecanismo de descoberta para selecionar um novo serviço. Este
+novo serviço será vinculado (binding) à aplicação e um contrato SLA [Cancian, Rabelo e
+Wangenheim 2009] é gerado. No passo 12, um engine BPEL executa a aplicação SOA
+com os mais adequados serviços para o momento e contexto.
+3.3. Pressupostos
+A relação de pressupostos não pretende limitar o modelo, mas considerar um conjunto
+de elementos que sustentam e aproximam o modelo da realidade do mundo BPM&SOA.
+Eles  são:  conteúdo  da  pesquisa,  local  da  descoberta,  provedores,  abordagem  de
+descoberta, modelo SaaS (Software as a Service) [SIIA 2001] e composição de serviços.
+No modelo, a consulta é por serviços web. A descoberta resultará serviços web,
+usados  na  execução  de  atividades  em  aplicações  SOA.  Em  relação  ao  local  da
+descoberta, o modelo usará como fonte uma entidade lógica chamada de Federação de
+Provedores  de Serviços  de Software  [Rabelo  2008].  O uso  de uma  Federação  não
+restringe a busca, mas garante qualidade e confiança do provedor e do serviço ofertado,
+além de atuar como um “único” ponto lógico de busca nos mais diversos provedores
+ligados à Federação. Provedores de serviços de software, interessados em participar da
+Federação, usarão guias e práticas [Cancian 2009] para publicar serviços de acordo com
+um contexto e QoS.
+Em virtude da crescente pressão do mercado por soluções BPM&SOA, antevê-
+se que os provedores de serviços de software passarão a ter cada vez mais interesse
+comercial  em  desenvolver  serviços  web  para  processos  de  negócios  empresariais
+baseados em um modelo internacional de padronização, tal como UBL ou RosettaNet.
+Isto implica uma potencial e maior escala de acesso a mercados SOA e SaaS, enquanto
+se  reduz  custos  de  desenvolvimento  e  implantação  na  medida  que  se  minimizam
+problemas de interoperabilidade e reutilização [Rabelo 2008]. Esta visão é chave para a
+definição da estratégia de interoperabilidade semântica do modelo de descoberta.
+Nesse cenário de serviços sendo desenvolvidos segundo padrões, o modelo prevê
+que a oferta de serviços seja na forma de 1:1. Ou seja, haverá um (1) serviço web para
+cada um (1) dos sub-processos associados a um dado processo UBL. Por conseguinte,
+em relação à composição de serviços, assume-se que cada atividade presente em um
+processo de negócio empresarial será executada por (1) um serviço web.
+Tome-se  como  exemplo  um  processo  de  compras,  que  no  padrão  UBL  é
+composto  de  vários  sub-processos,  identificados  funcionalmente  e  em  termos  de
+sequência de execução. Embora tais sub-processos possam ser instanciados de forma
+particular  para  diferentes  empresas,  os  ambientes  BPM  conseguem  reconhecer  tal
+processo. Dado que tais ambientes são integrados ao nível de execução de serviços web,
+
+
+
+
+o  mecanismo de descoberta tem como capturar isto. Assim, o mecanismo procurará
+serviços compatíveis com o contexto de negócios compra, com os requisitos funcionais
+associados  a   seus  sub-processos  e  sequência  de  invocação.   Nos  provedores,
+individualmente ou via uma Federação, estes publicarão e oferecerão serviços de acordo
+com  o  padrão  UBL.  Assim,  restará  ao  mecanismo  descobrir  o  serviço  web  mais
+adequado  para  cada  um  dos  sub-processos,  considerando  não  apenas  os  requisitos
+funcionais e QoS. Posteriormente, a aplicação SOA será composta  (com os serviços
+mais adequados para cada um dos sub-processos) e executará observando um contrato
+SLA e o modelo de negócios SaaS .
+Em relação  à  abordagem no  processo  de  descoberta,  do  ponto  de  vista  do
+projetista da aplicação  (off-line) ela será assistida (seção  3.1). Esta abordagem dá ao
+projetista  flexibilidade  para  relaxar  ou  restringir  critérios  de  seleção  de  serviços.  A
+intenção é privilegiar o conhecimento do projetista e usar este conhecimento para criar
+aplicações mais próximas das suas necessidades. Em relação à execução de aplicações
+(on-line), a abordagem é automática (seção  3.1). Nela, caso algum serviço não esteja
+acessível no momento da execução da aplicação, um novo serviço será descoberto e
+vinculado                                                                                            (binding)  automaticamente  à  aplicação  em tempo  de  execução.  Isto  será
+realizado  de  forma  transparente  pelo  ambiente  BPM,  permitindo  que  usuários  de
+aplicações se preocupem única e exclusivamente com a execução da aplicação em si.
+3.4. Expressão da Descoberta
+Este aspecto tem a ver com o subproblema como expressar o serviço (seção 3.1). No
+modelo, a expressão da descoberta está estruturada na forma de uma 3-tupla: Wdesejado =
+(F,O,Q), onde Wdesejado denota o serviço web desejado, F a funcionalidade desejada para
+o serviço, O representa a ontologia de processos empresariais, e Q descreve a lista de
+aspectos de QoS requeridos para um serviço (ver Figura 1, passo 3). O matching feito
+pelo mecanismo de descoberta é sintático. Ou seja, o mecanismo encontra sintaticamente
+serviços que atendem a funcionalidade desejada e são compatíveis com a ontologia UBL;
+selecionando, sintaticamente, serviços que atendem QoS.
+4. Implementação
+A  implementação  dos  elementos  do  modelo                                                         (seção                                                                                3)  é  baseada  no  reuso  de
+                                                                                                     componentes (conceituais e software), sendo complementada com a criação dos demais.
+Figura 3 - Interface fornecida pelo ambiente BPM para inserção de QoS.
+
+
+
+
+As ontologias de QoS e UBL estão definidas e integradas ao ambiente BPM. A
+ontologia UBL foi projetada a partir do estudo e análise dos processos e sub-processos
+UBL e da interpretação dos diagramas responsáveis pelo detalhamento destes processos.
+A ontologia QoS foi gerada a partir da ontologia de alto nível [Tondello 2008], a qual foi
+baseada na definição de QoS  [OMG 2006]. As características de QoS, bem como as
+dimensões foram instanciados a partir de [W3C 2003]. A justificativa para a definição da
+ontologia de QoS se deu em virtude da necessidade de interoperabilidade do modelo. A
+ontologia de  Nomes  de Serviços  está  sendo  concebida  e  pretende dar  ao  provedor
+informações suficientes para publicar serviços de acordo com a nomenclatura usada nos
+processos de negócios UBL. Além disso, foi desenvolvido um protótipo de ambiente de
+edição de aplicações BPMN para testes. Este ambiente permite associar informações de
+QoS às atividades   (Figura 3) e invocar o crawler para descobrir serviços candidatos.
+A Figura 4a apresenta um exemplo de resultado de descoberta produzido pelo
+crawler. Nela, serviços candidatos são mostrados e classificados em função da reputação
+do provedor. Caso o crawler não encontre serviços que atendam a expressão  (Figura
+4b),  as  características de QoS ficam em itálico  (Figura  4b  - Performance/Latency),
+sinalizando ao projetista a necessidade de revisão dos mesmos.
+Figura 4a - Crawler: serviços candidatos.                                                       Figura 4b - QoS que precisam ser revistos.
+Um repositório de serviços  (UDDI) foi implementado. Ele funciona como um
+serviço web e utiliza elementos bindingTemplate para guardar QoS. A conclusão da
+implementação do modelo se dará com o desenvolvimento do catálogo de processos de
+negócios e a integração dele aos demais elementos de software pertencentes ao modelo.
+5. Considerações Finais
+A  identificação  das  fases  de  projeto  e  execução  de  aplicações  contribui  para  a
+compreensão e para o desenvolvimento de ferramentas afinadas ao mundo BPM&SOA.
+O  crawler proporciona previsibilidade  na  descoberta,  orienta  o  projetista em
+relação aos aspectos de QoS, além de poupar esforço do algoritmo de descoberta. Um
+destaque está na sistemática de classificação dos serviços. Preliminarmente, o protótipo
+usa a reputação do provedor. Entretanto, novas versões poderão ser preparadas para
+usar  outras  fontes:  preferências  do  projetista,  características  dos  negócios  de  uma
+empresa etc. Isto customiza a classificação e resulta em serviços mais perfeitos.
+O  uso  de  um  catálogo  de  processos  de  negócios  empresariais  é  outra
+contribuição importante. Ele fornece o contexto dos processos, disponibiliza padrões
+
+
+
+
+para serem usados na composição de aplicações e permite a substituição do catálogo de
+processos por outro, sem impacto na descoberta. Isto porque tanto o crawler como o
+algoritmo  de  descoberta  dinâmica  fazem  uso  intenso  de  padrões  e  recomendações
+internacionais aceitas como padrões de facto pelo mercado.
+O uso de uma Federação de Provedores de Serviços de Software traz ganhos
+importantes. Ela gerencia provedores, repositórios e ontologias, além de proporcionar
+qualidade dos serviços publicados e ofertados.
+Além disso, o modelo pressupõe que a empresa adota um padrão de processos
+(no  caso  o  UBL)  e  que  o  projetista  da  aplicação  o  conhece  e,  portanto,  define  a
+sequência de atividades a serem usadas na composição.  Apesar de ele poder inserir
+algum processo particular em função de alguma necessidade, seguindo o padrão, essa
+sequência já estará definida. Assim, a empresa não fica dependente da experiência do
+projetista e nem de como ele “acha” que um processo deve ser feito.
+Como próximos passos, planeja-se a implementação do catálogo de processos, a
+integração dele aos demais elementos e procedimentos de verificação experimental.
+6. Referências
+Adam, Sebastian. Doerr; Joerg (2008). “How to better align BPM & SOA - ideas on Improving the
+Transation between process design and deployment”. The  9th Workshop on Business Process
+Modeling, Development, and Support BPMDS'08. 16-17 June, Montpellier, France.
+BPMINSTITUTE (2006) “State of Business Process Management”. http://www.bpminstitute.org
+Cancian, Maiara Heil. (2009) “A Quality Reference Guide for Software-as-a-Services Providers”,
+M.Sc. Thesis, Federal University of Santa Catarina.
+Cancian, Maiara Heil; Rabelo, R. J. ; Wangenheim, C. G. V. (2009) "Uma proposta para elaboração de
+Contrato de Nível de Serviço para Software-as-a-Service (SaaS)". In: 8th I2TS. Florianópolis.
+Friesen, Andreas; Börger, Egon (2006) "A High-Level Specification for Semantic Web Services Discovery
+Services". ICWE'06 Workshops, July, 2006, Palo Alto CA.
+Garofalakis, J. et al (2006). “Contemporary Web Service Discovery Mechanisms”. Journal of Web
+Engineering, Rinton Press,v. 5, n 3, p. 265-290.
+Inaganti, Srikanth; Behara; Gopala Krishna (2007). “Service Identification: BPM and SOA
+Handshake”. in Business Process Trends March.
+Kokash, N. (2005) “Web Service Discovery With Implicit QoS Filtering”. Proceedings of the IBM
+PhD Student Symposium, in conjunction with the Inter. Conference on SOC.
+OASIS (2004) “UDDI Specification V 3.0.2”.
+OASIS (2006) “Universal Business Language V2.0”.
+OMG (2006) ”UML Profile for Modeling QoS and FT Characteristics and Mechan. Spec.”, v1.0.
+Rabelo, R. J. (2008) “Advanced Collaborative Business ICT Infrastructures. In: (Ed.). Methods and
+Tools for Collaborative Networked Organizations”, Springer, pp.337-370.
+Friesen, Andreas; Börger, Egon (2006). “A High-Level Specification for Semantic Web Services
+Discovery Services”. ICWE'06 Workshops, July, Palo Alto CA. ACM.
+ROSETTANET (2008). Especificações sobre Processos de Negócios (PIP).
+SOFTWARE & INFORMATION INDUSTRY ASSOCIATION (SIIA) (2001)   “Software as a
+Service: Strategic Backgrounder”.
+Tran V. X.; Tsuji H. (2008)                                                                             “A Survey of Fuzzy-based Approaches for Web Service Ranking”. In
+International Journal of  WS Practices. 2008.
+Tondello, G. F. (2008) ” Especificação Semântica de QoS: A Ontologia QoS-MO”. Dissertação
+(Programa de Pós-graduação em Ciências da Computação). UFSC.
+W3C (2003) "QoS for Web Services: Requirements and Possible Approaches".
+http://www.w3c.or.kr/kr-office/TR/2003/ws-qos/
+W3C (2004) “Web Services Architecture (WSA)”.
+W3C (2007a) “SOAP Specification. V. 1.2”.
+W3C (2007b) “Web Services Description Language Specification. V 2.0”.
+
+
+
+
+

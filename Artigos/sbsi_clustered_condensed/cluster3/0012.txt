@@ -1,0 +1,596 @@
+﻿V Simpósio Brasileiro de Sistemas de Informação
+Identificação de Serviços a partir da Modelagem de
+Processos de Negócio
+Leonardo Guerreiro Azevedo1,2, Fernanda Araujo Baião1,2, Flávia Santoro1,2,
+Jairo Souza1, Kate Revoredo1, Vinícios Pereira1, Isolda Herlain3
+1NP2Tec - Núcleo de Pesquisa e Prática em Tecnologia
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+2Departamento de Informática Aplicada - DIA
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+3Petrobras - Petróleo Brasileiro S/A
+{azevedo, fernanda.baiao, flavia.santoro}@uniriotec.br,
+{jairofsouza, katerevoredo, viniciospereira}@gmail.com,
+iherlain.POLITEC@petrobras.com.br
+Abstract.  Various  approaches  for  services  development  in  SOA  propose
+business processes as a starting point. However, there is a lack of service
+identification  systematic  methods  during  business  analysis.  Also,  existing
+approaches  typically  rely  on  analysts  and  developers  expertise,  which
+consider one business process at a time for service derivation. We argue that
+there has to exist a holistic view of organizational business processes for an
+effective  SOA  approach  to  occur.  This  work  proposes  a  heuristic-based
+method  for  identifying  a  set  of  candidate  services  to  support  business
+activities.
+Resumo. Diversas abordagens para desenvolvimento orientado a serviços têm
+processos de negócio como ponto de partida. No entanto, as pesquisas não
+detalham sistemáticas de identificação de serviços a partir de modelos de
+processos de negócio. Assume-se que os processos são automatizados e que
+destes derivam-se os serviços. Entretanto, propomos um passo anterior, que
+corresponde ao entendimento dos requisitos a partir de todo o conjunto de
+processos de negócio de uma organização. Este artigo propõe um método
+para identificação de serviços adequados para apoio às atividades do negócio
+da organização.
+1. Introdução
+A implantação de SOA (Service-Oriented Architectures) em uma organização apresenta
+uma série de desafios, incluindo análise de aplicações de software; implantação de
+dispositivos de hardware, servidores, infra-estrutura de ESB (Enterprise Service Bus) e
+mecanismos de segurança; integração de aplicações com processos de negócio, sendo
+ainda necessário definir processos para modelagem, projeto, monitoramento e gestão de
+serviços [Papazoglou et al. 2007].
+O ciclo de vida da engenharia de software tradicional não se aplica diretamente a
+SOA. Novos papéis arquiteturais e novas tarefas de desenvolvimento são introduzidos
+para tratar as características de desenvolvimento orientado a serviços [Gu e Lago 2007].
+Diversos autores concordam que uma abordagem sistemática para desenvolvimento de
+133
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+serviços é fundamental  [Papazoglou et al.  2007][Gu e Lago  2007][Erl  2005]. Nas
+abordagens identificadas, o ponto de partida são os processos de negócio. [Klückmann
+2007] e  [Josuttis  2007] destacam a necessidade do conhecimento dos processos de
+negócio, sendo uma tendência a identificação de serviços a partir de seus modelos.
+Apesar desta tendência, não existe um consenso quanto ao melhor método de
+análise do negócio para especificação dos serviços. Observa-se que, na maioria das
+propostas, assume-se que os processos são automatizados e que destes derivam-se os
+serviços.  Entretanto,  a  definição  de  processos  automatizados  não  é  suficiente.
+Argumentamos que existe a necessidade de uma visão integrada dos processos de
+negócio da organização, onde cada processo de negócio é derivado da cadeia de valor.
+Esta visão integrada é determinante para uma abordagem efetiva de identificação de
+serviços.
+Este artigo trata do desafio da identificação do conjunto mais adequado de
+serviços para apoio às atividades do negócio da organização na gestão do ciclo de vida
+de serviços. Um método baseado em heurísticas é proposto.
+Este trabalho está dividido da seguinte forma. A seção 1 corresponde a presente
+introdução. Na seção 2, são apresentados trabalhos relacionados e a motivação para o
+método proposto em um ciclo de vida de serviços. A seção 3 apresenta diretrizes para a
+identificação de serviços a partir de modelos de processos de negócio, enquanto que a
+seção 4 detalha o método proposto. Na seção 5 é apresentada a avaliação do método e,
+na seção 6, são destacadas as conclusões e trabalhos futuros.
+2. Ciclo de vida de serviços
+Modelos de ciclo de vida de serviços apresentam novos desafios quando comparados
+com os modelos tradicionais da engenharia de software, por exemplo: como alinhar
+requisitos  de  negócio  com  soluções  de  TI  em  SOA,  como  manipular  serviços
+distribuídos além dos limites organizacionais de maneira segura, como tratar versões de
+serviços de acordo com mudanças nos processos de negócio. Dessa forma, um modelo
+de ciclo de vida é vital para o bom funcionamento de SOA [Pulier e Taylor 2006].
+[Gu e Lago 2007] afirmam que não há consenso para um modelo de ciclo de vida de
+serviços na literatura. Estes autores avaliaram uma série de propostas e constataram que
+as seguintes características são importantes: apresentar uma seqüência bem definida de
+passos com um bom nível detalhamento, estes passos estarem dividido nos três estágios
+de  ciclo  de  vida                                                                        (projeto,  execução  e  mudança),  além  de  terem  suas  atividades
+associadas a papéis que serão responsáveis por executarem estas atividades.
+Entretanto, propostas apresentadas na literatura não descrevem em um nível de
+detalhes adequado a atividade de identificação de serviços a partir da modelagem de
+processos. Por exemplo,  [Erl 2005] apresenta um passo-a-passo para modelagem de
+serviços, todavia, não é proposto um método estruturado para identificação de serviços.
+[Papazoglou e Heuvel 2006] apresentam princípios para identificação de serviços, tais
+como baixo acoplamento, alta coesão e nível de granularidade, sem detalhar os passos
+necessários. [Marks e Bell 2006)] ressaltam o reuso como princípio para identificação
+de serviços. [McBride 2007] sinalizam que, a partir de um requisito de negócio, deve-se
+buscar, no repositório de serviços, serviços que atendam aos requisitos de negócio ou
+que possam ser modificados para atender ao requisito de negócio, ou novos serviços
+devem ser implementados. [Jamshidi et al. 2008] consideram modelos de processos de
+134
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+negócio  da  organização  e  modelos  de  entidade  da  organização  e  propõem  uma
+abordagem para identificação e especificação de serviços. A abordagem assume que o
+modelo de processo de negócio é altamente detalhado (até no nível de processo de
+negócio elementar, ou EBP (Elementary Business Process), e que a granularidade de
+cada entidade do negócio deve estar no mesmo nível do EBP que a cria. Modelos de
+processos  neste  nível  de  abstração  não  são  fáceis  de  serem  elaborados,  podendo
+demandar  um  tempo  considerável.  Além  disso,  esta  proposta  não  considera  os
+elementos de um processo de negócio, tais como regras de negócio, requisitos de
+negócio, fluxos do processo e funções recorrentes em fluxos de processo.
+Portanto, identificar os serviços que atendam a requisitos de negócio específicos
+é totalmente dependente do conhecimento e memória do analista SOA. De maneira
+geral, a literatura aponta para a importância de se analisar quais funcionalidades dos
+processos devem ser expostas como serviços ou implementadas em aplicações. Todavia,
+decidir por um serviço que atenda a um requisito não é trivial, sendo necessário um
+método detalhado para identificação de serviços durante a análise do negócio. Uma
+proposta é apresentada na Seção 3.
+3.  Diretrizes  para  a  identificação  de  serviços  a  partir  de  modelos  de
+processos de negócio
+A identificação de serviços a partir de processos de negócio modelados tem o objetivo
+de responder às seguintes questões:
+  como definir o escopo de processos para identificar serviços?
+  como identificar os serviços mais adequados para atender ao escopo pré-definido?
+  quais elementos utilizados na modelagem de processos devem ser considerados nesta
+identificação?
+  que tipos de serviços podem ser identificados a partir da modelagem de processos?
+Esta seção apresenta diretrizes para identificação de serviços candidatos a partir
+da  modelagem  de  processos  de  negócio.  Serviço  candidato  é  uma  abstração  (não
+implementada) de serviço a qual, durante a fase de projeto em um modelo de ciclo de
+vida de serviço, pode ser escolhida para ser implementada como um serviço ou como
+uma funcionalidade de uma aplicação [Erl 2005].
+3.1 Modelagem de Processos de Negócio
+A modelagem de processos de negócio compreende a construção de um conjunto de
+visões integradas que proveem entendimento comum do negócio (Figura 1). Existem
+várias abordagens para modelagem de negócio, e cada uma delas define diferentes
+notações  e  linguagens  de  modelagem.  Independente  da  abordagem  utilizada,  os
+seguintes modelos podem ser considerados pelos os analistas para identificação de
+requisitos:
+1)  Modelo  Organizacional:  corresponde  às  unidades  organizacionais,  papéis  e
+relacionamentos;
+2)  Modelo de Objetivos: mostra as metas estratégicas e como são divididas em sub-
+metas;
+135
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+3)  Modelo de Processos: representa os macroprocessos de negócio e fluxos de
+atividades que compõem cada processo;
+4)  Modelo de Atividades: representa o relacionamento entre as atividades e os
+responsáveis  por  cada  uma  delas,  além  de  detalhes  tais  com  objetos  e
+informações manipuladas, regras de negócios e requisitos de negócio [Sharp e
+McDermott 2001].
+Conceitos do modelo de negócio
+Onde?
+Localização                                                                                 Quem?
+Quando?                                                                                     Papel
+Como?
+Evento                                                                                      Departamento
+Processo                                                                                    Atividade
+Por quê?
+O quê?
+                                                                                            Meta           Produto          Sistema
+                                                                                            Regra de
+                                                                                            negócio
+Fatores                                                                                                    Dados externos
+externos
+                                                                                            Objetivo
+Figura 1. Perspectivas dos modelos de negócios.
+Um dos aspectos mais importantes na modelagem do negócio é a explicitação
+das regras do negócio. Regras de negócio correspondem a declarações de políticas ou
+condições que  devem ser satisfeitas pelos processos da organização e definem ou
+restringem alguns aspectos do negócio [Guide Business Rule Project 2008]. Regras de
+negócio são utilizadas para determinar a dependência entre atividades, explicitando o
+fluxo dos processos de negócio, ou para explicitar regras específicas de uma atividade
+do processo. Os seguintes tipos de regras podem ser considerados: assertiva estrutural
+(definição de termo de negócio, relacionamento entre termos), restrição (integridade,
+condição ou autorização), derivação (cálculo matemático ou inferência).
+Outro  elemento  fundamental  é  o  requisito de  negócio,  que  representa  uma
+necessidade do negócio a ser apoiada por sistema. Os requisitos podem ser identificados
+durante a análise do processo como forma de melhoria dos mesmos. Portanto, requisitos
+de negócio podem constar em um modelo de processos futuro (modelo TO-BE) para
+serem implementados, ou em modelos atuais (modelos AS-IS) como documentação de
+sistemas de apoio existentes.
+4. O método proposto para identificação de serviços
+Um método para identificação de serviços deve ter como ponto de partida uma demanda
+de desenvolvimento de software. Esta demanda deve ser descrita por um conjunto de
+requisitos que serão suportados por componentes de software, onde cada componente
+pode ser implementado como um serviço ou como funcionalidades de uma aplicação.
+Em seguida, os modelos de processos que estejam relacionados à demanda
+devem ser analisados a fim de identificar serviços candidatos. Destes modelos de
+processos,  devem  ser  analisadas as  atividades e  os  fluxos  que  incluam  atividades
+automáticas, automatizáveis e apoiadas por sistemas, as quais serão utilizadas nas etapas
+subseqüentes. Atividades manuais (que não estão consideradas para automatização pela
+demanda) são descartadas, pois não faz sentido desenvolver serviços para as mesmas.
+136
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+De acordo com o detalhamento de informações existentes nos modelos,  os
+serviços candidatos identificados podem ser classificados em (i) de negócio, quando o
+serviço encapsula uma regra de negócio; (ii) de dados, quando o serviço executa apenas
+operações de manipulação de dados  (Create, Retrieve,  Update ou Delete); ou  (iii)
+utilitário, quando o serviço implementa uma função recorrente em diversos processos de
+negócio, de vários domínios. Além disso, o método identifica serviços candidatos que
+podem  ser  compostos  por  outros  serviços  candidatos.  Uma  composição  pode  ser
+implementada como uma orquestração dos serviços (onde um serviço invoca os outros
+serviços componentes) ou como um serviço único contendo métodos que implementam
+as funcionalidades dos serviços componentes. O método proposto, no entanto, não trata
+da implementação dos serviços físicos,. Esta é uma decisão da fase de projeto de
+serviços, já que são necessárias informações como capacidade do hardware, largura de
+rede, etc.
+O  método  de  identificação  de  serviços  proposto  inclui  os  seguintes passos
+(Figura  2):  (1) Seleção das atividades;  (2) Identificação e classificação dos serviços
+candidatos; (3) Consolidação dos serviços candidatos.
+Identificação e
+Seleção de                                                                                  Consolidação de
+classificação de
+serviços candidatos                                                                         serviços candidatos
+serviços candidatos
+Figura 2. Método para idenficação de serviços.
+A identificação de serviços a partir da modelagem de processos de negócio é um
+cenário que requer avaliação de um número muito grande de possíveis soluções. Neste
+caso, uma alternativa é a adoção de métodos heurísticos de busca onde soluções são
+buscadas  por  aproximações  sucessivas,  avaliando-se  os  resultados  alcançados.  As
+heurísticas propostas são definidas a fim de tratar tanto a análise sintática como a
+análise semântica de modelos de processos.
+A  análise  sintática  dos  modelos  de  processos  é  realizada  considerando  a
+estrutura do modelo de processo. Portanto, nós propomos heurísticas para identificação
+de serviços para cada padrão de workflow proposto por [Van der Aalst 2000 e 2003].
+Um  padrão  de  workflow  é  uma  abstração  de  uma  forma  concreta  que  ocorre
+repetidamente em contextos específicos. Os padrões de workflow de [Van der Aalst
+2003] são sempre utilizados como benchmark para avaliar funcionalidades de sistemas
+de gestão de workflow. Ao considerarmos a especificação de padrões de workflow para
+a identificação de serviços, nós afirmamos estar cobrindo todas as possibilidades de
+fluxos de atividades que podem ser representadas por um modelo de processo.
+A análise semântica de um modelo de processo para identificação de serviços
+deve considerar todas as indicações para automação de processos, seja total ou parcial.
+Dentre todos os elementos possíveis em um modelo de processos [Sharp e McDermott
+2001], o método considera requisitos de negócio e regras de negócio em especial, dado
+que suas semânticas indicam funcionalidades que devem ser implementadas em serviços
+de apoio ao processo. Portanto, nós propomos heurísticas para identificação de serviços
+candidatos a partir de cada um destes dois elementos, quando ele está associado às
+atividades selecionadas na fase 1.
+O  método  de  identificação  proposto  recebe  como  entrada  a  demanda  de
+desenvolvimento de software, os modelos de processos TO-BE, e uma lista de requisitos
+137
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+de negócio que já estão implementados em aplicações existentes relacionadas com a
+demanda. O resultado final do método é uma tabela e grafos de dependência entre
+serviços candidatos, que auxiliarão o arquiteto no projeto e construção dos serviços.
+Etapa 1: Seleção das atividades. Na primeira etapa do método, é feita a seleção das
+atividades dos processos TO-BE, a partir das quais podem ser identificados serviços
+candidatos.  São  selecionadas  todas  as  atividades  automáticas,  automatizáveis  ou
+apoiadas por sistemas.
+Etapa 2: Identificação e classificação dos serviços candidatos. Na segunda
+etapa (Figura 3), as atividades selecionadas na etapa 1 são analisadas dentro dos seus
+contextos nos modelos de processos, segundo um conjunto de heurísticas que levam em
+consideração a semântica da atividade (regras de negócio, requisitos de negócio) e a
+estrutura do fluxo de atividades (padrões de workflow). As heurísticas propostas são
+descritas a seguir.
+                                                                                                                                                             Identificação e classificação de                                                                 Serviço candidato
+Automática                                                                                                                                                   services candidatos
+                                                                                                                                                                                                                                                              de dado
+                                                                                                 SYS                                   Parcialmente
+                                                                                                                                       apoiada por sistema   Padrões de workflow                Atividades
+Automatizável                                                                                                                                                (Estrutura)                        (semântica)
+                                                                                                                                                             MCCP                               Programador da produção                  SAP -PP              Serviço candidate
+                                                                                                                                                             Ordem de produção                  Lib erar ordens de planejadas produção   Ordem de produç ão
+                                                                                                                                                             Ordem de produç ão                                                          COHVOMPP             de negócio
+Liberação de ordens                                                                              de produç ão
+Figura 3. Etapa de identificação e classificação de serviços candidatos.
+Heurística 1: Um serviço candidato deve ser identificado a partir de uma regra de negócio.
+Exemplo: A partir da regra de negócio  ”Seleção de fornecedor de produto” com a
+descrição “Deve ser selecionado o fornecedor com as melhores condições comerciais
+referentes  a  preço  e  prazo”  deve  ser  identificado  o  serviço  candidato                  “Selecionar
+fornecedor de produto”.
+Heurística 2: Um serviço candidato deve ser identificado a partir de um requisito de negócio.
+Exemplo: A partir do requisito de negócio “Consultar cotações de fornecedores”, cuja
+descrição é “O sistema XPTO deve consultar as cotações de todos os fornecedores que
+fornecem determinado produto.”, deve ser identificado o serviço candidato “Consultar
+cotações de fornecedores”.
+Heurística 3: Um serviço candidato deve ser identificado a partir de um conjunto de atividades
+seqüenciais.
+Exemplo:  A  partir  da  seqüência  de  atividades                                               “Comprometer  limite  de  crédito”,
+“Determinar taxa de juros a ser cobrada” e “Gerar contrato”  (Figura 4), um serviço
+candidato deve ser identificado.
+Serviço candidato
+Determinar taxa
+Limite                                                                                           Comprometer                           Gerar
+de juros a ser
+aprovado                                                                                         limite de crédito                     contrato              Atividade
+cobrada d...
+Figura 4. Exemplo de atividades seqüenciais.
+138
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Heurística 4: Um serviço candidato deve ser identificado a partir de uma estrutura iniciada em
+um ponto no workflow onde um fluxo de controle simples divide-se em fluxos de controle
+múltiplos, que podem ser executados em paralelo, e finalizada em um ponto no workflow onde
+os múltiplos fluxos paralelos convergem em um fluxo de controle simples, sincronizando-os, ou
+onde ramificações terminem em evento final.
+Serviço candidato
+Fluxo paralelo síncrono
+Figura 5. Exemplo de atividades que fazem parte de um fluxo AND.
+Exemplo: Um serviço candidato deve ser identificado, a partir do fluxo descrito na
+Figura                                                                                              5  para  as  atividades                          “Obter  histórico  do  cliente”,                                             “Obter  informações
+financeiras”,                                                                                       “Obter  informações  de  roubos  e  furtos”  e                                                      “Obter  informações  de
+sinistros”.
+Heurística 5: Um serviço candidato deve ser identificado a partir de uma estrutura iniciada em
+um  ponto  no  workflow  onde,  baseado  em  uma  decisão,  uma,  e  somente  uma,  de  várias
+ramificações do fluxo é escolhida, e finalizada em um ponto no workflow onde as ramificações
+do fluxo se juntem sem sincronização ou quando uma ou mais das ramificações termina em
+evento final.
+Exemplo: Um serviço candidato deve ser identificado para o fluxo representado pela
+Figura                                                                                              6,  correspondendo  às atividades                “Verificar  situação  cadastral  do  cliente”  e
+“Atualizar informações do cliente”, incluindo as regras de decisão.
+Cadastro                                                                                            Serviço candidato
+desatualiza
+do
+Atualizar
+informações
+do cliente                                                                                          Fluxo paralelo
+Verificar
+Cadastro                                                                                            alternativo
+situação
+novo
+cadastral ...
+Cadastro
+atualizado
+Figura 6. Exemplo de XOR.
+Heurística 6: Um serviço candidato deve ser identificado a partir de uma estrutura iniciada em
+um ponto no workflow onde, baseado em uma decisão, uma ou mais ramificações do fluxo é
+escolhida e finalizada em um ponto no workflow onde as várias ramificações do fluxo se juntem.
+Se  mais  de  um  dos  fluxos  de  origem  foi  executado,  então  é  necessário  sincronizá-los.
+Ramificações podem também terminar em um evento final.
+Heurística 7: Um serviço candidato deve ser identificado a partir de uma estrutura do workflow
+onde uma ou mais atividades podem ser executadas repetidamente.
+139
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Heurística 8: Um serviço candidato deverá ser identificado a partir de uma atividade que recebe
+uma mensagem enviada por uma atividade de outro workflow.
+Exemplo: O processo  “Tratar limites de mercadorias em estoque”  (Figura  7.a), ao
+identificar que o limite de uma mercadoria em estoque foi atingido,  envia um pedido de
+mercadoria para o processo “Fornecer mercadoria” (Figura 7.b). Segundo a “Heurística
+de interface de processo”, um serviço candidato deve ser identificado para a atividade
+“Receber pedido de mercadoria”.
+Necessidad                                                                                                                                                                             Necessidad
+Enviar                                                                                                Processar                                                                        Verificar                             Receber
+e de                                                                                                                                                                                   e de
+pedido de                                                                                             pedido de                                                                        nível de                              pedido de
+reposição                                                                                                                                                                              reposição
+mercadoria                                                                                            mercadoria                                                                       estoque                               mercadoria
+de estoq...                                                                                                                                                                            de estoq...
+(a)                                                                                                                                                                                    (b)
+Figura 7. Exemplo de interface entre processos.
+Heurística 9: Um serviço candidato deve ser identificado a partir de um ponto do workflow
+onde  múltiplas  mensagens  são  enviadas  a  partir  de  uma  atividade  para  outras  atividades
+conhecidas.  Além  do  serviço  remetente  da  mensagem,  um  serviço  candidato  deve  ser
+identificado  para  cada  destinatário.  O  serviço  remetente  é  conhecido  como  broker  e  é
+responsável  por  receber  a  mensagem  em  questão  e  distribuí-la  para  todos  os  serviços
+destinatários. Existem serviços brokers que permitem que serviços destinatários inscrevam-se
+em  sua  lista  de  destinatários  em  tempo  de  execução.  Isso  faz  com  que  a  alteração  dos
+destinatários seja transparente para uma aplicação cliente.
+Exemplo: Na Figura  8, deve ser identificado um serviço para a atividade  “Enviar
+solicitação de cotação” (serviço remetente) e um serviço para  “Tratar solicitação de
+cotação” para cada fornecedor (serviços destinatários).
+                                                                                                      Para cada fornecedor                                                             Serviço candidato (remetente)
+Enviar                                                                                                Tratar
+solicitação                                                                                           solicitação
+                                                                                                                                                                                       Serviços candidatos (destinatários)
+de cotação                                                                                            de cotação
+Figura                                                                                                8.  Exemplo  de  atividade  de  notificação  e  atividades  de  tratamento  da
+notificação.
+Etapa 3: Consolidação de Serviços Candidatos. Uma vez identificados os serviços
+candidatos, a consolidação tem por objetivo gerar, para cada serviço candidato, um
+conjunto de características que vão auxiliar a equipe de arquitetos SOA a definir a
+melhor forma de implementação do conjunto de serviços físicos. A consolidação é
+dividida nos seguintes passos:
+1. Eliminar serviços duplicados;
+2. Identificar grau de reuso para cada serviço: O grau de reuso de um serviço
+candidato corresponde ao número de ocorrências da(s) atividade(s) da(s) qual(is)
+o serviço foi identificado. O grau de reuso é equivalente ao conceito de suporte, e
+pode ser calculado segundo [Agrawal et al., 1998];
+3. Associar serviços candidatos aos sistemas que os implementam: Nos casos em
+que um serviço candidato já esteja implementado em algum sistema, deve-se
+registrar esta informação na tabela de consolidação. Esta informação permitirá ao
+projetista identificar os requisitos que podem ser expostos como serviços mais
+facilmente, reutilizando o código fonte.
+140
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+4. Associar  os  serviços  candidatos  aos  requisitos  da  demanda:  os  serviços
+candidatos que foram identificados a partir da demanda devem ser associados à
+demanda. Esta indicação permitirá ao projetista identificar o conjunto mínimo de
+serviços necessários para atender à demanda inicial.
+5. Associar serviços à(às) atividade(s) que lhe deram origem: Esta associação
+permite identificar todos os serviços que apóiam uma atividade, e pode-se com
+isso indicar a implementação de um serviço composto que encapsule todas as
+funcionalidades tratadas por esta atividade.
+6. Identificar  granularidade  e  dependência  entre  serviços  candidatos:  Os
+serviços candidatos devem ser associados aos serviços candidatos que os utilizam.
+Esta informação é obtida a partir do relacionamento entre regras de negócio e
+entre  regras  de  negócio  e  requisitos  de  negócio,  quando  estes se  encontram
+explícitos no modelo de processos. A associação entre serviços candidatos é uma
+representação  da  dependência  entre  eles,  além  de  ser  um  indicador  da
+granularidade de cada serviço candidato. Serviços candidatos que não utilizam
+nenhum outro serviço candidato são considerados de granularidade fina e são
+independentes  de  outros  serviços.  Serviços  candidatos  que  utilizam  outros
+serviços candidatos são de granularidade grossa, e são dependentes dos serviços
+que utilizam.
+7. Identificar serviços utilitários: Deve-se marcar os serviços candidatos que foram
+identificados a partir de funções recorrentes em processos de negócio ou aspectos
+de estrutura organizacional como propostos por [Thom et al. 2007] como sendo
+serviços candidatos utilitários. A importância da análise de padrões baseados em
+fluxos recorrentes se dá porque, de acordo com [Thom et al., 2007], os processos
+de negócio freqüentemente incluem uma variedade de fragmentos que podem ser
+entendidos como atividades de bloco com semântica específica e bem definida.
+Em particular, um fragmento (ou função recorrente em processo de negócio) pode
+ocorrer diversas vezes em uma mesma definição de processo ou em modelos de
+processos  diferentes.  A  Figura                                                      9  apresenta  um  exemplo,  onde  a  atividade
+“Verificar  condições  de  contrato  com  cliente”  corresponde  ao                    “Padrão  de
+Aprovação”  [Thom  et  al.  2007]  e  pode  ser  generalizado  como  um  serviço
+utilitário, ou seja, o serviço de aprovação de condições de contrato pode ser
+utilizado por diferentes papéis na organização de acordo com o nível hierárquico
+para aprovação de contrato de cliente.
+Contrato
+não
+Verificar                                                                              aprovado
+condições do                                                                           pelo cliente                                     Serviço candidato
+contrato com
+cliente
+Contrato
+aprovado
+pelo cliente
+Figura 9. Exemplo de padrão de aprovação.
+5. Avaliação do método de identificação de serviços
+Com o objetivo de avaliar o método proposto, foi conduzido um estudo de caso na
+PETROBRAS, maior empresa brasileira de gás e petróleo. O método foi aplicado no
+141
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+processo “Realizar diagnóstico diário da produção de óleo”, executando as três etapas
+propostas. Na execução da etapa  1, foram identificadas  19 atividades apoiadas por
+sistema  ou  automáticas.  Em  seguida,  foi  realizada  a  etapa                             2,  correspondente  às
+heurísticas 1 a 9, a qual identificou 147 serviços candidatos. Na etapa 3, os serviços
+candidatos foram consolidados. As informações geradas por esta etapa para os serviços
+candidatos (grau de reuso, associação com sistemas, definição de granularidade inicial,
+dependência entre serviços) foram submetidas para avaliação por dois arquitetos da área
+de  desenvolvimento  de  serviços  PETROBRAS                                                  -  TIC/TIC-E&P/GDIEP,  os  quais
+inclusive já haviam implementado um conjunto de serviços de apoio ao processo em
+questão,  a  partir  da  identificação  manual  dos  serviços  necessários.  Segundo  os
+arquitetos, as informações de consolidação de serviços candidatos foram consideradas
+de grande utilidade, pois contém informações importantes para direcionar o projeto e
+construção de serviços. Ainda, segundo eles, o método proposto idenficou todos os
+serviços que haviam sido implementados.
+As heurísticas que mais identificaram serviços candidatos foram as de regra e
+requisito de negócio, já que existia um amplo conjunto destes elementos explícitos no
+modelo de processos. Notou-se que a aplicação do método identificou tanto serviços de
+granularidade grossa quanto fina. Serviços gerados utilizando a Heurística 1 possuem,
+de maneira geral, granularidade fina, enquanto que a Heurística 2 e as baseadas em
+padrões de workflow podem gerar serviços candidatos de granularidade mais grossa.
+Em  geral  os  serviços  candidatos  gerados  a  partir  de  padrões  de  workflow  têm
+granularidade  grossa,  com  exceção  dos  padrões  relacionados  a  desvios  de  fluxo
+condicionais (conector XOR). Os casos de XOR encontrados têm mais uma atividade e
+um evento final além da atividade anterior ao XOR. Dessa forma, apenas a regra de
+negócio existente na atividade anterior ao conector deu origem a um serviço candidato,
+o qual tem granularidade fina.
+Houve casos de serviços candidatos diferentes que correspondiam a uma mesma
+funcionalidade. Isso ocorre quando os serviços candidatos são gerados por heurísticas
+diferentes, que se baseiam em objetos diferentes do modelo de negócio, mas que dizem
+respeito a uma mesma funcionalidade. Percebeu-se que, para que esta identificação
+possa ser feita com confiabilidade, é preciso que o modelo explicite o relacionamento
+entre requisitos de negócio e suas regras de negócio correspondentes. Outro benefício
+do  relacionamento  explícito  entre  regras  de  negócio  e  requisitos  de  negócio  é  a
+conseqüente  possibilidade de associação de serviços gerados a partir de regras de
+negócio com os requisitos recebido como demanda. Caso o modelo não permita este
+relacionamento explicitamente, os serviços candidatos gerados pela Heurística de regra
+de negócio não serão indicados como prioritários através da associação com a demanda,
+já que esta associação não é possível. As entradas e saídas dos serviços candidatos
+podem  ser  identificadas  automaticamente,  caso  seja  explicitado  no  modelo  o
+relacionamento entre regras de negócio e as informações que são referenciadas por elas.
+6. Conclusão
+A implantação de SOA em uma organização apresenta uma série de desafios, dentre os
+quais destacamos questões relacionadas à modelagem, projeto, monitoramento e gestão
+de serviços. As propostas de modelos de ciclo de vida que estão no estado da arte da
+literatura são, em geral, abstratas, e não existe um consenso de um modelo de ciclo de
+vida de serviços. Um bom ciclo de vida de serviços não apenas facilita a gerência do
+142
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+ciclo  de  vida  de  sistemas  orientados  a  serviço  como  também  pode  melhorar  sua
+governança.
+Neste trabalho, dentre as atividades do modelo de ciclo de vida, foi dada maior
+ênfase à atividade identificação de serviços a partir da modelagem de processos. Sendo
+assim,  propomos  uma  análise  top-down  dos  modelos  de  processos,  identificando
+serviços a partir das regras de negócio, requisitos de negócio e de workflows. Como
+resultado  destas  atividades,  um  conjunto  de  serviços  candidatos  é  identificado  e
+consolidado quanto a aspectos como o grau de reuso do serviço, em quais sistemas o
+serviço está implementado, qual a relação do serviço candidato com a demanda de
+desenvolvimento, quais atividades estão relacionadas ao serviço, relacionamentos entre
+serviços  e  granularidade.  O conjunto  de  serviços  candidatos  consolidado  serve  de
+entrada para o projeto de serviços, e auxilia o projetista a decidir se o serviço candidato
+deve ser implementado como serviço físico, como um componente de um serviço ou
+como um método de um componente.
+A proposta de identificação de serviços foi avaliada em um estudo de caso sobre um
+processo de negócio de uma organização real na área de Óleo e Gás. A partir deste
+estudo de caso foram identificados 147 serviços candidatos para o modelo de processo
+considerado. O conjunto resultante de serviços candidatos foi considerado adequado por
+especialistas (analistas e desenvolvedores) de serviços.
+Como  trabalhos  futuros,  propomos  a  implementação  de  uma  ferramenta  para
+automatizar o método proposto, além da realização de estudos de caso para validação da
+proposta em outros domínios. Além disso, propomos o estudo de heurísticas para tratar
+dos  critérios  de  projeto  de  serviços,  tais  como  desempenho,  granularidade  mais
+adequada  de  serviço  de  acordo  considerando características físicas                       (capacidade  do
+hardware, largura de banda de rede, etc.), orquestração e composição de serviços.
+Agradecimentos
+Agradecemos à Petrobras, em especial à TIC/TIC-E&P/GDIEP pelo apoio ao projeto do
+qual resultou a proposta deste trabalho.
+7. Referências
+Erl,  T.                                                                                      (2005)                                                            “Service-Oriented  Architecture:  concepts,  technology,  and  design”,
+                                                                                              Prentice Hall.
+Gu, Q., Lago, P. (2007) A stakeholder-driven service life cycle model for SOA. In 2nd
+international Workshop on Service Oriented Software Engineering: in Conjunction
+with the 6th ESEC/FSE Joint Meeting, pp 1-7, Croatia.
+Guide                                                                                         Business                                                          Rule                                                                      Project   (2008)
+http://www.businessrulesgroup.org/first_paper/br01c1.htm#s1e (acessado em agosto
+de 2008)
+Jamshidi, P., Sharif, M., Mansour, S. (2008) “To Establish Enterprise Service Model
+from  Enterprise  Business  Model”.  Proceedings  of  the                                     2008  IEEE  International
+Conference on Services Computing, vol. 1, pp. 93-100.
+Josuttis, N. (2007) “SOA in practice: The Art of Distributed System Design”. O’Reilly.
+Klückmann  J.                                                                                 (2007)   Steps  to  Business-Driven  SOA,  ARIS  Expert  Paper,
+143
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+http://www.ids-scheer.com/set/6473/ARIS_Expert_Paper-SOA-
+10_Steps_to_SOA_Klueckmann_2007-03_en.pdf (acessado em junho de 2008).
+Marks,  E.  A.,  Bell,  M.                                                            (2006),  Service-Oriented  Architecture:  a  planning  and
+implementation guide for business and technology, John Willey & Sons Inc.
+McBride, G.  (2007) The role of SOA quality management in SOA service lifecycle
+management.  DeveloperWorks,  Rational  SOA  Go  to  Market  Manager,  IBM.
+ftp://ftp.software.ibm.com/software/rational/web/articles/soa_quality.pdf.            (acessado
+em agosto 2008).
+Papazoglou,  M.  P.,  van  den  Heuvel,  W.  J.                                       (2006)  Service-oriented  design  and
+development methodology. Int. Journal Web Engineering and Technology (IJWET),
+vol. 2(4), p.412-442.
+Papazoglou, M. P., Traverso, P., Dutsdar, S., Leymann, F.  (2007) Service-Oriented
+Computing: State of the Art and Research Challenges. IEEE Computer Society, vol.
+40 (11), p. 38-45.
+Pulier, E., Taylor, H. (2006), Understanding Enterprise SOA. Manning.
+Sharp, A., McDermott, P. (2001). Workflow Modeling: Tools for Process Improvement
+and Application Development, Artech House.
+Thom, L., Iochpe, C., Reichert, M.  (2007) Workflow Patterns for Business Process
+Modeling. In: B. Pernici, J.A. Gulla (Eds.): Proc. of the CAiSE'06 Workshops, vol.
+1,  8th Int'l Workshop on Business Process Modeling, Development, and Support
+(BPMDS'07), Trondheim, Norway. p. 349-358.
+Tsai, A., Jiacun, W. T. W., Rosea, D. (2006) EPC Workflow Model to WIFA Model
+Conversion. In Proceedings of   IEEE International Conference on Systems, Man and
+Cybernetics 8, p. 2758-2763, Taipei.
+                                                                                      Van der Aalst, W. M. P., Ter Hofstede, A. H. M., Kiepuszewski, B., Barros, A. P.
+                                                                                      (2000)  Advanced  workflow  patterns.  In  Proceedings  of  the                    7th  International
+Conference  on  Cooperative  Information  Systems                                     (CoopIS  2000),  vol.                                                              1901  of
+Lecture Notes in Computer Science, pp. 18-29.
+Van der Aalst, W. M. P., Ter Hofstede, A. H. M., Kiepuszewski, B., Barros, A. P.
+(2003) Workflow patterns. In Distributed and Parallel Databases vol. 14(1), p.5-51.
+144
+
+
+
+
+

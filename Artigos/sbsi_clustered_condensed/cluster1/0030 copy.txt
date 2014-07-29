@@ -1,0 +1,305 @@
+﻿Suporte Computacional à Integração entre Processos de
+Negócio e Ontologias de Domínio - Acessando o Protégé
+através do ARIS
+Thiago Andrade Marques da Silva, Flávia Maria Santoro, Fernanda Araujo Baião
+NP2Tec - Núcleo de Pesquisa e Prática em Tecnologia
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+{thiago.andrade,  flavia.santoro,  fernanda.baiao}@uniriotec.br
+Resumo. Este artigo apresenta o tema Ontologia de Domínio contextualizada
+em Processos de Negócio, descrevendo a partir de um estudo de caso o uso de
+Ontologias de Domínio na recuperação de conceitos inter-relacionados para
+uma melhor qualidade do gerenciamento e interpretação de processos de
+negócio em uma organização real. São descritas as atividades realizadas para
+a integração entre Ontologia de Domínio e Processos de Negócio com as
+ferramentas ARIS e Protégé, mostrando como a utilização das linguagens e
+ferramentas selecionadas representam suporte computacional adequado para
+facilitar a interpretação semântica dos conceitos pertencentes a um domínio a
+partir de um modelo de Processos de Negócio.
+Abstract. This paper addresses how Domain Ontologies may be used in the
+context of Business Process (BP), describing a case study that was conducted
+in a real organization, in which a Domain Ontology was adopted to represent
+interrelated concepts referred by the BP, thus improving the interpretability
+and contributing to BP management in a organization. We describe all the
+activities performed to implement the integration between ARIS and Protégé
+applications, showing that with an appropriate application of languages and
+tools it is possible to use the Ontology as a valuable resource to improve the
+semantic interpretation of the domain concepts of a BP model.
+1.                                                                                        Introdução
+A aquisição e aplicação do conhecimento, aliados à sua gestão, criação e implantação de
+processos que criem, armazenem, gerenciem e disseminem o conhecimento representam
+o  novo  desafio  das  organizações                                                       [Lambert     2007].  Para  potencializarem  seus
+crescimentos e expansões eficientemente, as organizações estão conduzindo iniciativas
+que mantenham seus conhecimentos mapeados, permitindo que se conheçam cada vez
+mais. Dentre essas iniciativas pode-se citar a modelagem de processos de negócio e a
+criação de ontologias de domínio [Cardoso e Aalst, 2009].
+A modelagem de processos usa conceitos de um domínio para descrever as
+visões  que  compõem  o  modelo  do  negócio,  mas  tais  conceitos  podem  não  ter  o
+significado   consensual   e   compartilhado   entre   os   envolvidos   no   processo,
+comprometendo  na  correta  interpretação  do  modelo  de  processos.  Para  que  essa
+interpretação consensual e compartilhada dos modelos de processos de negócio seja
+efetivamente realizada, é preciso fazer-se uso de um adequado apoio computacional.
+
+
+
+
+Esse  apoio  justifica-se  por  muitas  vezes  os  modelos  serem  de  complexa
+visualização e estarem disponíveis em plataformas de Business Process Management
+que  não  interagem  com  outras  plataformas  que  têm  como  objetivo  explicitar  e
+disponibilizar o conhecimento sobre os conceitos de um domínio, como é o caso das
+iniciativas  que  resultam  em  modelos  conceituais  de  dados,  e  no  mapeamento  de
+ontologias, cada vez mais frequente com o advento da Web semântica [Hall e Lee,
+2006].
+O problema tratado é como integrar ferramentas de modelagem de processos de
+negócio e engenharia de ontologias, para promover o acesso aos conceitos utilizados no
+modelo de processos e assim habilitar a interpretação semântica uniforme dos conceitos.
+Este  artigo  ilustra  um  caso  real  de  implementação  da  integração  entre  a
+ferramenta  de  modelagem  de  processos  ARIS  e  a  ferramenta  de  engenharia  de
+ontologias Protégé. A escolha das ferramentas ARIS e Protégé deveu-se por já serem
+adotadas na organização onde foi realizada a implementação.
+2.   Modelos de processos de negócio
+A  modelagem  de  processos  de  negócio  visa  representar,  de  forma  explícita,  o
+conhecimento que há sobre a execução dos processos de uma organização, além de
+definir os processos executados e o fluxo de controle das atividades. Um modelo de
+processo  de  negócio,  resultante  desta  representação,  é  composto  por  combinações
+lógicas de atividades, e cada atividade é associada a vários conceitos, descrevendo assim
+o que compõe e como é executado um processo [Magalhães et al. 2007]. Os conceitos
+associados às atividades descrevem diversas perspectivas do negócio:
+  Objetivo: razão, clara e única, que justifica a existência do processo;
+  Eventos: acontecimentos que interferem no comportamento do processo;
+  Entradas: produtos necessários para executar as atividades ou o processo;
+  Saídas: produtos gerados pelas atividades ou pelo processo;
+  Atividades: ações executadas para gerar os produtos do processo.
+  Papéis: são funções assumidas por pessoas;
+  Regras: especifica como atuar no processo.
+3.   A Plataforma ARIS
+A metodologia ARIS provê um esquema que descreve os processos de negócio de uma
+organização através de modelos e objetos para que os mesmos sejam representados e
+analizados através da plataforma ARIS [Scheer 2007]. Essa plataforma oferece soluções
+para estratégia, desenho, implementação e controle dos processos de negócio, bem como
+suporte nas fases de seu ciclo de vida. Os conceitos e funcionalidades da plataforma
+ARIS versão 7 mais relevantes para o presente trabalho são:
+Objeto.  É  a  unidade  básica  da  modelagem  ARIS,  sendo  detalhado  através  do
+preenchimento de seus atributos. Os atributos são as informações descritivas de um
+objeto, como autor, data de criação, e outros customizáveis, podendo ser visualizadas
+por interface gráfica ou reports. Cada objeto possui um nome, identificador único e tipo
+(podendo ser evento, operador lógico, papel, etc.).
+Modelo.  É  a  simplificação  de  uma  realidade  organizacional  pela  descrição  ou
+representação gráfica, denominada diagrama. Dos diagramas disponíveis, o Function
+
+
+
+
+Allocation Diagram (FAD) detalha as atividades, mostrando os recursos que interagem
+com esta, e os objetos de entrada/saída, como informações de documentos, papéis, etc.
+Report. Ele manipula as informações modeladas e gera relatórios específicos ao que foi
+programado. O resultado da execução de um report pode ser tanto um documento
+(*.doc, *.html, etc.) quanto o envio de informações para outros programas. A plataforma
+ARIS disponibiliza recursos para geração personalizável de relatórios através de scripts
+utilizando a linguagem ARIS Script, baseada nas linguagens Java Script e Java.
+Apesar de detalhar ao máximo um processo através de objetos, modelos e
+relatórios, a modelagem de processos de negócio pela plataforma ARIS limita-se à
+representação sintática das atividades do processo e dos elementos envolvidos em cada
+atividade. O entendimento mais alto nível dos conceitos envolvidos no processo, de
+modo  a  permitir  uma  compreensão  mais  semântica  das  informações  do  domínio
+relacionadas nos diversos processos da organização, fica comprometido. A partir desta
+falta  de  tratamento  semântico  entre  os  elementos  representados  no  processo  na
+ferramenta ARIS que encontra-se a proposta descrita neste artigo, oferecendo uma
+solução  para  que  os  usuários  acessem  semanticamente  os  conceitos  presentes  nas
+atividades.
+4.   Ontologia de domínio
+Ontologias representam conceitos de um domínio, organizados como uma taxonomia, e
+com relações estabelecidas entre os mesmos. A ontologia possui também axiomas,
+regras pertinentes ao domínio [Guarino, 1998]. Na Computação, a Ontologia formaliza,
+através de um esquema conceitual exaustivo e rigoroso, o conhecimento que há em um
+domínio, de modo a permitir o compartilhamento desse esquema [Silva 2005]. Uma
+ontologia provê como benefício uma melhor comunicação, formalização, representação
+de conhecimento e reutilização, eliminando-se as interpretações ambíguas que há na
+linguagem natural [Hinz 2006].
+Ontologias possuem em suas estruturas [Hinz 2006]:
+  Classe: conceito abstrato podendo descrever um conjunto, inclusive de outras classes;
+  Instância: componente “alto nível” como se fosse um “objeto” de uma classe;
+  Atributo: é uma característica da classe, e na instância possui um valor;
+  Relacionamento:  assertiva  lógica  impondo  restrições  às  classes,  atributos  e
+instâncias.
+Ontologias são descritas através de linguagens de representação, dentre elas
+destaca-se a Web Ontology Language (OWL), adotada como padrão pela W3C [W3C
+2004].  Para  uma  ontologia  ser  acessível  a  processos  automatizados  e  prover  as
+informações, a OWL é definida por uma padronização aberta, fazendo com que a
+descrição de um domínio não fique restrita apenas a um arquivo ou escopo [W3C 2004].
+Dentre as propriedades da OWL, destaca-se a Namespace, que identifica qual é o
+domínio referente aos conceitos na ontologia [W3C 2004].
+A ferramenta Protégé é um software livre que suporta a criação, visualização e
+manipulação de ontologias em vários formatos de representação, utilizada na construção
+de modelos de domínio e aplicações de base de conhecimento [Protégé 2009].
+
+
+
+
+5.   Desenvolvimento da proposta
+A criação da solução que a partir de um processo de negócio modelado na ferramenta
+ARIS permite acessar pela ferramenta Protégé a semântica dos conceitos envolvidos no
+processo de negócio, realizou-se pela sequência de atividades descrita na Figura 1.
+Figura 1. Sequência realizada para o desenvolvimento da proposta
+5.1.  Customização da ferramenta Protégé
+Como a ferramenta Protégé não identifica os privilégios administrativos de um usuário
+certificado  no  sistema  operacional,  o  que  permitiria  desabilitar  os  recursos  não
+interessantes de acordo com o usuário, foram necessárias intervenções no código-fonte
+da ferramenta Protégé de modo que os usuários apenas visualizassem as ontologias de
+domínio.
+Essa intenção justifica-se por não termos como objetivo a edição das ontologias,
+ocasionando o descontrole de versões das mesmas, mas sim a interpretação semântica
+dos conceitos no domínio do negócio. Além disso, para a eficiente visualização de uma
+ontologia, visto que ela pode ser abrangente na sua totalidade, criaram-se facilidades na
+visualização parcial de uma ontologia, que sejam de interesse a cada momento, evitando
+a dispersão do usuário em trechos da ontologia em que não há interesse.
+5.2.  Mapeamento através de Anotações Semânticas
+Como nem todos os objetos de um modelo de processos possuem o mesmo nome de um
+termo em uma ontologia, mesmo sendo o mesmo conceito, em uma tabela formalizou-se
+a relação entre os objetos do modelo de processos com os termos da ontologia.
+No mapeamento usou-se o conceito de anotações semânticas, onde os termos dos
+modelos  de  processos  foram  anotados  semanticamente.  Anotação  semântica  é  a
+associação de uma Uniform Resource Identifier (URI) que relaciona um artefato (no
+caso,  elementos  do  modelo)  a  um  recurso  de  rede  (metadado  compreensível  pela
+máquina, geralmente OWL) [Oren et al. 2006]. Assim, definiu-se para cada elemento
+nos modelos de processos o seu conceito em um domínio, contextualizando-o de forma
+que ao consultá-lo sempre se tenha a mesma visão semântica do seu significado.
+5.3.  Customização dos objetos do modelo de processos
+Como a ferramenta ARIS não suporta nativamente anotações semânticas a ontologias,
+criaram-se 2 atributos nos objetos dos modelos de processo: “Anotação semântica” e
+“Namespace da ontologia”, sendo estes respectivamente as referências para o conceito
+da ontologia e a ontologia de domínio. Assim viabilizou-se que, quando feita a interface
+entre o ARIS e Protégé, consultasse nos objetos quais conceitos e domínio seriam
+considerados para a exibição da parte da ontologia mais interessante no momento.
+5.4.  Criação da interface entre as ferramentas ARIS e Protégé
+Para ativar a ferramenta Protégé exibindo os conceitos da ontologia presentes em uma
+atividade do processo modelada na ferramenta ARIS, criou-se um report no ARIS que
+
+
+
+
+viabiliza a interoperabilidade entre as ferramentas ARIS e Protégé.
+6.   Exemplo de utilização da solução
+No domínio de exploração de petróleo, foi utilizado um processo de intervenção em
+poço de petróleo para testar a solução proposta. Primeiramente preencheram-se os
+atributos “Anotação semântica” e “Namespace da ontologia” dos objetos dos FADs,
+conforme a Figura 2.
+Figura 2. “Anotação semântica” e “Namespace da ontologia” preenchidos
+Com  os  objetos  dos  modelos  de  processos  possuindo  a  devida  anotação
+semântica e o namespace da ontologia, foi possível exibir a ontologia de duas formas:
+  Selecionando o modelo, caso se queira gerar o gráfico da ontologia com todos os
+conceitos presentes no FAD, conforme a Figura 3;
+  Selecionando-se o(s) objeto(s) desejado(s), para se gerar o gráfico da ontologia com
+apenas determinado(s) conceito(s) presente(s) no FAD, como na Figura 4.
+Figura 3. Selecionando o modelo através de sua exibição
+
+
+
+
+Figura 4. Alguns objetos selecionados no modelo
+Definido(s) o(s) objeto(s), o report de interface foi acionado e este apresentou os
+conceitos da ontologia atribuídos nos objetos do modelo de processos. Quando não
+havia conceitos relacionados ao(s) objeto(s) selecionado(s), a ontologia não foi exibida e
+uma mensagem alertou a inexistência de anotação semântica, conforme Figura 5.
+Figura 5. Alerta da inexistência de anotações semânticas
+Caso a ferramenta Protégé customizada fosse acionada com nenhuma anotação
+semântica passada como parâmetro, seria exibida a ontologia na íntegra, gerando uma
+figura extensa e complexa, o que nada ajudaria ao usuário no entendimento do domínio.
+Quando  existia  uma  única  anotação  semântica  entre  o(s)  elemento(s)
+selecionado(s) no modelo de processos de negócio, a figura da ontologia apresentou os
+relacionamentos do conceito e suas superclasses e subclasses, conforme Figura 6.
+Figura 6. Figura da ontologia para uma única anotação semântica definida
+Para não ficar apenas isoladamente um único conceito na figura da ontologia,
+resolveu-se  incluir  as  superclasses  e  subclasses  referentes  à  anotação  semântica
+
+
+
+
+identificada no modelo de negócio para melhor contextualizar o conceito no domínio.
+Quando mais de uma anotação semântica era identificada, todos os conceitos
+correspondentes eram exibidos na figura da ontologia. Nesse caso, exibiram-se os
+relacionamentos entre os conceitos e suprimiram-se as subclasses e superclasses. Com
+isso, conseguiu-se o objetivo de exibir somente a parte relevante da ontologia referente
+às anotações semânticas identificadas em um modelo de processos, conforme Figura 7.
+Como nesse caso há a identificação de mais de uma anotação semântica, só a
+exibição dos respectivos conceitos e seus relacionamentos é o suficiente para que o
+usuário faça a sua interpretação semântica existente no modelo de negócio. A retirada
+das subclasses e superclasses dos conceitos mostrou-se necessária, pois caso ficassem
+mantidas na figura da ontologia geraria uma figura mais complexa, o que acabaria
+dificultando a interpretação semântica do usuário.
+Figura 7. Figura da ontologia para várias anotações semânticas
+Mais detalhes sobre essa implementação são encontrados em Silva [2009].
+7.   Considerações sobre a solução proposta
+A implementação apresentada para integração entre Processos de Negócio e Ontologia
+de Domínio propôs uma solução prática aos usuários da ferramenta ARIS que permite a
+visualização dos vários conceitos presentes em um processo de negócio com o auxílio
+de uma ontologia do domínio correspondente ao processo de negócio, facilitando a sua
+interpretação semântica.
+A proposta exigiu poucas adaptações da ferramenta ARIS e um maior esforço de
+implementação na customização da ferramenta Protégé. A solução permitiu visualizar
+todos os conceitos de uma ontologia de domínio associados a um determinado elemento
+do modelo de processos do negócio. Essa associação permitiu uma melhor interpretação
+do processo com a ajuda do conhecimento do domínio descrito pelos conceitos através
+da ontologia. Desta forma, consegue-se agregar uma melhor qualidade e análise dos
+processos, além de uma melhor integração do processo com o domínio de conhecimento
+da  área  e  os  seus  termos  definidos  consensualmente.  Maiores  detalhes  da
+implementação são apresentados em [Souza et al. 2009].
+Algumas limitações foram observadas, como a necessidade de adaptar o código-
+fonte do script de interface em cada computador onde é utilizada a solução. Também
+percebeu-se  que  só  utiliza-se  uma  única  ontologia.  Mesmo  que  em  uma  área  da
+organização possua mais de uma ontologia de domínio, na aplicação da proposta é
+preciso decidir qual adotar para a implantação da solução de integração.
+
+
+
+
+Dentre  os  trabalhos  futuros,  além  de  sanar  as  limitações  detectadas,  está
+melhorar a forma de como atribuir aos objetos ARIS os conceitos presentes em uma
+ontologia de domínio. A proposta é que com o tempo sejam abolidas as propriedades
+customizadas,  e  que  a  partir  do  próprio  nome  do  objeto  ARIS  seja  realizada  a
+correspondência ao conceito presente na ontologia de domínio, assim como o nome de
+um determinado processo pode representar o namespace de uma ontologia.
+Pretende-se também adaptar a solução de integração entre as ferramentas de
+modo que funcione remotamente. Para diminuir o esforço de ter que instalar em vários
+computadores as mesmas ferramentas e ontologias. Com isso, o objetivo é evitar a
+redundância  das  ontologias  de  domínio,  e  facilitar  a  manutenção  das  ferramentas
+envolvidas. Além disso, pretende-se aproveitar a solução como uma forma de oferecer
+uma maior transparência a um processo. Uma vez já modelados os processos de negócio
+de uma organização, ou mesmo de uma instituição pública, a integração com a ontologia
+de  domínio  poderia  ser  otimizada  como  um  das  formas  de  se  obter  uma  maior
+compreensão das atividades da organização.
+Referências
+Cardoso, J., Aalst, W., Handbook of Research on Business Process Modeling, Information
+Science Reference, 2009
+Hinz,  Verlani  T.(2006)                                                                          “Proposta  de  Criação  de  uma  Ontologia  de  Ontologias”,
+http://ppginf.ucpel.tche.br/TI-arquivos/2006/VerlaniHinz/PPGINF-UCPel-TI-2006-2-10.pdf,
+23 de Março de 2009.
+Lambert,  Maria  Betania  M.  A.  (2007)  “O  novo  papel  do  profissional  da  informação  na
+sociedade                                                                                         da                                                             informação”,
+http://www.cinform.ufba.br/7cinform/soac/papers/473c6804ab40dff4b47411eddd72.pdf,
+último acesso em dez 2008.
+Magalhães, A. et al. (2007) “Uma Estratégia para Gestão Integrada de Processos e Tecnologia
+da Informação através da Modelagem de Processos de Negócio em Organizações” In:
+Revista Científico, Faculdade Ruy Barbosa ISSN: 1677-1591. pp. 45-53.
+Oren, Eyal; Möller, Knud H.; Scerri, Simon; Handschuh, Siegfried; Sintek, Michael (2006)
+“What                                                                                             are                                                            Semantic                                                          Annotations?”,http://www.siegfried-
+handschuh.net/pub/2006/whatissemannot2006.pdf, 2 de Agosto de 2009.
+Protégé (2009)“What is protégé?”,http://protege.stanford.edu/overview, Julho de 2009.
+Scheer,                                                                                           IDS                                                            (2007)                                                            “Soluções                                                                                   ARIS”,                http://www.ids-
+                                                                                                                                                                 scheer.com/pt/ARIS/Solues_ARIS/55324.html, 23 de Março de 2009.
+Silva,                                                                                            Fabrício                                                       S.(2005)”Projeto                                                  de                                                                                          uma         Base      de                Dados
+                                                                                                                                                                                                                                   Terminológica”,http://projetos.inf.ufsc.br/arquivos_projetos/projeto_37/Fabricio.tcc.pdf,                                           19
+                                                                                                  de Maio de 2009.
+Silva, Thiago Andrade Marques da (2009) “Estudo da Integração entre Ontologia de Domínio e
+Processos                                                                                         de                                                             Negócios                                                          -                                                                                           Acessando   Protégé   através           do     ARIS”,
+http://np2tec.uniriotec.br:9093/np2tec/publicacoes/ProjetoFinal-
+ThiagoAndradeMarquesSilva-2009.pdf, 28 de Abril de 2010.
+Souza, J. et al.  (2009)  “Integração Semântica de Modelos”, Relatório Técnico  0001/2009,
+Relate-DIA,                                                                                       UNIRIO.                                                        Disponível                                                        em
+http://seer.unirio.br/index.php/monografiasppgi/article/view/238/224, 28 de Abril de 2010.
+W3C (2004) “OWL Web Ontology Language Guide”, http://www.w3.org/TR/owl-guide, maio
+2009.
+
+
+
+
+

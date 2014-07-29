@@ -1,0 +1,280 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+An Investigation on the Use of Navigation Devices in Smart
+Transportation Systems
+Ana L. C. Bazzan and Guilherme G. Azzi
+1  Instituto de Informática - Universidade Federal do Rio Grande do Sul (UFRGS)
+Caixa Postal 15.064 - 91.501-970 - Porto Alegre - RS - Brazil
+{bazzan,ggazzi}@inf.ufrgs.br
+Abstract. In large urban areas, until recently, people used to choose a route
+having in mind the general, high-level mental map of the urban traffic network.
+With the dissemination of the use of navigation devices such as GPS, all roads
+may now be part of a path.  Therefore two questions arise, that are related
+to the performance of the traffic network as a whole, and to the effects of the
+use of these navigation devices on travelers that usually only do short trips in
+their own neighborhoods. Our preliminary results show that the average overall
+travel times indeed decrease with the use of GPS. However, travelers who used
+to avoid arterial roads are strongly penalized.
+1. Introduction
+The number of large metropolitan areas with more than ten million inhabitants is increas-
+ing rapidly, with the number of so-called mega-cities now at more than 20. For compari-
+son, in 1950 there were 83 cities with populations exceeding one million, with New York
+being the sole city with population above ten million.  This increase in the number of
+mega-cities has strong consequences to traffic and transportation.
+It is intuitively assumed that smart transportation can be benefited from smart-
+gadgets.  Indeed, such devices are changing the paradigm in many systems, including
+transportation. This can be observed, e.g., in urban areas such as the city of São Paulo:
+until a decade ago or so, people used to choose a route having in mind the general, high-
+level mental map of the urban traffic network, that means, the main arterials were known
+to a lesser or greater extent, while the rest of the network links remained basically un-
+known, except for those areas close to the traveler origin and destination. This has lead
+to some traffic patterns that were more or less predictable.  Moreover, users of residen-
+tial or secondary roads used to use these roads for trips within their own neighborhoods.
+With the dissemination of the use of navigation devices such as GPS, all roads may now
+be part of a path. Therefore two questions arise. The first relates to the performance of
+the traffic network as a whole, i.e., does travel time decreases (as intuitively believed) if
+navigation devices gets widely used? The second question relates to the effects of these
+navigation devices use on travelers that usually do only short trips in their own, known
+neighborhood, thus tending to avoid jammed arterials.
+The goal of this work is to answer these two questions by means of an agent-
+based model. In the next section we present some work that is related to ours though in
+fact the second question has barely been addressed.  The agent-based model is detailed
+in Section 3, while the settings and results achieved so far are discussed in Section 5.
+Conclusions and the future work are then presented in Section 6.
+156
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+2. Background and Related Work
+Smart transportation systems are likely to depend more and more on a good modelling of
+the transportation system at hand because only this way can the effect of new technologies
+be tested and evaluated. Basically, there are two approaches to the modelling of traffic:
+macroscopic and microscopic.  The former is mainly concerned with the movement of
+vehicles, that means, with the aggregate level.  In the microscopic modelling, one may
+go to the individual level. Each road user can be described as detailed as desired (given
+computational restrictions), thus permitting the model of travelers’ behaviours.  Travel
+and/or route choices may be considered, and this is a key issue in simulating traffic, since
+those choices are becoming increasingly more complex.  Using agent-based simulation
+is a promising technique for microscopic traffic models as the driver’s behaviour can be
+described incorporating complex and individual decision-making.
+Modelling of traffic scenarios with multiagent systems techniques is not new.
+However, the focus has been mainly on logistics regarding transportation scenarios. On
+the other hand, the work proposed here focuses on a fine-grained level.  At this level,
+there have been an increasing number of research studies.  Very few works investigate
+the effect of navigation devices, and, to the best of our knowledge, none at the agent-
+based level. Therefore, here we refer to some that are related to agent-based assignment
+of demand (without use of navigation devices): [Balmer et al. 2004, Bazzan et al. 2012,
+Chmura and Pitz 2007, Kl ügl and Bazzan 2004]. In summary, agent-based modelling and
+simulation can be used in transportation systems in various ways. In this particular paper
+we use agent-based simulations as a way to investigate what happens in traffic networks
+when some conditions change, as, e.g., what happens when navigation devices increase
+the travelers’ awareness of the traffic network.
+3. Methods
+The agent-based microscopic simulation proposed here was implemented using the traf-
+fic simulator called SUMO1. The main parameters are: the network G to be simulated,
+the number |N | of travelers that will have their trips distributed according to the origin-
+destination (OD) matrix, and a boolean indicating whether or not GPS navigation devices
+are used by the travellers.
+The following procedure is then repeated until there are vehicles in the network
+(i.e. until not everyone is at its destination). For each traveler i, the simulator will move i
+through its path. At each link, SUMO checks whether each i is at its destination. If yes, i
+computes its own travel time.
+This procedure is used no matter navigation devices are used or not. What distin-
+guishes these two cases is the kind of knowledge traveler i has about the network. This
+of course determines its route.  When navigation devices are used, the procedure works
+as usually in routing, i.e., it is as if a centralized mechanism considers the full graph and
+computes shortest paths routes for everyone. However, when those devices are not used,
+then the knowledge of the network is a private knowledge of i and must be explicitly kept
+for each i. This means that we have implemented a new module in SUMO, which handles
+the agent knowledge and do the routing in a different way than SUMO does, considering
+partial information that the agent itself has about its environment.
+1 http://sumo.sourceforge.net/
+157
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+4. Scenario
+The map used stems from the eastern part of São Paulo. Open street map (OSM, www.
+osm.org) was used to export the objects existing in this area. For this work we are using
+only links labeled as motorways, trunks, and primaries (OSM terminology). For short, we
+call them all as arterials. However, since secondary links are also necessary for our work,
+to mimic these we have created a grid of one-way links, which was added to the arterials
+extracted from OSM. The resulting network is shown in Figure 1.
+The following naming scheme is adopted here: Vertical, secondary links are la-
+beled with lowercase letters, from a to k.  Horizontal, secondary links are labeled with
+numbers, from 1 to 21. The arterial at the top of the map (roughly from nodes a2 to j1)
+is a motorway (Marginal Tietê) that is a major source of traffic congestion. Traffic lights
+were used in all intersections between two arterial roads, generated by SUMO with 40
+seconds of green time for each direction and 1s of yellow time on transitions.
+The demand pattern corresponds roughly to that observed in the eastern region
+of the city.  Although all regions may serve as origins and destinations, to reflect the
+morning peak, there are three main destinations districts shown in the map (Figure 1) as
+roman numerals: one of them is downtown (a6-b12), one at a18-c21, and one through
+a major motorway to the northeast (h1-j3). Regarding origins, the network G is divided
+in 10 rectangular origin districts, each stretching along 5 horizontal edges and 4 vertical.
+All origin/destination pairs have the same probability of being chosen for a vehicle.
+A few special vehicles called probe or floating cars (FCs) were added to the simu-
+lation to analyze the impact that the GPS-based routing has on neighborhood (local) traf-
+fic. To do this, these FCs were created with custom routes that are restricted to secondary,
+local links.  Henceforward we refer to these FCs by their route names:  East (meaning
+route j20 → j8 → i8) and Center (route f10 → f18).
+Two routing strategies were used, both based on the A* algorithm. For simulating
+158
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Table  1.  Travel times  (average over all travelers) with increasing demand, for
+situations without and with navigation devices.
+Demand                                                                                                     Without Navigation Device                           With Navigation Device
+N                                                                                               Mean (s)   Std. Dev.                   Mean (min)   Mean (s)   Std. Dev.                Mean (min)
+5000                                                                                            1948       3.33%                       32           1116       1.36%                    19
+10000                                                                                           4012       2.88%                       67           1910       0.59%                    32
+15000                                                                                           6313       2.40%                       105          2940       2.06%                    49
+20000                                                                                           9017       2.02%                       150          4063       2.36%                    68
+25000                                                                                           12803      7.43%                       213          5240       6.17%                    87
+the usage of navigation devices (thus all links may be used), all routes were computed with
+global topological knowledge, favoring wider roads: the cost of each link was computed
+as its length divided by its number of lanes. The other case is the one in which the traveler
+has only restricted knowledge.  We remark that this means that each driver only has a
+mental map containing the arterials links plus the knowledge of the links that belong to
+its origin and destination districts. Therefore routes were computed considering the real
+costs for these links.  Farther or unknown secondary links were assigned a high cost so
+that they are avoided.
+As mentioned, all simulations were performed in the SUMO traffic simulator. The
+routing strategy - with or without navigation devices, i.e., global or partial topological
+information - and the number of generated vehicles were varied orthogonally. For each
+combination of those parameters, the new implemented module in SUMO was used to
+create the drivers and generate the trips from the OD matrix.
+5. Results
+The results obtained so far are the average over five repetitions of the simulations for each
+combination of parameters. We have varied the demand created in the network G, i.e., the
+number of travelers, as well as the type of routing (with/without navigation device). |N |
+was set from 5K to 25K users. We note that although the morning peak for the city of São
+Paulo (apart from other parts of the metropolitan region) may reach 700K simultaneous
+users, we are only considering a portion of the eastern part of the city.  Besides, only a
+fraction of the secondary roads were represented. Hence the reduced demand.
+Table 1 shows the mean travel time in seconds as well as the standard deviation.
+To facilitate the comparison, the travel times are also given in minutes. As expected, the
+travel time increases with the increase of the demand.
+Regarding the comparison between the situations without and with use of naviga-
+tion devices, there is a remarkable decrease in these times in the latter case. The reason
+is that the demand is more distributed in the network. Moreover, the higher the demand,
+the higher the utility of using those devices. When |N | = 25000, there is a decrease of
+approximately 60% in the travel time.
+These results refer to the overall travel time (over all travelers). We now turn to
+more microscopic analyses that are possible when agent-based simulations are used. In
+the case here we are analyzing travel times of travelers with different route lengths. Due
+to lack of space we do not show the plots of travel times for travelers in each class of
+159
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Table 2. Travel times for the floating cars; situations without and with navigation
+devices.
+Demand                                                                                           Trip     Without Nav. Device   With Nav. Device   Increase
+N                                                                                                         Mean (min)            Mean (min)
+5000                                                                                             Center   5                     5                  ≈ 0%
+                                                                                                 East     10                    13                 ≈ 30%
+10000                                                                                            Center   5                     6                  ≈ 20%
+                                                                                                 East     23                    39                 ≈ 70%
+15000                                                                                            Center   5                     15                 ≈ 200%
+                                                                                                 East     37                    61                 ≈ 65%
+20000                                                                                            Center   5                     24                 ≈ 380%
+                                                                                                 East     49                    103                ≈ 110%
+25000                                                                                            Center   6                     36                 ≈ 500%
+                                                                                                 East     61                    135                ≈ 120%
+trip length. The main conclusion drawn is that travel time when not using GPS is higher
+only if the trip is longer than 5 kilometers. Below this, for each class of length, trips take
+roughly the same time, no matter whether GPS is used or not. Thus, the above mentioned
+conclusion that navigation devices do pay off was drawn from the fact that most trips take
+longer than 5 kilometers.
+Another kind of analysis that an agent-based simulation allows aims at answering
+the second question that we want to investigate in this work, namely what happens to
+those travelers called neighborhood or local travelers. As presented in Section 4, we have
+defined some special floating cars whose travel times were also measured. These travel
+times appear in Table 2.
+If we look at the travel times of the FCs, here the opposite behavior is observed
+regarding travel times. When the whole population of travelers does not use navigation
+devices, neighborhood travelers realize their trips in a lesser time because they, by def-
+inition, use only secondary links.  When all travelers may use the resources that were
+previously used only by the neighborhood travelers, these are penalized.  This penalty
+increases with the size of the demand.  For instance, taking the floating cars driving in
+the center route, when the demand is 10K travelers, their average travel time is 5 minutes
+(no navigation device) versus 6 minutes (device is used by other drivers). However, when
+the demand is 25K travelers, these figures increase to 6 and 36 minutes respectively. This
+means an increase of more than 400% in travel time for this particular floating car.
+6. Conclusion
+In many metropolitan areas, one may nowadays observe the spreading use of navigation
+devices such as those based on GPS. Although we all seem to enjoy this help, little has
+been investigated about the effects of this use, especially on the travelers whose routes did
+not involve major arterials, being restricted to secondary links of the traffic network, while
+the majority of other travelers would use primarily arterials (secondary links only close
+to their origins and destinations), which are part of their respective mental maps.  Two
+questions then arise. The first is whether travel time decreases if navigation devices gets
+widely used, while the second question relates to the effects of the use of these devices on
+160
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+travelers who use the network only for short trips in their own neighborhood, thus tending
+to avoid arterials.
+Our long term goal is to develop an agent-based infrastructure  (possibly over
+SUMO) that can be used for this and further investigations that are key to evaluate con-
+cepts of smart transportation systems. With this prototype, we have simulated thousands
+of agents that compute their own route based either on global knowledge of the traffic
+network, coming from navigation devices, or based on their mental maps of the network,
+which are necessarily partial.
+By means of the agent-based approach we were able to derive conclusions that
+would not be possible if only macroscopic methods were used, as for instance the fact
+that there are differences in the value of the navigation devices depending on the trip
+length.  Also, we have shown that although the population of travelers have decreased
+travel time, this impacts a minority of them, namely those that do neighborhood trips
+and/or avoid arterials, concentrating their trips on secondary links. For these, the increase
+in travel time can be manifold.
+We are aware that this model is a preliminary one. As part of a joint work with
+DLR, the developer of SUMO, we are working together in order to provide SUMO with
+the modules that will facilitate the modelling and simulation of agent-based transportation
+systems.  The focus is of course on simulating new technologies such as use of smart-
+phones and other devices, as well as car-to-car communication.  We are also aware of
+the necessity of calibrating the model, but this has probably to be done with data freely
+available (e.g., the repository www.bgu.ac.il/˜bargera/tntp), given the lack of
+data for the scenario used here.
+Acknowledgments
+The authors wish to thank the RNP (Cidades Inteligentes Call), CNPq for the support
+to the project LabTrans and for the partial support to the authors, and the anonymous
+reviewers for suggestions of future work regarding self-organization.
+References
+Balmer, M., Cetin, N., Nagel, K., and Raney, B. (2004). “Towards truly agent-based traffic
+and mobility simulations”. In Jennings, N., Sierra, C., Sonenberg, L., and Tambe, M.,
+editors, Proceedings of the 3rd International Joint Conference on Autonomous Agents
+and Multi Agent Systems, AAMAS, volume 1, pages 60-67, New York, USA. New
+York, IEEE Computer Society.
+Bazzan, A. L. C., Amarante, M. B., and da Costa, F. B. (2012). Management of demand
+and routing in autonomous personal transportation. Journal of Intelligent Transporta-
+tion Systems, 16(1):1-11.
+Chmura, T. and Pitz, T. (2007).  An extended reinforcement algorithm for estimation
+of human behavior in congestion games.  Journal of Artificial Societies and Social
+Simulation, 10(2).
+Kl ügl, F. and Bazzan, A. L. C. (2004). Route decision behaviour in a commuting scenario.
+Journal of Artificial Societies and Social Simulation, 7(1).
+161
+
+
+
+
+

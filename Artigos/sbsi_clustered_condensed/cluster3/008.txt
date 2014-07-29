@@ -1,0 +1,491 @@
+﻿Uma Abordagem Prática para Implementação da Garantia
+da Qualidade de Processo e de Produto
+João Pablo S. da Silva, Pablo Dall'Oglio, Sergio Crespo, João Carlos Gluz
+Programa Interdisciplinar de Pós-graduação em Computação Aplicada - Universidade
+do Vale do Rio dos Sinos (UNISINOS) - São Leopoldo - RS - Brasil
+{jpabloss,pablo.dalloglio}@gmail.com,  {crespo,jcgluz}@unisinos.br
+Abstract. The quality of a software product is directly related with the quality
+of  development  process  that  built  it.  Because  of  this,  it  is  necessary  to
+implement quality assurance practices in software development organizations.
+These practices, defined by quality reference models, not establish a clear way
+to  implement  itself.  To  cover  this  gap,  this  paper  proposes  a  practical
+approach to implement the product and process quality assurance, which is
+experienced in a real software development company.
+Resumo.  Assumindo  a  premissa  de  que  a  qualidade  de  um  produto  de
+software  está  diretamente  relacionada  com  a  qualidade  do  processo  de
+construção  deste  software,  faz-se  necessário  lançar  mão  de  práticas  de
+garantia da qualidade. Tais práticas, comumente definidas por modelos de
+referência de qualidade, não estabelecem claramente como implementá-las,
+definindo apenas o que deve ser atendido e não como deve ser atendido. Para
+sanar  esta  lacuna,  este  artigo  propõe  uma  abordagem  prática  para
+implementação de garantia da qualidade, a qual é experimentada em um
+ambiente real de desenvolvimento de software.
+1. Introdução
+O mercado está cada vez mais exigente no que se refere à prestação de serviços de
+desenvolvimento de softwares. Tal característica faz com que os fornecedores tenham
+comprovada  a  sua  capacidade  e  maturidade  para  prestar  o  serviço  contratado.  A
+comprovação desta capacidade e maturidade se dá através do cumprimento dos acordos
+estabelecidos com o cliente, o que aumenta o grau de confiança do mercado em relação
+ao  fornecedor.  Como  acelerador  deste  grau  de  confiança,  surgem  os  modelos  de
+referência  de  qualidade,  os  quais  estabelecem  objetivos  e  práticas  para  todas  as
+disciplinas relacionadas ao desenvolvimento de software  [Chrissis, Konrad e Shrum
+2007].
+Neste contexto, uma das disciplinas básicas tratadas pelos modelos de referência
+é a de garantia da qualidade, a qual provê às organizações uma clara visão sobre a
+aderência de seus projetos de desenvolvimento aos processos de software definidos.
+Implementar garantia da qualidade segundo modelos de referência não é algo trivial
+para as organizações por dois motivos: primeiro, os modelos de referência estabelecem
+o que deve ser implementado, mas não descreve como implementar, o que dificulta as
+atividades de definição da disciplina; segundo, em muitos casos a disciplina não é algo
+
+
+
+
+conhecido pelas equipes de desenvolvimento, o que dificulta a sua institucionalização
+[Chrissis, Konrad e Shrum 2007].
+Para fechar a lacuna existente entre o que é pedido pelos modelos de referência e
+como  isto  pode  ser  atendido,  o  presente  trabalho  apresenta  uma  abordagem  de
+implementação para garantia da qualidade construída a partir das necessidades reais de
+uma empresa de desenvolvimento de software. A Seção 2 traz a contextualização e
+motivação deste trabalho. A Seção 3 apresenta trabalhos relacionados. A Seção 4 faz a
+fundamentação de conceitos relacionados. A Seção 5 apresenta a solução estabelecida.
+A Seção  6 mostra os resultados gerados. A Seção  7 traz as conclusões e trabalhos
+futuros.
+2. Contexto e Motivação
+O presente trabalho surge dentro de um contexto organizacional, onde uma empresa de
+tecnologia da informação tem a necessidade de obter junto ao Software Engineering
+Institute                                                                                  (SEI)  o  laudo  de  nível                                                         2  de  maturidade  do  Capability  Maturity  Model
+Integration (CMMI1). A empresa em questão fornece serviços de desenvolvimento de
+software, está no mercado nacional e internacional a mais de 18 anos e conta com uma
+estrutura  de  aproximadamente                                                             1000  colaboradores.  Para  o  pleno  atendimento  da
+necessidade da empresa, faz-se necessário atender a um conjunto específico de áreas de
+processo, Process Area (PA), do CMMI, incluindo a PA que estabelece os objetivos e
+práticas relacionadas à garantia da qualidade.
+No  ano  de                                                                                2007  a  empresa  deu  início  aos  trabalhos  de  definição  e
+institucionalização de um processo de desenvolvimento capaz de atender aos objetivos e
+práticas do CMMI. Por questões de competitividade mercadológica, foram impostas ao
+trabalho  de  definição  do  processo  duas  restrições,  sendo  estas:  maximização  da
+qualidade agregada ao produto de software e minimização do custo agregado aos
+controles e monitoramentos definidos pelo modelo de referência de qualidade. Dentre as
+disciplinas relacionadas, a garantia da qualidade foi particularmente desafiadora pois
+não fazia parte da cultura das equipes de desenvolvimento. Tal desafio foi o fato
+gerador e motivador deste trabalho, pois foi necessário estabelecer uma solução ótima,
+em termos de custo/benefício, para garantia da qualidade.
+3. Trabalhos Relacionados
+Buscas realizadas em repositórios de publicações científicas indicam a existência de
+diversos trabalhos relacionados à garantia da qualidade de software. As publicações
+exploram diferentes fatores da garantia da qualidade, tais como: ferramentas de suporte
+a melhoria contínua de processos  [Lee et al.  2005], ferramentas para medição da
+qualidade de software [Alghamdi, Rufai e Khan 2005], e ferramentas de suporte aos
+modelos de qualidade em pequenas organizações  [Trudel et al.  2006]. Porém, duas
+publicações, apresentadas a seguir, merecem destaque por se relacionar diretamente
+com a proposta deste trabalho.
+                                                                                           A garantia da qualidade é uma disciplina que extrapola a fronteira da ciência da
+computação.                                                                                [Langheinricha  e  Kaltschmitt                                                     2006]  apresentam  em  seu  artigo  uma
+1 Vide [Chrissis, Konrad e Shrum 2007].
+
+
+
+
+metodologia  para  implementação  da  garantia  da  qualidade  na  indústria  de
+biocombustíveis. Os autores defendem a ideia de que o monitoramento e controle
+efetivo do processo de produção é chave para a qualidade do produto gerado. Mesmo
+sendo definida para outra área que não a computação, a metodologia traz a tona algumas
+necessidades também relevantes para a garantia da qualidade aplicada ao software, tais
+como:  ter  um  processo  definido,  identificar  fatores  que  influenciam  a  qualidade,
+identificar  pontos  de  controle,  estabelecer  medidas  apropriadas  e  monitorar  não
+conformidades até seu fechamento.
+No âmbito da ciência da computação, [Elberzhager e Denger 2007] estabelecem
+em seu artigo um framework para seleção e customização de técnicas de garantia da
+qualidade. Os autores argumentam que a qualidade final de um produto de software é
+um  fator  decisivo  para  uma  organização  e  que  esta  qualidade  é  atingida  através
+verificação dos produtos de trabalhos intermediários, gerados ao longo do ciclo de vida.
+Uma questão pertinente abordada pelos autores é a necessidade de se utilizar técnicas
+distintas para cada momento do ciclo de vida do software. Essencialmente, o framework
+proposto  estabelece  um  conjunto  de  técnicas  aplicáveis  ao  projeto,  as  quais  são
+selecionadas em função dos fatores que influenciam a qualidade do produto de software.
+4. Fundamentação Teórica
+Para o pleno entendimento deste trabalho, faz-se necessário entender dois conceitos
+fundamentais, sendo estes: processo de software, o qual estabelece como o produto de
+software deve ser construído; e o de garantia da qualidade, a qual estabelece como a
+execução do processo de software deve ser monitorada. Complementarmente, pode-se
+observar a relação de dependência unidirecional entre os conceitos, pois a garantia da
+qualidade só existe em função do processo de software, enquanto que, processos de
+software não dependem da garantia da qualidade para existir.
+4.1. Processo de Software
+Abordagens de engenharia de software, essencialmente, se apoiam em compromissos
+com a qualidade, tendo como principal alicerce uma camada de processos de software,
+os quais estabelecem frameworks capazes de efetivamente entregar o produto requerido
+[Pressman 2001]. Refinando esta definição, pode-se dizer que um processo de software
+é um conjunto de atividades e resultados associados, os quais levam a um produto de
+software [Sommerville 2001].  Um framework genérico de processo, é composto por
+frameworks de atividades aplicáveis a qualquer projeto de desenvolvimento de software.
+Cada framework de atividades é composto por uma coleção de tarefas e produtos de
+trabalho [Pressman 2001].
+O CMMI classifica os processos de software segundo sua maturidade, a qual
+remete a melhoria contínua dos processos da organização através de um conjunto de
+áreas de processo, Process Area (PA), organizados segundo critérios definidos pelo
+modelo. A Figura 1 apresenta a hierarquia de níveis de maturidade, Maturity Level
+(ML) estabelecido pelo CMMI. O nível Inicial se caracteriza por processos ad hoc que
+tendem ao caos, o sucesso em projetos de desenvolvimento, quando obtido, é reflexo de
+esforços individuais. O nível Gerenciado garante que o projeto de desenvolvimento é
+planejado e executado, os recursos têm as habilidades necessárias e a aderência ao
+processo é garantida [Chrissis, Konrad e Shrum 2007].
+
+
+
+
+O nível Definido é caracterizado por padrões, procedimentos, ferramentas e
+métodos, onde cada projeto estabelece seu processo a partir do processo padrão da
+organização. O nível Quantitativamente Gerenciado se caracteriza pelo pleno uso de
+medidas no planejamento e monitoramento, onde objetivos quantitativos são definidos
+com base em critérios orientados a qualidade e produtividade do processo. Por fim, o
+nível Otimizado é caracterizado pela melhoria contínua baseada no pleno entendimento
+quantitativo do processo, ou seja, processos estratégicos são identificados, medidos e
+melhorados [Chrissis, Konrad e Shrum 2007].
+Figura 1. Os cinco níveis de maturidade de um processo.
+4.2. Garantia da Qualidade
+Assumindo  a  premissa  que  a  qualidade  de  um  produto  de  software  é  altamente
+influenciada pela qualidade do processo que construiu este software, faz-se necessário
+lançar mão de mecanismos de monitoramento capazes de dar uma clara visão sobre a
+execução dos processos de software. O Software Engineering Body of Knowledge
+(SWEBOK) diz que o papel da garantia da qualidade é se certificar que um processo é
+executado como planejado, provendo para a organização um conjunto de indicadores de
+processo. Em outras palavras, a garantia da qualidade é responsável por monitorar a
+execução do processo, e os resultados gerados a partir deste monitoramento devem ser
+externados para as gerências responsáveis pela execução de projetos de software [Abran
+et al. 2004].
+Para fins de desambiguação, cabe diferenciar o conceito de garantia da qualidade
+do conceito de controle da qualidade. A garantia da qualidade é formada por um
+conjunto sistemático e planejado de atividades que, quando seguidas, garantem aos
+clientes que os produtos ou serviços atendem às suas expectativas. Em outras palavras,
+pode se dizer que garantia da qualidade remete ao como fazer o software, que por sua
+vez remete ao conceito de processo de software. Por outro lado, o controle da qualidade
+é  a  comparação  de  um  determinado  produto  ou  serviço  com  suas  respectivas
+especificações, onde todo e qualquer desvio identificado é devidamente registrado e
+endereçado. O controle da qualidade é uma atividade inserida em processo de software
+que garante o pleno funcionamento do produto ou serviço de acordo com os requisitos
+previamente levantados [Bastos et al. 2007].
+O CMMI trata a garantia da qualidade como uma PA, exigida para se atingir o
+nível 2 de maturidade. A garantia da qualidade de processo e de produto, Product and
+Process Quality Assurance (PPQA), é uma PA de suporte do CMMI, que provê às
+gerências da organização uma visão objetiva sobre a execução dos processos e produtos
+de trabalho relacionados. Cabe observar que não se deve confundir produto de software
+com produto de trabalho. Produto de software é a meta do projeto, é o programa ou
+sistema a ser desenvolvido pela equipe, enquanto que, produto de trabalho são todos os
+
+
+
+
+artefatos meio do projeto, ou seja, documentos de gerenciamento e engenharia, tais
+como: Plano de Projetos, Modelo de Casos de Uso, etc. Fundamentalmente, PPQA
+envolve a avaliação objetiva da execução dos processos e produtos de trabalho contra
+descrições de processo, procedimentos e padrões [Chrissis, Konrad e Shrum 2007].
+PPQA  busca  também,  a  identificação  e  o  acompanhamento  de  não
+conformidades, garantindo seu devido fechamento. Não conformidades são desvios na
+execução  do  processo  que  podem  expor  o  projeto  de  desenvolvimento  a  riscos
+relacionados ao escopo, custo, tempo ou qualidade. Garantir o fechamento significa
+monitorar e apoiar a equipe de desenvolvimento na resolução do problema e não
+realizar a correção propriamente dita. Por fim, PPQA explicita informações sobre a
+aderência  dos  projetos  de  desenvolvimento  aos  processos  definidos,  provendo  a
+fundamentação  necessária  para  a  tomada  de  decisão  por  parte  das  gerências
+competentes,  avaliação  e  melhoria  contínua  dos  processos  de  desenvolvimento
+[Chrissis, Konrad e Shrum 2007].
+Como  todas  as  demais  PAs  do  CMMI,  PPQA  é  organizada  em  objetivos
+específicos,  Specific  Goal                                                              (SG),  que  por  sua  vez  são  organizados  em  práticas
+específicas, Specific Practice (SP), como visualizado na Figura 2. O primeiro objetivo
+definido, SG 1, diz respeito à avaliação objetiva da aderência dos processos e produtos
+de trabalho elaborados contra descrições de processo, procedimentos e padrões. Este
+objetivo é composto pelas práticas para avaliação objetiva de processos, SP 1.1, e de
+produtos  de  trabalho  e  serviços,  SP                                                  1.2. O  segundo objetivo,  SG  2, propõe  uma
+percepção clara e objetiva do projeto em termos de desvios e suas correções. O objetivo
+é composto pela prática de comunicação e monitoramento das não conformidades até
+que estas sejam fechadas, SP 2.1, e pela prática de geração de registros para uso como
+base de conhecimento em ações de melhoria contínua, SP  2.2,  [Chrissis, Konrad e
+Shrum 2007].
+Figura 2. Estrutura hierárquica de PPQA.
+5. Uma Abordagem para Implementação de PPQA
+Como  um  produto  derivado  do  processo  definido  e  institucionalizado  na  empresa
+anteriormente   citada,   tem-se   uma   abordagem   de   implementação   de   PPQA
+fundamentada em três princípios. O primeiro diz respeito ao pleno atendimento dos
+objetivos da PA, garantindo o sucesso em avaliações oficiais para obtenção de laudos de
+maturidade CMMI. O segundo se refere à relação custo/benefício, buscando minimizar
+o esforço necessário para execução das atividades sem perder a cobertura necessária
+para garantir o monitoramento do processo. O terceiro diz respeito à percepção da
+equipe de desenvolvimento sobre a importância da PA, a qual deve sustentar a garantia
+da qualidade como uma ferramenta de suporte ao desenvolvimento.
+
+
+
+
+Podem ser observadas na Figura 3, as três frentes distintas para implementar
+PPQA. A primeira remete ao mapeamento de pontos críticos de um processo através do
+levantamento dos principais produtos de trabalho e a geração de uma coleção de itens
+de revisão que garantam a verificação dos fatores de sucesso para o projeto. A segunda
+remete à execução das inspeções em projetos através da definição de escopo, seleção e
+análise de amostras, e corroboração e publicação dos resultados. A terceira estabelece
+dois  indicadores  fundamentais  para  o  monitoramento,  tanto  dos  projetos  de
+desenvolvimento, quanto das próprias atividades de garantia da qualidade.
+Figura 3. Visão geral da solução definida para implementação de PPQA.
+5.1. Definição
+A primeira frente apresentada diz respeito às definições básicas realizadas antes de se
+dar início as inspeções de projeto propriamente ditas. Inicialmente, cabe observar que as
+atividades de definição não são atividades recorrentes como as atividades de inspeção
+de  projetos.  Uma  vez  estabelecidas  as  definições  necessárias,  estas  tendem  a  se
+estabilizar. Entretanto, como previsto pelo CMMI, tais definições devem ser revisadas
+sempre que o ocorrer algum tipo de modificação significativa nos processos, padrões ou
+procedimentos da organização.
+5.1.1. Identificar Evidências Críticas
+A identificação de evidências críticas é uma atividade fundamental para as definições
+básicas da implementação de PPQA, pois uma forma de se conseguir uma boa relação
+custo/benefício é identificar os artefatos que estão no caminho crítico da qualidade do
+projeto,  ou  seja,  documentos  que  se  construídos  de  forma  incorreta  impactam
+diretamente na qualidade do produto solicitado pelo cliente. Por exemplo, se uma Lista
+de Requisitos não for devidamente estruturada e escrita, a equipe de desenvolvimento
+pode não entender o escopo e construir algo não solicitado, o que impacta no orçamento
+do projeto. Para identificar as evidências críticas, faz-se necessário um estudo, tanto do
+processo de desenvolvimento, quanto do histórico de projetos da organização. Assim
+torna-se  possível  mapear  quais  e  quando  os  produtos  de  trabalho  devem  ser
+devidamente inspecionados.
+
+
+
+
+5.1.1. Definir Itens de Revisão
+Uma  vez  mapeados  os  produtos  de  trabalho  pertencentes  ao  caminho  crítico  da
+qualidade,  faz-se  necessário  enumerar  para  cada  um,  todas  as  características  que
+garantem sua qualidade. Se nas inspeções for possível identificar tais características nos
+artefatos gerados, pode-se concluir que estes estão aderentes ao processo definido. Cada
+característica enumerada vira um item de revisão, o qual sempre deve ter uma avaliação
+binária:  Atende  ou  Não  Atende.  Por  exemplo,  pode-se  enumerar  as  seguintes
+características, consequentemente itens de revisão, de um plano de gerenciamento de
+riscos:
+   os riscos identificados estão descritos de forma clara e objetiva;
+   cada risco está devidamente qualificado;
+   está definido para cada risco uma ação de resposta devidamente planejada;
+   para cada risco está definida pelo menos uma ação de contingência.
+5.2. Inspeção
+A segunda frente estabelecida caracteriza as inspeções dos projetos de software. Dados
+os objetivos de uma implementação de PPQA, esta se torna a frente mais importante,
+pois é nela que todas as práticas da PA são plenamente atendidas. Neste contexto, pode-
+se dizer que Definição e Medição são frentes de apoio à Inspeção. As atividades
+definidas dentro de Inspeção a tornam capaz de dar aos interessados uma plena e
+transparente visão da execução dos projetos de desenvolvimento no que se refere à
+aderência  aos  processos  definidos  pela  organização.  Cabe  ainda  salientar,  que  a
+inspeção é altamente recorrente, ou seja, são aplicadas em um projeto quantas vezes for
+necessário para garantir a execução do processo.
+5.2.1. Estabelecer Escopo
+É natural pensar que os projetos executam seus processos de forma contínua, logo, as
+inspeções  devem  cobrir  o  exato  ponto  de  execução  do  processo.  Para  tal,  faz-se
+necessário avaliar o status do projeto e decidir quais itens de revisão são aplicáveis neste
+momento. Esta é uma atividade repetida a cada inspeção e de rápida execução, pois o
+maior esforço deve ser concentrado na inspeção propriamente dita. Para exemplificar,
+suponha-se que um projeto, ao executar o Unfied Process2  (UP), esteja na fase de
+Construção,  logo,  não  faz  sentido  aplicar  itens  de  revisão  que  cobrem  a  fase  de
+Concepção, pois isto é algo já superado pelo projeto e eventuais correções em artefatos
+desta fase não agregam mais valor.
+5.2.2. Selecionar Amostras
+Uma vez estabelecido o escopo da inspeção, faz-se necessário colher amostra dos
+produtos de trabalho para efetivamente executar a inspeção. Nesta atividade, cabe a
+aplicação  de  técnicas  de  amostragem  para  garantir  um  resultado  plausível  com  a
+realidade do projeto. Por exemplo, ao buscar amostras de Atas de Reunião, poderia ser
+adotada uma amostragem estratificada por datas, sendo selecionado o artefato mais
+2 Vide [Larman 2004].
+
+
+
+
+antigo, o mediano e o mais novo. Já para a seleção de amostras de Diagramas de Caso
+de Uso, a amostragem pode ser estratificada por pacote e redator, colhendo um artefato
+de cada pacote para cada analista envolvido no projeto.
+5.2.3. Analisar Amostras
+A análise das amostras colhidas caracteriza a inspeção propriamente dita. É neste
+momento que se busca no artefato as características de qualidade, itens de revisão,
+enumeradas na Definição. Ao ponderar sobre cada item de revisão se deve chegar a uma
+conclusão sobre seu atendimento. É importante observar que a decisão de Atende ou
+Não Atende, é sempre tomada sobre o conjunto de amostras, ou seja, caso uma das
+amostras não atenda ao item de revisão em questão, todas as demais são desqualificadas
+e o item é considerado Não Atende. Por outro lado, se todas as amostras atenderem ao
+item de revisão este é considerado Atende. Tal critério garante a avaliação objetiva
+exigida pelo CMMI.
+5.2.4. Corroborar Resultado
+A equipe de desenvolvimento não deve ter a sensação de que o resultado de uma
+inspeção é algo externo ao projeto e imposto à equipe. Tal situação leva a PA ao
+descrédito, consequentemente, vira custo sem agregar valor. Uma forma simples de
+contornar este problema é corroborar o resultado junto aos representantes da equipe, tais
+como: Gerente de Projeto, Líder Técnico, etc. Ao apresentar o resultado, deve-se obter o
+consenso  de  todos,  sempre  usando  uma  abordagem  argumentativa.  Isto  reforça  a
+necessidade de ter como Analista de Qualidade um profissional com conhecimento e
+experiência em gerenciamento e engenharia.
+5.2.4. Publicar Resultado
+Como exigido pelo CMMI, o resultado das inspeções deve ser de conhecimento de
+todos os envolvidos, logo, faz-se necessário publicá-lo para a equipe do projeto e para
+as gerências diretamente superiores ao projeto. Assim, todos tem ciência sobre os riscos
+levantados, sobre as não conformidades endereçadas e sobre as suas responsabilidades
+para com o processo.
+5.3. Medição
+Como já observado, a frente de Medição dá suporte à frente de Inspeção, pois nela são
+definidos dois indicadores básicos para avaliação dos projetos e suas inspeções. O
+CMMI recomenda o uso de medidas para monitorar processos e projetos. No que se
+refere à PPQA, a lógica é a mesma, ou seja, faz-se necessário ter um conjunto mínimo
+de indicadores capazes de prover uma objetiva e clara percepção sobre a cobertura
+obtida durante as inspeções e sobre a aderência do projeto ao processo definido.
+5.3.1. Cobertura da Inspeção
+A cobertura da inspeção indica o quão boa foi a Definição, que estabelece o conjunto de
+itens de revisão, e o quão criterioso foi o Analista de Qualidade ao definir o escopo, pois
+este é o responsável por identificar itens aplicáveis e não aplicáveis. O cálculo deste
+indicador se dá através da razão entre o Total de Itens de Revisão Aplicáveis (TIRA) e o
+Total de Artefatos Inspecionáveis  (TAI). Para entender o número gerado, é preciso
+
+
+
+
+saber que quanto maior for o grau obtido melhor está a cobertura da inspeção em
+questão. Um projeto que tenha obtido grau 4 tem melhor cobertura que um que tenha
+obtido grau 2, porque o primeiro tem em média 4 itens de revisão para cada artefato,
+enquanto que, o segundo tem em média 2 itens de revisão para cada artefato. A Tabela 1
+exemplifica este cenário.
+Tabela 1. Exemplo de cálculo de cobertura de inspeção.
+Projeto 1                                                                                                                   Projeto 2
+TIRA                                                                                      40                                TIRA                                          20
+TAI                                                                                       10                                TAI                                           10
+TIRA / TAI                                                                                04                                TIRA / TAI                                    02
+5.3.2. Aderência ao Processo
+A aderência ao processo indica o quão próximo está o projeto daquilo que o processo
+entende como ideal. Este indicador gera um valor percentual, onde 100% indica total
+aderência e 0% indica nenhuma aderência. Para calcular, faz-se necessário obter a razão
+entre o Total de Itens de Revisão Atendidos (TIRAt) e o Total de Itens de Revisão
+Aplicáveis (TIRAp). Um projeto que tenha em seu escopo de inspeção  10 itens de
+revisão e tenha recebido Atende em 5 itens de revisão, tem como grau de aderência o
+valor de 0,5, ou seja, 50% de aderência ao processo. A Tabela 2 apresenta um exemplo
+para o cálculo deste indicador.
+Tabela 2. Exemplo de cálculo de aderência ao processo.
+TIRAt                                                                                     TIRAp                             TIRAt / TIRAp
+05                                                                                        10                                0,5
+6. Resultados Obtidos com a Solução
+A solução estabelecida e integrada ao processo de desenvolvimento da empresa, citada
+na Seção 2 deste trabalho, comprovou sua eficiência sendo aprovada em uma avaliação
+formal CMMI. Em Dezembro de 2007 a empresa obteve do SEI um laudo de nível 2 de
+maturidade e, desde então, o processo de desenvolvimento, juntamente com a solução
+de  implementação  de  PPQA,  se  mantém  em  produção  e  em  contínua  melhoria.
+Atualmente, a empresa trabalha a implementação de outras PAs, objetivando a obtenção
+junto ao SEI de um laudo de maturidade de nível 3.
+A Figura 4 apresenta um fragmento do principal produto de trabalho gerado pela
+solução apresentada neste artigo. Este produto de trabalho é um Modelo de Relatório de
+Garantia da Qualidade que consolida o conjunto de itens de revisão definidos para
+garantir a plena cobertura do processo. Além disto, o relatório é a ferramenta de
+trabalho em inspeções, registrando os pareceres sobre o atendimento de cada item e as
+não conformidades identificadas. Ao final de cada inspeção o relatório devidamente
+preenchido é publicado para a equipe do projeto e para as gerências diretamente
+superiores.
+Para evidenciar os resultados obtidos com a abordagem apresentada neste artigo,
+foi realizado um trabalho de medição, conforme apresentado na Seção 5.3. Para calcular
+os indicadores de Cobertura de Inspeção e Aderência ao Processo foi selecionada uma
+amostra  de                                                                               10  projetos  executados  entre   2007  e  2009.  Para  cada  projeto,  foram
+
+
+
+
+selecionadas 4 inspeções de garantia da qualidade, sendo uma para cada fase definida no
+processo de desenvolvimento da empresa. Isto totaliza uma amostra de 40 inspeções.
+Figura 4. Fragmento de um relatório de garantia da qualidade.
+O gráfico da Figura 5 mostra o comportamento do indicador de Cobertura de
+Inspeções, calculado a partir da amostra anteriormente definida. Pode-se observar que a
+fase com melhor cobertura é a de Planejamento, com 2,11 itens de revisão para cada
+produto de trabalho. A fase de Especificação apresenta uma queda considerável, onde a
+cobertura é de 1,68. A fase de Desenvolvimento melhora o cenário de cobertura, com o
+valor de 1,92. Já a fase de Entrega novamente derruba o indicador, tendo esta fase a
+menor cobertura, apenas 1,63.
+Figura 5. Gráfico para o indicador Cobertura de Inspeção.
+Também pode ser observada no gráfico da Figura  5, a homogeneidade dos
+dados. Tal observação se confirma através do cálculo do coeficiente de variação da
+amostra, sendo este de 10,37%. Outro dado relevante de se observar é o valor médio do
+indicador de Cobertura de Inspeção, o qual demonstra a granularidade das inspeções.
+
+
+
+
+Considerando o universo da amostra, 40 inspeções, o indicador possui um valor médio
+de 1,86 itens de revisão por produto de trabalho, o que indica uma granularidade muito
+grossa.  Inspeções  com  granularidade  grossa  tendem  a  não  ser  objetivas  como
+recomenda o CMMI.
+A Figura  6 apresenta um gráfico que consolida os valores de Aderência ao
+Processo  da  amostra  estabelecida.  Inicialmente,  pode-se  observar  um  valor  de
+Aderência ao Processo de  80,78% na fase de Planejamento. Na sequência, há uma
+elevação deste valor para  86,27%. Porém, as fases de Desenvolvimento e Entrega
+quebram a tendência de crescimento, gerando para o indicador os valores 83,91% e
+81,32%, respectivamente.
+Figura 6. Gráfico para o indicador Cobertura de Inspeção.
+Ao  observar  o  comportamento  do  gráfico,  nota-se  que  o  universo  desta
+amostragem  é  menos  homogêneo,  se  comparado  com  o  indicador  anteriormente
+apresentado. Mas, estatisticamente, o coeficiente de variação ainda é considerado baixo,
+pois apresenta um valor igual a 13,31%. O indicador de Aderência ao Processo tem
+como  média  final  da  amostragem  um  valor  de                                          83,07%,  ou  seja,  em  média,
+aproximadamente 20% do processo definido pela empresa não é seguido pelas equipes
+em projetos de desenvolvimento.
+8. Conclusões
+Ao longo do presente artigo, fica evidenciada a importância dada aos processos de
+desenvolvimento de software, pois se acredita que a qualidade de um produto de
+software está diretamente relacionada à qualidade do processo que originou o produto
+de software. Seguindo esta linha, o CMMI define uma PA de garantia da qualidade de
+processo e de produto, PPQA, porém não estabelece como suas práticas podem ser de
+fato  implementadas.  Este  artigo  vem  para  oferecer  uma  alternativa  para  esta
+necessidade, através da definição de uma abordagem prática para a implementação de
+PPQA.
+Ao confrontar a solução apresentada com as práticas da PA, fica evidenciado o
+pleno  atendimento  dos  objetivos  definidos  pelo  modelo  CMMI.  Esta  conclusão  é
+corroborada com o sucesso obtido na avaliação formal CMMI e pelo fato da empresa
+manter a solução em produção atualmente. Além disso, a análise do parecer dado pela
+empresa indica que o ponto forte da solução é a transparência que esta dá ao processo de
+inspeção. As gerências tem ciência de quão aderente estão os projetos em relação aos
+processos definidos. As equipes veem a disciplina como uma ferramenta de apoio ao
+desenvolvimento, onde é possível obter suporte e solucionar impedimentos.
+A análise do indicador de Aderência ao Processo apresenta um valor médio
+plausível para um projeto de desenvolvimento, onde menos de  20% das atividades
+
+
+
+
+executadas apresentaram algum tipo de não conformidade. Por outro lado, o indicador
+de Cobertura de Inspeção mostra uma baixa cobertura média, menos de 2 itens por
+produto de trabalho. Isto ocorre em função de uma granularidade grossa dos itens de
+revisão. A desvantagem de se ter itens de revisão com uma granularidade grossa é que
+se faz necessário ter Analistas de Qualidade experientes nas atividades de inspeção.
+Fica como proposta de trabalho futuro, o estabelecimento de uma ferramenta de
+apoio para as atividades de inspeção de garantia da qualidade, que possibilite uma
+execução criteriosa das atividades de Definição apresentadas na Seção  5.1. Como
+resultado desta execução criteriosa se deve obter uma granularidade mais fina das
+inspeções. Complementarmente, esta ferramenta de apoio deve garantir a manutenção
+do esforço despendido em inspeções, ou seja, aumentar a cobertura sem impactar nos
+custos.
+7. Referências
+Abran, A. and Moore, J. W. and Bourque, P. and Dupuis, R. (2004), Guide to the
+Software Engineering Body of Knowledge, IEEE Computer Society.
+Alghamdi, J. S. and Rufai, R. A. and Khan, S. M. (2005), OOMeter: A Software Quality
+Assurance  Tool,  In  IEEE  European  Conference  on  Software  Maintenance  and
+Reengineering.
+Bastos, A. and Rios, E. and Cristalli, R. and Moreira, T. (2007), Base de Conhecimento
+em Teste de Software, Martins Editora.
+Chrissis, M. B. and Konrad, M. and Shrum, S. (2007), CMMI Guidelines for Process
+Integration and Product Improvement, Addison Wesley.
+Elberzhager, F. and Denger, C.  (2007), A Comprehensive Planning Framework for
+Selecting and Customizing Quality Assurance Techniques, In IEEE Conference on
+Software Engineering and Advanced Applications.
+Larman, C. (2004), Utilizando UML e Padrões: Uma introdução à análise e ao projeto
+orientado a objetos e ao Processo Unificado. Bookman.
+Langheinricha, C. and Kaltschmitt, M.  (2006), Implementation and Application of
+Quality Assurance Systems, In Biomass and Bioenergy.
+Lee, J. W. and Jung, S. H. and Park, S. C. and Lee, Y. J. and Jang, Y. C. (2005), System
+Based SQA and Implementation of SPI for Successful Projects, In Information Reuse
+and Integration.
+Pressman, R. S. (2001), Software Engineering: A Practitioner's Approach, McGraw-
+Hill.
+Sommerville, I. (2001), Software Engineering, Addison Wesley.
+Trudel,  S.  and  Lavoie,  J.  and  Paré,  M  and  Suryn,  W.                              (2006),  PEM:  The  Small
+Company-Dedicated  Software  Process  Quality  Evaluation  Method  Combining
+CMMI and ISO/IEC 14598, In Software Quality Journal.
+
+
+
+
+
