@@ -1,0 +1,613 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Um Método para Seleção de Padrões para Melhoria de
+Processos de Negócio
+Alexandre Souza1, Leonardo Guerreiro Azevedo1,2, Flavia Santoro1,2
+1Departamento de Informática Aplicada -
+Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+Caixa Postal 22.290-240 - Rio de Janeiro - RJ - Brasil
+2Núcleo de Pesquisa e Prática em Tecnologia - NP2Tec
+{alexandre.souza, Azevedo, Flavia.santoro}@uniriotec.br
+Abstract.   Business   Process   Management   is   increasingly   present   in
+organizations, and process improvement is one of its focuses. Patterns for
+process redesign have been the focus of some studies, which seek to provide
+solutions to recurring problems of process improvement. However, the choice
+of these patterns is not an easy task, especially when performed in scenarios
+with large models and complex processes, which makes manual analysis a
+very costly task. This paper aims to propose a method to assist in the analysis
+of these patterns by automating the choice of patterns to be applied using
+information present in the process models.
+Resumo. Gestão de Processos de Negócio está cada vez mais presente nas
+organizações, e a melhoria de processos é um de seus focos. Padrões para
+redesenho de processos tem sido o foco de alguns trabalhos, os quais buscam
+apresentar soluções para problemas recorrentes de melhoria de processos.
+Contudo, a escolha destes padrões não é uma tarefa simples, principalmente
+quando executada em cenários onde se tem modelos de processos grandes e
+complexos,  o  que  torna a análise manual uma tarefa muito custosa. Este
+trabalho tem como objetivo propor um método para auxiliar na análise destes
+padrões através da automatização da escolha dos padrões a serem aplicados
+utilizando informações presentes nos modelos de processos.
+1. Introdução
+Processo de negócio consiste em atividades coordenadas a fim de atingir um
+determinado objetivo. Portanto, é através da execução de processos de negócio que as
+organizações realizam seus propósitos Weske  (2007) e Thom et al.  (2007). Hammer
+(1990) e Davenport e Short (1990) foram os primeiros autores a discutirem uma forma
+sistemática de melhoria de processos.
+Reijers                                                                                      (2005)  afirma  que,  durante anos,  boas práticas foram coletadas para
+melhoria  de  processos.  Uma  boa  prática  pode  ser  expressa  como  um padrão,  que
+descreve uma forma de tratar um problema particular, que pode ser aplicado a situações
+similares. Reijers (2005) então propõe que, assumindo certos objetivos, relacionados a
+perspectivas de tempo, qualidade, custo e flexibilidade, um analista pode utilizar a lista
+de  padrões,  para avaliar e melhorar um processo  existente. De acordo  com Forster
+279
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+(2009), o uso destes padrões pode ajudar também a racionalizar e formalizar métodos
+para melhoria de processos.
+Pourshahid (2010) aponta que a escolha destes padrões é muito difícil, e que as
+notações de modelos de processos não fornecem meios para se observar ou simular o
+impacto  destes padrões nos processos, seus indicadores e objetivos. Dessa forma, o
+suporte para selecionar um padrão apropriado para uma situação atual do negócio é um
+desafio. Em um cenário onde existem processos de negócio grandes e complexos, a
+seleção  desses  padrões  se  torna  ainda  mais  difícil  devido  ao  número  de  elementos
+afetados e a complexidade embutida nos mesmos.
+Por outro lado, os modelos de processos contêm muitas informações (entradas e
+saídas, executores, sistemas, dependências entre as atividades, eventos, etc) que podem
+ser utilizadas para auxiliar a seleção dos padrões. Assim, o objetivo deste trabalho é
+apresentar um método para seleção automática dos melhores padrões a serem utilizados
+para melhoria de processos a partir da leitura de modelos de processos de negócio.
+O artigo está organizado da seguinte forma: a Seção 2 apresenta os padrões de
+redesenho de processo; a Seção 3 descreve um método existente para tomada automática
+de decisões a partir de modelos de processos de negócio, que será tomado como base
+nesta proposta; na Seção  4, é descrita a proposta de solução; a Seção  5 discute um
+cenário de aplicação e a Seção 6 conclui o artigo.
+2. Padrões de redesenho de processos
+De acordo com Reijers (2005), um padrão é uma boa prática que descreve uma
+forma de tratar um problema particular, e que pode ser aplicado em situações similares.
+Reijers (2005) fornece um survey contendo diversos padrões de redesenho de processos,
+apresentando suas características, o impacto que cada um causa no processo e algumas
+situações  comuns  que  favorecem  sua  aplicação.  Os  padrões  são  baseados  em
+perspectivas de tempo, custo, qualidade, e flexibilidade.
+A perspectiva  de  tempo  diz  respeito  ao  tempo  gasto  para se levar um caso
+(instância  do  processo)  do  início  ao  fim.  Existem  muitas  formas  de  abordar  esta
+perspectiva, como por exemplo, tentar diminuir o tempo médio gasto no processo ou o
+tempo máximo de cada caso, ou até mesmo a variação do tempo entre os casos.
+A perspectiva de custo está relacionada à questão financeira. É comum que o
+foco  de  melhoria  seja  em  reduzir  custos  operacionais,  particularmente  em recursos
+humanos. Automação é comumente vista como uma alternativa, contudo outros custos
+estão  envolvidos, como  por exemplo, o  custo de desenvolvimento e manutenção da
+aplicação.
+A  perspectiva  de  qualidade  geralmente  está  associada  à  qualidade  interna  e
+externa.  A qualidade  externa  é  a  satisfação  do  cliente  em relação  ao  produto  e ao
+processo. A qualidade interna está ligada a condições de trabalho e controle do trabalho.
+Todas as perspectivas que buscam melhorar custo em geral pioram a qualidade.
+A perspectiva de flexibilidade pode ser definida como a habilidade de reagir a
+mudanças, como, por exemplo, gerenciamento de mudanças na estrutura do processo e
+alocação de recursos, e mudanças na estrutura e responsabilidade dos processos para
+atingir necessidades do mercado e dos parceiros de negócio.
+280
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Além destas perspectivas, os padrões são classificados por Reijers (2005) em: (i)
+Melhores práticas em atividades: Foca em otimizar uma única atividade em um processo
+de  negócio;                                                                               (ii)  Melhores  práticas  em  roteamento:  Tenta  melhorar  a  estrutura  de
+roteamento  do  processo  de negócio;  (iii) Melhores práticas em alocação: Envolve a
+alocação  particular de recursos no  processo  de negócio;                                 (iv) Melhores práticas em
+recursos: Foca nos tipos e números de recursos;  (v) Melhores práticas em terceiros:
+Tenta melhorar a colaboração e comunicação com o cliente e terceiros; (vi) Melhores
+práticas  em integração:  Se aplicam ao  processo  de negócio  como  um todo.  Reijers
+(2005) apresenta 28 padrões relacionados às classificações acima, suas características e
+situações de uso. A seguir, é apresentado um exemplo para cada tipo de padrão.
+Composição de atividades (classe “melhores práticas em atividades”) tem como
+propósito reunir atividades. Ela combina atividades finas (atividades que consistem em
+poucos procedimentos) em uma única atividade, ou divide atividades grossas (atividades
+que consistem em muitos procedimentos) em atividades finas trabalháveis. Combinar
+atividades deveria resultar em redução de tempo de iniciação, que é o tempo gasto pelo
+recurso para se tornar familiar com um caso específico. Atividades muito grossas podem
+resultar em diminuição da flexibilidade e piora da qualidade, já que as atividades podem
+se tornar impraticáveis. Contudo, obviamente atividades menores podem resultar em um
+tempo maior para inicializá-las. Um exemplo de esquema de atividades e aplicação do
+padrão é apresentado na Figura 1.
+Determinar taxa                                                                            Determinar taxa
+                                                                                                                                                                          Gerar proposta   Determinar taxas   Gerar proposta
+de contrato                                                                                de juros
+Figura 1 - Exemplo do padrão Composição de atividades
+Paralelismo  (classe  “melhores práticas em roteamento”) tem como  propósito
+considerar se atividades podem ser executadas em paralelo. O efeito óbvio da aplicação
+desta boa prática é que o tempo de espera seria reduzido, por outro lado isto pode
+aumentar o custo de execução do processo. Um exemplo de esquema de atividades e
+aplicação do padrão é apresentado na Figura 2.
+Determinar taxa                                                                            Determinar taxa
+Receber pedido                                                                             Gerar proposta
+de contrato                                                                                de juros
+Determinar taxa
+de contrato
+Receber pedido                                                                             Gerar proposta
+Determinar taxa
+de juros
+Figura 2 - Exemplo do padrão Paralelismo
+Dividir responsabilidades (classe “melhores práticas em alocação”) propõe evitar
+a atribuição  de responsabilidades a pessoas de diferentes unidades funcionais a uma
+mesma atividade. A ideia por trás desta boa prática é que atividades, que diferentes
+departamentos compartilham responsabilidades sobre a mesma, costumam ser fontes de
+negligência e conflitos. Com esta boa prática, deveríamos ter uma melhora na qualidade
+de execução das atividades. Contudo, diminuir o número efetivo de recursos disponíveis
+281
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+para uma atividade pode resultar um efeito negativo no que diz respeito ao tempo. Um
+exemplo de esquema de atividades e aplicação do padrão é apresentado na Figura 3.
+                                                                                          Crédito e taxas     Analista de                                                     Crédito e taxas     Analista de
+Atendimento                                                                               Gerente                                                               Atendimento   Gerente
+                                                                                          contratuais         crédito                                                         contratuais         crédito
+Proposta de                                                                                                   Proposta de                                       Proposta de                       Proposta de
+                                                                                          Analisar contrato                                                                   Analisar contrato
+contrato                                                                                                      contrato                                          contrato                          contrato
+Figura 3 - Exemplo do padrão Dividir responsabilidades
+Recursos extras  (classe  “melhores práticas em recursos”) propõe considerar o
+aumento do número de recursos de uma determinada classe de recursos se a capacidade
+não estiver suficiente. O efeito óbvio da aplicação desta boa prática é a diminuição do
+tempo, e contratar novas pessoas ou comprar recursos extras aumenta  o custo. Um
+exemplo seria uma atividade de manutenção que é executada por 1 operador de máquina
+que passaria a ser executada por 2 operadores de máquina.
+Redução  de  contatos                                                                     (classe             “melhores  práticas  em  terceiros”)  tem  como
+objetivo reduzir o número de contatos com clientes e terceiros. A troca de informações
+com clientes ou terceiros sempre consome tempo. Cada contato  também introduz a
+possibilidade de erros. Com isso, a redução de contatos deve diminuir o tempo gasto e
+melhorar a qualidade. A desvantagem de diminuir o número de contatos é que pode
+haver perda de informações essenciais, que está diretamente ligada à qualidade. Um
+exemplo de esquema de atividades e aplicação do padrão é apresentado na Figura 4.
+Atendente                                                                                 Cliente             Crédito Direto                                    Atendente     Cliente             Crédito Direto
+                                                                                          contributes to                                                                      contributes to
+Proposta de                                                                                                                                                     Proposta de
+                                                                                          Analisar proposta                                                                   Analisar proposta
+contrato                                                                                                                                                        contrato
+Figura 4 - Exemplo do padrão Redução de contatos
+Baseado em casos de trabalho (classe “melhores práticas em integração”) propõe
+considerar remover o processamento em lotes e as atividades periódicas do processo.
+Exemplos deste caso referem-se ao empilhamento de itens de trabalho em lotes para
+serem  processados  posteriormente.  Evitar  estes  processamentos  periódicos  deve
+aumentar significantemente o tempo de cada caso, já que seria processado caso a caso
+em  tempo  real.  O  custo  de  manter  sistemas  permanentemente  disponíveis  para  o
+processamento caso a caso pode aumentar em relação ao processamento periódico. Um
+exemplo de esquema de atividades e aplicação do padrão é apresentado na   Figura 5.
+282
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Diariamente, às
+Receber apólices
+19h
+Receber apólice
+Carregar banco                                                                               Carregar banco
+com apólices                                                                                 com apólice
+Figura 5 - Exemplo do padrão Baseado em casos de trabalho
+Pourshahid (2007) apresentou uma lista contendo os impactos que cada padrão
+pode causar no processo em relação às quatro perspectivas (tempo, custo, qualidade e
+flexibilidade).  Por  exemplo:  O  padrão  de nome  “Eliminação  de  atividades”  altera o
+processo de forma positiva na perspectiva tempo e custo, porém pode haver piora na
+qualidade, e na perspectiva flexibilidade a princípio não há alteração.
+Nesta seção foram apresentados os padrões levantados por Reijers  (2005). A
+escolha destes padrões apresentados nesta seção necessita que o analista passe por todos
+os padrões analisando se a sua aplicação é favorável ou não ao processo. Isto introduz a
+necessidade de uma maneira mais sistemática e automatizada para auxiliar o analista na
+decisão de uso destes padrões. Na próxima seção, é descrito um método para tomada de
+decisão em processos de negócio que foi utilizado como base para esta proposta.
+3. Suporte à decisão em processos de negócios
+Van Putten et al. (2011) propuseram um método de suporte à decisão sobre questões
+relacionadas aos elementos de um processo através de análise automática de modelos de
+processos de negócio. A entrada para o método é um modelo de processo, e então são
+geradas, com base em uma série de heurísticas e regras de negócio, recomendações para
+a solução das questões levantadas sobre os elementos do processo representado.
+O método consiste nas cinco etapas apresentadas na Figura 6. Na primeira etapa,
+o  método  lê o  modelo  de  processo.  Na  segunda  etapa,  são  aplicadas  determinadas
+heurísticas para levantar características do processo. Na terceira etapa, são aplicadas as
+regras  definidas  para  recomendação.  Na  quarta  etapa,  resoluções  de  conflitos  são
+aplicadas, que consiste em aplicações de pesos para as definições feitas pelas regras na
+etapa anterior. Por fim, na quinta etapa, são geradas as recomendações finais baseadas
+nos resultados das etapas anteriores.
+Ler modelo                                                                                   Caracteriza      Levantar        Resolver    Apresentar
+BPM                                                                                          r processo       recomendações   conflitos   decisão
+Figura 6 - Método para suporte à decisão automatizada (Van Putten et al.,
+2011)
+Um exemplo de decisão apresentado pelos autores é o local de disponibilização
+de uma informação sobre o produto gerado no processo. O produto é uma garrafa de
+vinho e as informações podem estar na própria garrafa ou referenciada para outro local.
+O trabalho mostra que os processos contêm informações que auxiliam na tomada de
+283
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+decisão. No exemplo, o processo utilizado como entrada descreve como o produto é
+utilizado  e  qual a  intensidade  de  uso  dos dados.  A partir  do  modelo  do  processo,
+heurísticas e critérios de resolução de conflitos, gerados especificamente para a tomada
+de  decisão  sobre  o  local  de  armazenamento,  apontam  recomendações  para  onde  a
+informação deve ser disponibilizada.
+As etapas executadas para o exemplos são apresentadas na Figura 7. Na primeira
+etapa, o modelo de processo é lido. Na segunda etapa, são aplicadas heurísticas que
+buscam no modelo características que determinam, por exemplo, a freqüência de acesso
+ao dado do produto e disponibilidade de internet no momento. Na terceira etapa, são
+aplicadas as regras definidas para recomendação. Neste caso, as regras são:  (i) se as
+informações do produto são muito acessadas, então é recomendado armazená-las na
+própria garrafa; caso contrário, as informações devem ser referenciadas; (ii) se houver
+disponibilidade de internet no momento, então a informação deve ser armazenada em um
+site, caso contrário (não houver disponibilidade de internet), então as informações devem
+ser armazenada localmente na garrafa. Na quarta etapa de resoluções de conflitos, foi
+definido que a freqüência de acesso ao dado tem peso maior que disponibilidade de
+internet, logo se tiver internet disponível no momento e o dado for muito acessado, é
+sugerido  que  a  informação  seja  armazenada  localmente,  pois  o  acesso  é  o  que
+predomina. Por outro lado, se o dado for pouco acessado, mas houver disponibilidade de
+internet, é sugerido que a informação seja referenciada. Por fim, na quinta etapa, as
+recomendações finais são apresentadas para o analista decidir.
+Figura 7 - Exemplo de aplicação do méto para suporte à decisão automatizada
+(adaptado de Van Putten et al., 2011)
+No nosso trabalho, o método proposto por Van Putten et al. (2011) é adaptado
+para identificar, a partir de modelos de processos de negócio, quais padrões de melhoria
+de processos são favoráveis ou desfavoráveis para serem aplicados, e assim auxiliar o
+analista na tarefa de decidir como melhorar o processo em questão.
+284
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+4. Proposta: Um Método para Melhoria de Processos baseado em Padrões de
+Redesenho
+O método proposto é uma adaptação do trabalho de Van Putten et al.  (2011) para
+auxiliar o analista a selecionar os padrões apresentados por Reijers (2005) para melhoria
+de processos. De acordo com a nossa premissa, os modelos de processos, entrada para o
+método, contêm informações que podem auxiliar na seleção destes padrões. O objetivo
+geral do método é aplicar heurísticas elaboradas para identificar os problemas típicos
+descritos nos padrões, e assim, sugerir se a aplicação de determinado padrão é favorável
+ou não ao processo em questão.
+O método é composto pelas cinco etapas apresentadas na Figura 8. Na Etapa 1
+(BPM - Business Process Model), o processo de negócio é lido, em seguida na Etapa 2
+(Heurísticas), são aplicadas as heurísticas elaboradas neste contexto, para identificação
+de problemas presentes no modelo. A Etapa 3 (Recomendações) gera recomendações de
+padrões a serem aplicados de acordo com os problemas presentes no modelo. Na Etapa
+4  (Resolução de Conflitos), o analista define um peso para cada recomendação, para
+tratar  possíveis  conflitos  entre  as  recomendações  geradas.  Por  fim,  na  Etapa      5
+(Recomendações Finais), os resultados anteriores são considerados para apresentação de
+um ranking das recomendações finais de padrões a serem aplicados no processo.
+As principais contribuições deste trabalho estão na definição e sistematização do
+conjunto de heurísticas para analisar um modelo de processos de negócio, observando
+alguns de seus elementos e informações relacionadas, a fim de identificar os problemas
+relatados nos padrões de redesenho e sugerir quais são os padrões mais apropriados de
+serem aplicados para melhorar o processo. Os padrões descritos por Reijers (2005) são
+descritos  em  linguagem  informal                                                          (linguagem  natural),  desta  forma,  é  necessário
+formalizar estes enunciados e relacionar os elementos que os compõe com os elementos
+ou objetos do modelo de processo em questão. A seguir, alguns exemplos de heurísticas
+são apresentados a fim de ilustrar nossa proposta.
+Figura 8 - Método para melhoria de processos baseado em padrões de
+redesenho
+285
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+A  heurística  H1  Atividade Sequencial tem como  propósito  buscar  atividades
+seqüenciais que podem ser executadas em paralelo, de acordo com o problema relatado
+no padrão Paralelismo. A heurística deve ser aplicada para toda sequência de atividades
+no modelo (sequência de atividades tipicamente são modeladas em modelos de processos
+como a ligação entre duas atividades sem controle de fluxo condicional (Van der Aalst et
+al., 2003)).
+H1   Atividade sequencial: Dadas atividades sequenciais no modelo, caso não haja
+algum  insumo  utilizado  como entrada numa das atividades sequenciais que
+tenha sido produzido como saída na atividade anterior a esta, a aplicação do
+padrão “paralelismo” neste ponto do modelo é favorável
+A heurística H2 Responsabilidade Compartilhada tem como objetivos identificar
+a atribuição  de responsabilidades a pessoas de diferentes unidades funcionais a uma
+mesma atividade. A heurística deve ser aplicada para todas as atividades do modelo.
+H2   Responsabilidade  compartilhada:  Se  uma  mesma  atividade  é  realizada  ao
+mesmo tempo por mais de uma unidade organizacional, então a aplicação do
+padrão “dividir responsabilidades” é favorável.
+A  heurística  H3  Atividade  Composta  tem  como  objetivo  buscar  atividades
+grandes ou complexas. Esta heurística deve ser aplicada para todas as atividades do
+modelo.
+                                                                                            H3   Atividade composta: Caso uma atividade possua muitas saídas (a quantidade
+pode  ser  definida  pelo  analista)                                                        -  isto  significa  que    muitos  produtos  são
+gerados  nesta  atividade                                                                   -,  então  a  aplicação  do  padrão                                                 “composição  de
+                                                                                            atividades” é favorável para realizar a divisão desta atividade em atividades
+menores.
+A heurística H4 Atividade Simples tem como objetivo buscar atividades pequenas
+ou que não agregam valor ao processo. Esta heurística deve ser aplicada para todas as
+atividades do modelo.
+H4   Atividade  simples:  Caso  uma  atividade  não  possua  nenhuma  saída,  isso
+significa  que  a  atividade  é  simples  de  mais,  então  a  aplicação  do  padrão
+“composição  de  atividades”  é  favorável  para  realizar  a  composição  desta
+atividade com a atividade exatamente anterior.
+A partir das recomendações, o analista foca seu trabalho na análise das mesmas,
+ao invés de passar por cada um dos padrões analisando todo o modelo. Neste momento,
+ele  poderia  decidir  com base  em sua  experiência,  conhecimento  e  habilidades quais
+recomendações dadas pelo método são aplicáveis no seu cenário em questão.
+5. Cenário de aplicação do método proposto
+Utilizamos o processo “Analisar pedido de crédito” apresentado por Souza et al. (2010)
+e ilustrado na Figura 9 para avaliação do método proposto neste trabalho. O processo
+inclui                                                                                      18  atividades  conduzidas  por  2  departamentos  em  uma  organização  na  área
+financeira. Este processo analisa propostas de crédito, as quais podem ser aprovadas ou
+negadas. O processo foi modelado utilizando a notação EPC (Cheer, 2000), sendo os
+fluxos  de  atividades  modelos  como  eEPC  (extended  Event  Process  Chain)  e  cada
+atividade detalhada em diagramas chamados de FAD (Function Allocation Diagram). Por
+limitação  de  espaço,  apenas  o  fluxo  eEPC  é  apresentado                              (Figura                                                                             9),  não  sendo
+286
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+apresentados neste trabalho os FADs das atividades. As técnicas para modelagem de
+processos propostas por Sharp e McDemortt (2001) foram utilizadas na modelagem do
+processo. As marcações pontilhadas não fazem parte da linguagem, foram incluídas na
+Figura 9 a fim de ressaltar aspectos que serão tratados na aplicação do método.
+Crédito e
+Atendimento                                                                                    taxas
+                                                                                               contratuais
+Atendente                                                                                      Crédito           Analista de
+                                                                                               Direto            crédito
+Receber                                                                                        Proposta de       Verificar
+proposta de                                                                                    crédito           cadastro do
+crédito                                                                                        recebida          cliente                  SYS
+                                                                                               Cadastro de                                Cadastro de
+Comunicar                                                                                      cliente não       Cliente não              cliente
+                                                                                                                 cadastrado
+proposta não                                                                                   atualizado                                 atualizado
+aprovada
+                                                                                               Atualizar         Cadastrar
+Proposta                                                                                       cadastro do
+não                                                                                            cliente           cliente
+                                                                                               SYS               SYS
+aprovada
+                                                                                               Cadastro de
+                                                                                               cliente           Cliente
+                                                                                                                 cadastrado
+                                                                                               atualizado
+                                                                                                                 Verificar limite
+Verificar                                                                                                        de crédito do
+condições de                                                                                   H4
+contrato com o                                                                                                   cliente                  SYS
+cliente
+Contrato                                                                                       Contrato          Limite não               Limite
+                                                                                               não               aprovado                 aprovado
+aprovado                                                                                       aprovado
+pelo cliente                                                                                   pelo cliente
+                                                                                                                 Cancelar
+Aprovar                                                                                        Cancelar          proposta de
+contrato                                                                                       contrato          crédito                  SYS
+                                                                                                                                                           Comprometer
+                                                                                                                                                           limite de     H3   Analisar
+                                                                                                                                                           crédito            contrato
+SYS
+Contrato                                                                                       Contrato
+aprovado                                                                                       cancelado         Para cada tipo de taxa   Calcular taxas
+do contrato
+SYS
+                                                                                               Determinar        Ajuste não               Contrato de      Ajuste
+Efetivar                                                                                       taxa de juros a   necessário               risco            necessário
+                                                                                               ser cobrada ...                            identificado
+contrato                                                                                       H1                SYS
+Gerar
+proposta de                                                                                                      Cancelar                 Alterar
+contrato                                                                                       SYS               contrato de              proposta de
+                                                                                                                 risco                    crédito
+Comunicar                                                                                                        Comunicar não
+proposta não                                                                                                     aprovação de             Proposta de
+aprovada                                                                                                         contrato de risco        crédito
+                                                                                               H1                                         alterada
+Proposta
+não
+aprovada
+Figura 9 - Processo "Analisar pedido de crédito"
+O  processo  inicia  quando  uma  proposta  de  crédito  é  recebida,  então  as
+informações do cliente são analisadas e o sistema verifica se o limite de crédito do cliente
+é compatível com a proposta submetida. Se o limite for compatível, então o sistema
+calcula os impostos e taxas a serem geradas para a proposta de contrato. Esta proposta
+de contrato é enviada para um analista que verifica se há necessidade de ajustes e define
+o nível de risco da proposta. Se o contrato for aceito, o atendente entra em contato com
+287
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+o cliente. Se o contrato for aprovado pelo cliente, o processo de efetivação do contrato é
+iniciado. Caso contrário, o contrato é cancelado.
+Aplicando o método proposto, primeiramente o modelo do processo foi lido e em
+seguida as heurísticas definidas na seção anterior foram aplicadas. Os pontos do processo
+nos quais as aplicações de padrões foram recomendadas foram marcados na Figura 9, em
+retângulos vermelhos pontilhados.
+Heurística H1 Atividade sequencial: as atividades “Calcular taxas do contrato”
+e  “Determinar taxa de juros a ser cobrada do cliente” seriam recomendadas a serem
+executadas em paralelo por não existirem insumos na segunda atividade que tenham sido
+produzidos na primeira. A mesma situação ocorre para as atividades “Comunicar não
+aprovação de contrato de risco” e “Comunicar proposta não aprovada”.
+Heurística H2 Responsabilidade compartilhada: não foi identificado nenhum
+ponto do processo para aplicação do padrão, pois não existe nenhuma atividade
+com mais de uma unidade organizacional responsável.
+Heurística  H3  Atividade  composta,  foi  recomendado  que  a  atividade
+“Comprometer  limite de crédito” fosse dividida em atividades mais finas por
+possuir muitas saídas.
+Heurística H4 Atividade simples: apenas a atividade “Verificar condições de
+contrato com o cliente” seria recomendada para ser composta com a atividade
+anterior por não possuir nenhuma saída.
+Neste cenário, não houve conflito entre as recomendações geradas, e com isso
+não  foi  necessário  definir  pesos  para  as  recomendações  conflitantes.  Com  isso,  as
+recomendações geradas foram consideradas como sendo as recomendações finais.
+Uma vez aplicado o método e de posse destas recomendações, cabe ao analista
+verificá-las e definir quais serão aplicadas e quais serão descartadas. O trabalho anterior
+de  verificar  todos  os  pontos  do  processo  para  todos  os  padrões  existentes  foi
+automatizado através da aplicação do método.
+Com base nas recomendações fornecidas pelo método, foi realizado o trabalho do
+analista de analisar as recomendações fornecidas pelo método e o modelo resultante é
+apresentado  na  Figura  10.  Os  2  pontos recomendados para  o  padrão  “Paralelismo”
+(Heurística H1) foram implementados no processo, por serem atividades que realmente
+não dependem uma da outra, e, portanto, poderiam ser executadas de forma paralela. A
+atividade recomendada para divisão em atividades mais finas (Heurística H3) foi dividida
+em  2  atividades,  onde  uma ficou  de responsabilidade por  comprometer  o  limite de
+crédito  do  cliente no  sistema, e outra por atualizar essa informação na proposta de
+crédito. A atividade recomendada para composição com alguma outra atividade não foi
+acatada,  pois  embora  não  possua  nenhuma  saída  na  atividade,  a  mesma  está
+representando uma verificação necessária para continuação do processo, não podendo
+ser incorporada em outra atividade.
+288
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Crédito e
+Atendimento                                                                            taxas
+                                                                                       contratuais
+Atendente                                                                              Crédito                                                                   Analista de
+                                                                                       Direto                                                                    crédito
+Receber                                                                                Proposta de                                                               Verificar
+proposta de                                                                            crédito                                                                   cadastro do
+crédito                                                                                recebida                                                                  cliente            SYS
+Comunicar
+proposta não
+aprovada
+Cadastro de                                                                            Cadastro de
+Cliente não
+cliente não                                                                            cliente
+cadastrado
+                                                                                       atualizado                                                                                                  atualizado
+Proposta
+não
+aprovada
+                                                                                       Atualizar
+                                                                                       cadastro do                                                                                  Cadastrar
+                                                                                                                                                                                    cliente
+                                                                                       cliente                                                                   SYS                SYS
+                                                                                       Cadastro de
+                                                                                                                                                                                    Cliente
+cliente
+Verificar                                                                              atualizado                                                                cadastrado
+condições de
+contrato co...
+                                                                                                                                                                 Verificar limite
+                                                                                       Contrato
+Contrato                                                                                                                                                         de crédito do
+                                                                                       não
+aprovado                                                                                                                                                         cliente            SYS
+pelo cliente                                                                           aprovado
+                                                                                       pelo cliente
+Aprovar                                                                                Cancelar
+contrato                                                                               contrato                                                                  Limite não         Limite
+                                                                                                                                                                 aprovado           aprovado
+Contrato                                                                               Contrato
+                                                                                                                                                                 Cancelar
+aprovado                                                                               cancelado                                                                 proposta de
+                                                                                                                                                                 crédito            SYS
+Comprometer
+limite de
+                                                                                       H3                                                                        crédito            SYS
+Efetivar
+contrato                                                                                                                                                         Atualizar
+                                                                                                                                                                 proposta de
+                                                                                                                                                                                                   Analisar
+                                                                                                                                                                 crédito            SYS            contrato
+H1
+                                                                                                                                                                 Determinar
+                                                                                       Calcular taxas                                                                               Necessidad
+Para cada tipo de taxa                                                                                                                                           taxa de juros a                   Contrato de    Necessidad
+                                                                                       do contrato                                                               ser cobrada ...    e de ajuste    risco          e de ajuste
+                                                                                       SYS                                                                       SYS                não
+                                                                                                                                                                                                   identificado   identificada
+                                                                                                                                                                                    identificada
+                                                                                                                                                                 Cancelar           Alterar
+Gerar                                                                                                                                                            contrato de        proposta de
+proposta de                                                                                                                                                      risco              crédito
+contrato                                                                               SYS
+Proposta de
+crédito
+H1
+alterada
+Comunicar                                                                              Comunicar
+proposta não                                                                           não
+aprovada                                                                               aprovação ...
+Proposta
+não
+aprovada
+Figura 10 - Processo resultante da aplicação dos padrões
+6. Conclusões e Trabalhos Futuros
+Há cerca de mais de duas décadas se tem olhado para processos de negócio pensando em
+melhoria.  Reijers                                                                     (2005)  reuniu  uma  série  de  padrões  utilizados  para  melhoria  de
+289
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+processos. Este artigo apresentou uma proposta de um método para auxiliar o analista a
+na selecão destes padrões. Este método visa facilitar o trabalho do analista evitando o
+trabalho de passar por todos os padrões analisando o modelo do processo, que num
+cenário contendo processos grandes e complexos pode-se tornar algo impraticável.
+Como  contribuição,  a  proposta  fornece  a  elaboração  das  heurísticas  para
+verificação dos problemas presentes no modelo de processo de negócio e seleção dos
+padrões favoráveis à aplicação, a resolução de conflitos entre as heurísticas, e a aplicação
+do método como exemplo, utilizando um processo de negócio do setor financeiro.
+Como trabalhos futuros, pretende-se: definir algoritmos para implementação das
+heurísticas, definir melhorias das heurísticas; elaborar novas heurísticas; aplicar o método
+em um modelo de processo real, maior e mais complexo; e, analisar a aplicação sucessiva
+do método em um modelo já melhorado com o auxílio do próprio método.
+Referências
+Van der Aalst, W.M.P., Ter Hofstede, A.H.M., Kiepuszewski, B., Barros, A.P.  (2003)
+"Workflow patterns". Distributed and Parallel Databases 14, 5-51.
+Davenport, T. H., Short, J. E.  (1990)  “The New Industrial Engineering: Information
+Technology and Business Process Redesign”. Sloan Management Review, 31(4):11-
+27.
+Forster, F. (2009) “The Idea behind Business Process Improvement: Toward a Business
+Process Improvement Pattern Framework”. http://www.bptrends.com/publication
+files/04-06-ART-PatternFramework-Forster.pdf (acessado em Novembro 2011)
+Hammer,  M.  (1990)                                                                            “Reengineering  Work:  Don’t  Automate,  Obliterate”.  Harvard
+Business Review,70-91.
+Pourshahid, A.,  Mussbacher, G.,  Amyot, D.,  Weiss, M.                                        (2009)                                                           “An  Aspect-Oriented
+Framework for Business Process Improvement”. E-Technologies: Innovation in an
+Open World, Vol. 26. Springer Berlin Heidelberg, p. 290.
+Pourshahid, A., Amyot, D., Chen, P., Weiss, M., Forster, A.J. (2007) “Business Process
+Monitoring and Alignment: An Approach Based on the User Requirements Notation
+and Business Intelligence Tools”. In WER 80-91.
+Van Putten, B.-J., Romeiro, C., Azevedo, L. G. (2011) “Decision Support By Automatic
+Analysis of Business Process Models”. ECIS 2011 Proceedings.
+Reijers,  H.                                                                                   (2005)                                                           “Process  Design  and  Redesign”.  In:  Process-Aware  Information
+Systems, pp. 207-234. John Wiley & Sons, Inc., Hoboken, New Jersey, USA.
+Sharp, A., McDemortt, P. (2001) “Workflow Modeling: Tools for Process Improvement
+and Application Development”. Artech House computing library.
+Souza, A., Diirr, T., Azevedo, L. G., Santoro, F. (2010). “Identificação e Análise de
+Serviços  a  partir  de  Modelos  de  Processos  de  Negócio:  Um estudo  de  caso”.
+Relatórios Técnicos do DIA/UNIRIO (RelaTe-DIA), RT-0001/2011.
+Thom,  L.H,  Iochpe,  C.,  Chiao,  C.  (2007)                                                  “Padrões  de  Workflow  para  Reuso  em
+Modelagem  de  Processo  de  Negócio”.  In:  Conferência  Latino  Americana  em
+Linguagens de Padrões para Programação, Porto de Galinhas, Brasil.
+Weske,   M.                                                                                    (2007)                                                           “Business   Process   Management                                     -   Concepts,   Languages,
+Architectures”, Verlag; Berlin; Heidelberg: Springer, 368p.
+290
+
+
+
+
+

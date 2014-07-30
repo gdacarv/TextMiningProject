@@ -1,0 +1,516 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Towards a Process for Negotiation of E-contracts Involving
+Web Services
+Gabriel Costa Silva1, Itana Maria de Souza Gimenes2, Marcelo Fantinato3, Maria
+Beatriz Felgar de Toledo4
+1Coordenação do Curso de Ciências da Computação - Universidade Tecnológica
+Federal do Paraná (UTFPR)
+Caixa Postal 271 - 87301-006 - Campo Mourão - PR - Brasil
+2
+Departamento de Informática - Universidade Estadual de Maringá (UEM) - Maringá,
+PR, Brasil
+3Curso de Sistemas de Informação - Escola de Artes, Ciências e
+Humanidades/Universidade de São Paulo (EACH/USP) - São Paulo, SP - Brasil
+4Instituto de Computação - Universidade Estadual de Campinas (UNICAMP) -
+Campinas, SP - Brasil
+gabrielcosta@utfpr.edu.br, itana@din.uem.br, m.fantinato@usp.br,
+beatriz@ic.unicamp.br
+Abstract.  Organizations  involved  in  cooperative  business  processes  have
+different interests and points of view. A negotiation allows them to discuss
+their interests and requirements in order to reach an acceptable agreement.
+We  propose  an  integrated  web  service  negotiation  process  that  considers
+human  interaction  and  the  use  of  different  protocols.  It  focuses  on  the
+application  of  feature  modelling  to  describe  the  negotiated  services.  Our
+contributions  include:                                                                       (i)  the  definition  of  a  negotiation  process;   (ii)  the
+definition of a conceptual model to support the negotiation of web services;
+(iii) reuse of artefacts generated throughout the negotiation process; and (iv)
+coverage of critical elements in the negotiation of electronic contracts.
+1. Introduction
+Organizations around the world are looking for means to ensure competiveness. Global
+cooperation has been considered a key factor. Business process outsourcing associated
+with internet technology offer a computational support that enable organizations to find
+partners, undertake negotiations and monitor the quality of contracted services even
+beyond geographical, cultural and technological limits [Grefen et al. 2006].
+The  web  service  technology,  together  with  business  process  management
+concepts and tools offer a set of resources and standards  [Papazoglou  2008; Weske
+2010]  that  facilitate  inter-organizational  cooperation.  Business  processes              (BP)  are
+composed  of  electronic  services  (e-services).  Service  consumers  look  for  e-service
+providers  to  compose  optimal  BP  that  join  core  internal  competences  and  the
+outsourcing of e-services that are not their focus. These BP are regulated by electronic
+contracts (e-contracts).
+A  successful  BP  needs  to  take  into  account  the  different  interests  of
+organizations. Interests have to be discussed before an e-contract can be established.
+267
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Thus, it is important to provide support for e-service negotiation [Grefen et al. 2006].
+Negotiation is an interaction process amongst two or more partners in which their goal
+is to reach a mutually acceptable agreement [Zlatev 2002]. Electronic negotiation (e-
+negotiation) is the process of conducting negotiations amongst business partners using
+electronic means. The partner in this process can be represented either by a human
+negotiator or a software agent [Rinderle and Benyoucef 2005]. The interactions amongst
+partners are guided by the rules of the negotiation protocols [Kim and Segev 2003].
+These rules define how the partners exchange offerings and decide on how to proceed or
+end a negotiation. In the e-service context, the negotiation process is a requirement to
+reach an agreement [Grefen et al. 2006] and then establish an e-contract.
+Several models [Lin 2008], frameworks [Comuzzi, Kritikos and Plebani 2009]
+and support systems  [Kersten and Lai  2007] for e-negotiation have been proposed.
+There are also works related to negotiation protocols [Ueyama and Madeira 2001] and
+electronic markets [Mukhtar et al. 2009]. Although some studies regard the negotiation
+amongst  software  agents  [Al-Aaidroos,  Jailani  and  Mukhtar  2011],  the  negotiation
+literature shows that the current industry scenario is still based in human interaction
+[Lin 2008]. However, there is a lack of support to negotiation of e-services involving
+human interaction in the context of the web service technology. Thus, it is necessary to
+conceive and provide computational support to a process that guides the preparation and
+conduction of e-contract negotiation.
+This paper presents a process that supports negotiation of e-contracts involving
+web services (WS-contracts). The process takes into account interaction amongst human
+negotiators and the use of different negotiation protocols. In addition, a feasibility study
+of the process is discussed. A prototype of a computer-aided support environment was
+developed for this purpose. The proposed negotiation process is provided within the
+context of a well-defined approach, called PL4BPM - Product Line for Business Process
+Management  [Fantinato et al.  2009], and its respective support environment, called
+FeatureContract [Fantinato, Gimenes and Toledo 2010].
+This paper is structured as follows. We present the research background, which
+is  mainly  concerned  with  BP,  e-contract  and  PL4BPM.  Next,  the  proposed  WS-
+negotiation-process and its activities are presented. We then present a feasibility study
+developed to evaluate the proposed process, illustrated with snapshots of the developed
+prototype.   Finally, we analyse related works and present the conclusions.
+2. Background
+Using web services technology, a software can be decomposed into self-contained,
+loosely coupled and language independent units [Papazouglou 2008]. BP can be used to
+compose web services; to integrate systems; to compose complex applications through
+services grouping and coordination; and, to establish partnerships in distributed system
+development. A BP consists of a set of tasks undertaken in a specific sequence to
+achieve  a  business  goal                                                                      [Weske  2010].  It  also  represents  constraints  on  activities
+execution order as well as possible interactions between them.
+An e-contract is a document used to represent an agreement amongst parties
+which is basically composed of: product or service definition; rights, obligations and
+prohibitions;  and,  actions  to  be  taken  in  case  of  disagreements.  Contracts  can  be
+complex and their establishment process is often cumbersome due to the large number
+268
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+of parameters involved in the selection of Quality of Service (QoS) attributes and levels.
+Thus, a negotiation amongst the parties is necessary to define the issues involved in
+establishing an e-contract [Grefen et al. 2006].
+PL4BPM aims to provide support both to model variability in BP and web
+services, and to monitor WS-contracts throughout the process execution  [Fantinato,
+Gimenes  and  Toledo  2010].  It  is  designed  to  model  the  artefacts  involved  in  the
+negotiation amongst organizations willing to establish a WS-contract to regulate their
+cooperation. Feature  modelling  allows  the  representation  of  e-services  and  possible
+levels of QoS attributes. A feature model is represented through a tree-like diagram
+[Czarnecki, Helsen and Eisenecker 2005]. We have developed a feature meta-model in
+which  the  e-services  feature  diagram  consists  of  two  sub-trees,  identified  by  the
+following pre-named root features:  (i) e-services sub-tree  that contains the  features
+representing the e-services provided by an organization; and, (ii) qos-attribute sub-tree
+that contains  the  features  representing the  QoS  attributes and  levels  which  can  be
+associated to the e-services.
+3. The WS-Negotiation process
+The WS-negotiation-process proposed in this paper has the following principles: (i) it
+focus on negotiation amongst organizations interested in undertaking a collaborative BP
+composed of web services;  (ii) it promotes the reuse of the core artefacts produced
+throughout the negotiation processes; (iii) it supports decision making throughout the
+negotiation; (iv) it supports different negotiation protocols; and, (v) it takes into account
+interaction between human negotiators.
+The  WS-negotiation-process  is  carried  out  in  the  context  of  PL4BPM  as
+presented  in  the  previous  section.  Its  conception  was  mainly  supported  by  the
+negotiation framework proposed by Kim and Segev (2003) and the process model for e-
+negotiation proposed by Kersten, Strecker and Law (2004).   The   process   consists   of
+eleven activities, as shown in Figure 1, divided into two life cycles: the Planning
+and   Negotiation   Agenda   Settings   and   the  Negotiating   and
+Establishing  WS-Contract.  The  first  cycle  defines  the  elements  of  the
+negotiation base, which are: (i) the negotiator roles; (ii) the business partners involved;
+(iii) target services of the negotiation; (iv) the negotiation variables for each service and
+their respective possible values; and, (v) the e-contract template. In the second cycle, the
+actual negotiation amongst the parties takes place by selecting the offered services,
+negotiating the variables of these services and finally, establishing the WS-contract.
+3.1. The Negotiation Conceptual Model
+The negotiation involves several related entities that compose the  negotiation base.
+They are persistent elements defined in the first negotiation life cycle and used in the
+second life cycle to undertake the actual negotiation. Moreover, the negotiation base can
+be reused in further negotiations. The entities of the conceptual model are presented in
+Figure 2. This model is an important contribution of our work.
+A Negotiation is conducted within a Negotiation  Case, which is the
+main element of the WS-negotiation-process. A Negotiation  Case belongs to only
+one Negotiator who is its owner.  Each Negotiator has several Roles. An
+invited Negotiator assumes a Role within a Negotiation which defines its
+269
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+responsibility, such as “Credit Verification Service Provider”. It is a specialization of
+the SOA  roles, thus an organization can be a consumer or a provider, for example.
+The Role  cardinality defines the number of negotiators, in that role, that can win
+the negotiation to provide and consume services at the end of the negotiation. For
+example, in a negotiation for tourist package, two airlines can win a trip, one to go and
+another to return, thus the cardinality is 2 (two). A Feature  Model  Template,
+associated  with  a Role,  defines  groups  of e-services  (e-service  Group)
+which are related to Negotiation  Variables. These variables represent QoS
+Attribute(s) and e-service  Property (ies).
+Figure 1. WS-negotiation-process model
+A Negotiator is invited to participate of a Negotiation, playing a certain
+Role, based on a Profile which contains personal information. Each Negotiator
+receives a Feature  Model Instance that can be updated according to the services
+that it can offer. According to the Negotiator interests, a Rating can be assigned
+to each e-service and Negotiation  Variable. This Rating is part of the
+information  base  used  by  negotiators  to  define  the  negotiation  Strategy.  The
+Negotiator  (consumer) expresses its Interests by configuring the Feature
+Model  Instance of its partner (provider).
+The  Negotiation  is  guided  by  a  Protocol  that  defines  a  set  of
+Activity(ies), like doing offers and counter-offers. Negotiation  Thread(s) are
+formed   of  e-service   Group(s)   provided   by   a   negotiation   partner.   A
+Negotiation   Thread   has   a  Rating.   A  Group   of  Thread   has   a
+Cardinality. A successful Negotiation produces one or more WS-contracts
+based on a WS-contract template.
+3.2.                                                                                           Activities of the Planning and Negotiation Agenda Settings life cycle
+The  planning  and  negotiation  agenda  settings  life  cycle  define  the  structure  used
+through  entire  negotiation  process,  such  as:  items  being negotiated  (e-services  and
+negotiation variable), partners and their roles, and rating for each negotiated issue.
+270
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+(1) Create negotiation case: this activity defines the objective of the negotiation and
+creates the negotiation case. The elements of a WS-contract negotiation are grouped
+within  a  negotiation  case  [Wu,  Kersten  and  Benyoncef  2006].  The  attributes  of  a
+negotiation case includes: a title, such as “Web-based graphical user interface”, a brief
+description of the negotiation case that can be used in a directory where partners can
+find negotiations of their interest; keywords; privacy information of the case; and the
+deadline to end the negotiation in order to proceed to the WS-contract establishment.
+Figure 2. The conceptual model of negotiation
+(2) Specify roles and cardinalities: this activity creates the roles that negotiators can
+have throughout a negotiation. The organization partners act within specific roles. A
+role groups a set of partners capable of providing the same type of service. In the same
+negotiation case there might be several roles. This activity also defines the negotiation
+direction,  i.e.  if  the  consumer  search  for  providers  or  the  providers  search  for
+consumers.  Finally,  cardinality  has  to  be  defined  for  each  role.  This  allows  the
+consumer organization to acquire services provided by different organizations.
+(3) E-services feature model elaboration: e-services to be contracted are represented
+in  the  feature  model  as  a  template.  This  model  is  created  and  assigned  to  a  role
+representing the set of services that the respective negotiator can offer. A negotiation
+starts with an instance of this model, associated with each negotiator, which is updated
+according to its capabilities to offer the services.   They can have one or more associated
+negotiation variables, which represents an issue associated to the service that needs to
+be negotiated. It is an item of evaluation that supports the negotiator. An usual example
+of negotiation variable is price [Marchione et al. 2010]. PL4BPM considers two main
+types of negotiation variables: e-services properties and QoS attributes.
+(4) Setting the rates: negotiators have different interests, whereas offering a service
+may be an advantage for a negotiator, it might not be for another. Thus, rates represent
+the importance of each negotiation item for a negotiator. They are assigned to: group of
+services, services and negotiation variables. The rates of a group of services vary from 0
+(lowest) to 100 (highest). The rate of a service varies from 0 to the rate value of its
+group.  After  rating,  we  can  see  the  importance  of  each  service  for  the  involved
+negotiators, such as organizations B, C and D. At  this  moment,  only  the  negotiation
+271
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+driver (the one that creates the negotiation case) is capable of rating the items of its
+interest because the negotiators were not invited yet. When further negotiators start their
+participation, each of them has to assign rates to its feature model. These rates are
+strategic information because they directly express the negotiator preferences. Thus,
+they are private information that cannot be shared amongst negotiators. They are used to
+support the selection of the offers.
+(5) Assign partners to a specific role: Negotiators are invited when they are previously
+known or they can be found in public directories. They can also offer themselves to
+participate of a negotiation when a call is made. When a negotiator is associated to a
+role, it receives the feature model instance based on feature model template for that role.
+It allows the negotiator to update its own feature model in the next process activity.
+(6) E-services feature model update: a partner may either not be capable of providing
+the services or even provide additional services. Thus, it is necessary that the provider
+organization  revise  its  feature  model  instance  to  represent  its  capabilities.  In  the
+negotiation literature, it is usually part of the negotiation agenda configuration [Kersten,
+Strecker and Law 2004]. It may demand modifications in the group of services, services
+and negotiation variables according to provider organizations.
+(7) WS-contract template creation: this activity creates the WS-contract template that
+contains information that can be used in any similar contract established from the
+defined feature model.
+3.3.                                                                                              Activities of the Negotiating and establishing WS-contract life cycle
+The negotiating and establishing WS-contract life cycle uses the structure defined in the
+first life cycle to support the negotiation amongst partners. The services offered are
+selected to be contracted. The negotiation of the variable values of these services is
+carried out and, finally the WS-contract is established.
+(8) E-services feature model configuration: the consumer selects the services and
+negotiation variables of its interest according to the instances of the feature model
+provided by the negotiators. There can be competing services and complementary ones.
+(9) Set up groups of negotiation threads: each service negotiated between a provider
+and a consumer results in a negotiation thread. A group of negotiation thread has a
+cardinality  that  is  inherited  from  a  role  and  can  be  updated  to  define  how  many
+organizations can provide this group of services in particular.
+(10) Execution of negotiation protocol: a negotiation protocol defines both style and
+rules that guide the bidding process. The negotiation proceeds or ends according to
+these rules. Our negotiation process can support the most common negotiation styles,
+such as bargain and auction. During the negotiation protocol execution, each service
+needs to be negotiated aiming at reaching an agreement amongst partners. Following the
+rules and observing the cardinalities, the winners of each negotiation thread are selected.
+The  players  can exchange  short  messages  throughout  our  negotiation  process.  The
+amount of providers that can provide a group of services is defined by the cardinality of
+the role and the group of negotiation thread.
+(11) WS-contract establishment: having defined the services and providers, the last
+activity can be executed. It consists of generating an instance of the WS-contract based
+272
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+on the template defined in first cycle of the negotiation process. The final WS-contract
+contains the service contracted by each winner organization of the negotiation.
+4. Feasibility Study
+A feasibility study was carried out to analyse the WS-negotiation process with the
+purpose  of  providing evidence  of  its feasibility and  usage  relevance.  Thus,  in this
+section we focus on the results obtained in this study. A computer-supported prototype
+was developed to automatize the proposed negotiation process. However, its details of
+operation will be discussed in other paper, thus they were omitted here. This prototype
+was used in the feasibility study to support the participants.
+4.1.                                                                                           The scenario domain
+The study was applied to a hypothetical scenario where an inter-organizational BP
+involves four types of organizations: a travel agency, hotels, airlines and car rental
+companies. This  scenario  involves:                                                           (i)  organizations  where  one  is  a  consumer
+organization (Travel Agency) and three are providers (Hotel, Airline and Car rental);
+(ii) negotiators, people that represent organizations throughout the negotiation; and (iii)
+services offered. From the WS-negotiation-process point of view, we consider that the
+travel agency is looking for providers to operate its BP, thus it will negotiate services to
+establish  a  WS-contract  with  selected  providers.  Feature  models  provide  the
+specification of the services looked for the travel agency. An example of the feature
+model provided for the specification of the Airline services is shown in Figure 3. This
+feature model specifies the group of service Ticket  management with services:
+Seeking  ticket, Buying  ticket; and Cancel  ticket.
+Figure 3. Feature model for the role of Airline Company
+These services have a QoS  Attributes  sub-tree which is shown in
+Figure 4. It has two QoS  Security and Availability. The possible levels for
+the Security  are  authentication  by  user  (User  Auth)  or  public  authentication
+(Public  auth).  The  QoS  attribute Availability  has  the  following  control
+levels: 24x7, 24x5 and 8x5 (hours x weekdays).
+273
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+In our hypothetical negotiation scenario the travel agency acts in the role of
+consumer interested in contracting services from the providers. Several organizations
+act in the role of providers with the following cardinalities:
+•   Hotel: cardinality 1 (one) - the travel agency covers only one destination so it
+is interested in contracting one hotel;
+•   Airline: cardinality 2 (two) - the agency can hire one company to go and
+another to return;
+•   Car  rental: cardinality 999 (any number) - the client can rent different cars
+for each occasion.
+Figure 4. Feature model representing the QoS attributes of services
+4.2.                                                                                        Execution and discussion
+The feasibility study involved  5  (five) participants who are postgraduate students in
+computer science. The participants had three hours of training, two for the negotiation
+process techniques and one for the domain. They were divided into 4 (four) groups, one
+group with two participants and 3 (three) with one. Each participant was representing a
+role for one organization; except for the car rental organizations to which we had two
+participants. The travel agency was the negotiation driver. The negotiation protocols
+were bargain, auction and fixed-price. The participants were allocated in one room, each
+in  a  computer  running  the  prototype  of  the  WS-negotiation  process  support
+environment. The participants executed the eleven activities of the process. At the end
+they filled a questionnaire.
+Data collected from the questionnaire were analysed regarding the feasibility
+and usage relevance of the WS-negotiation-process. Table 1 shows the analysed issues
+and the percentage of participant answers. Overall results show that participants were in
+favour of the WS-negotiation process feasibility and usage relevance. When asked about
+if the activity were clearly defined, 100% of the participants have agreed. Nevertheless,
+only 20% of the participants find the WS-negotiation-process easy to apply.
+274
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+They all considered the training satisfactory but 40% of them required assistance
+during  the  negotiation  process.  We  did  not  consider  this  relevant,  as  the  set  of
+technological issues is really large for beginners.
+Participants were asked if they consider the WS-negotiation process feasible.
+100% of them considered the process useful and relevant so they would apply it again.
+They confirm that there are advantages of using the process as compared to informal
+negotiation.  100% of the participants agreed that all the partners involved can have
+benefits from the process support.
+Table 1. Data collected from the participants of the feasibility study
+We considered the prototype a threat of validity to the experiment, as it provides
+only the basic functions and a simple user interface. Some difficulties faced by the
+participants  were  related  to  the  prototype  stage  of  the  support  environment.  A
+questionnaire was also applied to detect the experience of participants with the subject.
+Most of  them have  studied the subjects in the academic  context but did not have
+previous contact with the involved concepts.
+5. Related Work
+Negotiation is a multidisciplinary area, thus it is discussed in  [Bichler, Kersten and
+Strecker 2003]: psychology, economy and computer science. We could not find works
+that apply the same ideas of our approach towards modelling e-service negotiation. In
+particular, in the use of feature modelling to describe the negotiated services and its
+focus on artefact reuse. However, some works provided a solid background.
+We mainly point out at: (i) the frameworks of Comuzzi, Kritikos and Plebani
+(2009), Mukhtar et al. (2009) and Kim and Segev (2003); (ii) the processes of Kersten,
+Strecker and Law (2004), Chiu et al. (2005) and Elfatraty and Layzell (2004); and, (iii)
+the model of Lin  (2008) to support negotiation in electronic environment. Table  2
+highlights  items  that  we  use  to  compare  related  works  to  ours.  The  items  are:
+application area, multi-parties, multi-protocols, multi-items, multi-variables, support to
+decision making, human interaction throughout negotiation, e-contracts, web services
+and reuse of artefacts.
+275
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Comuzzi,  Kritikos  and  Plebani                                                             (2009)  propose  a  framework  that  aims  at
+discovering the negotiation protocol supported by the negotiators.  It focuses on an
+important issue, which is the cooperation amongst partners, but it only deals with part of
+the negotiation process. Mukhtar  et  al.                                                    (2009)  propose  an  integrated  framework  for
+electronic  markets.  Although  it  integrates  technologies  like  internet  and  SMS  to
+automate negotiation activities, it only deals with one scenario.
+The  Kim  and  Segev  (2003)  framework  and  the  Kersten,  Strecker  and  Law
+(2004) process provide basis for the conception of e-negotiation systems. They provide
+support  for  negotiation  in  dynamic  environments;  however,  they  do  not  take  into
+account WS-contracts specific issues of web services, such as QoS.
+Chiu et al. (2005) proposes a process and a metamodel for contract negotiation
+in B2B domain. However, it does not allow simultaneous negotiation of several items.
+Elfatatry and Layzell (2004) presents a negotiation process composed of three phases
+which defines favourite providers, roles and the establishment of a reliable negotiators
+database. However, details about the activities and artefacts are not provided.
+Lin  (2008) presents a conceptual model to specify a negotiation process in a
+service-oriented environment. The model defines a set of functionalities to each SOA
+element throughout the negotiation process as well as the interaction protocol amongst
+them.  However,  this  model  is  limited  to  one provider  and  one  consumer for  each
+negotiation, which constrains the specification of more complex negotiation such as
+supply chains.
+Table 2. Features of negotiation processes
+Our negotiation process tackles the gaps of these works by taking into account
+web services negotiations which deals with: multi-parties, multi-protocols, multi-items,
+multi-variables, decision making, human interaction and artefact reuse.
+6. Conclusions
+This paper presents a negotiation process applied to support the establishment of WS-
+contracts involving BP composed of web services. The negotiation process takes place
+276
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+in  an  environment  that  facilitates  artefact  reuse  based  on  product  line  and  feature
+modelling concepts. The negotiation process is composed of two main life cycles: (i) the
+Planning and Negotiation Agenda Settings and  (ii) the Negotiating and Establishing
+WS-Contract.   In addition to the proposed process a computer-supported prototype was
+developed and used in a feasibility study, which aimed at providing evidences of the
+feasibility and usage relevance of the process. The results confirmed that the proposed
+process is feasible and its usage is relevant for all the roles involved. However, we
+understand that an experiment with specialists is needed.
+The  contributions  of  this  work  include:                                                      (i)  the  definition  of  a  negotiation
+process;                                                                                          (ii)  the  definition  of  a  conceptual  model  to  support  the  negotiation  of  e-
+services; (iii) reuse of artefacts generated throughout the negotiation process; and (iv)
+coverage of critical elements in the negotiation of electronic contracts, such as role,
+features of electronic services and contract models.
+Future work includes the study of renegotiation in the context of the proposed
+conceptual model of negotiation. Although renegotiation is similar to negotiation in
+terms of roles, protocols, strategies and others, it appears more rarely in the literature.
+[Vecchiato et al. 2010] extended the WS-contract feature meta-model to contain actions
+and restrictions to contemplate renegotiation. Therefore, this new WS-Contract model
+will  be  further  incorporated  to  our  proposed  negotiation  conceptual  model  of
+negotiation to deal with renegotiation.
+References
+Al-Aaidroos, M., Jailani, N., Mukhtar, M. (2011) “Agent-based negotiation framework
+for  web  service's  SLA”,  Proceedings  of  the                                                  7th  International  Conference  on
+Information Technology in Asia: Emerging Convergences and Singularity of Forms
+(CITA 2011), Kuching, pp. 1-7.
+Bichler,  M.,  Kersten,  G.  and  Strecker,  S.  (2003).  Towards  a  Structured  Design  of
+Electronic Negotiations. In Group Decision and Negotiation, Vol. 12, No. 1, pp. 311-
+335.
+Comuzzi, M., Kritikos, K. and Plebani, P.  (2009)  “A semantic-based framework for
+supporting negotiation in Service Oriented Architectures”, Proceedings of the 2009
+IEEE Conference on Commerce and Enterprise Computing (CEC 2009), London, pp.
+137-145.
+Chiu, D.K., Cheung, S.C., Hung, P.C., Chiu, S.Y. and Chung, A.K. (2005). Developing
+e-Negotiation support with a meta-modeling approach in a web services environment.
+In Decision Support Systems, Vol. 40, No. 1, pp. 51-69.
+Czarnecki, K., Helsen, S. and Eisenecker, U.  (2005). Staged Configuration through
+Specialization  and  Multi-Level  Configuration  of  Feature  Models.  In  Software
+Process: Improvement and Practice, Vol. 10, No. 2, pp. 143-169.
+Elfatatry, A. and Layzell, P. (2004). Negotiating in service-oriented environments. In
+Communications of the ACM, Vol. 47, No. 8, pp. 103-108.
+Fantinato,  M.,  Gimenes,  I.M.S.  and  Toledo,  M.B.F.                                           (2009)                                                                                   “Product  Line  in  the
+Business Process Management Domain”, in K.C. Kang, V. Sugumaran and S. Park
+(eds.), Applied Software Product Line Engineering, Auerbach Publications, London,
+pp. 497-530.
+277
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Grefen, P., Ludwig, H., Dan, A. and Angelov, S. (2006). An analysis of web services
+support  for  dynamic  business  process  outsourcing.  In  Information  and  Software
+Technology, Vol. 48, No. 11, pp. 1115-1134.
+Kersten, G.E., Strecker, S.E. and Law, K.P. (2004) “Protocols for electronic negotiation
+systems: theoretical foundations and design issues”, in K. Bauknecht, M. Bichler and
+B. Pröll (eds.), EC-Web 2004 LNCS Vol. 3182, Springer, Berlin, pp. 106-115.
+Kersten, G.E. and Lai, H. (2007). Negotiation support and e-negotiation systems: An
+overview. In Group Decision and Negotiation, Vol. 16, No. 6, pp. 553-586.
+Kim, J.B. and Segev, A.  (2003)  “A Framework for Dynamic eBusiness Negotiation
+Processes”,  Proceedings  of  the  IEEE  International  Conference  on  E-Commerce
+Technology, Los Alamitos, pp. 84-91.
+Lin, J.A. (2008). A conceptual model for negotiating in service-oriented environments.
+In Information Processing Letters, Vol. 108, No. 4, pp. 192-203.
+Marchione,  F.,  Fantinato,  M.,  Toledo,  M.B.F.  and  Gimenes,  I.M.S.  (2010).  “Price
+Definition  in  the  Establishment  of  Electronic  Contracts  for  Web  Services”.  In
+International Journal of Web and Grid Services (IJWGS), to be published: Vol. 6,
+No. 4, pp. 357-384.
+Mukhtar,  M.,  Yahya,  Y.,  Jailani,  N.,  Abdullah,  S.  and  Abdullah,  Z.                (2009)                                                                                 “An
+integrated e-marketplace framework: A case study of wood-based products industry
+in  Malaysia”,  Proceedings  of  the                                                        2009  International  Conference  on  Electrical
+Engineering and Informatics (ICEEI 2009), Bangi, pp. 314-320.
+Papazoglou,  M.                                                                             (2008)  Web  Services:  Principles  and  Technology,  Prentice  Hall,
+Harlow.
+Rinderle,  S.  and  Benyoucef,  M.  (2005)  “Towards  the  automation  of  e-negotiation
+processes  based  on  Web  services  -  A  modeling  approach”,  in  A.H.H.  Ngu,  M.
+Kitsuregawa, E.J. Neuhold, J. Chung and Q.Z. Sheng (eds), WISE 2005 LNCS Vol.
+3806, Springer, Berlin, pp. 443-453.
+Ueyama,  J.  and  Madeira,  E.R.M.                                                          (2001)                                                                                 “An  Automated  Negotiation  Model  for
+                                                                                            Electronic  Commerce”,  Proceedings  of  the  Fifth  International  Symposium  on
+                                                                                            Autonomous Decentralized Systems Autonomous Decentralized Systems, Dallas, pp.
+29-36.
+                                                                                            Zlatev, Z.V. (2002) “Examination of the negotiation domain”, Technical Report, n.02-
+                                                                                            39,  Centre  for  Telematics  and  Information  Technology,  University  of  Twente,
+Enschede.
+                                                                                            Vecchiato,  D.A.,  Toledo,  M.B.F.,  Fantinato,  M.  and  Gimenes,  I.M.S.             (2010)                                    “A
+                                                                                            Feature-based  Toolkit  for  Electronic  Contract  Negotiation  and  Renegotiation”,
+Proceedings  of  the  IADIS  International  Conference  WWW/Internet  2010  (IADIS
+ICWI), Timisoara, pp. 3-10.
+Weske, M. (2010) Business Process Management: Concepts, Languages, Architectures,
+Springer, Berlin.
+Wu, S., Kersten, G.E. and Benyoncef, M. (2006) “INSS-a new approach in designing
+Web-based negotiation support systems”, Proceedings of the Montreal Conference on
+e-Technologies, Montreal, pp. 1-15.
+278
+
+
+
+
+

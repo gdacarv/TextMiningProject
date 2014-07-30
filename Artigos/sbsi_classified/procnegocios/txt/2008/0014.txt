@@ -1,0 +1,449 @@
+﻿Sistemas de Informação Geográfica Móveis orientados ao
+contexto: uma abordagem baseada em ontologias de domínios
+Anderson Resende Lamas, Jugurta Lisboa Filho,
+Alcione de Paiva Oliveira, André Marques Lopes
+Universidade Federal de Viçosa - Departamento de Informática
+Viçosa, MG, Brasil - CEP: 36570-000
+{andersonlamas,jugurta}@ufv.br,{alcione,marques}@dpi.ufv.br
+Abstract.  This  article  presents  a  Mobile  Geographic  Information  System
+(Mobile GIS) development, that allows customized queries to a Geographic
+Database  using  a  mobile  device  such  as  PDA  or  Smartphone.  This
+personalization was implemented through a mechanism that uses ontologies to
+define SQL language querying. Moreover, a set of WebServices had been
+developed to minimize the limitations of the mobile devices in processing and
+memory terms.
+Resumo.  Este  artigo  apresenta  o  desenvolvimento  de  um  Sistema  de
+Informação  Geográfica  Móvel  (SIG  Móvel)  que  permite  a  realização  de
+consultas personalizadas a um banco de dados geográfico através do uso de
+um dispositivo móvel como um PDA ou um Smartphone. Esta personalização
+foi implementada através de um mecanismo que utiliza ontologias para definir
+uma consulta na linguagem SQL. Além disso, foi desenvolvido um conjunto de
+WebServices para minimizar as limitações dos dispositivos móveis em termos
+de processamento e memória.
+1. Introdução
+O crescente uso de dispositivos móveis, tais como PDA’s (Personal Digital Assistent) e
+Smartphones, associado à grande difusão de dados geo-espaciais, fez com que surgisse
+mais um campo de aplicação dos Sistemas de Informação Geográfica (SIG). Este campo
+tem sido chamado de SIG Móveis, o qual segundo [Solyman, 2007], pode ser definido
+como uma estrutura que integra hardware e software para acesso a dados espaciais
+através de uma rede sem-fio, utilizando-se dispositivos móveis.
+O desenvolvimento de aplicações de SIG Móveis tem pelo menos dois grandes
+desafios. O primeiro deles é a capacidade limitada dos dispositivos móveis, o que inclui
+pouco espaço para armazenar dados, baixo poder de processamento, telas pequenas e a
+baixa largura de banda da rede sem-fio  [Caduff & Egenhofer,  2005]. Estes fatores
+impedem, por exemplo, que o dispositivo armazene localmente uma grande quantidade
+de dados ou mesmo que possa processá-los e dar a resposta em um tempo adequado.
+O segundo desafio diz respeito à expectativa que a mobilidade cria no usuário,
+que é a personalização de informações e serviços de acordo com suas necessidades
+individuais [Weibenberg et. al., 2006]. Isto significa que o usuário espera manter em seu
+
+
+
+
+dispositivo móvel somente as informações que estejam relacionadas à localidade em que
+ele se encontra, ou mesmo à determinadas atividades que ele esteja realizando.
+Uma solução para a personalização de dados em SIG tem sido a adoção de
+ontologias. Ontologias podem ser usadas para especificar "um conjunto de termos e
+relações que compreendem o vocabulário de uma área, além de um conjunto de regras
+para combinar estes termos e relações, as quais permitem a definição de extensões deste
+vocabulário” [Novello, 2007].
+O trabalho apresentado em [Araujo, 2005] apresenta um bom exemplo de como
+o  uso  de  ontologias  pode  enriquecer  um  processo  de  busca  de  informações.  Ele
+apresenta  o  aplicativo  "Geogle",  o  qual  permite  que  um  usuário  pesquise  por
+informações de forma textual ou através de uma base de conhecimento formada por
+ontologias. É visível como o uso de ontologias permite obter resultados mais amplos e
+precisos. Há ainda os trabalhos desenvolvidos por [Sadeh, 2003] e [Toivonen, 2003]
+que   modelam através de ontologias o contexto em que um usuário de um dispositivo
+móvel está inserido. Isto permite fornecer informações mais adequadas de acordo com
+variáveis como localização e tempo. Nesta mesma linha, porém bem mais ambicioso, há
+ainda o trabalho apresentado em  [Weibenberg,  2006], no qual é descrito o sistema
+"FLAME2008", o qual busca modelar além do contexto, as atividades que o usuário
+esteja realizando naquele momento, o que foi denominado pelo autor como "situação do
+usuário". Este sistema está sendo desenvolvido para uso nas Olimpiadas de Pequim em
+2008.
+Ao se definir um conjunto de ontologias para uma variedade de domínios, cria-se
+uma base de conhecimento. Esta base pode ser utilizada para realizar consultas em um
+banco de dados geográfico, como é apresentado em  [Viegas,  2006]. As ontologias
+podem ser utilizadas para filtrar ou inferir quais dados viriam como resposta a uma
+consulta feita pelo usuário de uma aplicação de SIG Móvel, retornando assim resultados
+personalizados.
+Este artigo apresenta o desenvolvimento de uma aplicação de SIG móvel para a
+realização de consultas personalizadas sobre um banco de dados geográfico. Na seção 2
+são detalhados alguns conceitos relacionados a SIG Móveis e ontologias. Já na seção 3 é
+apresentada a arquitetura definida para a construção do SIG Móvel. Na seção  4 é
+descrita a aplicação UFV-GeoMobile, construída para validar a arquitetura definida na
+seção 3. Por fim, na seção 5 são apresentadas as conclusões deste trabalho.
+2. Sistemas de Informações Geográficas Móveis e Ontologias
+Nesta seção são descritos alguns conceitos necessários para a correta compreensão dos
+termos descritos neste trabalho.
+2.1 Sistemas de Informações Geográficas Móveis
+Sistemas de Informação Geográfica (SIG) são definidos como sistemas computacionais
+capazes de capturar, modelar, armazenar, recuperar, manipular, analisar e apresentar
+dados geográficos [Worboys & Duckham, 2004]. Seu grande diferencial em relação aos
+Sistemas de Informação convencionais é a sua capacidade de integração de dados
+alfanuméricos com dados referenciados geograficamente.
+
+
+
+
+Segundo [Casanova et. al., 2005], dentre os modelos formais para representação
+de dados geográficos, distinguem-se dois tipos principais: o modelo de geo-campos e o
+modelo de geo-objetos. O modelo de geo-campos considera o espaço geográfico como
+uma superfície contínua, sobre a qual variam os fenômenos a serem observados.   Já o
+modelo de geo-objetos representa o espaço geográfico como uma coleção de entidades
+individualizadas distintas, onde cada entidade é definida por uma fronteira fechada.
+O desenvolvimento de um SIG está fortemente associado ao uso de Sistemas
+Gerenciadores  de  Banco  de  Dados  (SGBD).  Existem  basicamente  duas  formas  de
+integração  entre  SIG  e  SGBD,  as  quais  foram  denominadas  arquitetura  dual  e
+arquitetura integrada [Casanova et. al., 2005].
+A arquitetura dual caracteriza-se por armazenar os dados espaciais e os dados
+alfanuméricos  em  estruturas  separadas.  Enquanto  os  dados  alfanuméricos  são
+armazenados em um SGBD relacional, os dados espaciais são armazenados em arquivos
+com formato proprietário. Já na arquitetura integrada, tanto os dados alfanuméricos
+quanto os espaciais são armazenados em um único SGBD. O banco de dados utilizado
+neste caso é chamado de Banco de Dados Geográfico.
+O casamento de SIG com as tecnologias móveis deu origem aos Sistemas de
+Informação Geográfica Móvel (SIG Móvel), os quais são definidos como uma estrutura
+que integra hardware e software para acesso a dados espaciais através de uma rede sem-
+fio, utilizando-se dispositivos móveis [Solyman, 2007].
+Existem duas áreas de aplicação principais dos SIG Móvel:
+SIG baseado-em-campo, o qual foca na coleta de dados no campo;
+Serviço  Baseado  em  Localização                                                      (LBS),  o  qual  se  concentra  mais  em
+problemas como localização de pessoas e monitoramento de veículos.
+De acordo com [Tomko, 2003] o desenvolvimento de aplicações de SIG Móvel
+requer  atenção  aos  seguintes  elementos:                                              (a)  armazenamento  e  retorno  de  dados
+armazenados em um banco de dados geográficos; (b) a correta utilização de tecnologias;
+(c) prover um mecanismo para realização de consultas e acesso a dados localizados
+remotamente.
+2.2. Ontologias
+Ontologia é definida como “uma conceitualização formal, explícita e compartilhada de
+alguma área do conhecimento, também chamado de domínio de discurso” [Uschold &
+Gruninger, 1996]. Também se pode dizer que uma ontologia consiste de conceitos e
+relações, com propriedades e restrições descritas sob a forma de axiomas [Duarte &
+Falbo, 2000].
+Existem diversas formas para representação de ontologias, sendo a linguagem
+RDF (Resource Description Framework) a mais utilizada, por ser uma recomendação do
+W3C.  Em  RDF,  as  ontologias  são  representadas  em  arquivos  XML  (eXtensible
+Modeling Language) seguindo um modelo de dados composto de dois objetos básicos
+[RDF, 2007]:
+  Um  recurso  qualquer  identificado  por  uma  URI                                   (Uniform  Resource
+Identifier);
+
+
+
+
+  Uma propriedade que define uma relação binária entre recursos.
+No entanto, a RDF é mais adequada para o entendimento humano, não sendo
+adequada para o processamento automático e realização de inferências. Para este caso,
+foi projetada a linguagem OWL (Web Ontology Language) [OWL, 2007] como uma
+extensão da RDF, também recomendada pela W3C. Durante o processo de modelagem é
+interessante  a  utilização  de  algum  editor  gráfico,  o  qual  facilita  o  processo  de
+especificação da ontologia. Um editor que se destaca e que foi utilizado neste trabalho é
+o Protégé [Protégé, 2007].
+Aplicações de ontologias em SIG focam em problemas práticos de definição de
+um vocabulário comum para descrever um domínio geo-espacial. Este vocabulário pode
+facilitar a interoperabilidade e diminuir problemas de integração de dados [Fonseca et.
+al.,                                                                                           2000]. Na Web, já se fala da Geospatial Semantic Web [Egenhofer, 2002], que é
+uma tentativa de trazer semântica aos serviços de busca e integração de dados geo-
+espaciais.
+3. Arquitetura para SIG Móvel
+A arquitetura modelada para este sistema foi proposta tendo em vista dois objetivos: (a)
+definir  um  mecanismo  que  não  sobrecarregue  o  dispositivo  móvel  com  dados
+desnecessários; e  (b) que forneça apenas as informações relevantes para o perfil do
+usuário que esteja utilizando o sistema.
+A solução adotada para evitar a sobrecarga no dispositivo móvel foi a construção
+de WebServices, os quais ficam armazenados em servidores mais robustos e realizam as
+consultas ao banco de dados. Desta forma o dispositivo móvel é apenas um meio para a
+formulação das consultas e visualização dos dados.
+Para a definição de quais dados que são específicos para um determinado perfil
+de usuário, é utilizado um conjunto de ontologias. Estas ontologias são responsáveis por
+mapear os termos de uma área de aplicação para os termos utilizados no banco de dados
+geográfico. Diante destas condições foi definida a arquitetura mostrada na Figura 1.
+Na Figura 1 verifica-se a existência do (1) Banco de Dados Geográfico, (2) de
+uma base de conhecimento formada pelo conjunto de ontologias, (3) de um módulo de
+mapeamento de consultas das ontologias para o banco de dados geográfico,  (4) da
+definição dos WebServices e, por fim, (5) a aplicação de SIG Móvel utilizada pelos
+usuários.
+O banco de dados geográfico é o componente responsável por armazenar os
+dados geo-espacias e os dados descritivos de forma integrada. Estes dados podem ser
+consultados pelo usuário a partir de seu dispositivo móvel. Uma decisão importante é a
+escolha sobre qual tecnologia a ser utilizada para a implementação deste banco. Uma
+das alternativas é a utilização do modelo objeto-relacional, por exemplo, do SGBD
+Oracle 10g espacial [Oracle, 2007] ou o PostGIS [PostGIS, 2007], que é uma extensão
+para dados espaciais do SGBD PostGreSQL.
+
+
+
+
+Figura 1 - Arquitetura do SIG Móvel desenvolvido
+As ontologias, que neste projeto formam a base de conhecimento para consulta
+ao banco de dados, têm um papel importante ao modelar os conhecimentos específicos
+de domínios  de aplicação.  É  fundamental  que se  definam  os termos  da ontologia
+relacionando-os com termos presentes no banco de dados. Por exemplo, uma solução
+para isto é utilizar os relacionamentos espaciais definidos no modelo  9-Intersection
+[Egenhofer & Herring,  1991], tais como  ‘é um’,  ‘cercado por’,  ‘intercepta’, dentre
+outros. O editor Protégé [Protégé, 2007] permite a utilização destes termos durante o
+processo de especificação das ontologias.
+O banco de dados geográfico, a base de conhecimento apoiada em ontologias, e
+a aplicação de SIG Móvel, possuem ainda um conjunto de características que são
+específicas da área para a qual se está desenvolvendo o SIG Móvel. O módulo de
+preparação de consultas e os WebServices possuem funcionalidades que são comuns
+para qualquer domínio em que se esteja trabalhando.
+3.1. O módulo de preparação de consultas
+O módulo para preparação de consultas tem como função receber alguma solicitação
+feita pelo usuário, a partir de seu dispositivo móvel, e formatar esta solicitação para
+realizar uma consulta no banco de dados geográfico. O grande desafio é transformar as
+necessidades do usuário, contendo termos específicos de um domínio de aplicação, para
+uma seqüência de comandos SQL.
+Baseando-se nos modelos utilizados por  [Viegas,  2006] e  [Araujo,  2005], a
+solução adotada para realizar este mapeamento é realizar uma busca nas ontologias, que
+podem  estar  definidas  na  linguagem  OWL,  localizando  as  relações  dos  elementos
+encontrados com os itens armazenados no banco de dados geográficos. Isto é possível
+através da utilização de uma API, como a Jena [Jena, 2006].
+A API Jena gera um conjunto de grafos em RDF, os quais são representados por
+recursos, propriedades e literais. Utilizando-se estes termos é possível manipular e
+
+
+
+
+comparar as ontologias a partir dos relacionamentos que foram definidos durante sua
+implementação. À medida que os termos sinônimos são localizados, incrementa-se uma
+expressão SQL até que ela esteja completamente definida para realizar alguma consulta
+a um banco de dados.
+3.2. Definição dos WebServices
+Os WebServices são definidos como uma tecnologia que relaciona os componentes de
+um sistema em um ambiente distribuído onde são disponibilizados serviços que podem
+ser acessados dinamicamente através de uma rede [Amorim, 2004 apud Silva, 2004].
+Esta tecnologia propõe a exposição das transações e das regras de negócios por meio de
+protocolos  que  podem  ser  acessados  e  entendidos  por  qualquer  linguagem  de
+programação,  em  qualquer  sistema  operacional,  rodando  em  qualquer  dispositivo
+[Costa, 2002 apud Silva, 2004].
+Os WebServices construídos neste projeto utilizam um conjunto de funções que
+recebem como parâmetro o domínio ontológico escolhido e a consulta em forma textual.
+Estes dados são repassados para o módulo de preparação de consulta, o qual faz todo o
+processo de transformação e obtenção dos dados, que são finalmente retornados para o
+usuário do aplicativo do SIG Móvel.
+Graças a esta capacidade que os WebServices possuem de integrar variados
+ambientes é que foi proposta sua utilização nesta arquitetura. Desta forma foi possível
+realizar operações que demandam um grande poder de processamento, sem haver a
+exigência de que tudo fosse implementado no dispositivo móvel.
+4. UFV-GeoMobile: uma aplicação SIG Móvel para o Campus da UFV
+A Universidade Federal de Viçosa (UFV) é uma instituição pública de ensino superior,
+cujo principal campus está localizado na cidade de Viçosa-MG. A UFV oferece diversos
+cursos de graduação e pós-graduação, em diversas áreas do conhecimento. Anualmente
+recebe um grande volume de pessoas que visitam ou que estabelecem algum vínculo
+com o seu campus. Dentre estas pessoas estão os novos estudantes (~2000 por ano),
+participantes de congressos, pesquisadores visitantes,  ou simplesmente pessoas que
+desejam visitar suas dependências. Além destas pessoas existem também os que já
+possuem alguma ligação com a Universidade, tais como professores, servidores ou
+ainda os estudantes egressos. Um ponto em comum entre estes diversos indivíduos é
+que muitas vezes eles têm dificuldades em identificar lugares ou serviços no campus,
+dada sua grande extensão territorial e à velocidade com que surgem novas construções e
+instalações diversas.
+Considerando  este  cenário,  verifica-se  que  o  mesmo  é  ideal  para  a
+implementação de um aplicativo que valide a arquitetura para o SIG Móvel proposto
+neste trabalho. Seria interessante que houvesse uma fonte prática e automatizada para o
+usuário buscar informações sobre o campus. Seria ainda mais adequado que os termos e
+as opções de consultas fossem especificas para o perfil do usuário que queira ter acesso
+aos dados. Como exemplo, pode-se dizer que para um turista seja mais comum o termo
+“prédio” do que “departamento”. Além disso, um turista certamente não quer saber qual
+o horário da próxima aula.
+
+
+
+
+Diante desta realidade foi implementado o aplicativo UFV-GeoMobile, o qual
+permite que usuários de dispositivos móveis possam realizar consultas personalizadas a
+um banco de dados geográfico que contém informações sobre a UFV. A modelagem do
+banco de dados geográfico, o conjunto de ontologias definidas para o campus, bem
+como algumas interfaces do aplicativo desenvolvido são descritos nas subseções que se
+seguem.
+4.1. Definição do repositório de dados geográficos
+A base de dados foi construída a partir da junção de um conjunto de dados
+geográficos, mantidos pela administração da UFV, associados a um conjunto de bases
+relacionais utilizadas por uma variedade de sistemas administrativos, também mantidos
+pela instituição. Os dados geográficos foram alterados para se adequarem aos formatos
+de dados manipulados pelo aplicativo de SIG Móvel. Inicialmente os dados estavam
+armazenados no formato do sistema AutoCad e foram convertidos para o formato
+Shapefile. As informações foram divididas em logradouros, construções e um conjunto
+de pontos para mapear instalações específicas dentro de uma construção.
+A modelagem conceitual do banco de dados, elaborada com base no modelo
+UML-GeoFrame  [Lisboa Filho & Iochpe,  2007], que é um modelo específico para
+bancos de dados geográficos, está mostrada na Figura 2.
+No diagrama da Figura 2 pode-se observar que o sistema possui classes com e
+sem representação espacial. De acordo com o modelo UML-GeoFrame, as classes e
+subclasses Funcionário, Professor, Técnico Administrativo, Órgão, Evento e Tipo de Instalação
+são especializações de ObjetoNãoGeográfico  (), ou seja, não possuem representação
+espacial. As classes Construção, Logradouros e Instalação são percebidas na visão de
+objetos                                                                                         ()  e  possuem  representação  espacial  do  tipo  Área,  Ponto,  Linha  e  Ponto,
+respectivamente. Por fim, as classes ImagemAérea e CurvaDeNivel são percebidas na visão
+de campo (). A primeira possui representação espacial do tipo GradeDeCélulas (),
+enquanto a segunda possui representação do tipo Isolinhas ().
+As instalações, representadas no diagrama da Figura 2, mapeiam um conjunto de
+informações que podem ser obtidas sobre a UFV. Elas podem ser de vários tipos como
+restaurante, supermercado, farmácia, bancos, papelaria, etc. Podem também ser algum
+laboratório ou ainda a representação de algum órgão da instituição, que por sua vez,
+pode ser um órgão da administração superior, um órgão técnico-administrativo ou um
+órgão vinculado.
+As  representações  espaciais  das  instalações,  juntamente  com  seus  dados
+descritivos, são os itens utilizados para a realização de consultas ao banco de dados
+geográficos, e para exibir as informações resultantes para os usuários.  Este  modelo  foi
+implementado utilizando-se o SGBD PostGreSQL com sua extensão espacial PostGIS.
+
+
+
+
+Figura 2 - Modelagem do banco de dados geográfico para o UFV-GeoMobile
+4.2. A base de conhecimento ontológico
+Para que as consultas à base de dados funcionem corretamente é fundamental que as
+ontologias estejam definidas de forma mais completa e adequada possível. Para o caso
+da aplicação UFV-GeoMobile foram definidas três ontologias: Ontologia Acadêmica,
+Ontologia Administrativa e Ontologia de Turismo.
+A Ontologia Acadêmica (OntAcad) trata das interações que ocorrem no dia-a-dia
+de uma universidade, especificando mais os termos relacionados ao ensino, pesquisa e
+extensão. Contempla elementos como professores, alunos, disciplinas e locais de aula.
+
+
+
+
+A Ontologia Administrativa  (OntAdm) trata de questões ligadas a estrutura
+hierárquica da Universidade,  incluindo a reitoria, pró-reitorias, centros de ciências,
+departamentos, cursos, órgãos vinculados e lotações de funcionários.
+Já  a  Ontologia  de  Turismo                                                             (OntTur)  trata  das  atividades  que  podem  ser
+desenvolvidas por um turista no campus, além de especificar quais os termos são mais
+adequados para um indivíduo que não conhece a nomenclatura adotada internamente no
+campus.
+A Figura  3 exibe parte da OntTur. Nela pode-se identificar que o campus é
+formado por prédios e áreas abertas. Cada prédio é cercado por uma área aberta, a qual
+pode ser um estacionamento, um jardim ou um parque. Cada prédio oferece serviços, os
+quais estão divididos em alimentação, museus e bancos. Nos prédios podem ocorrer
+eventos, sejam eles congressos, reuniões ou mesmo uma comemoração.
+4.3. Interface gráfica no dispositivo móvel
+O protótipo foi desenvolvido através do framework Microsoft Visual Studio  2003,
+utilizando a linguagem C#.NET. Utilizou-se durante o desenvolvimento o emulador
+Pocket PC 2003. Para a visualização dos dados geo-espacias foi utilizado o software
+Map  Suite Pocket PC, o qual consiste em um  conjunto de controles baseados na
+plataforma                                                                                .NET  para  construção  de  aplicativos  de  SIG  em  dispositivos  móveis
+[Mapsuite, 2007].
+Para a utilização do aplicativo, inicialmente o usuário escolhe em qual contexto
+de informações está interessado: estrutura acadêmica, administrativa ou turística. Após
+este passo é definida uma tela inicial de consulta contendo os termos e imagens mais
+adequadas para o tipo de informações que foi escolhido.
+Figura 3 - Ontologia de Turismo para o UFV-GeoMobile
+A Figura 4-a ilustra a tela inicial do sistema exibindo os dados geográficos de
+construções, logradouros e algumas instalações. Nesta tela também estão disponíveis
+
+
+
+
+alguns itens para navegação como zooms, arrastar, além de um botão de informações.
+Este botão permite o clique sobre um dos pontos exibidos, fazendo com que alguns
+dados descritivos se abram em outra tela.
+Para exemplificar  o  processo  de mapeamento dos termos representados nas
+ontologias com os itens definidos no banco de dados geográfico, suponhamos que um
+turista utilize seu dispositivo móvel e faça a seguinte consulta: “localizar um restaurante
+que tenha um estacionamento em suas proximidades”. O mapeamento desta consulta
+será feita através da OntTur. Inicialmente o termo “restaurante” será mapeado como um
+“serviço”. “Serviço” equivale ao termo “instalações” no banco de dados. Já o termo
+“estacionamento” está relacionado a uma  “área aberta”. Este item está mapeado no
+banco de dados como “edificações”. Por fim o termo “em suas proximidades” indica o
+relacionamento espacial “distance” entre os termos presentes no banco de dados, que
+neste caso convencionou-se menor que  20 metros. Desse modo chega-se à seguinte
+consulta em SQL:
+SELECT i.id, i.nome
+FROM  edificacoes e, instalacoes i
+WHERE distance ( e.the_geom, i.the_geom ) < 20;
+A Figura  4-b exibe a resposta a esta consulta feita pelo usuário, na qual se
+percebe uma filtragem dos pontos exibidos de acordo com as informações que se deseja
+obter.
+5. Conclusões
+Armazenar o conhecimento associado a um conjunto de dados geográficos talvez seja
+tão importante quanto armazenar os próprios dados. Isto é fundamental para que um
+usuário realize consultas e obtenha como resposta somente as informações que estejam
+mais adequadas ao seu contexto. Se considerarmos as aplicações que estejam no âmbito
+de um SIG móvel, isto se torna ainda mais importante, dado que esta mobilidade
+implica em exigências muito maiores por parte dos usuários.
+Alguns trabalhos já realizaram experiências bastante satisfatórias em relação à
+utilização  de  bases  de  conhecimento  associadas  a  dados  geográficos.  O  trabalho
+apresentado em [Viegas, 2006] é um bom exemplo, no qual é criada uma estrutura para
+consultas ontológicas através de um ambiente Web. De qualquer forma, a criação de
+uma estrutura em um ambiente de SIG Móvel é algo ainda pouco explorado e que
+apresenta muitos desafios.
+Adicionar uma base de conhecimento, apoiada em ontologias, a uma aplicação
+de SIG móvel permite agregar valor semântico às consultas dos usuários. Este fator
+pode  ser  fundamental  como  forma  de  melhorar  o  uso,  além  de  contribuir  para  o
+crescimento das tecnologias de SIG móvel.
+Agradecimentos
+Projeto parcialmente apoiado com recursos da FAPEMIG - Fundação de Amparo à
+Pesquisa do Estado de Minas Gerais.
+
+
+
+
+(a)                                                                                      (b)
+Figura 4 - Telas do UFV Mobile
+Referências
+ARAÚJO, M. A. Web Services na Informação Geográfica. Dissertação (Mestrado em
+Informática). Universidade do Minho, Portugal. 2005.
+CADUFF, D.; EGENHOFER, M. J. Geo-Mobile Queries: Sketch Based Queries in
+Móbile Enviroments. W2GIS. 2005.
+CASANOVA, M. et al. Bancos de Dados Geográficos. Brasil, MundoGeo, 2005. 506 p.
+DUARTE, K.; FALBO, R. A. Uma Ontologia de Qualidade de Software. Anais do VII
+Workshop de Qualidade de Software, XIV Simpósio Brasileiro de Engenharia de
+Software, João Pessoa, 2000.
+EGENHOFER, M. J.; HERRINGER, J. Categorizing Binary Topological Relations
+Between Regiosn, Lines, an Points in Geografphic Databases.   University of Maine,
+Orono, 1991. (Technical Report)
+EGENHOFER, M. J. Toward the Semantic Geospatial Web. In Proceedings of the Tenth
+ACM Int'l Symposium on Advances in Geographic Information Systems  (ACM-
+GIS'02), McLean, VA, 2002.
+FONSECA,  F.  et.  al.  Ontologias  e  Interoperabilidade  Semântica  entre  SIGs.  II
+Workshop Brasileiro em Geoinformática - GeoInfo, São Paulo. 2000.
+
+
+
+
+JENA.   A   Semantic   Web   Framework   for   Java                                    -   Jena                             2   Ontology   API.
+<http://jena.sourceforge.net/ontology>. Acesso em 05 de novembro de 2006.
+LISBOA FILHO, J.; IOCHPE, C. Modeling with a UML profile. In: Shashi Shekhar and
+Hui Xiong. Encyclopedia of Geographical Information Science. Germany: Springer-
+Verlag, 2007. (in press)
+MAPSUITE. Map Suíte Pocket PC. Disponível em <http://thinkgeo.com>. Acesso em
+27 de agosto de 2007.
+NOVELLO, T. C. Ontologias, Sistemas baseados em Conhecimento e Modelos de
+Banco                                                                                  de                                   Dados.                Disponível   em   <http://www.inf.ufrgs.br/~clesio/
+cmp151/cmp15120021/artigo_taisa.pdf>, 20 de maio de 2007.
+ORACLE.   Oracle   Spatial.   Disponível   em                                          <http://www.oracle.com/technology/
+products/spatial>. Acesso em 20 de janeiro de 2007.
+OWL.    OWL    Web    Ontology    Language    Overview.    Disponível    em
+<http://www.w3.org/TR/owl-features/>. Acesso em 03 de abril de 2007.
+PROTEGE.  Protege  Ontology  Editor.  Disponível  em  http://protege.stanford.edu//.
+Acesso em 06 de março de 2007.
+POSTGIS.  PostGIS  Site.  Extensão  espacial  para  o  PostGreSQL.  Disponível  em
+http://postgis.refractions.net/. Acesso em 20 de janeiro de 2007.
+RDF.  Resource  Description  Framework.  Disponível  em  http://www.w3.org/RDF/.
+Acesso em 20 de março de 2007.
+SADEH, N. et. al. MyCampus: An agent-based environment for context-aware mobile
+services. Workshop on Ubiquitous Agents on Embedded, Wearable, and Mobile
+Devices (AAMAS), Bologna - Itália. 2002.
+SILVA, G. K. C., et. al. Disponibilizacao de Serviços Baseados em Localização via
+Web Services.  Simpósio Brasileiro de GeoInformática, GeoInfo. 2004.
+SOLYMAN,     A.     A.     Investigating     Mobile     GIS.     Disponível            em
+<http://www.directionsmag.com/article.php/>, 28 de maio de 2007.
+TOIVONEN, S. et. al. Facilitating mobile users with contextualized content. Workshop
+Artificial Intelligence in Mobile System, 2003.
+TOMKO, M. Spatial Databases for Mobile GIS Applications.  2003. Maser thesis  -
+Slovak University of Technology, Eslováquia, 2003.
+USCHOLD, M.; GRUNINGER, M. Ontologies: Principles, Methods and Applications.
+Knowledge Engineering Review, 11(2): 93-155, 1996.
+VIEGAS, R.; SOARES, V. Querying a Geographic Database using an Ontology-Based
+Methodology.  Simpósio Brasileiro de GeoInformática, GeoInfo, 2006.
+WEIßENBERG, N. et. al. An Ontology-based Approach to Personalized Situation-
+aware Mobile Service Supply. GeoInformatica, v.10, n.1, p:55-90, 2006.
+WORBOYS, M.; DUCKHAM, M. GIS: A Computing Perspective Second Edition. Boca
+Raton, Florida, USA: CRC Press, . p. 426, 2004.
+
+
+
+
+

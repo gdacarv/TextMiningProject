@@ -1,0 +1,543 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+GenPolis - Prototipagem e aplicação de uma ferramenta
+especializada para otimização via algoritmos genéticos de
+planos fixos de sinalização semafórica em sub-redes urbanas
+1Bruno Sarno Mugnela, 1Marcio Lobo Netto
+1Departamento de Engenharia de Sistemas Eletrônicos (PSI)
+Escola Politécnica da Universidade de São Paulo (EPUSP)
+CEP 05508-010 - São Paulo - SP - Brasil
+bruno.mugnela@usp.br,  marcio.netto@poli.usp.br
+Abstract.  There  is  a  considerable  knowledge  base  for  traffic  engineering
+optimization using genetic algorithms, but rare are the real applications on
+environments  that  lack  on  traffic  flow  data  or  Intelligent  Transportation
+Systems (ITS). This paper summarizes a new simulation model over which a
+genetic algorithm is applied for finding signal timing plans that reduce stops
+and  delays  in  congested  urban  sub-networks.  The  tool  is  simplified  for
+achieving  fast  running  times  using  only  the  parameters  measured  by  the
+Traffic Engineering Company of the city of São Paulo  (CET-SP). The case
+study in one of its sub-networks resulted in approximate 30% reduction of the
+delays registered in the simulations of the previous plans.
+Resumo. A aplicação de algoritmos genéticos  (AGs) para otimizações em
+engenharia  de  tráfego  possui  boa  base  bibliográfica,  mas  são  raras  as
+aplicações  reais  em  meios  onde  há  escassez  de  dados  e  de  sistemas
+inteligentes de controle de tráfego. Este artigo apresenta um novo modelo de
+simulação  sobre  o  qual  um  AG  é  aplicado  para  encontrar  planos  de
+sinalização  semafórica  que  reduzam  atrasos  e  paradas  em  sub-redes
+congestionadas. A ferramenta é simplificada para execução rápida, usando
+apenas os parâmetros colhidos pela CET-SP. O estudo de caso em uma sub-
+rede paulistana resultou em reduções da ordem de 30% no nível de atraso
+calculado nas simulações dos planos anteriores.
+1. Introdução
+Para a solução dos problemas de congestionamento em grandes cidades, as ações são
+tanto no sentido de aumentar a infraestrutura viária e melhorar o seu funcionamento
+com obras de expansão e reformas, quanto de controlar a frota de veículos por meio de
+regulamentações e ajustes de sinalização. Em Lopes  (2003) são descritos exemplos
+relevantes desses tipos de iniciativa.  Nos últimos anos testemunhamos a implantação de
+algumas   ferramentas   de   suporte   ao   controle   de   tráfego,   como   câmeras   de
+monitoramento,  radares  para  aferição  de  velocidade  média,  sensores  como  laços  e
+controle semafórico ativo por meio de sistemas centralizados dotados de métodos como
+o SCOOT  [Robertson e Bretherton,  1991]. Em cidades como São Paulo obstáculos
+variados  impedem  que  estes  recursos  estejam  plenamente  disponíveis  ou,  quando
+disponíveis, facilmente acessíveis e manipuláveis para os operadores de tráfego.  Ainda
+198
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+em  Lopes  (2003),  são  levantados  pontos  importantes  relativos às limitações dessas
+medidas como escassez de recursos financeiros e impactos reduzidos a longo prazo, pois
+o  comportamento  da  frota  se  altera  constantemente.  Neste  sentido,  uma  vez  que
+melhorias aumentam a capacidade de determinada região urbana, esta passa a atrair mais
+usuários, criando uma nova situação de equilíbrio na rede. Assim vemos que algo que se
+pode fazer de forma mais ágil para adaptar a resposta das malhas viárias é o ajuste
+frequente dos planos de sincronização semafórica fixa.
+Para  a  temporização  de  uma  rede  sincronizada  de  semáforos  existem  três
+parâmetros principais a serem configurados, tempo de ciclo, tempos de verde, e as
+defasagens que determinam o instante de início de funcionamento entre os ciclos de
+cada semáforo (em relação a um semáforo de referência).  Para  planos  de  temporização
+fixa, quando se leva em conta apenas o comportamento de uma única intersecção, a
+determinação  dos  dois  primeiros  parâmetros  envolve  um  processo  relativamente
+simples. Mas, mesmo esse procedimento faz uso de dados cuja atribuição é baseada na
+experiência (ajuste e observação) dos órgãos operadores de tráfego [Vilanova, 2005a].
+Quando a questão envolve o funcionamento de vários semáforos em uma rede
+sincronizada essa tarefa fica mais difícil, e uma importante parte do trabalho reside em
+se determinar o conjunto correto de defasagens entre os diferentes semáforos. No caso
+de malhas viárias, métodos analíticos não representam a melhor forma para analisar a
+interação entre os elementos da malha viária, e ao mesmo tempo, envolvem explosões
+combinatórias  que criam vastos espaços de buscas que não permitem uma procura
+exaustiva pela solução ótima global [Lebdeh e Benekohal, 1997].
+Em função da característica mencionada, os métodos clássicos de coordenação
+semafórica em rede, como o do TRANSYT-7F [Hale, 2008], não utilizam algoritmos de
+otimização convencionais e não representam a interação de forma analítica, preferindo
+usar métodos de simulação de tráfego. Nessas ferramentas, métodos de busca de ótimos
+locais  foram  aplicados  de  forma complementar, ajustando a sinalização a partir de
+configurações  baseadas  nas  observações  dos  engenheiros  de  tráfego.  Um  exemplo
+desses métodos é o hill-climbing, formulado com o compromisso de encontrar o ótimo
+local pertencente à região do plano de busca que compreende a solução inicial dada
+como entrada. Mais recentemente, meta-heurísticas de procura global foram propostas e
+vêm sendo usadas com sucesso para otimização de sinalização e outros problemas de
+engenharia  que  envolvam  explosões  combinatórias.  Para  uma  descrição  formal  de
+muitos deles, recomenda-se Brownlee (2011).
+Este  trabalho  tem  então  por  objeto  propor  uma  ferramenta  dotada  de  uma
+heurística para realizar otimizações de temporização fixa de sub-redes de semáforos, de
+modo a contribuir para a melhoria do fluxo de tráfego em sub redes viárias de grandes
+centros urbanos. Tal proposta incorpora tarefas de otimização de sinalização semafórica
+através de Algoritmos Genéticos (AGs) [Mitchell, 1995]. Esse método é acoplado a um
+simulador de tráfego simplificado e rápido que usa, para estabelecer o comportamento
+do trânsito, apenas os parâmetros que provenientes de estudos para revisão de planos
+semafóricos na cidade São Paulo [Ejzenberg, 2005; Vilanova, 2005b] cuja malha viária
+contém a sub-rede usada no estudo de caso retratado ao fim deste artigo. Logo, neste
+trabalho pretende-se apresentar um panorama experimental acerca da aplicabilidade de
+AGs para a realização de melhorias no trânsito de cidades como São Paulo.
+199
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+2. Estratégias Evolucionárias e Algoritmos Genéticos
+Seja qual for a forma que qualquer espécie de ser vivo tenha adquirido com a evolução,
+ela decorre de uma adaptação para sobrevivência, sendo que nesse processo não há
+restrições acerca de como as soluções podem se apresentar e o caminho que devem
+tomar.  Foi a partir desse princípio dos processos evolutivos, dos inúmeros caminhos
+possíveis que podem ser tomados até a emergência de uma solução, que se pensou na
+hipótese da aplicação desses conceitos para resolver problemas da vida prática. E com
+isso surgiram os programas que são classificados pelo nome desta seção.   Para resumir o
+resultado  da  inspiração  nos  mecanismos  naturais  de  evolução  cabe  começar  por
+enumerar os passos de um procedimento comum na área de AGs [Rennard, 2000]:
+Inicialização:
+1. Codificação do problema, normalmente em uma série binária (cromossomo);
+2. Criação aleatória (ou não) de uma população inicial de soluções/cromossomos;
+Ciclo evolutivo:
+3. Atribuição de uma pontuação (fitness, ou índice de mérito) para cada  solução;
+4. Seleção de soluções de acordo com seus níveis de adequação;
+5. Recombinações entre os cromossomos selecionados e criação de nova geração.
+Geralmente o espaço amostral que compreende as alternativas para um problema
+complexo é muito grande, o que torna complicada a identificação de um traçado ao
+redor das regiões que contenham as melhores soluções. O AG é capaz de contornar esse
+problema começando com a geração de uma população inicial de vários indivíduos que
+disparam uma exploração paralela de diferentes regiões.  Mas o que confere ao AG sua
+eficácia é o seu paralelismo implícito, explicado nos próximos parágrafos.
+É comum fazermos a descrição de um indivíduo por partes, de modo que ao
+descrevermos   vários   indivíduos,   muitas   vezes   nos   deparamos   com  eventuais
+semelhanças entre eles. Desta forma alguém que, por exemplo, tenha braços longos
+representa inevitavelmente a população dos indivíduos que também possuem este traço.
+Trazendo essa premissa para o AG, na codificação de um problema a partir de palavras
+de oito bits, teremos então que, assim como um braço, cada conjunto de dois ou mais
+bits constitui um bloco de construção da solução, sendo que no espaço de busca, cada
+bloco representa uma região distinta (por exemplo: 10*** ***; **00***                      **).
+Assim podemos perceber que existe um paralelismo implícito na exploração do
+espaço amostral, na medida em que um único cromossomo representa diversas regiões
+ou populações de outros cromossomos ao mesmo tempo. Por sua vez, os blocos de
+construção  específicos  que  têm  efeito  importante  na  adequação  do  indivíduo  ao
+problema possuem chances maiores de se propagar por diversas gerações e permitir a
+exploração de boas regiões. Por fim a propagação e união desses blocos através dos
+cruzamentos é o que permite a rápida convergência de um AG a bons resultados.
+Importante notar que os tempos de convergência são muito dependentes dos parâmetros
+de execução. Uma avaliação introdutória na área pode ser encontrada em Cavicchio
+(1972),  onde são medidos os tempos de convergência para diferentes conjuntos de
+parâmetros e o nível de melhora trazido pelos mesmos.
+200
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+3. AGs Aplicados à Engenharia de Tráfego
+Nessa seção é apresentada uma revisão referenciando alguns trabalhos importantes que
+envolveram estudos de AGs em controle de tráfego ao longo dos últimos quinze anos.
+Em Lebdeh e Benekohal (1997) o foco da aplicação é a prevenção da formação
+de  bloqueios  em  que  um  sinal  verde  não  libera  carros  devido  ao  enchimento  do
+segmento  à  frente                                                                         (jusante).  Neste  trabalho  é  indicada  a  necessidade  de  controle
+semafórico dinâmico para situações saturadas, pois o comportamento do tráfego em uma
+janela de tempo depende do que foi registrado na janela de tempo anterior. Além disso,
+o autor relata que execuções de AGs para condições iniciais dentro de certa faixa de
+dispersão (sementes de números aleatórios distintos) convergem a valores semelhantes.
+No estudo realizado por Lo et al. (1999), um AG otimiza o tráfego simulando
+janelas  de                                                                                 45  minutos.  Nele  é  indicado  que  em  situações  não  congestionadas  o
+recomendável seria otimizar um semáforo de cada vez, de forma serial, enquanto que
+em  situações  congestionadas  seria  mais  interessante  otimizar  todos  os  semáforos
+paralelamente, sendo que ambas as estratégias apresentaram resultados melhores que
+aqueles alcançados pelo software Transyt-7F.
+Para avaliar o impacto do uso de diferentes funções objetivo, Park et al. (2000)
+mediram  o  desempenho  do  AG  em  situações  de  saturação,  e  ao  classificar  os
+cromossomos de acordo com diversos critérios, chegaram ao indício de que o critério
+mais simples, o do atraso, é o mais eficiente. Outro trabalho interessante realizado por
+Park et al. (2004) envolveu o uso de AGs para a otimização de diversos planos ao longo
+de um dia de operação, e inclusive dos pontos de transição entre eles.
+Ceylan  e  Bell  (2004a)  contemplaram  o  efeito  dinâmico  de  longo  prazo  do
+comportamento da rede ao adicionarem ao AG um procedimento periódico em que o
+comportamento  do  tráfego  simulado  frente  aos  melhores  planos  encontrados  é
+reavaliado, de forma a estabelecer a nova situação de equilíbrio entre oferta e demanda e
+assim remodelar as matrizes de origem-destino antes de prosseguir com a otimização.
+Em trabalho semelhante naquele ano [Ceylan e Bell, 2004b], os pesquisadores aferiram
+o aumento de capacidade da rede causado pelo mesmo método.
+Cantarella et al. (2006) compararam, frente a tempos fixos de processamento,
+diversos  métodos heurísticos de otimização, a saber o  Hill Climbing, Tabu Search
+[Brownlee, 2011], um AG, e métodos híbridos. O autor identificou que os métodos AG
+e Tabu Search puros são os que convergem mais rapidamente, e constatou   que o Hill
+Climbing foi o único que obteve performance consideravelmente pior, mas alertando
+que pode ao mesmo tempo ser o melhor se os outros forem configurados de maneira
+errada.
+Também para contemplar as mudanças nos fluxos de tráfego, dois trabalhos, de
+Sun  e  Benekohal                                                                           (2006)  e  Teklu  et  al.                                                     (2007)  aplicaram  ciclos  simultâneos  de
+otimização e reavaliação de fluxos, usando diferentes AGs, com os primeiros indicando
+que é necessário realizar diversas otimizações e os últimos que muito ainda deve ser
+feito para que se saiba selecionar os melhores parâmetros do AG.
+Para  aumentar  a  rapidez  de  execução  do  AG,  Stevanovic  et  al.                      (2007),
+executaram um AG usando computação distribuída, e usaram como índice de mérito
+201
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+uma composição de atrasos e paradas (o total dos atrasos da rede em horas é somado ao
+número de paradas multiplicado por um fator). Com maior agilidade puderam avaliar
+diferentes conjuntos de parâmetros para execução do AG recomendando então o uso de
+números  de  gerações  no  mínimo  três  vezes  maior  que  o  tamanho  da  população,
+probabilidade de cruzamento de 40 a 70% e de mutação de 1 a 4%.
+Na mesma busca por boas configurações, Kesur (2009) avaliou outros elementos
+como os tipos de codificação, cruzamento e mutação, chegando aos indicativos de que o
+AG funciona melhor com o uso de código gray para uniformizar as mutações binárias.
+Além disso, em detrimento do método de corte simples, os resultados favoreceram o uso
+do cruzamento misturado, em que os cromossomos dos pais são quebrados em diversos
+pedaços, cada um contendo um parâmetro, com os filhos recebendo esses parâmetros de
+um ou outro pai de forma aleatória.
+Em Medina et al. (2010) foi realizado estudo considerando diversos níveis de
+situações saturadas e não saturadas, levando à constatação de que o AG traz maiores
+ganhos em redes carregadas.
+Em um trabalho interessante, Pohlmann e Friedrich (2010) ajudam a quebrar a
+barreira do AG como aplicação apenas offline e combinam uma ferramenta estimadora
+de  tráfego  a  sistemas  de  monitoramento  em  tempo  real  e  um  modelo  rápido  de
+simulação por transmissão celular para desenvolver uma aplicação em pipeline que
+otimiza a sinalização semafórica a cada quinze minutos. A ferramenta foi aplicada em
+uma rede real com bons resultados, mas indicando que o estimador ainda apresenta
+problemas na hora de lidar com o tráfego mais volátil dos períodos de pico.
+4. A Ferramenta GenPolis
+O GenPolis é um simulador de trânsito mesoscópico de demanda dinâmica, concebido
+para simular rapidamente malhas complexas de vias concorrentes e semaforizadas. Nele,
+o simulador apresenta uma foto virtual do estado da rede para cada segundo simulado. O
+projeto possui um construtor preliminar responsável por transformar a malha viária,
+extraída  de  um  mapa  através  de  dados  geográficos  do  website  OpenStreetMap,
+automaticamente em um grafo conexo que é então tratado no programa CityEngine. O
+resultado é a obtenção rápida de redes geometricamente semelhantes às redes reais
+(Figura 1).
+Figura 1. Processo de obtenção de uma rede de teste (região da Av.Paulista)
+202
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+O ambiente de simulação é composto basicamente de três entidades: o segmento
+de rua (Link), que se assemelha a uma esteira, movimentando todos os carros com igual
+velocidade do começo ao fim do segmento, onde são empilhados (o que apontaria para
+um modelo de fila vertical, como em versões antigas do Transyt, mas não no caso do
+GenPolis,  onde  há  cálculo  de fila  horizontal,  mais  condizente  com  a  realidade);  o
+cruzamento (Nó), que pode conter um semáforo ou não e é responsável por distribuir os
+carros dos segmentos à montante para os segmentos conectados à jusante; e o carro, a
+partícula básica de carga do sistema.
+Do lado da simulação microscópica temos apenas que o simulador descreve seus
+carros  de  forma  unitária,  enquanto  que  pelo  lado  macroscópico  predominante,  o
+comportamento dos carros é regido por determinações agregadas de velocidade fixa (em
+função do tempo de percurso medido em campo) e as conversões são baseadas em
+probabilidade. Logo os fluxos das malhas virtuais são compostos de forma estatística e
+consolidada sem se preocupar em atribuir identidade aos veículos.
+Vale  ressaltar  aqui  que  os  dados  necessários  para  a  constituição  de  uma
+simulação que esteja alinhada ao padrão de coleta de dados da CET-SP são agregados e
+apontam  para  o  uso  de  simuladores  macroscópicos  ou  mesoscópicos,  modelos  que
+necessitam de muito menos esforços para calibragem do que modelos microscópicos
+[Burghout, 2004]. Estes dados são: o fluxo de saturação dos segmentos de rua no seu
+ponto de saída, que é usado para reger a vazão de cada link da simulação; o tempo de
+percurso  livre  médio  de  cada  segmento,  que rege  a  velocidade  com que os carros
+percorrem cada link; o fluxo, ou contagem, que diz a frequência com a qual passam
+carros no segmento; e as probabilidades de conversão, que regem o perfil de saída dos
+carros de cada segmento. Estes dados serão importantes para que o ambiente simulado
+represente  de  forma  verossímil  o  ritmo  de  vazão,  o  crescimento,  propagação  e
+dissipação das filas e os perfis de envio e chegada de carros entre um semáforo e outro.
+Um dos fatores mais importantes a serem simulados, principalmente em redes
+congestionadas  é  a  propagação  das  filas,  mais  especificamente  o  cálculo  do  ponto
+efetivo de bloqueio, o fim delas. Neste modelo, este cálculo é feito de forma explícita a
+partir do perfil de chegada dos carros: para calcular o crescimento da fila, a cada passo
+de  simulação  os  carros  que  estão  empilhados  em  um  link  são  contados  e  um
+comprimento inicial da fila é calculado, em seguida cada carro que se encontra em
+movimento mas que esteja à frente deste fim da fila é incrementado; para simular a
+propagação da fila, foi implementado conceito de propagação de espaços, que representa
+o fato de que ao sair do segmento pela linha de retenção, todo carro deixa um espaço
+igual na fila, que vai se propagando para trás, isso remete à ideia complementar de
+semáforos móveis que representam os momentos em que os carros podem ou não andar;
+por último, para representar a dissipação das filas estes semáforos, quando verdes, se
+chegam ao fim da fila, são eliminados para retroceder este ponto de bloqueio.
+A velocidade de propagação destes espaços respeita em sua formulação o fluxo
+de  saturação  e  o  tempo de percurso da via para cada link e este modelo permite,
+principalmente, que seja simulado um atraso realista entre a liberação de carros no ponto
+de saída de um link lotado, por exemplo, e o momento em que o link à montante pode
+inserir carros nele. Este seria um exemplo básico, mas essa descrição também tem por
+consequência a observação de todos os efeitos de propagação de filas compostos pelos
+203
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+movimentos de crescimento e dissipação, independente do perfil e ritmo de chegada e
+saída dos carros. Assim, é permitido ao usuário contemplar os diversos pelotões que
+compõem uma única fila no caso dessa ser bem extensa (Figura 2).
+A-   Link Bloqueado (fim da fila no final do segmento);
+B e F- Espaço se Propagando;
+C- Carros em Movimento;
+D- Fim da última Fila do segmento;
+E- Segunda Sub-Fila;   G- Primeira SubFila
+Figura 2. Parte de uma simulação mostrando algumas vias congestionadas
+Sobre esse modelo de simulação é aplicado um AG em que, para cada indivíduo
+testado                                                                                    (cada  plano  semafórico)  existe  um  cromossomo  com  duas  partes  que
+representam  as  defasagens  entre  os  semáforos  e  os  graus  de  saturação  de  cada
+aproximação de um semáforo. Como os graus de saturação recomendados [Vilanova,
+2005a]  situam-se  entre                                                                   80%  e  90%,  optou-se  por  trabalhar  com                                 16  níveis  de
+discretização  (4  bits)  entre                                                            76%  e  91%.  Enquanto  isso,  o  tempo de ciclo máximo
+adotado para o estudo de caso foi o de 120 segundos e optou-se trabalhar com -64 a 63
+segundos de defasagem (7 bits).
+O tipo de seleção escolhido foi baseado em janelamento onde os mais fortes
+serão mais favorecidos, e para que se aumente a pressão evolutiva e se permita rápidas
+convergências. Existe alguma dúvida se isso pode levar a convergências prematuras, de
+modo que outros métodos de seleção serão testados no futuro. Cada dois indivíduos
+selecionados  geram  dois  filhos  diferentes  que  recebem  mutações  binárias  com
+probabilidade de 1% para cada bit.  A  técnica de cruzamento escolhida foi a de corte
+duplo semelhante ao corte circular, onde ao filho é atribuída uma metade de cada
+cromossomo pai, sendo que o ponto de corte inicial será definido aleatoriamente para
+cada cruzamento entre o início e a metade do cromossomo.  No estudo de caso o índice
+de  mérito  escolhido  é  composto  pelo  atraso  total  somado  ao  número  de  paradas
+seguindo a fórmula Fit=A+20*P. A primeira componente reflete efetivamente quanto
+tempo  é  desperdiçado  pelos  motoristas  na  rede  toda,  enquanto  que  a  segunda
+componente  reflete  o  custo  ambiental  e  psicológico  das  sucessivas  frenagens  e
+arrancadas que se dão ao longo do percurso.
+No programa foi aplicado o gerador de números aleatórios “Mersenne Twister”
+[Matsumoto  e  Nishimura,  1998]  para  todos  os  elementos  que  requeriram  números
+aleatórios, da inserção de carros pelos links de entrada e sorteio de suas conversões ao
+longo  da  simulação,  à  geração  das  populações  iniciais  de  cromossomos,  e
+estabelecimento de pontos de corte para cruzamentos e as mutações.
+5. Estudo de caso
+Durante  o  projeto  foi  mantido  contato  com  a  CET-SP  e,  após  a  programação  da
+ferramenta, foi recebida uma sub-rede da zona sul de São Paulo, no bairro do Brooklin,
+para estudo de caso. A rede (Figura 3) é composta por 6 semáforos de duas fases e
+204
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+compreende a região descrita pela rua Padre Antonio José dos Santos e Rua Indiana,
+com as travessas desde a Rua Portugal até Rua Guaraiuva.
+Semáforo
+principal
+Figura 3. Mapa do estudo de caso
+A coleta de dados foi realizada por uma única pessoa, de modo que no caso dos
+fluxos  de  saturação  e  dos  tempos  de  percurso  foi  necessário  realizar  algumas
+compactações para agilizar a parametrização. Agrupamentos de segmentos que possuem
+as mesmas conformidades topológicas, como condição da pavimentação, inclinação,
+sinalização de via preferencial ou não e valetas, receberam parâmetros iguais sejam eles
+apenas o fluxo de saturação, o tempo de percurso, ou ambos.
+As contagens de fluxo e porcentagens de conversão foram realizadas ao longo de
+manhãs e tardes para otimizar os dois períodos de pico diários, um entre as 07:00 e
+11:00 e o outro entre as 16:00 e 20:00. Devido à falta de contingente para a coleta de
+dados foi necessário realizar uma extrapolação para que toda a rede recebesse uma
+demanda dinâmica que se aproximasse aos perfis dos horários na região. Para isso, foi
+escolhido  um  cruzamento  principal  que  para  cada  tarde  ou  manhã  de  leitura  seria
+observado uma vez a cada duas janelas de 15 minutos, enquanto os outros cruzamentos
+seriam observados uma única vez nas outras janelas.
+Com a repetição desse processo de medidas e através de ajustes baseados na
+demanda de pico do cruzamento principal foi possível obter um perfil aproximado de
+demanda para a rede e valores médios acerca do fluxo de todas as aproximações, perfil
+este que pode ser observado na figura 4.
+!"                                                                                            #$%&    ' $   (   $   !   -./'   !"   #$%&    ' $   (   $   !)   *  +'
+,
+,
+Figura 4. Perfis de demanda dos picos da manhã e da tarde respectivamente
+Após a coleta de dados, foi feita a parametrização manual da rede para cada
+período de pico, sendo que para cada situação algumas otimizações foram feitas e seus
+205
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+planos de temporização registrados. No caso da manhã, não foi identificada saturação da
+rede, o que permitiu realizar otimizações com alguns níveis de demanda, de 100% em
+relação às leituras até a  130%, ponto onde a rede apresentou saturação e os planos
+otimizados atingiram o tempo de ciclo máximo permitido (120 segundos).
+Seguindo  as  recomendações  encontradas  no  manual  do  software  Transyt-7F
+[Hale,  2008], o tamanho da população do AG executado foi de  20 indivíduos e o
+número de gerações escolhido foi 200. Os resultados encontram-se na figura 5.
+Figura 5. Curvas de evoluçao do melhor fitness de cada geração em função do
+número de gerações. Foram realizadas seis otimizações (cores distintas) para
+cada  nível  de  demanda  (de  100  a  130%  do  esperado),  cada  qual  com  uma
+semente de pseudo-aleatoriedade distinta.
+Assim  foi  possível  criar  uma  tabela  (Figura  6)  que  comparasse,  frente  aos
+diferentes níveis de demanda, os desempenhos simulados dos planos otimizados para
+cada cenário e do plano anterior. Com a tabela foi possível escolher o plano mais
+robusto, que foi implantado na rede real.
+3                                                                                         3
+                                                                                          01    2   ,    ,              ,
+3                                                                                         1     2             ,     ,       ,   ,
+!  "                                                                                      # 3   $   43   41   $ $   2
+Figura 6. Desempenhos de planos otimizados e do anterior para pico da manhã
+Para o pico da tarde foi identificada saturação da rede durante as leituras, então
+somente se otimizou o nível de demanda aferido, sendo escolhido o plano otimizado que
+possuia maior quantidade de semelhanças com os demais. Na figura 7 há uma síntese
+com a curva de evolução do fitness, a tabela comparativa entre os desempenhos do
+plano otimizado aplicado e do anterior e as temporizações dos semáforos para cada um.
+206
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Os planos otimizados encontram-se aplicados na rede real e, analisados por
+engenheiros da CET-SP, já apresentaram bons resultados em casos isolados de demanda
+atipicamente alta devido a redirecionamentos de tráfego causados por ocorrências em
+redes  próximas,  mas  leituras  mais  conclusivas  ainda  precisam  ser  feitas,  pois  a
+implantação foi feita no período de férias escolares e portanto a demanda média diária
+encontra-se abaixo do esperado.
+                                                                                                                                               '   "                                               '6   4               '
+                                                                                                                                                                      5     $
+$                                                                                            %   )6   6      $         %  )6   6      $    %   )6                                              $   %    )6   6      $   %  )6   6
+                                                                                                      0                        0                                            & '                              0                  0
+                                                                                                      0                ,                                                    ("                          ,    0                  0
+                                                                                                                                                              3   3
+                                                                                                      0                ,                                                    & '                              ,0                 0
+                                                                                                                               37     $7       ,
+                                                                                                 ,    0                ,                                                    )  *  +   ,                 ,    0                  0
+                                                                                                                               37     7                           ,
+                                                                                                      ,  0                                                                  & '                              0                  0
+                                                                                                      ,  0        --   ,       ,  0                    0                    /0                               ,  0               0
+                                                                                                      0           --           0                       0                    & '                              0                  0
+                                                                                                 ,    0                ,       0                       0              % 1                  2            ,    ,  0               0
+                                                                                                      0           --   ,       0                       0              3                                      0                  0
+                                                                                                      ,0     --                0                       0              % 1                  2                 ,0                 0
+                                                                                                      0                        0                       0                    & '                              0                  0
+                                                                                                 ,    ,  0             ,       ,  0            ,       ,  0           $(              (*                ,    ,  0       ,       ,  0
+Figura  7.  Otimização  para  o  pico  da  tarde,  plano  semafórico  encontrado  e
+tabelas comparativas entre temporização do plano aplicado e do anterior
+Em relação ao tempo de processamento, cada simulação de um período de 4
+horas demora de 0,5 a 0,7 segundos no computador usado, provido de processador Intel
+Core i5 de 2.4 GHz e 4 GB de memória RAM DDR3 1333 MHz, dependendo do quanto
+a rede estiver carregada. Isso implica em tempos de otimização de cerca de 40 minutos
+para os valores escolhidos de tamanho da população e números de gerações  (4000
+simulações). Esse número pode ser multiplicado se for escolhido realizar mais de uma
+otimização por cromossomo para obter valores de fitness médios, o que foi a opção
+neste estudo de caso para as simulações de situações mais congestionadas  (3 ou  4
+repetições) devido à grande volatilidade apresentada, semelhante a redes reais.
+6. Conclusões
+Como  esperado,  a  ferramenta  desenvolvida  obteve  resultados  simulados  mais
+expressivos no caso das redes congestionadas e se apresentou como boa alternativa para
+obtenção de soluções para temporização de semáforos. Apesar da situação de escassez
+de dados, e das consequentes aproximações e extrapolações das leituras, os resultados
+da aplicação real trouxeram bons indícios para que o desenvolvimento de um simulador
+mais avançado, juntamente à implementação de técnicas de AGs mais elaboradas e com
+melhores desempenhos, tragam resultados melhores e mais próximos a realidade do que
+a versão atual.  Além disso, no futuro seria interessante realizar o mesmo estudo, mas
+dispondo de maior contingente para a realização das leituras para a obtenção de dados
+mais precisos que permitam os traçados dos perfis de demanda dinâmico para cada
+aproximação ao invés de apenas um cruzamento principal.
+Outro resultado interessante alcançado na elaboração do modelo foi o relativo à
+velocidade  da  simulação,  que,  mesmo  sem  qualquer  otimização  na  codifiação,  é
+comparável àquela da aplicação online no trabalho de Pohlmann e Friedrich  (2011),
+207
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+indicando que a arquitetura aqui desenvovida favoreceria AGs para a otimização de
+planos semafóricos em tempo real mesmo sem o uso de computação paralela, que
+também é uma ótima alternativa para a viabilização desse tipo de aplicação.
+Referências
+Brownlee,  J.                                                                             (2011)  Clever  Algorithms                                                      -  Nature  Inspired  Programming  Recipes,
+                                                                                          Creative Commons Attribution-Noncommercial-Share Alike 2.5 Australia License,
+livro de referências, 436p
+Cantarella, G.E. e Pavone, G.; Vitetta, A.  (2006) Heuristics for urban road network
+design: Lane layout and signal settings, European Journal of Operational Research
+Volume 175, Issue 3, artigo, 14p
+Cavicchio, D.  (1972) Reproductive Adaptive Plans, Proceedings of the ACM annual
+conference-Volume 1, artigo, 11p
+Ceylan, H. e Bell, Michael G. H. (2004a) Reserve Capacity for a Road Network Under
+Optimized Fixed Time Traffic Signal Control, Journal of Intelligent Transportation
+Systems Volume 8, Issue 2, artigo, 14p
+Ceylan, H. e Bell, M. G. H. (2004b) Traffic signal timing optimisation based on genetic
+algorithm  approach,  ncluding  drivers  routing,  Transportation  Research  Part  B:
+Methodological Volume 38, Issue 4, artigo, 14p
+Ejzenberg, S. (2005) Reprogramação de Semáforos - Método de Observação de Campo,
+website instrucional Sinal de Trânsito  (http://www.sinaldetransito.com.br)  - CET-
+SP, artigo, 32p
+Hale,  D.  K.                                                                             (2008)  TRAffic  Network  StudY  Tool,  TRANSYT-7F,  United  States
+Version, McTrans Center - University of Florida, manual, 442p
+Holland,                                                                                  J.                                                                              H.                                           (1992)   Genetic   Algorithms,
+http://econ2.econ.iastate.edu/tesfatsi/holland.gaintro.htm
+Kesur, K. B. (2009), Advances in Genetic Algorithm Optimization of Traffic Signals,
+Journal of Transportation Engineering 135, Issue 4, artigo, 14p
+Lebdeh, G. A. e Benekohal, R.  (1997), Development of Traffic Control and Queue
+Management  Procedures  for  Oversaturated  Arterials,  Transportation  Research
+Record: Journal of the Transportation Research Board, Volume 1603, artigo, 9p
+Lo,  H.  K,  Chang  E.  e  Chan,  Yiu  C.                                                 (2001)  Dynamic  Network  traffic  control,
+Transportation Research Part A: Policy and Practice, Volume 35, Issue 8, artigo, 24p
+Lopes, D.L. (2003), Viabilidade do Uso de Modelos Sintéticos Integrados de Uso de
+Solo e Transportes: Estudo de Aplicação à Cidade de São Paulo, Escola Politécnica
+da USP, tese mestrado, 177p
+208
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Medina, J. J. S., Moreno, M. J. G. e Royo, E. R. (2010) Traffic Signal Optimization in
+“La Almozara” District in Saragossa Under Congestion Conditions, Using Genetic
+Algorithms, Traffic Microsimulation, and Cluster Computing, IEEE Transactions on
+Intelligent Transportation Systems, Volume 11, Issue 1, artigo 10p
+Mitchell, M. (1995) Genetic algorithms: An overview, Santa Fe Institute, artigo, 17p
+Parl, B., Messer, C. e Urbanik, T.  (2000) Enhanced Genetic Algorithm for Signal-
+Timing  Optimization  of  Oversaturated  Intersections,  Transportation  Research
+Record: Journal of the Transportation Research Board, Volume 1727, artigo, 10p
+Park,  B.,  Santra,  P.,  Yun,  I.  e  Lee  D.  H.                                       (2004)  Optimization  of  Time-of-Day
+Breakpoints  for  Better  Traffic  Signal  Control,  Transportation  Research  Record:
+Journal of the Transportation Research Board, Volume 1867, artigo, 7p
+Pohlmann, T. e Friedrich, B. (2010) A new online control strategy for signalized urban
+sub-networks, 12th World Congress on Transportation Research, artigo, 22p
+Rennard,                                                                                 J.                                              P.   (2000),   Introduction   do   Genetic   Algorithms
+(http://www.rennard.org/alife/english/gavintrgb.html), website educativo
+Robertson, D. I. e Bretherton, R. D. (1991) Optimizing Networks of Traffic Signals in
+Real  Time-The  SCOOT  Method,  IEEE  Transactions  on  Vehicular  Technology,
+Volume 40, Issue 1, artigo, 5p
+Sun D; Benekohal, R. F. e Waller T. (2006) Bi-level Programming Formulation and
+Heuristic Solution Approach for Dynamic Traffic Signal Optimization,   Computer-
+Aided Civil and Infrastructure Engineering, Volume 21, Issue 5, artigo, 13p
+Stevanovic, A., Martin P., e Stevanovic J.  (2007) VisSim-Based Genetic Algorithm
+Optimization of Signal Timings, Transportation Research Record: Journal of the
+Transportation Research Board, Volume 2035, artigo, 10p
+Teklu,  F.;  Sumalee,  A.;  Watling,  D.                                                 (2007),  A  Genetic  Algorithm  Approach  for
+Optimizing Traffic Control Signals Considering Routing, Computer-Aided Civil and
+Infrastructure Engineering, Volume 22, Issue 1, artigo, 13p
+Vilanova,  L.  (2005a)  Programação  de  um  semáforo  usando  o  método  do  grau  de
+saturação, website instrucional Sinal de Trânsito (http://www.sinaldetransito.com.br),
+artigo, 14p
+Vilanova, L.  (2005b) Fundamentos da programação semafórica, website instrucional
+Sinal de Trânsito (http://www.sinaldetransito.com.br) - CET-SP, artigo, 20p
+209
+
+
+
+
+

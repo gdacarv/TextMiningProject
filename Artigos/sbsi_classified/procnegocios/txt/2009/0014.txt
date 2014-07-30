@@ -1,0 +1,474 @@
+﻿V Simpósio Brasileiro de Sistemas de Informação
+Ontologias e Web Services aplicados ao desenvolvimento de
+Sistemas de Informação Geográfica Móveis Sensíveis ao
+Contexto
+Anderson Resende Lamas, Jugurta Lisboa Filho,
+Ronoel Matos de Almeida Botelho Júnior, Alcione de Paiva Oliveira
+Universidade Federal de Viçosa - Departamento de Informática
+Viçosa, MG, Brasil - CEP: 36570-000
+{andersonlamas,jugurta}@ufv.br,{ronoeljr,alcione}@dpi.ufv.br
+Abstract. This article presents the proposal of an architecture aiming at the
+development of Mobile Geographic Information Systems (Mobile GIS) capable
+to manage context information. This architecture is based on the specification
+of a context model based on ontologies and a set of Web Services to access the
+information stored remotely in a geographic database. This mechanism allows
+Mobile GIS user to receive personalized information in his mobile device,
+combining the information of his profile with the exhibition of geo-spatial
+data.
+Resumo.  Este  artigo  apresenta  a  proposta  de  uma  arquitetura  para  o
+desenvolvimento de Sistemas de Informação Geográfica Móveis (SIG Móveis)
+capazes de gerenciar informações de contexto. Esta arquitetura baseia-se na
+especificação de um modelo de contexto baseado em ontologias e em um
+conjunto  de  Web  Services  para  acesso  a  informações  armazenadas
+remotamente em um banco de dados geográficos. Com este mecanismo é
+possível  que  um  usuário  de  um  SIG  Móvel  possa  receber  informações
+personalizadas em seu dispositivo móvel, combinando as informações de seu
+perfil com a exibição de dados geo-espacias.
+1. Introdução
+Vive-se hoje em um período de avanços sem precedentes em tecnologias que exploram
+a mobilidade e a comunicação entre usuários e dispositivos. Este fato é evidenciado pela
+constante expansão das infra-estruturas de rede sem fio e a grande proliferação de
+dispositivos  móveis  tais  como  PDA`s  (Personal  Digital  Assistent),  Smartphones  e
+telefones celulares. Este cenário tem causado um grande impacto nas mais diversas
+áreas do conhecimento, especialmente pela possibilidade do desenvolvimento de novas
+aplicações que exploram tais características.
+Na área de Sistemas de Informação Geográfica (SIG), por exemplo, a interseção
+de dados geo-espacias com dispositivos móveis deu origem a área chamada de SIG
+Móvel (Mobile GIS). Segundo [Solyman, 2005], SIG Móvel pode ser definido como
+uma estrutura que integra hardware e software para acesso a dados espaciais (mapas)
+através de uma rede sem-fio, utilizando-se dispositivos móveis.
+Outra área de aplicação que vem crescendo com estes avanços é a de aplicações
+sensíveis ao contexto (context-aware applications). Estas aplicações são caracterizadas
+157
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+por  utilizarem  informações  de  contexto  para  fornecerem  serviços  e  informações
+relevantes ao usuário durante a realização de alguma tarefa [Dey, 2000]. Neste cenário,
+contexto pode ser definido como qualquer informação que possa ser utilizada para
+caracterizar uma pessoa, um lugar ou um objeto, relevantes em uma interação entre um
+usuário  e  uma  aplicação                                                                    [Dey,   2000].  Como  informações  deste  tipo  têm-se,  por
+exemplo, a identificação e preferências do usuário, sua localização ou características dos
+dispositivos utilizados.
+A integração de informações de contexto em um ambiente de SIG Móvel é um
+fator que pode agregar um grande valor às informações exibidas para o usuário de uma
+aplicação. Esta afirmação é possível graças a possibilidade de entrega de informações
+personalizadas ao usuário, combinadas com a exibição de dados geo-espaciais. Diante
+deste cenário, este artigo apresenta as características e soluções existentes tanto na área
+de SIG Móvel quanto de aplicações sensíveis ao contexto e propõe uma arquitetura para
+o desenvolvimento de aplicações de SIG Móveis capazes de gerenciar informações de
+contexto.
+Na Seção 2 são descritos alguns aspectos relativos à modelagem de contexto. A
+Seção 3 descreve alguns trabalhos correlatos. Na Seção 4 é apresentada a arquitetura
+proposta para o desenvolvimento de SIG Móveis sensíveis ao contexto. A Seção  5
+apresenta um estudo de caso construído para validar esta arquitetura. Por fim, na Seção
+6 são apresentadas as conclusões sobre este trabalho.
+2. Modelagem de Contexto
+Um sistema é caracterizado como sensível ao contexto quando utiliza o contexto para
+fornecer informação e/ou serviços relevantes ao usuário [Dey, 2000]. Segundo Strang e
+Linnhoff-Popien [2004] a chave para o desenvolvimento de uma aplicação sensível ao
+contexto é a definição de um modelo de contexto apropriado, o qual pode ser definido
+através do uso de ontologias.
+As características ontológicas de formalidade, semântica explícita e abstração de
+implementação habilitam sistemas de software não apenas a inferir novas informações a
+partir de informações modeladas por ontologias, mas também a compartilhar entre si
+essas informações de maneira a integrar de forma transparente os serviços que as
+manipulam [Bulcão Neto, 2006].
+Baseado nestas características Bulcão Neto  [2006] propõe o modelo SeCoM
+(Semantic Context Model), um modelo ontológico independente de domínio, descrito na
+linguagem OWL (Web Ontology Language), que serve como base para a definição de
+informações de contexto. Este modelo é composto de um conjunto de ontologias inter-
+relacionadas baseadas nas dimensões semânticas de identidade, localização, tempo,
+atividade e modo de captura e acesso.
+SeCoM foi desenvolvido utilizando conceitos genéricos de tal forma que possa
+ser reutilizado por uma variedade de aplicações sensíveis ao contexto. Para que isto seja
+possível, as ontologias seguem uma abordagem em duas camadas: a camada superior de
+ontologias, apresentada na Figura 1, que representa o modelo em si e a camada inferior
+de ontologias, que é construída com conceitos específicos da aplicação sensível ao
+contexto  que  está  sendo  desenvolvida.  Nesta  camada,  o  modelo  SeCoM  pode ser
+158
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+reusado ou mesmo estendido com os conhecimentos que são particulares do domínio da
+aplicação.
+Figura 1 - Modelo SeCoM [Bulcão Neto, 2006].
+Com relação ao papel desempenhado pelas ontologias apresentadas na Figura 1,
+verifica-se as ontologias de apoio Knowledge, Relationship, Role, Contact, Document e
+Project, as quais modelam diversos aspectos relacionados a um ator  (Actor). Neste
+modelo atores são entidades que executam alguma ação em uma interação usuário-
+computador.   Já   as   ontologias   Spatial,   Time,   Activity   e   Device   modelam,
+respectivamente,  informações  de  contexto  de  localização,  tempo,  atividade  e
+dispositivos  computacionais  de  captura  e  acesso.  As  ontologias  Spatial  Event  e
+Temporal Event são extensões das ontologias Spatial e Time para representar eventos
+que contenham componentes espaciais e temporais, concomitantemente.
+3. Trabalhos Correlatos
+O desenvolvimento de aplicações de SIG Móveis sensíveis ao contexto vem sendo
+pesquisado  por  diversos  grupos.  A  seguir  são  descritos  alguns  dos  trabalhos  que
+contribuíram para se chegar à arquitetura aqui proposta.
+Li et al. [2006] especificam um mecanismo baseado em Web Services para exibir
+informações contextuais a usuários de dispositivos móveis. As informações contextuais
+são definidas através da localização do usuário, via GPS, das informações do hardware e
+das informações dos softwares utilizados. Esta definição de contexto não considera
+informações do perfil do usuário ou mesmo trata dos dados geo-espaciais.
+Weibenberg et. al  [2006] descreve a plataforma FLAME2008, desenvolvida
+para ser utilizada nas Olimpíadas de Pequim. Esta plataforma se caracteriza como uma
+solução para entrega de informações personalizadas a usuários de dispositivos móveis.
+Este trabalho utiliza um conjunto de ontologias para definir a situação do usuário, que se
+caracteriza por tentar inferir as atividades que usuários possam realizar durante um
+intervalo de tempo. A partir da definição da situação do usuário são exibidas, via Web
+Services, as informações que sejam mais adequadas para aquele momento. Apesar de ser
+um sistema bastante amplo, este trabalho não descreve as implicações de se integrar as
+informações de contexto em um ambiente de SIG Móvel.
+159
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Pode-se citar ainda o desenvolvimento da arquitetura CoMPASS (Combining
+Mobile Personalized Applications with Spatial Services) [Weakliam et. al, 2005] a qual
+utiliza,  além  das  informações  de  perfil  e  localização,  a  trajetória  do  usuário  para
+automaticamente entregar informações personalizadas a um cliente de SIG Móvel. A
+definição e o armazenamento das informações de contexto baseiam-se na utilização de
+um conjunto de arquivos de log. Esta abordagem difere da solução proposta neste artigo,
+a qual sugere o uso de ontologias para definição das informações de contexto e o uso de
+um banco de dados geográficos para armazenamento dos dados.
+4. A Arquitetura Context-Mobile-GIS
+A arquitetura proposta neste trabalho, batizada de Context-Mobile-GIS (CM-GIS), tem
+como  objetivo  a  construção  de  SIG  Móveis  integrados  a  aplicações  sensíveis  ao
+contexto.
+No  caso  dos  SIG  Móveis,  conforme  definido  por  Tomko                                       [2003],  o
+desenvolvimento   de   aplicações   requer   atenção   aos   seguintes   elementos:               (a)
+armazenamento e consulta a dados em um banco de dados geográficos; (b) prover um
+mecanismo para realização de consultas e acesso a dados localizados remotamente; (c) a
+correta utilização de tecnologias.
+Com relação ao banco de dados geográficos (a) deve-se utilizar algum Sistema
+de Gerenciamento de Banco de Dados (SGBD) que tenha capacidade para armazenar e
+gerenciar dados geo-espacias. Alguns SGBD disponíveis atualmente disponibilizam esta
+funcionalidade através de uma extensão para dados espaciais, como é o caso do Oracle,
+do  SQLServer,  do  PostGreSQL,  dentre  outros.  Para  tratar  do  acesso  remoto  às
+informações (b), uma solução bastante adotada é o uso de Web Services, devido a sua
+capacidade de disponibilizar serviços que podem ser acessados dinamicamente através
+de uma rede. Por fim, com relação às tecnologias adotadas (c), é importante que se
+escolha uma ferramenta capaz de manipular e exibir dados geo-espaciais, tanto em sua
+forma gráfica quanto descritiva, nos dispositivos móveis.
+Já no caso das aplicações sensíveis ao contexto é importante que se defina um
+mecanismo capaz de representar e manipular o contexto envolvido no domínio que está
+sendo tratado pela aplicação. Como o modelo SeCoM foi definido de forma genérica, no
+presente trabalho sugere-se a sua utilização na definição do modelo de contexto.
+Diante  das  considerações  feitas  foi  proposta  a  arquitetura  CM-GIS  para  o
+desenvolvimento  de  aplicações  de  SIG  Móveis  sensíveis  ao  contexto,  conforme
+apresentado  na  Figura                                                                           2.  Esta  arquitetura  prevê  que  para  o  desenvolvimento  de
+aplicações de SIG Móveis capazes de gerenciar informações de contexto são necessários
+os seguintes elementos:
+(1) a aplicação de SIG Móvel, a qual será a interface para o cliente a partir de seu
+dispositivo  móvel.  Um  requisito  importante  para  esta  aplicação  é  que  ela  tenha
+capacidade de manipular e exibir dados geo-espaciais;
+(2) um conjunto de Web Services para gerenciar a comunicação e o fornecimento
+de serviços e informações ao usuário. A utilização de Web Services tem uma grande
+importância nesta arquitetura, ao permitir que operações que demandem uma alta carga
+160
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+de processamento possam ser realizadas em máquinas mais robustas e não diretamente
+no dispositivo móvel;
+Figura 2 - Arquitetura Context-Mobile-GIS (CM-GIS)
+(3) um módulo (Módulo de Consultas Espaciais) que se comunica com os Web
+Services e realiza consultas espaciais, através da linguagem SQL, sobre as informações
+armazenadas no banco de dados geográficos;
+(4) um conjunto de ontologias que servem para modelar o contexto envolvido na
+aplicação.  É  sugerido  para  a  modelagem  do  contexto  o  uso  do  modelo  SeCoM
+apresentado na Seção 2;
+(5) um módulo (Módulo de Gerência de Contexto) definido a partir do modelo
+de contexto baseado em ontologias que se comunica com os Web Services para fornecer
+informações de contexto. As informações de contexto também devem estar armazenadas
+no banco de dados e consultadas via SQL; e
+(6) um banco de dados geográficos que gerencia todos os dados geo-espaciais e
+descritivos envolvidos na aplicação.
+Estes itens devem ser detalhados conforme a aplicação que será desenvolvida.
+Na  próxima  Seção  é  apresentado  um  estudo  de  caso,  construído  com  base  nesta
+arquitetura.
+5. UFV-GeoMobile: um estudo de caso
+Nesta Seção é descrito o desenvolvimento do sistema UFV-GeoMobile. Este
+sistema teve como alvo o campus da Universidade Federal de Viçosa (UFV), que é uma
+instituição pública de ensino superior, cujo principal campus está localizado na cidade
+de Viçosa, MG. A UFV oferece diversos cursos de graduação e pós-graduação, em
+161
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+diversas áreas do conhecimento. Anualmente recebe um grande volume de pessoas que
+visitam ou que estabelecem algum vínculo com o seu campus. Dentre estas pessoas
+pode-se  citar  os  novos  estudantes                                                      (~2000  por  ano),  participantes  de  congressos,
+pesquisadores   visitantes,   ou   simplesmente   pessoas   que  desejam  visitar  suas
+dependências. Além disso, existem também as pessoas que já possuem alguma ligação
+com a Universidade, tais como professores, servidores ou ainda os estudantes egressos.
+Um ponto em comum entre estes diversos indivíduos é que muitas vezes eles têm
+dificuldades em identificar lugares ou serviços no campus, dada sua grande extensão
+territorial e à velocidade com que surgem novas construções e instalações diversas.
+Considerando este cenário, verifica-se que o mesmo é ideal para a implementação
+de  um  sistema  que  valide  a  arquitetura  CM-GIS,  proposta  neste  trabalho.  Seria
+interessante que houvesse uma fonte prática e automatizada para o usuário buscar
+informações sobre o campus. Seria ainda mais adequado que as opções de consulta e a
+obtenção das informações fossem personalizadas de acordo com o contexto em que o
+usuário se encontra. Como exemplo, pode-se citar que um visitante provavelmente não
+está interessado no horário da próxima aula, mas gostaria de informações sobre pontos
+de serviço (banco, farmácia, etc) ou mesmo de se informar sobre o local de realização de
+algum evento que ele esteja interessado.
+Diante  desta  realidade  foi  implementado  o  sistema  UFV-GeoMobile,  o  qual
+permite que um usuário utilizando uma aplicação de SIG Móvel instalada em um PDA
+possa realizar consultas ou mesmo receber informações personalizadas sobre o campus
+da UFV. Esta aplicação tem como base um mapa do campus devidamente gerenciado
+por um componente para manipulação de dados geográficos. Além disso, possui um
+conjunto  de  telas  com  as  opções  de  consulta  e  um  mecanismo  para  exibição  de
+informações baseadas no contexto do usuário. Mais especificamente a definição de
+contexto baseia-se em uma agenda de atividades a serem realizadas pelo usuário para
+assim exibir a localização geográfica do local onde será realizada esta atividade.
+Todo o processo de desenvolvimento é descrito nas seções que se seguem.
+5.1. O modelo de contexto: ontologia de um campus universitário
+O modelo de contexto para o estudo de caso UFV-GeoMobile deve conter informações
+sobre as estruturas e as atividades realizadas em um campus universitário. Dentre as
+informações que devem ser modeladas para refletir este domínio estão:
+   As  pessoas:  neste  caso  envolvem  estudantes,  funcionários  e  visitantes.  Os
+funcionários podem ser professores ou servidores técnico-administrativos;
+   A   estrutura   administrativa:  reflete  a  organização  hierárquica  de  uma
+universidade, incluindo reitoria, centros de ensino, departamentos e órgãos;
+   A estrutura acadêmica: envolve atividades relacionadas ao ensino, pesquisa e
+extensão;
+   Agenda de atividades: corresponde ao conjunto de tarefas que uma pessoa possa
+realizar no campus. Este item é fundamental para o sistema resolver informações
+de contexto;
+162
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+   Dados geo-espaciais: utilizado para representar espacialmente os elementos que
+possuem localização geográfica no campus. Exemplos destes elementos são as
+construções e os serviços instalados em cada uma destas construções.
+A partir destas informações parte-se para uma representação formal de um modelo
+de contexto. O modelo de contexto do sistema UFV-GeoMobile foi feito com base no
+modelo SeCoM, proposto por Bulcão Neto  [2006], do qual foram aproveitados os
+conceitos ontolológicos de Actor, Activity, Spatial Event e Temporal Event.
+Este  modelo  de  contexto  tem  grande  importância  no  desenvolvimento  da
+aplicação, pois serviu de base para a modelagem do Banco de Dados Geográfico e para
+a implementação das funcionalidades disponíveis no módulo de gerência de contexto.
+Por  limitações  de  espaço,  a  representação  formal  do  modelo  de  contexto  não  é
+apresentada neste trabalho.
+5.2. Construção do banco de dados geográficos
+O Banco de Dados Geográficos do sistema UFV-GeoMobile foi construído a partir da
+junção de um conjunto de dados geográficos, mantidos pela administração da UFV,
+associados a um conjunto de bases relacionais utilizadas por uma variedade de sistemas
+administrativos,  também  mantidos  pela  instituição.  Os  dados  geográficos  foram
+alterados para se adequarem aos formatos de dados manipulados pelo aplicativo de SIG
+Móvel. Inicialmente os dados estavam armazenados no formato do sistema AutoCad e
+foram  convertidos  para  o  formato  Shapefile,  utilizando-se  o  programa  cad2shape
+[Cad2Shp, 2006]. As seguintes camadas foram produzidas: logradouros, construções e
+instalações  específicas  dentro  de  uma  construção,  como  órgãos  administrativos  e
+laboratórios.
+A modelagem conceitual do banco de dados, conforme visualizado na Figura 3,
+foi definida a partir das informações modeladas na ontologia de domínio de um campus
+universitário. Para esta tarefa foi utilizado o modelo UML-GeoFrame [Lisboa Filho &
+Iochpe,                                                                                           2008],  que  é  um  modelo  específico  para  bancos  de  dados  geográficos.
+Posteriormente,  o  modelo  conceitual  foi  implementado  utilizando-se  o  SGBD
+PostGreSQL com sua extensão espacial PostGIS.
+No diagrama da Figura 3 pode-se observar que o sistema possui classes com e
+sem representação espacial. De acordo com o modelo UML-GeoFrame, as classes e
+subclasses  Funcionário,  Professor,  Técnico  Administrativo,  Pessoa,  Estudante,  Visitante,
+Agenda, Atividade, Órgão e Tipo de Instalação são especializações de ObjetoNãoGeográfico
+(), ou seja, não possuem representação espacial. As classes Construção, Logradouros e
+Instalação são percebidas na visão de objetos () e possuem representação espacial do
+tipo Área, Linha e Ponto, respectivamente. Por fim, as classes ImagemAérea e CurvaDeNivel
+são percebidas na visão de campo (). A primeira possui representação espacial do tipo
+GradeDeCélulas (), enquanto a segunda possui representação do tipo Isolinhas ().
+5.3. A aplicação SIG Móvel
+A interface gráfica do SIG Móvel foi desenvolvida utilizando o framework Microsoft®
+Visual Studio  2005, a linguagem C#  .NET e o emulador Pocket PC  2003. Para a
+visualização dos dados geo-espacias foi utilizado o software SharpMap, o qual consiste
+em  um  conjunto  de  controles  baseados  na  plataforma                                         .NET  para  construção  de
+163
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+aplicativos de SIG em dispositivos móveis [SharpMap, 2008]. Uma versão inicial deste
+protótipo foi publicada em [Lamas et al., 2008].
+Figura 3 - Modelagem do Banco de Dados Geográfico para o UFV-GeoMobile
+Para  permitir  o  acesso  as  informações  armazenadas  no  banco  de  dados
+geográfico foi desenvolvido um Web Service na linguagem Java (SOAP), utilizando-se a
+IDE NetBeans 6.1 e o servidor GlassFish. Para cada funcionalidade disponibilizada no
+aplicativo  de  SIG  Móvel  foi  desenvolvida  uma  operação  correspondente  no  Web
+Service, para receber os parâmetros e repassá-los ao Módulo de Consultas Espaciais ou
+ao Módulo de Gerência de Contexto. Para exemplificar estas operações são descritas
+neste trabalho a opção de localizar uma instalação ou serviço e o mecanismo que
+informa ao usuário sobre a localização geográfica de uma atividade a ser realizada por
+ele.
+Para a localização de um serviço ou instalação, inicialmente o usuário digita o
+nome completo ou parcial do item desejado, utilizando a tela apresentada na Figura 4-a.
+Ao digitar este nome e clicar no botão “Pesquisar” é invocada a operação “getLocal”,
+descrita em detalhes no Quadro  1. Esta operação recebe como parâmetros o nome
+digitado e as coordenadas  (x,y) do usuário, obtidas via GPS ou via um mecanismo
+implementado no SIG Móvel que permite ao próprio usuário indicar sua localização,
+inserindo um ícone no mapa. Esta segunda opção foi implementada para que o usuário
+possa utilizar o aplicativo UFV-GeoMobile, mesmo que o PDA não possua um GPS
+embutido.
+164
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+A operação “getLocal” repassa seus parâmetros para o módulo de consulta, o
+qual gera uma consulta SQL, também descrita no Quadro1, que retorna os nomes das
+instalações que correspondem ao nome digitado, a distância de cada instalação em
+relação a posição do usuário e as coordenadas do ponto central da edificação na qual a
+instalação  esteja  alocada.  A  seleção  feita  pela  consulta  SQL  é  retornada  para  o
+dispositivo móvel, que exibe uma lista das instalações disponíveis                              (Figura 4-a). Ao
+selecionar um dos itens desta lista, a aplicação indica, através de um pequeno ícone
+desenhado sobre o mapa, a localização geográfica da instalação escolhida, conforme
+visualizado na Figura 4-b.
+O  mecanismo  para  notificar  o  usuário  do  SIG  Móvel  sobre  a  localização
+geográfica de alguma atividade que esteja cadastrada em sua agenda, foi desenvolvido
+como uma opção sensível ao contexto do usuário. Inicialmente para ter acesso a esta
+funcionalidade o usuário deve se identificar no sistema através de um login e uma
+senha. A partir deste momento, de minuto em minuto é invocada operação “GetEvento”,
+apresentada no Quadro 2. Esta operação recebe como parâmetro além do login e da
+senha, a hora atual, que é obtida do dispositivo móvel. Esta operação repassa estes
+parâmetros para o módulo de gerência de contexto o qual gera uma consulta em SQL,
+também apresentada no Quadro 2. Esta consulta retorna todas as atividades cadastradas
+do usuário que faltem 10 minutos para seu início, detalhando a descrição da atividade, o
+horário de início e de término desta atividade, o nome da instalação na qual a atividade
+irá ser realizada e as coordenadas do ponto central da edificação na qual a instalação
+está alocada. A partir destas informações, a aplicação de SIG Móvel exibe uma caixa de
+texto  para  o  usuário  e  indica  através  de  um  ícone  a  localização  geográfica  desta
+atividade, conforme observado na Figura 5.
+(a) Consulta instalações                                                                        (b) Localização de uma instalação
+Figura 4 - Telas de consulta a instalações no sistema UFV-GeoMobile
+165
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Quadro 1 - Operação do Web Service e consulta SQL para localizar instalações.
+@WebMethod(operationName  =  "getLocal")
+public List<String> getLocal(@WebParam(name  =  "nomeLocal")
+String nomeLocal,  @WebParam(name  =  "x") double x,
+@WebParam(name  =  "y") double  y)  {
+}
+SELECT  i.nome, distance(e.the_geom,  GeomFromText('POINT(x,  y)',-1)),
+Centroid(e.the_geom)
+FROM Edificacoes  e,  Instalacoes  i, Tipo_Instalacao t
+WHERE  (i.nome like  '%nomeLocal%') or
+((t.tipo=  'nomeLocal')  and  (t.tipo  = i.tipo))  and
+intersects(e.the_geom,  i.the_geom);
+Quadro 2 - Operação do Web Service e consulta SQL para avisar sobre eventos.
+@WebMethod(operationName  =  "getEvento")
+public List<String> getEvento(@WebParam(name  = "login")
+String login,  @WebParam(name  = "senha")
+String senha,  @WebParam(name  = "horaAtual")
+Object horaAtual)  {
+}
+SELECT  at.descricao, at.horaIni,  at.horaFim, i.nome,  Centroid(e.the_geom)
+FROM Edificacoes  e,  Instalacoes  i, Atividade at,  Agenda  ag,  Pessoa  p
+WHERE  (i.horaIni  -  'horaAtual')  =  10  and  (p.login  =  'login') and
+(p.senha='senha') and intersects(e.the_geom, i.the_geom)  and
+(p.idpessoa=ag.idpessoa)  and  (ag.idagenda=at.idagenda);
+Figura 5 - Tela que notifica o usuário sobre a realização de alguma atividade.
+166
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+6. Conclusões
+Neste  trabalho  foi  apresentada  a  especificação  de  uma  arquitetura  para  o
+desenvolvimento de SIG Móveis capazes de gerenciar informações de contexto. Foram
+estudadas as características inerentes a este tipo de aplicação até que se chegasse a
+solução proposta, a qual inclui: o uso de Web Services para permitir o acesso remoto a
+informações a partir do dispositivo móvel, ontologias para a modelagem de contexto e o
+uso de banco de dados geográficos para o armazenamento das informações.
+O uso de ontologias para especificar um modelo de contexto tem como principal
+vantagem a possibilidade de especificar o correto significado e relacionamento entre os
+termos, evitando interpretações imprecisas sobre o domínio que está sendo modelado. A
+adoção do modelo SeCoM pode facilitar bastante este processo de modelagem, visto
+que ele aborda as diversas dimensões de informação contextual e foi desenvolvido com
+característica de independência de domínio.
+O uso de ontologias neste trabalho poderia ser melhor explorado se houvesse um
+mecanismo  que  manipulasse  as  ontologias  e  inferisse  novas  informações  antes  de
+retorná-las ao usuário do SIG Móvel. Esta abordagem será feita em um trabalho futuro.
+Outra característica que pode ser futuramente explorada é o uso de Geo Web
+Services, os quais são serviços definidos pela OGC (Open GIS Consortium) para tratar
+especificamente de dados geo-espaciais.  Este mecanismo evitaria a necessidade da
+instalação de um aplicativo no PDA, conforme foi feito na aplicação UFV-GeoMobile.
+Ao invés disso, o aplicativo de SIG Móvel poderia ser acessado através de um browser.
+Contudo, a arquitetura apresentada, juntamente com a estrutura UFV-GeoMobile
+desenvolvida como estudo de caso, mostram como o uso de um aplicativo de SIG
+Móvel capaz de gerenciar informações de contexto pode ser de grande utilidade para um
+usuário,  especialmente  pela  capacidade  de  apresentar  informações  personalizadas
+combinadas com a exibição de dados geo-espaciais. Desse modo, este trabalho apresenta
+uma forma viável e bastante prática para o desenvolvimento de aplicações de SIG
+Móvel, apresentando soluções para tratar desafios típicos de aplicações que envolvam
+dados geo-espaciais, contexto e dispositivos móveis.
+Agradecimentos
+Projeto parcialmente apoiado com recursos da FAPEMIG - Fundação de Amparo à
+Pesquisa do Estado de Minas Gerais e do CNPq/MCT/CT-Info.
+Referências
+Bulcão Neto, R. F.  (2006). Um processo de software e um modelo ontológico para
+apoio ao desenvolvimento de aplicações sensíveis ao contexto. São Paulo. Tese
+(Doutorado em Ciência da Computação) - Universidade de São Paulo.
+Cad2Shp  (2006).  Cad2Shp:  AutoCAD  DXF/DWG  to  ArcView  Shapefile Converter.
+Disponível em:  <http://www.brightergraphics.co.uk/guthrie/ cad2shp.htm>. Acesso
+em: 12 de fevereiro de 2006.
+Dey,  A.  K.                                                                               (2000).  Providing  architectural  support  for  building  context-aware
+applications. Estados Unidos. PhD thesis (Doutorado em Ciência da Computação) -
+Georgia Institute of Technology.
+167
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Lamas, A. R.; Lisboa Filho, J.; Oliveira, A. P.; Lopes, A. M.  (2008). Sistemas de
+Informação Geográfica Móveis orientados ao contexto: uma abordagem baseada em
+ontologias  de  domínios.  In:  Anais  do  IV  Simpósio  Brasileiro  de  Sistemas  de
+Informação (SBSI 2008). Rio de Janeiro: SBC. pp. 70-81.
+Li, X.; Shin, W.; Li, L.; Yoo, S. B. (2006). GIS Web Service Using Context Information
+in Mobile Environments. In: Proceedings of ICCSA 2006, LNCS 3980, pp. 895 -
+903.
+Lisboa Filho, J.; Iochpe, C. (2008). Modeling with a UML profile. In: Shashi Shekhar
+and Hui Xiong. Encyclopedia of Geographical Information Science. New York:
+Springer. pp. 691-700.
+SharpMap                                                                                 (2008).  SharpMap:  Geospatial  Application  Framework  for  the  CLR.
+Disponível em: <http://www.codeplex.com/SharpMap>. Acesso em: 17 de agosto de
+2008.
+Solyman,    A.    A                                                                      (2005).                                                                  Investigating   Mobile    GIS.    Disponível    em:
+<http://www.directionsmag.com/article.php/>. Acesso em: 28 de maio de 2007.
+Strang, T.; Linnhoff-Popien, C. (2004). A Context Modeling Survey. In: Proceedings of
+Workshop   on   Advanced   Context   Modelling,   Reasoning   and   Management
+(UbiComp4). Nottingham-England.
+Tomko,  M.  (2003).  Spatial  Databases  for  Mobile  GIS  Applications.  Eslováquia.
+Dissertação (Mestrado em Engenharia Civil) - Slovak University of Technology.
+Weakliam, J., et al. (2005). Delivering Personalized Context-Aware Spatial Information
+to Mobile Devices. In: Proceedings of W2GIS 2005, LNCS 3833, pp. 194-205.
+Weißenberg, N.; Gartman, R.; Voisard, A.  (2006). An Ontology-based Approach to
+Personalized Situation-aware Mobile Service Supply. GeoInformatica, v.10, n.1, pp.
+55-90.
+168
+
+
+
+
+

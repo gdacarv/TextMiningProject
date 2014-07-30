@@ -1,0 +1,496 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Legibilidade em Dados Abertos: uma Experiência com os
+Dados da C âmara Municipal de S ão Paulo
+Fernanda C. Bico, Leandro N. Trindade
+Roberto A. R. Caracciolo Jr., Ronaldo J. S. Paiva Jr., Sarajane M. Peres1
+1Escola de Artes, Ciências e Humanidades - Universidade de São Paulo (USP)
+Av. Arlindo Béttio - 03828-000 - São Paulo - SP - Brasil
+{fernanda.bico,leandro.trindade,
+roberto.caracciolo,ronaldo.p,sarajane}@usp.br
+Abstract. S ão Paulo City Council’s open data are published on its Website
+using XML (eXtensible Markup Language).  XML format provides an organ-
+izing semistructured data, facilitating the data reading and reusing by computer
+applications, however supplies poor legibility for direct analysis about the in-
+formation comprised therein.  The work presented here aimed to study such
+organization to making possible building a Web application able to generate
+graphical views, making more democratic the opening data initiative. Both Web
+application development process and implemented filter options and graphical
+visualizations are presented in this paper.
+Resumo. Dados abertos da C âmara Municipal de S ão Paulo s ão publicados no
+seu portal Web usando o formato XML (eXtensible Markup Language). O for-
+mato XML confere uma organizaç ão semiestruturada aos dados, facilitando a
+leitura e re úso dos mesmos por meio de aplicaç ões computacionais, mas fornece
+pouca legibilidade para an álise direta da informaç ão nele contida. O trabalho
+aqui apresentado teve o objetivo de estudar tal organizaç ão para que fosse
+possível construir uma aplicaç ão Web capaz de gerar visualizaç ões gr áficas,
+tornando mais democr ática a iniciativa de abertura de dados. O processo de de-
+senvolvimento da aplicaç ão Web bem como suas opç ões de filtros de informaç ão
+e de visualizaç ão s ão apresentadas neste artigo.
+1.                                                                                         Introduç ão
+Em um país de tamanha densidade populacional e diversidade educacional, cultural e
+social como o Brasil, é frequente o estabelecimento de lacunas de comunicação entre o
+governo e a população.  De certo modo, a informação referente ao trabalho do governo
+é acessível de forma resumida e pré-formatada e, quando disponibilizada, é apresentada
+em uma organização difícil de ser interpretada pelo cidadão comum.  A atenção para
+iniciativas de “abertura de dados” se apresenta como um movimento recente no país, que
+direciona esforços para democratização da informação.
+No âmbito governamental, dados abertos se referem à publicação de dados em for-
+mato natural (raw), porém que os tornem acessíveis, prontamente disponíveis para todos
+e passíveis de re úso [Machado e Parente de Oliveira 2011]. Assim, a divulgação de dados
+governamentais pode ser identificada como um grande passo rumo a um maior envolvi-
+mento dos cidadãos na gestão e desenvolvimento da sociedade, uma vez que informação
+678
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+de qualidade sobre as decis ões das esferas governamentais poderiam se tornar de amplo
+conhecimento da população.
+Ainda que esse movimento seja recente no Brasil, e muitos cidadãos desconheçam
+o quão eficiente este recurso pode ser, algumas iniciativas para a regulamentação do movi-
+mento de dados abertos no Brasil vem motivando diversos órgãos p úblicos a disponibi-
+lizarem seus dados em meio eletr ônico. Entre eles está a Câmara Municipal de São Paulo
+(CMSP), que vem divulgando na Web os dados sobre suas aç ões, sob o Programa de Da-
+dos Abertos do Parlamento1, criado pelo Ato da Mesa no  1156/2011, o qual “disp õe sobre
+a implementação do Programa de Dados Abertos do Parlamento no âmbito da Câmara
+Municipal de São Paulo”2.
+Entretanto,  apesar das vantagens que potencialmente se vislumbra com estas
+iniciativas,  ao acessarem os dados disponibilizados pela CMSP, os cidadãos paulis-
+tanos deparam-se com dados em formato semiestruturado, com baixa granularidade de
+informação.  Para que estes dados possam ser efetivamente compreendidos, e para que
+informação de qualidade possa ser extraída da análise deles, é necessário possuir conheci-
+mentos técnicos sobre o formato usado na disponibilização e sobre como usar a tecnologia
+para transformar os dados em informação.
+O projeto aqui apresentado teve como objetivo estudar a estrutura de publicação
+dos dados da CMSP e implementar uma aplicação Web para extrair e disponibilizar
+informação contida nestes dados para os cidadãos.  Por meio desta aplicação o usuário
+pode realizar consultas referentes ao assunto que mais lhe interessar e visualizar as res-
+postas em uma interface gráfica. Este trabalho traz ainda um relato referente ao processo
+de entendimento dos dados e de desenvolvimento da aplicação que pode contribuir com
+iniciativas similares, já que na disponibilização de dados abertos, é comum a inexistência
+arquivos de meta-dados, o que insere um dificultador a mais para a compreensão dos
+dados e consequente projeto de aplicaç ões sobre eles.
+A fim de melhor organizar o conte údo deste artigo, as seç ões que o divide são apre-
+sentadas como segue: na Seção 2 algumas caraterísticas de iniciativas relacionadas são
+brevemente comentadas; a descrição dos dados abertos da CMSP é apresentada na Seção
+3; a Seção 4 representa a primeira contribuição deste artigo - a descrição das tomadas de
+decisão que permitiram a construção da aplicação em questão; a segunda contribuição, a
+aplicação Web em si, é apresentada na Seção 5; finalmente, as consideraç ões finais são
+apresentadas seguidas das referências bibliográficas.
+2. Iniciativas relacionadas
+Com  o  movimento  em  prol  da  divulgação  de  dados  p úblicos  e  com  a  efetiva
+disponibilização de dados, começaram a surgir iniciativas que tem como objetivo ana-
+1 http://www.camara.sp.gov.br
+2 Legislaç ões correlatas a este tema são: a Lei no  301/2011, de 22 de junho de 2011. Institui a política
+municipal de dados abertos e acesso à informação na administração p ública direta e indireta, no tribunal de
+contas, e na Câmara Municipal de São Paulo, e dá outras providências (Requerimento de coautoria RDS
+848/2011 - Aprovado.) Publicação Oficial da Cidade de São Paulo, 22 de junho de 2011, p.101.; a Lei no
+41/2010, de 30 de abril de 2010. Regula o acesso a informaç ões previsto no inciso XXXIII do art.  5o , no
+inciso II do § 3o  do art.  37 e no § 2o  do art.  216 da Constituição Federal; altera a Lei no  8.112, de 11 de
+dezembro de 1990; revoga a Lei no  11.111, de 5 de maio de 2005, e dispositivos da Lei no  8.159, de 8 de
+janeiro de 1991; e dá outras providências. Portal Atividade Legislativa.
+679
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+lisar os dados, processá-los e disponibilizar aplicaç ões para visualização de informação
+ou para prestação de serviços a partir das informaç ões geradas. Esse movimento é mais
+evidente em países da América do Norte e da Europa.  Um exemplo comum a países
+destes dois continentes é o The Godvild site 3  [B öhm et al. 2010], onde estão disponíveis
+dados provenientes de diferentes agências governamentais americanas e européias, sob
+o formato de formulários de consultas que além de disponibilizar funç ões de filtragem
+da informação, também trazem consultas pré-projetadas para destaque dos dados mais
+recentemente publicados e das consultas mais acessadas pelos usuários.
+No Brasil, existem alguns exemplos de projetos de destaque.  O sistema Legis-
+Dado4,  que se constitui como uma aplicação Web que consome dados diretamente
+dos sites da Câmara dos Deputados e do Senado Federal do Brasil, permitindo que a
+tramitação dos Projetos de Lei sejam acompanhados nas duas casas e criando um am-
+biente de mapeamento de todo o processo legislativo federal brasileiro.  Em uma linha
+similar está site “Para onde foi o meu dinheiro”5, desenvolvido pelo OpenData-BR 6,
+movimento criado pela comunidade de software livre S ão Paulo Pearl Mongers, utiliza o
+“Portal da Transparência”7  como fonte de dados. O site acessa dados do governo federal
+desde 2005 e do Estado de São Paulo desde 2010, e exibe de forma clara e objetiva, os
+valores e percentuais de como foram gastos os recursos p úblicos. Na área de “estatísticas”
+tem destaque o portal do IBGE 8  que organiza dados de todas as cidades brasileiras, re-
+ferentes a trabalhos de censo nos mais diversos domínios, incluindo desde indicadores
+como Produto Interno Bruto das cidades, até estatísticas sobre n úmero de casamentos e
+div órcios realizados por ano em cada uma delas.
+Para além de iniciativas com dados governamentais, a publicação de dados abertos
+também suporta aplicaç ões que facilitam a vida dos cidadãos em diferentes sentidos. O
+site After School Special 9  combina dados sobre escolas, livrarias e restaurantes da cidade
+de São Francisco nos Estados Unidos, de forma que os cidadãos possam planejar, por
+exemplo, atividades extra-escolares para crianças, levando em consideração informaç ões
+referentes a nutrição, localização geográfica e tipo de vizinhança.  Ainda em relação a
+informaç ões sobre a cidade de São Francisco, outra aplicação interessante é a SFScores 10
+que oferece visualização gráfica sobre as inspeç ões de qualidade de todos os restaurantes
+e caso um local de interesse, selecionado pelo usuário, possua uma violação de padr ões
+de segurança alimentar, a aplicação mostra os motivos e esclarecimentos sobre o fato.
+Na área de aplicativos específicos para Smart Phones, a cidade de Nova York se destaca.
+Reposit órios de dados abertos sobre esta cidade permitiram a criação de aplicativos como
+o Trees Near You 11, para iPhones, que identifica todas as árvores da cidade; ou ainda o
+Routesy 12, também para iPhones, que mostra os horários de  ônibus e a localização de
+estaç ões através de um mapa. Uma reportagem destacando a importância de ferramentas
+3 govwild.hpi-Web.de
+4 http://data.votaio.com/
+5 http://www.paraondefoiomeudinheiro.com.br
+6 http://opendatabr.org
+7 http://www.portaldatransparencia.gov.br/
+8 http://www.ibge.gov.br/cidadesat/topwindow.htm?1
+9 http://www.afterschoolsf.org/
+10 http://sfscores.com/
+11 http://www.treesnearyou.com/
+12 http://www.routesy.com/
+680
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+como essas, e algumas outras mais, pode ser encontrada em [Miller 2006].
+Assim como há  projetos de disponibilização de dados e aplicativos para uso
+p úblico,  há  também  iniciativas  de  desenvolvimento  de  ferramentas  para  suportar  a
+organização e disponibilização dos dados e para proporcionar que os pr óprios usuários
+transformem os dados em informação [B öhm et al. 2010]. Exemplos interessantes são o
+dcat GridWorks 13  e as ferramentas encontradas no site do Linked Data 14.
+Em uma linha mais abrangente do que a criação de aplicaç ões, está o trabalho
+desenvolvido pelo Serviço Federal de Processamentos de Dados (SERPRO) do Brasil,
+que prop õe uma arquitetura para permitir o acesso a dados, por ele chamados “primários”
+[Machado e Parente de Oliveira 2011].  Este acesso se dá via desenvolvimento de soft-
+ware tal que seja possível, por exemplo, combiná-los em aplicaç ões do tipo mashup,
+gerando novas informaç ões.  Esta arquitetura tem o objetivo de oferecer concordância
+semântica entre fontes de dados heterogêneos.
+3. Dados Abertos da C âmara Municipal de S ão Paulo
+A CMSP disponibiliza dados referentes às sess ões plenárias ordinárias e extraordinárias,
+a informaç ões sobre funcionários e à área contábil. A área contábil é a que possui mais da-
+dos disponibilizados e eles estão organizados nas seguintes subáreas: pagamentos gerais
+e contrato; demonstrativo de despesas realizadas; balancete da despesa; demonstrativo
+diário da execução da despesa (estorno); demonstrativo diário da execução da despesa
+(empenho); despesa de pessoal; dotaç ões orcamentárias da Câmara Municipal de São
+Paulo; e dotaç ões orçamentárias da Secretaria Municipal de Educação.
+Esses dados estão divulgados seguindo o formato XML - padrão definido pelo
+W3C  (World Wide Web Consortium) e disponibilizados para download via protocolo
+HTTP (Hypertext Transfer Protocol). A adoção da linguagem XML sob o padrão W3C
+permite a criação de uma comunicação universal para aplicaç ões computacionais, visto
+que a sintaxe da linguagem XML permite que elas consumam e distribuam dados com fa-
+cilidade. O conjunto de dados estudado no presente projeto está organizado em 8 arquivos
+XML conforme descrito na Tabela 1.
+A Figura 1 apresenta um pequeno trecho do arquivo XML 8. Note que os dados
+são apresentados na forma semiestruturada, discriminados por tags que, em algum nível,
+passam informação semântica sobre o contexto que o dado representa.  Observando o
+conte údo do XML é possível verificar que se tratam de dados da área de educação porque
+a tag <org ão> discrimina a proveniência dos dados. Outras tags podem ser analisadas
+para inferência de mais informaç ões, por exemplo:  a tag                                      <programa> especifica o
+contexto de uso da dotação; a tag <grupoDespesa> indica que o gasto é considerado
+como “investimento” e a tag <valor> especifica o montante referente ao investimento.
+4. Decis ões de Projeto e Modelagem de Dados
+A  complexidade  do  contexto  contábil  e  a  dificuldade  em  encontrar  metadados  que
+pudessem ajudar na compreensão dos relacionamentos existentes entre os dados dos ar-
+quivos XML representa um complicadador tanto para a compreensão dos dados disponi-
+13 http://lab.linkeddata.deri.ie/2010/dcat/♯what
+14 http://linkeddata.org/tools
+681
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Tabela 1. Resumo do contexto do conjunto de dados estudado no presente tra-
+balho. A coluna referente a “tamanho” diz respeito ao n ´umero de registros XML
+contidos no arquivo.  Tamanho vari ´avel (var.)  foi adotado aqui para indicar ar-
+oes frequentes.
+                                                                                              Tamanho   Sobre os dados
+1                                                                                             135       Pagamentos gerais e contratos de julho/2011
+2                                                                                             22        Demonstrativo de despesas referente a julho/2011 - mensal e acumulado
+3                                                                                             22        Balancete da despesa referente a julho/2011 - mensal e acumulado
+4                                                                                             26        Demonstrativo diário da execução de despesa referente a julho/2011 - estornos
+5                                                                                             169       Demonstrativo diário da execução de despesa referente a julho/2011 - empenhos
+6                                                                                             1         Despesa de pessoal - maio/2010 a abril/2011
+7                                                                                             873       Dotação orçamentária da Secretaria Municipal de Educação - exercício de 2011
+8                                                                                             29        Dotação orçamentária da Câmara Municipal de São Paulo - exercício de 2011
+9                                                                                             var.      Presença de Vereadores em Sess ões Plenárias Ordinárias e Extraordinárias
+10                                                                                            var.      Votaç ões em Sess ões Plenárias Ordinárias e Extraordinárias
+bilizados quanto para a construção de uma aplicação para produção de informação. Esta
+dificuldade é exemplificada pela situação ilustrada na Figura 1.
+Com base nos dados visualizados nesse arquivo é possível inferir que “9 milh ões
+de reais foram investidos na forma de obras e instalaç ões para a  área de educaç ão
+da cidade de S ão Paulo, durante o ano de 2011”.  Porém, o dado representado na tag
+<modalidadeDespesa>, por exemplo, possui um sentido semântico que não faz parte do
+vocabulário do cidadão comum e seu significado não pode ser facilmente determinado.
+Evidentemente que o acompanhamento de um especialista da área de Ciências Contábeis,
+com experiência em Contabilidade P ública,  poderia suportar análises mais críveis e
+verossímeis, entretanto, num contexto de democratização da informação, a exigência
+deste conhecimento específico corrobora contra a plena legibilidade da informação.
+Face a essas circunstâncias, os autores deste estudo identificaram duas formas de
+explorar os dados da CMSP para construção de aplicaç ões para geração e disponibilização
+de informação:
+• a primeira, mais restrita a um grupo de pessoas que tenham conhecimento es-
+pecialista do contexto contábil dos dados ou acesso aos sistemas de informação
+legados da CMSP produtores desses dados, e respectiva documentação, possibi-
+litaria a construção de aplicaç ões mais complexas com potencial para geração de
+informação de alto nível e, inclusive, descoberta de conhecimento;
+• a segunda, mais democrática, gira em torno do trabalho de extração de informação
+a partir de inferências, que apesar se constituirem como um mapeamento direto
+dos arquivos XML para uma modelagem de dados estruturadas, tem o potencial
+de permitir a construção de filtros de dados e geração de visualização gráfica da
+informação, atendendo a demanda de democratização da informação, ainda que
+parcialmente.
+Adotando a segunda possibilidade como método de extração de informação, para a
+realização do presente projeto foram selecionados os arquivos 7 e 8 (Tabela 1). A partir da
+seleção desses arquivos, foram desenvolvidos duas modelagens de dados: (a) a primeira,
+682
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+ao de 2011,
+em formato XML.
+uma modelagem de dados relacional, para receber os dados transferidos dos arquivos
+XML e criar uma ambiente adequado para realização de consultas que viabilizasse um
+estudo sobre o contexto dos dados; (b) a segunda, uma modelagem multidimensional e
+hierárquica, para organizar e persistir os dados para a aplicação Web.
+4.1. Estudando os Dados com a Modelagem Relacional
+A fim de criar um ambiente para facilitar o estudo sobre os dados, foi concebido um
+modelo relacional que representa a organização de dados usada nos arquivos XML. Esse
+modelo não apresenta relacionamentos entre os dados pois não foi construído para repre-
+sentar a estrutura relacional que os dados devem possuir no contexto real; é portanto um
+modelo não-normalizado.  No entanto, a motivação para tal modelagem foi persistir os
+dados em um Sistema de Gerenciamento de Banco de Dados para criar cenários, através
+de consultas SQL (Structured Query Language), que pudessem revelar requisitos para
+construção da aplicação Web. Para construção deste modelo de dados, as seguintes regras
+de mapeamento foram estabelecidas:
+• cada arquivo XML é representado, na base de dados, como uma relação (tabela);
+• cada elemento-filho contido no XML é representado na base de dados como uma
+tupla (linha);
+• cada atributo de um elemento-filho contido no XML é representado, na base de
+dados, como um atributo (coluna) de uma relação (tabela).
+Portanto, o modelo relacional construído é um “espelho” do conte údo do arquivo
+XML, ou seja, a organização dos dados contida nos arquivos XML permanece neste mo-
+delo. Um aplicativo console foi desenvolvido exclusivamente como uma ferramenta cujo
+objetivo é promover a interface de dados entre arquivos XML e banco de dados, estando
+apto a ler os arquivos XML e a popular este novo modelo, este último assumiu um caráter
+temporário no processo de desenvolvimento da aplicação Web aqui discutida.
+683
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Com a migração para o ambiente estruturado de um modelo de dados relacional foi
+possível melhorar a compreensão sobre os dados. Usando a linguagem SQL, foram pro-
+jetadas e executadas diferentes consultas de agrupamento, contabilização e ordenamento
+de valores, o que possibilitou o alcance de graus de liberdade na manipulação dos dados
+- antes dificultada pelo fato dos dados estarem contidos em arquivos semiestruturados; e
+foi possível constatar alguns fatos.
+Um exemplo dessas constataç ões  é ilustrado pelas situação presente na Figura
+2. Note que vários elementos-filho referentes a contexto de “despesas”, nos dois arquivos
+selecionados, além de apresentarem a mesma estrutura (com atributos idênticos), apresen-
+tam valores de atributos em comum, tanto em elementos-filho do mesmo arquivo quanto
+de arquivos diferentes. Esta constatação motivou a criação de um modelo de dados único,
+adequado para receber dados de mais de um arquivo XML, para a aplicação Web.
+ao de pontos comuns nos arquivos de dados XML, facili-
+ao dos dados em um modelo relacional e pelo uso da lin-
+guagem SQL. Note que os valores dos atributos grupoDespesa, modalidadeDespesa e
+fonteDespesa s ˜ao iguais nos dois arquivos.
+Idealmente, um processo de normalização no modelo relacional seria necessário
+para que a modelagem alcançasse maturidade para suportar o desenvolvimento de uma
+aplicação. Contudo, devido à motivação, então já existente, para criação de um segundo
+modelo capaz de representar as constataç ões elicitadas, uma organização de dados mais
+suscetível para o processamento de dados e geração da informação mostrou-se interes-
+sante e um modelo de dados multidimensional e hierárquico foi projetado.
+4.2. Organizando e Persistindo Informaç ão com a Modelagem Multidimensional e
+Hier árquica
+Conceitos de OnLine Analytical Process (modelagem, linguagem e produtos) envolvem,
+segundo [Thomsen 2002], noç ões ou ideias de dimens ões m últiplas e hierárquicas, usa-
+das para melhorar o entendimento sobre o mundo (domínio de aplicação).  Assim, com
+o intuito de promover a geração de informação de forma eficiente, foi concebida uma
+modelagem de dados multidimensional e hierárquica para persistir os dados da aplicação
+aqui discutida.
+684
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+¸ament ´aria.
+O modelo de dados multidimensional e hierárquico utilizado foi o Snow Flake
+Schema, uma variação do popular “Modelo Estrela”, com o diferencial que as tabelas de
+dimens ões são normalizadas [Han e Kamber 2006]. Para persistir os dados nesta modela-
+gem foi adotada uma arquitetura de sistema ROLAP (Relational Online Analytical Pro-
+cessing), onde os dados, ainda que organizados de forma multidimensional e hierárquica,
+são armazenados em um Sistema Gerenciador de Banco de Dados Relacional. O modelo
+resultante está ilustrado na Figura 3.
+O modelo multidimensional e hierárquico concebido tem um caráter técnico,
+tendo sido construído a partir da organização semiestruturada original dos dados, e ap ós
+o estudo feito sobre modelo de dados relacional temporário. Um único modelo foi gerado
+para receber os dados dos dois arquivos XML estudados e, de acordo com o que foi ve-
+rificado via o estudo com consultas SQL, apenas o contexto de “Função” e “Sub-função”
+pode ser hierarquizado, visto que de acordo com as instâncias constantes no banco de
+dados, não houve conflito de agrupamento de valores.  Um conflito seria confirmado se
+uma sub-função aparecesse associada a duas funç ões diferentes.
+Embora houvesse indícios semânticos de que o contexto de “Despesas” pudesse
+ser modelado de forma hierárquica, dependências funcionais  (veja o conceito de de-
+685
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+pendências funcionais em [Elmasri e Navathe 2005]) referentes a esse contexto não foram
+encontradas e, inclusive, constatou-se a violação de dependências funcionais similares
+àquelas encontradas no contexto de “Função”.  Assim, hierarquias no contexto “Despe-
+sas” não foram estabelecidas.
+Note que essas decis ões de projeto estão baseadas em um estudo sobre instâncias
+de dados, e dependências funcionais que são válidas nas instâncias podem não ser requeri-
+das pelo modelo (ou esquema) [Elmasri e Navathe 2005].  Para definir as dependências
+funcionais no modelo, fazendo com que fosse exigidas nas instâncias, seria necessário
+usar conhecimento especializado do domínio contábil, e como já discutido antes neste
+artigo, não foi considerada a semântica contábil inerente ao domínio da aplicação.
+A Figura 4 representa o processo de criação do modelo, o qual considerou os
+seguintes aspectos:
+• os atributos de um elemento-filho do arquivo XML, cujas nomenclaturas se ini-
+ciam por “id”, tornaram-se chaves-primárias da relaç ões que armazenam dados
+das “Dimens ões” do modelo;
+• cada tabela “Dimensão” possui atributos de descrição que acompanham os atribu-
+tos cujas nomenclaturas se iniciam por “id”;
+• os elemento-filhos dos arquivos XML são representados na tabela “Fato” do mo-
+delo, que possui chave primária numérica e incremental;
+• os relacionamentos existentes entre a tabela “Fato” e as dimens ões são do tipo
+“um-para-muitos” significando que cada tupla da tabela “Fato” se relaciona a uma
+tupla de cada “Dimensão”;
+• todos os demais atributos que não se tornaram “Dimens ões”, tornaram-se atributos
+da relação “Fato” constituindo os atributos de “Métricas” do modelo;
+• dependências funcionais verificadas no estudo dos dados geraram normalização
+no modelo.
+ao do modelo multidimensional e hier ´arquico: a
+¸ ˜ao “Fato” tb Item Dotaç ão representa o elemento-filho linha do arquivo XML.
+Ela possui os atributos Valor e Dotacao, al ´em da chave-prim ´aria IdItemDotacao e
+ao de “Dimens ˜ao” tb Fonte. Esta
+aria idFonte e atributo o DescFonte, origina-
+dos, respectivamente, dos atributos idFonteDespesa e fonteDespesa do arquivo XML.
+5. C âmara Aberta: um aplicativo Web para dados abertos
+Sobre o modelo de dados multidimensional e hierárquico gerado foi desenvolvida uma
+aplicação  Web  intitulada  “Câmara  Aberta”.   A  aplicação  disponibiliza  relat órios  e
+686
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+representaç ões gráficas, com informaç ões geradas a partir dos dados abertos da CMSP.
+O objetivo desta aplicação é mostrar a informação de maneira simplificada.  Com esse
+tipo de iniciativa, dados brutos de difícil compreensão podem ser visualizados na forma
+de informação.
+Uma das principais características desta aplicação Web  é  oferecer ao usuário
+a liberdade de exploração da informação por meio de uma interface gráfica de fácil
+operação.  Uma descrição mais detalhada das possibilidades de filtros que a aplicação
+disponibiliza é apresentada na Tabela 215. As Figuras 5, 6 e 7 exibem, respectivamente,
+a página onde o usuário pode escolher os filtros a partir dos quais os relat órios serão
+gerados; um exemplo da organização da informação em um relat ório; um exemplo de
+visualização gráfica.
+ao.
+Sub
+                                                                                                           Orgão                                      Unidade   Categoria   Despesa   Elemento   Fonte   Função            Grupo   Modalidade   Programa   Atividade
+                                                                                                                                                                                                                  Função
+Relat órios                                                                                                x                                          x         x           x         x          x       x        x        x       x            x          x
+Gráficos                                                                                                                                                                                                                   x                    x          x
+(a)                                                                                                        (b)
+Figura  5.                                                                                                 ao de relat ´orios  (filtros escolhidos:
+¸ ˜oes escolhida:
+C ˆamera Municipal e Tesouro Municipal).  A possibilidade de escolher v ´arios fil-
+¸ ˜oes dentro deles gera o cruzamento de dados.
+6. Consideraç ões Finais
+A falha na comunicação entre os cidadãos e seus governos  é um problema eminente,
+prejudicando a disseminação das informaç ões p úblicas. O incentivo à divulgação de da-
+dos p úblicos no Brasil é um grande passo rumo à redução desta separação, embora esta
+ainda seja uma atividade muito recente no país e muitos cidadãos desconheçam o quão
+15 As células não marcadas na tabela referem-se a filtros possíveis para os quais ainda não foram imple-
+mentadas as interfaces gráficas.
+687
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+(a)                                                                                       (b)
+¸ ˜oes,  organizadas,  referente
+¸alho e
+oes finais do relat ´orio.
+eficiente pode ser este recurso.  Neste contexto, um dos grandes obstáculos encontra-
+dos é a forma como estes dados são disponibilizados.  Em suma, a maioria dos dados
+abertos é disponibilizado em um formato de difícil entendimento, ou porque exigem co-
+nhecimentos específicos para interpretação do contexto em que se inserem, muitas vezes
+desconhecidos pela maioria dos cidadãos; ou porque estão formatados em planilhas ou
+arquivos semiestruturas cuja legibilidade é totalmente inadequada para análise manual.
+Este  contexto  evidencia  a  importância  da  utilização  de  ferramentas  automa-
+tizadas  que  agregam  valor  a  esses  dados  (e  iniciativas)  gerando  informação      útil  e
+disponibilizando-as em formato gráfico e organizado. Dentre as diversas soluç ões exis-
+tentes, a experiência relatada neste artigo tratou especificamente de uma solução Web,
+que conferiu legibilidade à parte dos dados disponibilizados pela CMSP, principalmente
+porque a modelagem de dados realizada abriu uma série de filtros que prossibilitam a
+criação de vis ões com cruzamento de informação.
+A aplicação aqui descrita explora dois arquivos XML que são disponibiliza-
+dos pela CMSP e, portanto, ainda precisa de mais esforço de estudo, modelagem e
+implementaç ões para que, de fato, consolide-se como uma ferramenta que fornece total
+visibilidade aos dados abertos da CMSP. Algumas necessidades prementes de extensão
+desta aplicação são:
+                                                                                          • estudar a possibilidade de modelar a contexto de “Despesas” como uma nova
+tabela                                                                                    “Fato”,  transformando  o  modelo  atual                                      (Snowflake)  em  um  modelo
+Constelaç ão;
+• acrescentar a dimensão Tempo ao modelo, para comportar futuras atualizaç ões de
+dados, conforme eles forem disponibilizados pela CMSP.
+• explorar um n úmero maior de arquivos XML;
+• melhorar detalhes técnicos da aplicação para que ela possa ser disponibilizada
+para o p úblico em geral.  Entre essas melhorias estão:  implementar a interface
+gráfica para mais filtros e cruzamentos de dados; otimizar o processo de con-
+688
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+sumo dos dados do portal da CMSP; desenvolver funcionalidades de cadastro do
+usuários, envio de e-mail com avisos de atualização da base de dados; e integração
+do aplicativo com redes sociais.
+es
+diferentes grupos de gastos da CMSP.
+Mais do que relatar uma experiência, este artigo teve o intuito de mostrar o pro-
+cesso executado pelos autores para conduzir o estudo, esperando assim motivar outros de-
+senvolvedores a explorar bases de dados abertos para disseminar a cultura de exploração
+destes dados e de criação de ferramentas correlatas.
+Referências
+B öhm, C., Naumann, F., Freitag, M., George, S., H öfler, N., K öppelmann, M., Lehmann,
+C., Mascher, A., e Schmidt, T. (2010). Linking open government data: what journalists
+wish they had known. In Proceedings of the 6th International Conference on Semantic
+Systems, I-SEMANTICS ’10, pages 34:1-34:4, New York, NY, USA. ACM.
+Elmasri, R. E. e Navathe, S. (2005).  Sistemas de Banco de Dados - Fundamentos e
+Aplicaç ões. Addison Wesley, 4a edition.
+Han, J. e Kamber, M. (2006). Data Mining: Concepts and Techniques. Diane Cerra, San
+Francisco, CA, 2nd edition.
+Machado, A. e Parente de Oliveira, J. (2011).  Digo:  An open data architecture for e-
+government. In IEEE International Enterprise Distributed Object Computing Confer-
+ence Workshops (EDOCW), pages 448-456.
+Miller, C. C. (2006). Local governments offer data to software tinkerers. Newspaper: The
+New York Times.
+Thomsen, E. (2002). OLAP Solutions. Robert Ipsen, Canada, 2nd edition.
+689
+
+
+
+
+

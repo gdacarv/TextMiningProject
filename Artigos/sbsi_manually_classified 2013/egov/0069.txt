@@ -1,0 +1,510 @@
+﻿Uso de Aprendizado de M áquina para a Classificaç ão de
+Documentos do Exército Brasileiro
+Sander P. Pivetta, Sergio L. S. Mergen, Fabio N. Kepler
+Universidade Federal do Pampa (UNIPAMPA)
+Campus Alegrete - RS - Brasil
+{sanderpivetta,sergiomergen,kepler}@unipampa.edu.br
+Abstract. The Brazilian Army produces a summarized report about each mili-
+tary member’s activities during a semester. This requires that the references to
+a specific member are searched through a set of documents produced during the
+period of six months. This work proposes ways of performing this classification
+task automatically by using the Naive Bayes learning method. It is also neces-
+sary to identify which sentences inside a document refer to the military member
+in question, such that only these sentences are used for training the classifier. We
+propose two techniques for sentence selection that choose portions of texts that
+surrounds the target names.  The experiments show that it is possible to achi-
+eve an f-measure of 76.7% in retrieving relevant documents, and that sentence
+selection and training data size play important roles in the task.
+Resumo. A cada semestre o Exército Brasileiro gera relat órios sumarizados a
+respeito de cada militar e suas atividades.  Para isso  é necess ário encontrar
+referências relevantes a cada militar dentro de um conjunto de documentos pro-
+duzidos periodicamente no intervalo de seis meses. Este trabalho prop õe formas
+de realizar essa classificaç ão de maneira autom ática, utilizando o método Naive
+Bayes de aprendizado probabilístico. Para isso, também é necess ário identifi-
+car quais sentenças em um documento s ão relativas a cada militar, de modo que
+apenas elas sejam usadas durante o treinamento do classificador.  Assim, este
+trabalho prop õe duas heurísticas de seleç ão de sentenças que escolhem trechos
+de texto que aparecem pr óximos ao nome de cada militar. Os experimentos mos-
+tram que é possível atingir 76, 7% de medida-f na recuperaç ão de documentos
+relevantes, e que a seleç ão de sentenças e o tamanho da base de treinamento
+desempenham papéis importantes na tarefa.
+1.                                                                                            Introduç ão
+O desenvolvimento tecnol ógico e a popularização dos computadores provocou um au-
+mento no n úmero de documentos digitais existentes. Assim, documentos passaram a ser
+confeccionados em formatos digitais, e não mais diretamente em papéis, possibilitando
+automatizar atividades através de métodos computacionais. Uma tarefa que pode ser re-
+alizada é a classificação de informaç ões, ou seja, separar documentos em subconjuntos
+baseando-se em alguns critérios. Tal atividade facilita a tomada de decis ões a respeito de
+determinados assuntos.
+Várias organizaç ões necessitam realizar a classificação de seus documentos. Um
+exemplo  é  o Exército Brasileiro,  que produz os Boletins Internos  (BI) e as Folhas
+768
+
+
+
+
+de Alteraç ões (FA). Os BIs são documentos confeccionados periodicamente contendo
+informaç ões relacionadas às atividades realizadas pela instituição e por seus integrantes.
+A partir deles são extraídas informaç ões referentes a militares a fim de gerar um relat ório
+das atividades por eles desempenhadas [Exército 2002].
+Esses relat órios, chamados de Folha de Alteraç ões (FA), são confeccionados se-
+mestralmente para cada militar, e relatam o hist órico de atividades desempenhada pelo mi-
+litar durante o período analisado [Exército 2001]. Conforme as normas vigentes que nor-
+matizam a confecção das FAs encontradas em [Exército 2001], nem todas as informaç ões
+presentes no BIs são relevantes para a sua elaboração. Desta forma, a partir de um militar,
+é necessário realizar uma pesquisa sobre todos os BIs produzidos durante um semestre.
+Para cada informação encontrada a respeito do militar, deve-se analisar se ela é relevante
+na produção da sua FA.
+Como os BIs são disponibilizados em formato digital, é possível agilizar esta ta-
+refa, encontrando os documentos que possuem apenas as informaç ões pertinentes a um
+militar.  Este trabalho prop õe o emprego de técnicas de aprendizado de máquina como
+forma de automatizar esta atividade. Como disp õe-se de informaç ões previamente clas-
+sificadas em semestres anteriores,  é possivel o emprego de abordagens de aprendizado
+supervisionado [Mitchell 1997].  Dentre estas abordagens, será utilizado o algoritmo de
+Naive Bayes (NB) [Mitchell 1997].
+Problemas clássicos de classificação de documentos consideram todo conte údo de
+um documento para verificar sua relevância. Entretanto, no caso de uso aqui apresentado,
+a tarefa é dificultada pelo fato dos BIs não serem documentos exclusivos para cada militar,
+isto é, eles são compostos por conjuntos de pequenas informaç ões referentes a assuntos e
+pessoas distintas. Assim, é necessário identificar quais desses conjuntos são relevantes a
+cada militar. Caso contrário, informaç ões err ôneas podem ser consideradas relevantes du-
+rante o treinamento. Este é o problema da Seleção de Sentenças, e envolve escolher quais
+trechos de cada BI serão utilizados para realizar a classificação de forma mais precisa.
+O restante deste artigo está organizado da seguinte forma:  Na Seção 2  é apre-
+sentado o funcionamento do classificador Naive Bayes, juntamente com trabalhos que
+realizam classificação textual usando este algoritmo e trabalhos que abordam seleção de
+sentenças. Na Seção 3 é apresentado o método de classificação escolhido. Na Seção 3.1
+as técnicas propostas para realizar a seleção de sentenças são demonstradas. Na Seção 4
+são descritos os experimentos realizados, e na seção 5 são tecidas as consideraç ões finais.
+2. Trabalhos Relacionados
+O aprendizado de máquina é uma área que pode ser empregada em diversas atividades.
+Quando têm-se a disposição uma conjunto de informaç ões a serem utilizadas na obtenção
+do conhecimento, torna-se útil a uso do aprendizado supervisionado.
+Dentre os algoritmos supervisionados, alguns ganham destaque quando utilizados
+na classificação de documentos textuais.  Um que apresenta uma boa empregabilidade
+e um bom desempenho é o classificador bayesiano, um método de aprendizado proba-
+bilístico que está baseado no Teorema de Bayes.
+O objetivo do classificador Bayeasiano é verificar se uma amostra analisada per-
+tence ou não a uma determinada classe.  A obtenção desta resposta realiza-se através
+769
+
+
+
+
+de uma análise estatística das informaç ões coletadas sobre as instâncias fornecidas.
+[Mitchell 1997] apresenta o seu funcionamento através da Equação 1
+P (h|D) = P (D|h) P (h)                                                                       (1)
+P (D)
+O objetivo do classificador é encontrar a P (h|D), que representa a probabilidade
+a Posteriori da ocorrência da classe h em razão do evento D.  Para calculá-la,  é ne-
+cessário encontrar a probabilidade condicional P (D|h), que representa a probabilidade
+de ocorrência do evento D dado a classe h. Também é necessário encontrar a probabili-
+dade a Priori (P (h)) de ocorrência da classe a partir dos dados de treinamento. Também
+necessita-se da P (D), o que representa a probabilidade do evento dentro do conjunto de
+treinamento. Em alguns casos onde são utilizadas mais de uma classe, a P (D) pode ser
+desconsiderada do cálculo da probabilidade bayesiana, pois ela não altera a proporção en-
+tre os resultados. Neste caso é realizada uma comparação entre eles, e o evento é atribuído
+ao que obter o maior resultado [Mitchell 1997].                                               E importante ressaltar que o classifica-
+dor assume que os eventos são independentes entre si, o que diminui a complexidade do
+cálculo probabilístico.
+Uma análise do classificador bayesiano é realizada em [Koga 2011], onde é feita
+uma comparação com outros métodos de classificação existentes. O objetivo do trabalho
+envolveu a classificação automática do sujeito de frases. Para o treinamento foi utilizado
+um conjunto de atributos morfol ógicos e estruturais extraídos de frases pré-processadas.
+Os resultados obtidos demostraram um melhor desempenho do classificador bayesiano,
+o que foi justificado pelo fato de a maioria das informaç ões analisadas realmente não
+possuírem dependência entre si.
+Um problema clássico onde classificadores bayesianos são geralmente utilizados
+é a análise de mensagens do tipo spam [Silva and Vieira 2007].  Normalmente existem
+mensagens eletr ônicas previamente classificadas como spans, o que permite que aborda-
+gens supervisionadas de classificação sejam utilizadas. O trabalho de [Rabelo et al. 2011]
+verificou que a resposta correta era retornada em 85% dos emails analisados, e que a pre-
+cisão diminuía quando o conte údo das mensagens ficava mais denso.
+No problema de classificação textual, os eventos estudados costumam ser pala-
+vras contidas em documentos.  Como o classificador bayesiano considera as variáveis
+independentes entre si, o contexto no qual uma palavra está inserida é descartado.  En-
+tretanto, muitas palavras podem assumir significados diferentes dependendo do contexto.
+[Peng et al. 2004] compara o algoritmo original, onde as variáveis são palavras indepen-
+dentes, e uma modificação, onde as variáveis são obtidas com a utilização de n-gramas,
+ou seja, n palavras adjacentes. Como resultado, verificou-se que o desempenho utilizando
+trigramas foi superior.
+Nem todas informaç ões em um documento podem estar relacionados ao assunto
+alvo da classificação. Assim, é necessário realizar a seleção das sentenças a serem usadas
+para treinar um classificador.  Nessa linha, o trabalho de [Goldstein et al. 1999] mostra
+que a seleção de sentenças com poucas palavras melhora a classificação, assim como a
+remoção de stop words.
+A seleção de sentenças tem outras aplicaç ões além da tarefa de classificação.
+770
+
+
+
+
+Por exemplo, [Wang et al. 2012] procura por informaç ões que consigam discriminar as
+principais informaç ões contidas nos documentos, separando-os em grupos conforme suas
+semelhanças. Em seguida, é produzido um resumo com as principais diferenças encon-
+tradas nestes grupos de documentos. Também [Metzler and Kanungo 2008] busca seleci-
+onar sentenças para realizar a sumarização de documentos extraídos da Web.
+3. Método de Classificaç ão
+Um  classificador  bayesiano  divide  o  processamento  em  duas  fases:  treinamento  e
+classificação. No treinamento os parâmetros do modelo são estimados, e na classificação
+eles são usados para retornar os documentos relevantes dado um determinado militar.
+Para  o  classificador  proposto  neste  trabalho,  os  passos  necessários  para  a
+realização das duas fases são ilustrados na Figura 1.  Ela esta dividida em duas partes.
+As etapas do lado esquerdo representam as atividades desempenhadas durante a fase de
+treinamento.  Já as etapas do lado direito representam as atividades desempenhadas du-
+rante a fase de classificação.
+Figura 1. Arquitetura do classificador proposto.
+Os Documentos de Treinamento são compostos pelas Folhas de Alteraç ões e pelos
+BIs que deram origem a elas. Para montar a efetiva base de treinamento, são realizadas
+pesquisas pelo nome de um militar nas FAs. Caso sejam encontrados, os BIs selecionados
+771
+
+
+
+
+são atribuídos à classe dos documentos relevantes, enquanto os demais BIs são atribuídos
+à classe dos não relevantes. Essa base é utilizada pelo classificador para descobrir a pro-
+babilidade das evidências (palavras ou termos) estarem associadas às classes de interesse
+(relevante e não relevante).
+Os Documentos a Classificar são um conjunto de BIs e FA que foram confecci-
+onados em semestres anteriores, sendo estes os responsáveis pela formação das classes
+relevantes e n ão relevantes.
+A fase chamada de Convers ão de PDF é responsável pela transformação dos do-
+cumentos, que encontram-se no formato PDF, em um formato textual que possibilite as
+pr óximas fases realizarem as suas atividades. Para realizar esta atividade, foi empregada
+a biblioteca open source para Java chamada PDFBox1.
+Na Seleç ão de Sentenças, de cada documento são escolhidos os trechos que serão
+processados. Inicialmente, são selecionados os documentos onde for encontrado o nome
+completo do militar (ex. Sander Pes Pivetta) ou a graduação mais o nome de guerra (ex.
+3o Sgt Sander). Também é necessário encontra o trecho no texto que realmente referencie
+o militar em questão. Essa seleção é descrita na pr óxima seção.
+Como a língua portuguesa possui uma grande quantidade de palavras distintas,
+porém com sentidos semelhantes entre si, ocorre um aumento na esparsidade dos da-
+dos, o que dificulta o processo de classificação. Na busca por diminuir esta diversidade,
+a etapa de Pré-processamento utiliza a remoção de stop words [Rigo et al. 2007], para
+remover palavras consideradas irrelevantes no processamento (ex.  artigos, preposiç ões
+e numerais), e o emprego de técnicas de stemminhg [Rezende 2005], para realizar uma
+normalização linguística das palavras.
+Na etapa de Treinamento, para todas as sentenças selecionadas, são extraídos
+os eventos, que são representados por n-gramas de palavras.  Estes eventos são então
+atribuídos às classes analisadas (relevante e não relevante), gerando tabelas contendo os
+termos e sua frequência ou incidência nos documentos de treinamento.  Essas tabelas
+formam o Modelo Treinado, que depois é usado na etapa de Classificação.
+Ap ós  a  formação  da  base  de  conhecimento,  torna-se  possível  realizar  a
+Classificaç ão dos documentos. Nesta etapa, através do Teorema de Bayes e das evidências
+coletadas anteriormente (Modelo Treinado), é analisada a probabilidade dos BIs perten-
+cerem a uma das classes. Caso seja verificado que, em pelo menos um dos trechos anali-
+sados, a probabilidade de ser relevante for superior à de ser não relevante, o documento é
+considerado relevante para o militar em questão.
+3.1. Seleç ão de Sentenças
+Um dos passos mais importantes na execução do método proposto, tanto na fase de
+classificação quanto na de treinamento, é o da seleção de trechos dos documentos. Uma
+seleção inapropriada para um determinado caso implica na utilização de dados errados
+para o cálculo das probabilidades.
+Neste trabalho são propostas duas técnicas para seleção dos trechos, chamadas de
+“Janela Fixa” e “Janela Deslizante”.  Ambas partem dos pontos no texto onde o nome
+1 http://pdfbox.apache.org
+772
+
+
+
+
+do militar, chamado piv ô , aparece. Dado um piv ô , cada técnica utiliza regras diferentes
+para selecionar o texto relacionado. A técnica da Janela Fixa considera como informaç ões
+importantes aquelas que encontram-se mais pr óximas ao piv ô . Para isso, a partir do piv ô ,
+é realizada a seleção dos κ caracteres anteriores e posteriores ao nome.
+A técnica da Janela Deslizante considera que a informação importante possa estar
+afastada do piv ô , principalmente quando ele estiver contido em uma tabela de nomes.
+Para fazer essa análise, primeiro deve-se verificar se o piv ô encontra-se dentro de uma
+linha válida.  Uma linha é válida se o n úmero de palavras válidas da linha for igual ou
+superior a λ. Uma palavra é válida se possuir mais do que µ caracteres.
+Em seguida,  o texto anterior e o posterior ao piv ô  são selecionados até  que
+símbolos de término de parágrafo sejam encontrados. Caso essa seleção possua λ > 6,
+ela é considerada válida e efetivamente selecionada.  Caso contrário, ela é descartada e
+verificaç ões sobre os parágrafos anteriores são realizadas, até que a condição de validação
+do texto seja satisfeita e esse texto efetivamente selecionado.
+Ss Figuras 2 e 3 demonstram exemplos onde o texto “Sander Pes Pivetta” foi
+usado como piv ô .  Na Figura 2 foi utilizada a Janela Fixa com κ = 150, ou seja, foram
+selecionados os 300 caracteres mais pr óximos ao piv ô . Na Figura 3 foi utilizada a Janela
+Deslizante com λ = 6 e µ = 3.
+                                                                                                                                              !"# $ "%&'()( $ %( $ *"+,- $ )" $ .'(%/0-'&" $ 1)23%3/&'(&34- $ )-$
+                                                                                                                                              5#('&"6$ ( $ 0('&" $ 7' $ 89: $ ; $ <#''3"6= $ )- $ >2& $ ?/@)                                                                        $ > $ 10=     $
+                                                                                                                                              /-63A3&(%)-$8B$C#2(D$0(//(E"2$)"$3)($)"$16"E'"&";F*$0('(                                                                                            $
+                                                                                                G-'&- $16"E'";F* $" $ 8B $C#2(D $ 0(//(E"2                                                                          $ )" $ 4-6&( $ )" $G-'&-$
+                                                                                                                                              16"E'";F*$0('($16"E'"&";F*=$)"$(A-')-$A-2$-$3%A3/-$H$)-                                                                                             $
+                                                                                                ('&3E-$I9$)-$!"A$%J$KL:8M=$)"$B9                                                                                    $N#6$8I=$0('($-$                    :O$*E&$P%&$
+>-2$                                                                                            !"#$%& ' (%) ' (*+%,,"= $ "2                                                                                        $ 43'&#)" $ )" $ '"(63Q(+,- $ )"$
+                                                                                                A-%/#6&($2R)3A($"/0"A3(63Q()(L$1 $0                                                                                 ('&3)($"$-$'"&-'2-$"/&,-                                                      $
+                                                                                                0'"43/&-/$0('($-/$)3(/$B:$N#6$BB$"$BS$N#6                                                                           $BB=$'"/0"A&34(2"%&"$
+                                                                                                C/-6#+,-$T$%-&($7'$8K8;*.1=$)"$8U$N#6$BBDV$
+ao de texto por Janela Fixa com “Sander Pes Pivetta” como piv ˆo.
+                                                                                                                                              !"# $ "%&'()( $ %( $ *"+,- $ )" $ .'(%/0-'&" $ 1)23%3/&'(&34- $ )-$
+                                                                                                                                              5#('&"6$ ( $ 0('&" $ 7' $ 89: $ ; $ <#''3"6= $ )- $ >2& $ ?/@)                                                                                      $ > $ 10=$
+                                                                                                                                              /-63A3&(%)-$8B$C#2(D$0(//(E"2$)"$3)($)"$16"E'"&";F*$0('($
+                                                                                                G-'&- $16"E'";F* $" $ 8B $C#2(D $ 0(//(E"2                                                                                                              $ )" $ 4-6&( $ )" $G-'&-$
+                                                                                                                                              16"E'";F*$0('($16"E'"&";F*=$)"$(A-')-$A-2$-$3%A3/-$H$)-                                                                                                          $
+('&3E-$I9$)-$!"A$%J$KL:8M=$)"$B9                                                                                                                                                                                    $N#6$8I=$0('($-$                                                :O$*E&$P%&$
+>-2$                                                                                            !"#$%& ' (%) ' (*+%,,"= $ "2                                                                                        $ 43'&#)" $ )" $ '"(63Q(+,- $ )"$
+A-%/#6&($2R)3A($"/0"A3(63Q()(L$1 $0                                                                                                                                                                                 ('&3)($"$-$'"&-'2-$"/&,-                                                                   $
+                                                                                                0'"43/&-/$0('($-/$)3(/$B:$N#6$BB$"$BS$N#6                                                                                                               $BB=$'"/0"A&34(2"%&"$
+                                                                                                C/-6#+,-$T$%-&($7'$8K8;*.1=$)"$8U$N#6$BBDV$
+ao de texto por Janela Deslizante com “Sander Pes Pivetta” como
+o.
+Analisando as Figuras 4 e 5, verifica-se um exemplo onde o nome do militar
+encontra-se em uma tabela, juntamente com o nome de outras pessoas. Para esta situação,
+a sentença relevante encontra-se no parágrafo que aparece antes da tabela. Na Figura 4 foi
+utilizada a seleção por Janela Fixa com κ = 150. Como pode-se ver, a técnica seleciona
+773
+
+
+
+
+praticamente todas as informaç ões contidas na tabela, que são irrelevantes para a análise.
+Já na Figura 5 foi utilizada a Janela Deslizante com λ = 6 e µ = 3. Observa-se que, nesse
+caso, como a linha onde o nome do militar ocorre não é considerada válida, a janela de
+texto desliza para cima até o encontro de uma linha válida.
+!"#!$%&%'()*#!(+(%,-!)*(&%.()($/!*0')*!-#!1%(#!23/!24/!56!*                                   !
+57!1*!-8'8+)-!1*!9255/!(!9:!;<($(1(!1-!9=!>?@!A!9255!*                                        !
+-+'%B*)($!-#!#*C8%0'*#!)*#8&'(1-#D
+!"#$                                                                                                 %"&&'() #$!*+"
+E01%B%18-!FG$*)-!H$                                                                           9I22   J
+E01%B%18-!FG$*)-!K-%#                                                                         9I22   L
+E01%B%18-!FG$*)-!>)M#                                                                         9I22   L
+,-./0123042356077-                                                                            93N2   OP
+E01%B%18-!FG$*)-!Q8(')-                                                                       9322   P
+E01%B%18-!FG$*)-!;%0R-                                                                        65N2   L
+E01%B%18-!FG$*)-!S*%#                                                                         9T22   OP
+E01%B%18-!FG$*)-!S*'*                                                                         6222   P
+E01%B%18-!FG$*)-!"%'-                                                                         6222   OP
+E01%B%18-!FG$*)-!F-B*                                                                         6222   P
+ao de texto por Janela Fixa quando o piv ˆo (“Sander Pes Pivetta”)
+est ´a em uma tabela.
+!"#!$%&%'()*#!(+(%,-!)*(&%.()($/!*0')*!-#!1%(#!23/!24/!56!*!
+57!1*!-8'8+)-!1*!9255/!(!9:!;<($(1(!1-!9=!>?@!A!9255!*!
+-+'%B*)($!-#!#*C8%0'*#!)*#8&'(1-#D
+!"#$                                                                                                 %"&&'() #$!*+"
+E01%B%18-!FG$*)-!H$                                                                           9I22   J
+E01%B%18-!FG$*)-!K-%#                                                                         9I22   L
+E01%B%18-!FG$*)-!>)M#                                                                         9I22   L
+,-./0123042356077-                                                                            93N2   OP
+E01%B%18-!FG$*)-!Q8(')-                                                                       9322   P
+E01%B%18-!FG$*)-!;%0R-                                                                        65N2   L
+E01%B%18-!FG$*)-!S*%#                                                                         9T22   OP
+E01%B%18-!FG$*)-!S*'*                                                                         6222   P
+E01%B%18-!FG$*)-!"%'-                                                                         6222   OP
+E01%B%18-!FG$*)-!F-B*                                                                         6222   P
+ao de texto por Janela Deslizante quando o piv ˆo (“Sander Pes
+Pivetta”) est ´a em uma tabela.
+4. Experimentos e Resultados
+Foram  realizados  diversos  experimentos  com  o  objetivo  de  avaliar  o  método  de
+classificação proposto e as técnicas de seleção de sentenças por Janela Fixa e por Ja-
+nela Deslizante. Para efeitos de comparação também foi verificada a qualidade de outros
+dois métodos, chamados “Pesquisa Nominal” e “Documento Inteiro”.
+774
+
+
+
+
+O método da Pesquisa Nominal realiza uma categorização dos BIs através de uma
+pesquisa pelo nome do militar. Caso seja encontrada alguma referência a este militar, o
+documento é considerado relevante para a composição das suas FA. Neste método, não é
+empregado o aprendizado de máquina.
+O método do Documento Inteiro realiza o treinamento dos BIs sem utilizar a
+seleção de sentenças.  Ou seja, para cada documento utilizado para gerar a Folha de
+Alteração de um determinado militar, todas as palavras do documento são consideradas
+como eventos associados à classe de documentos relevantes para esse militar.
+O método da Janela Fixa realiza o treinamento dos BIs utilizando a técnica de
+seleção de sentenças por Janela Fixa, com κ = 150. Assim, caso um documento contenha
+informaç ões relevantes a respeito de um militar, apenas as palavras que pertencem a um
+trecho, selecionado por essa técnica, são consideradas eventos associados  à classe de
+documentos relevantes desse militar.
+Similarmente, o método da Janela Deslizante realiza o treinamento dos BIs uti-
+lizando a técnica de seleção de sentenças por Janela Deslizante, com λ  =  6 e µ  =  3.
+Caso um documento contenha informação relevantes a respeito de um militar, apenas as
+palavras que pertencem ao trecho selecionado por essa técnica são consideradas eventos
+associados à classe de documentos relevantes desse militar.
+Os desempenhos dos experimentos foram avaliados usando as medidas de pre-
+cis ão, cobertura e medida-f. A precisão é calculada em função do n úmero de BIs classi-
+ficados como relevantes e que realmente o são. Já a cobertura é calculada em função do
+n úmero de BIs relevantes que foram assim classificados. A medida-f é a média harm ônica
+das outras duas medidas.
+Para a base de treinamento foram utilizados 200 BIs, confeccionados durante o
+período de 1 ano, referentes a 64 militares.  A etapa de testes utilizou BIs e Folhas de
+Alteraç ões de um semestre específico que não foi utilizado durante o treinamento.  Os
+métodos de classificação foram encarregados de classificar 109 BIs para um conjunto de
+16 militares.
+As Tabelas 1 e 2 apresentam os valores de precisão, cobertura e medida-f encon-
+trados para cada um dos métodos de classificação descritos. Como pode ser observado, o
+método n-grama utiliza sequencia de 2 e 3 palavras (bigramas e trigramas) para a monta-
+gem de suas variáveis.
+Observe que, dos quatro métodos, o que utiliza o “Documento Inteiro”é o que pos-
+sui o pior desempenho, muito inferior aos demais. Isto ocorre porque o treinamento leva
+em consideração muitos parágrafos que não possuem nenhuma relação como os militares
+usados durante o treinamento. Com a execução da “Pesquisa Nominal”, a medida-f ficou
+pr óxima a 50%. Apesar de encontrar todos os documentos relevantes, a precisão obtida
+foi baixa, pois foram retornados muitos BIs não importantes para a confecção das Folhas
+de Alteraç ões do militar.
+Os melhores resultados foram obtidos com a execução do classificador bayseano
+associado a uma técnica de seleção de sentenças, a Janela Fixa ou a Janela Deslizante.
+Dentre as duas, a seleção de sentenças através da Janela Deslizante conseguiu realizar
+uma melhor seleção dos trechos significativos para os militares. O resultado reflete o fato
+775
+
+
+
+
+                                                                                             -   33                                                             100                                                        49,6
+Documento Inteiro                                                                            1   11                                                             21                                                         13,7
+Janela Fixa                                                                                  1   62                                                             47                                                         53
+Janela Deslizante                                                                            1   88                                                             51                                                         64,5
+Janela Fixa                                                                                  2   65                                                             48                                                         55
+Janela Deslizante                                                                            2   88                                                             68                                                         76,7
+Janela Fixa                                                                                  3   61                                                             46                                                         52
+Janela Deslizante                                                                            3   86                                                             60                                                         69,7
+                                                                                                 Tabela 2. Resultados utilizando a ocorr ˆencia das features.
+M É TODO                                                                                                                                                        N-GRAMA    PRECIS ˜AO (%)   COBERTURA (%)   MEDIDA-F (%)
+Pesquisa Nominal                                                                             -   33                                                             100                                                        49,6
+Documento Inteiro                                                                            1   12                                                             23                                                         15,7
+Janela Fixa                                                                                  1   61                                                             39                                                         38
+Janela Deslizante                                                                            1   85                                                             46                                                         59,6
+Janela Fixa                                                                                  2   55                                                             44                                                         49
+Janela Deslizante                                                                            2   88                                                             52                                                         64,8
+Janela Fixa                                                                                  3   59                                                             41                                                         43
+Janela Deslizante                                                                            3   77                                                             45                                                         56,8
+de que, em muitos casos, as informaç ões relevantes para o militar encontra-se distantes
+de seu nome, como por exemplo, dentro de listas de nomes. Nestes casos, a seleção com
+Janela Deslizante consegue percorrer o texto até encontrar a informação mais provável de
+ser a relevante.
+Outra técnica explorada utiliza a frequência com que as palavras ocorrem dentro
+da base de treinamento, ou a incidência das palavras em cada documento. Nos resultados
+verificou-se que o uso da frequência apresenta um melhor desempenho comparado com
+a incidência das palavras, tanto com a Janela Fixa como com a Janela Deslizante.  Este
+resultado mostra que palavras que ocorrem por mais vezes sao bons indicadores da classe.
+A forma como as variáveis são selecionadas também merece destaque.  Como
+muitas palavras apresentam sentidos distintos quando pr óximas a outras palavras, utilizar
+n-gramas para selecionar as variáveis torna-se oportuno. Nos resultados verifica-se que o
+emprego de bigramas e trigramas apresenta melhores resultados.
+Apesar de modelos bayesianos no geral obterem bons resultados com relati-
+vamente poucos dados de treinamento,  ainda assim  é  preciso atentar para que haja
+evidências suficientes para estimar os parâmetros do modelo.  Para verificar como o ta-
+manho da base de treinamento afeta a classificação no problema em questão, foram feitos
+experimentos variando-se o n úmero de documentos utilizados no treinamento. As Figu-
+ras 7 e 6 mostram os resultados obtidos com Janela Fixa e Deslizante em comparação à
+Pesquisa Nominal.
+776
+
+
+
+
+80
+70
+60
+50
+1-grama frequência
+40
+1-grama incidência
+2-grama frequência
+2-grama incidência
+30                                                                                         3-grama frequência
+3-grama incidência
+Pesquisa nominal
+20
+50                                                                                         100                  150   175   200
+N úmero de Documentos
+ao por Janela Deslizante.
+55
+50
+45
+40
+35                                                                                         1-grama frequência
+                                                                                           1-grama incidência
+                                                                                           2-grama frequência
+30                                                                                         2-grama incidência
+                                                                                           3-grama frequência
+                                                                                           3-grama incidência
+25
+Pesquisa nominal
+50                                                                                         100                  150   175   200
+N úmero de Documentos
+ao por Janela Fixa.
+Analisando os gráficos, é possível verificar que a classificação apresenta resulta-
+dos baixos treinando a aplicação com um n úmero pequeno de documentos.  Conforme
+a quantidade de documentos utilizados aumenta, são obtidos melhores resultados, até o
+momento onde os resultados começam a estabilizar. Esta estabilidade é obtida a partir da
+utilização de 175 BIs, mantendo praticamente constante a partir deste valor.
+De modo geral, os resultados são melhores quando é utilizada a seleção Janela
+Deslizante combinada com a frequência das palavras e com o emprego de bigramas. Esta
+combinação obteve um valor de medida-f igual a 76,7%, sendo seguido pelo uso de tri-
+gramas, que obteve uma medida-f igual a 69,7%.
+777
+
+
+
+
+5. Conclus ões
+Este artigo apresentou uma aplicação de classificação de documentos que emprega o
+método de aprendizado de máquina supervisionado Naive Bayes.  O objetivo deste tra-
+balho foi selecionar os Boletins Internos que deveriam compor as Folhas de Alteraç ões
+de militares do Exército Brasileiro. Para testar a aplicação foram realizados experimentos
+com parâmetros e técnicas variados tais como: o uso da frequência ou incidência das pa-
+lavras; a composição por unigramas, bigramas ou trigramas; e a seleção de sentenças por
+Janela Fixa ou Janela Deslizante.
+A avaliação foi realizada através da classificação de um conjunto de Boletins Inter-
+nos como relevantes para compor as Folhas de Alteraç ões de militares. Na análise destes
+resultados, verificou-se que a combinação do algoritmo de Naive Bayes com a utilização
+de n-gramas maiores que um e a seleção adequada das sentenças são as técnicas mais
+influentes neste estudo. A seleção de sentenças por Janela Deslizante combinada com o
+uso de bigramas retornou os melhores resultados: 76,7% de medida-f.
+O uso da Janela Deslizante retornou melhores resultados porque foi capaz de sele-
+cionar algumas sentenças relevantes ao militar que não estavam juntas com o seu nome. Já
+o uso de bigramas ajudou a identificar o contexto das palavras no texto. O uso de trigramas
+não obteve o mesmo desempenho possivelmente porque o n úmero de sentenças analisadas
+não foram suficientes para estimar uma distribuição de probabilidade adequada.
+Como trabalhos futuros pretende-se analisar o desempenho das técnicas apresen-
+tadas variando-se os valores de κ, λ e µ.  Além disso, pretende-se utilizar o algoritmo
+SVM2  a fim de verificar se esse método supera o classificador Bayesiano na classificação
+de BIs do Exército Brasileiro.
+Referências
+Exército (2001). Boletim do Exército 02. Secretaria Geral do Exército, Brasilia.
+Exército (2002).  Separata ao Boletim do Exército N úmero 08: Instruç ões Gerais para
+Ambito do Exército
+(IG 10-42). Gabinete do Comandante do Exército, Brasilia.
+Goldstein, J., Kantrowitz, M., Mittal, V., and Carbonell, J. (1999). Summarizing text do-
+cuments: sentence selection and evaluation metrics. In Proceedings of the 22nd annual
+international ACM SIGIR conference on Research and development in information re-
+trieval, New York. ACM.
+Koga, M. L. (2011). Classificadores Bayesianos: Aplicados a análise sintática da língua
+portuguesa. In Escola Politécnica da Universidade de S ão Paulo, São Paulo.
+Metzler, D. and Kanungo, T. (2008).  Machine learned sentence selection strategies for
+query-biased summarization. In SIGIR Learning to Rank Workshop.
+Mitchell, T. M. (1997). Machine Learning. McGraw-Hill Science/Engineering/Math.
+Peng, F., Schuurmans, D., and Wang, S. (2004). Augmenting naive bayes classifiers with
+statistical language models. Inf. Retr., pages 317-345.
+2 Suport Vector Machine, em inglês.
+778
+
+
+
+
+Rabelo, J. P., Filho, M. A., and Oliveira, T. (2011). Mineração de Textos Através do Al-
+goritmo de Classificação. In Instituto de Matem ática. Universidade Federal da Bahia
+(UFBA), Salvador.
+Rezende, S. O. (2005). Sistemas Inteligentes. Fundamentos e Aplicaç ão. Editora Manole
+Ltda, Barueri.
+Rigo, S. J., Oliveira, J. P. M., and Barbieri, C. (2007).  Classificação de Textos Baseada
+em Ontologias de Domínio.  In Anais do XXXVII Congresso da Sociedade Brasileira
+de Computaç ão - V Workshop em Tecnologia da Informaç ão e da Linguagem Humana,
+Rio de Janeiro.
+Silva, C. F. and Vieira, R. (2007).  Categorização de Textos da Língua Portuguesa com
+Arvores de Decisão, SVM e Informaç ões Linguísticas. In Anais do XXVII Congresso
+da Sociedade Brasileira de Computaç ão. V Workshop de Tecnologia da Informaç ão e
+da Linguagem Humana, Rio de Janeiro.
+Wang, D., Zhu, S., Li, T., and Gong, Y. (2012). Comparative document summarization via
+discriminative sentence selection.  ACM Transactions on Knowledge Discovery from
+Data.
+779
+
+
+
+
+

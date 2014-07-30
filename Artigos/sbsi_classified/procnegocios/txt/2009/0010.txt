@@ -1,0 +1,478 @@
+﻿V Simpósio Brasileiro de Sistemas de Informação
+Andr ´e de Amorim Fonseca1, Daniela Barreiro Claro 1, Denivaldo Cicero Pavã o Lopes2
+1Laborat ório de Sistemas Distribuídos - LaSiD
+Departamento de Ciência da Computação - Universidade Federal da Bahia
+Av. Adhemar de Barros, s/n. Salvador/BA - Brasil CEP. 40170-110
+deco.af@gmail.com,  dclaro@ufba.br
+2
+Departamento de Engenharia de Eletricidade - Universidade Federal do Maranhão
+Avenida dos Portugueses s/n. Sao Luis/MA - Brasil CEP.65080-040
+denivaldo.lopes@gmail.com
+Resumo.A diversidade de Sistemas de Informocq                                                                                                                 ã   ue tem utilizado a Web
+                                                                                       ã                   o dos servic¸os Web para facilitar a interopera-
+simples nã o atendem
+ando ori-
+õ es de servic¸os Web (Web service Composition).  Ambientes
+mento
+de um servic¸o Web simples, como o plugin WTP(Web Tool PlnoiE) clipse,
+poré m poucosêtm se preocupado com as compoesc¸                                        õ                   é m disso,
+                                                                                       õ                   s semânticas, nenhum deles
+propõ e reutilizar ferramentasáj existentes para compor os servic¸os Web, re-
+ã                                                                                      quanto o tempo de
+aprendizado do usuário. Assim, o presente trabalho tem dois principais o-jeti
+â nticos;
+plugin para o Eclipse denominado
+nticos atravé s de uma in-
+terface grá fica intuitiva e amigá vel, reutilizando ferramentas e gerando uma
+composicã o correta, tanto sintática quanto semanticamente.
+d an
+ty of these systems.
+ese systems,
+ns. Integrated
+evelopment of a sim-
+but only a
+on.  More-
+sitions, none of
+s Composition,
+arning time
+e fundamen-
+tal requirements to make the Web services Composition, nnhe itpossession
+of these requirements, develplugin for Eclipse called OWL-S Composer to
+user interface,
+tic as semantically.
+109
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+mentas amigáveis e funcionais para facilitar e agilizar o processo de construção destes
+sistemas.  A utilização da Web como forma de publicar novas aplicaç ões e disponibili-
+zar novas funcionalidades tem consolidado o uso dos serviços Web. Estes serviços vêm
+sendo incorporados em muitos Sistemas de Informação e têm garantido assim a intero-
+perabilidade entre sistemas heterogêneos[Claro and Macêdo 2008b]. A grande vantagem
+desta interoperabilidade é que estes serviços podem ser combinados dando origem a ou-
+tros serviços Web. Assim, uma composição de serviços Web (Web Service Compositi)n
+pode ser definida como um novo serviço Web resultante da combinação de outros serviços
+isolados.
+A  utilização  de  ferramentas  amigáveis  e  funcionais  no  processo  de  desen-
+volvimento de um serviço Web já  foi incorporado em diversos ambientes integrado
+de  desenvolvimento  (IDE  -  Integrated  Development  Environm)ntcomo  o  Eclipse
+([Eclipse 2003]).  Estas ferramentas podem ser desenvolvidas em formato de plugins,
+como por exemplo, a utilização do WTP(Web Tool Plugi)[Dai et al. 2007] no ambiente
+Eclipse. O WTP é um plugin que transforma o desenvolvimento de um serviço Web, ou-
+trora árduo, trabalhoso e demorado, em um processo fácil e rápido, ampliando a utilização
+deste ambiente para o desenvolvimento de aplicaç ões Web. Na verdade, a utilização de
+um ambiente de desenvolvimento integrado aumenta a produtividade e diminui a curva de
+apredizagem de um desenvolvedor Web, contribuindo para o desenvolvimento de sistemas
+de informação novos e integrados.
+Algumas  outras  ferramentas  ou  plugins já  foram  desenvolvidos  dentro  de
+ambientes  integrados  com  o  intuito  de  agilizar  e  facilitar  a  manipulação  das
+composiç ões de serviços [Scicluna et al. 2004, Srinivasan et al. 2006, Chafle et al. 2007,
+Knublauch et al. 2004].  Porém, muitos destes trabalhos não utilizam componentes da
+pr ópria ferramenta, não inicializam o processo de desenvolvimento de composiç ões por
+meios gráficos e nem criam os arquivos de saída da composição de uma maneira sintati-
+camente e semanticamente correta, exigindo em muitos casos o conhecimento de outras
+tecnologias por parte do usuário e um tempo extra na compreensão do c ódigo gerado.
+Muitas vezes, estes fatores desencorajam os desenvolvedores a utilizar estes ambientes e
+assim continuam utilizando o processo manual de criação das composiç ões, retardando o
+processo de desenvolvimento de sistemas.
+Diante deste contexto, este trabalho prop õe o desenvolvimento de um plugin den-
+tro de um ambiente integrado como o Eclipse para gerenciar o desenvolvimento de uma
+composição de serviços Web utilizando serviços previamente desenvolvidos e publicados
+na Web, garantindo um arquivo de saída sintaticamente e semanticamente correto. Além
+disso, este trabalho adiciona características semânticas aos serviços desenvolvidos, facili-
+tando assim a sua descoberta e, consequentemente, permitindo-o que a sua descrição seja
+realizada de uma maneira não-ambígua. As principais contribuiç ões deste artigo podem
+ser resumidas abaixo:
+• propor e analisar os principais requisitos para a composição de serviços Web uti-
+lizando um ambiente integrado;
+• utilizar ferramentas existentes (WTP no Eclipse) para facilitar o desenvolvimento
+dos serviços a serem incluídos na composição;
+110
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+• criar uma ferramenta (plugin) para o desenvolvimento de composiç ões de serviços
+semânticos utilizando uma interface gráfica intuitiva e amigável;
+• gerar o arquivo OWL-S referente à composição proposta pelo usuário de forma
+que o mesmo seja sintaticamente e semanticamente correto.
+O presente artigo está assim organizado: a seção 2 apresenta as composiç ões de
+serviços, incluindo a linguagem OWL-S. A seção 3 prop õe alguns requisitos fundamentais
+para o desenvolvimento de um plugin.  A seção 4 introduz o plugin proposto:  OWL-S
+. A
+seção 6 apresenta alguns experimentos realizados e resultados obtidos e a seção 7 conclui
+e direciona alguns trabalhos futuros.
+¸os Web
+Diversos prot ótipos desenvolvidos prop õem duas etapas para o processo de desenvolvi-
+mento de uma composição de serviços Web [Claro and Macêdo 2008a].  Uma primeira
+etapa conhecida como abstrata ou planejamento da composição que determina as ativi-
+dades que a composição deve realizar e uma segunda etapa conhecida como concreta ou
+executora, onde efetivamente a composição pode ser executada.  Composiç ões abstra-
+tas estão sendo utilizadas juntamente com outras áreas de pesquisa como planejadores
+[Digiampietri et al. 2007] com o intuito de determinar automaticamente quais atividades
+devem participar de uma composição de serviço. Embora a versão atual deste trabalho não
+contemple as composiç ões automáticas, os serviços, neste trabalho, foram projetados para
+que esta funcionalidade fosse incorporada. Nesse contexto, é importante a utilização de
+linguagens semânticas de descrição dos serviços Web como OWL-S [Martin et al. 2007]
+e WSMO[Domingue et al. 2005]. Dentre estas, a OWL-S harmoniza de forma satisfat ória
+a interação entre os serviços Web (coreografia) e a visão global da composição, ou seja,
+o agrupamento dos serviços dado um objetivo proposto  (orquestração), sendo que, a
+mesma carece de ferramentas amigáveis para popularizar a sua utilização.  Assim, este
+trabalho utiliza a OWL-S como linguagem de descrição dos serviços que participam da
+composição assim como do serviço composto gerado como resultado. A figura 1 demons-
+tra as entradas e saídas da ferramenta proposta para o gerenciamento da composição.
+Figura 1. As entradas e saídas do   OWL-S Composer
+O WSDL 1 assim como o WSDL 2 presente na figura 1 representam os arquivos de
+descrição de serviços gerados pelo plugin WTP, no Eclipse. Estes arquivos de descrição
+através da ferramenta JAX-SA[Babik 2008] onde
+111
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+os mesmos podem ser convertidos em arquivos de descrição OWL-S. Os arquivos OWL-
+S 1 e OWL-S 2 representam as descriç ões de serviços Web semânticos e são compostos
+.  No final, o
+OWL-S composergera um OWL-S (OWL-S 3) referente a um arquivo de descrição de um
+serviço correspondente à composição criada.
+2.1. OWL-S
+A necessidade de descriç ões semânticas  é  essencial para a descoberta,  invocação e
+composição automática de serviços Web. Estas características motivaram a utilização de
+uma linguagem de descrição que possibilitasse a uma máquina distinguir serviços com as
+mesmas características semânticas (objetivos similares) porém sintaticamente diferentes.
+A Web Semântica favorece a resolução destes problemas, permitindo que da-
+dos  e  serviços  sejam  interpretados  por  software,  sem  o  problema  da  ambig üidade
+[Berners-Lee et al. 2001]. Uma das linguagens que proporciona a descrição semântica de
+) [Martin et al. 2007].
+), que se trata de
+uma linguagem baseada em XML com a finalidade de descrever ontologias. Uma onto-
+logia OWL consiste em um conjunto de classes, instâncias, propriedades e axiomas que
+descrevem um conceito dentro de um domínio particular [Murtagh 2007].
+A OWL-S utiliza três ontologias para representar informaç ões referentes a um
+serviço Web [Martin et al. 2007].
+• Profile: Elemento que descreve as habilidades do serviço, facilitando sua desco-
+berta automática. Através dessa ontologia são identificados elementos funcionais,
+precondiç ões e efeitos, e elementos não funcionais como a categoria do serviço e
+informaç ões sobre o provedor do serviço.
+• Model:  Esse elemento possui uma subclasse Processonde o comportamento
+do serviço  é descrito.  Basicamente, informaç ões sobre invocaç ões de serviços
+at ômicos ou compostos durante a execução de um serviço e a troca de mensa-
+gens entre eles são descritas nesta ontologia. Um serviço composto pode ser de-
+finido como um serviço que contém informaç ões de invocação de outros serviços
+at ômicos ou compostos (ontologia Model), encapsulados em estruturas de con-
+trole como: Sequence,SplitJoin, Anyorder, etc. Já um serviço at ômico, não pode
+invocar outros, somente pode ser executado.
+• Grounding: Essa ontologia descreve o mapeamento das estruturas do Model em
+uma descrição WSDL, facilitando a execução automática dos serviços Web.
+Assim, a linguagem OWL-S provê facilidades mediante a utilização do conceito
+da Web semântica para solucionar problemas relacionados à descoberta e à composição
+automática de serviços Web, sendo a linguagem utilizada neste trabalho pelo OWL-S
+Composer.
+3. Requisitos de uma ferramenta para composico                                               ã   de servic¸os
+Segundo [Chafle et al. 2007], alguns requisitos são essenciais para o desenvolvimento de
+uma ferramenta para compor serviços Web. Este trabalho avaliou alguns destes requisitos
+¸ã o), adaptando-os quando necessário,
+e prop ôs um quinto requisito: Corretude. A seguir são apresentados estes requisitos:
+112
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+• Funcionalidade: O ambiente de desenvolvimento deve acompanhar o usuário du-
+rante todo o ciclo de vida de uma composição de serviços Web.
+• Interface:  Uma visão simplificada e funcional deve ser provida pelo ambiente
+de desenvolvimento de modo que o usuário não necessite utilizar nenhum outro
+recurso para realizar a composição de serviços.
+• Usabilidade:  O ambiente de desenvolvimento deve existir de forma que uma
+composição de serviços, realizada com sua utilização, possa ser intuitiva para um
+usuário inexperiente e prática para um usuário experiente, provendo uma capaci-
+dade de gerenciamento da composição de serviços Web da forma mais simples e
+eficiente possível.
+• Integração: A integração entre os recursos do ambiente de desenvolvimento deve
+ser aproveitada utilizando a potencialidade de cada elemento nesse ambiente que
+possa contribuir para a composição de serviços Web.
+• Corretude: O c ódigo gerado, referente à composição de serviços, em um ambi-
+ente de desenvolvimento de composiç ões de serviços Web, deve ser legível e cor-
+responder sintaticamente e semanticamente a um c ódigo válido correspondente
+gerado manualmente.
+atendeu a estes requisitos como é apre-
+sentado na pr óxima seção.
+4. OWL-S Composer
+Com o intuito de viabilizar a criação de uma ferramenta para gerenciar o desenvolvi-
+mento de composiç ões de serviços Web semânticos foi desenvolvido um plugin para a
+O OWL-S Composerse baseia na utilização de um editor de diagramas que uti-
+liza elementos em WSDL convertidos para a linguagem OWL-S ou serviços importados
+pelo usuário, de forma que a composição possa ser realizada visualmente para a posterior
+geração do c ódigo OWL-S referente ao serviço composto representado neste diagrama.
+A plataforma Eclipse foi utilizada devido a sua estrutura extensível, baseando-se funda-
+mentalmente em componentes plugáveis. Todos os componentes do Eclipse, exceto o seu
+n úcleo, são baseados em plugins. Assim, OWL-S Composerfoi desenvolvido como um
+plugin podendo se integrar com outros pluginsdessa plataforma.
+O fato do OWL-S Composer ser um plugin, evidencia a conformidade deste com
+o requisito integrac¸ã o, proposto na seção 3, reforçando sua proposta de atuar em ambi-
+ente integrado para o desenvolvimento de Serviços Web.  Com isso, nesse nesmo am-
+biente, serviços desenvolvidos utilizando o plugin WTP poderiam ser importados em
+uma composição através do uso da ferramenta externa JAX-SA[Babik 2008] que realiza
+a transformação dos documentos WSDL em descriç ões OWL-S correspondentes, ocor-
+rendo, dessa forma, a integração do OWL-S Composercom o plugin WTP do Eclipse.
+Contudo, serviços produzidos pelo usuário manualmente ou através da utilização de ou-
+tras ferramentas, também podem ser incluídos em uma composição, nesse caso, não ne-
+cessitando da utilização do WTP ou do JAX-SA.
+O OWL-S Compose(figura  2) se relaciona com os seguintes plugins da pla-
+taforma Eclipse:  Eclipse Modeling Framework Project(EMF)  [EMF 2008], Graphi-
+cal Editing Framework(GEF)  [GEF 2008],  Graphical Modeling Framework(GMF)
+113
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Figura 2. Arquitetura do   OWL-S Composer
+(JET) [JET 2008]. Estes pluginssão utilizados na
+criação e edição do diagrama e na geração do c ódigo referente à composição dos serviços,
+logo, os mesmos não foram implementados nesse trabalho apesar de servirem como base
+se relaci-
+ona com a ferramenta JAX-SA, porém esta ferramenta não depende de nenhum elemento
+desta arquietura para sua execução, e, por isso, a ferramenta JAX-SA é representada como
+uma ferramenta independente na figura 2, juntamente com o Eclipse. A seguir são apre-
+sentadas mais algumas características do OWL-S Composerevidenciando os requisitos
+propostos na seção 3.
+4.1. Interface grá fica
+O OWL-S Composerdeve garantir que o desenvolvimento de uma composição de serviços
+Web deve ser realizado de uma maneira intuitiva, em se tratando de um usuário inexperi-
+ente, e prática, em se tratando de um usuário experiente. Neste sentido, um plugin deve
+prover um alto nível de abstração sobre os detalhes técnicos referentes a essa atividade.
+Com o intuito de atender a este requisito, o OWL-S Composerutiliza uma abordagem
+ilustrada para compor serviços Web. A utilização desse tipo de abordagem é importante
+tanto em tempo de projeto quanto durante a manutenção de uma composição, auxiliando
+assim todo o seu ciclo de vida. Esta característica evidencia o requisito de usabilidadedo
+A figura 3 apresenta a utilização de uma janela contendo informaç ões de projetos
+e outros tipos de arquivo suportados no Eclipse, denominada de Package Explore(janela
+1). O editor de diagramas é representado pela janela central (janela 2) contendo um espaço
+para a edição do diagrama e um componente chamado Paletteonde pode-se selecionar os
+serviços OWL-S, as mensagens trocadas entre serviços, e os controladores dos serviços
+compostos tais como: Sequence,Split e AnyOrder. A janela intitulada Properties(janela
+3) descreve as propriedades de cada elemento selecionado no diagrama, sendo que, algu-
+mas delas, podem ser editadas pelo usuário. A janela Outline (janela 4) é utilizada para
+dar uma visão geral do diagrama caso seu tamanho seja muito extenso. A posição dessas
+114
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Figura 3. Projeto visual do   OWL-S Composer
+janelas pode ser modificada e outras janelas podem ser adicionadas dinamicamente de
+acordo com as necessidades do usuário.
+Deve-se resaltar que o projeto da interface do OWL-S Composervisa ser completo
+em relação à composição de serviços Web, oferecendo recursos para que o usuário não
+necessite da utilização de outras telas para realização dessa atividade.  Isso satisfaz o
+requisito de interfaceproposto na seção 3.
+¸os Web
+Na linguagem OWL-S, a modelagem de uma composição de serviços Web deve ser
+feita  a  partir  de  outros  serviços  at ômicos  ou  compostos,  dispostos  em  controlado-
+res de fluxo,  com a finalidade de atingir um objetivo.   No OWL-S Composeressa
+disposição dos serviços  é modelada graficamente através do editor de diagramas (ver
+seção 4.1), sendo que os serviços disponíveis nesse diagrama devem ser selecionados
+pelo usuário no momento da criação do diagrama.  Internamente, a biblioteca OWL-S
+API [MINDSWAP 2007] é utilizada no sentido de realizar o mapeamento das descriç ões
+pode desenvolver composiç ões
+de serviços utilizando os serviços Web semânticos importados, devidamente indicados na
+janela de criação do diagrama, e os controladores de fluxo: Sequence,Split ou AnyOr-
+der.  A utilização de somente três controladores dentre os definidos na especificação da
+linguagem OWL-S 1.1 é somente ilustrativa, podendo ser estendida para os demais con-
+troladores em vers ões futuras deste plugin.  Esta característica satisfaz parcialmente o
+, em sua versão atual, não realiza o
+deployautomático das composiç ões geradas. A figura 4 demonstra uma composição de
+4.3. Gerac¸ã o de Có digo
+Uma vez que a composição projetada estiver concluída no editor de diagramas, o usuário
+pode gerar o c ódigo referente a esta composição.  O plugin JET é utilizado no OWL-S
+115
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Figura 4. Demonstraç                                                                          ao de serviços no   OWL-S Composer
+Composerpara gerar o c ódigo correspondente a essa composição de serviços. No OWL-S
+Composer,o templatedo c ódigo da composição de serviços Web resultante é formatado
+seguindo a especificação da versão 1.1 da linguagem OWL-S. O requisito corretudepode
+ser evidenciado na validação sintática e semântica do c ódigo gerado pelo OWL-S Compo-
+ser.
+5. Trabalhos relacionados
+Esta seção relaciona três ferramentas cujo prop ósito é compor serviços Web visualmente
+utilizando OWL-S: o Malta’s OWL-S Editor, o CMU’s OWL-S Editore o Prot´ege OWL-S
+Editor. Neste trabalho, as características de cada uma dessas ferramentas foram avaliadas
+O OWL-S Editor[Scicluna et al. 2004] é uma ferramenta com o intuito de faci-
+litar a criação de uma descrição de serviços Web utilizando OWL-S, sendo que, uma
+composição de serviços Web pode ser definida através de um diagrama de atividades ba-
+seado em UML. O OWL-S Editorfornece todos os recursos necessários da linguagem
+OWL-S para a criação de serviços at ômicos, incluindo pré-condiç ões e efeitos. Contudo,
+a completude dessa ferramenta não é verificada quando se trata da composição de serviços
+sendo que a mesma s ó possui suporte à duas estruturas de controle da linguagem OWL-S:
+o Split e o IF-Then-Else. Além disso por não ser um ambiente incorporado a uma IDE
+como Eclipse, este editor exije um conhecimento prévio na ferramenta e no ambiente de
+desenvolvimento.
+O CMU’s OWL-S Development EnvironmeCt(ODE) [Srinivasan et al. 2006] é
+um plugin para a plataforma Eclipse com o objetivo de dar suporte ao desenvolve-
+dor através de todo ciclo de vida do desenvolvimento de um serviço Web semântico
+[Srinivasan et al. 2006].  A representação gráfica das ontologias OWL-S nesse plugin é
+baseada em árvores de elementos, não propondo uma visualização gráfica completa da
+composição.  A descrição OWL-S gerada através do WSDL2OWL-S é incompleta, ne-
+cessitando de alguma edição antes de sua utilização, fator que dificulta a utilização deste
+plugin. Além disso, os arquivos WSDL são importados e não reutilizados do WTP, o que
+116
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+evidencia uma integração incompleta com a plataforma de desenvolvimento Eclipse.
+O OWL-S Editor[Knublauch et al. 2004] trabalha como um plugin para Proté gé
+OWL ontology editor[Protégé 2006] que, por sua vez, provê um conjunto de ferramen-
+tas para o projeto de aplicaç ões baseadas em conhecimento (knowledge-based)utilizando
+ontologias. Essa ferramenta, contudo, não habilita uma edição direta do diagrama de uma
+dada composição, sendo essa ação restrita a uma interface baseada em árvores de ele-
+mentos. Além disso, a geração do c ódigo, referente à composição resultante, se mostrou
+desorganizada.  Com isso, apesar dessa ferramenta fornecer melhores funcionalidades
+para manipulação de ontologias OWL-S em relação às ferramentas supra-citadas, a pouca
+interatividade na composição gráfica de serviços Web e as falhas na geração do c ódigo
+prejudicam sua usabilidade. Outro fator importante é que o Protègè não é uma IDE para
+desenvolvimento de serviços Web, o que dificulta a execução da composição de serviços
+previamente desenvolvidos.
+Diante deste contexto,  o OWL-S Composese mostra como uma ferramenta
+mais adequada para o desenvolvimento de composiç ões de serviços Web, enfatizando
+a utilização interativa de um ambiente gráfico, além da geração do c ódigo da composição
+de maneira clara e correta, como pode ser observado na seção 6.
+A  tabela  1  permite  uma  melhor  visualização  dos  plugins analisados  e  uma
+comparação através dos requisitos propostos na seção 3.
+Trab. Relacionados                                                                            Funcionalidade   Interface   Usabilidade   Integrac¸ ã o   Corretude
+OWL-S Composer                                                                                Parcial          Sim         Sim           Sim             Sim
+Malta’s OWL-S Ed.                                                                             Parcial          Sim         Sim           Não             Sim
+CODE                                                                                          Parcial          Sim         Não           Sim             Sim
+Protégé OWL-S Ed.                                                                             Parcial          Sim         Sim           Sim             Parcial
+Tabela 1. Quadro comparativo dos trabalhos relacionados.
+6. Experimentos
+Dois experimentos quanto ao c ódigo gerado referente à composição de serviços Web fo-
+. Primeiramente foi realizado
+um experimento quanto à sintaxe do c ódigo gerado. O objetivo deste experimento foi ve-
+rificar se o arquivo OWL-S gerado referente a uma composição correspondia a um arquivo
+OWL-S gerado manualmente. Neste sentido, critérios quanto a organização, estrutura das
+tagsgeradas e identação foram analizados. Um segundo experimento foi realizado quanto
+à semântica do c ódigo gerado ou seja, se esse era funcionalmente correto e se efetivamente
+executava uma composição de serviços Web. Em ambos os experimentos foram utiliza-
+, pagamentoCartaoe
+, construídos com o intuito de validar o plugin. A figura 5 apresenta
+A composição foi modelada de forma que o serviço solicitaOrc¸amentofosse inici-
+almente executado recebendo a quantidade e as características do computador a ser com-
+, pagamentoCartaoe entregaEquipamento
+foram executados sequencialmente ap ós o usuário ter selecionado um dos orçamentos.
+117
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Figura 5. Compra de um equipamento utilizando o                                                OWL-S Composer .
+, re-
+cebe como entrada duas mensagens:  o c ódigo do orçamento selecionado pelo usuário
+e o CPF do cliente que realiza a compra.  Este serviço retorna um c ódigo da compra
+que é encaminhado para o serviço pagamentoCartao,onde juntamente com o n úmero do
+cartão informado, o cliente efetua o pagamento. Em caso positivo da execução do serviço
+pagamentoCartao,o c ódigo do produto é repassado para o serviço de entrega, entregaE-
+, assim como o endereço do cliente. Como retorno, este serviço fornece um
+c ódigo para que a entrega possa ser rastreada pelo cliente. As linhas presentes na figura 5
+representam as entradas e saídas de cada serviço Web presente na composição.
+6.1. Resultados
+Os resultados obtidos foram analisados separadamente quanto  à  sintaxe e quanto  à
+semântica. Sintaticamente, o c ódigo gerado através do OWL-S Composercorrespondeu à
+organização e a estrutura das tagsgeradas manualmente.
+Quanto à identação, a ontologia Processque corresponde aos serviços compos-
+tos apresentou uns pequenos desvios, não correspondendo de forma fidedigna ao c ódigo
+gerado manualmente.  Este problema foi detectado como sendo pertinente  à forma de
+utilização do plugin JET, porém, sua correção já foi incorporado como trabalho futuro
+deste plugin.
+118
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Quanto à semântica, foi realizado um deploydo c ódigo gerado automaticamente
+para verificar se o mesmo executaria a composição que foi proje-
+tada graficamente. A execução da composição utilizou a OWL-S API na versão 1.1.0 e o
+resultado da composição da compra do equipamento foi obtido.
+7. Conclusã o
+Nesse artigo foi apresentada uma ferramenta para gerenciar o desenvolvimento de uma
+. O OWL-S Composer é um plu-
+gin desenvolvido para compor serviços Web semânticos através da plataforma Eclipse.
+Este plugin tem como principais características: a utilização de um ambiente visual para
+gerar as composiç ões de serviços, a integração com outros pluginsdo Eclipse, como o
+WTP, minimizando a curva de aprendizagem e a facilidade de manipular as composiç ões
+além de gerar o c ódigo da composição de uma maneira sintática e semanticamente correta.
+O OWL-S Composer foi analisado de acordo com os requisitos propostos neste trabalho
+e comparado com outros pluginse ferramentas que foram desenvolvidos com o intuito de
+compor serviços Web. O OWL-S Composer reuni os requisitos fundamentais: funciona-
+lidade, interface, usabilidade,integrac¸ã o e corretude, o que facilita a sua incorporação e
+utilização em sistemas de informação em processo de desenvolvimento. Como trabalho
+futuro, pretende-se estender este plugin para a utilização de mecanismos de descoberta e
+composição automática de serviços Web utilizando, por exemplo, planejadores da Inte-
+ligência Artificial.
+Referê ncias
+Babik, M. (2008). Jax-sa.                                                                      Ultimo acesso em 9 de junho de 2008.
+Berners-Lee, T., Hendler, J., and Lassila, O. (2001). The semantic web. Scientific Ameri-
+can.
+Chafle, G., Das, G., Dasgupta, K., Kumar, A., Mittal, S., Mukherjea, S., and Srivastava,
+B. (2007).  An integrated development enviroment for web service composition.  In
+, pages 1-9.
+Claro, D. B. and Macêdo, R. J. A. (2008a). Dependable web service compositions using
+a semantic replication scheme.  In Simpó sio Brasileiro de Redes de Computadores e
+, Rio de Janeiro,RJ.
+Claro, D. B. and Macêdo, R. J. A. (2008b).  Web services e sua relação com sistemas
+ã                                                                                              o(SBSI’08),
+pages 356-359, Rio de Janeiro, RJ.
+Dai, N., Mandel, L., and Ryman, A. (2007).  Eclipse Web Tools Platform: Developing
+Java(TM) Web Applications.Addison-Wesley Professional, 1 edition.
+Digiampietri, L. A., Pérez-Alcázar, J. J., and Bauzer, C. M. (2007). Ai planning in web
+services composition: a review of current approaches and a new solution.  In VI En-
+Domingue, J., Lausen, H., and Fensel, D. (2005). Web service modeling ontology.
+Eclipse (2003).  Eclipse platform technical overview.  Object Technology International.
+www.eclipse.org/whitepapers/eclipse-overview.pdf.
+119
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+EMF (2008).  Eclipse modeling framework project.                                          Ultimo acesso em 24 de maio de
+2008.
+Ultimo acesso em 24 de maio de 2008.
+Ultimo acesso em 24 de maio de 2008.
+JET (2008). Java emitter templates.                                                       Ultimo acesso em 24 de maio de 2008.
+Knublauch, H., Fergerson, R., Noy, N., and Musen, M. (2004). The protégé owl plugin:
+An open developoment environment for semantic web applications. In Proceedings of
+ages 229-243. Sprin-
+ger/LNCS 3298.
+Martin, D., Burstein, M., Hobbs, J., Lassila, O., McDermott, D., McilRaith, S., NaraYa-
+nan, S., Paolucci, M., Parsia, B., Payne, T., Sirin, E., Srinivasan, N., and Sycara, K.
+(2007). Owl-s: Semantic markup for web services.
+MINDSWAP (2007).  Maryland information and network dynamics lab semantic web
+agents project.
+                                                                                          .  PhD thesis, University of
+Dublin, Dublin.
+Protégé (2006). Protégé owl editor.                                                       Ultimo acesso em 29 de maio de 2008.
+Scicluna, J., Abela, C., and Montebello, M. (2004). Visual modelling of owl-s services.
+                                                                                          ternet.
+Srinivasan, N., Paolucci, M., and Sycara, K. (2006). Semantic web service discovery in
+the owl-s ide.  In Proceedings of the IEEE 39th Hawaii International Confereone
+120
+
+
+
+
+

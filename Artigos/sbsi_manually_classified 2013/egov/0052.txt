@@ -1,0 +1,482 @@
+﻿Provimento de Informações sobre Transporte Público Urbano
+para Empresas Concessionárias: Simulação e Avaliação
+Apoiada por um Sistema Multi-agentes
+Thiago Lopes Trugillo Silveira e Marcia Pasin1
+1Centro de Tecnologia - Universidade Federal de Santa Maria (UFSM)
+Av. Roraima 1.000 - Cidade Universitária - Santa Maria - RS - Brasil
+{thiago,  marcia}@inf.ufsm.br
+Abstract. Monitoring and planning are interesting activities to help transit ope-
+rator and to provide quality in public transportation. In fact, some computatio-
+nal tools and simulators play this role and assist humans in tasks and improving
+transportation. However, existing solutions are typically proprietary and, the-
+refore, have prohibitive cost to be adopted by small and medium size cities. In
+addition many of them are not easy to be operated by non-specialists.  In this
+paper, we describe the implementation and evaluation of a simulation using the
+support of a multi-agent system to represent dynamic components (flow, roads,
+vehicles, pedestrians, bus stops, etc.) in the urban transport. Our simulation can
+be easily operated by non-specialists and was experimentally evaluated using as
+scenario a medium city, considering the variations of two given journeys.
+Resumo. O monitoramento e planejamento por empresas concessionárias são
+elementos chave na tarefa de provisão de transporte público com qualidade. De
+fato, algumas ferramentas computacionais e simuladores desempenham este pa-
+pel e auxiliam humanos nas tarefas de melhoramento e gestão de transporte. No
+entanto, soluções existentes são tipicamente proprietárias, com custo proibitivo
+para muitas cidades, ou então não são fáceis de usar por não-especialistas.
+Este trabalho apresenta a implementação e avaliação de uma simulação apoi-
+ada por um sistema multi-agentes para modelar os componentes de transporte
+urbano coletivo (como fluxo, vias, veículos, pedestres, paradas de ônibus).  A
+ferramenta pode ser facilmente operada por não-especialistas e foi avaliada
+experimentalmente usando como cenário uma cidade de médio porte, conside-
+rando variações de fluxo do período de diferentes jornadas completas.
+1.                                                                                         Introdução
+A crescente complexidade da gestão do transporte nas cidades tem exigido, por órgãos
+gestores (municípios, empresas concessionárias) e usuários deste serviço, a convenção de
+novas regras e a implantação de melhorias, visando garantir operação mais eficiente. Com
+o objetivo de automatizar processos e prover suporte computacional adequado, Sistemas
+Inteligentes de Transporte (ITS ou Intelligent Transport Systems) estão sendo cada vez
+mais implementados e desenvolvidos. Seu uso possibilita previsão, análise e diagnóstico
+para problemas no processo de tráfego de veículos e circulação de pedestres.
+Um aspecto importante no processo de transporte público é o desenvolvimento de
+ferramentas de monitoramento e de simulação que permitam aos órgãos gestores acesso
+565
+
+
+
+
+fácil e preciso a informações, motivado pela grande importância no melhoramento do
+serviço (mais ônibus, menos carros). Estas ferramentas devem fornecer informações so-
+bre componentes desta problemática (como fluxo, vias, veículos, pedestres, paradas
+de ônibus) que viabilizem planejamento operacional e gestão (através de visualização de
+comboios, gargalos devido a acidentes, saídas de espetáculos, entre outros, e geração
+de relatórios estatísticos) e, finalmente, melhoria da Qualidade de Serviço (QoS) para o
+usuário final.
+É importante fornecer, a órgãos gestores, informações para facilitar planejamento
+tais como aquelas que medem os efeitos do nível de serviço das vias, e o número de veí-
+culos atrasados.  Por exemplo, dado um certo nível de serviço, em um certo período do
+dia, qual é o número de veículos a serem colocados em uma linha particular para obter
+determinada QoS? No entanto, um obstáculo no caso de transporte público urbano é a au-
+sência de ferramentas de fácil operação por não-especialistas, de baixo custo de aquisição
+para que possam ser adotadas por cidades de pequeno e médio porte, e que permitam o
+planejamento, provisionamento de informação e monitoramento em tempo real, além da
+execução de simulações. Existe carência de investimento nessas ferramentas e o resultado
+se reflete na dificuldade de gestão, que impacta fortemente na QoS. Considerado um ele-
+mento chave neste processo, ferramentas de simulação de software permitem a avaliação
+de situações, possibilitando a observação de diferentes cenários e antecipação de detecção
+de problemas, antes mesmo da implementação de soluções na prática.
+Desta forma, este artigo apresenta o desenvolvimento e avaliação de uma simu-
+lação gráfica para fornecer informações aos órgãos gestores (notadamente empresas con-
+cessionárias) do sistema de transporte público urbano apoiada por um sistema de multi-
+agentes (MAS ou Multi-Agent System).  O conceito de agentes de software permite a
+modelagem de cada componente desta problemática de forma independente e dinâmica,
+associando ações específicas para atribuir maior realismo ao software resultante.
+Mais precisamente, a simulação aqui apresentada destaca as seguintes caracterís-
+ticas: (i) o uso de software aberto e de livre distribuição, enfatizando baixo custo e liber-
+dade de distribuição e modificação, inclusive por órgãos gestores de cidades de pequeno
+e médio porte (ii) usabilidade porque a ferramenta precisa de ser fácil de ser usada e
+compreendida por não-especialistas, (iii) possibilidade de observação de comportamento
+dinâmico de fluxos no processo de transporte público, suportado por um MAS, (iv) simu-
+lação de fluxos levando em conta diferentes etapas do dia (para demostrar movimentação
+na hora do rush e horas de ociosidade), (v) geração de relatórios e coleta de dados estatís-
+ticos. A simulação foi avaliada experimentalmente no contexto de uma cidade de pequeno
+porte, considerando as variações do período de uma jornada completa.
+Em geral, a simulação aqui proposta visa servir como uma ferramenta para permi-
+tir melhor compreensão e agilizar o processo de entendimento de problemas no sistema de
+transporte nas cidades de médio e pequeno porte. Além disso, essas informações podem
+ser utilizadas por empresas licenciadas para antecipar demandas e tomar ações pró-ativas
+para melhorar a QoS de transporte e gestão de frotas.
+O restante deste artigo está organizado da seguinte forma. Trabalhos relacionados
+são apresentados na seção 2.  A Seção 3 apresenta o detalhamento da simulação para
+transporte público urbano. Seção 4 aborda aspectos de implementação. Seção 5 descreve
+566
+
+
+
+
+a avaliação experimental da simulação usando como cenário um conjunto de linhas que
+servem uma cidade de porte médio. Finalmente, a Seção 6 apresenta conclusões finais e
+trabalhos futuros.
+2. Trabalhos relacionados
+O provimento de transporte público eficiente é um grande desafio para o desenvolvimento
+de cidades inteligentes. Visando mobilidade sustentável, as Tecnologias de Informação e
+Comunicação (TIC) têm sido aplicadas, com o resultado primário dos ITS. Neste sentido,
+diversos aspectos têm sido ser explorados, tais como a construção de (i) simuladores
+muitas vezes apoiados por MAS, (ii) ferramentas que oferecem informação online sobre
+tráfego e trânsito em geral (Google Traffic, Google Transit, Waze e outros aplicativos para
+GPS), e (iii) ferramentas e sistemas para entendimento e gerenciamento de transporte
+público especificamente voltadas para empresas.
+No contexto de simuladores, destacam-se soluções proprietárias (VisSim, http:
+//www.vissim.com, entre outras) que apresentam o inconveniente do alto custo de
+implantação e manutenção, e soluções acadêmicas (SUMO [Behrisch et al 2011], Itsumo
+[Castro da Silva 2004]), tipicamente suportados por MAS. Simuladores não são feitos
+para serem usados por não-especialistas e, tipicamente, não identificam componentes da
+problemática de transportes de forma individualizada (por exemplo, nome de uma de-
+terminada linha de ônibus).  Há a necessidade de uma camada de software para fazer a
+interface-simulador usuário e, este presente trabalho contribui neste sentido.  A imple-
+mentação aqui apresentada foi conduzida sobre o simulador o Siafu por sua facilidade de
+desenvolvimento e pela disponibilidade deste software que é de livre distribuição.
+Existe também uma coleção de ferramentas, disponíveis gratuitamente, que pos-
+sibilitam observar movimentação de veículos em geral. Um exemplo é o GoogleTraffic
+(http://maps.google.com.br/) que apresenta o comportamento do tráfego nas
+vias urbanas com o suporte de crowd sourcing. Usuários de transporte quando utilizam
+serviços Google em seus dispositivos móveis com GPS, implicitamente enviam informa-
+ções (posição atual e velocidade) para o centro de operações do Google. Com base nos
+dados recebidos e histórico, a ferramenta fornece uma estimativa do tráfego que é exi-
+bido usando cores diferentes em um mapa do Google Maps, através de interface web.
+Outro exemplo é a ferramenta colaborativa Waze (http://www.waze.com) também
+baseada em GPS. O Waze permite que usuários colaborem na inserção de informações
+relevantes para o andamento do fluxo de transporte e trânsito.
+Ferramentas  e  sistemas  para  entendimento  e  gerenciamento  de  transporte
+público  também  têm  sido  desenvolvidas  nas  empresas,  como  o  sistema  Somar
+[Ladeira el al. 2009] da Carris de Porto Alegre em desenvolvimento a partir de 1997,
+o  sistema  alemão  INITRANS  [Staib e Gerland 1999],  que  começou  de  forma  aca-
+dêmica  de  depois  tornou-se  um  produto,  e  tantas  outras  ferramentas  proprietárias
+(Mentor Streets Transit  (http://www.mentoreng.com/),  FLASHNET  (http:
+//www.swarco.com),  Fleet  Focus  Transit  (http://www.assetworks.com/
+fleet-management-software/),   IVU.FLEET                                                      (http://www.ivu.com/)).
+Ferramentas proprietárias apresentam características muito úteis (entre elas destaca-se
+a localização automática de veículos, e o envio de mensagens para motoristas), inclusive
+algumas podem ser usadas tanto em modo standalone, para simulação, por exemplo, ou
+567
+
+
+
+
+em modo tempo real. Contudo, requerem investimento substancial na implantação e na
+manutenção da sua operacionalidade, o que pode ser inviável para a realidade de muitas
+cidades brasileiras.
+Finalmente, destacam-se trabalhos acadêmicos como ênfase em técnicas de inteli-
+gência artificial. [Molina 2005] apresenta um sistema de recomendação para diagnóstico,
+previsão e planejamento de transporte público.  Outras simulações, baseadas em MAS,
+são descritas em [Meignan et al 2007] e [Gruer et al 2001]. Entretanto, o problema destas
+ferramentas é que elas permitem apenas um número limitado de funções e relatórios (por
+exemplo tempo de espera do passageiro, variação de demanda de passageiros), e não são
+voltadas para o usuário leigo. Detecção de comboios é um assunto não abordado.
+De forma geral, existe uma carência de ferramentas, aplicações e sistemas de in-
+formação que permitam o entendimento, o monitoramento e o planejamento, por parte das
+instituições, de serviços de transporte público urbano além do provimento de informação
+para o usuário deste tipo de transporte. Estas ferramentas e sistemas, se implementados de
+forma adequada (desempenho eficiente, resultados corretos e em tempo hábil, disponibili-
+dade, e facilidade de uso), podem oferecer suporte interessante para observação, controle,
+previsão e simulação de diferentes cenários.
+3. Solução proposta: provimento de informações para operadoras de trânsito
+Visando oferecer uma simulação amigável e com baixo custo de implantação, neste tra-
+balho foi desenvolvida uma implementação com o auxílio de uma biblioteca de simula-
+ção livre (Siafu) [Martin e Nurmi 2006], baseada em MAS. Esta simulação foi avaliada
+usando como cenário um conjunto de linhas que servem a cidade de Santa Maria - RS.
+Esta solução é descrita a seguir.
+3.1. Arquitetura
+A arquitetura da simulação é estruturada em três camadas: entrada de dados, processa-
+mento e visualização.  O módulo de entrada de dados é alimentado com informações
+estáticas como posição geográfica paradas de ônibus (valores para latitude e longitude) e
+descrição de paradas que compõem as rotas que são previamente gravadas em armazena-
+mento não-volátil. Essas informações são alimentadas por uma infraestrutura de suporte
+que permite a coleta das informações, através de sensores, sobre a frota de veículos que
+oferece o transporte público urbano.
+O módulo de entrada de dados suporta o módulo de processamento. O módulo
+de processamento é apoiado pelo Siafu, e envolve cálculo de valores usados no módulo de
+visualização. O módulo de visualização integra geração de relatórios (ver item 3.2) e pro-
+vimento de informações para a interface gráfica. A Figura 1 apresenta um screenshot da
+implementação atual da interface gráfica, com duas áreas principais: mapa com veículos
+em descolamento e área de visualização de informações sobre um determinado veículo
+(selecionado através de um menu). Usando a interface gráfica, um usuário comum pode
+realizar simulações e previsões para obter informações com a finalidade de facilitar a
+gestão do sistema de transporte público urbano. O usuário tem as opções de parar uma
+simulação e de alterar a velocidade da simulação.
+De forma mais específica, com o auxílio da interface gráfica, o usuário pode obser-
+var as seguintes informações: (i) informações estáticas sobre carros (como identificação,
+568
+
+
+
+
+Figura 1. Screenshot da implementação atual da interface gráfica de simulação
+através do número da placa do veículo, por exemplo) e linhas associadas (nome da li-
+nha, origem e destino), (ii) informação dinâmica sobre a localização do ônibus, (iii) a
+velocidade média do veículo, (iv) consumo médio de combustível, (v) número atual de
+passageiros no ônibus (passageiros sentados e em pé) e (vi) informações avançadas, como
+detecção de comboios.
+Ainda falta projetar e implementar facilidades de edição de mapas. Uma vez fi-
+nalizada a implementação da ferramenta, as simulações podem ser feitas para o tráfego
+através da (i) adição ou remoção de uma parada de ônibus em uma linha, (ii) adição ou
+remoção de um ônibus em uma linha, ou ainda (iii) parada um veículo para simular o
+acontecimento de um acidente.
+3.2. Geração de relatórios
+Outro recurso implementado pela ferramenta, além da simulação visual, é a geração de
+um conjunto de relatórios ao final de cada simulação. Os relatórios descrevem diferentes
+listagens que podem ser usadas como medida de QoS e auxiliam no processo de tomada
+de decisão. O relatórios descrevem (i) os carros mais atrasados, (ii) as linhas mais sobre-
+carregadas e (iii) comboios detectados. Estes relatórios são gerados no final da jornada de
+simulação. Na implementação atual, a visualização é feita através de um arquivo HTML.
+Os carros mais atrasados são detectados através de um cálculo simples da di-
+ferença entre o tempo esperado para o cumprimento de um percurso e do tempo que o
+ônibus levou para cumprir o percurso em uma simulação. Atualmente, o relatório apre-
+senta uma listagem com o ID, tempo de saída da garagem, tempo aguardado para per-
+correr o percurso, tempo que o ônibus levou para percorrer o percurso e identificação
+do percurso/linha. Este relatório será alterado oportunamente para apresentar não apenas
+informações da simulação mas também dados estatísticos como informações como um
+indicador de pontualidade para cada linha.
+569
+
+
+
+
+O relatório das linhas mais sobrecargas lista uma série de linhas mais congestio-
+nadas. O cálculo é feito medindo o fluxo de usuários que entram e saem em cada veículo.
+Valores altos para este índice em uma determinada linha demostram que esta linha está
+no elenco das mais congestionadas.
+Outra funcionalidade implementada pela ferramenta aqui proposta é a detecção
+de comboios. Um comboio é formado por um grupo de carros (dois ou mais) que viajam
+juntos, de acordo com um determinado destino. O objetivo de um comboio é aumentar
+o fluxo de embarque e desembarque de ônibus em uma parada regular para evitar o con-
+gestionamento em corredores de ônibus dedicados. Tipicamente, um congestionamento
+nos pontos de interesse é causado pelo tempo necessário para o embarque e desembarque
+de passageiros num carro. A eficiência do comboio depende do tamanho médio do com-
+boio (TMC) e também no fluxo de usuários do serviço. A implementação deste serviço é
+detalhada na no item 4.3 deste artigo.
+Finalmente, quando todo o sistema se tornar operacional, sensores instalados na
+infraestrutura de transporte (em ônibus, paradas) coletariam dados sobre o posiciona-
+mento de ônibus, a velocidade, o volume de combustível no tanque e enviariam, em
+tempo real, informações para atualizar o banco de dados. Estas informações serão obtidas
+a cada intervalo fixo de tempo.  Como alternativa, a mesma informação pode ser usada
+para fornecer informações para um serviço de informação avançada ao usuário (ATIS ou
+Advanced Traveler Information System), com auxílio de monitores e dispositivos móveis.
+4. Implementação
+A ferramenta de simulação, elemento chave para o entendimento e planejamento do pro-
+cesso de transporte público urbano, foi implementada tendo como base mapas reais e o
+uso de informações previamente armazenadas em arquivos em formato CSV chamados
+Buses.csv, Routes.csv e Schedule.csv, respectivamente. Conforme já comentado neste
+texto, o simulador Siafu foi usado como suporte.
+4.1. Siafu
+Siafu (http://siafusimulator.sourceforge.net) é um conjunto de ferra-
+mentas de simulação, desenvolvido no contexto de SMA. Para programar usando Siafu,
+três classes básicas devem ser estendidas:  BaseAgentModel, BaseWorldModel e Ba-
+seContextModel.  Estas classes tratam respectivamente do comportamento dos agentes
+(agentes podem executar diferentes ações dentro da simulação, ônibus e paradas, neste
+cenário), lugares (há lugares específicos onde os ônibus podem circular, ou seja, as li-
+nhas) e sobreposições (que são as regiões do mapa que se destinam a causar alterações na
+simulação).  As sub-classes (classes que estendem as três classes de base acima menci-
+onadas) precisam substituir os métodos de criação x (onde x representa agentes, lugares
+ou sobreposições) e iterações entre eles. O primeiro é responsável por inicializar cada um
+dos modelos (agente e contexto em questão) e as últimas atualizações em cada um deles
+a cada iteração da simulação.
+De fato, a simulação em questão destina-se a mostrar a exploração de linhas ôni-
+bus de uma determinada micro-região (ou seja, Santa Maria).  Então, foi implementada
+uma simulação onde ônibus viajam nesta micro-região como uma extensão do agente de
+classe (Siafu *) que guardam informações tais como: origem, destino, número de lota-
+ção, capacidade de passageiros, velocidade. Uma simulação de um cenário com paradas
+570
+
+
+
+
+de ônibus e ingresso/abandono de passageiros é feito atribuindo o comando  parada de
+ônibus para certos lugares Siafu.  De fato, existem dois tipos de locais onde os ônibus
+exercem atividades: garagem da operadora de serviço e paradas de ônibus.
+Assim, foi implementado um sub-conjunto de serviço de linhas de ônibus através
+da criação de vários agentes a partir de um ponto de partida (garagem) que se desloca
+para o mesmo lugar final (garagem), com execução de serviço em paradas ao longo do
+caminho. Em cada lugar de conhecimento pelo Siafu, cada parada de ônibus tem infor-
+mações sobre quantas pessoas estão à espera de um ônibus. Esta quantidade de pessoas
+muda ao longo do experimento e também muda quando um carro atinge uma parada. Para
+simplificar a implementação, na simulação atual, o ônibus tem velocidade constante, ou
+aceleração não está presente.  Eles permanecem na mesma velocidade, sempre indo de
+um lugar a outro, utilizando como ponto de partida uma garagem e terminando em um
+ponto final, ou de um ponto de ônibus. Quando um ônibus encontra uma parada, espera
+até as pessoas que estão aguardando entrarem no ônibus, como ocorre na realidade. Esta
+parte da simulação é feita através de uma chamada em espera (neste caso, a velocidade do
+ônibus em questão é zero), multiplicando o número de pessoas que vão entrar ou sair do
+ônibus por uma constante (tempo médio que leva cada pessoa a subir ou deixar o ônibus).
+4.2. Overlays
+O Siafu comporta o uso de diferentes overlays (isto é mapas onde se pode manipular a
+frequência de objetos atuantes), então este esquema foi usado para modelar a quantidade
+de passageiros que embarcam e desembarcam em cada ônibus, de acordo com o período
+de duração da jornada. A Figura 2 mostra o esquema de overlays usado na simulação.
+Figura 2. Diferentes overlays usados nas simulações de uma jornada completa
+Em uma jornada típica, cedo da manhã, as pessoas deixam suas casas rumo ao
+trabalho ou à universidade, há grande concentração de pessoas embarcando e desembar-
+cando nos ônibus. Durante a metade da manhã, o fluxo de passageiros diminui e volta a
+aumentar no período do meio-dia. Decresce no meio da tarde e volta a crescer no final da
+tarde quando as pessoas deixam o local de trabalho ou de estudo.
+571
+
+
+
+
+4.3. Detecção de comboios
+Detecção de comboios é um serviço relativamente fácil de ser implementado pelo Siafu.
+Siafu fornece um método chamado isNear que devolve verdadeiro se um agente está pró-
+ximo ao outro, que foi usada para aplicar a detecção de comboio. Como o método isNear
+é aplicado a todos os carros na simulação, um comboio será eventualmente detectado.
+O Algoritmo 1, contribuição deste trabalho, esboça a descoberta de comboio entre
+dois ou mais ônibus usada na simulação. Nas linhas 1 até 5 é feita a seleção dos agentes
+(ônibus) que estão sendo exibidos na interface, ou seja, os ônibus visíveis.  Após, nas
+linhas 6 e 7, faz-se a comparação entre todos os ônibus visíveis. Durante a comparação,
+na linha 8, é testada a proximidade (de acordo com um FACTOR de proximidade pré-
+definido) entre dois agentes distintos busi e busj que pertencem a mesma linha de ônibus:
+se o teste é positivo, as imagens destes agentes são alteradas para uma imagem que sinaliza
+um comboio para facilitar a visualização. Finalmente, na linha 11, as imagens originais
+são restauradas caso a distância entre dois agentes não esteja dentro da pré-estabelecida.
+Algoritmo 1: Algoritmo para detecção de comboios
+Require:  Conjunto de ônibus
+Ensure:  Detecção de comboios
+1:  for all busi  do
+2:                                                                                            if isV isible(busi ) = true  then
+3:                                                                                            visible := visible + busi
+4:                                                                                            end if
+5:  end for
+                                                                                              6:  for all  busi em visible  do
+7:                                                                                            for all  busj  em visible  do
+8:                                                                                                                                                                        if isNear(busi , busj , FACTOR) and busi  = busj  and busi .route = busj .route  then
+9:                                                                                                                                muda_imagens({busi , busj }, SPECIAL)
+10:                                                                                           else
+11:                                                                                                                                                                       if busi .image= SPECIAL and busj .image = SPECIAL and isNear(busi , busj , FACTOR)
+                                                                                              = false then
+12:                                                                                                                               restaura_imagens(busi , busj )
+13:                                                                                           end if
+14:                                                                                           end if
+15:                                                                                           end for
+16:  end for
+5. Avaliação experimental
+Para avaliar a ferramenta aqui proposta e implementada, foi conduzido uma análise ex-
+perimental usando como cenário um conjunto de linhas do transporte público urbano da
+cidade de Santa Maria - RS. Diferentes fluxos foram submetidos, fixando o número de
+paradas e ônibus e alterando a quantidade de passageiros que embarca ou desembarca em
+um ônibus durante uma jornada.  De acordo com os experimentos efetuados, foi obser-
+vado a QoS em termos de passageiros sentados e em pé, freqüência de lotação máxima
+de ônibus e incidência de linhas com mais atrasos. O cenário usado para o experimento
+é composto por dois fluxos distintos um deles composto por (i) um conjunto de 6 linhas,
+15 paradas e 188 ônibus e outro composto por (ii) 70 paradas, 12 linhas, 700 ônibus. A
+partir deste ponto do texto, o primeiro fluxo será chamado de fluxo reduzido e o segundo
+fluxo será chamado de fluxo ampliado.
+572
+
+
+
+
+5.1. Fluxo reduzido
+Uma simulação com uma jornada de 24 horas (0h-23h) e outra para o período da manhã
+(8h30-12h) foram realizadas com o fluxo reduzido. A Tabela  1 mostra informações sobre
+o número de viajantes em pé e sentados em relação à frequência de serviço de ônibus para
+intervalos de partida da garagem de ônibus de 30/60/90 minutos, respectivamente, obtida
+com dados da simulação.
+Passageiros                                                                                 30 min         60 min       90 min
+Sentados                                                                                    28,14          42,28        42,95
+Em pé                                                                                       0,22           8,43         26,90
+Tabela 1. Listagem com quantidade de passageiros sentados e em pé em função
+de diferentes frequências de serviço para uma determinada linha no serviço da
+manha para o fluxo reduzido
+Para obter esses resultados foram executadas 10 simulações levando em conta o
+serviço da manhã.  Pode ser observado que para o cenário de entrada, para fornecer o
+melhor nível de QoS para os viajantes (isto é, todos ou quase todos sentados), um serviço
+de transporte tem de ser iniciado a cada 1/2 hora (apenas 0,22 passageiros em pé, em
+média, nesta frequência).
+A Tabela 2 apresenta uma listagem como o comboio detectado para o fluxo redu-
+zido na jornada de 24 horas. Apenas um comboio foi detectado.
+Hora do dia                                                                                 busi           busj         Nome da linha
+12:43                                                                                       Bus 176        Bus 175      Euclides da Cunha St - N. Sra Medianeira Av
+Tabela 2. Comboios detectados em uma jornada de 24 horas
+A Tabela 3 apresenta uma listagem com linhas mais atrasadas para uma deter-
+minada jornada para o fluxo reduzido.  A tabela está ordenada de acordo com o campo
+Indicador de atraso que identifica que a linha mais atrasada é Euclides da Cunha St - N.
+Sra Medianeira Av e que a linha mais pontual é Presidente Vargas Av - N. Sra Dores Av.
+Nome da linha                                                                               Atraso total   Qtde total   Indicador
+                                                                                            (em minutos)   de ônibus    de atraso
+Euclides da Cunha St - N. Sra Medianeira Av                                                 10             9            1,11
+Silva Jardim St - Fernando Ferrari Av                                                       4              2            2,00
+N. Sra Dores Av - Presidente Vargas Av                                                      28             8            3,50
+Fernando Ferrari Av - Silva Jardim St                                                       23             6            3,83
+Presidente Vargas Av - N. Sra Dores Av                                                      31             6            5,16
+Presidente Vargas Av - Euclides da Cunha St                                                 131            22           5,94
+Tabela 3.  Listagem com linhas mais atrasadas para fluxo reduzido em uma jor-
+nada de 24 horas
+5.2. Fluxo ampliado
+Para o fluxo ampliado, foi realizada uma simulação de uma jornada de 24 horas. Foram
+avaliadas as seguintes métricas: quantidade de passageiros sentados versus frequência de
+ônibus, quantidade de passageiros em pé versus frequência de ônibus, e tempo médio de
+573
+
+
+
+
+espera. A Figura 3 descreve o fluxo ampliado. Pode ser observado que há uma variação
+na quantidade ônibus em percurso, notadamente após as 6 horas da manhã. A quantidade
+de ônibus por hora usada na simulação foi gerada com o auxílio do recurso do Siafu de
+overlay usando os mapas descritos na Figura 2.
+Figura 3. Descrição do fluxo ampliado na jornada de 24 horas
+Levando em conta o fluxo ampliado, descrito através do gráfico da Figura 3, as
+Figuras 4 e                                                                                  5 apresentam, respectivamente, os gráficos com o número de passageiros
+sentados e em pé, dada uma certa frequência de ônibus (15/20/30 minutos). Pode ser ob-
+servado, que o aumento da frequência do ônibus influencia na quantidade de passageiros
+sentados e em pé, exceto em horários entre a meia-noite e as 5 horas da manhã.
+Figura 4.  Passageiros sentados para o fluxo ampliado em uma jornada de 24
+horas para intervalos de 15/20/30 minutos (média de todas as linhas)
+O gráfico da Figura  6 descreve o tempo médio de espera para uma simulação na
+jornada de 24 horas em fluxo ampliado.  Para o fluxo avaliado, o serviço deverá contar
+com mais de 50 ônibus em circulação para que o tempo de espera de um usuário em uma
+parada seja inferior a 10 minutos. Finalmente, o gráfico da Figura 7 descreve a quantidade
+de passageiros por ônibus (em pé ou sentados) na jornada de 24 horas em fluxo ampliado
+(média de todas as linhas). Os picos ocorrem no final das jornadas.
+574
+
+
+
+
+Figura 5. Quantidade de passageiros em pé no fluxo ampliado por jornada de 24
+horas (média de todas as linhas)
+Figura 6. Tempo de espera de um usuário por um ônibus na jornada de 24 horas
+em fluxo ampliado
+6. Conclusões e perspectivas futuras
+Este artigo apresentou um trabalho em curso que descreve uma ferramenta de simulação
+para permitir o monitoramento do processo de transporte urbano.  As funcionalidades
+implementadas pela ferramenta são a detecção de comboios e geração de relatório com
+informações estatísticas sobre os carros mais atrasados e as linhas com mais sobrecarga.
+A ferramenta é suportada pela concepção de agentes de software, que permite a atribuição
+de comportamentos individuais a cada dos seus elementos.
+Uma vez concluída a implementação da ferramenta de simulação, a ideia é in-
+corporar um comportamento diferente para os motoristas por agentes de software. Além
+disso, tais informações e informações detalhadas sobre o posicionamento de carros po-
+dem ser utilizadas para análise do comportamento do tráfego na modelagem de demanda
+futura. A ferramenta apresentada neste artigo pode ser usada com outras ferramentas para
+aplicação aos sistemas de transporte público com a finalidade de melhorar a QoS de trân-
+sito e transporte de passageiros. Adicionalmente, para trabalhos futuros, a ideia é usar a
+expertise obtida neste trabalho para a construção de uma ferramenta para monitoramento
+em tempo real e trabalhar com o apoio de dados verídicos.
+575
+
+
+
+
+Figura 7. Quantidade de passageiros por ônibus na jornada de 24 horas em fluxo
+ampliado (média de todas as linhas)
+Agradecimentos
+Este trabalho está sendo conduzido no escopo dos projetos CTIC SIMTUR Cidades Inte-
+ligentes - RNP e CNPq/FAPERGS RS-SOC PRONEX número 10/0049-7.
+Referências
+Castro da Silva, B.; Bazzan, A. L. C.; Andriotti, G. K.; Lopes, F.; de Oliveira, D. (2004)
+"ITSUMO: an intelligent transportation system for urban mobility"in Proceedings of
+the 4th Int. Conf. on Innovative Internet Community Systems (IICS’04),pp. 224-235.
+Behrisch, M.; Bieker, L., Erdmann, J.; Krajzewicz, D. (2011)  "SUMO - Simulation of
+Urban MObility: An Overview"in SIMUL 2011, The Third International Conference
+on Advances in System Simulation.
+Gruer, P., Hilaire, V., Koukam, A. (2001) "Multi-agent approach to modeling and si-
+mulation of urban transportation system",  in IEEE Systems, Man, and Cybernetics
+Conference. pp. 2499-2504.
+Ladeira, M. C. M.; Michel, F. D., Pavanatto, S. A. (2009) "Monitoramento da operação
+de transporte público: o caso de Porto Alegre",  in Congresso de Pesquisa e Ensino
+em Transportes.
+Martin, M.; Nurmi, P. (2006) "A generic large-scale simulator for ubiquitous computing",
+in Mobile and Ubiquitous Systems, Annual Int. Conference on, 0:1-3.
+Meignan, D.; Simonin, O.; Koukam, A. (2007) "Simulation and evaluation of urban bus
+networks using a multi agent approach", in Simulation Modeling Practice and Theory
+V. 15, N. 6, pp. 659-671.
+Molina, M. (2005) "An intelligent assistant for public transport management", in Procee-
+dings of International Conference on Intelligent Computing, ICIC 2005, pp. 199-208.
+Staib, R.; Gerland, H. (1999) "Advanced transit fleet management transfer of European
+systems and solutions into American environment", in Proceedings of the 1999 APTA
+Bus Conference. pp. 136-143.
+576
+
+
+
+
+

@@ -1,0 +1,521 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Sistema de Monitoramento de Amplitude de Movimento
+Baseado em Redes de Sensores sem Fio Aplicado à Fisioterapia
+Renan C. A. Alves1, Fabíola C. L. dos Santos2, Bruno T. de Oliveira1, Cíntia B. Margi1
+1Laborat ório de Arquitetura e Redes de Computadores
+Departamento de Engenharia de Computação e Sistemas Digitais
+Escola Politécnica - Universidade de São Paulo
+São Paulo - SP - Brasil
+2Departamento de Fisioterapia, Fonoaudiologia e Terapia Ocupacional
+Faculdade de Medicina - Universidade de São Paulo
+São Paulo - SP - Brasil
+{renanalves,  fasantos,  brunotrevizan,  cintia}@usp.br
+Abstract. Range of motion is an important parameter used to evaluate and du-
+ring physical therapy treatment. The FlexMeter system provides real time joint
+angles measurement and visualization, as well as stored data analysis.  The
+system is based on wireless sensor networks with accelerometer nodes.  The
+physical therapist, through the system interface, monitors the session, writes
+observations, and also analyses the patient evolution through multiple sessions.
+Validation results show how the system use could ease the physical therapist
+work.
+Resumo. A amplitude de movimento é um par âmetro importante utilizado na
+avaliaç ão e durante o tratamento fisioterapêutico. O sistema FlexMeter permite
+a mensuraç ão e a visualizaç ão de ângulos articulares em tempo real e a an álise
+posterior a partir de dados armazenados.  O sistema baseia-se em redes de
+sensores sem fio com m ódulos sensores munidos de aceler ômetros. A interface
+do sistema permite ao fisioterapeuta acompanhar a sess ão, inserir observaç ões,
+bem como analisar a evoluç ão do paciente ao longo de m últiplas sess ões. Os
+resultados da validaç ão demonstraram como seu uso pode facilitar o trabalho
+do fisioterapeuta.
+1.                                                                                             Introduç ão
+As grandes evoluç ões da medicina costumam acompanhar as evoluç ões tecnol ógicas,
+caracterizando  um  processo  multidisciplinar,  envolvendo  principalmente  as  ciências
+médicas e a engenharia.  Um dos principais fatores deste processo de evolução são os
+instrumentos de mensuração, que permitem um monitoramento do estado de sa úde do
+paciente, facilitando as decis ões dos profissionais da área sa úde. O advento da tecnologia
+da informação e a utilização dos sistemas de informação, possibilitaram uma análise mais
+refinada dos dados dos pacientes, bem como a manutenção de um hist órico médico de
+cada indivíduo. No domínio de conhecimento da sa úde, a fisioterapia mostra-se uma área
+carentes destes aplicativos e ferramentas.
+A fisioterapia  é uma ciência da sa úde que estuda, previne e trata os dist úrbios
+cinéticos funcionais intercorrentes em órgãos e sistemas do corpo humano, gerados por
+504
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+alteraç ões genéticas, por traumas e por doenças adquiridas. Esta fundamenta suas aç ões
+em mecanismos terapêuticos pr óprios [COFFITO 2012].
+A goniometria, ou mensuração dos ângulos, de articulaç ões é uma tarefa comum
+a profissionais da área de fisioterapia, tratando-se de uma métrica importante para quanti-
+ficar a evolução do quadro de seus pacientes [Marques 2003]. As ferramentas existentes
+requerem que o profissional interrompa a sessão para a obtenção de mensuraç ões ne-
+cessárias, e demandam considerável trabalho manual para o registro dos dados obtidos.
+A adoção de sistemas de informação em conjunto com mecanismos automatizados
+de coleta dos dados, como Redes de Sensores sem Fio (RSSF), permite ao profissional
+concentrar seus esforços e atenção no paciente, focando na análise dos dados de evolução
+e na orientação dos exercícios. Ademais, a partir do armazenamento dos dados coletados
+é possível manter um hist órico detalhado de cada tratamento.
+As RSSF são comumente utilizadas em aplicaç ões de monitoramento e podem
+ser definidas como uma classe especial de redes ad hoc de m últiplos saltos (MANETs -
+multihop ad hoc networks), são redes sem fio que não possuem qualquer infra-estrutura
+fixa.  Tipicamente, os n ós participantes possuem baixa capacidade de processamento,
+pouca mem ória para armazenamento, sistemas de comunicação de baixa velocidade e
+largura de banda, e fonte de energia limitada [Culler et al. 2004].
+O  projeto  apresentado  visa  conciliar  engenharia  e  fisioterapia,  permitindo  a
+mensuração e a visualização de ângulos articulares em tempo real, por meio de RSSF,
+e a análise posterior a partir de dados armazenados. Através do estudo da evolução das
+medidas é possível construir um indicador da efetividade dos exercícios e de possíveis
+dificuldades encontradas pelos pacientes, permitindo o acompanhamento e a supervisão
+dos respectivos tratamentos.  Assim, o trabalho almeja contribuir junto à  área de fisio-
+terapia no que diz respeito a sistemas de monitoramento, e para tanto descrever projeto,
+implementação e validação de um prot ótipo do sistema FlexMeter.
+Este trabalho está organizado da seguinte forma.  A Seção 2 trata dos trabalhos
+relacionados. A Seção 3 especifica e detalha as características de hardware e software do
+sistema FlexMeter, aqui apresentado. Em seguida, os resultados da validação de medidas
+e usabilidade do sistema são apresentados e discutidos na Seção 4, enquanto a Seção 5
+apresenta as consideraç ões finais e trabalhos futuros.
+2. Trabalhos Relacionados
+Os trabalhos relacionados discutidos nesta seção podem ser divididos em duas categorias,
+de acordo com sua proximidade a engenharia (seção 2.1) ou fisioterapia (seção seção 2.2).
+2.1. Redes de Sensores Sem Fio
+Uma família de aplicaç ões de RSSF que se destaca  é a de eHealth.  Seu uso permite
+aplicaç ões de monitoramento mais robustas, devido a diversos contextos pessoais que
+podem ser capturados e usados para prover melhores serviços de sa úde, como emergência,
+cuidado com idosos, e auxílio a fisioterapia.
+O projeto CodeBlue [Malan et al. 2004] possui aplicação em ambiente hospitalar,
+triagem de pacientes, entre outros. O projeto Mercury [Lorincz et al. 2009] é uma plata-
+505
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+forma wearable baseada em RSSF para análise de movimento de pacientes em tratamento
+de doenças neuromotoras, como Mal de Parkinson, epilepsia e derrame cerebral.
+O monitoramento dos batimentos cardíacos do paciente e a sua postura em sess ões
+de hidroterapia  é proposto por [Silva et al. 2007].  A postura  é monitorada através de
+ângulos rotacionais dos membros do corpo com sensores interligados com cabos.  Os
+dados são enviados a estação base por um m ódulo sensor flutuante, de modo a evitar a
+comunicação sem fio subaquática. Tal trabalho tem como objetivo medir apenas a posição
+da coluna, e não do ângulo de movimento de outros membros.
+A  teoria  para  se  realizar  mensuração  de                                                      ângulos  com  redes  de  senso-
+res  através  do  uso  de  aceler ômetros,  girosc ópios  e  magnet ômetros                        é  descrita  em
+[O’donovan et al. 2007].  Uma prova de conceito para medidas de  ângulos de joelho e
+tornozelo é descrita em [O’Donovan and Ayer 2011], não mencionando a existência de
+um sistema de informação para auxiliar a análise dos dados obtidos.
+2.2. Instrumentaç ão de Fisioterapia
+A amplitude de movimento (ADM)1  é um importante parâmetro utilizado na avaliação
+e durante o tratamento fisioterapêutico. Muitas vezes a avaliação da amplitude do movi-
+mento faz parte da definição da propedêutica e do progn óstico de um indivíduo submetido
+a fisioterapia [Portney and Watkins 2000].
+A ADM varia de indivíduo para indivíduo de acordo com a idade, sexo, prática
+de atividade física, presença ou ausência de disfunção e o grau de força muscular quando
+o indivíduo  é submetido  à avaliação da ADM ativa [Rothstein 1985].  A padronização
+da metodologia empregada é de extrema importância uma vez que pode evitar possíveis
+vieses.
+Alguns instrumentos vêm sendo utilizados para tal mensuração. O mais utilizado
+é o goni ômetro universal, por ser de fácil utilização e baixo custo, para a mensuração é ne-
+cessário a utilização de pontos anat ômicos determinados [Gajdosik and Bohannon 1987].
+Outro  instrumento                                                                                 é  o  flexímetro,  cujo  sistema  pendular  gravitacional  pos-
+sui indicação do  ângulo produzida por efeito da gravidade, minimizando os erros de
+interpretação do eixo longitudinal correspondente. A escala angular foi desenhada com
+incrementos de  1o  (um grau) a  360o  (trezentos e sessenta graus), progressivos e re-
+gressivos de fácil visualização.   As vantagens da utilização do flexímetro,  segundo
+[Clarkson and Gilewich 1991], em relação a um goni ômetro universal são:  não  é ne-
+cessário alinhar o flexímetro com o eixo articular; os movimentos rotacionais e a avaliação
+do tronco são medidos com maior facilidade; ocorre pouca mudança no alinhamento do
+aparelho segundo os fabricantes.
+O inclin ômetro digital  é um instrumento de funcionamento dependente da gra-
+vidade através de um sensor que capta medida da angulação.                                         E um instrumento útil de
+fácil utilização, no entanto pouco difundido na fisioterapia com um custo mais elevado
+e independe de pontos anat ômicos como o goni ômetro universal [Bennell et al. 1998,
+de Winter et al. 2004].
+O eletrogoni ômetro é um instrumento relativamente novo com maiores possibili-
+1 Quantidade de movimento passiva ou ativa que paciente consegue realizar [Amado and Maria 2006]
+506
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+dades de aplicabilidade uma vez que pode-se realizar mensuraç ões consecutivas, como
+no caso do FlexMeter, gerando um relat ório em tempo real da sessão.  Assim pode-se
+alterar a conduta ao visualizar este resultado beneficiando o paciente em questão. Alguns
+dos eletrogoni ômetros existentes apenas mensuram a ADM naquele instante, o tempo de
+realização do movimento.
+Por fim, o produto BioFeed [BioSmart 2011] é um equipamento que prop õe mo-
+nitorar movimentos do corpo humano, através da mensuração da inclinação dos membros
+do corpo em relação ao solo. Contudo, informaç ões técnicas não estão disponíveis.
+3. FlexMeter
+O sistema FlexMeter [Polizel et al. 2011] tem como objetivo o acompanhamento e a su-
+pervisão do tratamento de pacientes de fisioterapia. Através de RSSF, mede-se ângulos
+articulares de um paciente ao longo de uma sessão de fisioterapia e exibe-se estes dados
+de três formas:  quantitativamente, através do valor numérico e de gráficos em função
+do tempo, e qualitativamente, através de um modelo de computação gráfica do paciente,
+como observado na Figura 1.  Dados característicos de cada sessão, tais como O valor
+máximo, mínimo e médio de cada ângulo medido, são armazenados ap ós o término da
+sessão.  Estes podem ser consultados e analisados, tanto individualmente a cada sessão
+como através de um gráfico composto por valores de várias sess ões.
+Figura 1. FlexMeter - interface
+A Figura 2 exibe a arquitetura do sistema, indicando o posicionamento dos seis
+m ódulos sensores no paciente e a conexão do m ódulo sorvedouro com a estação do fisiote-
+rapeuta, onde o software de processamento de dados é executado. No prot ótipo construído
+foram contemplados somente ângulos articulares relativos a membros inferiores.
+As subseç ões seguintes descrevem o procedimento utilizado para a realização dos
+cálculos de ângulos e os componentes de hardware e software que comp õem o sistema.
+3.1. Procedimento de c álculos de ângulos
+O ângulo θ formado por dois vetores, v1  e v2, em espaço euclidiano pode ser calculado a
+partir de suas coordenadas em uma base ortonormal da seguinte forma:
+(                                                                                           )
+v1  · v2
+θ = arccos                                                                                  (1)
+|v1||v2|
+507
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 2. Arquitetura do Sistema
+Assim, para determinar ângulos articulares de um paciente, basta determinar ve-
+tores que correspondam as linhas de mensuração dos ângulos em uma base comum. Estes
+vetores podem ser determinados através de m ódulos sensores acoplados ao paciente.
+Para que seja possível o cálculo da direção de um sensor no espaço, algumas
+premissas são consideradas:
+•  a base B  =  (bx, by , bz ) do ambiente, comum a todos os m ódulos sensores, é
+fixa. Convenciona-se que bz  é um vetor unitário no sentido da gravidade, bx  é
+um vetor horizontal unitário perpendicular ao primeiro e by  é obtido através do
+produto vetorial dos primeiros;
+•  os  m ódulos  sensores  possuem  uma  base  ortogonal  intrínseca  variável  em
+relação a base do ambiente. Suas medidas são feitas em relação a esta base;
+•  os m ódulos sensores possuem dispositivos para aferir as componentes da base
+do ambiente (bz  e bx) em sua base intrínseca;
+•  algum  dos  eixos  da  base  dos  sensores  deve  estar  alinhado  com  o  ponto
+anat ômico a ser observado. Convencionamos que seja o eixo X.
+Desta forma, o problema do cálculo da direção de um sensor no espaço se resume
+em calcular a direção do eixo X da base dos sensores na base do ambiente.
+Sejam u  =  (ux, uy , uz ) e v  =  (vx, vy , vz ) os vetores normalizados que repre-
+sentam os valores medidos por um m ódulo sensor de bx  e bz .  Portanto, v representa a
+direção da gravidade, enquanto que u representa o vetor de referência horizontal, ambos
+representados na base do m ódulo sensor.
+A matriz de mudança de base Msa  é a matriz que, se multiplicada pela direita por
+um vetor, transforma suas coordenadas da base do ambiente para coordenadas na base do
+m ódulo sensor.  Desta forma, a Equação 2 relaciona a referência horizontal da base do
+ambiente ao vetor u.  Analogamente, a Equação 3 relaciona o vetor unitário na direção
+da gravidade ao valor aferido pelo m ódulo sensor.  Por fim, a Equação 4 os respectivos
+produtos vetoriais2  (a Equação 5 exibe o produto vetorial por extenso).
+2 × é o sinal de produto vetorial
+508
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Msa.(1, 0, 0)=(ux, uy , uz )                                                               (2)
+Msa.(0, 0, 1)=(vx, vy , vz )                                                               (3)
+Msa.(0, 1, 0)=(vy .uz  − vz .uy , vz .ux  − vx.uz , vx.uy  − vy .ux)                       (4)
+u × v=(vy .uz  − vz .uy , vz .ux  − vx.uz , vx.uy  − vy .ux)                               (5)
+                                                                                                    Com estas informaç ões é possível construir a matriz Msa, conforme Equação 6.
+                                                                                                    Tendo Msa em mãos, o vetor correspondente a direção do eixo X do m ódulo sensor pode
+ser calculada pela Equação 7.
+                                                                                                    ⎡                                                                                      ⎤
+                                                                                                    ux    vy .uz  − vz .uy    vx
+                                                                                                    ⎣                                                                                      ⎦
+                                                                                           Msa  =   uy    vz .ux  − vx.uz    vy                                                                (6)
+uz    vx.uy  − vy .ux    vz
+Msa.(x, y, z) = (1, 0, 0)                                                                  (7)
+Resolvendo o sistema obtêm-se os valores x, y e z correspondentes às coordenadas
+do vetor unitário na direção do eixo X do m ódulo sensor na base do ambiente.  Assim,
+para calcular o ângulo entre dois m ódulos sensores, determina-se a direção do eixo X de
+ambos na base do ambiente e calcula-se o ângulo com a equação 1.
+Para o prot ótipo apresentado, o sensor utilizado para aferir bz  foi o aceler ômetro.
+A calibração de cada um de seus eixos foi realizada através da aquisição de valores
+simétricos conhecidos, desta forma o offset do sensor é dado pela média aritmética de
+todos os valores adquiridos [Shimmer Research 2011a].
+Dado o uso exclusivo de aceler ômetro, não foi utilizado nenhum sensor para afe-
+rir o vetor de referência horizontal, tendo sido adotado um valor constante.  Devido a
+esta simplificação, o sistema é capaz de aferir ângulos articulares somente nos casos em
+que o eixo X dos m ódulos sensores encontram-se em um mesmo plano vertical.  Esta
+restrição pode ser contornada a partir da adição de outros sensores, como magnet ômetros
+e girosc ópios.
+3.2. Hardware
+Dos  sete  m ódulos  sensores  do  sistema,   seis  são  m ódulos  básicos  Shimmer
+[Shimmer Research 2011b], vistos na Figura  3.  Estes m ódulos são munidos de ace-
+ler ômetro de três eixos e bateria.  O sétimo m ódulo é um telosB [MEMSIC Inc. 2004]
+que, no escopo do sistema, tem a função de sorvedouro de dados, ou seja, receptor dos
+dados da aplicação.
+Ambos  tipos  de  m ódulos  seguem  o  padrão  de  comunicação  sem  fio  IEEE
+802.15.4 [IEEE Standard 2006], implementado pelo microcontrolador do rádio transcep-
+tor CC2420 [Texas Instruments 2007], que além do recursos de acesso ao meio, fornece
+serviços de segurança como confidencialidade, integridade e autenticidade dos dados, re-
+curso importante para atender os requisitos de privacidade do paciente.
+509
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+O software pode ser dividido em duas categorias:  o software embarcado desenvolvido
+para os m ódulos sensores e o software da estação do fisioterapeuta, dividido em proces-
+samento de dados, interface gráfica e banco de dados.
+3.3.1. Software Embarcado
+Os m ódulos sensores utilizam o TinyOS [Levis et al. 2005], um sistema operacional di-
+rigido a eventos projetado especialmente para plataformas com recursos de mem ória e
+processamento restritos. Um programa feito para TinyOS é composto pela instanciação
+de componentes e a interação destes com o programa principal através de suas interfaces.
+Os componentes em geral representam componentes de hardware, como m ódulos
+de comunicação ou sensores, enquanto que as interfaces definem os comandos que os
+componentes podem realizar. A codificação é realizada em nesC [Gay et al. 2003], uma
+linguagem de programação derivada da linguagem C.
+O software desenvolvido para os m ódulos sensores pode ser dividido em três eta-
+pas de execução distintas: inicialização dos componentes, leitura e envio de valores.
+A inicialização contempla a ativação do aceler ômetro, do m ódulo de comunicação
+e de um componente de temporização responsável pelo disparo das leituras dos sensores.
+Ap ós a inicialização do sistema embarcado, uma sequência peri ódica de leituras e envios
+de dados é mantida durante o uso do sistema.
+A leitura do aceler ômetro é composta pela obtenção de dados referente a três eixos
+ortogonais, formando uma tripla de valores inteiros de 16 bits. A partir da finalização de
+cada leitura, os dados obtidos são encapsulados e encaminhados à interface de rádio, que
+por sua vez os envia para o m ódulo sorvedouro.
+3.3.2. Software de Processamento de Dados
+O software que calcula os resultados a partir dos dados obtidos dos m ódulos sensores é
+composto pela arquitetura apresentada na Figura 4.
+510
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 4. Arquitetura do software de processamento de dados
+O software é composto basicamente por duas threads, além daquelas que contro-
+lam a interface gráfica com o usuário. Uma destas threads, intitulada “Thread Receptora”,
+é responsável por receber os dados dos m ódulos sensores através do m ódulo sorvedouro.
+Além disso, é responsável por adicionar os dados recebidos ao log do sistema.
+A outra thread, a “Thread Processadora”, transforma os dados obtidos pela pri-
+meira, com base nos cálculos definidos da seção 3.1, e então submete os resultados para
+serem exibidos na interface gráfica. Esta também exerce a função de armazenar os valor
+máximo, mínimo e médio ao término da sessão.
+3.3.3. Banco de dados
+O sistema utiliza o gerenciador de bancos de dados MySQL [Oracle Corporation 2011]
+para armazenar os dados de pacientes e tratamentos. O banco de dados é composto por
+três tabelas: Paciente, Sessão e Medição. As informaç ões armazenadas são dados pesso-
+ais do paciente, observaç ões feitas pela fisioterapeuta e os valores sumarizados medidos
+durante cada uma das sess ões.
+3.4. Modelo Tridimensional
+Para melhor visualização dos dados, foi construído um modelo 3D de paciente, que  é
+exibido em um papplet na interface gráfica. Papplet é um componente do Processing, um
+ambiente de desenvolvimento de aplicaç ões 3D, integrável com aplicaç ões Java.
+Tal modelo consiste de quatro cilindros, que representam os grandes ossos da
+perna, e um triângulo, que representa a quadril. Estes objetos são posicionados na tela de
+acordo com as posiç ões calculadas dos dados dos m ódulos sensores, como na Figura 1.
+O modelo possui as seguintes funç ões auxiliares de visualização: zoom através do
+botão de rolagem do mouse; destaque de membros que formam determinados ângulos e
+reposicionamento da câmera com arrasto do botão direito do mouse.
+4. Resultados
+Nesta seção serão apresentados os resultados obtidos com o desenvolvimento do sistema.
+Estes contemplam o processo de validação das mensuraç ões e da interface.
+511
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+4.1. Validaç ão das Medidas do FlexMeter
+Com objetivo de averiguar a pertinência das medidas do sistema, comparou-se sua saída
+com  ângulos estáticos determinados por um goni ômetro.  Quatro  ângulos foram esco-
+lhidos arbitrariamente dentro do intervalo [0◦, 140◦], intervalo esperado típico para uma
+articulação de joelho [Marques 2003].
+Dois m ódulos sensores foram posicionados um em cada braço do goni ômetro,
+de forma que o ângulo entre os m ódulos sensores fosse o mesmo que o indicado pelo
+instrumento.
+O valor retornado pelo sistema foi coletado 20 vezes para cada um dos quatro
+ângulos de referência escolhidos (0◦, 45◦, 90◦  e 120◦).  Parte do erro existente nestas
+medidas é proveniente do erro inerente ao goni ômetro e do desalinhamentos da posição
+relativa entre os m ódulos sensores e os braços do goni ômetro.
+Com  estes  dados  é  possível  estabelecer  o  intervalo  de  confiança  para  cada
+mensuração de ângulo.  Utilizando o nível de confiança de 95%, assumindo que as me-
+didas estão distribuídas de acordo com uma distribuição normal e utilizando equaç ões
+clássicas obtemos a Tabela 1.
+ao do sistema - estatísticas
+Angulos de Referência
+Estatística                                                                                  0◦                                                      45◦         90◦                           120◦
+Média                                                                                        1.695◦                                                  45.381◦     90.429◦                       120.079◦
+Comprimento do intervalo de confiança                                                        0.445◦                                                  0.960◦      0.832◦                        0.695◦
+Erro máximo no intervalo de confiança                                                        2.14◦                                                   1.34◦       1.26◦                         0.77◦
+Para considerar o erro do goni ômetro na estimativa do erro do sistema, utiliza-
+se as equaç ões 8 e 9, para a determinação do erro médio e do desvio do erro médio,
+respectivamente. Desta forma, o valor pontual do erro do sistema é dado pela diferença
+entre o valor apontado pelo goni ômetro e a média dos valores apontados pelo sistema.
+                                                                                             ErroFlexMeter  = ângulogoni ômetro  − ânguloFlexMeter               (8)
+√
+=                                                                                            σângulo                                                 + σângulo   (9)
+σErroFlexMeter                                                                               goni ômetro                                             FlexMeter
+Foi considerado que o erro do goni ômetro, σângulo                                                                                                               , é igual a metade da menor
+goni ômetro
+divisão do instrumento, isto é, 1◦. Para o erro do sistema, utilizou-se o desvio padrão da
+amostra, de acordo com o ângulo considerado.
+Os resultados dos cálculos do erro do sistema e seu desvio encontram-se na tabela
+2. O erro médio é pequeno, porém seu desvio é grande. Contudo, de acordo com a Tabela
+1, observa-se que o erro médio não é muito maior do que 2◦, com 95% de confiança.
+4.2. Usabilidade
+Com a finalidade de avaliar a usabilidade do sistema, a fisioterapeuta co-autora utili-
+zou o prot ótipo em ambiente clínico. Ap ós a leitura da versão preliminar do manual de
+512
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Tabela 2. Valores de erro do sistema
+Angulo                                                                                          Erro   Desvio do Erro
+0◦                                                                                              1.7◦   1.4◦
+45◦                                                                                             0.4◦   2.4◦
+90◦                                                                                             0.4◦   2.1◦
+120◦                                                                                            0.1◦   1.9◦
+usuário e as funç ões fornecidas pelo sistema foram testadas. Notou-se a falta de algumas
+explicaç ões básicas, porém necessárias para um usuário que não havia entrado em contato
+com o sistema anteriormente
+Quanto ao protocolo de uso, trecho do manual que indica ao seu leitor como ob-
+ter a medida dos ângulos desejados, o manual trouxe os procedimentos necessários. Por
+exemplo, para realizar a mensuração do ângulo de flexão ou extensão da articulação do
+joelho, o manual instrui o fisioterapeuta a posicionar dois m ódulos sensores, respectiva-
+mente, no m úsculo reto femural e m úsculo tibial anterior do paciente.
+No caso desta articulação, é importante notar que ao usar o goni ômetro universal o
+posicionamento deveria ser no plano sagital entre os c ôndilos femural e tibial e o terapeuta
+teria que manipular o instrumento para acompanhar o movimento.
+Porém, foi preciso explicitar no manual que alguns ângulos, como os de flexão e
+extensão do joelho, são medidos com o mesmo par de m ódulos sensores e a diferenciação
+entre eles fica a cargo do usuário.
+Não foram observados bugs ou comportamentos inesperados durante a operação.
+Ap ós a compreensão dos pontos deficientes do manual, o usuário foi capaz de utilizar o
+sistema, seguir as etapas de preparação e realizar a mensuração do ângulo de flexão do
+joelho direito e observar os dados obtidos.
+Portanto, os resultados obtidos através do processo de validação de mensuração
+dos ângulos e a avaliação de usabilidade realizada pela fisioterapeuta demostram o poten-
+cial do sistema como aplicação prática.
+5. Consideraç ões Finais
+No contexto das cidades inteligentes, desenvolver ferramentas de apoio a fisioterapia per-
+mite expandir o suporte a área de sa úde.  Este trabalho é resultado da intersecção entre
+a engenharia e fisioterapia, proporcionando maior automação e poder de processamento
+de dados na tarefa de monitoramento de amplitude de movimento através do sistema pro-
+posto.
+O prot ótipo descrito e validado neste artigo realiza a mensuração de ângulos ar-
+ticulares em tempo real, através de dispositivos de sensoriamento conectados por redes
+redes sem fio, garantindo a mobilidade do paciente e fisioterapeuta. O padrão de rede sem
+fio utilizado é o 802.15.4 [IEEE Standard 2006], apropriado para aplicaç ões que possuem
+requisitos relacionados à consumo de energia e privacidade.
+Os dados que o sistema armazena durante as sess ões permite ao fisioterapeuta
+acompanhar a evolução do paciente e gerar relat órios clínicos completos, permitindo
+quantificar a efetividade do tratamento.
+513
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+O processo de validação constatou que o erro cometido pelo sistema ao realizar
+mensuraç ões de ângulos articulares é da mesma ordem de grandeza de goni ômetro.  O
+teste de usabilidade realizado contemplou a implantação preliminar do sistema em ambi-
+ente clínico.  Com estas informaç ões, conclui-se que o sistema possui potencial para se
+tornar uma aplicação prática.
+Como discutido na seção 3.1, a adição de outros sensores, como magnet ômetros
+e girosc ópios, permitirão ao sistema aferir ângulos articulares em qualquer posição do
+paciente.  Neste caso, o sistema poderia ser utilizado como ferramenta de suporte e
+acompanhamento em educação física, ap ós a adição de filtros para lidar com as grandes
+aceleraç ões envolvidas.  Além disso, pretende-se estender os testes realizados, reprodu-
+zindo o experimento em diversos pacientes e com maior n úmero de fisioterapeutas.
+Agradecimentos
+Bruno Trevizan de Oliveira possui Bolsa de Mestrado financiada pela Fundação de Am-
+paro à Pesquisa do Estado de São Paulo, processo FAPESP 2010/02909-8.
+Referências
+Amado, J. and Maria, S. (2006). Métodos de Avaliaç ão cínica e funcional em fisioterapia.
+Guanabara Koogan.
+Bennell, K., Talbot, R., Wajswelner, H., Techovanich, W., Kelly, D., and Hall, A. (1998).
+Intra-rater and inter-rater reliability of a weight-bearing lunge measure of ankle dorsi-
+flexion. Aust J Physiother, 44(3):175-180.
+BioSmart (2011). Biofeed. http://www.biosmart.com.br/biofeed.html.
+Clarkson, H. and Gilewich, G. (1991).  Avaliaçao musculo-esqueletica:  amplitude de
+movimento articular e força muscular manual. Manole.
+COFFITO (2012). Definição de fisioterapia. Conselho Federal de Fisioterapia e Terapia
+Ocupacional.
+Culler, D., Estrin, D., and Srivastava, M. (2004). Overview of sensor networks. Computer
+Magazine, 37(8):41-49.
+de Winter, A. F., Heemskerk, M. A. M. B., Terwee, C. B., Jans, M. P., Devillé;, W., van
+Schaardenburg, D.-J., Scholten, R. J. P. M., and Bouter, L. M. (2004). Inter-observer
+reproducibility of measurements of range of motion in patients with shoulder pain
+using a digital inclinometer. BMC Musculoskelet Disord, 5:18.
+Gajdosik, R. L. and Bohannon, R. W. (1987). Clinical measurement of range of motion.
+review of goniometry emphasizing reliability and validity.  Phys Ther, 67(12):1867-
+1872.
+Gay, D., Welsh, M., Levis, P., Brewer, E., Behren, R. V., and Culler, D. (2003). The nesc
+language: A holistic approach to networked embedded systems. In In Proceedings of
+Programming Language Design and Implementation (PLDI, pages 1-11.
+IEEE Standard (2006).  IEEE 802.15.4:  Wireless medium access control (MAC) and
+physical  layer  (PHY)  specifications  for  low-rate  wireless  personal  area  networks
+(WPANs).
+514
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Levis, P., Madden, S., Polastre, J., Szewczyk, R., Whitehouse, K., Woo, A., Gay, D.,
+Hill, J., Welsh, M., Brewer, E., and Culler, D. (2005).  TinyOS: an operating system
+for sensor networks ambient intelligence. In Weber, W., Rabaey, J. M., and Aarts, E.,
+editors, Ambient Intelligence, chapter 7, pages 115-148. Springer Berlin Heidelberg,
+Berlin/Heidelberg.
+Lorincz, K., Chen, B.-r., Challen, G. W., Chowdhury, A. R., Patel, S., Bonato, P., and
+Welsh, M. (2009).  Mercury:  a wearable sensor network platform for high-fidelity
+motion analysis. In Proceedings of the 7th ACM Conference on Embedded Networked
+Sensor Systems, SenSys ’09, pages 183-196, New York, NY, USA. ACM.
+Malan, D., Fulford-jones, T., Welsh, M., and Moulton, S. (2004).  Codeblue:  An ad
+hoc sensor network infrastructure for emergency medical care.  In In International
+Workshop on Wearable and Implantable Body Sensor Networks.
+Marques, A. (2003). Manual de goniometria. Manole, segunda edition.
+MEMSIC   Inc.                                                                                 (2004).       telosb   product   details                                                                          -        6020-0094-04   rev
+b.                                                                                                                                               http://www.memsic.com/support/documentation/wireless-sensor-
+networks/category/7-datasheets.html?download=152
+O’Donovan, K. and Ayer, S. (2011). Real-time joint angle measurement using the shim-
+mer wireless sensor platform.  In Proceedings of the First ACM Workshop on Mobile
+Systems, Applications, and Services for Healthcare, mHealthSys ’11, pages 7:1-7:2,
+New York, NY, USA. ACM.
+O’donovan, K., Kamnik, R., O’keeffe, D., and Lyons, G. (2007). An inertial and magnetic
+sensor based technique for joint angle measurement. J Biomech, 40(12):2604-11.
+Oracle Corporation (2011). Mysql website. http://www.mysql.com/.
+Polizel, A. S., Wada, E. D., and Alves, R. C. A. (2011).  Redes de sensores sem fio
+aplicadas à fisioterapia. Tese de conclusão de curso, Escola Politécnica, Universidade
+de São Paulo, São Paulo.
+Portney, L. and Watkins, M. (2000).  Foundations of clinical research: applications to
+practice. Prentice Hall Health.
+Rothstein, J. (1985). Measurement in physical therapy. Clinics in physical therapy. Chur-
+chill Livingstone.
+Shimmer   Research                                                                            (2011a).      9DOF   calibration   user   manual   -   Rev                                                        0.1b.
+http://www.shimmer-research.com/wp-content/uploads/2011/06/Shimmer-9DOF-
+Calibration-Application-User-Manual-Rev0.1b.pdf.
+Shimmer Research (2011b). Shimmer - wireless sensor platform. http://www.shimmer-
+research.com/wp-content/uploads/2011/05/Shimmer-Platform.pdf.
+Silva, H., Afonso, J., Morim, P., Oliveira, P., Correia, J., and Rocha, L. (2007). Wireless
+hydrotherapy smart-suit network for posture monitoring.  In Industrial Electronics,
+2007. ISIE 2007. IEEE International Symposium on, pages 2713 -2717.
+Texas                                                                                         Instruments   (2007).                              Chipcon                                                        cc2420   datasheet.
+http://inst.eecs.berkeley.edu/ cs150/Documents/CC2420.pdf.
+515
+
+
+
+
+

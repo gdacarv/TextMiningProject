@@ -1,0 +1,286 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+The UbiBus Project: Using Context and Ubiquitous
+Computing to build Advanced Public Transportation Systems
+to Support Bus Passengers
+Vaninha Vieira1, Ana Carolina Salgado2, Patricia Tedesco2, Valeria Times2, Carlos
+Ferraz3, Elisa Huzita4, Ana Paula Chaves5, Igor Steinmacher5
+1Department of Computer Science - Federal University of Bahia - Salvador-BA, Brazil
+2 Informatics Center - Federal University of Pernambuco - Recife-PE, Brazil
+3C.E.S.A.R. - Recife- PE, Brazil
+4Department of Informatics - State University of Maringá - Maringá-PR, Brazil
+5UTFPR - Campo Mourão-PR, Brazil
+vaninha@dcc.ufba.br,  {acs,  pcart,  vct,  cagf}@cin.ufpe.br,
+emhuzita@din.uem.br,  {anachaves,igorfs}@utfpr.br
+Abstract. Urban mobility is a problem that affects all cities. Providing real
+time information that can assist citizens on planning their trips by choosing
+times and itineraries more appropriate to their needs are essential on smart
+cities. Our project, named UbiBus, investigates how Computational Context
+and  Ubiquitous  Computing  can  be  applied  to  Intelligent  Transportation
+Systems to aid bus passengers mobility on cities, since dynamic real-time
+factors can affect transportation means. This paper describes the overall ideas
+concerning the UbiBus Project and presents some of the applications under
+development with their preliminary results.
+1. Introduction
+Big  cities  are  increasingly  suffering  from  the  problem  of  urban  mobility.  Several
+problems, such as constant traffic jam, lack of investments in road infrastructure, and
+poor quality of public transportation services make citizens daily life stressful and
+complicated                                                                                    [Chaves  et  al.                    2011].  Stimulating  the  use  of  public  transportation  is
+essential to support urban mobility, because it reduces the number of cars on public
+roads [Barry 2010][Caulfield and O’Mahony 2007].
+Intelligent Transportation Systems (ITS) aim “to combine high technology and
+improvements  in  information  systems,  communication,  sensors,  and  advanced
+mathematical  methods  with  the  conventional  world  of  surface  transportation
+infrastructure" [Sussman 2005]. APTS (Advanced Public Transportation Systems) is a
+subarea of ITS interested on providing passengers information and technologies to
+enhance public transportation system operations [Sussman 2005]. APTS often involves
+situations and objects related to issues such as navigation, mobility and traffic, i.e.,
+aspects that have greatly vary their behavior. Thus, APTS users need transportation
+information  to  be  available  “anytime,  anywhere,  from  any  device”  [Weiser  1991].
+Understanding  the  context  of  transportation  vehicles                                      (e.g.  current  location,  speed,
+availability), routes (e.g. traffic jam, accidents, obstructions), passengers (e.g. physical
+55
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+disability, preferences, tourism) or environmental conditions (e.g. rush hour, rainy days,
+natural disasters) are essential for APTS systems to better assist passengers.
+In our work we investigate how the Ubiquitous Computing [Weiser 1991] and
+Computational Context [Schilit et al 1994] areas can support APTS development. In this
+light,  we  propose  a  ubiquitous,  context-sensitive  advanced  public  transportation
+solution, called UbiBus [Vieira et al 2011]. UbiBus objectives include to specify and to
+implement technological solutions (e.g. models, algorithms, tools and applications) to
+support real time information delivery about public transportation, in particular urban
+buses  (e.g.  route  recommendation,  bus  location  and  arrival  time  estimative,  traffic
+occurrences). Applications being developed use real time context information collected
+from  different  sources,  considering  vehicles  and  passengers  mobility,  and  dynamic
+factors that can affect the transportation (e.g. occurrences on the routes). To support the
+ubiquity principles, applications can be accessed seamlessly from different devices (e.g.
+desktops, terminals on bus stops, displays inside a bus or mobile phones).
+This  paper  presents  the  overall  ideas  and  preliminary  results  on  UbiBus.  It
+discusses related work in Section 2. Section 3 describes its overall architecture. Some
+preliminary results achieved with implemented applications are presented in Section 4.
+Finally, Section 5 presents our final considerations and ongoing work.
+2. Related Work
+Several applications have been developed to assist users in finding out information
+about public transportation means in a city. Waze1 generates maps according to the
+route informed by the user, and presents traffic data collected in real time from other
+people who are also using the software [Ogliari 2011]. OneBusAway [Ferris et al 2010]
+is directed to bus users in Seattle and its vicinity, and presents all bus stops closer to the
+user’s location, the lines associated to each stop and their current schedules, updated in
+real time by the bus company; it also provides a web interface that displays a map with
+the bus stops’ locations and the timetables for all vehicles associated to those stops.
+ToTransit2  displays  the  street-cars  location  in  Toronto,  Canada,  with  information
+provided, in real time, by the transportation companies; Bus Maps London3 shows static
+information about bus stops, routes and schedules for the city of London-UK. Google
+Maps4 also presents APTS features for some cities, allowing people to plan their routes
+using public transportations. Moreover, Google Maps API is used to compose most of
+the applications mentioned on this section.
+Despite  those  initiatives,  it  is  difficult  to  obtain  dynamic  information  about
+public transportation conditions, since many unexpected events may occur in the route
+(e.g. traffic jams, accidents). Most solutions strongly depend on information provided
+by official transportation companies and use proprietary methods and algorithms. Our
+proposal aims to build open source systems with free available models, algorithms and
+tools that can be used and evolved by the community, on different cities.
+1 http://www.waze.com/
+2 http://totransit.ca/
+3 http://www.t                                                                                   .gov.uk/t   /gettingaround/maps/buses/
+4 http://maps.google.com
+56
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+3. The UbiBus Project
+UbiBus investigates different aspects related to: (i) context acquisition, processing and
+management for either static or dynamic information;  (ii) algorithms and models to
+estimate  arrival  times  and  recommend  routes  and  vehicles;                                (iii)  geo  information
+visualization and interpretation, considering large volume of data from transportation
+and routes; (iv) middleware support for building context-sensitive ubiquitous systems;
+and  (v)  development  of  adaptable,  multi-platform  applications  to  assist  passengers.
+Figure 1 presents an overview of the UbiBus Architecture with its 5 main layers: Data,
+Communication, Acquisition, Processing and Application.
+The Data Level manages data processed by the system, including georeferenced
+spatial  context  for  the  trajectories  of  moving  objects                                   (e.g.  vehicles  and  people).
+Different dynamic context information about buses, bus stops and passengers may be
+considered.  Data  on  the  positioning  of  mobile  objects  are  continually  updated,  to
+represent their movements over time.
+Figure 1. The UbiBus Architecture Overview [Vieira et al 2011]
+The Communication Level allows the connection between static and dynamic
+elements that compose the transportation infrastructure, allowing information exchange
+in real time. Advances and standardization of wireless communication technologies
+allows short and long-range communications. Information may be offered directly to
+users,   considering   the   wide   availability   of   connectivity   based   on   wireless
+communication  technologies  between  mobile  devices  and  laptops.  The  Acquisition
+Level  is  responsible  for  gathering  static  and  dynamic  data  from  different  sources,
+sending them to the Data Level. For instance, GPS systems installed on buses can
+provide bus location and speed information; traffic level can be inferred by text mining
+social networks; external meteorology systems may provide weather information; and
+passengers’ location can be achieved by a mobile. The Processing Level uses acquired
+contextual information along with mathematical and algorithmic solutions to calculate
+other information, such as the estimated bus arrival time. It is also responsible for pre-
+processing  acquired  information  ensuring  compatibility  between  different  context
+sources and the incorporation of semantics to mobile elements trajectories.
+57
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+The Application Level contains the different types of applications developed on
+top of the UbiBus infrastructure. These applications should be adjusted to different
+platforms and devices  (e.g. Web, desktop, mobile devices, terminals at bus stops or
+displays inside a bus). Web applications should provide: i) arrival times for each bus at
+each stop; ii) definition of best routes based on priorities (cost, time, comfort); iii) traffic
+level in each area, route or region; iv) services to support the passenger on choosing the
+vehicle according to preferences or needs; and others. Mobile applications are similar to
+web  applications,  but  with  interface  adaptations  for  mobile  devices  and  also  the
+possibility of using device's geographical position for more contextualized information.
+Bus applications are available on terminals inside the buses and provide information
+about the current trip, so passengers can visualize information about the trip and change
+their  original  plans  due  to  unforeseen  events.  Bus  Station  applications  provides
+information to passengers that are waiting for a bus in a bus stop regarding buses they
+can take, estimated arrival time and their current location.
+To  support  developing  different  types  of  applications,  UbiBus  proposes  a
+multiparadigm, extensible and message oriented middleware for Ubiquitous Systems. It
+encompasses the activities presented on the Communication, Acquisition and Processing
+levels.  A  middleware  plays  an  important  role  in  developing  context  sensitive  and
+ubiquitous  applications  since  it  facilitates  the  communication  and  coordination  of
+distributed software components dealing, in a transparent way, with the difficulties and
+complexities introduced by mobility and wireless communication [Souto et al 2004].
+4. Preliminary Results
+This section presents an overview of the preliminary results achieved with the UbiBus
+project, concerning some developed applications, as described in the following.
+4.1. Your City on Time (YCIT)
+YCIT is a bus station application type proposed in [Caldas 2010]. It uses contextual
+information  to  estimate  a  bus  arrival  time  at  a  given  bus  stop.  A  map  is  used  to
+contextualize the bus location, whereas a table shows: the bus lines that serve that bus
+stop; the current distance and estimated arrival time for each bus. To calculate the
+estimated  arrival  time,  YCIT  considers  contextual  elements  such  as:  bus  location,
+current speed and average speed; bus stop location; route stretch average speed and
+traffic level. To infer traffic level in a stretch we used two incremental weighted update
+formulas, proposed in [Sananmongkhonchai et al 2008]. The contextual elements bus
+speed, bus location and bus average speed  are  acquired  from  GPS.  The  front-end
+application uses the Google Maps API to provide directions and distances between a
+bus and a bus stop in its itinerary. Currently, the application works on web browsers,
+but we intend to migrate it to mobile phones to support passengers mobility.
+4.2. UbibusRoute
+UbibusRoute [Lima et al 2012] uses information coming from social networking sites
+(in  this  first  prototype  we  have  used  Twitter)  to  recommend  routes  to  users,  thus
+supporting them in their decision making processes. Based on the context of the user
+and of the route and buses, the application computes the possible routes (for each user to
+get to their destination), indicating on a map the route to follow. UbibusRoute was
+designed as a client-server application, where the client is a mobile application (that can
+58
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+work with any available operating system) that communicates with the server. The
+application has two Databases: one stores contextual traffic data, and the other static
+data (e.g. bus stops, bus lines and routes). The Server module is divided into three main
+components:  the  Route  Identifier,  responsible  for  identifying  all  possible  routes
+according to the user's location or the selected bus stop; the Route Indicator, responsible
+for selecting the best route according to the user's preference (time, cost or distance); the
+Contextual Information Extractor, that acquires information from social networks and
+checks the current state of traffic. Additionally, there is a module (that wraps up the
+social networks) that works in capturing information related to traffic.
+4.3. EPITrans
+The Extraction, Processing and Inference of Transport information  (EPITrans) is an
+application  that  offers  updated  and  useful  information  to  the  users  extracted  from
+Facebook messages on a map. It exploits the cooperation between the Facebook social
+network users, by mining and extracting information related to the transit on the cities
+from the messages posted by users. A navigable map points the most current traffic
+events, informed by the users.
+4.4. Occurrences reporting and visualization
+We have proposed applications based on social network and crowdsourcing to support
+information visualization about facts that occur and affect public transportation. They
+access citizens’ knowledge about real-time conditions available on social networks or
+other tools on the Internet. They are: (i) Collaborative routes editing is a tool integrated
+to Facebook which enables users to collaboratively create routes that can be visualized
+and edited by the user’s contacts [Alves et al 2011]. In the future, the users will be able
+to indicate preferred routes, comment or give a reputation for a route, and others; (ii)
+Occurrence report using mobile devices takes advantage of the mobility trend to enable
+passengers to provide and get real time information about the public transportation they
+are using; users can report facts that occur in their route (these facts will be posted as
+Twitter messages) and retrieve facts that affect a given bus line; messages can be
+visualized textually or in a map showing most recent occurrences;  (iii) Occurrence
+reporting and visualization via web aims to enable users to report occurrences using a
+collaborative  map;  recorded  occurrences  are  displayed  as  a  pointer  in  the  map,
+facilitating  the  occurrence  location  identification;  and                                   (iv)  Traffic  conditions
+visualization, a web application based on maps that aims to display the possibility of
+traffic problems in a given location; it uses different colors in each section of a route,
+based on amount, intensity and type of messages reported.
+5. Conclusions and Further Work
+This paper presented an overview of the UbiBus Project, a multi-institutional initiative
+in the scope of smart cities, involving five institutions, being four universities and one
+information company, that aims to integrate methods and techniques from several areas
+(e.g. Ubiquitous Computing, Computational Context, Middleware and Geographical
+Information Systems) to build solutions for the advanced public transportation systems.
+The paper also presented some preliminary applications developed on the context of
+UbiBus. The project is still in progress and there is much work to be done to achieve its
+goals. Currently, we are working on refining the specification and development of the
+59
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+five  levels  indicated  in  the  UbiBus  architecture                                              (Figure                                                         1),  the  Middleware  for
+Ubiquitous Systems and on the applications described in Section 4, improving them and
+identifying additional requirements. To evaluate the project ideas, we are in contact with
+some cities transportation administrations to establish partnerships.
+Acknowledgments
+This work is supported by the CNPq (process 560135/2010-6) and [partially] supported by the
+INES5. Authors thank UbiBus researchers from UFPE, UFBA, UTFPR, UEM and CESAR.
+Special  thanks  to  Luiz  Caldas,  Vanessa  Gomes,  Adriano  Oliveira,  Tainan  Gomes  and  all
+students involved on the development of the UbiBus applications.
+References
+Alves, L. P. S., Chaves, A. P., Steinmacher, I. F. Um aplicativo baseado em inteligência coletiva
+para compartilhamento de rotas em redes sociais. VIII Simpósio Brasileiro de Sistemas
+Colaborativos, Paraty-RJ, 2011
+Barry, K. How smartphones can improve public transit. Wired Magazine, 2010.
+Caldas, L. R. Desenvolvimento de Uma Solução Sensível ao Contexto Como Suporte a um
+Sistema  de  Transporte  Público.  Monografia  de  Conclusão  de  Curso                             -  Ciência  da
+Computação. 2010.
+Caulfield, B., O’Mahony, M. An examination of the public transport information requirements
+of users. IEEE Transactions on Intelligent Transportation Systems, 8:1, 2007, 21-30.
+Chaves, A. P., Steinmacher, I., Vieira, V. Social networks and collective intelligence applied to
+public  transportation  systems:  A  survey.  In:  VIII  Simpósio  Brasileiro  de  Sistemas
+Colaborativos, Paraty-RJ, 2011.
+Ferris, B., Watkins, K., Borning, A. Location-aware tools for improving public transit usability.
+IEEE Pervasive Computing, 9, 2010, 13-19 [http://www.onebusaway.org/]
+Lima, V., Magalhães, F., Tito, A., Santos, R., Ristar, A., Santos, L., Vieira, V., Salgado, A.C.
+UbibusRoute: Um Sistema de Identificação e Sugestão de Rotas de Ônibus Baseado em
+Informações de Redes Sociais. VIII SBSI - Trilha de Ferramentas. São Paulo-SP, 2012.
+Ogliari. R.   Crowdsourcing, muito melhor com mobile. Revista Espírito Livre, 26, 2011, 51-55.
+Sananmongkhonchai, S., Tangamchit, P., Pongpaibool, P. Road traffic estimation from multiple
+GPS  data  using  incremental  weighted  update.  In  Proc.  of                                     8th  Int.  Conf.  on  ITS
+Telecommunications, Phuket, Thailand, 2008, 62-66.
+Schilit, B., Adams, N., Want, R. Context-Aware Computing Applications. In Workshop on
+Mobile Computing Systems and Applications. Santa Cruz, CA, 1994, 90-98.
+Souto, E., Guimarães, G., Vasconcelos, G., Vieira, M., Rosa, N., Ferraz, C. A message-oriented
+middleware for sensor networks, 2nd Workshop on Middleware For Pervasive and Ad-Hoc
+Computing, Ontario, Canada, 2004, 127-134.
+Sussman, J. Perspectives on Intelligent Transportation Systems. Springer, New York, USA,
+2005.
+Vieira, V., Caldas, L. R., Salgado, A. C. Towards an Ubiquitous and Context Sensitive Public
+Transportation  System.  In:                                                                        4th  International  Conference  on  Ubimedia  Computing,  São
+Paulo, 2011, 174-179.
+Weiser, M., "The computer for the 21st century", Scientific American, 265:3. pp.66-75, 1991.
+5 http://www.ines.org.br
+60
+
+
+
+
+

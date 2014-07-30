@@ -1,0 +1,506 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Formalizando Contexto em Processos de Negócio
+Talita da Cunha Mattos1, Flávia Maria Santoro1, Kate Revoredo1, Vanessa
+Tavares Nunes2
+1Programa de Pós-Graduação em Sistemas de Informação - Universidade Federal do
+Estado de Rio de Janeiro (UNIRIO) - Rio de Janeiro - RJ - Brasil
+2COPPE/PESC - Programa de Engenharia de Sistemas e Computação - Universidade
+Federal do Rio de Janeiro (UFRJ) - Rio de Janeiro - RJ - Brasil
+{talita.mattos,  flavia.santoro,  katerevoredo}@uniriotec.br,
+vanunes@cos.ufrj.br
+Abstract. Business processes are dynamic and constantly evolving. Contextual
+elements that had not yet been identified and represented in business process
+model  can  arise  and  influence  the  execution  of  each  process  instance  in
+diverse  manners.  In  this  scenario,  the  identification  of  these  elements  is
+considered of great importance. This paper proposes a formalism for context
+associated with business processes that intends to support the identification of
+the contextual elements of an activity in order to subsidize decisions to be
+taken within the execution of a process.
+Resumo. Processos de negócios são dinâmicos e estão em constante evolução.
+Elementos   contextuais   que   ainda   não   haviam   sido   identificados   e
+representados no modelo do processo de negócio podem surgir e influenciar a
+execução de cada instância do processo de diversas maneiras. Neste cenário,
+a identificação desses elementos é considerada de grande importância. Este
+artigo propõe um formalismo de contexto associado a processos de negócios
+que  pretende  apoiar  a  identificação  dos  elementos  contextuais  de  uma
+atividade, a fim de subsidiar decisões a serem tomadas na sua execução.
+1. Introdução
+Processo  de  negócio  está  sendo  considerado  o  principal  fator  na  sustentação  e
+aperfeiçoamento das competências centrais das organizações [Tao et al. 2006]. Além
+disso, segundo Aalst [2009] a tecnologia da informação tem mudado os processos de
+negócio dentro das organizações e entre elas. Mais e mais processos de trabalho estão
+sendo conduzidos sob a supervisão de sistemas de informação orientados por processos,
+os Process-Aware Information System (PAIS).  PAIS   pode   ser   definido   como   um
+sistema que gerencia e executa processos operacionais envolvendo pessoas, aplicações e
+informações com base em modelos de processos [Dumas, Aalst e Hofstede 2005].
+Neste  cenário,  mudanças  nas  rotinas  de  negócios  durante  a  execução  de
+processos automatizados precisam ser consideradas, de modo que esses processos sejam
+capazes de reagir e flexibilizar a sua especificação considerando as ocorrências do
+ambiente [Nunes 2011; Rosemann, Recker e Flender 2008]. Estas possíveis mudanças
+186
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+podem ser entendidas como elementos existentes nas rotinas de negócios que ainda não
+haviam sido identificados como relevantes, e por isso não foram representados nos
+modelos  de  processos.  Estes  elementos  são  apresentados  na  literatura por meio do
+conceito de contexto  [Brézillon e Pomerol  1999]. Em um cenário de processos de
+negócio, o contexto pode ser definido como o conjunto mínimo de variáveis que contém
+toda a informação importante que impacta sua concepção, implementação e execução
+[Rosemann, Recker e Flender 2008]. A cada instância do processo, pode haver variações
+em sua execução caracterizadas por um conjunto distinto de informações de contexto.
+Segundo  Bider  [2005],  é  possível  prever  até  90%  dos  acontecimentos,  mas
+nunca  100% de todos os acontecimentos, nem  100% de todas as possibilidades de
+atuação. Ou seja, não é viável prever tudo que pode ocorrer durante a execução de um
+processo,  pois  novos  cenários  surgem;  além  de  que,  descrever  todos  os  caminhos
+possíveis em um modelo de processo pode prejudicar o seu entendimento, devido ao
+alto grau de complexidade exigido [Bider 2005; Kumar e Narasipuram 2006].  Então,   a
+flexibilidade do processo está relacionada à compreensão destes eventos inesperados
+que acontecem enquanto pessoas, sistemas e recursos interagem e demandam ajustes.
+Como exemplo, considere uma empresa americana ABC, que realiza a venda de
+produtos através da internet. Um cliente, João, residente no Brasil, possui uma filha que
+mora nos Estados Unidos. Ele decide presenteá-la com um item desta loja, cuja entrega
+seria realizada nos Estados Unidos. No entanto, quando ele tenta realizar a compra com
+seu cartão de crédito internacional, ela é negada. Embora o cartão seja válido, a loja
+esperava que o país de entrega fosse o mesmo da fatura do cartão de crédito do cliente.
+Neste caso, temos um produto a ser entregue nos Estados Unidos e um endereço de
+faturamento no Brasil. Então, a compra não é autorizada.  O fato de o país da fatura de
+cartão de crédito ser diferente do país de entrega constitui um cenário não previsto no
+processo de negócio. Este elemento novo, país de fatura do cartão de crédito diferente
+do  país  de  entrega  da  mercadoria,  que  não  havia  sido  considerado  no  modelo  do
+processo em curso, foi introduzido, o que torna difícil para a empresa alcançar o seu
+objetivo principal, que é aumentar as vendas. Neste caso, é relevante o desenvolvimento
+de métodos para a identificação e tratamento desses elementos contextuais, a fim de
+adaptar o processo no momento certo.
+A fim de ampliar a percepção do contexto na execução de uma instância do
+processo, neste artigo apresentamos uma descrição formal para caracterizar o contexto
+de uma atividade de processo de negócio em um determinado domínio. Nosso objetivo é
+apresentar uma formalização dos conceitos relacionados ao contexto, pela proposição de
+um Modelo de Contexto. Adicionalmente, este modelo é aplicado aos processos de
+negócio envolvidos e ao domínio onde eles estão sendo executados. Para isso, modelos
+conceituais são definidos e o relacionamento entre eles é estabelecido. Dessa forma,
+situações relevantes podem ser entendidas e caracterizadas, servindo como entrada para
+a análise da adequação da instância do processo para a atual circunstância, a fim de
+permitir que organizações atinjam seus objetivos e estratégia.
+O artigo está organizado da seguinte forma: a Seção 2 descreve o formalismo
+proposto, a Seção 3 discute o modelo aplicado a um cenário de aplicação, a Seção 4
+apresenta  os  trabalhos  relacionados  e  a  Seção  5  conclui  o  trabalho  e  apresenta  os
+trabalhos futuros.
+187
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+2. Proposta: Formalismo para Contexto em Processos de Negócio
+Em cada instância de um processo de negócio, as atividades podem ser influenciadas
+por uma série de fatores, envolvendo conhecimentos sobre vários aspectos do negócio,
+tais como ambiente, pessoas, tecnologias, a própria organização, e até mesmo aspectos
+externos à organização. A literatura tem chamado este conjunto de informações de
+contexto [Rosemann, Recker e Flender 2008]. Muitas vezes, esta informação não foi
+identificada  na  modelagem  do  processo.  No  entanto,  uma  vez  que  pode  causar
+dificuldades para a sua execução, ela deve ser compreendida e tratada.
+De acordo com Bazire e Brézillon [Bazire e Brézillon 2005], existem mais de
+150 definições para o termo contexto. Ele tem sido estudado por filósofos, linguistas,
+psicólogos, e cientistas da computação. Em cada comunidade, o termo é interpretado do
+modo que melhor se adapte às suas metas [Wan 2009]. No entanto, apesar da relevância
+do conceito de contexto ser reconhecido em diferentes áreas, não há nenhuma definição
+formal adotada em pesquisas relacionadas. A formalização desses conceitos tem sido
+discutida desde os anos 80, quando J. McCarthy [McCarthy 1993] argumentou que a
+formalização de contexto é um passo crucial para resolver o problema da generalidade.
+Desta  forma,  propomos  uma  abordagem  formal  para  o  contexto  na  área  de
+processos de negócios, por meio da definição de um Modelo de Contexto independente
+de domínio, que descreve os elementos relacionados à manipulação de contexto e seus
+relacionamentos. Este modelo é apresentado na subseção 2.1. Adotamos o formalismo
+de ontologias, e a ferramenta Protégé  [Protégé  2012] foi utilizada para construir os
+modelos. Ontologia pode ser usada para representar conceitos em qualquer domínio,
+além de permitir estabelecer relacionamentos entre os conceitos com maior expressão
+semântica [Noy e McGuiness 2001].
+2.1. Modelo de Contexto
+O  Modelo  de  Contexto  compreende  os  conceitos  relacionados  ao  contexto  e  seus
+relacionamentos. Ele foi adaptado do metamodelo de contexto proposto em  [Santos
+2008], onde um framework para suporte ao design de sistemas sensíveis a contexto em
+diferentes  domínios  foi  apresentado.  Em relação ao metamodelo, nosso Modelo de
+Contexto suprime as classes Tipo de Atualização (Update_Type) e Tarefa (Task) por
+não se aplicarem à nossa proposta e adiciona as classes Atividade e Situação assim
+como seus relacionamentos, uma vez que o trabalho pretende apoiar a identificação dos
+elementos  contextuais  de  uma  atividade,  com  o  objetivo  de  identificar  situações
+relevantes que possibilitem uma tomada de decisão. A Figura  1 apresenta o modelo
+conceitual, no qual os quadrados representam classes e as setas o tipo de relacionamento
+entre elas, cujos conceitos são descritos na Tabela 1.
+O Modelo de Contexto tem por objetivo resolver a questão da multiplicidade de
+definições do termo contexto, bem como descrever os demais elementos aplicados em
+sua manipulação e como eles se relacionam entre si. Como o foco desta pesquisa é a
+aplicação em processos de negócio, são propostos dois modelos adicionais: o Modelo de
+Processo de Negócio e o Modelo de Domínio, apresentados nas subseções 2.2 e 2.3,
+respectivamente.  O  Modelo  de  Processos  de  Negócio,  também  independente  do
+domínio, demonstra os elementos associados a um processo, com o foco na atividade do
+processo de trabalho. O Modelo de Domínio inclui a definição da estrutura de dados,
+188
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+funções, relacionamentos e restrições da área de conhecimento considerada (para cada
+domínio, um modelo diferente é construído).
+Figura 1 - Modelo de Contexto
+Tabela 1. Conceitos do Modelo de Contexto
+Classe                                                                                                                                                       Descrição
+Entidade                                                                                 Representa  entidades                                               (pessoa,  lugar,  objeto, usuário,  aplicação) a  serem  consideradas  para a  finalidade  de
+Contextual                                                                                                                                                   manipular informações de contexto. É caracterizada por pelo menos um elemento contextual.
+Elemento                                                                                                                                                     Representa uma propriedade usada para caracterizar uma entidade contextual. É a unidade básica do modelo,
+Contextual                                                                                                                                                   identificada por um conjunto de atributos e relacionamentos associados a uma entidade.
+Fonte de                                                                                                                                                     Representa formas através das quais as instâncias dos elementos contextuais podem ser obtidas a partir de
+Contexto                                                                                                                                                     origens de contexto heterogêneas e externas (sensores, interface de usuário de diálogo, etc.).
+                                                                                                                                                             Representa formas de capturar elementos contextuais. Parametriza a relação entre um elemento contextual e uma
+Aquisição
+                                                                                         fonte de contexto.
+                                                                                                                                                             Permite a   determinação   de elementos   contextuais que devem   ser   instanciados e   usados   para compor
+Foco
+                                                                                         uma Situação contextual
+                                                                                                                                                             Declaração lógica que  especifica a  execução de uma  ou  mais  ações,  quando suas  condições definidas forem
+Regra
+                                                                                         atendidas.
+Atividade                                                                                Representa o trabalho a ser realizado, estabelecendo o foco.
+                                                                                                                                                             Representa o executor de tarefas, que pode ser uma pessoa, um grupo de pessoas, um processo ou um agente
+Ator
+                                                                                         de software
+Papel                                                                                                                                                        Responsabilidade desempenhada por um agente  durante a execução de uma tarefa.
+Relevância                                                                               Nível de importância de um elemento contextual em relação ao foco
+                                                                                                                                                             Conjunto de elementos contextuais que caracteriza a necessidade de uma adaptação. Caminho, tendência que a
+Situação
+instância do processo está seguindo, ou  uma condição que já está acontecendo.
+Por fim, como meio de consolidar a aplicação dos três modelos juntos e fornecer
+a  conceituação  dos  diversos  aspectos  relacionados  ao  contexto,  é  proposto  um
+formalismo estruturado em camadas (Figura 2).
+189
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 2 - Estrutura em Camadas para Tratamento do Contexto
+2.2. Modelo de Processo de Negócio
+Em  [McCarthy  1993], os elementos de um modelo de processo de negócio e seus
+relacionamentos  foram  identificados  e  representados  em  uma  ontologia.  Nesta
+ontologia, todos os elementos de um modelo de processo eram especializações de uma
+classe  chamada  Context.  No  nosso  modelo  de  contexto  esses  elementos  são  os
+elementos contextuais. Nesse trabalho, modificamos essa ontologia excluindo a classe
+Context, já que esses elementos foram representados no Modelo de Contexto, assim
+como todos os outros conceitos relevantes à definição de contexto. Dessa forma, a
+ontologia resultante representa apenas conceitos relacionados aos elementos necessários
+em um modelo de processo de negócio, definindo um metamodelo de processos. Esse
+metamodelo  deve  ser  considerado  para  a  construção  dos  modelos  de  processo  de
+negócio da organização.
+O conceito de Atividade na camada de processo é o mesmo que na camada de
+contexto, e cada um dos outros conceitos na camada de processo está relacionado à
+camada de contexto, como extensões do Elemento Contextual. Portanto, há uma relação
+de herança entre todos os elementos na camada de processo e do Elemento Contextual.
+No entanto, dependendo das configurações apresentadas no processo de negócio e no
+190
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+domínio,  apenas  um  subconjunto  deles  será  considerado  relevante,  a  fim  de  ser
+realmente monitorado. Por exemplo, em um processo específico, um artefato pode ser
+escolhido como informação relevante a ser monitorado, assim, o elemento Artefato será
+o único considerado como um Elemento Contextual para este domínio.
+Nossa proposta é ilustrada na Figura  3. Entre os conceitos que compõem o
+modelo de processo de negócios, podemos citar:  (i) Atividade  - Conjunto de ações
+destinadas a alcançar um ou mais objetivos, que consome e produz informações e
+artefatos e requer os intervenientes para executá-lo; (ii) Ator - Identifica os profissionais
+envolvidos na execução de uma atividade através de seus/suas habilidades, informações
+pessoais e as relações entre eles. É especializado em Indivíduo, Grupo e Ator Não-
+Humano; (iii) Papel - Uma função que é executada por um ou mais intervenientes e que
+é atribuído a cada atividade do processo. Papéis têm hierarquia entre si e requerem
+algum tipo de Habilidade; (iv) Artefato - Produto concreto resultante da execução de
+uma atividade que pode servir como entrada para outras atividades; (v) Dados Externos
+-  Informações  externas  ao  processo  de  organização  ou  trabalho  que  está  sendo
+executado.
+Figura 3. Modelo de Processo de Negócio
+2.3. Modelo de Domínio
+A terceira camada é chamada de Modelo de Domínio. Este modelo pretende representar
+o vocabulário e os conceitos-chave de uma área de conhecimento específica, por meio
+da descrição das entidades, atributos, papéis e relacionamentos, bem como as restrições
+que garantem a integridade de um domínio particular. Portanto, diferentemente das
+outras camadas, este modelo não é único em nosso formalismo e deve ser desenvolvido
+para  cada  caso  particular.  Enquanto  as  outras  duas  camadas  são  de  domínio
+independente e, portanto, não variam, o modelo de domínio deve ser construído de
+acordo com a área de conhecimento da organização em questão.
+Modelos de processos são projetados de acordo com os conceitos apresentados
+na  camada  de  processo  (um  metamodelo  para  a  construção  desses  modelos,  como
+explicado na subseção anterior), bem como a aplicação dos conceitos definidos na
+camada de domínio. Assim, para um mesmo modelo de domínio, pode haver vários
+modelos de processos em uma organização.  Os  conceitos  Situação  e  Atividade  que
+aparecem no modelo de domínio são referências de outras camadas. Cada conceito do
+191
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+domínio  pode  ser  considerado  como  um  Elemento  Contextual.  Portanto,  os
+relacionamentos entre esses conceitos podem ser estabelecidos Por exemplo, o conceito
+Endereço de Cobrança (que poderia ser uma classe de domínio que aparece no exemplo
+discutido  na  Seção  de  Introdução)  poderia  ser  uma  especialização  de  Elemento
+Contextual  (no Modelo Contexto), para o caso de um processo específico  (Vender
+Itens), que possui a atividade (Pagar Fatura).
+Esta abordagem pretende tornar a manipulação do contexto mais flexível, já que
+cada  camada  pode  expressar  a  existência  de  relacionamento  entre  os  conceitos
+incorporados.  Isso  significa  que  alguns  conceitos  definidos  em  uma  camada  tem
+relacionamento com outros conceitos nas outras camadas, como ilustrado antes. Um
+cenário  mais  completo  é  descrito  na  próxima  seção,  na  qual  um  domínio  real  foi
+escolhido, os modelos foram construídos, e a aplicação é discutida.
+3. Cenário de Aplicação
+Nesta seção, o formalismo proposto é aplicado ao cenário de Controle do Espaço Aéreo.
+Sua  escolha  foi  motivada  pelo  fato  de  ser  um  domínio  de  notória  relevância,
+amplamente  dinâmico  e  com  a  possibilidade  de  interferência  de  vários  fatores  na
+execução  do  processo.  O  modelo  de  domínio  apresentado  na  Figura  4  descreve  o
+domínio. Nesse diagrama, está presente o conceito de Decolagem, que começa com uma
+Solicitação de Decolagem e termina com uma Permissão de Decolagem para decolar em
+uma determinada Pista. Além disso, o procedimento de descolagem pode ser submetido
+a alguns Perigos, baseados nos critérios Homem, Meio, Máquina, Gerenciamento e
+Missão. Um Piloto e um Controlador de Tráfego Aéreo são os tipos de perigo Homem,
+enquanto uma Aeronave é um tipo de perigo Máquina, Condição Meteorológica é um
+tipo Meio, Regulamento é um tipo Gerenciamento, e Tipo de Missão é um tipo Missão.
+Figura 4. Modelo de Domínio
+Neste  cenário  a  terceira  camada  do  formalismo  proposto  é  composta  pelo
+modelo de domínio da Figura 4. Depois de incluir este modelo de domínio na terceira
+camada, os relacionamentos entre ela e o modelo de processo na segunda camada devem
+ser estabelecidos. Uma vez que o nosso formalismo define os relacionamentos entre os
+elementos dos modelos em camadas um e dois, definir as conexões entre os elementos
+no modelo de domínio com elementos no modelo de processo permite a definição dos
+elementos contextuais. A fim de definir os elementos relevantes no Modelo de Domínio
+e em seguida, especificar a sua relação com a camada de processo, o processo de
+negócio é analisado. Neste caso, o processo é Decolagem de Aeronave (Figura 5). Este
+modelo inclui tipos de atividades e papéis (conceitos no modelo de processo).
+192
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 5. Processo Decolagem de uma Aeronave
+Este  processo  começa  com  a  solicitação  do  piloto  para  decolar.  Então,  o
+Controlador de Tráfego Aéreo inicia o procedimento de autorização da decolagem,
+definindo e informando ao Piloto a Pista e os parâmetros associados. O piloto coloca a
+aeronave na pista correta, ajusta os parâmetros e informa o controlador que tudo está
+pronto para decolar. O Controlador autoriza a decolagem e o piloto decola. Há alguns
+perigos associados à execução deste processo. Por exemplo, o controlador pode atender
+ao  telefone  ao  mesmo  tempo  em  que  está  estabelecendo  os  parâmetros  e,  por
+negligência, informa um parâmetro incorreto para o piloto. Este é um exemplo de um
+perigo  humano  que  pode  afetar  este  processo.  Portanto,  deve  ser  monitorado  para
+permitir uma mudança no processo, se necessário. No manual da FAA [United States -
+FAA 2000], um modelo 5M é proposto, também visto na Figura 4, em que cinco perigos
+associados a alguns fatores são definidos, conforme resumido na Tabela 2.
+Tabela 2. Fatores do Modelo 5M
+5M                                                                                           Fatores
+                                                                                             Refere-se a elementos humanos, como aspectos psicológicos, fisiológicos, de proficiência e experiência na
+Homem
+realização de tarefas.
+                                                                                             Refere-se  ao  ambiente  onde  a  tarefa  é  executada,  incluindo  condições  climáticas,  condições  da  pista,
+Meio
+                                                                                             obstruções, iluminação do espaço aéreo e auxílios à navegação disponíveis.
+                                                                                             Refere-se aos aspectos de fabricação e manutenção de aeronaves e de confiabilidade e desempenho dos
+Máquina
+equipamentos.
+Gerenciamento                                                                                Refere-se à capacidade de gestão em termos de regulamentos, políticas e atitudes em relação à segurança.
+Missão                                                                                       Refere-se ao tipo de trabalho realizado, seja complexo ou de rotina.
+Uma  vez  que  neste  cenário  queremos  monitorar  os  perigos  da  atividade
+Decolagem,  os  elementos  no  modelo  de  domínio  correspondentes  a  eles  serão  os
+considerados para conectar o modelo de domínio com o modelo de processo. Portanto, o
+elemento Perigo e Decolagem estão ligados a Dados Externos e Atividade (Figura 6).
+Depois de enumerar os elementos contextuais, as situações podem ser caracterizadas.
+Para isto os elementos contextuais devem ser analisados. Além disso, os valores que
+esses elementos assumem em uma instância do processo de negócio, podem definir a
+situação. Em nosso cenário, os cinco fatores de perigo são considerados elementos
+contextuais. Podemos caracterizar uma situação, pela ocorrência de um perigo dos tipos
+homem e meio. A Tabela 3 ilustra esse cenário.
+193
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 6. Relacionamento entre Camadas
+Tabela 3. Cenário com Ocorrência dos Perigos Homem e Meio
+Elementos Contextuais
+Homem                                                                                     Meio   Máquina   Gerenciamento   Missão
+Sim                                                                                       Sim    Não       Não             Não
+Portanto, quando esta situação ocorre, uma decisão sobre o curso do processo
+deve ser tomada. Por exemplo, a aeronave não deve decolar. Devido a isso, uma regra
+de inferência é formalizada.
+SE Perigo (Homem) ^ Perigo (Meio)
+ENTÃO não executar a atividade Decolagem
+Assim, por meio da análise do contexto, é possível avaliar a ocorrência de
+necessidades de ajustes para garantir o progresso da instância do processo. Logo, com a
+aplicação da abordagem proposta, por meio do constante monitoramento dos elementos
+contextuais no processo, será possível identificar a situação de uma atividade, que por
+sua vez, poderá sinalizar a necessidade da adaptação do processo.
+194
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+4. Trabalhos Relacionados
+Existe uma vasta literatura relacionada a Arquiteturas de Sistemas Sensíveis a Contexto.
+Dentro deste universo, modelos de contexto têm sido propostos e compõem o foco da
+nossa  discussão.  Estas  aplicações  coletam  informações  com  base  em  modelos  de
+contexto e executam o seu processamento. Em geral, o processamento de contexto
+representa o tratamento aplicado aos dados brutos de contexto, a fim de refiná-los de
+modo que sejam usados para adaptar o comportamento destas aplicações.
+Context Framework [Jaufman e Munch 2005] captura dados brutos de contexto
+de  várias  fontes.  Eles  são  pré-processados,  abstraídos  de  suas  características  e
+quantizados. A partir deste ponto eles são considerados átomos de contexto. Um serviço
+de reconhecimento de contexto cria um objeto de alto nível único com os átomos de
+contexto. O tratamento de contexto é feito por meio de um "vocabulário de contexto",
+que  considera  as  seguintes  categorias:  localização,  tempo,  ambiente,  usuário  e
+dispositivo. Em comparação com o nosso modelo, estas categorias seriam parte de nosso
+Elemento Contextual. Gaia [Anand e Nahrstedt 2002] constrói objetos de contexto de
+alto nível executando operações em lógica de primeira ordem, como quantificação,
+implicação, conjunção, disjunção e negação do predicado. Esta arquitetura é derivada do
+Context Toolkit [Dey, Abowd e Salber 2001]. Este sistema propõe a identificação de
+contexto por meio da análise de quatro tipos básicos de entidades: aplicação, serviço,
+dispositivo  de  rede,  e  pessoa.  De  maneira  semelhante  à  referência  anterior,  estes
+elementos fazem parte dos nossos Elementos Contextuais, também considerados como
+Fonte de Contexto.  Em  Context  Toolkit                                                       [Dey,  Abowd  e  Salber  2001],  um  widget
+representa o contexto de um sensor em particular e um agregador é responsável por todo
+o contexto de uma entidade. A identificação do contexto é feita por meio da avaliação
+das entidades Pessoa (indivíduos ou grupos), Lugar (regiões geográficas do espaço) e
+Coisas (objetos físicos ou componentes de software). Estas entidades fazem parte dos
+nossos Elementos Contextuais, também consideradas como Fontes de Contexto.
+CEManTIKA [Santos 2008] usa o Elemento Contextual, um conceito estático,
+como parte atômica do contexto. O contexto de uma interação, o que seria a agregação,
+é o conjunto de elementos contextuais instanciados necessários para realizar uma tarefa.
+É um conceito dinâmico, definido em tempo de execução, quando o foco é identificado.
+Este metamodelo de contexto é a referência utilizada como base para nossa proposta.
+Nosso trabalho inclui a classe Situação, e não lidamos com as tarefas, mas atividades.
+Ao contrário das propostas descritas, na qual o contexto é tratado para lidar com
+aplicações sensíveis ao contexto, nossa proposta está focada no uso do contexto para a
+adaptação de processos de negócios. Além disso, enquanto a maioria dos modelos é
+limitada à análise de pessoa, lugar e dispositivos, o nosso modelo é mais abrangente e
+flexível, permitindo a especificação do elemento contextual (conceito definido em nosso
+formalismo), de acordo com o domínio e processo da organização. Outras diferenças em
+relação aos modelos já existentes são a possibilidade de identificar a situação de uma
+atividade, a previsão de interação em qualquer domínio e a formalização de conceitos
+por meio de um modelo conceitual. Além disso, o modelo conceitual pode apoiar a
+adaptação do processo, uma vez que não apenas considera as circunstâncias que estão
+ocorrendo  [Saidani e Nurcan  2007], mas também compreende como estas condições
+afetam o processo [Jaufman e Munch 2005].
+195
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+5. Conclusões
+A  flexibilidade  das  rotinas  de  trabalho  precisa  ser  considerada  nos  processos  de
+negócios. Novos elementos que podem demandar mudanças nestas rotinas devem ser
+identificados e tratados, de modo que não interfiram nos objetivos das organizações.
+Além disso, a grande variedade de definições de contexto nos leva a busca de uma
+formalização dos conceitos relacionados a este tópico.
+Este trabalho propõe a formalização do conceito de contexto para processos de
+negócio. Para tal, a abordagem adotada propõe um Modelo de Contexto que descreve os
+elementos relacionados ao tratamento do contexto e seus relacionamentos. Além disso,
+com vistas a permitir a identificação da situação, são propostos modelos adicionais, o
+Modelo de Processo de Negócio e o Modelo de Domínio. A união dos três modelos
+permite um formalismo estruturado em camadas, relacionadas entre si. Estas relações
+permitem-nos identificar um conjunto de elementos que permeiam desde a definição do
+contexto  até  a  modelagem  de  um  domínio  específico,  fazendo  com  que  a  camada
+superior atue como um guia para a construção da imediatamente inferior.
+Por fim, baseado na premissa de que os processos devem ser simples para serem
+gerenciados de forma eficiente, faz-se interessante o emprego de PAIS, sistemas de
+informação com o foco em uma visão holística de processos de negócio. O emprego
+PAIS permite uma atuação em modelos de mais alto nível que facilitem a adaptação das
+instâncias de processos durante sua execução. Esta abordagem permite acompanhar o
+andamento do processo, como discutido no cenário de aplicação apresentado. Outra
+vantagem é a capacidade de identificar uma situação e fornecer subsídios para uma
+possível adaptação do processo, de forma a melhor atender os interesses da organização.
+Como trabalho futuro, pretende-se avaliar o formalismo proposto por meio de
+um  estudo  de  caso  em  um  cenário  real,  modelado  a  partir  de  entrevistas  com
+especialistas, entre eles pilotos de aeronaves e controladores de tráfego aéreo.
+Agradecimento
+Agradecemos à Professora Vaninha Vieira pela valiosa contribuição com suas
+considerações acerca dos conceitos tratados neste artigo.
+Referências
+Aalst, W. M. P. (2009) “Process-Aware Information Systems: Design, Enactment, and
+Analysis”, Wiley Encyclopedia of Computer Science and Engineering, pp. 2221-2233.
+Anand, R., Nahrstedt, K. (2002) “A middleware infrastructure for active spaces”. IEEE
+Pervasive Computing, pp. 74 - 83.
+Bazire,  M.,  Brézillon,  P.  (2005)  “Understanding Context  Before  Using It”,  In:  5th
+International  and  Interdisciplinary Conference,  CONTEXT  2005,  v.  LNAI  3554,
+2005, pp. 29-40, Springer Verlag, Paris, France.
+Bider, I.  (2005)  “Masking flexibility behind rigidity: Notes on how much flexibility
+people are willing to cope with”. In: Proceedings of the CAiSE’05 Workshop on
+Business Process Modeling, Development and Support, pp. 7-18, Porto, Portugal.
+196
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Brézillon, P., Pomerol, J.-C. (1999) “Contextual Knowledge Sharing and Cooperation in
+Intelligent Assistant Systems”, Le Travail Humain, PUF, Paris, v. 62, n. 3, 1999, pp.
+223-246.
+Dey A. K., Abowd G. D., and Salber D. (2001) “A conceptual Framework and a Toolkit
+for Supporting the Rapid Prototyping of Context-Aware Applications”. In Human-
+Computer Interaction (HCI), vol. 16, no. 2, 3 &4, pp. 97 - 166.
+Dumas, M., Aalst, W. M. P., Hofstede, A. H. TER. (2005) “Process Aware Information
+Systems: Bridging People and Software Through Process Technology”. 1 ed. Wiley-
+Interscience.
+Jaufman  O.,  Munch,  J.  (2005)  Acquisition  of  a  Project-Specific  Process,  In:       5th
+International  Conference  on  Product  Focused  Software  Process  Improvement
+(PROFES2005), v.3547, pp.328-342, Oulu, Finland.
+Kumar, K., Narasipuram, M. M. (2006) “Defining requirements for business process
+flexibility).  In:  Proceedings  of  the  CAiSE’06  WorkshopsWorkshop  on  Business
+Process Modeling, Development, and Support (BPMDS’06), pp. 137-148
+McCarthy,  J.  (1993)  "Notes  on  formalizing  context".  In:  Proceedings  of  the        13th
+international joint conference on Artificial intelligence, p. 555-560, France
+Noy, N. F., McGuiness, D.L. (2001) “Ontology Development 101: A Guide to Creating
+Your First Ontology”. Stanford Knowledge Systems Laboratory Technical Report
+KSL-01-05. March 2001.
+Nunes, V. T. (2011) “Adaptação Dinâmica de Processos: Uma Abordagem Orientada a
+Contexto”.  Exame  de  Qualificação  ao  Doutorado  em  Engenharia  de  Sistemas.
+Universidade Federal do Rio de Janeiro.
+Protégé                                                                                     (2012).  The  Protégé  Project.  Disponível  em   <http://protege.stanford.edu>.
+Acessado em 20 nov. 2011.
+Rosemann M., Recker J., Flender C. (2008) “Contextualisation of business processes”
+Int. J. Business Process Integration and Management, Vol. 3, No. 1.
+Saidani, O, Nurcan, S. (2007) “Towards Context Aware Business Process Modelling”,
+In: Proceeding of the 8th Workshop on Business Process Modeling, Development,
+and Support (BPMDS 2007), In conjunction with CAiSE’07, Norway.
+Santos, V.  (2008)  “CEManTIKA: A Domain-Independent Framework for Designing
+Context-Sensitive System”. Tese de Doutorado. UFPE.
+Tao, Y., Wang, J., Wang X., He, D., Yang, S.  (2006).  “Knowledge-based Flexible
+Business Process Management”. TENCON 2006. 2006 IEEE Region 10 Conference.
+UNITED STATES. Department of Transportation - Federal Aviation Administration.
+(2000) “FAA System Safety Handbook, Chapter 15, Operational Risk Management.”
+Washington                                                                                  DC.                                               2000.                            Disponível   em:
+<http://www.faa.gov/library/manuals/aviation/risk_management/ss_handbook/media/
+chap15_1200.pdf>. Acesso em 05 out. 2011.
+Wan,  K,  (2009)  “A  Brief  History  of  Context”,  International  Journal  of  Computer
+Science Issues, IJCSI, Volume 6, Issue 2, pp33-43, 2009.
+197
+
+
+
+
+

@@ -1,0 +1,445 @@
+﻿VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Gerador de Sítios de Grupos de Pesquisa com Inclusão
+Automática de Conteúdo Baseada na Plataforma Lattes
+Bruno Rego Salomé, Fátima L. S. Nunes, Marcos Lordello Chaim
+Escola de Artes, Ciências e Humanidades (EACH)
+Universidade de São Paulo (USP)
+CEP: 03828-000 - São Paulo, SP - Brasil
+{bruno.salome, fatima.nunes, chaim}@usp.br
+Abstract. This paper describes the GPWeb tool whose objective is to facilitate
+and  automate  the  creation  of  Web  sites  of  research  groups.  The  GPWeb
+generates the structure of the Web page including information obtained from
+the Brazilian National Council for Scientific and Technological Development
+(CNPq) by accessing its Lattes platform. Moreover, GPWeb allows visualizing
+information, such as the qualification of the scientific production of the group,
+according to Qualis classification, created by the High Education Personnel
+Improvement Coordination (CAPES). In this sense, GPWeb is also a tool to
+support the research group management and decision making.
+Resumo. Este trabalho apresenta a ferramenta GPWeb que visa a facilitar e
+automatizar a  criação  de sítios de grupos de pesquisa.  A GPWeb gera a
+estrutura da página web preenchendo as seções de conteúdo com   informações
+provenientes  da  plataforma  Lattes,  pertencente  ao  Conselho  Nacional  de
+Desenvolvimento  Científico  e  Tecnológico                                                 (CNPq).  Além  disso,    permite
+visualizar informações importantes para auxiliar a tomada de decisões como
+a  classificação  Qualis  da  produção  científica  do  grupo,  elaborada  pela
+Coordenação de Aperfeiçoamento de Pessoal de Nível Superior (CAPES).
+1. Introdução
+Os grupos de pesquisa científica são geralmente formados por docentes, pesquisadores e
+discentes  do  meio  acadêmico  cujo  objetivo  é  buscar  soluções  para  problemas  da
+sociedade,   inovações tecnológicas e melhorias em rotinas ou situações diversificadas.
+Uma tarefa importante, portanto, é tornar disponível a informação e o conhecimento
+gerado pelos grupos de pesquisa científicos brasileiros.
+O  Conselho  Nacional  de  Desenvolvimento  Científico  e  Tecnológico  (CNPq)
+dispõe de um diretório dos grupos de pesquisa científica em atuação no Brasil. Este
+diretório disponibiliza informações básicas na rede mundial de computadores - a World
+Wide Web (Web). No entanto, essa forma de divulgação é limitada.
+Uma maneira de produzir sítios Web para divulgação dos grupos de pesquisa é
+utilizando gerenciadores de conteúdo. Essas ferramentas consistem em plataformas que
+permitem  a  exposição  de  conteúdo  variável na  Internet,  administrado  por  meio  de
+menus,  com estética e navegação  configuráveis.  Por meio  de um painel de controle
+administrativo, os gerenciadores do sítio podem administrar o conteúdo, gerenciar os
+583
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+processos,  o  acesso  e a segurança,  bem como customizar e realizar integração  com
+sistemas  legados                                                                              [Moratelli  and  Valdameri  2002].  Contudo,  para  ser  utilizado,  um
+gerenciador de conteúdo requer um alto nível de conhecimento técnico,   principalmente
+na sua instalação e configuração inicial.
+A plataforma  Lattes  [PLATAFORMA LATTES  2011]  é  uma  arquitetura  de
+informações  mantida  pelo  Conselho  Nacional  de  Desenvolvimento  Científico  e
+Tecnológico  (CNPq),  com  a  finalidade  de  gerir  suas  atividades  de  fomento  e  para
+integrar em um mesmo ambiente os diversos atores ligados ao sistema de inovação do
+país [Balancieri et al. 2005].
+As  informações  da  plataforma  Lattes,  em  conjunto  com  os  recursos  dos
+gerenciadores de conteúdo, podem auxiliar a criação dos sítios de grupos de pesquisa.
+No entanto, isso requer   um sistema prático de instalação e configuração da ferramenta,
+além de possibilitar uma manutenção de dados mais prática.
+Além da questão de disponibilização informação para o público em geral, no
+contexto  atual da  administração  acadêmica  do  país,  é  também  importante  avaliar  a
+produção  científica.  A métrica  utilizada é  o  sistema  Qualis  [WEBQUALIS                  2011],
+administrado  pela  Coordenação  de  Aperfeiçoamento  de  Pessoal  de  Nível  Superior
+(CAPES) [CAPES 2012]. O Qualis utiliza diferentes formas de classificação de acordo
+com as diferentes áreas de estudo, qualificando cada publicação segundo os chamados
+“estratos” (A1, A2, B1, B2, B3, B4, B5, C) sendo A1 o estrato indicativo de qualidade
+mais elevado e C o estrato com menor peso [QUALIS PERIÓDICOS 2012].
+Neste trabalho é descrita a ferramenta GPWeb  (Grupos de Pesquisa na Web)
+cujo  objetivo  é  gerar  sítios  Web  para  grupos  de  pesquisas utilizando  como  base  a
+ferramenta  de  gerenciamento  de  conteúdo  JOOMLA!  [JOOMLA!.ORG  2011]  e  as
+informações  provenientes  da  plataforma  Lattes.  Outra  característica  da  GPWeb  é
+permitir a avaliação das produções do grupo de pesquisa segundo a classificação Qualis
+da área de atuação do grupo.
+Para  apresentar  mais  detalhadamente  a  ferramenta  GPWeb,  este  artigo
+primeiramente apresenta alguns trabalhos relacionados, na seção 2, comparando-os em
+características semelhantes à GPWeb e destacando suas diferenças. A seção 3 apresenta
+um detalhamento técnico da ferramenta. A seção 4 tece uma discussão e disponibiliza
+resultados a respeito  da utilização  da ferramenta e, por fim, a seção  5 apresenta as
+conclusões do artigo e propõe trabalhos futuros para sua continuidade.
+2. Trabalhos relacionados
+Na literatura alguns trabalhos propõem o uso da plataforma Lattes como fonte de dados
+para análise de produção científica. Porém, nenhuma delas propõe a criação de sítios dos
+grupos de pesquisa, conforme pode ser conferido a seguir.
+A ferramenta scriptLattes [Mena-Chalco and Cesar-Jr. 2009] propõe a extração e
+a compilação automáticas de produções bibliográficas, produções técnicas, produções
+artísticas, orientações, projetos de pesquisa, prêmios e títulos, grafo de colaborações,
+mapa de geolocalização de um conjunto de pesquisadores cadastrados na plataforma
+Lattes [SCRIPTLATTES 2011]. Essas informações são disponibilizadas ao usuário por
+meio de uma página HTML construída automaticamente pela ferramenta.
+584
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+O trabalho de Silva (2010) realizou uma análise sobre a integração de redes de
+colaboração científica e a tecnologia, tendo como foco de estudo a plataforma Lattes.
+Esta  ferramenta  teve  como  base  de  coleta  de  dados  também  a  plataforma  Lattes,
+utilizando-os para formar grafos exibindo a rede de colaboração entre os pesquisadores
+que utilizam a plataforma. Assim como a GPWeb, é uma forma de captura de dados da
+plataforma Lattes e geração de uma visualização interessante sobre os dados adquiridos.
+Algumas principais características que diferenciam a GPWeb    das ferramentas
+apresentadas são: cria páginas HTML que podem ser modificadas pelo gestor do grupo,
+além de publicá-las automaticamente em seu momento de criação e modificação; fornece
+possibilidade de avaliar a qualidade das produções científicas de acordo com a métrica
+Qualis; visa a coletar e relacionar informações de produção bibliográfica de um grupo de
+pesquisa como um todo, agrupando os dados dos pesquisadores a ele pertencentes.
+A ferramenta scriptLattes, que mais se aproxima da proposta da GPWeb, exibe
+as  informações  em  HTML  para  os  interessados,  entretanto  não  possui informações
+qualitativas  das  publicações  para  disponibilizar  dados  para  análise  aos  gestores  dos
+grupos  de  pesquisa,  como  a  GPWeb  propõe.  Essas  informações  são  de  extrema
+importância para os gestores para que possam realizar a administração dos recursos do
+grupo de pesquisa de forma concisa e conduzir o trabalho dos pesquisadores de acordo
+com as expectativas.
+As   demais   ferramentas   apresentam   características   de   compilação   e
+disponibilização de informações relativas às publicações ou relações entre pesquisadores;
+entretanto  não  realizam  uma  relação  com  formas  de  avaliação  das  publicações  ou
+publicam as informações em um site.
+3. Descrição da ferramenta GPWeb
+O desenvolvimento do sistema foi realizado em PHP [PHP.NET 2011] uma vez que a
+ferramenta  Joomla!  é  composta  de  diversos  componentes  escritos  nessa  linguagem.
+Componentes com funcionalidades similares são agrupados e chamados de módulos, de
+forma a facilitar a explanação da estrutura do sistema.
+A Figura 1 representa o funcionamento do sistema de forma geral, exibindo a
+interação  entre os módulos do  gerenciador de conteúdo  e  as fontes de informações
+externas.
+585
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 1. Diagrama de Módulos da Ferramenta GPWeb.
+De forma geral, o processo ilustrado na Figura  1, é composto pelas seguintes
+etapas:
+1-) O administrador da ferramenta GPWeb gera um novo sítio para um grupo de
+pesquisa;
+2-) O gestor do grupo de pesquisa em questão acessa as plataformas Tycho e
+WebQualis (detalhadas adiante) e obtém os dados necessários para inserção no sistema;
+3-) O gestor acessa o site criado e insere os dados coletados por meio do módulo
+de inserção de dados;
+4-) O gestor aciona o módulo de dados de produção para gerar a execução da
+junção e classificação dos dados;
+5-) O gestor acessa o módulo de tomada de decisão para visualizar os resultados.
+Em paralelo a todo este processo os usuários acessam o site e visualizam as informações
+dos grupos de pesquisa.
+586
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+3.1. Módulo de criação automatizada dos sítios
+Este módulo é composto por um componente de criação automatizada de sítios que
+realiza  as  operações  necessárias  via  código  PHP.  Assim  é  possível  que  a  criação
+automatizada seja feita por meio um componente do Joomla!.
+Os processos para a criação automatizada são:
+1-) Copiar a pasta do sítio base no servidor;
+2-) Renomear a pasta com o nome do sítio do grupo de pesquisa;
+3-) Realizar um backup do banco de dados do sítio base e restaurá-lo em um
+novo banco com o nome do grupo de pesquisa;
+4-)   Modificar   um   arquivo   de   configuração   existente   no   Joomla!
+(configuration.php) indicando o novo banco de dados.
+O módulo de criação automatizada pode ser visualizado na Figura 2.
+Figura 2. Módulo de criação automatizada de sites.
+3.2. Módulo de inserção de dados
+Este módulo é responsável pela administração da inserção de dados no sistema GPWeb.
+Exemplos de dados inseridos na GPWeb são os pesquisadores pertencentes ao grupo de
+pesquisa, as informações do Qualis e os dados provenientes da plataforma Lattes.
+Este módulo é dividido em três diferentes componentes, responsáveis pela inserção
+de cada tipo de dado, como especificado nas subseções a seguir.
+3.2.1. Componente de gerenciamento de pesquisadores
+Este componente é responsável por gerenciar os dados dos pesquisadores que serão
+utilizados como parâmetro para obtenção de suas publicações.
+Ao instalá-lo, o componente cria uma tabela no banco de dados que possuirá os
+dados   de   cada   pesquisador   do   grupo   e   disponibiliza   a   opção                  “Administrar
+Pesquisadores” no menu de componentes do Joomla!.
+Por  meio  deste  menu  o  usuário  poderá  inserir  novos registros na tabela  citada
+anteriormente.
+O componente de gerenciamento de pesquisadores pode ser visualizado na Figura 3.
+587
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 3. Componente de gerenciamento de pesquisadores.
+3.2.2. Componente de inserção Qualis
+Para executar a classificação dos dados de produção científica, foi utilizado o sistema
+Qualis que é uma classificação de veículos científicos gerenciada pela CAPES.
+A CAPES torna disponível uma ferramenta na Internet [WEBQUALIS 2011] para
+obtenção de um arquivo em formato Excel com todas as publicações de uma dada área e
+sua respectiva avaliação. O módulo Qualis da ferramenta GPWeb possui uma interface
+na qual o usuário pode enviar o arquivo Excel fornecido pela CAPES via um sistema de
+upload.
+O componente realiza a leitura do arquivo e insere as informações existentes nele em
+uma tabela específica no banco de dados, relacionando um veículo de publicação (com
+nome, ISSN, ISBN, de acordo com o tipo deste veículo) e seu estrato.
+O componente de inserção Qualis pode ser visualizado na Figura 4.
+Figura 4. Componente de inserção Qualis.
+3.2.3. Componente de inserção Tycho
+A  obtenção  dos  dados  existentes  na  plataforma  Lattes  não  poderia  ser  realizada
+diretamente  por  acesso  ao  sítio  do  CNPq,  de  forma  automatizada,  devido  a
+especificidades técnicas impostas pela administração do sítio.
+Como forma alternativa de obtenção destes dados foi utilizada a plataforma Tycho
+[TYCHO,  2011].  Esta plataforma  realiza  a  captura dos  dados da plataforma Lattes
+devido a um acordo formal estabelecido entre a Universidade de São Paulo (USP) e a
+CAPES.  Isso  limita  as  funcionalidades  automatizadas  atuais  da  GPWeb  apenas  a
+pesquisadores com vínculo com a USP. Assim como  a CAPES, a plataforma Tycho
+oferece  um  arquivo  Excel  com  as  informações  solicitadas  por  meio  de  interfaces
+próprias.
+Uma forma de contornar a limitação a pesquisadores com vínculo com a   USP é
+inserir as informações adicionais - referentes aos demais pesquisadores participantes do
+grupo de pesquisa - manualmente em um arquivo Excel no formato aceito pela GPWeb.
+588
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Este procedimento poderia ser adotado por grupos de pesquisa que desejam utilizar a
+GPWeb e não pertencem à USP.
+O  componente  de inserção  de dados do  Tycho é composto  por  um sistema de
+upload que realiza a leitura deste arquivo Excel e adiciona as informações de publicações
+científicas presentes neste arquivo em uma tabela do banco de dados.
+O componente de inserção Tycho pode ser visualizado na Figura 5.
+Figura 5. Componente de inserção Tycho.
+3.3. Módulo de dados de produção
+O módulo de dados de produção tem como intuito reunir, organizar e classificar os
+dados de produção científica dos pesquisadores do grupo de pesquisa presentes no banco
+de dados.
+Ele  é  composto  pelo  componente  de  captura  que  verifica  os  pesquisadores
+cadastrados através do  sistema de gerenciamento  de  pesquisadores.  Em seguida,  os
+dados desses pesquisadores, inseridos através do componente de inserção do Tycho, são
+obtidos.
+Ao obter os dados das publicações, o módulo verifica também as informações
+presentes na tabela com os dados do Qualis e realiza a classificação de cada publicação
+de acordo com o meio na qual foi vinculada.
+O  componente  realiza  essa  comparação  inicialmente  por  ISBN.  Caso  a
+informação não esteja presente na publicação, o módulo procura por ISSN, e, por fim,
+por título.
+Em  seguida  todas  as  informações  da  publicação,  juntamente  com  sua
+classificação, são inseridas em uma nova tabela.
+O componente também edita algumas informações da publicação, pertinentes à
+apresentação ao público, e as codifica em formato HTML para inseri-las à tabela de
+conteúdo  do  Joomla!.  As informações são  inseridas  relacionadas  à  categoria a qual
+pertence (Livro, Revista ou Evento). Caso a categoria não exista na tabela no Joomla!, o
+componente a insere na tabela antes de relacioná-la à informação que está sendo inserida.
+Após esse processo, as informações estarão disponíveis na página correta no sítio
+do grupo de pesquisa e as publicações estarão devidamente classificadas no banco de
+dados do módulo.
+3.4. Módulo de tomada de decisão
+Este módulo é composto pelo componente de relatórios, que oferece uma interface para
+que  o  usuário  selecione  as  informações  existentes  no  sistema  de  acordo  com  sua
+necessidade. Ao  configurar os filtros desejados, o componente irá disponibilizar uma
+tabela com as classificações e quantidade de publicações para cada uma delas. Fornece
+589
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+também um gráfico de produção anual por estrato, mostrando a quantidade total de
+publicações para cada classificação por ano, representado pela Figura 6.   Além disso,
+estão disponíveis outros formatos de gráfico (barras verticais, pizza, barras horizontais e
+linear).
+Os  gráficos  foram  desenvolvidos  utilizando  a  ferramenta  Google  Charts
+[GOOGLE CHARTS API  2011]. De acordo com a opção desejada selecionada pelo
+usuário, é criado um link dinamicamente que exibe os gráficos através da API.
+Figura 6. Modelo de gráfico do módulo de tomada de decisão.
+4. Resultados e discussões
+De forma a exemplificar o funcionamento da GPWeb foi realizada a criação do sítio do
+grupo  de  pesquisa  LApIS                                                                    (Laboratório  de  Aplicações  de  Informática  em  Saúde),
+pertencente à Escola de Artes, Ciências e Humanidades da USP.
+Para criar o sítio do grupo, utilizou-se o sítio base já existente no servidor e o
+módulo de criação automatizada do sítio. Em seguida foi inserido o nome do grupo de
+pesquisa: LApIS. Com isso, o sistema realizou os processos explicados anteriormente
+para  executar  uma  nova  instalação  do  Joomla!  com  os  dados  do  grupo  LApIS,
+disponibilizando, assim, um sítio para o grupo de pesquisa, bastando acessá-lo para dar
+continuidade aos processos (Figura 7).
+Figura 7. Gráfico de Estrato com Quantidade x Ano.
+Com o sítio do grupo de pesquisa já criado, foi executado o módulo de inserção
+de pesquisadores e as informações dos pesquisadores do grupo foram nele inseridas. Os
+nomes e números de registro dos pesquisadores são registrados na tabela do banco de
+590
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+dados pertinente para que sejam utilizados como parâmetros para pesquisa no módulo de
+tomada de decisão.
+Para que seja possível incluir as informações do Qualis no sistema, primeiramente
+é necessário obter a planilha de dados oferecida no sítio da CAPES. Para isso basta
+selecionar, no sítio da CAPES, a área de interesse e gerar o relatório. Para este caso de
+teste, a área selecionada foi “Ciência da Computação”.
+Com  o  intuito  de  obter  informações  referentes  à  qualidade  das  publicações
+futuramente, a planilha de dados do Qualis foi enviada ao servidor por meio do módulo
+de dados de produção, que, em seguida, realizou a leitura desta planilha e inseriu as
+informações nela presentes em uma tabela do banco de dados.
+Para obter os dados necessários a respeito da produção bibliográfica do grupo de
+pesquisa, foi necessário acessar a plataforma Tycho e filtrar os resultados desejados pelo
+grupo de Pesquisa. As informações foram inseridas no sistema usando-se do módulo de
+inserção de dados, realizando-se o upload de arquivos Excel.
+Para finalizar o processo, executou-se o módulo de captura de dados, que reúne
+as informações e as prepara para exibição ao usuário no sítio e no módulo de tomada de
+decisão, exibindo uma mensagem de confirmação. O módulo de captura realiza uma
+leitura dos dados de produção bibliográfica existentes no banco de dados e os agrupa em
+uma única tabela, já os classificando de acordo com as informações do Qualis.
+Com isso as informações a respeito das publicações científicas do grupo já foram
+automaticamente disponibilizadas para os usuários na devida página do sítio (Figura 7).
+Por  fim,  é  possível visualizar  gráficos  que  analisam a  quantidade  de  estrato
+segundo alguns filtros utilizados para realizar a consulta. Os filtros disponibilizados para
+realizar  esta consulta  são:  Pesquisador,  Estrato  (Intervalo)  e Ano  (Intervalo). Desta
+forma, pode-se pesquisar a produção de um determinado pesquisador  (ou de todos),
+entre um determinado intervalo de estratos (ou de todos) e ainda pelo intervalo de ano
+de publicação. Como exemplo, foram selecionados todos os pesquisadores e todos os
+estratos do ano de 2000 até o ano de 2011. Após a inserção de informações desejadas
+nos filtros, o sistema disponibiliza ao usuário cinco opções diferentes de gráficos.  A
+Figura  8 mostra o resultado o gráfico de quantidade de publicações no período nos
+diferentes estratos. Na Figura 9 esses dados são mostrados em formato de gráfico de
+linhas.
+Figura 8. Gráfico de Estrato com Quantidade x Ano.
+591
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Figura 9. Gráfico linear.
+Há também duas opções de gráficos de barras: o gráfico de barras horizontais e o
+gráfico de barras verticais, mostrados nas Figuras 10 e 11, respectivamente. Essas duas
+opções foram disponibilizadas para atender diferentes necessidades de visualização.
+Figura 11. Gráfico de barras verticais.
+Figura 10. Gráfico de barras
+horizontais.
+O gráfico  no formato de pizza fornece uma visão quantitativa das produções
+bibliográficas de acordo com seus estratos, no período considerado (Figura 12).
+Figura 12. Gráfico de pizza.
+Com essas tecnologias agregadas ao Joomla!, o resultado final se apresentou
+como um produto de fácil manuseio e com fornecimento de informações importantes
+para se realizar a tomada de decisão, oferecendo diversas opções de visualização.
+O  desenvolvimento  do  projeto  visou  também  durante  todo  o  tempo  a
+simplicidade de instalação, deixando os módulos formados por componentes facilmente
+instaláveis no Joomla!.
+592
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+5. Conclusão
+Neste trabalho foi apresentada a ferramenta GPWeb cujo objetivo é permitir a criação
+automatizada de sítios de grupos de pesquisa para auxílio à tomada de decisão utilizando
+dados provenientes da plataforma Lattes.
+A ferramenta auxilia os gestores dos grupos de pesquisa a publicar informações
+na Internet, a administrar informações importantes para o grupo e a analisar a qualidade
+das publicações a partir da classificação proposta pelo sistema Qualis da CAPES.   Além
+disso,  as  páginas  Web  geradas  pela  GPWeb  podem  ser  customizadas  devido  às
+características da plataforma Joomla!, tanto no que diz respeito ao design quanto às
+funcionalidades disponíveis.
+Quanto às limitações do projeto, o principal ponto a salientar é o fato de ainda
+existir grande quantidade de trabalho manual a ser exercido pelo gestor do grupo de
+pesquisa.  Um  exemplo  disso  é  a  necessidade  de  acesso  à  ferramenta  Tycho,  para
+obtenção  das planilhas com dados das produções bibliográficas para inserir no sítio,
+assim como ocorre com os dados do sistema Qualis.
+Como trabalhos futuros estão previstas melhorias na interface da GPWeb a fim
+de oferecer  mais opções de edição  dos dados e alternativas ao  realizar  inserção  de
+arquivos  Excel,  além  de  gráficos  mais  elaborados,  de  acordo  com  as  necessidades
+apresentadas pelos grupos de pesquisa durante a utilização do sistema.
+Agradecimentos
+Os  autores  agradecem  ao  Conselho  Nacional  de  Desenvolvimento  Científico  e
+Tecnológico  (CNPq)  - Processo  559931/2010-7, à Fundação de Amparo à Pesquisa
+do   Estado   de   São   Paulo                                                               (Fapesp)   -   Processo                                  2010/15691-0,   ao   Instituto
+Nacional   de   Ciência   e   Tecnologia                                                                -   Medicina   Assistida   por   Computação
+Científica (INCT-MACC) e à Pró-reitoria de Pesquisa da USP, pelo apoio financeiro.
+Referências
+Balancieri, R. et al. (2005), “A análise de redes de colaboração científica sob as novas
+tecnologias de informação e comunicação: um estudo na Plataforma Lattes”, Revista
+Ciência da Informação, Brasília, v.34, p. 64-77.
+CAPES  (2012)  “CAPES  -  Coordenação  de  Aperfeiçoamento  de  Pessoal  de  Nível
+Superior”, http://www.capes.gov.br/ Janeiro (Acessado em: 08 de Janeiro de 2012).
+CMS MATRIX (2012) “Compare Content Management Systems - cmsmatrix.org - The
+Content Management Comparison Tool”, http://cmsmatrix.org/matrix/cms-matrix#
+Maio (Acessado em: 26 de Maio de 2012).
+Fernandes, L. A. (2005), “Melhoria de Desempenho em Gerenciador de Conteúdo Web
+usando XML e Banco de Dados”, Salvador: Universidade Federal da Bahia.
+GOOGLE   CHARTS   API                                                                        (2011)     “Google   Chart   Tools                       -   Google   Code”,
+http://code.google.com/apis/chart/ Outubro (Acessado em: 24 de Outubro de 2011).
+JOOMLA!.ORG (2011) “Joomla!”, http://www.Joomla!.org/ Março  (Acessado em: 12
+de Março de 2011).
+593
+
+
+
+
+VIII Simpósio Brasileiro de Sistemas de Informação (SBSI 2012)
+Trilhas Técnicas
+Mena-Chalco, J.P., Cesar-Jr, R. M.  (2009)  “scriptLattes: An open-source knowledge
+extraction  system  from  the  Lattes  platform”,  Journal  of  the  Brazilian  Computer
+Society, vol. 15, n.4, pp. 31—39.
+MICROSOFT   EXCEL                                                                          2010     (2011)                                                           “Microsoft   Excel   2010   -   Office.com”,
+http://office.microsoft.com/pt-br/excel/ Novembro (Acessado em: 10 de Novembro
+de 2011).
+MICROSOFT WINDOWS  (2011)  “O que é o Windows  7? - Microsoft Windows.”,
+http://Windows.microsoft.com/pt-BR/Windows7/products/what-is/ Maio (Acessado
+em: 25 de Maio de 2011).
+Moratelli, A. S.; Valdameri, A.R. (2002), “Sistema de gerenciamento de conteúdo para
+ambiente WEB”, Anais do XI Seminário de Computação, Blumenau, v. 1, n. 1, p. 53-
+64.
+PHP.NET  (2011)  “PHP: Hypertext Preprocessor”,  http://br.php.net/ Maio  (Acessado
+em: 30 de Maio de 2011).
+PLATAFORMA  LATTES  (2011)  “Plataforma  Lattes”,  http://Lattes.cnpq.br/  Março
+(Acessado em: 12 de Março de 2011).
+QUALIS PERIÓDICOS (2012) “WebQualis”, http://www.capes.gov.br/avaliacao/qualis/
+Janeiro (Acessado em: 08 de Janeiro de 2012).
+REGISTRO.BR  (2011)  “Registro.br”, http://registro.br/ Março  (Acessado em:  12 de
+Março de 2011).
+SCRIPTLATTES  (2011)  “scriptLattes”,  http://scriptlattes.sourceforge.net/  Fevereiro
+(Acessado em: 09 de Fevereiro de 2011).
+Silva, E. E. (2010), “Estudo e Desenvolvimento de Ferramentas para a Análise de Redes
+Sociais de Pesquisa”, São Paulo: EACH-USP, p. 48.
+TYCHO (2011) “Tycho”, https://sistemas.usp.br/tycho/start.jsp/ Outubro (Acessado em:
+24 de Outubro de 2011).
+WEBQUALIS                                                                                  (2011)   “WebQualis”,   http://qualis.capes.gov.br/webqualis/   Outubro
+(Acessado em: 24 de Outubro de 2011).
+Yamaoka  E.  J.  (2006),                                                                            “O  uso  da  Internet.  Métodos  e  técnicas  de  pesquisa  em
+comunicação”, v.2, p. 146-162.
+594
+
+
+
+
+

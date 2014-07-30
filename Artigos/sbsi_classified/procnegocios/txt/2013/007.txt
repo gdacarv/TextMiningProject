@@ -1,0 +1,534 @@
+﻿Plataforma PGuide:
+um modelo de recomendaç ão para usu ários m óveis
+Alezy Oliveira Lima1,2, Ricardo Alexandre Afonso2, Thiago Bruno Melo de Sales2
+1Centro de Informática - Universidade Federal de Pernambuco (UFPE)
+Av. Jornalista Anibal Fernandes, Cidade Universitária - 50740-560 - Recife - PE - Brasil
+2Campus Arapiraca - Universidade Federal de Alagoas (UFAL)
+Av. Manoel Severino Barbosa, Bom Sucesso - 57309-005 - Arapiraca - AL - Brasil
+aol@cin.ufpe.br,  {afonso055,thiagobrunoms}@gmail.com
+Abstract. Mobile devices as smartphones and tablet PC have become an im-
+portant platform for communication and information access.  This implies the
+emergence of new forms of interaction with these technologies, which include
+the use of mobile devices as a resource in support of decision making.  Take
+into account the user context while the same search information to maximize
+their level of satisfaction with the system since the information space/time may
+provide further details on the process of information filtering. In this perspec-
+tive, this works presents a recommender system able to customize products and
+services based on geographic location, as well as in estimated consumption pat-
+terns of mobile users.
+Resumo. Dispositivos m óveis tais como smartphones e tablets PC têm se tor-
+nado uma importante plataforma de comunicaç ão e acesso à informaç ão. Isto
+implica no surgimento de novas formas de interaç ão com estas tecnologias,
+que incluem a utilizaç ão de dispositivos m óveis como recurso no apoio                      à
+tomada de decis ão. Considerar o contexto do usu ário enquanto o mesmo busca
+informaç ões deve maximizar seu grau de satisfaç ão junto ao sistema, uma vez
+que a informaç ão espaço/tempo pode proporcionar maiores detalhes nos pro-
+cessos de filtragem de informaç ão. Nesta perspectiva, é apresentado um sistema
+de recomendaç ão capaz de personalizar ofertas de produtos e serviços com base
+na localizaç ão geogr áfica, bem como nas estimativas de padr ões de consumo
+dos usu ários m óveis.
+1.                                                                                           Introduç ão
+Dispositivos como smartphones e tablets estão mais presentes no cotidiano das pessoas do
+que há poucos anos atrás [Ricci 2010] [Lima et al. 2012]. Isso é reflexo da clara migração
+das atividades antes realizadas nos computadores de mesa para a computação m óvel e per-
+vasiva [Weiser 1991], na qual o acesso à informação ocorre em qualquer lugar, a qualquer
+momento. A ampla expansão da computação m óvel é influenciada por diversos fatores,
+dentre eles destacam-se os avanços das tecnologias de redes sem fio, tais como Wi-Fi e
+3G, o barateamento na produção dos dispositivos m óveis, o crescente n úmero de novos
+aplicativos voltados para plataformas m óveis e, principalmente, a acirrada concorrência
+entre as fabricantes de dispositivos m óveis.
+Com efeito, várias aplicaç ões buscam proporcionar serviços com o objetivo de
+facilitar atividades regulares ou mesmo proporcionar conforto aos seus usuários. Para o
+73
+
+
+
+
+fornecimento de serviços e informaç ões cada vez mais relevantes, várias técnicas baseadas
+em inteligência artificial podem ser empregadas. Dentre elas, destacam-se os Sistemas de
+Recomendação [Ricci et al. 2011], que são constituídos de técnicas que têm o objetivo de
+fornecer sugest ões de itens que possam ser do interesse do usuário. Estas técnicas podem
+ser incorporadas aos mais variados tipos de sistemas de informação, em diversas platafor-
+mas, no intuito de oferecer produtos e serviços com maior precisão e probabilidade de
+aquisição por parte do usuário.
+Os sistemas de recomendação têm sido adotados em várias ferramentas de soft-
+ware com o objetivo de incrementar seus serviços. Dentre elas destacam-se as ferramentas
+voltadas para o comércio eletr ônico. Naturalmente é possível observar em lojas virtuais
+a sugestão de itens que estão correlacionados aos itens visitados pelo usuário, e isso tem
+impulsionado o sucesso do comércio eletr ônico na era da informação.
+As tecnologias de computação m óvel, associadas aos sistemas de recomendação,
+podem potencializar ainda mais a qualidade dos serviços no comércio eletr ônico, uma
+vez que experiências com novas grandezas associadas (por exemplo, o espaço e o tempo)
+podem beneficiar outros cenários e indicar resultados cada vez mais satisfat órios para o
+consumidor.
+1.1. Problem ática e objetivos
+Dificuldades podem ser  encontradas quando se deseja comprar  algum produto  (ali-
+mentício, vestuário etc) e não é possível determinar a melhor estratégia de compra com
+base em parâmetros como: qual loja oferece o melhor preço, melhor forma de pagamento
+e melhores promoç ões; ou qual loja está mais pr óxima a sua localização atual, buscando
+considerar custos como deslocamento e tempo.  Essa tomada de decisão pode se tornar
+ainda mais complexa quando tais parâmetros devem ser combinados.  Como exemplo,
+considere duas lojas A e B que disponibilizam um mesmo produto “X”. A loja “A” ofer-
+ece preços promocionais para este produto, embora os custos do deslocamento de um
+usuário localizado em um ponto “P” até a loja “A” possam ser superiores em relação à
+economia alcançada com as promoç ões. Desta forma, talvez seja melhor recomendá-lo a
+loja “B”.
+Ou seja, como automatizar a tomada de decisão de um usuário m óvel que deseja
+comprar uma unidade ou um conjunto de produtos, porém, precisa lidar com uma grande
+quantidade de lojas e opç ões de produtos disponíveis relativamente pr óximas a ele?
+Ainda, como realizar uma análise automatizada levando-se em consideração grandezas
+e critérios distintos entre si, tais como preço e distância?
+Dessa forma, este trabalho objetiva desenvolver um sistema de recomendação
+baseado em técnicas de inteligência artificial que permita a realização de análises de ofer-
+tas de produtos e serviços, no intuito de oferecer ao usuário as melhores indicaç ões de
+produtos e serviços.  Isto será possível graças à análise individualizada do contexto no
+qual o mesmo está inserido, estimativa de perfil e padr ões de consumo. Com isto, espera-
+se obter:
+• recomendação individualizada com o objetivo de auxiliar o consumidor que usa
+aplicaç ões m óveis no momento da tomada de decisão;
+• descoberta automática de conhecimento através da análise do comportamento de
+usuários m óveis;
+• exposição de an úncios com uma maior probabilidade de aquisição com base na
+estimativa de padr ões de consumo de cada usuário;
+74
+
+
+
+
+• obtenção  de  um  melhor  custo-benefício  para  os  anunciantes,  visto  que  seus
+an úncios atingirão um p úblico-alvo que tende a ser mais específico.
+O  trabalho  está  estruturado  da  seguinte  maneira:   na  Seção                                       2                                                               é  apresentada  a
+fundamentação te órica, delineando algumas técnicas e ferramentas utilizadas no desen-
+volvimento desse projeto. Na Seção 3 é apresentada uma revisão da bibliografia, onde são
+abordados alguns trabalhos relacionados a este projeto. Em seguida, está apresentada na
+Seção 4 a ferramenta proposta, através de seus diagramas, arquitetura, modelos e algorit-
+mos de recomendação. Depois, na Seção 5 é apresentado um exemplo de aplicação para
+as ferramentas propostas. Finalmente, na Seção 6 são abordadas as consideraç ões finais e
+a continuidade do projeto através de seus trabalhos futuros.
+2. Fundamentaç ão Te órica
+2.1. Sistemas de Recomendaç ão
+Sistemas  de  Recomendação                                                                               (RS)                                                            [Resnick and Varian 1997]  são  ferramentas  e
+                                                                                                         técnicas  de  software  que  fornecem  sugest ões  de  itens1   que  podem  ser                                  úteis  ao
+usuário [Ricci et al. 2011].  Estas sugest ões podem estar relacionadas a vários proces-
+sos de tomada de decisão, como a escolha de uma m úsica, de um livro, de quais notícias
+podem ser relevantes ou quais itens que podem ser comprados em uma loja eletr ônica.
+Os RS foram desenvolvidos inicialmente a partir de situaç ões típicas do cotidi-
+ano:  as pessoas muitas vezes dependem de indicaç ões fornecidas por outras pessoas
+em processos de tomada de decisão  [Ricci et al. 2011].  O principal papel de RS no
+n úcleo de um sistema computacional é prever a avaliação subjetiva que um usuário dará
+a um item no sistema, orientando e ajudando o mesmo localizar itens que ele poderá
+gostar [Schafer et al. 2001].  Esta previsão  é calculada através de uma série de mode-
+los que tenham uma característica em comum, isto é, explorando avaliaç ões fornecidas
+pelo usuário para itens anteriormente visualizados ou adquiridos, ou mesmo seus simi-
+lares [Ricci 2010].
+Para atingir estes objetivos, uma vasta variedade de técnicas baseadas em RS
+foram propostas.  Estas concentram-se em quatro principais:  a filtragem colaborativa,
+a filtragem baseada em conte údo, a filtragem baseada em conhecimento e a filtragem
+híbrida [Burke 2007].
+Provavelmente  a  mais  popular  e  consolidada  [Burke 2002]  entre  as  técnicas
+baseadas em RS, a filtragem colaborativa, em suas implementaç ões mais simples, observa
+correlaç ões entre usuários e suas avaliaç ões sobre itens em um sistema de informação.
+O objetivo  é prever a classificação de itens relevantes para um indivíduo baseando-se
+nas classificaç ões fornecidas por outros indivíduos de características ou padr ões simi-
+lares [Ricci 2010].
+Na filtragem baseada em conte údo,  os itens que serão recomendados para o
+usuário são selecionados através de suas características associadas (conjuntos de docu-
+mentos e/ou descriç ões) [Lops et al. 2011].  Um RS baseado em conte údo aprende os
+interesses de um usuário com base em características presentes em itens que o usuário
+tenha classificado anteriormente. Através deste aprendizado, é estabelecido um modelo
+ou perfil de interesses deste usuário para então realizar os processos de recomendação.
+1 O termo “item” é geralmente utilizado para caracterizar o objeto que o sistema recomenda ao usuário.
+75
+
+
+
+
+Ainda, existe a técnica de filtragem baseada em conhecimento. Esta técnica per-
+mite o cálculo e recomendação de itens baseando-se no uso de estruturas de conhe-
+cimento que realizam inferências acerca das necessidades explícitas e preferências do
+usuário [Ricci 2010] [Burke 2007].
+Por fim,  as técnicas de filtragem híbrida são compostas pela combinação de
+duas ou mais técnicas com o objetivo de conquistar melhor performance, minimizando
+limitaç ões de cada abordagem [Burke 2002]. Nestes casos onde são empregadas técnicas
+híbridas, normalmente a filtragem colaborativa é combinada com alguma outra técnica
+para se atingir objetivos específicos.
+2.2. Computaç ão M óvel
+O  crescimento  extraordinário  que  tem  ocorrido  nos                                       últimos  anos  nas   áreas  de
+comunicação,  redes  locais  e  serviços  via  satélite  permite  que  informaç ões  e  re-
+cursos  possam  ser  acessados  e  utilizados  em  qualquer  lugar,  em  qualquer  mo-
+mento  [Mateus and Loureiro 2005].   A maior parte dos dispositivos modernos tem a
+capacidade de se comunicar com outros dispositivos, fixos e m óveis, na rede.  A este
+paradigma de computação, onde os dispositivos computacionais não necessariamente pre-
+cisam ter uma posição fixa na rede, dá-se o nome de Computação M óvel.
+A evolução da tecnologia favoreceu a popularização dos smartphones. Contudo,
+os sistemas operacionais proprietários ainda geravam uma série de dificuldades no desen-
+volvimento de aplicaç ões para diferentes dispositivos [Euzébio 2011]. Por esta razão, um
+grupo de empresas lideradas pelo Google formou a Open Handset Alliance. Desta aliança
+surgiu o desenvolvimento do Android, um sistema operacional de c ódigo aberto voltado
+para dispositivos m óveis.
+Atualmente na liderança entre as plataformas m óveis mais utilizadas no mercado,
+com cerca de 44,2% do mercado norte-americano (conforme visto na Figura 1) e com
+aproximadamente 89 milh ões de dispositivos vendidos (59% do total comercializado)
+somente no primeiro trimestre de 2012 [IDC 2012], a plataforma Android pode ser con-
+siderada a mais popular entre os usuários m óveis no mundo.
+ovel. Fonte: [Nielsen Company 2011].
+76
+
+
+
+
+3. Trabalhos Relacionados
+Em  RS,  percebe-se  que  boa  parte  dos  esforços  são  dedicados  no  ramo  do
+comércio eletr ônico  (ou e-commerce) e redes sociais.   O primeiro exemplo encon-
+trado na  literatura consultada                                                               é  o  trabalho intitulado                      “Recommender Systems  in E-
+Commerce”  [Schafer et al. 1999],  onde  é  realizada uma análise da evolução da im-
+portância dos RS no e-commerce, atribuindo aos RS a responsabilidade pelo aumento
+na quantidade de vendas realizadas pelos sistemas.  Para os autores, os RS são parte da
+personalização de um site, pois elas adaptam o mesmo às características pessoais de cada
+consumidor.
+Em  2002, no trabalho  “Travel Recommender Systems”,  [Ricci 2002] faz uma
+análise do uso de sistemas de recomendação em aplicaç ões voltadas para viagens e tu-
+rismo.  Nele, o autor descreve que os RS emergiram inicialmente como ferramentas de
+filtragem de itens inapropriados para as necessidades dos usuários.  Entretanto, com o
+tempo as pesquisas e os novos prot ótipos lançados mostraram que os papéis e as funç ões
+dos RS podem ser bem variados.
+Ainda  em  2002,  em  “Hybrid  Recommender  Systems:   Surveys  and  Experi-
+ments”,  [Burke 2002] realizou uma análise do cenário dos RS e prop ôs uma técnica
+híbrida que combinava aspectos da filtragem baseada em conhecimento e filtragem co-
+laborativa para o desenvolvimento do EntreeC, um sistema de recomendação de restau-
+rantes baseado no Entree.  Alguns anos depois, em “Hybrid Web Recommender Sys-
+tems”, [Burke 2007] traz uma nova análise do cenário de RS em técnicas híbridas voltadas
+para a Web. O objetivo é demonstrar que a combinação entre diferentes técnicas de fil-
+tragem é capaz de minimizar limitaç ões que as abordagens trazem individualmente.
+Em 2004, [Penha 2004] realizou um estudo intitulado “Inteligência Artificial em
+Dispositivos M óveis:  Estado da arte”, onde  é abordado um levantamento hist órico e
+evolutivo acerca da Inteligência Artificial e dos dispositivos m óveis, demonstrando como
+a união entre estas duas grandezas pode potencializar as funcionalidades dos dispositivos
+e a experiênica do usuário.
+Já a proposta de [Goren-Bar and Kuflik 2004] parece ser bastante interessante. No
+trabalho “Don’t Miss-R - Recommending Restaurants through an Adaptive Mobile Sys-
+tem”, os autores realizam um experimento com o objetivo de obter uma comparação entre
+dois sistemas de recomendação para usuários m óveis, um adaptativo e um não adaptativo,
+com o prop ósito de avaliar as preferências dos usuários com respeito à adaptatividade do
+sistema.
+Mais  recentemente,                                                                           [Mack 2010]  realiza  um  estudo  intitulado   “Sistema  de
+recomendaç ão baseado na localizaç ão e perfil utilizando a plataforma android”, onde
+são  destacados  aspectos  acerca  de  serviços  baseados  em  localização  e  sistemas  de
+recomendação.  Ao fim,  é proposta uma aplicação de sistema de recomendação com
+técnicas de filtragem híbridas que seja capaz de permitir que o usuário, através de seu
+smartphone, possa descobrir a localização de um estabelecimento pr óximo que o mesmo
+deseja visitar.
+Algumas aplicaç ões otimizam seus serviços com base em informaç ões acerca do
+contexto onde o usuário está inserido e até mesmo da estimativa de seu perfil, com o obje-
+tivo de auxiliar em seus processos de tomada de decisão. Exemplos a serem considerados
+são o serviço de pesquisa e visualização do Google Maps [Google Inc. 2005], que fornece
+opç ões de rotas rodoviárias otimizadas para o destino desejado pelo indivíduo.
+77
+
+
+
+
+Na literatura discutida, poucos trabalhos se assemelham aos objetivos desta pro-
+posta. Dentre eles, é importante destacar [Burke 2002], que desenvolveu um RS Web para
+sugerir restaurantes baseando-se em preferências coletadas explicitamente do usuário.
+Além deste, [Goren-Bar and Kuflik 2004] desenvolveu um RS adaptativo também voltado
+para restaurantes, mas relacionado à recomendação de itens de cardápio.  Entretanto, a
+maior contribuição do trabalho foi a realização de uma análise da melhor estratégia de
+RS, entre a adaptativa e a não adaptativa.
+Por fim, a proposta de [Mack 2010] foi a que se apresentou mais pr óxima da pro-
+posta desta pesquisa. Contudo, a proposta representa apenas um modelo que recomenda
+estabelecimentos de acordo com os critérios de localização e reputação. Não há avaliação
+de itens específicos destes estabelecimentos, que  é onde concentra-se o objetivo desta
+pesquisa.  O sistema proposto também não realiza estimativas de perfil ou padr ões de
+consumo dos usuários.
+O fato de não ser possível traçar um perfil acerca do usuário m óvel também incide
+no impedimento da personalização de ofertas através de an úncios personalizados. Estes,
+se realizados adequadamente, são importantes na perspectiva do crescimento do nível de
+satisfação do usuário. Também podem possibilitar, em momentos futuros, a monetização
+do sistema com um melhor custo-benefício, uma vez que investidores poderiam anunciar
+seus produtos e serviços de maneira direta para usuários específicos.
+4. Plataforma PGuide
+PGuide                                                                                         é  uma  plataforma  que  oferece  um  serviço  de  recomendação  baseado  em
+informaç ões sobre o usuário e o contexto onde o mesmo está inserido.  Seu objetivo
+principal é indicar sugest ões de lugares e ofertas para itens que o usuário deseje com o
+melhor custo-benefício, oferecendo suporte para a tomada de decisão durante o processo
+de compras.
+Sua funcionalidade primordial reside na possibilidade de realização de consultas
+e de recomendaç ões de estabelecimentos comerciais que tenham disponíveis os itens que
+o indivíduo deseja. Ademais, o sistema permite a busca por ofertas de itens que são do
+interesse do usuário.
+Para avaliar e classificar os estabelecimentos que possuem estes itens de acordo
+com o nível de interesse do usuário, a plataforma utiliza três grandezas básicas: preço
+do item, reputação obtida pelos estabelecimentos comerciais que o possuem através da
+avaliação de outros usuários, e distância para estes estabelecimentos. Já para a sugestão
+de ofertas, é necessária a análise do perfil do usuário para compreender quais itens são do
+interesse e quais não são. Para tal, o sistema conta com o acesso ao hist órico de consultas
+do usuário.
+Para ser capaz de executar estas funcionalidades, foi necessário definir uma ar-
+quitetura de software cliente-servidor, de modo que o cliente é representado pela aplicação
+m óvel, executada em dispositivos tais como smartphones ou tablets PC e denominada
+“PGuide Mobile”,  e o servidor  é  representado pela aplicação denominada  “PGuide
+Server”.
+Na arquitetura proposta, ilustrada na Figura 2, os usuários m óveis, através do
+PGuide Mobile, utilizam os recursos de rede disponíveis para acessar o servidor PGuide
+Server. Este, por sua vez, acessa suas bases de dados, que possuem informaç ões acerca de
+itens que são de interesse do usuário, de reputação de estabelecimentos e sua localização
+78
+
+
+
+
+geográfica, perfis de consumo de clientes, dentre outros.
+Figura 2. Arquitetura da Plataforma PGuide.
+Em posse destes dados, os algoritmos de recomendação são capazes de executar
+cálculos para a realização de recomendaç ões e retornar para o usuário as informaç ões da
+forma que ele espera: uma lista ordenada com os lugares mais apropriados para adquirir
+os itens que ele escolheu, cada lugar associado a um índice de compatibilidade em relação
+aos interesses do usuário.
+A aplicação m óvel, em si, representa apenas um terminal de comunicação entre
+o usuário e o servidor (PGuide Server).  Quando o usuário entra com dados ou dispara
+eventos na aplicação, a aplicação m óvel envia solicitaç ões para o servidor, que retorna o
+que lhe é solicitado: realização de autenticaç ões, dados, listas de itens, entre outros. Esta
+comunicação é possível através da implementação serviços web (web services), que são
+implementados utilizando o protocolo JSON (JavaScript Object Notation).
+A aplicação PGuide Server traz a principal contribuição deste trabalho.  Ela ar-
+mazena as fontes de dados utilizadas por toda a plataforma e executa o processamento
+dos modelos que permitem a recomendação de itens para o usuário.
+Este conjunto (mobile e server) permite que a plataforma PGuide ofereça como
+solução, em seus algoritmos, a atribuição de pesos aos critérios que serão avaliados, de
+acordo com as preferências do usuário. Assim, o usuário tem a capacidade de manipular
+os pesos de cada um dos critérios de preferências com o objetivo de tornar os resultados
+cada vez mais compatíveis com seus interesses, variando de uma escala no intervalo de
+0                                                                                                (zero), que representa o menor peso, até 100 (cem), que representa o maior peso.  A
+representação deste valor é denominada “índice de relevância”.
+Apesar de preço,  distância e reputação serem grandezas distintas entre si,  a
+classificação delas através de pesos possibilitará  que elas associem-se entre si,  con-
+vergindo para uma nova grandeza: a pontuação de compatibilidade que o item tem para
+com o usuário.  Esta é calculada através da soma de três cálculos: pontuação de prox-
+imidade, pontuação de preço e pontuação por reputação.  O cálculo destas pontuaç ões
+obedece aos modelos apresentados a seguir.
+A F órmula 1 apresenta o cálculo de pontuaç ão de proximidade (Pproximidade). As
+variáveis dmin e dmax representam, respectivamente, os valores mínimo e máximo utiliza-
+79
+
+
+
+
+dos como referência para o cálculo da pontuação referente à proximidade. Estes valores
+podem ser adquiridos de duas maneiras: a primeira é através do registro explícito infor-
+mado pelo usuário, o que requer uma filtragem dos itens que obedecerão a este critério;
+a segunda é através de uma análise acerca dos itens que serão avaliados, onde o valor
+da distância do item que está localizado mais pr óximo ao usuário, assim como o mais
+distante, serão utilizados como referências nestes parâmetros. As variáveis d e ir  corre-
+spondem, respectivamente, à distância entre o usuário e o estabelecimento que possui o
+item a ser avaliado e o índice de relevância para o cálculo da pontuação de proximidade.
+￿100 − ((d−dmin )×100)                                                                        ￿ ir
+dmax −dmin
+Pproximidade  =                                                                               (1)
+100
+O modelo realiza o cálculo da distância entre a localização atual do usuário m óvel
+e o estabelecimento que possui o item a ser computado e, a partir deste resultado, calcula
+a pontuação através de uma regra de três simples que analisa o quão pr óximo dos valores
+mínimo e máximo a distância para o item analisado está. A este valor de pontuação, ao
+fim do algoritmo, aplica-se o valor do índice de relevância para este critério, de acordo
+com as preferências do usuário.
+Já o modelo para o cálculo de pontuaç ão de preço (Ppreco) é idêntico ao da prox-
+imidade, como descrita através da F órmula 2, onde a variável p representa o valor (preço)
+do item a ser analisado e as variáveis pmin e pmax representam, respectivamente, os valores
+mínimo e máximo para o critério “preço”.
+￿100 − ((p−pmin )×100)                                                                        ￿ ir
+pmax −pmin
+Ppreco  =                                                                                     (2)
+100
+Pode-se observar que, nos dois algoritmos apresentados, o valor da pontuação é
+resultante da subtração 100 - X, onde X é o valor do cálculo da regra de três que envolve
+os valores máximos e mínimos para os critérios de distância e preço.  Esta subtração
+justifica-se da seguinte forma: para os dois critérios (distância e preço), os valores que
+interessam ao usuário são os menores possíveis, ou seja, quanto mais baixo, mais  útil.
+Dessa forma, os valores da proporção entre o item e os valores mínimo e máximo são
+dados numa escala que varia de 0 (mais barato ou mais pr óximo) a 100% (mais caro ou
+mais distante).  Por isto, há a necessidade de ser realizada uma inversão destes valores.
+Para exemplificar, um item que possui o preço de R$20 numa escala onde o preço mínimo
+encontrado é R$10 e o máximo é R$50 atingirá uma pontuação de 25 pontos numa escala
+de 0 a 100 pontos. Portanto, com a inversão, percebe-se que a pontuação para este item
+será de 100 - 25 = 75% em relação aos outros itens.
+O modelo para o cálculo de pontuaç ão de reputaç ão (Preputacao) é apresentado
+na F órmula 3. Observa-se que o mesmo é similar ao modelo de cálculo da pontuação do
+preço, mas não segue a mesma linha dos algoritmos anteriores, onde o valor da pontuação
+é calculado com base na inversão do resultado. Isto ocorre porque o valor da reputação é
+proporcional à relação entre os valores mínimo e máximo. Ou seja, quanto maior o valor
+de reputação, mais indicado o item será para o usuário.  Por isto, a inversão não se faz
+necessária nesta operação.
+80
+
+
+
+
+￿
+(r−rmin )×100
+￿ ir
+rmax −rmin
+Preputacao  =                                                                                   (3)
+100
+Para a realização da análise de uma variedade de ofertas de um item que é do in-
+teresse de um usuário, é estabelecida uma lista de estabelecimentos que possuem o item a
+ser avaliado. Para cada item desta lista, são calculadas as pontuaç ões de distância, preço e
+reputação, onde a soma destas pontuaç ões constitui a pontuação final do item, conforme
+mostrado na F órmula 4. Ao fim, calculada a pontuação de cada estabelecimento, é elab-
+orada uma lista ordenada de forma decrescente de acordo com a pontuação final (Pfinal )
+de cada item.  Esta é calculada de forma proporcional em relação à escala que varia de
+0 a 100%, tomando-se como limite máximo para o intervalo (Pmax) o item que obteve
+a maior pontuação, na forma que apresenta a F órmula 5. Assim, as maiores pontuaç ões
+obtidas serão recomendadas com mais alto grau de compatibilidade com o usuário.
+Ptotal  = Pproximidade  + Ppreco  + Preputacao                                                  (4)
+Pfinal  = 100 × Ptotal                                                                          (5)
+Pmax
+Para a avaliação de uma lista de itens o processo é um pouco mais complexo. Foi
+admitido que, para que um estabelecimento seja avaliado,  é necessário que ele possua
+todos os itens que foram adicionados à lista de interesses do usuário. Com isto, o critério
+preço agora não é mais avaliado em sua singularidade, mas em conjunto (somat ório) com
+todos os outros itens e quantidades desejadas.  Já os critérios distância e reputação são
+calculados da mesma forma que anteriormente.
+￿
+spreco  =                                                                                       (p(i) × q(i))   (6)
+i=0
+Seja n uma determinada quantidade de itens em uma lista de interesse do usuário,
+p(i) e q(i) o preço do item i e a quantidade de unidades desejada deste mesmo item,
+respectivamente. O cálculo do preço total (spreco) se dá na forma apresentada na F órmula
+6. de itens de interesse do mesmo.
+5. Exemplo de aplicaç ão
+Para o desenvolvimento da aplicação m óvel PGuide foi escolhida a plataforma Android.
+Foram utilizadas duas instâncias para os testes durante o desenvolvimento: uma l ógica,
+através do emulador disponibilizado com a SDK do Android; e uma física, representada
+pelo dispositivo Samsung Galaxy Nexus.  Já a aplicação servidor foi desenvolvida uti-
+lizando a linguagem de programação Python, através do framework Django.
+A comunicação com o servidor é realizada através do m ódulo WebService, que
+utiliza o protocolo JSON. Seus métodos recebem as solicitaç ões da aplicação e enviam
+81
+
+
+
+
+mensagens ao servidor.  Este analisa os dados recebidos na solicitação, realiza os pro-
+cedimentos necessários (sejam de consulta, de registro ou de processamento) e retorna os
+dados através de pacotes JSON.
+Entretanto, os dados retornados no formato JSON não são  úteis à aplicação.                                 E
+necessário realizar um processo de interpretação destes dados.  Este papel é executado
+pelo m ódulo Parser, que recebe como entrada as respostas do web service e retorna no
+formato das estruturas de dados que a aplicação utiliza.
+5.1. Cen ário de uso
+Para visualizar um exemplo de aplicabilidade da plataforma PGuide, considere o cenário
+Alcool Etílico 500mL” da marca
+“Nobre”.  O mesmo está localizado na latitude -9.4154227 e longitude -36.6224096 e
+ajustou como prioridade nos critérios preço, distância e reputação o valor de 50% (ou
+seja, o usuário atribuiu o mesmo nível de prioridade para os três critérios).  Considere
+também os dados sobre a disponibilidade do referido item nos estabelecimentos relativa-
+mente pr óximos, apresentado na Tabela 1.
+Alcool Etílico Hidratado”, 500mL, marca “Nobre”.
+Estabelecimento                                                                                             Preço     Latitude    Longitude    Reputaç ão
+Unicompra                                                                                                   R$ 1,15   -9.408234   -36.631316   4.62
+Todo Dia                                                                                                    R$ 1,32   -9.409637   -36.630286   4.02
+Mercadinho Vieira                                                                                           R$ 1,51   -9.414527   -36.622379   3.52
+Ao solicitar a realização de recomendação de estabelecimentos para o item sele-
+cionado, o usuário obteve as recomendaç ões apresentadas na Figura 3 (esquerda).
+Agora considere que o usuário, não satisfeito com os resultados, realizou uma
+alteração entre os pesos dos critérios de avaliação de preço, distância e reputação para
+30%,80% e 30%, respectivamente. Assim, o critério que mais interessa ao usuário neste
+momento é uma distância mínima para se percorrer e chegar até o local desejado. Assim,
+foram observados os resultados apresentados na Figura 3 (direita).
+Por  fim,  considerando  os  resultados  satisfat órios,  o  usuário  clica  em  uma
+das  recomendaç ões  e,  automaticamente,  a  aplicação  inicia  uma  rota  do  Google
+Maps [Google Inc. 2005] com o percurso entre sua localização atual e a localização do
+estabelecimento escolhido.  Isto é possível graças à integração através de uma chamada
+externa ao aplicativo Google Maps, que automatiza todo o procedimento de roteamento
+rodoviário, auxiliando o usuário a chegar até o seu destino.
+6. Consideraç ões Finais
+Neste trabalho foi proposta a plataforma PGuide, ferramenta que utiliza técnicas de sis-
+temas de recomendação para fornecer serviços voltados para o comércio eletr ônico m óvel.
+O mesmo foi importante por trazer uma análise sobre o estado da arte em técnicas de in-
+teligência artificial, em especial as técnicas de sistemas de recomendação tradicionais e
+voltadas para serviços em dispositivos m óveis.
+2 Na plataforma PGuide, o valor da reputação de um estabelecimento varia entre 0 (zero) e 5 (cinco).
+Quando apresentado nas avaliaç ões (recomendaç ões) ao usuário, é representada numa escala que varia de 0
+(zero) a 10 (dez).
+82
+
+
+
+
+Figura 3.                                                                                 ao mesmo peso para todos os crit ´erios de
+erios com pesos diferentes.
+A  principal  contribuição  deste  projeto  reside  nos  modelos  e  algoritmos  de
+recomendação de itens ao usuário que levam em consideração, simultaneamente, diver-
+sas grandezas que são do interesse do consumidor no comércio eletr ônico, mesclando-as
+em um único parâmetro de valor percentual, com a finalidade de facilitar o processo de
+decisão do usuário.
+Além disto, o exemplo de aplicação implementa prot ótipos da plataforma PGuide
+em duas arquiteturas: PGuide Mobile (aplicação para consumidores m óveis) e PGuide
+Server (aplicação servidor que oferece o serviço).
+Os resultados da pesquisa apresentada representam a concepção e introdução da
+plataforma PGuide. Assim, para a evolução deste estudo, muitas são as possibilidades de
+continuidade, expansão e implantação.  Possíveis oportunidades de pesquisa podem ser
+vislumbradas, tais como:
+• Realização  da  análise  do  desempenho  dos  algoritmos  de  recomendação  e
+investigação de outras quest ões, tais como escalabilidade e disponibilidade, prin-
+cipalmente com a utilização de um maior volume de dados, inclusive dados reais,
+para obter um melhor processo de validação;
+• Realização de testes aprofundados sobre os algoritmos de recomendação;
+• Expansão dos algoritmos de recomendação, através da adição de outros critérios
+de avaliação e obtenção de pontuação, tais como formas de pagamento, condiç ões
+climáticas ou de tráfego, análise de feedback, entre outros;
+• Implementação de mecanismos de segurança e privacidade,  visando oferecer
+maior confiabilidade do serviço para os usuários;
+• Disponibilização do projeto na forma de um framework de recomendação.
+83
+
+
+
+
+Referências
+Burke, R. (2002). Hybrid Recommender Systems: Surveys and Experiments. User Mod-
+eling and User-Adapted Interaction (UMUAI)., pages 331-370.
+Burke, R. (2007).  Hybrid Web Recommender Systems.  The Adaptative Web., pages
+377-408.
+Euzébio, M. V. M. (2011).  DroidLar - Automação residencial através de um celular
+Android. Technical report, Instituto Federal de Santa Catarina.
+Google Inc. (2005). Google maps.  [online]; disponível em: http://maps.google.com em
+27/10/2012.
+Goren-Bar, D. and Kuflik, T. (2004). Don’t Miss-R - Recommending Restaurants through
+an Adaptive Mobile System.  In 9th International Conference on Intelligent User In-
+terfaces, pages 250-252.
+IDC (2012). Android- and iOS-Powered Smartphones Expand Their Share of the Market
+in the First Quarter, According to IDC. Technical report, International Data Corpora-
+tion.
+Lima, A. O., Ferreira, D. I. S., and de Sales, T. B. M. (2012). PGuide. In INOVA-BASE -
+XII Escola Regional de Computaç ão Bahia Alagoas Sergipe, Juazeiro-BA (Brasil).
+Lops, P., de Gemmis, M., and Semeraro, G. (2011).  Recommender Systems Handbook,
+chapter Content-based Recommender Systems: State of the Art and Trends. Springer.
+Mack, R. S. (2010). Sistema de recomendação baseado na localização e perfil utilizando
+a plataforma android. Technical report, Universidade Federal do Rio Grande do Sul.
+Mateus, G. R. and Loureiro, A. A. F. (2005). Indrodução à Computação M óvel. Departa-
+mento de Ciência da Computação da UFMG.
+Nielsen Company (2011).  The Mobile Media Report. State of the media - Q3/2011.
+Technical report, Nielsen.
+Penha, G. B. (2004).  Inteligência Artificial em dispositivos m óveis.  Technical report,
+Universidade Estadual de Londrina.
+Resnick, P. and Varian, H. R. (1997).  Recommender Systems.  Communications of the
+ACM., 40(3):56-58.
+Ricci, F. (2002). Travel Recommender Systems. IEEE Intelligent Systems., pages 55-57.
+Ricci, F. (2010).  Mobile Recommender Systems.  International Journal of Information
+Technology and Tourism., pages 205-231.
+Ricci, F., Shapira, B., Rokach, L., and Kantor, P. B. (2011).  Recommender Systems
+Handbook, chapter Introduction to Recommender Systems Handbook. Springer.
+Schafer, J. B., Konstan, J., and Riedl, J. (1999). Recommender Systems in E-Commerce.
+In 1st ACM conference on Electronic commerce, pages 158-166, USA.
+Schafer, J. B., Konstan, J. A., and Riedl, J. (2001). E-Commerce Recommendation Ap-
+plications. Data Mining and Knowledge Discovery., 5:115-153.
+Weiser, M. (1991).  The Computer for the 21st Century.  Scientific American Ubicomp.,
+pages 94-104.
+84
+
+
+
+
+

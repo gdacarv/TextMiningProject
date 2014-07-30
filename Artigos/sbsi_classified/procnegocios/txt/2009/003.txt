@@ -1,0 +1,636 @@
+﻿V Simpósio Brasileiro de Sistemas de Informação
+An álise qualitativa e quantitativa de WorkFlow nets utilizando
+L ógica Linear
+Lígia Maria Soares Passos1, Stéphane Julia1
+1Faculdade de Computação - Universidade Federal de Uberlândia (UFU)
+38400-902 - Uberlândia - MG - Brazil
+ligia@pos.facom.ufu.br,  stephane@facom.ufu.br
+Abstract. This article presents a method for qualitative and quantitative anal-
+ysis of WorkFlow nets based on the proof trees of linear logic.  The qualita-
+tive analysis is concerned with the proof of Soundness correctness criterion for
+WorkFlow nets. The quantitative analysis is concerned with the resource plan-
+ning for each task of the workflow process and is based on the computation of
+symbolic date intervals for task execution.
+Resumo. Este artigo apresenta um método para a an álise qualitativa e quanti-
+tativa de WorkFlow nets baseada na construç ão de árvores de prova can ônica
+da l ógica linear.  A an álise qualitativa proposta neste trabalho diz respeito  à
+prova do critério de corretude para WorkFlow nets denominado Soundness. A
+an álise quantitativa basea-se no c álculo de intervalos de datas simb ólicas para
+a execuç ão de cada tarefa do processo de workflow modelado, possibilitando,
+assim, o planejamento dos recursos a serem utilizados em todas as tarefas do
+processo.
+1.                                                                                            Introduç ão
+O principal objetivo dos Sistemas de Gerenciamento de Workflow é executar processos de
+workflow. Os processos de workflow representam as sequências de atividades que devem
+ser executadas em uma organização para tratar casos específicos e alcançar uma meta bem
+definida [van der Aalst and van Hee 2004].
+De acordo com [Murata 1989], as redes de Petri são apropriadas para modelar
+Sistemas de Tempo Real, uma vez que elas permitem uma boa representação de situaç ões
+de conflito, compartilhamento de recursos, comunicação síncrona e assíncrona, restriç ões
+de precedência e restriç ões de tempo explícito no caso das redes de Petri temporizadas.
+Muitos artigos já consideraram a teoria das redes de Petri como uma ferramenta
+eficiente na modelagem e análise de Sistemas de Gerenciamento de Workflow.   Em
+[van der Aalst 1998] e em [van der Aalst and van Hee 2004], por exemplo, são definidas
+as WorkFlow nets, que são redes de Petri que modelam processos de workflow.  Em
+[Kotb and Badreddin 2005], é definido um modelo estendido de redes de Petri para a mo-
+delagem de workflow. Tal modelo permite o tratamento de recursos críticos que devem
+ser utilizados em atividades específicas em tempo real. Em [Ling and Schmidt 2000], uma
+extensão das WorkFlow nets é apresentada. Este modelo é chamado de Time WorkFlow
+net e associa intervalos de tempo às transiç ões do modelo de rede de Petri correspondente.
+Em particular, um exemplo de sistema de sa úde é usado para ilustrar uma abordagem onde
+uma enfermeira que cuida de dois pacientes é representada por uma ficha simples em um
+24
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+lugar compartilhado. Em [Vilallonga et al. 2003], especificaç ões de “clock” são combi-
+nadas com a teoria das redes de Petri para a especificação de requisitos temporais em Pro-
+cessos de Neg ócios. Esta nova formalização permite algumas verificaç ões temporais que
+dependem da construção de um grafo das marcaç ões acessíveis. Em [Lin and Qu 2004],
+a análise quantitativa proposta é baseada em reduç ões de padr ões básicos de workflow.
+Reduç ões sucessivas levam à perda de informação em relação ao tempo de execução de
+cada tarefa, individualmente.  Assim, é possível responder quando o processo global fi-
+nalizará.  No entanto, não é possível responder quest ões sobre quando cada tarefa será
+executada e, consequentemente, planejar a utilização de recursos envolvidos nestas.
+Há     várias                                                                                técnicas                                                                           para   analisar   processos   de   workflow.
+[van der Aalst and van Hee 2004]  definem  duas  metodologias  de  análise  distintas:
+an álise qualitativa e an álise quantitativa.   A análise qualitativa preocupa-se com a
+corretude de uma WorkFlow net, enquanto a análise quantitativa preocupa-se com a
+performance e dimensionamento de recursos. Para a análise qualitativa três métodos são
+apresentados: o primeiro método é baseado na construção de grafos da alcançabilidade,
+o segundo é baseado na análise das propriedades liveness e boundedness para uma rede
+“short-circuited” e o terceiro é baseado na substituição de blocos bem formados.  Para
+a análise quantitativa, três métodos são citados: análises Markovianas, teoria das filas e
+simulação (para maiores detalhes, ver [Marsan et al. 1995]).
+Segundo [van der Aalst and van Hee 2004], o problema de planejamento de re-
+cursos tem como meta mostrar quais recursos e de que tipo são necessários considerando
+um dado período de tempo. Em particular, é importante encontrar um equilíbrio entre os
+recursos requisitados e os disponíveis.
+Neste artigo,  uma abordagem baseada na l ógica linear  é  proposta para ana-
+lisar qualitativamente e quantitativamente uma WorkFlow net.   A análise qualitativa
+refere-se                                                                                    à  prova  do  critério  de  corretude  Soundness  definido  para  WorkFlow  nets
+[van der Aalst 1998].  Já a análise quantitativa preocupa-se com o planejamento de re-
+cursos para cada atividade de um processo mapeado em uma t-Time WorkFlow net.
+Na sessão 2 são apresentadas as WorkFlow nets, o critério de corretude Soundness
+e as t-Time WorkFlow nets. Na sessão 3 é mostrada uma visão geral sobre a l ógica linear.
+As duas análises, qualitativa e quantitativa, propostas neste artigo são apresentadas nas
+sess ões 4 e 5, respectivamente. Finalmente, a última sessão conclui este trabalho com um
+pequeno resumo, uma avaliação sobre a abordagem proposta e uma perspectiva sobre os
+trabalhos futuros.
+2. WorkFlow nets
+Uma  rede  de  Petri  que  modela  um  processo  de  workflow                                é  uma  WorkFlow  net
+[van der Aalst and van Hee 2004],[van der Aalst 1998].  Uma WorkFlow net satisfaz as
+seguintes propriedades [van der Aalst 1998]:
+• Tem apenas um lugar de início (denominado Start) e apenas um lugar de término
+(denominado End), sendo estes dois lugares tratados como lugares especiais; o
+lugar Start tem apenas arcos de saída e o lugar End apenas arcos de entrada.
+• Uma ficha em Start representa um caso que precisa ser tratado e uma ficha em
+End representa um caso que foi tratado.
+25
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+• Toda tarefa t (transição) e condição p (lugar) deve estar em um caminho que se
+encontra entre o lugar Start e o lugar End.
+Soundness é o critério de corretude definido para WorkFlow nets. Uma WorkFlow
+net é Sound se, e somente se, os três requisitos abaixo são satisfeitos:
+• Para cada ficha colocada no lugar de início, uma (e apenas uma) ficha eventual-
+mente aparecerá no lugar de término.
+• Quando uma ficha aparece no lugar de término, todos os outros lugares estão
+vazios, considerando o caso em questão.
+• Considerando  uma  tarefa  associada                                                         à  uma  transição,                                                                  é  possível  evoluir  da
+marcação inicial até uma marcação que sensibiliza tal transição, ou seja, não deve
+haver nenhuma transição morta na WorkFlow net.
+2.1. Processos
+Um processo define quais tarefas precisam ser executadas e em qual ordem a execução
+deve  ocorrer.    Modelar  um  processo  de  workflow  em  termos  de  uma  WorkFlow
+net                                                                                            é  bem direto:  transiç ões são componentes ativos e modelam as tarefas,  lugares
+são  componentes  passivos  e  modelam  as  condiç ões  (pré  e  p ós)  e  as  fichas  mode-
+lam  os  casos  [van der Aalst 1998].    Para  ilustrar  o  mapeamento  de  processos  em
+WorkFlow nets, considera-se o processo de tratamento de reclamaç ões mostrado em
+[van der Aalst and van Hee 2004]:  uma reclamação  é inicialmente gravada.  Então, o
+cliente que efetuou a reclamação e o departamento responsável pela reclamação são con-
+tactados. O cliente é questionado para maiores informaç ões. O departamento é informado
+sobre a reclamação. Estas duas tarefas podem ser executadas em paralelo, isto é, simulta-
+neamente ou em qualquer ordem. Depois disso, os dados são recolhidos e uma decisão é
+tomada. Dependendo da decisão, ou um pagamento de compensação é efetuado, ou uma
+carta é enviada. Finalmente, a reclamação é armazenada. A Figura 1 mostra a WorkFlow
+net que representa este processo.
+c3                                                                                             Pay
+c1
+Contact_Client
+                                                                                                                                                                                                                        c5            c6
+                                                                                                                                                                                   Record                     Collect                      c7
+Start                                                                                                                                                                                                                        Assess                      File   End
+                                                                                               c2                                                                                                             c4
+                                                                                                                                                                                   Contact_Department
+                                                                                                                                                                                                                                           Send_Letter
+oes e os seus acionamentos
+2.1.1. Roteamentos
+De acordo com [van der Aalst and van Hee 2004], pela rota de um caso, ao longo de uma
+série de tarefas, pode-se determinar quais tarefas precisam ser executadas (e em que or-
+dem). Quatro construç ões básicas para o roteamento de tarefas são consideradas: sequen-
+cial, paralela, condicional (rota seletiva) e iterativa.
+26
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Na abordagem proposta, uma rota iterativa será substituída por uma tarefa global.
+Na verdade, na prática, se um processo de workflow deve respeitar um limite de tempo,
+ele não poderá repetir indefinidamente uma mesma atividade.  A estrutura hierárquica
+das redes de Petri, baseadas no conceito de “Well-formed block” [Valette 1979], pode
+ser utilizada para representar uma rota iterativa através de uma única tarefa. Assim, uma
+duração máxima será associada a esta tarefa, a fim de especificar, de modo implícito, o
+n úmero de vezes que a tarefa poderá ser executada dentro do bloco antes de ser detectado
+um problema na execução desta atividade.
+2.1.2. Acionamentos
+Um acionamento é uma condição externa que guia a execução de uma tarefa sensibilizada
+[van der Aalst 1998]. Há quatro tipos distintos de tarefas: Usu ário: uma tarefa é acionada
+por um recurso humano e este acionamento é mostrado em uma WorkFlow net através do
+símbolo   nas transiç ões; Mensagem: um evento externo aciona uma tarefa sensibilizada,
+o que é mostrado em uma WorkFlow net através do símbolo B                                     nas transiç ões; Tempo:
+uma tarefa sensibilizada é acionada por um rel ógio, isto é, a tarefa é executada em um
+tempo pré-definido.  Isto é mostrado em uma WorkFlow net através do símbolo U nas
+transiç ões; Autom ática:  uma tarefa  é acionada no momento em que  é sensibilizada e
+não requer interação humana. Para este tipo de tarefa não há nenhuma representação na
+WorkFlow net.
+Nota-se que quando uma tarefa do tipo Usu ário  é considerada, uma tarefa  é
+acionada por um recurso humano, isto é, há uma alocação de recurso associada a esta
+tarefa. Nos demais tipos de tarefa não há alocação de recursos.
+2.2. t-Time WorkFlow nets
+De acordo com [van der Aalst and van Hee 2004], dado um processo modelado por uma
+rede de Petri, realizar afirmaç ões sobre sua performance  é sempre desejado.  Para es-
+tar apto a responder quest ões como o tempo esperado de conclusão de um processo e
+a capacidade de recursos requerida é necessário incluir informaç ões pertinentes sobre o
+tempo neste modelo de processo. As redes de Petri clássicas não permitem a modelagem
+do tempo, mas estas podem ser estendidas em relação ao tempo.
+As redes de Petri temporais e temporizadas podem associar tempo aos lugares (re-
+des de Petri p-temporais e p-temporizadas) ou às transiç ões (redes de Petri t-temporais
+e t-temporizadas).   Nas redes de Petri p-temporizadas  [Sifakis 1977],  o tempo  é  re-
+presentado por duraç ões (n úmeros racionais positivos ou nulo) associadas aos lugares.
+Nas redes de Petri t-temporizadas  [Ramchandani 1974],  o tempo  é  representado por
+duraç ões (n úmeros reais positivos ou nulo) associadas às transiç ões. Nas redes de Petri
+t-temporais [Merlin 1974], o tempo é representado por um intervalo [θmin, θmax] associ-
+ado a cada transição, de forma que este intervalo de tempo corresponde a uma duração
+de sensibilização.  Assim, o intervalo  [8, 12] indica que a transição irá disparar pelo
+menos oito unidades de tempo ap ós a transição ter sido sensibilizada e no máximo doze
+unidades de tempo ap ós a sensibilização desta transição. Nas redes de Petri p-temporais
+[Khansa 1997], é associado um intervalo de tempo [θmin, θmax] aos lugares.
+No contexto das redes de Petri t-temporais, uma t-Time WorkFlow net será então
+27
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+uma WorkFlow net estendida com intervalos de tempo associados às transiç ões, já que a
+execução das tarefas ficará associada às transiç ões do modelo.
+Definiç ão 1. Uma t-Time WorkFlow net N é uma qu ádrupla (P, T , F, I ) tal que:
+•  (P, T , F ) é uma WorkFlow net, onde:
+- P  é um conjunto finito de lugares,
+- T  é um conjunto finito de transiç ões e
+- F ⊆ (P × T ) ∪ (T × P ) é um conjunto de arcos (relaç ão de fluxo).
+• I                                                                                             ∈  T  um  intervalo  de
+sensibilizaç ão I (t) =  θmim(t), θmax(t)                                                       ], onde θmim(t)  representa o tempo mínimo
+de disparo da transiç ão e θmax(t)  representa o tempo m áximo de disparo da
+transiç ão t.
+3. L ógica Linear
+A l ógica linear foi proposta em  1987  por Girard em  [Girard 1987].   Na l ógica li-
+near, as proposiç ões são consideradas como recursos que são consumidos ou produzi-
+dos a cada mudança de estado [Pradin-Chezalviel et al. 1999].  A l ógica linear introduz
+novos conectivos, como os conectivos  “par”(O),  “times”(⊗),  “with”(N),  “plus”(⊕)
+e implicaç ão linear(⊸).   Para maiores detalhes,  pode-se consultar  [Girard 1987] e
+[Pradin-Chezalviel et al. 1999]. Neste artigo apenas dois conectivos da l ógica linear serão
+explorados:
+• O conectivo times, denotado pelo símbolo ⊗, que representa a disponibilidade si-
+multânea de recursos. Por exemplo, A⊗B representa a disponibilidade simultânea
+dos recursos A e B.
+• O  conectivo  implicaç ão  linear,  denotado  pelo  símbolo  ⊸,  representa  uma
+mudança de estado.  Por exemplo, A ⊸ B denota que consumindo A, B é pro-
+duzido. Pode-se notar que ap ós a produção de B, A não estará mais disponível.
+De acordo com [Pradin-Chezalviel et al. 1999], algumas dificuldades são conheci-
+das no contexto do uso das l ógicas modal e temporal quando duraç ões explícitas são as-
+sociadas ao disparo das transiç ões, como a ocorrência da explosão do espaço de estados
+e o fato das duraç ões serem delimitadas por valores, ou seja, não oferece computação
+simb ólica. Por estas raz ões, a abordagem apresentada neste artigo utiliza a l ógica linear.
+A tradução de uma rede de Petri em f órmulas da l ógica linear é apresentada em
+[Pradin-Chezalviel et al. 1999].  Uma marcação M é um mon ômio em ⊗, ou seja, uma
+marcação é representada por M = A1 ⊗A2 ⊗. . .⊗Ak onde Ai são nomes de lugares. Uma
+transição é uma expressão da forma M1  ⊸ M2  onde M1  e M2  são marcaç ões. Um se-
+quente M, ti  ⊢ M ′ representa um cenário onde M e M ′ são, respectivamente, a marcação
+inicial e final e ti                                                                            é  uma lista de transiç ões não ordenadas  [Julia and Soares 2003].
+Um sequente pode ser provado aplicando regras do cálculo de sequentes.  De acordo
+com  [Girault 1997], há  equivalência entre a prova de sequentes da l ógica linear e a
+alcançabilidade de uma rede de Petri. O sistema de dedução linear é similar ao sistema
+de dedução de Gentzen, que foi proposto em 1934 [Gochet and Gribomont 1990]. Uma
+árvore de prova da l ógica linear é lida de baixo para cima (bottom-up) e termina quando
+todas as folhas forem sequentes identidade (sequentes do tipo A ⊢ A).
+28
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+c3                                                                                             Pay
+c1
+                                                                                                                                                                                                                                                                                                              [   d     P       d       max   ]
+                                                                                                                                                            Contact_Client
+                                                                                                                                       [   d   CC                                d                 max   ]                        c5                                      c6
+                                                                                                                                                                                                             Collect
+                                                                                                                                                                                                                                                                                                         c7
+                                                                                                                                               Record                                  [   d   C             d         max   ]
+Start                                                                                                                          [   d   R                d                        max       ]                                                       Assess                                                                                     File                 End
+                                                                                                                                                                                                                                       [   d   A            d   max   ]                                                         [   d   F            d   max   ]
+                                                                                               c2                                                                                                                            c4
+                                                                                                                                                            Contact_Department
+                                                                                                                                                                                                                                                                                           Send_Letter
+                                                                                                                                       [   d   CD                                d                 max   ]                                                                     [   d   L                 d        max       ]
+oes, seus acionamentos e inter-
+as tarefas
+Neste artigo, serão consideradas apenas algumas regras da l ógica linear.  Estas
+regras serão utilizadas na construção das árvores de prova can ônica. Para tanto, considere
+que F , G e H são f órmulas e que Γ e Δ são blocos de f órmulas da l ógica linear. As regras
+são apresentadas abaixo [Riviere et al. 2001]:
+• A regra  ⊸L, dada por  Γ ⊢ F   Δ, G ⊢ H                                                      ⊸L, expressa o disparo de uma
+Γ, Δ, F  ⊸ G ⊢ H
+transição e gera dois sequentes, tal que o sequente à direita representa o subse-
+quente restante a ser provado e o sequente à esquerda representa as fichas con-
+sumidas pelo disparo da transição.
+• A regra ⊗L, dada por Γ, F, G ⊢ H
+Γ, F ⊗ G ⊢ H  ⊗L, transforma uma marcação em uma lista
+de átomos.
+• A regra ⊗R , dada por Γ ⊢ F   Δ ⊢ G
+Δ, Γ ⊢ F ⊗ G  ⊗R , transforma um sequente do tipo A, B ⊢
+A ⊗ B em dois sequentes identidade A ⊢ A e B ⊢ B.
+Em uma árvore de prova, cada disparo de transição pode gerar uma data simb ólica
+associada a cada átomo (token) como mostrado em [Riviere et al. 2001]. Neste artigo, Di
+denota uma data e di uma duração associada a um disparo de uma transição (ti). Um par
+(Dp, Dc) será associado a cada átomo da árvore de prova, tal que Dp  e Dc  representam,
+respectivamente, as datas de produção e consumo de um átomo. O cálculo de datas em
+árvores de prova can ônica é dado pelos seguintes passos:
+• Determine uma data de produção Di para todas as fichas da marcação inicial;
+• para cada instância da regra ⊸L, calcule a data de disparo desta transição: isto
+é igual ao maior valor de data de produção dos  átomos consumidos por esta
+transição, acrescido pela duração de sensibilização di  associada à transição con-
+siderada;
+• atualizar as datas de todos os átomos que foram consumidos e produzidos.
+Em um modelo de rede de Petri t-temporal, toda duração de sensib[ilização di  d]e
+uma transição ti tem um valor que pertence a um intervalo de tempo Δi  =  δimin, δimax  .
+Logo, uma vez que as datas simb ólicas computadas dependem de di, seus domínios
+também serão em função de intervalos de tempo.
+4. An álise Qualitativa: verificaç ão da propriedade Soundness
+No contexto das WorkFlow nets, o objetivo principal da análise qualitativa  é provar o
+critério de corretude para WorkFlow nets denominado Soundness. Para isso, é necessário
+29
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+provar sequentes lineares que representem a WorkFlow net e analisar as árvores de prova
+construídas para provar estes sequentes.  Inicialmente, se a WorkFlow net tiver mais
+de uma rota (ou seja, uma ou mais rotas condicionais),  é necessário construir e provar
+um sequente linear para cada cenário da WorkFlow net.  Por exemplo, na Figura 1, há
+dois cenários diferentes: o primeiro cenário, Sc1, onde a tarefa Pay será executada, isto
+é, a transição Pay será disparada, e o segundo cenário, Sc2, onde a tarefa Send Letter
+será executada.  Assim, para esta WorkFlow net, dois sequentes lineares deverão ser
+provados.  Cada sequente linear considera apenas uma rota da WorkFlow net analisada.
+Por exemplo, para o cenário Sc1, é necessário provar o sequente:
+Start,Record,Contact Client,Contact Department,Collect,Assess,P ay,F ile⊢End
+e para o cenário Sc2  é necessário provar o sequente:
+Start,Record,Contact Client,Contact Department,Collect,Assess,Send Letter,F ile⊢End
+onde: Record = t1  = Start ⊸ c1 ⊗ c2, Contact Client = t2  = c1 ⊸ c3,
+Contact Department = t3  = c2 ⊸ c4, Collect = t4  = c3 ⊗ c4 ⊸ c5,
+Assess = t5  = c5 ⊸ c6, P ay = t6  = c6 ⊸ c7, Send Letter = t7  = c6 ⊸ c7 e
+F ile = t8  = c7 ⊸ End.
+Para provar estes sequentes,  árvores de prova da l ógica linear, sem cálculo de
+datas serão utilizadas.  Nota-se que cada sequente linear tem apenas um  átomo Start
+que representa a marcação inicial da WorkFlow net. Para analisar o critério de corretude
+Soundness, apenas uma ficha no lugar Start é necessária e suficiente.  Assim, o método
+de prova proposto neste artigo sempre considera apenas uma ficha no lugar Start.            Na
+sequência são mostradas as árvores de prova, sem cálculo de datas, para os cenários Sc1
+Arvore de prova para o cenário Sc1:
+c7⊢c7                                                                                       End⊢End
+⊸L
+                                                                                                                                                 c6⊢c6                                 c7,c7⊸End⊢End
+                                                                                                                                                                                                                           ⊸L
+                                                                                                                                                 c5⊢c5                                 c6,c6⊸c7,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+c3⊢c3                                                                                       c4⊢c4
+c3,c4⊢c3⊗c4                                                                                                                                                                            ⊗R       c5,c5⊸c6,t6 ,t8 ⊢End  ⊸L
+                                                                                            c2⊢c2                                                c3,c4,c3⊗c4⊸c5,t5 ,t6 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+                                                                                            c1⊢c1                                                c2,c3,c2⊸c4,t4 ,t5 ,t6 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+                                                                                                                                                 c1,c2,c1⊸c3,t3 ,t4 ,t5 ,t6 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊗L
+                                                                                            Start⊢Start    c1⊗c2,c1⊸c3,t3 ,t4 ,t5 ,t6 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+Start,Start⊸c1⊗c2,t2 ,t3 ,t4 ,t5 ,t6 ,t8 ⊢End
+Arvore de prova para o cenário Sc2:
+c7⊢c7                                                                                       End⊢End
+⊸L
+                                                                                                                                                 c6⊢c6                                 c7,c7⊸End⊢End
+                                                                                                                                                                                                                           ⊸L
+                                                                                                                                                 c5⊢c5                                 c6,c6⊸c7,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+c3⊢c3                                                                                       c4⊢c4
+c3,c4⊢c3⊗c4                                                                                                                                                                            ⊗R       c5,c5⊸c6,t7 ,t8 ⊢End  ⊸L
+                                                                                            c2⊢c2                                                c3,c4,c3⊗c4⊸c5,t5 ,t7 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+                                                                                            c1⊢c1                                                c2,c3,c2⊸c4,t4 ,t5 ,t7 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+                                                                                                                                                 c1,c2,c1⊸c3,t3 ,t4 ,t5 ,t7 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊗L
+                                                                                            Start⊢Start    c1⊗c2,c1⊸c3,t3 ,t4 ,t5 ,t7 ,t8 ⊢End
+                                                                                                                                                                                                                           ⊸L
+Start,Start⊸c1⊗c2,t2 ,t3 ,t4 ,t5 ,t7 ,t8 ⊢End
+30
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Quando todas as árvores de prova para a WorkFlow net analisada estão construídas, elas
+deverão ser analisadas seguindo os seguintes passos:
+1.  Para cada árvore de prova construída verificar se:
+(a) Apenas um átomo End foi produzido (isto é representado, na árvore de
+prova, pelo sequente identidade End ⊢ End). Este fato prova o primeiro
+requisito para a verificação da propriedade Soundness, isto é, que apenas
+uma ficha aparece no lugar End para o caso tratado.
+(b) Quando a prova está finalizada, isto é, quando há apenas sequentes identi-
+dade na árvore de prova, não há nenhum átomo disponível para consumo
+na árvore de prova. Este fato prova que todos os lugares da WorkFlow net
+estão vazios, ou seja, o segundo requisito para afirmar que uma WorkFlow
+net é Soundness.
+2.  Considerando todos os cenários Sc1, Sc2, ..., Scn da WorkFlow net analisada, cada
+transição t ∈ T precisa aparecer em um cenário, pelo menos. Isto prova que todas
+as transiç ões são disparadas, ou seja, nenhuma transição é morta.
+Se as condiç ões 1 e 2 acima são satisfeitas, a WorkFlow net analisada é Sound.
+Considerando as árvores de prova construídas para os cenários Sc1  e Sc2, a Work-
+Flow net mostrada na Figura 1 é Sound, uma vez que as três regras para Soundness são
+satisfeitas:
+• Apenas um átomo End foi produzido em cada cenário.
+• Considerando as árvores de prova finalizadas, não há nenhum átomo disponível
+para consumo nestas árvores de prova.
+• Considerando os cenários Sc1  e Sc2  da WorkFlow net analisada, cada transição
+desta WorkFlow net aparece em pelo menos um cenário e cada uma destas
+transiç ões foi disparada. Assim, é possível afirmar que não há nenhuma transição
+morta nesta WorkFlow net.
+5. An álise Quantitativa: planejamento de recursos
+O principal objetivo do planejamento de recursos, apresentado neste artigo,  é calcular
+janelas de datas onde poderá ocorrer a utilização de um recurso (pessoa, equipe, em-
+presa terceirizada etc.)  para o tratamento de atividades.  Assim, será possível prever a
+disponibilidade dos recursos envolvidos na execução das tarefas correspondentes.  No
+caso das WorkFlow nets analisadas através de árvores de prova can ônica da l ógica linear,
+as datas de execução das tarefas poderão ser dadas através de datas simb ólicas, ao invés
+de datas numéricas.  A maior vantagem da utilização de datas simb ólicas é que quando
+estas já estiverem calculadas poderão ser utilizadas diretamente para qualquer caso que
+será tratado pelo processo de workflow analisado - mesmo considerando casos cujo ins-
+tante de iniciação e/ou duração global são diferentes. Através das árvores de prova, datas
+simb ólicas para a execução de tarefas podem ser derivadas. A análise quantitativa também
+considera todos os possíveis cenários de uma t-Time WorkFlow net.  Isto  é necessário
+uma vez que o planejamento de recursos precisa calcular a data de utilização dos recursos
+associados a cada tarefa presente no processo de workflow analisado.  Como exemplo,
+considera-se a t-Time WorkFlow net mostrada na Figura 2. Para realizar o planejamento
+de recursos para esta WorkFlow net é necessário construir árvores de prova can ônica com
+cálculo de datas para os cenários Sc1  e Sc2, os mesmos cenários da análise qualitativa.
+31
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Para tanto, considera-se que: Seq = DS +dR +max(dCC , dCD ) +dC . As árvores de prova
+can ônica, com cálculo de datas, que correspondem aos cenários Sc1  e Sc2                     são dadas por:
+Arvore de prova, com cálculo de datas, para o cenário Sc1:
+                                                                                                                                                               c7(Seq+d                                                     A +dP ,Seq+dA +dP +dF )⊢c7              End(Seq+d
+                                                                                                                                                                                                                                                                    A +dP +dF ,.)⊢End  ⊸L
+                                                                                                                                                               c6(Seq+d                                                                                  c7(Seq+d
+                                                                                                                                                                                                                            A ,Seq+dA +dP )⊢c6                      A +dP ,.),c7⊸End⊢End  ⊸L
+                                                                                                                                                                                                                            c5(Seq,Seq+d                 A )⊢c5     c6(Seq+d
+                                                                                                                                                                                                                                                                    A ,.),c6⊸c7,t8 ⊢End  ⊸L
+c3(D                                                                                          S +dR +dCC ,Seq)⊢c3                                              c4(D                                                         S +dR +dCD ,Seq)⊢c4
+c3(D                                                                                                                                                           S +dR +dCC ,Seq),c4(DS +dR +dCD ,Seq)⊢c3⊗c4                                                          ⊗R       c5(Seq,.),c5⊸c6,t6 ,t8 ⊢End  ⊸L
+c2(D                                                                                                                                                           c3(D
+S +dR ,DS +dR +dCD )⊢c2                                                                       S +dR +dCC ,.),c4(DS +dR +dCD ,.),c3⊗c4⊸c5,t5 ,t6 ,t8 ⊢End  ⊸L
+c1(D                                                                                          S +dR ,DS +dR +dCC )⊢c1                                          c2(D
+                                                                                                                                                               S +dR ,.),c3(DS +dR +dCC ,.),c2⊸c4,t4 ,t5 ,t6 ,t8 ⊢End  ⊸L
+                                                                                                                                                               c1(D
+                                                                                                                                                               S +dR ,.),c2(DS +dR ,.),c1⊸c3,t3 ,t4 ,t5 ,t6 ,t8 ⊢End  ⊗L
+                                                                                              Start(D
+S ,DS +dR )⊢Start      c1(DS +dR ,.)⊗c2(DS +dR ,.),t2 ,t3 ,t4 ,t5 ,t6 ,t8 ⊢End  ⊸L
+Start(D                                                                                       S ,.),Start⊸c1⊗c2,t2 ,t3 ,t4 ,t5 ,t6 ,t8 ⊢End
+Arvore de prova, com cálculo de datas, para o cenário Sc2:
+                                                                                                                                                               c7(Seq+d                                                                                             End(Seq+d
+                                                                                                                                                                                                                            A +dL ,Seq+dA +dL +dF )⊢c7              A +dL +dF ,.)⊢End  ⊸L
+                                                                                                                                                               c6(Seq+d                                                                                  c7(Seq+d
+                                                                                                                                                                                                                            A ,Seq+dA +dL )⊢c6                      A +dL ,.),c7⊸End⊢End  ⊸L
+                                                                                                                                                                                                                            c5(Seq,Seq+d                 A )⊢c5     c6(Seq+d
+                                                                                                                                                                                                                                                                    A ,.),c6⊸c7,t8 ⊢End  ⊸L
+c3(D                                                                                          S +dR +dCC ,Seq)⊢c3                                              c4(D                                                         S +dR +dCD ,Seq)⊢c4
+c3(D                                                                                                                                                           S +dR +dCC ,Seq),c4(DS +dR +dCD ,Seq)⊢c3⊗c4                                                          ⊗R       c5(Seq,.),c5⊸c7,t7 ,t8 ⊢End  ⊸L
+c2(D                                                                                                                                                           c3(D
+S +dR ,DS +dR +dCD )⊢c2                                                                       S +dR +dCC ,.),c4(DS +dR +dCD ,.),c3⊗c4⊸c5,t5 ,t7 ,t8 ⊢End  ⊸L
+c1(D                                                                                          S +dR ,DS +dR +dCC )⊢c1                                          c2(D
+                                                                                                                                                               S +dR ,.),c3(DS +dR +dCC ,.),c2⊸c4,t4 ,t5 ,t7 ,t8 ⊢End  ⊸L
+                                                                                                                                                               c1(D
+                                                                                                                                                               S +dR ,.),c2(DS +dR ,.),c1⊸c3,t3 ,t4 ,t5 ,t7 ,t8 ⊢End  ⊗L
+                                                                                              Start(D
+S ,DS +dR )⊢Start      c1(DS +dR ,.)⊗c2(DS +dR ,.),t2 ,t3 ,t4 ,t5 ,t7 ,t8 ⊢End  ⊸L
+Start(D                                                                                       S ,.),Start⊸c1⊗c2,t2 ,t3 ,t4 ,t5 ,t7 ,t8 ⊢End
+Para cada tarefa do tipo usuário modelada na WorkFlow net analisada, deve-se
+extrair as datas de produção, DP , e consumo, DC , do átomo que representa a pré-condição
+da transição correspondente a esta tarefa. Quando há mais de uma pré-condição associada
+à transição, considera-se a data máxima das produç ões dos átomos correspondentes a estas
+pré-condiç ões. A data de produção deste átomo, DP , corresponde ao início da execução
+da tarefa associada  à transição e a data de consumo, DC , corresponde ao término da
+execução da mesma. Assim, é gerado um intervalo [DP , DC ] de datas onde o recurso que
+executará a referida tarefa poderá ser requisitado para realizá-la.
+Uma vez que as datas de produção e consumo são depende[tes de dura] ões de
+sensibilização di, cujo valor pertence a um intervalo de tempo Δi  =  δimin, δimax  , pode-
+se considerar vários intervalos possíveis de execução das tarefas, de acordo com um plane-
+jamento estratégico. Por exemplo, o intervalo de execução IExec  = [DP min, DC max] con-
+sidera que a alocação do recurso para a execução da tarefa poderá ocorrer entre o início
+ao mais cedo e o término ao mais tarde da atividade considerada. Este intervalo de datas é
+o mais flexível, no sentido de que ele considera a janela de tempo de utilização do recurso
+a mais extensa possível. De acordo com a disponibilidade do recurso envolvido, poderão
+ser consideradas na estratégia de escalonamento de atividades do processo de workflow
+32
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+                                                                                                c3                                                                                          Pay
+c1
+                                                                                                                                                                                            [5,15]
+Contact_Client
+[20,30]                                                                                         c5                                                                                c6
+Record                                                                                          Collect                                                                                     c7
+[5,10]                                                                                          [0,0]
+Start                                                                                                                                                                             Assess    File          End
+                                                                                                                                                                                  [15,25]   [0,0]
+c2                                                                                              c4
+Contact_Department                                                                                                                                                                          Send_Letter
+[25,35]
+                                                                                                                                                                                            [20,30]
+oes, seus acionamentos e inter-
+valos de tempo num ´erico associados `as tarefas
+outras datas fornecidas pela árvore de prova, como DP max  (data de início ao mais tarde
+da tarefa) ou DC min  (data de término ao mais cedo da tarefa).
+A informação sobre quando o processo global finalizará, para um dado caso,  é
+dado pela data de produção do átomo End. Assim, pode-se calcular a data ao mais cedo
+de finalização do processo, dada pela data mínima DP min  de produção deste átomo e a
+data ao mais tarde de finalização do processo, dada pela data máxima DP max de produção
+do átomo End.
+A Tabela 1 mostra os intervalos de datas simb ólicas de execução para as tarefas
+que são do tipo usuário, dos cenários Sc1  e Sc2, considerando o intervalo de execução
+IExec                                                                                           =  [DP min, DC max].   Os intervalos de datas calculados poderão ser utilizados
+por qualquer caso tratado pelo processo de workflow modelado pela t-Time WorkFlow
+net da Figura 2.  A título de exemplificação, considera-se o processo de tratamento de
+reclamaç ões mapeado na t-Time WorkFlow net mostrada na Figura 3. A única diferença
+entre as Figuras 2 e 3 é que a primeira associa intervalos de tempo simb ólico às transiç ões
+enquanto que a segunda associa às transiç ões intervalos de tempo numérico. Assim, con-
+siderando os intervalos de tempo da t-Time WorkFlow net mostrada na Figura 3 e con-
+siderando que o processo a ser tratado inicia-se na data 0, ou seja, DS  = 0, os intervalos
+de datas para a execução das tarefas podem ser calculados apenas substituindo as datas
+simb ólicas presentes na Tabela 1 pelas datas numéricas associadas às transiç ões da t-Time
+WorkFlow net da Figura 3. A Tabela 2 mostra o resultado deste processo. Por exemplo, o
+recurso utilizado para executar a tarefa Send Letter do cenário Sc2  deverá ser alocado ao
+mais cedo na data 40 e deverá ser liberado ao mais tarde na data 100. Assim, o recurso
+que executará esta tarefa poderá ser alocado neste intervalo de datas.
+6. Conclus ão
+Este artigo apresenta um método de análise qualitativa e quantitativa de WorkFlow nets
+baseado nas árvores de prova can ônica da l ógica linear. A análise qualitativa tem como
+objetivo provar o critério de corretude para WorkFlow nets denominado Soundness e a
+análise quantitativa basea-se no cálculo de datas simb ólicas para o planejamento de recur-
+sos utilizados na realização de cada tarefa do processo de workflow.
+As vantagens desta abordagem são diversas. O fato de trabalhar com l ógica linear
+permite provar o critério de corretude Soundness sem que seja necessária a construção
+de um grafo das marcaç ões acessíveis, considerando diretamente a pr ópria estrutura da
+WorkFlow net. O cálculo de datas simb ólicas correspondentes à execução de cada tarefa
+33
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+                                                                                                                                                   ao de tarefas do tipo usu ´ario                           dos
+cen ´arios Sc1  e Sc2
+                                                                                           Transiç ão               Intervalos de data Sc1 e Sc2
+t                                                                                          2 =c1⊸c3                 [D                             S +δRmin ,DS +δRmax +δCC max ]
+t                                                                                                                   [D
+                                                                                           3 =c2⊸c4                                                S +δRmin ,DS +δRmax +δCDmax ]
+t                                                                                                                   [D
+                                                                                           5 =c5⊸c6                                                S +δRmin +max(δCC min ,δCDmin )+δC min ,
+                                                                                                                    D                              S +δRmax +max(δCC max ,δCDmax )+δC max +δAmax ]
+                                                                                           Transiç ão               Intervalos de data Sc1
+t                                                                                          6 =c6⊸c7                 [D                             S +δRmin +max(δCC min ,δCDmin )+δC min +δAmin ,
+                                                                                                                    D                              S +δRmax +max(δCC max ,δCDmax )+δC max +δAmax +δP max ]
+                                                                                           Transiç ão               Intervalos de data Sc2
+t                                                                                                                   [D
+                                                                                           7 =c6⊸c7                                                S +δRmin +max(δCC min ,δCDmin )+δC min +δAmin ,
+                                                                                                                    D
+                                                                                                                                                   S +δRmax +max(δCC max ,δCDmax )+δC max +δAmax +δLmax ]
+                                                                                                                    ¸ ˜ao de tarefas do tipo
+arios Sc1  e Sc2
+Tarefa                                                                                     Intervalos de data Sc1   Intervalos de data Sc2
+Contact Client                                                                             [5,40]                   [5,40]
+Contact Department                                                                         [5,45]                   [5,45]
+Assess                                                                                     [25,70]                  [25,70]
+P ay                                                                                       [40,85]                  —
+Send Letter                                                                                —                        [40,100]
+mapeada em uma t-Time WorkFlow net permite planejar a utilização dos recursos en-
+volvidos nas atividades do processo de workflow, através de f órmulas que podem ser
+utilizadas por qualquer caso tratado pelo processo de workflow correspondente, sem que
+seja necessário percorrer novamente o processo de workflow inteiro para recalcular, para
+cada novo caso, datas de início e término das atividades envolvidas no processo.
+Além  disso,  alguns  provadores  de  teoremas  da  l ógica  linear  automáticos,
+como LinTAP [Mantel and Otten 1999], Linprove [Tammet and Tammet 1994] e llprover
+[Tamura 1997], podem ser adaptados e utilizados para automatizar a prova dos sequentes
+lineares propostos neste artigo.
+Como trabalhos futuros, seria interessante aplicar esta abordagem a um estudo de
+caso no contexto de planejamento de recursos em gestão de projetos de software e adaptar
+ou desenvolver um provador de teoremas automático para a prova dos sequentes lineares
+apresentados neste artigo.
+Referências
+Girard, J.-Y. (1987). Linear logic. Theor. Comput. Sci., 50(1):1-102.
+Girault, F. (1997). A logic for Petri nets, volume 31. Eddition Hermes.
+Gochet, P. and Gribomont, P. (1990). Logique: méthodes pour l’informatique fondamen-
+tale, volume Vol 1. Hermès.
+34
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Julia, S. and Soares, M. S. (2003).  Verification of real time uml specifications through
+a specialized inference mechanism based on a token player algorithm and the sequent
+calculus of linear logic. In Proceedings of the 15th European Simulation Symposium
+and Exhibition, pages 65-70, Delft, The Netherlands.
+Khansa, W. (1997).  Réseaux de Petri p-temporels contribution à l’étude des systèmes à
+évenements discrets. PhD thesis, Université de Savoie, France.
+Kotb, Y. T. and Badreddin, E. (2005).  Synchronization among activities in a workflow
+using extended workflow petri nets.  In CEC ’05: Proceedings of the Seventh IEEE
+International Conference on E-Commerce Technology, pages 548-551, Washington,
+DC, USA. IEEE Computer Society.
+Lin, C. and Qu, Y. (2004). Temporal inference of workflow systems based on time petri
+nets: Quantitative and qualitative analysis. Int. J. Intell. Syst., 19(5):417-442.
+Ling, S. and Schmidt, H. (2000).  Time petri nets for workflow modelling and analysis.
+In Systems, Man, and Cybernetics,  2000 IEEE International Conference on, pages
+3039-3044 vol.4.
+Mantel, H. and Otten, J. (1999). lintap: A tableau prover for linear logic. In TABLEAUX
+’99: Proceedings of the International Conference on Automated Reasoning with Ana-
+lytic Tableaux and Related Methods, pages 217-231, London, UK. Springer-Verlag.
+Marsan, M. A., Balbo, G., Conte, G., Donatelli, S., Franceschinis, G., Computing, P.,
+Wiley, J., Almeida, V., Almeida, J., and Analysis, C. M. P. (1995).  Modelling with
+generalized stochastic petri nets. In Series in Parallel Computing. Wiley.
+Merlin, P. (1974). A study of recoverability of computer systems. PhD thesis, University
+of California, Irvine.
+Murata, T. (1989).  Petri nets: Properties, analysis and applications.  Proceedings of the
+IEEE, 77(4):541-580.
+Pradin-Chezalviel, B., Valette, R., and Kunzle, L. A. (1999).  Scenario durations char-
+acterization of t-timed petri nets using linear logic.  In PNPM ’99:  Proceedings of
+the The 8th International Workshop on Petri Nets and Performance Models, page 208,
+Washington, DC, USA. IEEE Computer Society.
+Ramchandani, C. (1974).  Analysis of asynchronous concurrent systems by timed petri
+nets. Technical report, Cambridge, MA, USA.
+Riviere, N., Valette, R., Pradin-Chezalviel, B., and Ups, I. A. . (2001).  Reachability
+and temporal conflicts in t-time petri nets.  In PNPM ’01:  Proceedings of the 9th
+international Workshop on Petri Nets and Performance Models (PNPM’01), page 229,
+Washington, DC, USA. IEEE Computer Society.
+Sifakis, J. (1977).  Use of petri nets for performance evaluation.  In Proceedings of the
+Third International Symposium on Measuring, Modelling and Evaluating Computer
+Systems, pages 75-93, Amsterdam, The Netherlands, The Netherlands. North-Holland
+Publishing Co.
+Tammet, T. and Tammet, T. (1994). Proof strategies in linear logic. Journal of Automated
+Reasoning, 12:273-304.
+35
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Tamura, N. (1997). A linear logic prover (llprover). Disponível em: http://bach.istc.kobe-
+u.ac.jp/llprover. Acesso em 26 Fev. 2009.
+Valette, R. (1979). Analysis of Petri Nets by Stepwise Refinements. Journal of Computer
+and System Sciences, 18:35-46.
+van der Aalst, W. M. P. (1998). The aplication of petri nets to workflow management. In
+The Journal of Circuits,Systems and Computers, pages 21-66.
+van der Aalst, W. M. P. and van Hee, K. (2004). Workflow Management: Models, Meth-
+ods, and Systems. The MIT Press.
+Vilallonga, G., Riesco, D., Montejano, G., and Uzal, R. (2003). Petri nets with clocks for
+the analytical validation of business process. pages 11-25.
+36
+
+
+
+
+

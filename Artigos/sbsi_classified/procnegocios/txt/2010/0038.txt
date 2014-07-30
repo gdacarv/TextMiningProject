@@ -1,0 +1,260 @@
+﻿Buscas Semânticas na identificação de similaridades entre
+conceitos para Integração Semântica de Informações
+Veronica dos Santos
+Departamento de Informática Aplicada (DIA) - Programa de Pós Graduação em
+Informática (PPGI) - Universidade Federal do Estado do Rio de Janeiro (UNIRIO)
+veronica.santos@uniriotec.br
+Orientadores: Asterio Tanaka e Fernanda Baião
+tanaka@uniriotec.br,  fernanda.baião@uniriotec.br
+Resumo. O processo de Integração de Informações é composto por diversas
+atividades que requerem um aumento no nível de automação ou pelo menos
+uma redução no esforço humano para realizá-las. A utilização de abordagens
+de Busca Semântica para recuperação da informação (information retrieval)
+melhora a precisão e cobertura do conjunto de documentos recuperados pois
+explora  o  conhecimento  do  domínio. Este trabalho propõe a utilização de
+Buscas Semânticas no repositório de metadados de um Sistema de Integração
+de  Informações  (SII),  com  o  objetivo  de  tornar  a  atividade  de  busca  por
+conceitos  similares  mais  eficiente  em  termos  de  precisão  e  cobertura  dos
+resultados.
+Palavras  chaves:Representação de informações de negócio e gerência de
+dados e metadados, Gestão da Informação.
+1.  Introdução
+De acordo com [Bernstein e Haas 2008] cada etapa de um processo de integração de
+dados requer muitas intervenções manuais e a busca por conceitos similares é uma das
+atividades que demandam por melhorias. A partir deste problema, a hipótese levantada é
+que a utilização de busca semântica no repositório de metadados de um Sistema de
+Integração de Informações (SII) irá tornar a atividade de busca por conceitos similares
+mais eficiente em termos de precisão e cobertura dos resultados.
+O  objetivo  deste  trabalho  é  propor  uma  arquitetura  de  uma  ferramenta  que
+permita  identificar  a  similaridade  semântica  entre  os  conceitos  a  serem  integrados
+utilizando busca semântica no repositório de metadados de um Sistema de Integração de
+Dados, pois será possível explorar o conhecimento do domínio através de ontologias.
+2.  Fundamentação Teórica
+2.1 Integração de Informações
+Na medida em que o número de repositórios de informação e aplicações cresce nas
+organizações, a necessidade de integração dos dados se torna mais evidente. Desde a
+década de  80, as pesquisas em bancos de dados e os fornecedores de software têm
+
+
+
+
+atribuído grande importância aos problemas de integração de dados do ponto de vista
+estrutural e técnico e muitas abordagens foram apresentadas com diferenças no nível de
+abstração que a integração ocorre [Ziegler e Ditrich 2007].
+O foco de pesquisa em integração de dados tem se voltado para os desafios do
+entendimento  semântico,  tendo  em  vista  que  a  evolução  da  Web  depende  do
+compartilhamento  da  semântica  para  permitir  que  dados  e  informações  sejam
+manipuláveis por computadores e que as conexões lógicas entre os conceitos tornem os
+sistemas interoperáveis [Nigel et. al. 2006]. A integração semântica deve garantir que
+somente dados relacionados com o mesmo conceito, ou pelo menos com conceitos
+semanticamente similares, serão combinados com a intenção de fornecer aos usuários
+uma visão lógica única para manipulação das informações [Ziegler e Dittrich 2007].
+Um sistema de integração de informações  (SII) proporciona acesso uniforme
+a  um  conjunto  de  fontes  de  dados  heterogêneas  e  autônomas.  Os  usuários            (ou
+aplicações) submetem as consultas através de um esquema mediado e as descrições das
+fontes de dados são utilizadas para realizar o mapeamento semântico entre o esquema
+mediado  e  os  esquemas  das  fontes  locais  [Halevy  2008].  A  geração  do  esquema
+mediado pode ser realizada através de um processo clássico de integração de esquemas,
+composto pelas atividades de Pré-integração, Comparação de Esquemas, Unificação de
+Esquemas e Reestruturação [Batini et. al., 1986].
+A  operação  de  casamento  de  esquemas                                                     (schema  matching),  realizada  na
+atividade de Comparação de Esquemas, permite a descoberta dos mapeamentos entre os
+conceitos  de  cada  modelo  que  possuem  entre  si  algum  grau  de  similaridade.  Esta
+descoberta pode se basear nas instâncias, na estrutura das fontes de dados, em outras
+entradas auxiliares ou em uma combinação de métodos. As indicações de mapeamentos
+geradas devem ser analisadas por especialistas [Rahm e Bernstein 2001].
+[Bernstein e Haas  2008] ressaltam que o processo de integração de dados é
+iterativo e que as muitas intervenções manuais de cada atividade constituem o maior
+custo em termos de esforço humano e tempo. Eles sugerem que um maior nível de
+automação pode ser alcançado a fim de tornar o processo mais ágil, e apontam que as
+pesquisas nesta área devem buscar formas de reduzir o esforço humano através de
+melhorias na tecnologia e de simplificação do processo. A busca por conceitos similares
+é uma das atividades do processo de integração de dados que demanda por melhorias
+para se tornar mais eficiente em termos de precisão e cobertura dos resultados.
+2.2 Similaridade Semântica
+As  maiores  dificuldades  na  construção  e  manutenção  de um SII estão em criar as
+descrições das fontes de dados e definir o mapeamento semântico entre as fontes e o
+esquema  mediado,  pois  é  necessário  conhecimento  do  negócio  para  entender  o
+significado dos esquemas que estão sendo mapeados  [Halevy  2008]. A similaridade
+léxica dos termos isoladamente não identifica todas as possibilidades de aproximação
+requerendo, portanto, abordagens que tratem do aspecto semântico.
+A semântica refere-se ao estudo do significado em todos os sentidos do termo e
+se ocupa do que algo significa dentro de um contexto. Pode-se dizer que a e b são
+sinônimos se tratam do mesmo conceito, que a é homônimo se trata de pelo menos dois
+conceitos diferentes (a'' e a'), que a é hipernímia de b se a é um conceito mais genérico
+
+
+
+
+do que o conceito representado por b, neste caso b é hiponímia de a                           (relação de
+generalização e especialização) e que a é meronímia de b se a representa um conceito
+que é parte do conceito de b, com isso b é holonímia de a pois é composto de b (relação
+de agregação e composição) [Mangold 2007].
+Na modelagem de banco de dados, semântica pode ser considerada como a
+interpretação dos projetistas e usuários sobre os dados e esquema em um determinado
+contexto [Ziegler e Dittrich 2007].   Mas para integração de dados, o maior desafio está
+em  identificar  os  conceitos  semanticamente  similares  que  apresentam  conflitos  em
+função dos diferentes contextos em que foram modelados. A proximidade semântica
+visa caracterizar o grau de similaridade através de uma medida qualitativa, variável em
+ordem  decrescente,  desde  equivalência,  relacionamento,  relevância  até  semelhança
+[Sheth e Kashyap 1992].
+Não é possível especificar exaustivamente a semântica associada aos dados e
+elementos  do  esquema  já  que  definições  de  esquemas  normalmente  não  são
+semanticamente explícitas para permitir a interpretação dos dados de forma consistente
+e inequívoca e parte da semântica está incorporada em modelos de dados, esquemas
+conceituais, programas de aplicação, nos dados em si, e até na mentes dos usuários e
+projetistas. Dessa forma, uma ontologia de domínio, representando a definição formal e
+explícita   dos   conceitos   e   seus   relacionamentos,   junto   com   um   vocabulário
+compartilhado que referencia estes conceitos, pode contribuir para resolver o problema
+da heterogeneidade semântica [Ziegler e Dittrich 2007].
+2.3 Buscas semânticas
+Em ferramentas de busca por documentos, o usuário especifica um ou mais termos de
+seu interesse. Mas estes termos podem não corresponder àqueles que fazem parte do
+conteúdo ou dos metadados dos documentos e alguns documentos relevantes para o
+usuário não serão recuperados. Algumas propostas para adaptação destas ferramentas
+têm explorado a utilização de ontologias e mecanismos de inferência para melhorar a
+precisão e cobertura do resultado, se comparado com a busca convencional.
+Busca semântica é um processo de recuperação de documentos que explora o
+conhecimento  do  domínio  que  pode  ser  formalizado  através  de  sistemas  para
+organização do conhecimento. O objetivo é maximizar precisão e cobertura do resultado
+da busca e minimizar a interação do usuário [Mangold 2007]. As abordagens de busca
+semântica podem ser categorizadas segundo a arquitetura (stand-aloneou meta search),
+acoplamento fraco ou forte entre os documentos e a ontologia, contexto do usuário (pré-
+definido  ou  dinâmico),  transparência  para  esclarecimento  do  contexto  da  busca,
+estrutura e tecnologia da ontologia.
+A reescrita da consulta pode ser (1) manual, através da navegação do usuário
+pela  ontologia  ou  respondendo  a  perguntas  que  visam  desambiguação,                    (2)  por
+argumentação,  onde  novos  termos  são  derivados  para  aumentar  a  abrangência  da
+consulta e (3) por substituição dos termos por outros que identificam os conceitos da
+ontologia como sinônimos, hipernímia e hiponímia. Os resultados sofrem tratamento
+diferenciado uma vez que os documentos são classificados e ordenados segundo os
+significados a eles atribuídos e à provável relevância desses significados para a consulta.
+
+
+
+
+A  busca  por  conceitos  similares,  assim  como  na  busca  convencional  por
+documentos, também pode não recuperar conceitos relevantes, devido à lacuna entre os
+termos informados na formulação da consulta e os termos utilizados para a identificação
+e descrição dos conceitos no repositório de metadados de um SII. Uma ontologia que
+represente do conhecimento do domínio das fontes de dados a serem integradas poderá
+melhorar o resultado da busca por conceitos similares.
+3.  Caracterização da contribuição
+A partir deste cenário, a hipótese é que a utilização de busca semântica   aumenta a
+eficiência para identificação de conceitos similares durante o processo de Integração de
+Dados. Desta forma, será possível explorar o conhecimento do domínio de modo a
+realizar consultas aproximadas, aumentar a precisão e cobertura do resultado da busca e
+reduzir a interação do usuário. O objetivo da aplicação de buscas semânticas em um
+processo de Integração de Dados é tornar a atividade de busca por conceitos similares
+mais eficiente em termos de precisão e cobertura.
+Este  trabalho  propõe  uma  arquitetura,  apresentada  na  figura                               1,  de  uma
+ferramenta que permita identificar a similaridade semântica entre os conceitos a serem
+integrados. A ferramenta contará com uma interface gráfica para informar os termos da
+busca, visualizar os resultados e navegar na ontologia e uma camada intermediária que
+realize  a  reescrita  das  consultas  utilizando  a  ontologia  e  acesse  o  repositório  de
+metadados. A descrição semântica dos conceitos e fontes de dados no repositório de
+metadados  também  será  realizada  através  da  ferramenta  usando  um  esquema  de
+metadados selecionado.
+A camada de reformulação da consulta deverá receber os termos da consulta da
+interface, realizar a busca na ontologia de conceitos, relações e atributos que possuam
+labels dentre estes termos, apresentar os labels dos recursos associados, permitindo a
+seleção dentre o conjunto apresentado, aplicar as modificações na consulta original para
+agregar os termos da ontologia de acordo com a similaridade desejada, interagir com o
+repositório de metadados para recuperar os conceitos e fontes de dados associados e
+compor o resultado ordenado a ser apresentado.
+A ontologia será utilizada também como referência para anotação semântica dos
+novos esquemas de conceito de dados, pois ao serem descritos na base de metadados,
+estes  esquemas  serão  anotados  semanticamente  para  garantir  o acoplamento com a
+ontologia de domínio. A anotação semântica [Mangold 2007] permite melhor precisão
+nos resultados uma vez que os documentos passam a ser instâncias da ontologia.
+A arquitetura proposta poderia ser usada no cenário descrito a seguir. Supondo
+que em uma universidade exista um sistema de Gestão Acadêmica e outro de Oferta e
+Acompanhamento  de  Estágio  Supervisionado.  O  orientador  de  estágio                         (professor
+responsável  pelo  acompanhamento)  necessita  identificar  os  alunos  de  graduação
+qualificados para as vagas e que ainda não completaram o número de horas. Por terem
+sido  projetados  para  propósitos  diferentes,  conceitos  semanticamente  similares
+envolvidos  na  integração  de  informações  destes  dois  sistemas  podem  apresentar
+conflitos.  Por  exemplo,  o  conceito                                                           “Aluno”  no  primeiro  sistema  contempla  todos
+aqueles que possuem matrícula em algum curso da universidade, sendo graduandos,
+mestrandos e até mesmo egressos, e o conceito “Estagiário” do segundo sistema contém
+
+
+
+
+informações   de   alunos   que   realizam   ou   já   realizaram   atividade   de   estágio
+supervisionado. A busca convencional pela palavra chave “aluno” nos metadados do
+segundo sistema poderia não recuperar o conceito relacionado enquanto que a busca
+expandida pela ontologia irá indicar que “Estagiário” é um “Aluno de Graduação”.
+Figura 1 - proposta de arquitetura
+4.  Trabalhos relacionados
+[Brauner et. al. 2008] é um exemplo de experimento que explora a semântica dos dados
+fazendo uso do conteúdo das fontes de dados para descobrir o casamento entre atributos
+dos esquemas. Esta abordagem pode não ser viável quando a submissão exaustiva de
+consultas  para  coleta  de  dados  para  análise  estatística  possa  vir  a  comprometer  o
+desempenho das fontes de dados em ambiente de produção. Tal problema não acontece
+na arquitetura proposta visto que a busca semântica será realizada sobre a base de
+metadados.
+O BDTerm [Silva e Mello 2006] é um sistema de gerenciamento de bases de
+dados terminológicas cujo objetivo principal é o suporte a processos de integração de
+dados para determinação de correspondências semânticas entre termos. Esta proposta foi
+desenvolvida para o processo BInXS [Mello e Heuser 2005], voltado especificamente
+para integração de esquemas XML, enquanto a arquitetura proposta explora a descrição
+das fontes de dados, independente de seus formatos, que estão registradas no repositório
+de metadados do SII.
+Em  [Py  et.  al.  2009]  é  proposto  um  método  com  passos  detalhados  para
+identificação de conceitos e fontes de dados durante um processo de integração de
+dados. O método se baseia na análise de glossários em modelos de processos de negócio
+e assume que todos os processos possuem uma única descrição para uma entidade, o que
+pode não acontecer em casos reais. Além disso, este método não trata da similaridade
+entre conceitos.
+5.  Estado atual do trabalho e avaliação dos resultados
+O trabalho está na fase de fundamentação teórica, com o estudo mais aprofundado das
+propostas existentes. Para avaliar a hipótese levantada serão realizados um experimento
+e um estudo de caso.
+
+
+
+
+O experimento irá comparar a precisão e a cobertura do resultado de consultas
+ao repositório de metadados, com e sem o apoio da arquitetura proposta. Um protótipo
+está sendo construído e será utilizado por alunos de graduação e mestrado em Sistemas
+de Informações da UNIRIO. Eles serão apresentados a três necessidades de informação
+hipotéticas que envolvem integração de informações de diferentes sistemas e, através da
+opção de busca, realizarão consultas no repositório de metadados para identificar quais
+os conceitos e fontes de dados serão utilizados para atender a cada necessidade. Ao final
+do  experimento  pretende-se  aplicar  um  questionário  aos  participantes  para  coletar
+informações subjetivas quanto à utilização da interface e o perfil dos mesmos.
+A  realização  do  estudo  de  caso  demonstrará  a  viabilidade  de  aplicação  da
+hipótese em um ambiente real. Será realizada uma análise em processos do Instituto
+Brasileiro  de  Geografia  e  Estatística                                                     (IBGE)  para  identificar  necessidades  de
+informações que envolvam integração de informações de diferentes sistemas.
+6.  Referências Bibliográficas
+Batini, C., Lenzerini, M., Navathe S. B.: A Comparative Analysis of Methodologies for
+Database Schema Integration. ACM Computing, v.18, n.4, p.323-364,. 1986.
+Bernstein, P. A., Haas, L. Information Integration in the Enterprise. Communications of
+the ACM. 2008
+Brauner, D. F., Gazola, A., Casanova, M. A., Breitman, K. K. Adaptative Matching of
+Database Web Services Export Schemas. ICEIS, 2008. p. 49-56
+Halevy, A. Information Integration. In: Liu, L., Ozsu, M. T.  (eds), Encyclopedia of
+Database Systems, Springer 2008, p. 1490-1496.
+Mangold, C. A Survey and classification of semantic search approaches. International
+Journal of Metadata Semantics and Ontology, vol. 2, nr. 1, 2007.
+Mello, R. S.; Heuser, C. A. BInXS: A Process for Integration of XML Schemata. In:
+CAiSE, 2005. p. 151-166.
+Nigel, S., Hall, W., Berners-Lee, T. The Semantic Web Revisited. IEEE Intelligent
+Systems.v.21, p.96-101,2006
+Py,  H.  S.,  Tanaka,  A.,  Baião,  F.,  Castro,  L.  A  Service-based  Approach  for  Data
+Integration Based on Business Process Models. ICEIS   2009.
+Rahm, E., Bernstein, P. A. A survey of approaches to automatic schema matching.
+VLDB Journal, nr.10, p. 334-350, 2001
+Sheth, A., Kashyap, V. So Far (Schematically) yet So Near (Semantically). IFIP 1992
+Silva, F. S.; Mello, R. S. BDTerm: um Sistema de Gerenciamento de Bases de Dados
+Terminológicas. In: II Escola Regional de Banco de Dados, 2006.
+Ziegler, P., Dittrich, K. Data Integration - Problems, Approaches and Perspectives. In:
+Krogstie,  J.,  Opdahl,  A.  L.,  Brinkkemper  S.                                             (eds),  Conceptual  Modelling  in
+Information Systems Engineering, p. 39-58. Springer, 2007.
+
+
+
+
+

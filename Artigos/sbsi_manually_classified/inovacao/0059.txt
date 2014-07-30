@@ -1,0 +1,492 @@
+﻿MD-UTS: Um Modelo para Desenvolvimento de Sistemas
+Ubíquos de Transporte
+Luiz Henrique Feltes1, Jorge Luis Vict ória Barbosa1
+1Programa Interdisciplinar de P ós-Graduação em Computação Aplicada
+Universidade do Vale do Rio dos Sinos (UNISINOS)
+Postal 93.022-000 - São Leopoldo - RS - Brasil
+luizfeltes@gmail.com,  jbarbosa@unisinos.br
+Abstract. The use of mobile and ubiquitous computing has been stimulated by
+the widespread diffusion of mobile devices, wireless networks and location sys-
+tems. In this context, numerous applications are emerging in different areas such
+as education, entertainment, commerce and transport. This paper proposes the
+MD-UTS, a model for development of ubiquitous transport systems. The model
+allows management of different types of vehicles, making a historical record of
+their movement. The model provides information through web services that can
+be used by different applications.  The article also describes two applications
+integrated into an urban transport simulator. The results demonstrate the fea-
+sibility of the model, facilitating the construction of applications directed to the
+transport system.
+Resumo. O uso da computaç ão m óvel e ubíqua tem sido estimulada pela
+grande difus ão dos dispositivos m óveis, redes sem fio e sistemas de localizaç ão.
+Nesse contexto, diversas aplicaç ões est ão surgindo em diferentes áreas, como
+educaç ão, entretenimento, comércio e transportes.  Esse artigo prop õe o MD-
+UTS, um modelo para o desenvolvimento de sistemas ubíquos de transporte. O
+modelo permite o gerenciamento de diferentes tipos de veículos, criando um
+registro hist órico do seu movimento.  O modelo fornece informaç ões através
+de web services que podem ser utilizadas por diferentes aplicaç ões.  O ar-
+tigo também descreve duas aplicaç ões integradas com um simulador de trans-
+porte urbano. Os resultados demonstram a viabilidade do modelo, facilitando
+a construç ão de aplicaç ões para o sistema de transporte.
+1.                                                                                       Introduç ão
+Em 1991, Mark Weiser introduziu o conceito de computação ubíqua, ao prever um mundo
+onde dispositivos computacionais estariam presentes em nossas vidas, interagindo na-
+turalmente com os usuários sem que fossem percebidos, em objetos, ambientes e nos
+pr óprios seres humanos [Weiser 1991].
+A Computação Ubíqua está permitindo o surgimento de oportunidades em di-
+versas                                                                                   áreas  como  medicina,  educação,  jogos,  comércio,  entretenimento,  transpor-
+tes,  entre  outros.   Conceitos  como  U-Learning  [Barbosa et al. 2011],  U-Commerce
+[Franco et al. 2011], U-Health [Kwon et al. 2010] e U-City [Oh and Oh 2011] surgiram
+nos últimos anos.
+649
+
+
+
+
+Os Sistemas Sensíveis ao Contexto  [Dey et al. 2001] podem agregar valor na
+elaboração dos sistemas de transportes. A popularização crescente de dispositivos m óveis
+e a evolução dos mais variados tipos de sensores são alguns dos fatores que contribuíram
+para os sistemas sensíveis ao contexto.
+Os Sistemas Inteligentes de Transporte e os Sistemas Sensíveis ao Contexto têm
+uma ligação forte, pois envolvem quest ões comuns como o deslocamento entre determi-
+nadas regi ões demográficas [Vieira et al. 2011].
+Além dos Sistemas Sensíveis ao Contexto, destaca-se também o uso de regis-
+tros hist óricos de uma entidade percorrendo diversos contextos,  chamado de Trilha
+[Silva et al. 2010]. A Trilha é uma coleção de locais visitados, com informaç ões de con-
+texto associadas, e segue uma ordem de cronol ógica.  No caso dos transportes, a Trilha
+pode representar a rota realizada pelo veículo demarcando pontos importantes durante
+este percurso.
+Os Sistemas Inteligentes de Transporte (ITS - Intelligent Transport Systems) são
+aplicaç ões e tecnologias que envolvem uma integração entre comunicação, gerenciamento
+e processamento de informaç ões para um sistema de transporte [Miles and Walker 2006].
+Sussman [Sussman 2005] indica como principal objetivo de um ITS: “casar o
+mundo de altas tecnologias e avanços com o mundo convencional da infraestrutura de
+transporte”.  As altas tecnologias são descritas como aquelas envolvendo  áreas como:
+sistemas  de  informação,  comunicação,  sensores  e  métodos  matemáticos  avançados.
+Nesse sentido, surge o conceito de Ubiquitous Transport System (UTS) [Lee et al. 2008]
+[Passos and Rossetti 2009], unindo as tecnologias ITS com os conceitos da computação
+ubíqua.
+Esse artigo apresenta um modelo para o desenvolvimento de sistemas ubíquos de
+transporte denominado MD-UTS, que provê sensibilidade ao contexto, gerenciamento de
+diferentes tipos de veículos através de um m ódulo de perfil e o gerenciamento de trilhas.
+O artigo está organizado em seis seç ões. Na seção dois é proposto o modelo MD-
+UTS. A terceira seção apresenta os aspectos de implementação e na quarta os aspectos de
+avaliação. Na seção cinco são descritos e comparados os trabalhos relacionados e por fim
+a seção seis apresenta as consideraç ões finais.
+2. Modelo MD-UTS
+O MD-UTS1  é um modelo para desenvolvimento de sistemas ubíquos de transporte sendo
+suas principais características:
+• Suporte a diversos tipos de veículos: não restringe o tipo de veículo a ser geren-
+ciado;
+• Sensibilidade ao contexto: possibilita o gerenciamento de contextos, incluindo
+regi ões e pontos de interesse por região;
+• Gerenciamento de trilhas:  permite armazenar e consultar registros hist óricos
+sobre os contextos visitados pelos veículos;
+• Gerenciamento de perfil do veículo: permite a utilização de um perfil para cada
+veículo, de acordo com suas características;
+1 MD-UTS (Model for Development of Ubiquitous Transport Systems)
+650
+
+
+
+
+• Suporte a sensores: permite o acesso a informaç ões de sensores instalados nos
+veículos;
+• Portal administrativo:  permite gerenciar as informaç ões dos m ódulos do mo-
+delo;
+• Serviços: disponibiliza serviços para que aplicaç ões sejam construídas utilizando
+as informaç ões gerenciadas pelo modelo.
+Com base nessas características, aplicaç ões dos mais variados gêneros podem
+ser desenvolvidas utilizando os serviços fornecidos pelo modelo, permitindo levar as
+informaç ões para diferentes p úblicos, como por exemplo, motoristas, usuários de trans-
+porte, governo e empresas responsáveis pelo transporte p úblico ou privado.
+2.1. Arquitetura do MD-UTS
+A arquitetura do MD-UTS (Figura 1) possui dois componentes chamados Transport Sys-
+tem (TS) e Vehicle System (VS) e uma ontologia para a representação de conhecimento
+na área de transporte. A arquitetura prevê ainda o uso de aplicaç ões externas que podem
+ser conectadas ao modelo.
+Figura 1. Arquitetura do MD-UTS
+O TS  é o principal componente do modelo, gerenciando as informaç ões sobre
+contextos, perfil dos veículos e as trilhas realizadas por eles. O VS suporta a comunicação
+com os diferentes sensores que podem ser instalados no veículo, os quais são gerenciados
+pelo TS.
+A criação da ontologia para domínio de transportes foi baseada na metodologia
+proposta por Noy e McGuinness [Noy and McGuinness 2001] que prop õe a criação de
+uma versão inicial que deve ser revisada e refinada gradativamente.
+Seguindo  essa  metodologia,   três  ontologias  relacionadas  foram  pesqui-
+sadas  para  considerar  a  reutilização                                                      [Wang et al. 2005]   [Almeida and Bax 2003]
+[Houda et al. 2010].  Com base nas ontologias, uma nova ontologia é proposta, reapro-
+veitando aspectos de cada uma delas. A Figura 2 mostra a ontologia proposta, chamada
+de OntoUTS.
+A OntoUTS auxilia na definição dos termos utilizados e seus relacionamentos,
+facilitando a integração entre os componentes do MD-UTS e também a construção de
+aplicaç ões. As principais classes da ontologia são as seguintes:
+• Region:  classe responsável por definir uma região demográfica, utilizando um
+conjunto de coordenadas geográficas, que representam por exemplo um bairro ou
+uma cidade;
+651
+
+
+
+
+Figura 2. Ontologia para domínio de transporte (OntoUTS)
+• Entity: classe que representa os objetos físicos que são utilizados no modelo, tais
+como carros ou rodoviárias;
+• EntityStationary: classe que representa um objeto físico que não se movimenta,
+ou seja, sempre está na mesma posição geográfica, tais como uma rodoviária ou
+um posto de combustível;
+• EntityMobile: classe que representa um objeto físico que se movimenta, ou seja,
+sua posição varia de acordo com sua locomoção, tais como carros, ônibus e metr ô ;
+• Vehicle: subclasse da classe EntityMobile que representa os diferentes tipos de
+veículos suportados pelo modelo.
+2.2. Transport System (TS)
+O TS gerencia as informaç ões oriundas dos veículos mapeados, fornecendo serviços para
+que outras aplicaç ões possam usufruir destes dados. O TS é composto por cinco m ódulos,
+chamados de Context, Profile, Trail, Portal e Services, conforme a Figura 3.
+Figura 3. M ´odulos do Transport System (TS)
+O m ódulo Context gerencia as informaç ões sobre os contextos. Cada contexto é
+representado por uma região, conforme descrito pela ontologia. A região é determinada
+por um conjunto de coordenadas geográficas obtido utilizando um sistema de posiciona-
+mento global (GPS).
+Além das informaç ões sobre as regi ões, o m ódulo Context gerencia as informaç ões
+652
+
+
+
+
+sobre as entidades fixas que pertencem à região. Essas entidades podem representar qual-
+quer ponto de interesse conforme descrito na OntoUTS.
+O m ódulo Profile gerencia as informaç ões sobre o perfil de cada veículo.  Nele
+estão os dados informados no momento em que o veículo é adicionado ao modelo, e as
+informaç ões obtidas durante o seu deslocamento pelas regi ões.
+O perfil do veículo é composto por propriedades pertinentes a cada veículo. Elas
+podem ser de dois tipos: estáticas ou dinâmicas. As estáticas são informaç ões cadastrais,
+diferentemente das dinâmicas que são alteradas conforme os sensores capturam dados do
+veículo. A Tabela 1 descreve algumas das propriedades disponíveis.
+Tabela 1. Propriedades do Perfil
+Classe                                                                                       Propriedade        Descrição
+Vehicle                                                                                      Identificador      Identificador único do veículo
+Vehicle                                                                                      PosiçãoAtual       Identifica a posição geográfica atual do veículo, usando a latitude e
+                                                                                                                longitude
+Vehicle                                                                                      RegiãoAtual        Identifica a região onde o veículo se encontra
+Vehicle                                                                                      Velocidade         Identifica a velocidade atual do veículo
+Bus                                                                                          Rota               Identifica a rota do ônibus
+Bus                                                                                          AtualPassageiros   Identifica a quantidade atual de passageiros no ônibus
+Bus                                                                                          Acessibilidade     Identifica se o ônibus possui algum tipo de acessibilidade para PCDs
+(Pessoas Com Deficiência)
+O m ódulo Trail armazena e disponibiliza as informaç ões sobre a trilha do veículo.
+A trilha é um conjunto de registros, onde cada registro é composto por uma data, uma
+localização geográfica, o veículo, o evento dessa trilha e uma descrição detalhada.
+O Portal gerencia os dados armazenados no MD-UTS. Através de um sítio na web
+é possível realizar a inserção, atualização e remoção dos dados de cada um dos m ódulos.
+A comunicação entre o TS e o VS, assim como entre o TS e as aplicaç ões, passa
+pelo m ódulo Services. Esse m ódulo disponibiliza uma camada de comunicação baseada
+em serviços. O uso dos serviços envolve uma comunicação através do protocolo HTTP.
+Cada serviço é disponibilizado através de um URI que descreve a sua função.
+Os serviços disponibilizados formam uma API para trabalhar com as informaç ões
+provenientes do modelo. Os serviços foram construídos utilizando os princípios da arqui-
+tetura REST [Fielding 2000] e estão agrupados de acordo com os m ódulos do modelo. A
+Tabela 2 descreve alguns dos serviços disponíveis.
+Tabela 2. Servic¸os disponíveis no MD-UTS
+URI                                                                                          Método             Descrição
+/context/region                                                                              GET                Identifica o nome da região utilizando uma localização
+/profile/property                                                                            GET                Busca o nome de todas as propriedades de um determinado veículo
+/profile/property                                                                            POST               Atualiza a informação de uma propriedade específica de um veículo
+/trail/trail                                                                                 POST               Insere um registro na trilha do veículo
+/trail/trail                                                                                 GET                Busca as trilhas de um determinado veículo
+2.3. Vehicle System (VS)
+O componente VS coleta os dados do veículo utilizando sensores, para envio ao TS. Para
+realizar essa tarefa, o VS é composto por dois m ódulos, chamados de Sensor e Vehicle
+653
+
+
+
+
+Application, conforme a Figura 4.
+Figura 4. M ´odulos do Vehicle System (VS)
+O  Sensor  suporta  a  interação  dos  sensores  instalados  nos  veículos  com  o
+MD-UTS. Podem existir diversos tipos de sensores,  como por exemplo,  localização
+[Hightower and Borriello 2001], presença, velocidade e proximidade [Fowler 2009].
+Os sensores podem variar de veículo para veículo, de acordo com os dados que o
+veículo deve disponibilizar. Veículos de transporte p úblico, como por exemplo, ônibus e
+metr ô , podem utilizar um sensor de presença para identificar a quantidade de passageiros
+dentro do veículo e atualizar essas informaç ões no MD-UTS em tempo real.
+O m ódulo Vehicle Application  é um aplicativo que trata as informaç ões como
+velocidade e localização, independente do tipo de veículo e disponibiliza esses dados
+para o TS. As três funç ões realizadas são: i) atualizar constantemente a localização do
+veículo, utilizando um sensor de localização; ii) trabalhar com as propriedades do perfil
+do veículo, como seu identificador, velocidade e localização; iii) registrar eventos na trilha
+de acordo com a movimentação do veículo.
+Esse aplicativo pode ser estendido e especializado de acordo com o tipo de veículo
+e sua finalidade. Dessa forma, o VS pode ser adaptado para atender a diversas situaç ões.
+Veículos como os  ônibus, por exemplo, além das informaç ões sobre a sua localização,
+podem adaptar o aplicativo e utilizar os demais serviços disponíveis no m ódulo Services.
+3. Implementaç ão e Simulaç ão
+O prot ótipo do MD-UTS foi implementando utilizando a linguagem de programação Java.
+Para a implementação do m ódulo Portal foi utilizado JSP em conjunto com HTML, CSS
+e Javascript. Na camada de comunicação do m ódulo Services foi utilizado o framework
+VRaptor para criar os serviços REST. Para a persistência dos dados foi utilizado o banco
+de dados MySQL.
+A geração de dados para a avaliação foi baseada em uma simulação usando o
+SUMO2. A simulação envolveu dados reais oriundos da cidade de São Leopoldo, locali-
+zada no estado do Rio Grande do Sul.
+A cidade foi inserida no simulador utilizando a exportação de mapas através do
+Open Street Maps3.  Pontos de interesse como rodoviárias, estaç ões de metr ô e paradas
+2 http://sumo.sourceforge.net
+3 http://www.openstreetmap.org
+654
+
+
+
+
+de ônibus também foram adicionadas, assim como 4 das 78 linhas de ônibus disponíveis
+na cidade.  O mapeamento das paradas foi realizado com o Google Street View4.  Os
+demais veículos foram inseridos de forma aleat ória, utilizando as ferramentas do SUMO.
+A Figura 5 apresenta a cidade mapeada no simulador.
+Figura 5. Cidade de S ˜ao Lepoldo no simulador (SUMO)
+4. Avaliaç ão
+A comunidade científica vem usando em conjunto com os aplicativos a criação de cenários
+para a validação de sistemas sensíveis ao contexto [Dey et al. 2001] e sistemas ubíquos
+[Satyanarayanan 2001] [Franco et al. 2011] [Oliveira et al. 2013].
+Dessa forma, para avaliar as principais características funcionais do MD-UTS, fo-
+ram desenvolvidos dois aplicativos baseados em cenários. O primeiro aplicativo avalia as
+características de sensibilidade ao contexto e o sistema de perfil do veículo, descrevendo
+um cenário de transporte p úblico. O segundo aplicativo avalia a característica de supor-
+tar diferentes tipos de veículos e o m ódulo de trilhas, permitindo gerenciar os veículos e
+registar dados hist óricos sobre eles.
+4.1. Aplicaç ão 1 - Bus Assistent
+O aplicativo Bus Assistent (Figura 6(a)) explora os m ódulos Context, Profile e Services.
+Informaç ões sobre contexto (linhas e paradas) e perfil (capacidade e suporte à acessibili-
+dade) de alguns ônibus da cidade foram adicionadas para suporte à simulação.
+O cenário  é o seguinte:                                                                      ”Carlos  é um estudande da UNISINOS e cadeirante.
+Ele est á utilizando o Bus Assistent no seu smartphone.  Todo dia pela manh ã , antes de
+sair de casa para se deslocar até a parada mais pr óxima, consulta o aplicativo para
+identificar o ônibus com acessibilidade que faz a linha entre sua casa e a Universidade.
+Ap ós realizar a busca, Carlos identifica a localizaç ão atual do ônibus e a quantidade de
+passageiros.  Como o  ônibus estava praticamente lotado e ele ainda tinha tempo para
+esperar o pr óximo, optou por aguardar em casa terminando suas atividades escolares”.
+O Vehicle Application (VA) foi estendido para trabalhar com as informaç ões de
+entrada e saída de passageiros do ônibus e enviar esses dados para o Services. A Tabela 3
+resume a dinâmica do cenário, destacando os atores e as aç ões.
+4 http://maps.google.com.br/intl/pt-BR/help/maps/streetview/
+655
+
+
+
+
+Ator                                                                                       Aç ão
+Onibus                                                                                     A cada 30 segundos o Vehicle Application (VA) instalado no veículo en-
+                                                                                           via as informaç ões (velocidade, quantidade de passageiros, localização)
+                                                                                           para o Services
+Services                                                                                   Recebe as informaç ões e registra no m ódulo de perfil
+Usuário                                                                                    Inicia o aplicativo para consultar sua linha de ônibus
+Bus Assistent                                                                              Comunica com o Services para localizar a linha de  ônibus e a parada
+                                                                                           desejada
+Services                                                                                   Busca as informaç ões de contexto (linhas e paradas) da cidade
+Bus Assistent                                                                              Mostra para o usuário os ônibus dessa linha e o tempo aproximado para
+                                                                                           chegar até parada
+Usuário                                                                                    Seleciona o ônibus para obter as informaç ões
+Bus Assistent                                                                              Chama novamente o Services para buscar as informaç ões sobre perfil
+                                                                                           do veículo
+Usuário                                                                                    Usuário visualiza as informaç ões sobre o ônibus e toma sua decisão
+A Figura 6(a) mostra o aplicativo com o resultado da busca realizada pelo usuário.
+O marcador representa a posição atual do  ônibus e abaixo são exibidas as informaç ões
+sobre o perfil do veículo como capacidade, quantidade de passageiros e se o veículo tem
+suporte à acessibilidade.
+4.2. Aplicaç ão 2 - City Manager
+O aplicativo City Manager (Figura 6(b)) explora os m ódulos Trail e Services, bem como o
+suporte a diferentes tipos de veículos. Dessa forma, diferentes veículos foram mapeados
+como carros, ambulâncias, viaturas da guarda municipal, táxis e ônibus.
+O seguinte cenário foi executado:                                                          ”A Prefeitura precisa controlar os veículos
+da cidade em tempo real e armazenar um registro hist órico dos veículos.  Além disso,
+as viaturas da guarda municipal precisam registrar os locais onde s ão realizadas as
+ocorrências. Esses dados v ão ser utilizados para identificar as áreas onde surgem mais
+ocorrências para ent ão organizar as viaturas em pontos estratégicos. No início do mês
+de Fevereiro a Prefeitura acessa o aplicativo City Manager para coletar e analisar os
+dados disponíveis”.
+No caso das viaturas da guarda municipal, o VA foi estendido para gravação de
+um registro da trilha sempre que uma viatura chegar ao local da ocorrência.  Para isso
+foram programadas no simulador paradas aleat órias desses veículos durante o percurso,
+representando uma ocorrência atendida.
+A Tabela 4 resume a dinâmica do cenário, destacando os atores e as aç ões.  O
+simulador foi executado 31 vezes representando os dias do mês de janeiro, sendo geradas
+trilhas para os veículos nesse período.
+A Figura 6(b) mostra a trilha de uma viatura conforme o período selecionado no
+aplicativo. Cada marcador no mapa representa uma ocorrência e, caso selecionado, são
+mostrados dados como a data, hora e uma descrição sobre o evento.
+656
+
+
+
+
+Aç ão
+Prefeitura                                                                                     Registra os veículos que serão monitorados através do m ódulo Portal
+Veículos                                                                                       A cada 30 segundos o VA instalado no veículo envia as informaç ões
+sobre localização
+Viatura                                                                                        Sempre que a viatura parar é acionada a função do VA para criar um
+                                                                                               registro da trilha informando a ocorrência
+Services                                                                                       Recebe as requisiç ões dos VA e registra os dados no perfil e na trilha
+Prefeitura                                                                                     Abre o aplicativo City Manager e visualiza os veículos em tempo real
+City Manager                                                                                   Faz as requisiç ões no Services para buscar os dados dos veículos
+Services                                                                                       Busca as informaç ões no perfil do veículo
+City Manager                                                                                   Mostra o mapa para usuário visualizar os veículos cadastrados
+Prefeitura                                                                                     Busca a trilha de uma viatura filtrando por uma data e hora inicial e final
+City Manager                                                                                   Chama o serviço do m ódulo Services para buscar a trilha
+Services                                                                                       Consulta o m ódulo Trail retornando a trilha do período informado
+Prefeitura                                                                                     Visualiza no mapa a trilha do período informado
+5. Trabalhos Relacionados
+Na área de Sistemas Inteligentes de Transporte destaca-se o i-WAY [Rusconi et al. 2007],
+um sistema que coleta e utiliza as informaç ões vindas de sensores instalados nos veículos
+e na rodovia. Com essas informaç ões, o sistema fornece uma ferramenta para gestão do
+tráfego otimizado, contribuindo para a redução de acidentes e fornecendo informaç ões
+atualizadas sobre o ambiente.
+Outro trabalho de destaque  é o projeto CVIS  [Toulminet et al. 2008] que tem
+como objeto conceber, desenvolver e testar tecnologias para permitir que veículos se
+comuniquem de forma segura um com o outro e com a infraestrutura da rodovia.  Para
+alcançar esse objetivo, o CVIS usa o padrão internacional de comunicação chamado de
+CALM [Ernst et al. 2009].
+O OneBusAway [Ferris et al. 2010] é um conjunto de ferramentas desenvolvidas
+pela Universidade de Washington para fornecer dados sobre as chegadas e partidas de
+ônibus em Seattle, com o objetivo de ajudar os passageiros que usam frequentemente esse
+transporte ou que ainda não conhecem o caminho e as paradas do ônibus.
+Da mesma forma que o OneBusAway, o Olho Vivo [SPTrans 2009] tem como
+objetivo visualizar em tempo real a localização dos ônibus na cidade de São Paulo (Brasil),
+obtendo informaç ões como a quantidade de minutos que o ônibus vai levar até chegar na
+parada.
+O projeto SIMTUR [SIMTUR 2011] visa desenvolver um sistema integrado de
+soluç ões para fornecer informaç ões de apoio aos usuários de transporte coletivo e privado.
+Para os passageiros de transporte coletivo, são disponibilizadas informaç ões relativas aos
+itinerários e rastreamento de veículos. No caso dos motoristas de veículos, são disponibi-
+lizadas informaç ões sobre o tráfego e condiç ões das vias urbanas, além de um serviço de
+comunicação segura entre veículos.
+Através    da    revisão    bibliográfica    desse    artigo                                   [Rusconi et al. 2007]
+657
+
+
+
+
+(a) Bus Assistent                                                                               (b) City Manager
+Figura 6. Telas dos aplicativos
+[Toulminet et al. 2008] [Ferris et al. 2010] [SPTrans 2009] [SIMTUR 2011], constata-se
+que o MD-UTS  é o primeiro modelo que atende a diversos tipos de veículos e que
+permite gerenciar as características específicas de cada um deles através de seu perfil,
+com suporte ao uso de Trilhas, conforme a Tabela 5.
+ao entre os trabalhos relacionados
+Quesito                                                                                         iWay                            CVIS          OneBusAway   Olho Vivo   SIMTUR              MD-UTS
+Sensível ao Contexto                                                                            Sim                             Sim           Sim          Sim         Sim           Sim
+Utiliza Trilhas                                                                                 Não                             Não           Não          Não         Não           Sim
+Utiliza Perfis                                                                                  Não                             Não           Não          Não         Não           Sim
+P úblico Foco                                                                                                      Motoristas   Motoristas,   Pedestres    Pedestres   Motoristas,         Motoristas,
+                                                                                                e                  Go-          Pedes-                                 Pedes-              Pedestres,
+                                                                                                verno                           tres          e                        tres          e     Governo e
+                                                                                                                                Governo                                Governo             Empresas
+Veículos Suportados                                                                                                Veículos     Veículos      Onibus       Onibus      Veículos            Veículos
+                                                                                                                   em geral     em geral                               em geral            em geral
+Utiliza Ontologia                                                                               Não                             Não           Não          Não         Não           Sim
+6. Consideraç ões Finais
+Esse artigo prop ôs um modelo para o desenvolvimento de sistemas inteligentes de trans-
+porte, com foco no gerenciamento de diferentes tipos de veículos, suporte a trilhas e perfis.
+O artigo prop ôs ainda uma ontologia para o domínio de transportes.
+A implementação de um prot ótipo, sua integração com o SUMO e o desenvol-
+vimento de duas aplicaç ões, permitiu uma avaliação das funcionalidades previstas no
+modelo. A avaliação mostrou a viabilidade da proposta, estimulando a continuidade do
+trabalho.
+Dentre os trabalhos futuros previstos encontram-se: i) desenvolver serviços adi-
+cionais para as aplicaç ões, tornando assim o modelo mais flexível; ii) implementar uma
+camada de comunicação utilizando sensores reais no m ódulo Sensor do VS; iii) ampliar
+658
+
+
+
+
+a avaliação, aperfeiçoando os cenários apresentados; iv) disponibilizar o MD-UTS para
+uso em condiç ões reais na cidade de São Leopoldo.
+7. Agradecimentos
+Os autores agradecem à empresa de transporte p úblico Viação Leopoldense Ltda, pela
+disponibilização das informaç ões de transporte na cidade de São Leopoldo usadas nesse
+artigo.
+Referências
+Almeida, M. B. and Bax, M. P. (2003).  Uma visão geral sobre ontologias:  Pesquisa
+sobre definiç ões, tipos, aplicaç ões, métodos de avaliação e de construção. Ciência da
+Informaç ão, 32:7 - 20.
+Barbosa, J. L. V., Hahn, R. M., Barbosa, D. N. F., and Saccol, A. I. d. C. Z. (2011).
+A ubiquitous learning model focused on learner interaction.  Int. J. Learn. Technol.,
+6(1):62-83.
+Dey, A. K., Abowd, G. D., and Salber, D. (2001). A conceptual framework and a toolkit
+for supporting the rapid prototyping of context-aware applications.  Hum.-Comput.
+Interact., 16(2):97-166.
+Ernst, T., Nebehaj, V., and Srasen, R. (2009).  Cvis: Calm proof of concept preliminary
+results. In Intelligent Transport Systems Telecommunications,(ITST),2009 9th Interna-
+tional Conference on, pages 80 -85.
+Ferris, B., Watkins, K., and Borning, A. (2010).  Location-aware tools for improving
+public transit usability. Pervasive Computing, IEEE, 9(1):13 -19.
+Fielding, R. T. (2000).  Architectural Styles and the Design of Network-based Software
+Architectures. PhD thesis, University of California, Irvine.
+Fowler, K. (2009). Sensor survey results. Instrumentation Measurement Magazine, IEEE,
+12(1):39 -44.
+Franco, L. K., Rosa, J. H., Barbosa, J. L., Costa, C. A., and Yamin, A. C. (2011). Mucs: A
+model for ubiquitous commerce support. Electronic Commerce Research and Applica-
+tions, 10(2):237 - 246. Special Issue on Electronic Auctions: Strategies and Methods.
+Hightower, J. and Borriello, G. (2001). Location systems for ubiquitous computing. Com-
+puter, 34(8):57 -66.
+Houda, M., Khemaja, M., Oliveira, K., and Abed, M. (2010). A public transportation on-
+tology to support user travel planning. In Research Challenges in Information Science
+(RCIS), 2010 Fourth International Conference on, pages 127 -136.
+Kwon, O., Shin, S., Shin, S., and Kim, W. (2010).  Design of u-health system with the
+use of smart phone and sensor network. In Ubiquitous Information Technologies and
+Applications (CUTE), 2010 Proceedings of the 5th International Conference on, pages
+1 -6.
+Lee, E., Ryu, K., and Paik, I. (2008). A concept for ubiquitous transportation systems and
+related development methodology. In Intelligent Transportation Systems, 2008. ITSC
+2008.11th International IEEE Conference on, pages 37 -42.
+659
+
+
+
+
+Miles, J. and Walker, A. (2006).  The potential application of artificial intelligence in
+transport. Intelligent Transport Systems, IEE Proceedings, 153(3):183 -198.
+Noy, N. F. and McGuinness, D. L. (2001).  Ontology Development 101:  A Guide to
+Creating Your First Ontology. Online.
+Oh, J. and Oh, S. (2011). Some aspects of the ubiquitous services on the u-city implemen-
+tation. In Mobile IT Convergence (ICMIC), 2011 International Conference on, pages
+78 -81.
+Oliveira, R. R., Noguez, F. C., Costa, C. A., Barbosa, J. L., and Prado, M. P. (2013). Sw-
+track: An intelligent model for cargo tracking based on off-the-shelf mobile devices.
+Expert Systems with Applications, 40(6):2023-2031.
+Passos, L. S. and Rossetti, R. J. F. (2009). Intelligent transportation systems: a ubiquitous
+perspective. In 14th Portuguese Conference on Artificial Intelligence, pages 27-38.
+Rusconi, G., Brugnoli, M., Dosso, P., Kretzschmar, K., Bougia, P., Fotiadis, D., Salgado,
+L., Jaureguizar, F., and De Feo, M. (2007). I-way, intelligent co-operative system for
+road safety. In Intelligent Vehicles Symposium, 2007 IEEE, pages 1056 -1061.
+Satyanarayanan, M. (2001). Pervasive computing: vision and challenges. Personal Com-
+munications, IEEE, 8(4):10 -17.
+Silva, J. M., Rosa, J. H., Barbosa, J. L., Barbosa, D. N., and Palazzo, L. A. (2010). Content
+distribution in trail-aware environments.  Journal of the Brazilian Computer Society,
+16:163-176.
+SIMTUR (2011). Simtur - sistema inteligente de monitoramento de tráfego urbano. Dis-
+ponível em:  http://projeto.unisinos.br/simtur/. Acesso em:  19 ja-
+neiro 2013.
+SPTrans  (2009).   Sistemas  informatizados  para  a  gestão  do  transporte  coletivo  do
+município de são paulo. Disponível em: http://www.sptrans.com.br/pdf/
+biblioteca_tecnica/SISTEMAS_INFORMATIZADOS_PARA_A_GESTAO_
+DO_TRANSPORTE.pdf. Acesso em: 19 janeiro 2013.
+Sussman, J. S. (2005). Perspectives on Intelligent Transportation Systems (ITS). Springer
+Verlag NY.
+Toulminet, G., Boussuge, J., and Laurgeau, C. (2008).  Comparative synthesis of the 3
+main european projects dealing with cooperative systems (cvis, safespot and coopers)
+and description of coopers demonstration site 4. In Intelligent Transportation Systems,
+2008. ITSC 2008. 11th International IEEE Conference on, pages 809 -814.
+Vieira, V., Caldas, L., and Salgado, A. (2011).  Towards an ubiquitous and context sen-
+sitive public transportation system.  In Ubi-Media Computing (U-Media), 2011 4th
+International Conference on, pages 174 -179.
+Wang, J., Ding, Z., and Jiang, C. (2005).  An ontology-based public transport query
+system. In Semantics, Knowledge and Grid, 2005. SKG ’05. First International Con-
+ference on, page 62.
+Weiser, M. (1991).  The Computer for the Twenty-First Century.  Scientific American,
+265(3):94-104.
+660
+
+
+
+
+

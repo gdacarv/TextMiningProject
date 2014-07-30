@@ -1,0 +1,323 @@
+﻿ADS-Flow: Uma Ferramenta para Construção de Sistemas
+Alinhados a Processos
+Daniel André Klinger 1, Kurt Werner Molz 1
+1Departamento de Informática - Universidade de Santa Cruz do Sul (UNISC)
+Caixa Postal 15.064 - 96.810-530 - Santa Cruz do Sul - RS - Brazil
+danielandreklinger@yahoo.com.br,  kurt@unisc.br
+Abstract.  This  work  is  focused  on  two  major  problems  of  the  current
+companies:  managing  their  processes,  and  the  search  for  a  way  to  store
+knowledge independent of technology. This research is segmented into four
+papers which approached the modeling of process, the engine that interprets
+and execute these processes, a module to define indicators (which is the base
+for a system BAM system), and a module that deals with the paradigm oriented
+knowledge.    Although  developed  separately,  they  are  integrated  and  they
+constitute a BPM system. The definition and collection of process indicators
+are innovations in BPM tools, and they can meet the process perspective of the
+BSC methodology.
+Resumo. Este trabalho está focado em dois grandes problemas das empresas
+atuais: a gestão de seus processos, e a busca por uma forma de armazenar o
+conhecimento independente de tecnologia. Esta pesquisa está segmentada em
+quatro trabalhos, os quais abordaram a modelagem dos processos, o motor
+que  interpreta  e  executa  estes  processos,  um  módulo  de  definição  de
+indicadores, que é a base para um sistema BAM, e um módulo que trata o
+paradigma orientado ao conhecimento.   Embora concebidos separadamente,
+eles são integrados e constituem um sistema BPM. A definição e coleta de
+indicadores de processo é uma inovação em ferramentas desta natureza, e
+poderá atender a perspectiva de processo da metodologia BSC.
+1. Introdução
+Este trabalho concentra-se em duas questões: o quê e como as empresas podem fazer
+para gerenciar seus processos; e como uma empresa pode sair do paradigma onde todo o
+seu  conhecimento  do  negócio  está  em  sistemas  e  dependente  de  uma  determinada
+tecnologia.  A  busca  da  melhoria  na  produtividade  empresarial  tem  sido  um  dos
+objetivos fundamentais de TI. Primeiro, foram os sistemas departamentais, depois os
+ERP  (Enterprise  Resource  Planning),  e  hoje  aponta  para  BPM  (Business  Process
+Management).
+Na atual conjuntura, cada vez mais as empresas vêm automatizando o registro de suas
+informações  através  de  sistemas  ERP.  Porém,  estes  sistemas  não  suportam  o
+gerenciamento de informações dentro da visão de processo. Este gerenciamento se faz
+cada vez mais necessário, devido à demanda imposta por um mercado globalizado.
+Nesse contexto, apresenta-se uma proposta inovadora para o desenvolvimento de um
+software de BPM. Este compreende desde a modelagem do processo, passando pela
+execução, através do motor, e por fim a definição de indicadores estratégicos, baseados
+
+
+
+
+na modelagem e na execução dos processos. Este último deve atender a Perspesctiva de
+Processo da metodologia BSC. Com isso, a estrutura para um sistema BAM (Business
+Activity  Monitoring)  está  incorporada  na  ferramenta.  Além  disso,  buscou-se  a
+integração de uma ferramenta para geração de código para regras de negócio, onde a
+especificação do negócio é armazenada em um metamodelo independente de tecnologia.
+Este módulo tem como característica principal a abstração da complexidade tecnológica
+e a conseqüente eliminação dos riscos relacionados com a tecnologia empregada nos
+projetos.  Assim,  retiram-se  as  preocupações  com  tecnologia  do  processo  de
+desenvolvimento,  fazendo  com  que  a  equipe  trabalhe  focada  nas  funcionalidades e
+requisitos do negócio, ou seja, mudando o paradigma e concentrando todo o foco no
+conhecimento  puro,  que  tem  valor  permanente,  e  é  independente  dos  elementos
+plataforma,  arquitetura  e  tecnologia.  Este  último  módulo  é  utilizado  para  a
+automatização das atividades do processo. A seguir, serão apresentados os módulos que
+fazem parte do sistema de BPM.
+2. A Modelagem do processo
+A  modelagem  de  um  processo  de  negócio  compreende  a  definição  dos  seus
+componentes e suas respectivas propriedades ou atributos. O processo, sem dúvida, é o
+principal fundamento de um sistema BPM, uma vez que o objetivo é a automatização
+destes.  Atividade  é  a  unidade  de  trabalho  executada  por  um  único  responsável.  O
+responsável por uma atividade pode ser um papel (atividades executadas por usuários do
+sistema), assim como o próprio motor do sistema (atividades automatizadas).   Na figura
+1, o meta-modelo utilizado para persistir esses componentes em uma base de dados.
+Figura 1 - Representação do modelador
+As principais atividades suportadas na ferramenta são:
+
+
+
+
+Instrução (IN): é uma atividade realizada por um usuário do sistema. Para tanto, esse
+usuário poderá se utilizar de recursos como: formulários, documentos anexos e demais
+instruções necessárias, contidas nas propriedades da atividade.
+Aprovação (AP): é uma atividade com as mesmas características e comportamentos da
+atividade  Instrução.  O  que  as  difere,  é  que  na  atividade  de  Aprovação,  existe  a
+necessidade,  por  parte  do  usuário  que  a  está  executando,  de  emitir um parecer de
+aprovação ou rejeição.
+Invocação de Aplicativo (IA): é uma atividade que também é realizada por um usuário
+do sistema, porém, através da invocação de um aplicativo externo ao sistema BPM.
+Execução  de  Procedimento                                                                       (EP):  é  uma  atividade  realizada  pelo  motor,  sem  a
+necessidade de interferência de um usuário do sistema. Consiste na execução de um
+procedimento em um determinado banco de dados. Este tipo de atividade, quando ainda
+não  automatizada,  permite  que  seja  usado  o  módulo  de  gerador  de  software,
+automatizando a atividade, como uma transação, dentro de uma visão de processo.
+Exportação de Dados (ED): é uma atividade realizada pelo motor, sem a necessidade de
+interferência de um usuário do sistema. Consiste na exportação de dados relativos aos
+atributos do processo para um arquivo xml ou txt.
+Subprocesso (SP): é uma atividade que consiste na execução de um outro processo de
+negócio, chamado, nesse caso, de subprocesso.
+Outro  aspecto  relevante  em  um  sistema  BPM  é  o  tempo.  Os  tempos  podem
+comprometer a eficiência do processo, a produtividade e lucratividade da organização.
+Os  tempos  podem  ser  de  ciclo,  processamento  e  espera.  Durante a modelagem do
+processo, tempos previstos de processamento e espera são atribuídos às atividades para
+futura comparação dos resultados pelo módulo de gerenciamento de indicadores e dados
+estratégicos.
+Além dos principais componentes de um sistema BPM, o meta-modelo apresentado
+suporta também a definição de formulários Web, os quais poderão ser utilizados como
+ferramenta auxiliar para a execução de atividades do tipo “Instrução” e “Aprovação”.
+Basicamente, a definição de um formulário compreende em especificar os atributos do
+processo que poderão ser visualizados e/ou modificados, o título do formulário,   textos
+livres para o cabeçalho e rodapé. Com base nesses dados, é possível gerar o código de
+um formulário Web, que será posteriormente invocado e controlado pelo motor no
+momento em que a atividade, que tiver o formulário associado, for executada.
+3. O Motor do sistema
+As funcionalidades típicas de um motor de um BPMS (Business Process Management
+System)  estão  relacionadas  com  o  armazenamento  de  dados,  que  representam
+informações  sobre  o  estado  interno  de  cada  processo e atividade.    A definição do
+processo a ser interpretado é gerado pelo modelador de processos, que é um módulo
+separado  da  execução,  e  o  controle  de  execução  do motor é baseado na definição
+interpretada.    A  execução  de  processos  inicia-se  na  leitura  e  interpretação  da  sua
+definição. Na leitura, deverá ser mapeada a representação do processo, descrevendo a
+rede  de  atividades  e  suas  dependências,  os  critérios  de  inicio  e  de  término,  os
+participantes do processo e as regras de integridade.
+
+
+
+
+A definição do processo não especifica um participante, mas sim um papel. Em tempo
+de execução, este papel precisa ser atribuído a um participante, acontecendo a resolução
+de papel. Para isto, pode-se permitir que um usuário indique o próximo participante, ou
+que se utilize um algoritmo de balanceamento de carga, o qual se baseia na lista de
+trabalho (lista que reúne os itens de trabalho sob a responsabilidade de um participante).
+Na  definição  do  processo,  é  possível  vincular  atividades  com  aplicativos  externos,
+assim, ao selecionar-se um item de trabalho na lista, o aplicativo externo correspondente
+pode ser invocado. Cada atividade deste tipo tem especificado o aplicativo externo a ser
+executado. De acordo com o tipo de aplicativo, o componente de controle de aplicativos
+externos fará a invocação.
+Normalmente as organizações enfrentam dificuldades em executar processos de negócio
+que utilizam diversos sistemas de informação, entre eles, sistemas legados, bases de
+dados e aplicações.   O desafio é encontrar uma solução que seja flexível e se adapte aos
+sistemas legados existentes. Então, fazer a integração destes   sistemas   com a arquitetura
+BPM é uma tarefa complexa devido ao custo e riscos de mau funcionamento. O motor
+em  questão  possui  web  services  visando  uma  solução  orientada  a  serviços,  sendo
+utilizado o padrão mundial WSDL.
+4. Gestão de Indicadores
+A gestão por processos, diferente da administração funcional, coordena todas as tarefas
+e atividades inerentes ao(s) processo(s) sob gestão da área de domínio delimitada, como
+hierarquicamente  vinculada  a  cada  Gerência  de  Serviços/Processos  definida.  Tal
+definição  tem  como  ponto  de  partida  a  delimitação  de  todos  os  processos  da
+organização, feita a partir da aplicação da metodologia de padronização de processos,
+em  suas  fases  de mapeamento global dos processos através de macrofluxograma e
+decorrente identificação dos processos-chave da organização.
+É evidente que a automação dos processos por meio de um BPM contribui com a gestão
+por processos. Tendo em vista a proposta do trabalho em questão, é possível observar
+que,  além  da  automatização  dos  processos,  os  dados  gerados  por  esses  podem  ser
+amplamente  analisados  e  utilizados.  Busca-se  com  isso,  a  gestão  por  processos,  e
+tornando-a muito mais funcional.
+Este módulo tem por objetivo viabilizar a gestão de indicadores construídos com base
+em processos de negócio. É possível segmentar o módulo de gestão em:
+Construção                                                                                     Indicadores  específicos  baseados  nos  atributos  dos  processos
+(atributos provenientes da modelagem desses processos).
+Consulta                                                                                       Indicadores específicos
+   Análise de regras construídas para os indicadores
+   Produção de dados baseado na execução dos processos
+Indicadores genéricos
+   Análise de dados comuns a processos de negócio, oriundos
+de sua execução
+Monitoramento                                                                                  Funcionalidade   que   analisa   os   indicadores   informando  não-
+(BAM)                                                                                          conformidades.
+
+
+
+
+Integração                                                                                      Interface  que  fornece  os  dados  dos  indicadores  a  ferramentas
+externas
+4.1. Indicadores
+Segundo Soares, citado por Müller  (2003, p.129), o Balanced Scorecard  (BSC) foi
+criado com a finalidade de desenvolver um novo grupo de medidas de desempenho, a
+partir da crença de que a gestão, baseada somente nas medidas financeiras, estava se
+tornando obsoleta e que a dependência destas medidas estava prejudicando a capacidade
+da empresa de criar valor econômico futuro.
+Portanto, a base de um Balanced Scorecard são indicadores como suas metas e seus
+resultados (Kaplan, 1997). Um dos objetivos do módulo Gestão de Indicadores é dar
+suporte ao BSC, fornecendo os dados necessários à Perspectiva do Processo Interno.
+Segundo  Hronec  (1994),  medidas  de  desempenho  são  sinais  vitais  da  organização,
+comunicando a estratégia para baixo, os resultados dos processos para cima e o controle
+e melhoria dentro dos processos, devendo, por isso, ser desenvolvidas de cima para
+baixo, interligando as estratégias, recursos e processos.
+O módulo Gestão de Indicadores tem por objetivo viabilizar uma completa gerência dos
+indicadores  de  gestão.  Para  isso,  permite  que  indicadores  sejam  construídos,
+consultados, monitorados e utilizados por sistemas externos a ele.
+A Gestão de Indicadores está totalmente integrada aos módulos de modelagem e motor.
+Para a construção dos indicadores são utilizados atributos dos processos modelados, já
+os resultados desses indicadores são provenientes da execução dos processos. Isso tudo
+acontece em uma base de dados que é compartilhada pelos módulos.
+4.2. Business Activity Monitoring
+Segundo Balloni (2005), BAM trata-se do Monitoramento das Atividades de Negócio -
+ferramenta que provê acesso em tempo real aos indicadores críticos de desempenho do
+negócio, melhorando a rapidez e eficácia das operações de negócios.
+Essa  funcionalidade  é  implementada  através  de  um  serviço  que  constantemente
+monitora a base de dados e emite avisos de não-conformidade nos indicadores.
+Para validar e provar os conceitos inerentes a mensuração de resultados, implementou-
+se um protótipo nomeado Dynamic Business EStrategic daTa, ou simplesmente DBEST.
+O DBEST contempla: a criação de indicadores específicos, a utilização de indicadores
+genéricos,  um  mecanismo  de  BAM,  integração  com  sistemas  heterogêneos  e  a
+visualização de relatórios e gráficos configurados pelo próprio usuário.
+Como  ilustra  a  figura  2,  para  a  construção  dos  indicadores,  o  usuário  tem  a  sua
+disposição todos os dados do processo e pode utilizá-los para construir a fórmula do
+indicador. O usuário pode ainda definir algumas características para o indicador como: a
+meta, o instante da compilação, a atividade mãe e se o indicador deve ser monitorado
+pelo BAM.
+
+
+
+
+Figura 2 - DBEST: construção de indicadores
+A consulta dos indicadores específicos é feita por meio de um assistente que permite ao
+usuário  configurar  as  suas  visões.  Para  isto,  ele  pode  mostrar  quais indicadores, o
+período e os dados para análise.
+Já na consulta de indicadores genéricos, o usuário tem a sua disposição uma série de
+dados pré-definidos, e com eles, pode montar a sua pivot table. Desta forma, o usuário
+tem a completa liberdade de combinar dados e analisar os resultados.
+O Activity Monitoring pode ser visualizado em todas as interfaces do configurador de
+saída de dados. Ele está localizado na barra inferior dessa interface e pode se apresentar
+em dois estados: um estático, mostrando que todos os indicadores estão sob controle e,
+outro,  no  formato  de  alerta                                                                 (com  um  aviso  piscante),  que  aponta  a  existência  de
+indicadores fora de controle. Portanto, quando o BAM estiver em modo de alerta, o
+usuário pode visualizar os indicadores fora de controle e montar uma visão sobre eles,
+verificando o motivo da não conformidade.
+A integração deste módulo com outras ferramentas pode ser feita de duas formas: por
+meio da importação dos dados das planilhas eletrônicas (Excel) geradas pelos relatórios;
+ou por intermédio de uma camada de serviços (Web Services), oferecida pelo protótipo.
+Para a integração por meio da camada de serviços, as demais ferramentas terão a seu
+dispor um Web Service chamado Integração, que expõem publicamente dois métodos:
+um para a busca da lista de indicadores disponíveis, e outro, para a busca dos resultados
+desses indicadores.
+5. Automatização de Atividades
+Acredita-se firmemente que é inevitável a substituição do paradigma atual (como 40
+anos atrás orientado aos programadores e à programação algoritma e manual) por um
+novo  paradigma  orientado  ao  conhecimento.  Esta  substituição  é  inevitável,  pois  a
+programação manual se mostra cada vez mais inviável e hoje implica em produtividade
+muito baixa do desenvolvimento e custos elevados (dinheiro e tempo) de manutenção de
+sistemas.  Muitas  vezes,  isto  obriga  as  empresas  a  sacrificar  sua  individualidade  e
+renunciar a vantagens competitivas para adotar pacotes padrão, com suas conseguintes
+rigidezes, porque é impossível para elas construir e manter os aplicativos que realmente
+necessitam.
+
+
+
+
+A principal característica desta ferramenta é a abstração da complexidade tecnológica e
+a conseqüente eliminação dos riscos relacionados com a tecnologia empregada nos
+projetos,  ou  seja,  retirando  as  preocupações  com  tecnologia  do  processo  de
+desenvolvimento e fazendo com que a equipe trabalhe focada nas funcionalidades e
+requisitos de negócio. O conhecimento puro tem um valor permanente, e é independente
+de elementos de menor nível, tais como a plataforma  (hardware, sistema operativo,
+servidor de base de dados, servidor de aplicações, etc.), a arquitetura  (centralizada,
+cliente-servidor  de  duas  camadas,  cliente-servidor  de  três  camadas,  multiservidor
+orientado à rede como Java ou Microsoft .NET) e a tecnologia disponível.
+Protege-se  o  conhecimento  de  todos  os  usuários,  independentemente  da  tecnologia
+utilizada. Quaisquer que sejam as tecnologias usadas no futuro, o conhecimento será o
+mesmo;  portanto,  construindo  os  geradores  necessários,  este  conhecimento  será
+reutilizado  para  gerar  sistemas  para  as  novas  tecnologias.  A  figura                 3  apresenta  a
+interface onde as regras de negócios são especificadas.
+Figura 3 - Interface do módulo de especificação de regras de negócio.
+Isto  significa  dizer  que  o  conhecimento  estratégico  do  negócio,  estando  uma  vez
+documentado, pode ser reutilizado para qualquer tecnologia, sem gerar custos muito
+elevados com a atualização tecnológica.   Vale lembrar, a quantidade de empresas que
+gastam  grandes  quantias  em  recursos  para  migrar  seus  sistemas  para  uma  nova
+tecnologia, pois possuem todo o conhecimento do negócio da empresa programada
+dentro de suas aplicações e dependentes destas tecnologias.
+Ao utilizar o ambiente, as especificações de projeto realizadas em uma ferramenta
+CASE são importadas para o metamodelo da ferramenta, deixando de ser meramente
+documentacionais, pois formam a base para a geração de código-fonte. A seguir, o
+analista passa a especificar os componentes de negócio. Feitas as especificações, o
+ambiente permite a geração automática das estruturas principais dos componentes de
+negócio.  Componentes  de  negócio  com  regras  muito  complexas,  podem  ser
+implementadas por programadores e depois importados para o metamodelo, para que
+possam ser criadas na próxima geração do sistema.
+Devido a integração entre as fases e ferramentas de desenvolvimento, não há retrabalho
+e a documentação mantêm-se atualizada, pois o analista será conduzido a proceder as
+
+
+
+
+modificações dos sistemas no ambiente da ferramenta e não diretamente no código-
+fonte, como acontece nos processos tradicionais.
+6. Conclusão
+Essa   pesquisa,   através   dos   trabalhos   de   graduação,   originou   protótipos   que
+compartilham informações entre si, ou seja, o motor executa os processos modelados e o
+modulo  de  gestão  de  indicadores  permite  a  construção  de  indicadores  sobre  a
+modelagem, porém analisando dados produzidos pelo motor. Para a automatização das
+atividades é proposto um ambiente de geração de software.
+Apesar da grande abrangência conseguida através da integração dos protótipos, outras
+funcionalidades  ainda  podem  ser  adicionadas,  como,  por  exemplo,  a  utilização  de
+notação BPMN, recursos de GED/EDI, além da utilização de arquitetura SOA.
+Mais  detalhes  sobre  a  pesquisa  realizada  e  os  protótipos  desenvolvidos  podem  ser
+encontrados nos trabalhos de Feldens (2006), Santos (2006) e Machado (2006).
+References
+                                                                                               Balloni,  Antonio  José.(2005)                                                                     “Por  que  gestão  em  Sistemas  e  Tecnologias  de
+Informação?                                                                                    II.2"                                                                             -                <http://www.ccuec.unicamp.br/revista/infotec/
+artigos/GESITI_FINAL.pdf>. Acesso em 27 maio 2006. São Paulo.
+Cruz,  Tadeu.  (2001).  E-Workflow:  como  implantar  e  aumentar  a  produtividade  de
+qualquer processo. São Paulo: Cenadem.
+Carvalho, L.  (1995). Indicadores de desempenho gerencial. Apostila  (Projeto Gestão
+Empresarial e Qualidade) - Serviço Nacional da Indústria (SENAI), Federação das
+Indústrias do estado do Rio Grande do Sul (FIERGS), Porto Alegre.
+Feldens, Gunter. (2006). Definição de um meta-modelo para especificação de processos
+e atividades em um ambiente de Workflow, Trabalho de Conclusão - Universidade
+de Santa Cruz do Sul, Santa Cruz do Sul.
+Hronec, Steven. (1994). M. Sinais vitais: usando medidas de desempenho da qualidade,
+tempo e custo para traçar a rota para o futuro de sua empresa. São Paulo: Makron
+Books.
+Kaplan,  R.  S.;  Norton,  D.  P.                                                              (1997).  A  estratégia  em  ação:  Balanced  Scorecard.
+Tradução de Luiz Euclydes Trindade Frazão Filho. Rio de Janeiro: Campus.
+Machado, Tiago. (2006). Especificação de Indicadores de Gestão Baseada na Gerência
+de Processos, Trabalho de Conclusão - Universidade de Santa Cruz do Sul, Santa
+Cruz do Sul.
+Muller,  Cláudio  J.                                                                           (2003).  Modelo  de  gestão  integrando  planejamento  estratégico,
+                                                                                               sistemas  de  avaliação  de  desempenho  e  gerenciamento  de  processos          (MEIO  -
+Modelo  de  Estratégia,  Indicadores  e  Operações).                                           2003.  Tese                                                                       (Doutorado  em
+                                                                                               Engenharia) - Universidade Federal do Rio Grande do Sul, Porto Alegre.
+Santos,  Alan  Ricardo  dos.                                                                   (2006).  Uma  Arquitetura  para  Suporte  a  Execução  de
+                                                                                               Workflow, Trabalho de Conclusão - Universidade de Santa Cruz do Sul, Santa Cruz
+do Sul.
+
+
+
+
+

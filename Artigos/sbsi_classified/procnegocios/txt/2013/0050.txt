@@ -1,0 +1,540 @@
+﻿Um Algoritmo Genético para Seleç ão de Portf ólio de
+Investimentos com Restriç ões de Cardinalidade e
+Lotes-Padr ão
+Renan Fortes Tourinho, Ant ônio Costa de Oliveira, Rodrigo de Melo Souza Veras
+1Departamento de Computação (DC) - Universidade Federal do Piauí (UFPI)
+Teresina - PI - Brasil
+renantourinho@gmail.com,  {costa,rveras}@ufpi.edu.br
+Abstract. The Markowitz’s quadratic model played a key role in the invest-
+ments’ portfolio selection problem, however, no longer meets the needs of the
+complexity of the current market. The addition of constraints to approximate the
+model to the real situation faced by investors, makes the problem NP-Complete.
+Thus, this paper presents a genetic algorithm that seeks to maximize the invest-
+ment’s return, given an acceptable risk level. After portfolio optimization based
+on historical data, there is a forecast for the subsequent year.  The results im-
+proves the Bovespa index performance, highlighting the effects of diversification
+according to the number of assets and the capital available for investment.
+Resumo. O modelo quadr ático de Markowitz desempenhou um papel funda-
+mental no problema da seleç ão de portf ólio de investimentos,  contudo,  j á
+n ão atende  às necessidades da complexidade do mercado atual.  A adiç ão de
+restriç ões que aproximam o modelo à situaç ão real enfrentada pelos investido-
+res, tornam o problema NP-Completo.  Assim, este artigo apresenta um Algo-
+ritmo Genético que busca maximizar o retorno de um investimento, dado um
+patamar aceit ável de risco. Ap ós a otimizaç ão do portf ólio com base em dados
+hist óricos, faz-se uma previs ão para o ano posterior.  Os resultados superam
+a performance do Índice Bovespa, destacando os efeitos da diversificaç ão de
+acordo com o n úmero de ativos e com o capital disponível para investimento.
+1.                                                                                           Introduç ão
+Historicamente, a necessidade de otimizar os recursos, fez com que a seleção de portf ólio
+se tornasse um t ópico de amplo interesse aos fundos de investimento institucionais. Nos
+últimos anos esse assunto tem sido considerado no âmbito da gestão de carteiras de inves-
+tidores individuais, com o objetivo de melhorar os resultados dos indivíduos, adaptando
+as melhores práticas já consolidadas no contexto institucional [Torre e Rudd 2004].
+Para decidir a melhor combinação dentre as possibilidades de investimentos exis-
+tentes,                                                                                      é necessário levar em conta tanto o retorno que será obtido como o risco que
+será incorrido.  Nesse contexto, Harry Markowitz [Markowitz 1952] prop ôs um método
+para solucionar de maneira direta a escolha dos ativos para investimento, através da
+quantificação de variáveis outrora indefinidas, como o risco e o retorno do portf ólio, o
+que deu origem à moderna teoria das carteiras.  O modelo média-variância, como ficou
+conhecido, estima o retorno da carteira como a média ponderada de todos os retornos de
+cada ativo, enquanto o risco é mensurado pela variância da carteira escolhida.
+541
+
+
+
+
+A importância deste trabalho consiste na otimização de portf ólios que visam for-
+necer o melhor retorno para um patamar aceitável de risco, se utilizando de uma ex-
+tensão do Modelo de Markowitz [Markowitz 1952]. Além disso considerou-se a inserção
+de duas restriç ões do mundo real, lotes-padrão mínimos para compra de cada ativo e
+n úmero de aç ões diferentes (cardinalidade) para diversificação do investimento, investi-
+gando também os seus efeitos sobre o retorno obtido. Nesse caso, portf ólio (ou carteira)
+refere-se a um conjunto de investimentos composto por um determinado n úmero de aç ões.
+Segundo [Kellerer et al. 1999], este é um problema NP-Completo, em que desconhece-se
+um algoritmo polinomial que possa resolvê-lo.
+Para lidar com tal complexidade, este trabalho apresenta um Algoritmo Genético
+(AG), utilizando como entrada dados hist óricos de cotaç ões de aç ões da Bolsa de Valores,
+Mercadorias e Futuros de São Paulo (BM&FBOVESPA) [Bovespa 2012], durante o ano
+2010 no intuito de otimizar portf ólios, e utilizá-los como investimento para o ano de
+2011, comparando o desempenho da carteira obtida ao Índice Bovespa (IBOVESPA), o
+benchmark que melhor representa o comportamento do mercado brasileiro.
+Este artigo está organizado da seguinte maneira: a seção 2 exp õe o estado da arte
+das pesquisas relacionadas ao problema.  Na seção 3, o problema e suas restriç ões são
+definidos, tendo sua modelagem detalhada na seção 4. A seção 5, por sua vez, define o
+Algoritmo Genético conforme seus principais operadores.  A seção 6 é responsável por
+detalhar os experimentos empíricos realizados, enquanto a seção 7 discute os resultados
+computacionais obtidos. Na seção 8, por sua vez, é apresentada a conclusão e são discu-
+tidas algumas possibilidades de trabalhos futuros.
+2. Estado da Arte
+Markowitz  [Markowitz 1952]  definiu  um  framework  quantitativo  para  a  seleção  de
+portf ólios, ao alocar ativos dependentes das medidas de retorno e risco por ele propos-
+tas.  A resolução de tais parâmetros resultou em um gráfico composto por uma lista de
+carteiras que associam seus retornos para um mínimo risco possível, ou seu risco para um
+máximo retorno almejado, nomeado como Fronteira Eficiente. Posteriormente, William
+Sharpe [Sharpe 1963] simplificou a função de Markowitz, formando o Modelo de Índice
+Unico, que deu origem ao Modelo de Precificação de Ativos Financeiros (CAPM).
+Como  desenvolvimento  alternativo,   Hiroshi  Konno  e  Hiroaki  Yamazaki
+[Konno e Yamazaki 1991] foram os responsáveis pela utilização do desvio-médio ab-
+soluto como medida de risco, consolidando um modelo de programação linear.  Em
+[Markowitz et al. 1993], os autores, por sua vez, estudaram funç ões objetivas mais com-
+plexas, e propuseram outras soluç ões baseadas no conceito de semivariância. Tais mode-
+los oferecem uma robusta fundamentação te órica, contudo, compartilham da fraqueza de
+simplificar o cenário enfrentado pelo investidor, o que os distancia de uma solução com
+real aplicação prática em um ambiente de mercado.
+Uma   característica   marcante   dos   portf ólios   financeiros   diz   respeito            à
+diversificação de ativos, onde a inclusão de novos investimentos diminuem o risco di-
+versificável ao passo que aumentam o retorno esperado.  Tal premissa leva o investidor
+a querer maximizar a relação entre o retorno e o risco incluindo o máximo de ativos
+possíveis em sua carteira. Todavia, Maringer [Maringer 2005] mostrou que a maior parte
+dos efeitos positivos da diversificação pode ser obtida sem necessitar envolver todas as
+542
+
+
+
+
+aç ões disponíveis no mercado.
+A medida que os pesquisadores buscavam aproximar os portf ólios otimizados da
+realidade, mais restriç ões foram consideradas. Portf ólios com limites mínimos de compra
+foram considerados em [Beale e Forest 1976], buscando evitar o investimento de peque-
+nas parcelas do capital em um único ativo.
+Para explorar o impacto da diversificação ou de taxas sobre investimentos, a
+restrição de cardinalidade começou a ser inserida nos modelos, permitindo ao investi-
+dor comprar apenas um n úmero pré-definido de aç ões. [Chang et al. 2000] consideraram
+uma fronteira eficiente descontínua ao adicionar determinados n úmeros de ativos para
+formação de carteiras. [Li et al. 2006] abordaram a restrição de cardinalidade juntamente
+a lotes específicos, adaptados para a realidade do mercado de Hong Kong.
+Através   de   uma   formulação   de   programação   quadrática   inteira-mista,
+[Corazza e Favaretto 2007]  buscaram  soluç ões  viáveis  através  de  um  n úmero  finito
+de passos, simulando portf ólios com 5, 10, 25, 50, 100 e 250 ativos. Ainda considerando
+a  cardinalidade,                                                                             [Shaw et al. 2008]  apresentaram  um  procedimento  baseado  em  um
+relaxamento lagrangeano, simplificando a matriz de covariância em uma matriz de risco
+diagonal, reduzindo o tempo computacional da resolução do modelo, mas também sua
+expressividade quanto às restriç ões.
+Utilizando a heurística Simulated Annealing, [Derigs e Nickel 2003] considera-
+ram variáveis macroecon ômicas para influenciar no risco e retorno de seu modelo, apli-
+cado ao mercado alemão. [Cura 2009] apresentou um modelo baseado em particle swarm
+optimisation , onde cada partícula representava um portf ólio, com resultados baseados nos
+problemas-teste provenientes de [Chang et al. 2000].
+Por intermédio de uma Busca Tabu híbrida, [Junior et al. 2011] resolveram um
+modelo estendido de Markowitz, considerando lotes-padrão e custos de transação associ-
+ados à BM&FBOVESPA, contudo, ignorando a cardinalidade. [Raposo 2010] utiliza dois
+Algoritmos Genéticos (AGs), um para agrupamento e outro para seleção de ativos, a fim
+de também resolver o modelo de Markowitz e aplicá-lo à Bolsa de Valores, limitando-se
+à formação de conjuntos através de similaridades e divergências em relação aos retornos
+das aç ões avaliadas.  Ainda no mercado brasileiro, [Freitas e Ribeiro 2009] otimizaram
+portf ólios com base no conceito de Valor em Risco Condicional (CVAR), utilizando-se
+de um modelo de programação linear para representação do problema, contudo, sem forte
+representação do cenário real enfrentado pelos investidores.
+3. Seleç ão de portf ólio de investimentos com restriç ões de cardinalidade e
+lotes-padr ão
+Para a seleção de investimentos, o ideal seria considerar o retorno e risco esperados. Con-
+tudo, pela enorme dificuldade em se obter esses valores esperados, uma estimativa comum
+para risco e retorno esperados vem da avaliação da média e volatilidade do seu retorno
+hist órico, de modo que, implicitamente, é suposto que o passado vai repetir-se no futuro.
+Restriç ão de Lotes-Padrao: para prover liquidez ao mercado financeiro, os ati-
+vos são transacionados em m últiplos de quantidades mínimas, conhecidos como lotes.
+Ao inserir tal restrição, o problema passa a ter uma região de viabilidade descontínua
+[Lin e Liu 2007].
+543
+
+
+
+
+Restriç ão  de  Cardinalidade:   Markowitz  [Markowitz 1952]  mostrou  que  a
+diversificação de investimentos diminui o risco do portf ólio, todavia, não há um consenso
+para definir quantos tipos de aç ões diferentes são suficientes para que haja uma redução
+significativa no risco, sem afetar consideravelmente o retorno. [Evans e Archer 1968] ex-
+plicam que 10 ativos reduzem o risco praticamente na mesma proporção que se o capital
+fosse diversificado em todo o mercado. No entanto, a metodologia utilizada por Evans é
+questionada por [Bird e Tippett 1986], pelo argumento de que os parâmetros de Mínimos
+Quadrados utilizados eram tendenciosos e, consequentemente, ainda há um benefício con-
+siderável de redução de risco ao se expandir mais o tamanho da carteira.
+A  abordagem  heurística  encontrou  espaço  na  otimização  de  portf ólios  com
+restriç ões, primeiramente através do trabalho de [Chang et al. 2000], que prop ôs soluç ões
+através  de  Algoritmos  Genéticos,  Busca  Tabu  e  Simulated  Annealing,  expondo  as
+diferenças no formato da fronteira eficiente, que exibe o melhor retorno para um dado
+patamar de risco, de acordo com um n úmero pré-definido de aç ões a serem escolhidas.
+4. Modelo de Markowitz Estendido
+O modelo de Markowitz, onde o retorno de um portf ólio é definido pela média ponderada
+dos retornos individuais de cada ação, e o risco é mensurado pela soma das variâncias
+dos ativos e das covariâncias entre todos os ativos, é um modelo quadrático de decisão
+multi-objetivo que visa maximizar o lucro enquanto reduz o risco  [Markowitz 1959].
+Por conveniência, este modelo usualmente fixa um de seus objetivos para trabalhar a
+otimização do outro, portanto, o trabalho abordará a maximização do retorno para um
+determinado patamar de risco ao qual o investidor está disposto a aceitar.  Para que os
+resultados tornem-se mais pr óximos da realidade, o modelo será estendido pela adição
+de restriç ões quanto à quantidade máxima e mínima de investimento percentual em uma
+única ação, assim como as restriç ões de cardinalidade e lotes-padrão.
+Modelo de Markowitz Estendido
+￿
+                                                                                                                                   max Rp  =                   wiri                                        (1)
+                                                                                                                                                               i=1
+Sujeito a:
+                                                                                                                     ￿             ￿
+                                                                                                     σp              =                                         wiwjσij                                     (2)
+                                                                                                                     i=1           j=1
+                                                                                                     wi              ≥   0                                                                                 (3)
+                                                                                                     wi              =   ￿ nxici                                                                           (4)
+                                                                                                                                                               i=1 xici , i = (1, 2, · · · , n)
+                                                                                                     ￿
+                                                                                                     xici            ≤  b                                                                                  (5)
+                                                                                                     i=1
+                                                                                               ￿
+                                                                                                                                                               ￿  zi  = 1,  caso a ação seja selecionada
+                                                                                                     zi  = k  onde                                                                                         (6)
+                                                                                                                                   zi  = 0,  caso contrário
+                                                                                               i=1
+                                                                                                     Linf                          ∗ (1 − zi) ≤ xici  ≤ Lsup   ∗ (1 − zi)                                  (7)
+                                                                                                     i                                                         i
+As equaç ões (1)-(3) representam o modelo original de Markowitz, onde n  é o
+numero de aç ões, Rp  é a taxa total esperada do retorno; ri  é a taxa de retorno esperada
+544
+
+
+
+
+para a ação i; σij representa a covariância entre as aç ões i e j; σp  é a variância do portf ólio;
+p é o patamar de risco aceitável ao investidor. wi representa a fração (ou peso) do capital
+investido no ativo i.  Na equação (4), xi  é o n úmero de lotes-padrão do ativo i, que vai
+compor o portf ólio. ci representa o preço da ação i. zi  é uma variável binária para garantir
+a cardinalidade. k representa o n úmero de aç ões que formarão a carteira e Linf                      e Lsup
+i                                                                                                     i
+são, respectivamente, o mínimo e o máximo investimento permitido em um único ativo i.
+A equação (4) expressa a conversão dos valores reais de investimento em uma
+medida percentual do capital disponível. A equação (5), por sua vez, garante que a carteira
+formada não extrapole o orçamento. Em (6), garante-se que exatamente k ativos formarão
+o portf ólio, já na equação (7), há uma limitação para evitar um investimento muito baixo
+ou muito alto em uma única ação, dependendo do capital total disponível.
+5. Algoritmo Genético Proposto
+Atualmente,  uma  grande  variedade  de  problemas  de  otimização  tem  sido  enfren-
+tada por técnicas heurísticas devido                                                                  à  dificuldade de resolução por métodos exatos
+[Pham e Karaboga 2000]. Dentre as heurísticas de melhor desempenho, destacam-se os
+Algoritmos Genéticos. Originalmente proposto por [Holland 1975], Algoritmo Genético
+é uma técnica de busca baseada nos mecanismos de seleção natural. Eles usam como base
+a mesma ideia que rege o seguinte princípio que existe na natureza: a sobrevivência dos
+mais aptos. Sua utilização tem sido cada vez mais explorada principalmente pela robustez
+e simplicidade que oferece [Gen e Cheng 1997].
+A maioria das técnicas heurísticas iniciam a busca com uma solução inicial para o
+problema. Essa solução é progressivamente modificada, na busca de uma solução ótima
+ou pr óxima da ótima. Os Algoritmos Genéticos, por sua vez, transformam uma população
+de possíveis soluç ões em uma nova geração de soluç ões usando os princípios Darwinianos
+de reprodução e sobrevivência dos mais aptos, pela aplicação de determinadas etapas
+como codificação/decodificação, função de avaliação, seleção, cruzamento e mutação.
+Codificaç ão e Decodificaç ão:  Apesar do modelo proposto apresentar soluç ões
+inteiras, a codificação do AG se dá através de n úmeros reais, envolvendo a parcela wi do
+capital, ao invés das unidades padrão xi. Para inicializar um cromossomo pertencente a
+uma população inicial, gera-se um wi aleat ório, entre 0 e 1, para cada gene. Não é sempre
+que sempre a soma de todos os wi  ficará igual ou menor a 1, o que faz necessário uma
+normalização conforme a equação (8), onde wi  é o novo peso normalizado.
+wi  = ￿ nwi                                                                                           (8)
+i=1 wi , i = (1, 2, · · · , n)
+Funç ão de Avaliaç ão: ap ós a geração da população inicial, os cromossomos são
+avaliados segundo a sua função de avaliação, que é a representação da função objetivo.
+Aqui consiste um dos grandes problemas dos Algoritmos Genéticos aplicados a proble-
+mas com várias restriç ões: a inviabilidade das soluç ões. [Gen e Cheng 1997] propuseram
+três métodos para lidar com as restriç ões: rejeição, reparação e penalização.
+A estratégia de rejeição descarta automaticamente uma solução inviável, gerando
+outra solução até que uma viável seja encontrada.  Já a estratégia de reparação, trans-
+forma soluç ões inviáveis em viáveis e, por conta da dificuldade de adaptação aos proble-
+545
+
+
+
+
+mas, ainda é pouco utilizada. Nesse trabalho, consideramos a estratégia de penalização,
+que formula uma função de penalização que aplica-se a todas as soluç ões inviáveis, na
+esperança de, quando submetidas aos processos de cruzamento e mutação, gerar proles
+viáveis. Em (9), qi  é uma representação em n úmero real, da quantidade de lotes-padrão
+adquiridos pelo peso wi de investimento no ativo i.
+qi  = b ∗ wi                                                                                 (9)
+ci
+￿  qi  − mod(qi) + 1,  caso mod(qi)  ≥ 0, 6
+p(xi) =                                                                                      (10)
+qi  − mod(qi),                                                                               caso contrário
+Em (10), a penalização gera a viabilização parcial da solução, uma vez que xi
+passa a ser representado de forma inteira, porém não é garantida que a soma de todos
+os investimentos sejam inferiores a b. A viabilização total com o objetivo de satisfazer a
+equação (5), será realizada apenas na última população, para aumento de eficiência.
+Seleç ão: o operador de seleção, seleciona os indivíduos que sofrerão cruzamento e
+mutação. Da mesma forma que ocorre no processo de seleção natural, os indivíduos mais
+qualificados, de acordo com a função de avaliação, têm mais chances de serem escolhidos.
+Para este estudo, foram testados a seleção por Torneio, por Roleta Viciada, e
+por Torneio Estocástico, sendo esse  último método o que se mostrou mais promissor.
+Neste método, a cada geração a população é submetida a uma seleção aleat ória de y in-
+divíduos (y é o tamanho do torneio). Posteriormente, monta-se uma Roleta Viciada, com
+proporç ões de acordo com a função de avaliação de cada um desses indivíduos, e um
+sorteio é efetuado para selecionar o candidato à pr óxima etapa, o cruzamento.
+Cruzamento: o objetivo do cruzamento é a permutação de material genético entre
+os pares de indivíduos previamente selecionados. O cruzamento é o operador responsável
+pela recombinação de características dos pais durante a reprodução, permitindo que as
+pr óximas geraç ões herdem essas características.
+Ap ós definir o critério de seleção,  testamos quatro tipos de cruzamentos:                  1
+ponto,  2  pontos, uniforme e R3, tendo este  último apresentado os melhores resulta-
+dos.  O cruzamento R3  foi adaptado tendo como base o operador hom ônimo descrito
+em [Radcliffe 1991]. Suas regras consistem em verificar se ambos os pais possuem uma
+ação particular em seu portf ólio. Em caso afirmativo, o filho resultante possuirá a mesma
+ação, em uma quantidade aleat ória gerada entre o percentual desse ativo em cada um dos
+pais. Caso ambos os pais não possuam determinada ação em seus portf ólios, ela também
+não constará na carteira de seus filhos. Por fim, se um determinado ativo consta em um
+pai, mas não em outro, o valor a ser repassado a seus filhos vai ser gerado aleatoriamente
+entre as quantidades de seus pais. De forma dinâmica, há uma função que varre todo o
+cromossomo ap ós o cruzamento, visando transformar qualquer prole inviável em viável,
+segundo as restriç ões já definidas.
+Mutaç ão  é a inserção de material genético novo na população.  Este processo
+ocorre, de acordo com uma dada probabilidade de mutação.  Esta perturbação no cro-
+mossomo é uma arma poderosa para tentar evitar que o algoritmo fique preso em ótimos
+locais.  Neste experimento, a mutação ocorre através da escolha de um gene aleat ório,
+546
+
+
+
+
+dentre os n genes considerados no cromossomo.  O ativo escolhido tem seu n úmero de
+lotes padrão modificado, obedecendo às mesmas restriç ões de normalização supracitadas,
+visando obter sempre cromossomos viáveis de real aplicação.
+Elitismo:  no intuito de garantir que o AG tenha sempre uma qualificação pro-
+gressiva em suas soluç ões, surgiu o elitismo, que consiste em preservar os x melhores
+indivíduos de uma geração, para as geraç ões seguintes, garantindo, no pior caso, que a
+pr óxima geração tenha o melhor resultado ao menos igual ao de seus pais [Coley 1999].
+6. Experimentos Empíricos
+Os estudo se utilizou de dados da BM&FBOVESPA no período de 2010, considerando as
+aç ões que comp õem o Índice Bovespa. Para fins de preservar a integridade das medidas
+de retorno e risco, desconsiderou-se as empresas que sofreram fusão, ou que não parti-
+ciparam do IBOVESPA durante todo o período estudado. Desse modo, os experimentos
+foram feitos sobre 40 empresas distintas, unificando a composição de aç ões ordinárias e
+preferenciais de uma mesma companhia.
+O presente trabalho utiliza uma versão estendida do modelo de Markowitz.  O
+objetivo é comparar o desempenho do portf ólio otimizado à performance do Índice Bo-
+vespa, que é o mais importante indicador do desempenho médio das cotaç ões do mercado
+de aç ões brasileiro. Sua relevância advém do fato de retratar o comportamento dos prin-
+cipais papéis negociados na BM&FBOVESPA e também de sua tradição, pois o índice
+manteve a integridade de sua série hist órica e não sofreu modificaç ões metodol ógicas
+desde sua implementação em 1968 [Bovespa 2012].
+O  investimento  em  fundos  indexados  ao  Ibovespa  normalmente  é  preferível
+àqueles investidores que visam o longo prazo, uma vez que o capital é sujeito a volatili-
+dades que podem resultar em perdas no curto prazo, mas historicamente tem se mostrado
+rentável no longo prazo, como pode-se perceber na Figura 1, onde o eixo das abscis-
+sas corresponde ao período hist órico do índice, enquanto o eixo das ordenadas mostra a
+variação percentual e o valor da carteira te órica formada pelas aç ões que comp õem o Ibo-
+vespa. Portanto, os resultados tem essencialmente o caráter comparativo à real variação do
+Ibovespa, ou seja, o objetivo não é que absolutamente haja lucro ao investidor individual
+a cada portf ólio gerado, mas que relativamente a carteira formada supere continuamente
+o índice para gerar uma maior rentabilidade no longo prazo.
+Para medir o retorno e o risco, foram consideradas as variaç ões mensais dos preços
+das aç ões abordadas.  A otimização dos portf ólios, através do Algoritmo Genético pro-
+posto, ocorre sobre o horizonte de tempo de 1 ano (2010). Um port ólio de investimentos
+é gerado para esse período, e posteriormente são considerados como investimentos para o
+ano de 2011, como se não houvesse conhecimento prévio dos resultados reais desse ano.
+6.1. Par âmetros utilizados
+Para determinar os melhores parâmetros para o Algoritmo Genético, o testamos para 600,
+700,  800,  900 e 1000 geraç ões, onde o ponto de convergência aproximou-se das 800
+geraç ões, sendo este o n úmero escolhido. Para compor o n úmero de portf ólios em cada
+população, testou-se casos com 20, 30, 40 e 50 carteiras. Os melhores resultados vieram
+com 50 portf ólios. Como limites percentuais superior e inferior de investimento em uma
+única ação, definimos a taxa de 0,5 e 0,02, respectivamente.
+547
+
+
+
+
+As taxas probabilística de cruzamento variaram entre 0,8, 0,9 e 1; tendo apresen-
+tado um melhor resultado com a última taxa.Com o operador de mutação, foram testadas
+as taxas de 0,01, 0,05, 0,1 e 0,2, escolhendo-se a taxa de 0,1.  O n úmero de soluç ões
+preservadas pelo elitismo variou entre 1, 3 e 5. Escolhendo-se o último valor. Como já
+citado, a seleção ocorre por intermédio do torneio estocástico, com y = 3, o cruzamento
+se dá pelo modelo R3  e a mutação acontece pela mudança de um gene.
+Este trabalho contemplará os lotes-padrão de 100 aç ões, como sendo a unidade
+at ômica de cada ativo, concordando com os lotes de negociação da BM&FBOVESPA.
+Para verificar os efeitos da diversificação na função objetivo e sua relação com o capital
+disponível para investimento, foi considerada como restrição de cardinalidade portf ólios
+de 10, 15, 10, 25 e 30 aç ões. Quanto ao capital inicial b investido, analisou-se instâncias
+nos valores de R$ 300.000,00, R$ 500.000,00, R$ 700.000,00 e R$ 1.000.000,00.
+7. Resultados Computacionais
+As instâncias foram executadas em um computador com processador Intel Core-I5 M430
+com 2.27GHz, e 4GB de mem ória Ram, através do Sistema Operacional Windows 7. O
+tempo computacional mostrou-se satisfat ório, com o menor tempo medindo 20 segundos,
+e o maior marcando 31 segundos.  Cada instância foi executada 10 vezes, obtendo-se o
+melhor resultado dentre elas, assim como o resultado médio de todas as execuç ões.
+Os resultados foram subdivididos e apresentados nas Tabelas 1, 2, 3, 4 de acordo
+com o montante investido em cada carteira. Cada tabela demonstra nas colunas 2 e 3 o
+portf ólio otimizado através dos dados hist óricos de 2010, período no qual o Ibovespa teve
+um rendimento médio mensal de -1,78%; já nas colunas 4 e 5, exibem o retorno, caso o
+investidor decidisse investir nesse mesmo portf ólio otimizado, durante todo o período de
+2011, sem conhecimento prévio de seus dados, apenas em posse dos preços de compra das
+aç ões no início do ano. Em 2011, semelhante ao ano anterior, o índice Bovespa também
+resultou em um retorno negativo, dessa vez em uma taxa de -1,62% mensais.
+O Ibovespa teve um rendimento médio mensal de -1,78% em 2010 e de -1,62%
+no período de 2011, resultando em prejuízo em ambos os anos. A heurística desenvolvida
+não alcança um saldo positivo na otimização ou na previsão, por trabalhar exclusivamente
+com aç ões que comp õem o Ibovespa. Todavia, cumpre satisfatoriamente o seu objetivo
+548
+
+
+
+
+Tabela 1. Percentual de lucro sobre capital investido de R$300.000,00
+                                                                                                                                                                         Portf ólio Otimizado             Previsão para 2011
+N úmero de Aç ões do Portf ólio                                                               Melhor                                                                     Retorno                Melhor    Retorno
+                                                                                              Retorno                                                                    Médio                  Retorno   Médio
+10 Aç ões                                                                                     -0.13%                                                                     -0,83%                 0,1%      -0,77%
+15 Aç ões                                                                                     -0,85%                                                                     -1,33%                 -0,15%    -0,55%
+20 Aç ões                                                                                     -1,05%                                                                     -1,56%                 -0,69%    -1,16%
+25 Aç ões                                                                                     -1,13%                                                                     -1,68%                 -0,76%    -1,39%
+30 Aç ões                                                                                     -1,52%                                                                     -1,91%                 -1,16%    -1,84%
+                                                                                              Tabela 2. Percentual de lucro sobre capital investido de R$ 500.000,00
+                                                                                                                                                                         Portf ólio Otimizado             Previsão para 2011
+N úmero de Aç ões do Portf ólio                                                               Melhor                                                                     Retorno                Melhor    Retorno
+                                                                                              Retorno                                                                    Médio                  Retorno   Médio
+10 Aç ões                                                                                     -0,37%                                                                     -0,99%                 -0,57%    -1,32%
+15 Aç ões                                                                                     -0,45%                                                                     -1,40%                 -0,37%    -0,98%
+20 Aç ões                                                                                     -0,95%                                                                     -1,49%                 0,12%     -1,04%
+25 Aç ões                                                                                     -1,42%                                                                     -1,92%                 -0,47%    -1,54%
+30 Aç ões                                                                                     -1,79%                                                                     -2,07%                 -0,86%    -1,64%
+                                                                                              Tabela 3. Percentual de lucro sobre capital investido de R$ 700.000,00
+                                                                                                                                                                         Portf ólio Otimizado             Previsão para 2011
+N úmero de Aç ões do Portf ólio                                                               Melhor                                                                     Retorno                Melhor    Retorno
+                                                                                              Retorno                                                                    Médio                  Retorno   Médio
+10 Aç ões                                                                                     0,09%                                                                      -0,77%                 -0,84%    -1,36%
+15 Aç ões                                                                                     -1,19%                                                                     -1,46%                 -0,33%    -0,98%
+20 Aç ões                                                                                     -0,91%                                                                     -1,67%                 -0,45%    -1,09%
+25 Aç ões                                                                                     -1,23%                                                                     -1,95%                 -1,19%    -1,63%
+30 Aç ões                                                                                     -1,54%                                                                     -1,91%                 -1,18%    -1,56%
+                                                                                              Tabela 4. Percentual de lucro sobre capital investido de R$ 1.000.000,00
+                                                                                                                                                                         Portf ólio Otimizado             Previsão para 2011
+N úmero de Aç ões do Portf ólio                                                               Melhor                                                                     Retorno                Melhor    Retorno
+                                                                                              Retorno                                                                    Médio                  Retorno   Médio
+10 Aç ões                                                                                     -0,55%                                                                     -1,24%                 -0,23%    -1,40%
+15 Aç ões                                                                                     -0,72%                                                                     -1,38%                 0,10%     -0,23%
+20 Aç ões                                                                                     -1,13%                                                                     -2,00%                 -0,63%    -1,04%
+25 Aç ões                                                                                     -1,41%                                                                     -2,14%                 -0,73%    -1,19%
+30 Aç ões                                                                                     -1,67%                                                                     -2,46%                 -0,90%    -1,51%
+de superar o índice, uma vez que o objetivo da carteira é o lucro a longo prazo, seguindo a
+tendência exibida na Figura 1. No geral, os melhores resultados para a otimização foram
+obtidos com os portf ólios de 10 e 15 aç ões.
+Os resultados mais promissores para a previsão envolvendo 2011 encontram-se na
+seleção de carteiras com 15 ativos.  A Tabela 4, por exemplo, mostra que se o investi-
+549
+
+
+
+
+dor decidisse comprar papéis no primeiro dia do ano, baseado no portf ólio de 15 ativos,
+otimizado do ano anterior, e decidisse vendê-lo no último dia do ano de 2011, teria uma
+média de perda de 0,23% ao mês. O melhor caso encontra-se na Tabela 2, onde, com 20
+ativos, o investidor seria capaz de obter um lucro de 0,12% mensais, durante o ano de
+2011, enquanto o Ibovespa sofreria com o prejuízo de -1,62%.
+Quantos aos efeitos da diversificação, os experimentos mostraram sua influência
+na diminuição do retorno das carteiras, à medida que novos tipos de ativos eram acres-
+centados. Também observou-se que o aumento no orçamento disponível potencializou a
+queda no retorno, em função do aumento na cardinalidade, conforme expresso na Figura
+2, onde o maior capital investido (R$ 1.000.000,00) gerou também o maior prejuízo (
+-2,46% com 30 aç ões), enquanto o menor orçamento (R$ 300.000,00) resultou na menor
+onerosidade (-1,91% com 30 aç ões).  Isso deve-se ao fato do algoritmo ser obrigado a
+designar uma maior parcela do capital a aç ões que tiveram um desempenho indesejável
+durante o período analisado, a fim de obedecer a todas as restriç ões impostas.
+ao e do capital disponível, sobre o retorno dos
+portf ´olios
+8. Conclus ão e Trabalhos Futuros
+A utilização de Algoritmos Genéticos para a otimização de carteiras considerando as
+restriç ões de cardinalidade e lotes-padrão,  mostra-se eficiente e eficaz,  encontrando
+soluç ões superiores ao benchmark, em todas as carteiras médias com até 15 ativos e na
+maioria dos portf ólios médios com até 25 investimentos. O AG também superou o Ibo-
+vespa em todas as previs ões para 2011, tornando o método viável para a utilização de um
+investidor que vise o longo prazo, ou até mesmo no auxílio de gestores institucionais que
+visam melhorar a rentabilidade de seus fundos indexados ao Índice Bovespa.
+Quanto ao efeito da diversificação, os experimentos comprovam que, na maioria
+dos casos, o aumento no n úmero de ativos dificulta a otimização do portf ólio, trazendo
+apenas ônus ao retorno, uma vez que o risco mínimo aceitável é atingido por cada uma
+das carteiras, independente de sua cardinalidade.  Tal constatação entra em acordo com
+a fronteira eficiente proposta por [Markowitz 1952], onde o retorno e o risco possuem
+relação diretamente proporcional entre si, e inversamente proporcional à diversificação.
+Por tratar-se de um problema com perturbaç ões, onde lida-se com a imprevisibilidade
+550
+
+
+
+
+do comportamento humano, o efeito da diversificação em relação às previs ões de 2011
+fogem ao escopo deste trabalho.
+Como trabalhos futuros,  pode-se considerar modelos alternativos ao de Mar-
+kowitz, como é o caso do modelo de desvio absoluto médio de [Konno e Yamazaki 1991],
+assim como desenvolver novas heurísticas para análise comparativa, tais como Busca
+Tabu, Simulated Annealing, GRASP, ou heurísticas híbridas, e também inserir novas es-
+tratégias para as heurísticas já abordadas. Também pode-se acoplar as heurísticas anteri-
+ormente citadas a métodos de inteligência computacional, como redes neurais, máquinas
+de vetor de suporte ou col ônias de formigas, visando a formação de conjuntos de investi-
+mento por similaridade, explorando o conceito de risco diversificável juntamente a outros
+modelos econ ômicos como o CAPM desenvolvido por Sharpe.
+Referências
+Beale, E. M. L. e Forest, J. J. H. (1976). Global optimization using special ordered sets.
+Mathematical Programming, 10:52-69.
+Bird, R. e Tippett, M. (1986). Naïve diversification and portfolio risk: A note. Manage-
+ment Science.
+Bovespa (2012). Índice bovespa. http://www.bmfbovespa.com.br.
+Chang, T.-J., Meade, N., Beasley, J. E., e Sharaiha, Y. M. (2000). Heuristics for cardinality
+constrained portfolio optimisation.  Computers and Operations Research, 27:1271-
+1302.
+Coley, D. A. (1999).  Introduction to Genetic Algorithms for Scientists and Engineers.
+World Scientific.
+Corazza, M. e Favaretto, D. (2007). On the existence of solutions to the quadratic mixed-
+integer mean-variance portfolio selection problem. European Journal of Operational
+Research, 176:1947-1960.
+Cura, T. (2009). Particle swarm optimization approach to portfolio optimization. Nonli-
+near Analysis: Real World Applications, 10:2396-2406.
+Derigs, U. e Nickel, N.-H. (2003).  Meta-heuristic based decision support for portfolio
+optimisation with a case study on tracking error minimization in passive portfolio ma-
+nagement. OR Spectrum, 25:345-378.
+Evans, J. L. e Archer, S. H. (1968).  Diversification and the reduction of dispersion: An
+empirical analysis. Journal of finance, pp 761-767.
+Freitas, E. T. e Ribeiro, C. O. (2009).  Abordagem robusta ao problema de seleção de
+portf ólio. Simp ósio Brasileiro de Pesquisa Operacional.
+Gen, M. e Cheng, R. (1997).  Genetic Algorithms and Engineering Design.  New York:
+Wiley.
+Holland, J. H. (1975).  Adaptation in Natural and Artificial Systems:  An Introductory
+Analysis With Applications to Biology, Control, and Artificial Intelligence.  Springer-
+Verlag.
+551
+
+
+
+
+Junior, M. P. L., de Almeida, M. R., e Ferreira, R. J. P. (2011). Seleção de portf ólios por
+meio de busca tab ú híbrida: Modelo de média variância em lotes. Simp ósio Brasileiro
+de Pesquisa Operacional.
+Kellerer, H., Mansini, R., e Speranza, M. G. (1999). Selecting portfolios with fixed costs
+and minimum transaction lots. Annals of Operations Research, 99:877-304.
+Konno, H. e Yamazaki, H. (1991). Mean-absolute deviation portfolio optimization model
+and its application to tokyo stock market. Management Science, 37(3):519-531.
+Li, D., Sun, X., e Wang, J. (2006). Optimal lot solution to cardinality constrained mean-
+variance formulation for portfolio selection. Mathematical Finance, 16:83-101.
+Lin, C. C. e Liu, T. Y. (2007).  Genetic algorithms for portfolio selection problems with
+minimum transaction lots. European Journal of Operational Research. O.R. Applica-
+tions.
+Maringer, D. (2005).  Portfolio management with heuristic optimization.  Springer, The
+Netherlands.
+Markowitz, H. M. (1952). Portfolio selection. Journal of Finance, 7(1):77-91.
+Markowitz, H. M. (1959).  Portfolio selection:  Efficient diversification of investments.
+New York: Wiley.
+Markowitz, H. M., Todd, P., Xu, G., e Yamane, Y.  (1993).   Computation of mean-
+semivariance efficient sets by the critical line algorithm.  Annals of Operations Re-
+search, 45:307-317.
+Pham, D. T. e Karaboga, D. (2000). Intelligent Optimisation Techniques: Genetic Algo-
+rithms, Tabu Search, Simulated Annealing and Neural Networks. Springer.
+Radcliffe, N. J. (1991).  Forma analysis and random respectful recombination.  Fourth
+International Conference on Genetic Algorithms, pp 222-229.
+Raposo, R. C. T. (2010). Seleção de portf ólios por meio de busca tab ú híbrida: Modelo
+de média variância em lotes. Workshop de Inteligência Computacional Aplicada.
+Sharpe, W. F. (1963). A simplified model for portfolio analysis. Management Science, pp
+277-293.
+Shaw,  D. X.,  Liu,  S.,  e Kopman,  L.  (2008).   Lagrangian relaxation procedure for
+cardinality-constrained portfolio optimization.  Optimization Methods and Software,
+23:411-420.
+Torre, N. G. e Rudd, A. (2004). The portfolio management problem of individual inves-
+tors:  A quantitative perspective.  Institutional Investor’s Guide to Integrated Wealth
+Management.
+552
+
+
+
+
+

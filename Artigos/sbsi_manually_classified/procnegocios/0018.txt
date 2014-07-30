@@ -1,0 +1,499 @@
+﻿Gest ão de Processos de Neg ócio em Curso de Sistemas de
+Informaç ão: Relato de Experiência Utilizando Software Livre
+Jessica Lasch de Moura1, Gabriel Machado Lunardi1,
+Andrea Schwertner Char ão1, Patrícia Pitthan Barcelos1, Benhur de Oliveira Stein1
+1Curso de Sistemas de Informação
+Universidade Federal de Santa Maria - UFSM
+{jmoura,  glunardi,  andrea,  pitthan,  benhur}@inf.ufsm.br
+Resumo. Neste artigo, apresenta-se um relato de experiência de modelagem e
+implementaç ão de um processo de neg ócio utilizando o software livre Bonita
+Open Solution. O processo em quest ão refere-se a uma atividade-meio em cur-
+sos de graduaç ão: a apreciaç ão e validaç ão de atividades complementares rea-
+lizadas pelos alunos. Sua implantaç ão em um Curso de Sistemas de Informaç ão
+trouxe melhorias em relaç ão ao processo original e permitiu identificar quali-
+dades e limitaç ões no software livre utilizado. Os artefatos gerados no desen-
+volvimento deste trabalho encontram-se disponíveis em um reposit ório p úblico,
+podendo servir como recurso pedag ógico para ensino de Gest ão de Processos
+de Neg ócio e, também, como soluç ão reutiliz ável em outros casos com requisitos
+similares.
+Abstract. This article presents an experience report of modeling and implemen-
+ting a business process using the free software Bonita Open Solution (BOS). The
+process refers to a support activity in undergraduate courses: the assessment
+and validation of complementary, extra-curricular activities developed by stu-
+dents. Its implementation in a Bachelor Course in Information Systems brought
+improvements over the original process and demonstrated some strenghts and
+limitations of BOS. All artifacts generated in the development of this work are
+available in a public repository, serving as a pedagogical resource for teaching
+Business Process Management, as well as a technological solution that can be
+used in other cases with similar requirements.
+1.                                                                                          Introduç ão
+A gestão de processos de neg ócio, do inglês Business Process Management (BPM), é um
+conceito que une as áreas de administração e tecnologia da informação com o objetivo
+de melhorar processos nas organizaç ões [Weske 2012]. Um processo pode ser entendido
+como um conjunto de atividades realizadas de forma organizada para atingir um obje-
+tivo [ABPMP 2012].  Tais conceitos se alinham com o perfil esperado dos egressos de
+cursos de bacharelado em Sistemas de Informação, que inclui uma formação “visando
+o desenvolvimento e a gest ão de soluç ões baseadas em tecnologia da informaç ão para
+os processos de neg ócio das organizaç ões de forma que elas atinjam efetivamente seus
+objetivos estratégicos de neg ócio” [Conselho Nacional de Educação 2012].
+Instituiç ões de ensino superior e, mais especificamente, suas subunidades que ge-
+renciam cursos de graduação, são potenciais “clientes” de BPM, pois realizam proces-
+sos envolvendo diferentes atores (discentes, docentes, secretários, coordenadores).  Tais
+206
+
+
+
+
+instituiç ões podem se beneficiar com a adoção de ferramentas de apoio à aplicação de
+BPM, os chamados sistemas de BPM (Business Process Management Systems ou Suites -
+BPMS). Casos e exemplos de gestão de processos de neg ócio são facilmente encontrados
+na literatura [Jeston e Nelis 2012], mas geralmente se enquadram no setor empresarial ou
+de serviços p úblicos. Em instituiç ões de ensino, a aplicação de BPM ainda é pouco difun-
+dida [Barn e Oussena 2010].  Qualquer que seja a área, os artefatos gerados em estudos
+de caso dificilmente ficam abertos para estudo aprofundado ou reuso em casos similares.
+Nesse contexto, surgiu a motivação para a aplicação de BPM a um processo co-
+mumente realizado em cursos de graduação e, particularmente, em cursos de bacharelado
+em Sistemas de Informação.  O processo escolhido foi a apreciação e validação de Ati-
+vidades Complementares, que são realizadas pelos alunos com o objetivo de enriquecer
+e flexibilizar suas formaç ões. Como tais atividades podem ser realizadas externamente à
+instituição de ensino, o processo geralmente envolve um trâmite de documentos impres-
+sos, entre alunos e coordenação, para que as atividades sejam reconhecidas e computa-
+das na integralização curricular. Possíveis melhorias de tal processo seriam, portanto, a
+redução de impress ões de documentos e maior agilidade na tramitação.
+Uma vez analisado o processo, escolheu-se um BPMS que atendesse aos requi-
+sitos identificados. Neste trabalho, optou-se pelo Bonita Open Solution (BOS), um soft-
+ware de c ódigo aberto que apoia atividades de BPM visando, principalmente, os res-
+ponsáveis por projetos de desenvolvimento e implantação de aplicaç ões orientadas a pro-
+cesso [BonitaSoft 2012]. Utilizando esta ferramenta, desenvolveu-se um sistema visando
+à transformação e melhoria do processo, possibilitando que toda a tramitação e apreciação
+de documentos seja realizada via Web pelos envolvidos.
+O presente artigo relata e discute as principais etapas da experiência.  Todos
+os artefatos produzidos durante o desenvolvimento estão disponíveis em um reposit ório
+p úblico e podem, assim, ser reusados ou servir como recurso didático. O sistema desen-
+volvido passou por vários testes com usuários finais e encontra-se, atualmente, implantado
+no curso de Sistemas de Informação da Universidade Federal de Santa Maria.
+O  artigo  está  estruturado  da  seguinte  forma:   a  seção                                2   apresenta  uma
+fundamentação relacionando conceitos de BPM, ferramentas disponíveis a esse prop ósito
+e um detalhamento da ferramenta adotada.  A seção 3 aborda a legislação educacional
+sobre atividades complementares em cursos de graduação.  Além disso, são explorados
+os requisitos do processo, com base no caso real analisado.  A seguir, a seção 4 relata
+principais fases do desenvolvimento: modelagem e implementação. A seção 5 faz uma
+avaliação da experiência e a seção 6 discute trabalhos relacionados.  Por fim, a seção 7
+traz as consideraç ões finais e perspectivas de trabalhos futuros.
+2. Gest ão de Processos de Neg ócio
+2.1. Conceitos
+Processos de neg ócio são atividades cujo objetivo  é estabelecer como o trabalho será
+realizado em uma organização. Pode-se dizer que são aç ões relacionadas entre si, a fim
+de promover uma saída [ABPMP 2012].  A gestão (ou gerenciamento) de processos de
+neg ócio, comumente designada pela sigla BPM, pode ser definida como um conjunto
+de boas práticas, com o intuito de mapear e gerenciar processos de neg ócio, onde se
+207
+
+
+
+
+envolvem pessoas e atividades automáticas.  O principal objetivo é obter uma melhoria
+desse processo [Weske 2012].
+O ciclo de vida de execução de BPM possui várias fases e dentre elas estão
+a análise, a modelagem e a implementação de processo de neg ócio.  Durante a fase
+da an álise são reunidas informaç ões pertinentes ao processos organizacionais, com a
+intenção de entendê-los.  Também são descritos os objetivos da modelagem e o am-
+biente de neg ócio que será modelado.  A fase de modelagem  é descrita como  “um
+conjunto de atividades envolvidas na criaç ão de representaç ões de um processo de
+neg ócio” [ABPMP 2012].  Por fim, a etapa de implementaç ão é definida como a fase
+que tem o objetivo de realizar o desenho aprovado do processo de neg ócio, na forma de
+procedimentos e fluxos de trabalho [ABPMP 2012].
+No que diz respeito à modelagem, existe um padrão chamado Business Process
+Model and Notation (BPMN), que define uma série de elementos padr ões para facilitar o
+entendimento e o desenho do processo [BPMI 2006]. Essa notação engloba termos para
+atividades, para encarregados de cada tarefa, entre outros.  Essa notação é comumente
+usada por ferramentas BPMS, apresentadas na pr óxima seção.
+2.2. Ferramentas
+BPMS (Business Process Management System) é o software para utilizar as metodologias
+do BPM para melhorar um processo. Através do BPMS, pode-se fazer a modelagem do
+processo e se ter métricas e controles de todo fluxo do processo. Com um software desse
+tipo, também é possível simular o processo e fornecer relat órios para ajudar durante a to-
+mada de decis ões. Ou seja, é possível utilizar essas ferramentas de várias formas visando a
+melhoria do processo. Alguns exemplos de ferramentas BPMS são Intalio, TIBCO BPM,
+além soluç ões Oracle e IBM WebSphere para BPM. Todos esses exemplos são do tipo
+“software proprietário”, que é licenciado com direitos exclusivos para o produtor. Exis-
+tem, também, ferramentas distribuídas sob licenças de software livre, tais como Activiti,
+jBPM, ProcessMaker e Bonita Open Solution.
+No presente trabalho, optou-se por uma solução de software livre por sua natu-
+ral flexibilidade e, também, por ser uma solução financeiramente viável para o caso em
+questão.  Ap ós análise da documentação das ferramentas citadas, experimentou-se Pro-
+cessMaker e Bonita Open Solution. Esta última foi escolhida pela sua maior habilidade
+em atender aos requisitos do processo, que serão abordados na seção 3.2.
+2.3. Bonita Open Solution
+Bonita Open Solution (BOS) é uma ferramenta distribuída sob uma licença de software
+livre, onde o c ódigo-fonte é liberado para permitir o uso, c ópia, estudo, etc. Trata-se de
+uma ferramenta desenvolvida em Java, pela empresa BonitaSoft [BonitaSoft 2012].
+A ferramenta BOS oferece componentes tanto para a modelagem como para a
+implementação e transformação de processos. A modelagem e customização de processos
+é realizada através do Bonita Studio, um componente com interface gráfica tipo desktop
+que agrupa ferramentas de desenvolvimento. Também é possível agregar funcionalidades
+aos processos através de conectores, como por exemplo:  armazenamento de dados em
+diversos SGBDs (MySQL, H2, PostgreSQL, entre outros), conexão com servidores de
+e-mail, reposit ório de documentos (Alfresco), redes sociais (Facebook, Twitter), geração
+208
+
+
+
+
+de relat órios (JasperReports), dentre vários outros.  Esses conectores, inclusive, podem
+receber personalizaç ões feitas através de c ódigos escritos em linguagem Groovy, algo
+que garante flexibilidade no desenvolvimento.
+Junto ao Bonita Studio, tem-se um ambiente de execução de processos chamado
+Bonita User Experience, permitindo o teste imediato de funcionalidades, num ambiente
+idêntico ao de um sistema em operação. Nesse ambiente, toda a interação com usuários
+ocorre via uma interface Web.  BOS também disponibiliza um ambiente de execução
+final, ou seja, para a implantação dos processos em servidores Web baseados em Java
+como Apache Tomcat e JBoss.
+3. An álise do Processo
+Conforme já mencionado, o foco deste trabalho é o processo que envolve a apreciação
+de atividades complementares em cursos de graduação, doravante designadas pela sigla
+ACG (Atividade Complementar de Graduação). O processo é uma atividade-meio (admi-
+nistrativa) que corrobora uma atividade-fim (formação da parte flexível do currículo do
+aluno). Na sequência, apresenta-se mais informaç ões sobre a legislação educacional que
+rege tais atividades, para depois partir-se para a análise de um caso real em que o processo
+em questão é realizado com frequência.
+3.1. Atividades Complementares em Cursos de Graduaç ão
+De acordo com as Diretrizes Curriculares Nacionais para os Cursos de Graduação em
+Computação [Conselho Nacional de Educação 2012], as atividades complementares são
+componentes curriculares que têm como objetivo principal enriquecer e expandir o perfil
+do egresso com atividades que privilegiem aspectos diversos da sua formação, incluindo
+atividades desenvolvidas fora do ambiente acadêmico.
+Desde o ano 2000, tais atividades vêm sendo mencionadas em diretrizes do Con-
+selho Nacional de Educação para diferentes cursos de graduação. No caso de cursos de
+Sistemas de Informação, as diretrizes estabelecem que tais atividades podem ser cum-
+pridas em diversos ambientes, como a instituição a que o estudante está vinculado, ou-
+tras instituiç ões e variados ambientes sociais, técnico-científicos ou profissionais, em
+modalidades tais como:  cursos de formação profissional, experiências de trabalho ou
+estágios não obrigat órios, extensão universitária junto à comunidade, iniciação científica,
+participação em eventos técnico-científicos, publicaç ões científicas, programas de moni-
+toria e tutoria, representação discente em comiss ões e comitês, participação em Empresas
+J únior, incubadoras, além de diversas outras atividades.
+3.2. Processo Original e Oportunidades de Melhoria
+A presente análise refere-se a um processo real, realizado com frequência no Curso de
+Sistemas de Informação da Universidade Federal de Santa Maria. Tal curso prevê, para
+integralização curricular, que o aluno desenvolva um total de 300 horas em Atividades
+Complementares de Graduação. Essas atividades podem ser desenvolvidas durante os 4
+anos de duração do curso e, para que sejam computadas no hist órico do aluno, precisam
+ser comprovadas pelo aluno e apreciadas e validadas junto à coordenação do curso.
+Nesse processo, para solicitar o aproveitamento de uma ACG, é necessário que
+o aluno preencha um formulário e o entregue na secretaria do curso,  junto com a
+209
+
+
+
+
+documentação da atividade (certificados e atestados, por exemplo) e, quando for o caso,
+um relat ório e um parecer do professor responsável.  Ap ós esta etapa, segundo normas
+do curso, a documentação é enviada a um relator, membro do colegiado do curso, para
+que seja emitido um parecer. Esse parecer é apresentado em uma reunião de colegiado,
+em que os demais membros também opinam e deliberam sobre a solicitação.  Caso a
+solicitação seja aprovada, a secretaria faz o trâmite necessário para que a carga horária
+seja computada no hist órico do aluno.  Algumas solicitaç ões podem seguir um trâmite
+mais curto, quando se trata de atividades em que o desempenho do aluno não precisa ser
+avaliado (participaç ões em eventos, por exemplo).
+De modo geral, sabe-se que esse processo  é trabalhoso, mas entende-se que a
+apreciação por várias pessoas seja importante para monitorar a qualidade das atividades
+desenvolvidas pelos alunos.  No entanto, o processo manual tem problemas, dentre eles
+o mau uso do tempo com o trâmite, já que toda a documentação precisa ser entregue
+em mãos aos envolvidos, um de cada vez, ocasionando atrasos desnecessários.  Outro
+problema é o grande desperdício de papel gerado pela impressão de formulários e docu-
+mentos.
+Para melhoria do processo, o requisito principal é que a interação entre os envolvi-
+dos ocorra de forma on-line, via Web, e que os documentos necessários sejam fornecidos
+e mantidos em formato digital. Deseja-se que todos os envolvidos possam autenticar-se,
+mesmo fora da instituição, e desempenhar seus papéis no processo, inclusive simultanea-
+mente, amenizando o problema de atraso do processo. Essa autenticação deve aproveitar
+um cadastro de usuários já existente em uma base LDAP (Lightweight Directory Access
+Protocol) na instituição.  O fluxo de trabalho deve contemplar as etapas de solicitação
+e apreciação de ACGs. Deseja-se, sempre que possível, que toda a apreciação seja feita
+através de pareceres on-line, mas em casos onde houverem d úvidas, que o sistema permita
+encaminhar o processo a uma reunião presencial do colegiado, para facilitar a interação
+entre os participantes.
+4. Desenvolvimento
+4.1. Modelagem do Processo
+A etapa de modelagem consistiu na especificação de um fluxo de trabalho seguindo o
+padrão BPMN, utilizando o Bonita Studio.  A figura 1 traz a visão geral do processo
+modelado. Nela, têm-se as divis ões (lanes) “Aluno”, “Tutor”, “Relator”, “Colegiado” e
+“Coordenação” que delimitam compartimentos de responsabilidade. Em seguida, as tare-
+fas (tasks) representam as atividades realizadas por um ou mais participante, por exemplo
+“Tutor avalia ACG” ou “Relator avalia ACG”. A maioria das tarefas são do tipo human
+tasks, ou seja, indicam que alguém será responsável por realizar essa tarefa. Uma exceção
+é a tarefa “Atualiza DB”, que é do tipo abstrata (não necessita alguém para iniciá-la), a
+qual realiza inserção no banco de dados.
+Como também mostra a figura 1, cada task é associada a uma etapa do processo,
+e cada etapa  é constituída por formulários Web, os quais devem ser preenchidos pelo
+usuário correspondente.  Por exemplo: o aluno deve descrever a ACG e preencher suas
+informaç ões de identificação; o professor responsável deve avaliar a solicitação e suge-
+rir alteraç ões, se necessário; o relator do colegiado deve fornecer um parecer sobre tal
+solicitação e, por fim, o colegiado deve aprovar ou não a solicitação de registro.
+210
+
+
+
+
+Figura 1. Diagrama da modelagem do processo
+Na etapa de modelagem, a ferramenta BOS satisfez plenamente os requisitos e,
+no caso em questão, não encontrou-se problemas de expressividade com o padrão BPMN,
+como relatado em estudos precedentes [Recker et al. 2006, zur Muehlen e Recker 2008].
+4.2. Implementaç ão
+O primeiro passo da implementação foi a criação dos formulários a serem visualizados pe-
+los participantes, conforme os papéis que desempenham. No Bonita Studio, a construção
+de formulários é facilitada, pois existem vários tipos de elementos pré-definidos que como
+caixa de texto, campo de data ou uma lista, por exemplo. Utilizando dos elementos cita-
+dos, é possível construir rapidamente um formulário. Porém, no caso prático em questão,
+foi necessário realizar algumas customizaç ões através de c ódigo na linguagem Groovy,
+para atender alguns requisitos tais como:  geração de uma lista com possíveis profes-
+sores/tutores, auto-preenchimento das informaç ões dos alunos, entre outros.  A figura 2
+mostra um exemplo de formulário visualizado pelo aluno, no momento em que este rea-
+liza a solicitação de aproveitamento de ACG.
+Para que o aluno pudesse anexar os documentos comprobat órios (certificados,
+atestados, pareceres, etc), utilizou-se um sistema para gestão de conte údo empresarial,
+do inglês Enterprise Content Management (ECM), denominado Alfresco. Essa tecnolo-
+gia foi escolhida por ser suportada via um conector na plataforma BOS, permitindo assim
+um gerenciamento facilitado dos documentos mesmo ap ós o término dos processos (o
+que de fato é necessário, pois tais documentos precisam ser arquivados na instituição).
+Tal como BOS, Alfresco também é um software livre, desenvolvido em Java.
+211
+
+
+
+
+¸ ˜ao de aproveitamento
+Para implementar a autenticação via LDAP, foi criado um novo m ódulo de login
+para o BOS, baseado em c ódigos Java retirados dos f óruns de discussão da ferramenta.
+Esse m ódulo substitui o m ódulo padrão de login, o qual autentica usuários através de
+um banco de dados interno à plataforma de execução. Paralelamente, foi necessário ca-
+dastrar grupos de usuários diretamente no BOS, pois muitas atividades dependiam dessa
+vinculação de usuários a grupos, e tais grupos não existiam na base LDAP. Os grupos
+criados foram “tutores”,  “relatores”,  “colegiado” e “coordenação”, correspondendo  às
+divis ões de responsabilidade no processo.  Também foi necessário vincular usuários ao
+grupo “admin”, que é um grupo padrão no BOS para designar usuários com permiss ões
+administrativas sobre os processos.
+Outro ponto importante na implementação do processo foi a geração de relat órios
+voltados tanto para alunos como para a coordenação, tais como hist órico de solicitaç ões
+de ACGs e resumo de carga horária homologada e faltante ao currículo do aluno.  A
+ferramenta BOS possui um tipo de conector que utiliza a biblioteca JasperReports para a
+geração de relat órios associados a um processo. Tal conector busca os dados do relat ório
+em uma base de dados externa à base do BOS.
+A partir da necessidade de relat órios, portanto, foi preciso definir uma base de
+dados externa para o armazenamento das informaç ões de solicitação/apreciação de ativi-
+dades.  Iniciou-se definindo a estrutura relacional contendo 5 tabelas1.  Em seguida, foi
+escolhido o SGBD Java H2 pela simplicidade e eficiência. Depois disso, foi necessário
+incluir conectores do SGBD H2 em tasks do processo, com as respectivas consultas SQL,
+para que a base de dados de atividades ficasse constantemente atualizada.
+Para a implementação dos relat órios, foi necessário construir uma definição XML
+1 Estrutura disponível no reposit ório: http://code.google.com/p/bpm-infufsm/
+212
+
+
+
+
+(contendo as consultas SQL, definiç ões de campos e formataç ões) para cada relat ório uti-
+lizando a ferramenta gráfica iReport. Mais tarde, essas definiç ões são executadas pela bi-
+blioteca JasperReports também provida por Bonita através do conector, contra uma fonte
+de dados.  Para que os usuários tivessem acesso aos relat órios gerados, foram criados
+mais dois processos chamados “Listar ACGs do usuário” (hist órico) e “Resumo ACGs do
+usuário” (carga-horária). A figura 3 ilustra esse mecanismo de funcionamento básico de
+conectores BOS para geração de relat órios com a biblioteca JasperReports.
+Figura 3. Funcionamento do conector que gera relat ´orios
+A última etapa da implementação foi a personalização da interface Bonita User
+Experience (versão 5.7.2), substituindo imagens e cores padrão do ambiente por ele-
+mentos que remetem  à identidade visual da instituição.  Esta customização foi reali-
+zada alterando-se arquivos HTML e CSS que definem a interface Web do BOS. Outras
+personalizaç ões mais profundas também foram necessárias na interface, para remover
+componentes julgados desnecessários, que acabavam por confundir os usuários. Porém,
+estas alteraç ões não poderiam ser feitas apenas editando-se imagens e arquivos.  Neste
+caso, foi necessário a alteração do c ódigo do pr óprio BOS, algo que s ó foi possível pelo
+fato de a ferramenta ser distribuída como software livre.
+Ao longo do desenvolvimento, foi criado um reposit ório on-line, disponível em
+http://code.google.com/p/bpm-infufsm/. Nesse reposit ório, encontram-se todos os artefa-
+tos produzidos durante o desenvolvimento do trabalho (requisitos, modelo do processo,
+vers ões do c ódigo implementado, esquemas de banco de dados). O reposit ório também
+permite que usuários registrem d úvidas, problemas ou sugest ões.
+5. Implantaç ão e Avaliaç ão
+Ap ós a implementação foi iniciada a fase de testes com usuários finais (membros do cole-
+giado e alguns alunos bolsistas). Os testes realizados ao longo do desenvolvimento indica-
+ram aceitação por parte dos usuários e revelaram oportunidades de melhoria da interface
+e da modelagem do processo. Ap ós várias revis ões, teve início a fase de implantação do
+processo, permitindo avaliá-lo em relação aos objetivos iniciais.
+213
+
+
+
+
+O processo foi disponibilizado à comunidade do curso, composta por cerca de 120
+alunos e 25 professores. O colegiado do curso, seguindo normas internas, fixou uma data
+limite para registro de atividades já realizadas pelos alunos.  Logo no primeiro mês, o
+sistema registrou mais de 100 instâncias (casos abertos) do processo. Em consultas infor-
+mais aos usuários, logo no início da implantação, notou-se boa aceitação da abordagem
+utilizada, que evita trâmite de documentos em papel.  A experiência com BOS no caso
+em questão foi apresentada a alunos de uma disciplina sobre modelagem de processos de
+neg ócio, suscitando interesse e reconhecimento.
+No segundo mês de uso do sistema, buscou-se quantificar a aceitação do sistema
+junto aos alunos. A decisão de iniciar a avaliação pela experiência dos alunos justifica-se
+pois estes, além de formarem a maioria dos usuários, são os atores que iniciam o processo
+solicitando uma ACG. Para esta avaliação, elaborou-se um questionário com quest ões de
+m últipla escolha, cada uma com 5 opç ões de resposta baseadas na escala de Likert2. Além
+de quest ões sobre aceitação, o questionário tinha também outras quest ões relacionadas a
+prioridades na implementação de correç ões e melhorias, incluindo uma questão discursiva
+opcional. Ao todo, 29 alunos responderam ao questionário, que era an ônimo e foi enviado
+aos alunos por e-mail.  A tabela 1 resume os resultados obtidos para as quest ões sobre
+aceitação do sistema. As respostas foram agrupadas em 3 categorias, buscando contrastar
+opini ões em concordância ou discordância.
+ao
+Questão                                                                                               Concordo        Indiferente   Discordo
+                                                                                                      totalmente ou                 totalmente ou
+                                                                                                      parcialmente                  parcialmente
+O trâmite on-line é melhor do que                                                                     15              2             12
+o trâmite em papel.
+O sistema das ACGs é um bom exemplo de                                                                22              2             5
+TI aplicada a um problema real.
+A integração do sistema com a base de                                                                 24              3             2
+usuários existente é conveniente.
+O sistema on-line das ACGs é fácil                                                                    11              4             14
+de aprender a usar.
+Observando-se a tabela 1, nota-se que houve concordância em alguns aspectos,
+mas que a aceitação da abordagem não foi tão forte quanto se esperava.  Em particu-
+lar, houve um n úmero significativo de usuários que não consideraram o sistema fácil de
+aprender a usar. Além disso, muitos não consideraram o trâmite on-line melhor do que o
+trâmite em papel.
+Para melhor interpretar esses resultados, é necessário saber que o questionário foi
+aplicado pr óximo à data limite de registro de ACGs, período em que houve um aumento
+considerável no n úmero de casos abertos no sistema. Além disso, o sistema apresentou fa-
+lhas nesse período, algumas delas ainda em investigação. Essas falhas e outras limitaç ões
+observadas são discutidas na pr óxima seção.
+2 Opç ões: Concordo totalmente, Concordo parcialmente, Indiferente, Discordo parcialmente, Discordo
+totalmente
+214
+
+
+
+
+5.1. Limitaç ões
+Um dos principais problemas observados diz respeito a casos que falham, por exemplo
+devido a alguma entrada não prevista ou devido a problemas de comunicação com o
+gerenciador de documentos (Alfresco) ou com o banco de dados.  Na implementação
+atual, os casos falhos são simplesmente assinalados aos usuários, sem uma explicação
+para isso. No questionário de avaliação, muitos usuários sugeriram prioridade máxima na
+resolução deste problema. Entretanto, a identificação do motivo da falha s ó é possível pela
+análise de logs do BOS, sendo restrita a administradores e muitas vezes difícil de localizar.
+E possível alterar a modelagem para incluir caminhos alternativos em caso de falhas,
+mas isso torna o processo mais complexo e não resolve todos os tipos de problemas (por
+exemplo, bugs no processo). Tudo isso revela a importância de se realizar muitos testes
+com o processo.  No entanto, testes automatizados não são suportados pela ferramenta,
+dificultando o trabalho.
+Ainda com relação a falhas, observou-se em diversas situaç ões que os serviços do
+sistema não foram corretamente restabelecidos ap ós serem interrompidos. Por exemplo,
+houve necessidade de recuperação manual do banco de dados interno do BOS, ap ós uma
+sequência de quedas de energia.  Em outra situação, um arquivo de lock não removido
+ocasionou degradação significativa no tempo de resposta para visualização de formulários
+no sistema.
+A interface administrativa do BOS, mostrada na figura 4, também revelou algumas
+limitaç ões. Por exemplo, quando se tem uma grande quantidade de casos abertos, torna-se
+difícil organizá-los ou localizar um caso específico. Em uma versão comercial do software
+(Bonita Subscription Pack) existe a opção de filtragem e busca dos casos, mas isso não
+está disponível no BOS. Porém, com a experiência adquirida, estima-se que o problema
+possa ser resolvido através de relat órios.
+Figura 4. Interface Administrativa
+Por  fim,                                                                                       é  importante  ressaltar  que  alguns  recursos  do  BOS  possuem
+documentação escassa (por exemplo, integração com LDAP e geração de relat órios) e
+s ó puderam ser utilizados com auxílio do f órum de discussão da ferramenta, consumindo
+215
+
+
+
+
+tempo significativo de desenvolvimento. Uma necessidade que surgiu durante o trabalho
+foi a edição colaborativa de um processo, já que a equipe tem mais de um desenvolvedor.
+Isso é previsto em uma versão comercial do software mas, novamente, não está incluído
+no BOS. Mesmo assim, foi possível criar uma estratégia manual de compartilhamento e
+controle de versão com Subversion, utilizando um cliente e um servidor externos.
+6. Trabalhos Relacionados
+Com o crescente interesse em tecnologias de BPM,  é  comum encontrar estudos de
+caso em páginas Web de empresas que comercializam soluç ões3.  Na literatura técnico-
+científica, muitos autores têm se dedicado a investigar a eficácia das soluç ões, princi-
+palmente no que diz respeito ao uso da notação BPMN para modelagem de proces-
+sos [Recker et al. 2006, zur Muehlen e Recker 2008, Ostroski et al. 2012].  Estudos en-
+volvendo outras fases e ferramentas de BPM são menos frequentes, embora se reconheça
+sua importância [Sordi e Spelta 2007, Wohed et al. 2009].
+No trabalho de Barn e Oussena (2010), encontra-se um estudo de caso de BPM
+aplicado a instituiç ões de ensino superior no Reino Unido.  O processo estudado, neste
+caso, tem por objetivo a validação de projetos de cursos superiores, resultando na criação
+de novos cursos ou na continuidade de cursos existentes. A modelagem do processo é feita
+com a ferramenta Intalio Designer e os autores relatam desafios enfrentados nesta etapa.
+Nosso trabalho relaciona-se a este, à medida que explora BPM no contexto de instituiç ões
+de ensino superior e aborda qualidades e limitaç ões de uma ferramenta.  Porém, nosso
+trabalho abrange mais etapas de BPM, chegando à implantação e avaliação por usuários
+finais.
+Analisando-se eventos e peri ódicos que publicam relatos de experiências na área,
+não encontrou-se outros trabalhos associando, ao mesmo tempo, a utilização de software
+livre para BPM e sua aplicação a uma atividade meio no ambiente acadêmico.
+7. Consideraç ões Finais
+Este artigo abordou uma experiência de aplicação de conceitos de BPM e ferramentas
+BPMS, inserido na realidade de cursos de graduação. Como contribuiç ões, o trabalho traz
+a modelagem e implementação de um sistema baseado em tecnologias de BPM, visando
+melhorar um processo que é realizado com bastante frequência em uma instituição de en-
+sino superior e, mais especificamente, no âmbito de um curso de Sistemas de Informação.
+O sistema desenvolvido foi implementado levando em conta o processo de apreciação de
+ACGs em uma instituição específica, mas está disponível em um reposit ório e pode ser
+adaptado para outras instituiç ões de ensino superior submetidas à mesma legislação.
+Outra contribuição deste trabalho está na exploração da ferramenta Bonita Open
+Solution. A experiência permitiu identificar qualidades da ferramenta, principalmente na
+modelagem do processo e nas suas possibilidades de extensão, customização e conexão
+com outros serviços. Também foi possível identificar algumas limitaç ões que s ó ficaram
+claras com a implantação do sistema.
+Como trabalhos futuros, pretende-se dar continuidade na exploração de BPM e
+suas contribuiç ões para melhoria de processos internos ao curso, ampliando a experiência.
+3 Ver por exemplo: http://www.orbis-software.com/customers/
+216
+
+
+
+
+De modo mais geral, um aspecto que merece ser explorado  é o teste automatizado de
+processos, que ainda carece de suporte adequado na ferramenta utilizada.
+Referências
+ABPMP (2012). Guide to the Business Process Management Body of Knowledge (BPM
+CBOK). Association of Business Process Management Professionals, 2nd edition.
+Barn, B. e Oussena, S. (2010). BPMN, toolsets, and methodology: a case study of busi-
+ness process management in higher education.  In Information systems development:
+towards a service provision society, pages 685-693. Springer, Boston, MA.
+BonitaSoft (2012). Bonitasoft open source workflow and bpm software. Disponível em:
+http://www.bonitasoft.com.
+BPMI (2006). OMG: Business Process Modeling Notation specification. Final Adopted
+Specification. Object Management Group. Disponível em: http://www.bpmi.org/.
+Conselho Nacional de Educação (2012). Parecer cne/ces no: 136/2012. conselho nacio-
+nal de educação/câmara de educação superior. diretrizes curriculares nacionais para os
+cursos de graduação em computação. processo no  23001.000026/2012-95.
+Jeston, J. e Nelis, J. (2012).  Business Process Management:  Practical Guidelines to
+Successful Implementations. Butterworth-Heinemann, 2nd edition.
+Ostroski, E. H., Digiampietri, L. A., Prado, E. P. V., de Albuquerque, J. P., Frazão, J. B.,
+Errante, P. R., e Condino-Neto, A. (2012).  Avaliação de BPMN para caracterização
+estratégia de uma organização de pesquisas acadêmicas.  In VIII Simp ósio Brasileiro
+de Sistemas de Informaç ão, pages 210-221.
+Recker, J., Indulska, M., Rosemann, M., e Green, P. (2006). How good is BPMN really?
+Insights from theory and practice. In Proceedings of the 14th European Conference on
+Information Systems.
+Sordi, J. O. d. e Spelta, A. G. (2007). Análise de componentes da tecnologia de Business
+Process Management System (BPMS) sob a perspectiva de um caso prático. JISTEM
+- Journal of Information Systems and Technology Management, 4:71 - 94.
+Weske, M. (2012). Business Process Management: Concepts, Languages, Architectures.
+Springer, 2nd edition.
+Wohed,  P.,  Russell,  N.,  Ter  Hofstede,  A.,  Andersson,  B.,  e  Van  Der  Aalst,  W.
+(2009).  Patterns-based evaluation of open source BPM systems: The cases of jBPM,
+OpenWFE, and Enhydra Shark.  Information and Software Technology, 51(8):1187-
+1216.
+zur Muehlen, M. e Recker, J. C. (2008). How much language is enough? Theoretical and
+practical use of the Business Process Modeling Notation.  In Proceedings of the 20th
+International Conference on Advanced Information Systems Engineering.
+217
+
+
+
+
+

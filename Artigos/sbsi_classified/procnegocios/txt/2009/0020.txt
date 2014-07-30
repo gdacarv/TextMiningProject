@@ -1,0 +1,515 @@
+﻿V Simpósio Brasileiro de Sistemas de Informação
+Um Sistema de Informaç ão Modelado com Redes Bayesianas
+para Auxílio na Resoluç ão de Testes de Paternidade
+Jo ão Roberto dos S. Junior , José Ten ório Cesar∗, Eliana Silva de Almeida
+1  Instituto de Computação
+Universidade Federal de Alagoas - Macei ó , AL - Brasil
+{jroberto.comp, tenoriocesar,  eliana.almeida}@gmail.com
+∗ Bolsista da Fundação de Amparo à Pesquisa do Estado de Alagoas (FAPEAL).
+Abstract. The high request of paternity testing made by forensic genetic labo-
+ratories has been estimulated the use of informations systems for support on
+resolutions of these tests. System of this kind need high rate of reliability, since
+treat of parentage indentification and, therefore, a formal and efficient approach
+for the studies of genetic linkage among individuals has a great value. In this
+paper, is proposed a tool that uses the formalism of the Bayesian Networks to
+support on the resolution of paternity testing. Since the complexity of this test
+type, which analise the causality relation among paternal genes and the child
+genes, and the need of realization of accurate statistical calculus, the use of the
+Bayesian Networks on modeling grants not only the reliabily of the results, but
+also the system dependability within the society.
+Resumo. A grande demanda de testes de paternidade feitos por laborat órios
+de genética forense tem estimulado o uso de sistemas de informações para
+auxílio na resoluç ão desses testes. Sistemas deste porte requerem alto grau de
+confiança, j á que tratam de identificação de parentesco e, portanto, uma abor-
+dagem formal e eficiente para o estudo de vínculo genético entre indivíduos é de
+grande valia. Neste trabalho, é proposta uma ferramenta que utiliza o forma-
+lismo das Redes Bayesianas para auxiliar na resolução de testes de paternidade.
+Considerando a complexidade deste tipo de testes, onde se analisa a relaç ão de
+causalidade entre os genes paternos e o gene da criança e a necessidade da
+realização de c álculos estatísticos precisos, o uso de Redes Bayesianas na sua
+modelagem garante n ão apenas a confiabilidade dos resultados, mas também a
+credibilidade do sistema perante a sociedade.
+1                                                                                          Introduç ão
+Atualmente, os laborat órios de genética forense realizam intensamente testes de pater-
+nidade.  De todas as análises feitas pelo Laborat ório de Genética Forense da UFAL
+(http://www.labdnaforense.br), 90% delas são testes de paternidade.  Basi-
+camente, a resolução destes testes deve confirmar se um suposto pai, mãe e criança com-
+partilham ou não as mesmas características genéticas. Resultados deste tipo, quando com-
+provados, influenciam em casos de determinação de pensão alimentícia e reclamantes de
+heranças, por exemplo, que abalam fortemente o ambiente familiar envolvido.
+Em um exame de paternidade alguns passos são realizados.  Inicialmente, deve
+ser feita a coleta dos dados necessários para a análise a partir das amostras de DNA de
+228
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+cada indivíduo envolvido (suposto pai, mãe e criança).  Se esses dados são coletados
+e interpretados corretamente, o estudo do DNA provê um potencial informativo muito
+grande no teste de paternidade [Morling et al. 2002].
+Em seguida, a análise do material genético é feita em regi ões específicas (loci)
+das amostras de DNA do suposto pai e da criança que são comparadas entre si. Ou seja,
+para cada região é relizada a comparação entre as duas amostras e, caso ocorra a igual-
+dade (matching), então a criança pode ter herdado um dos dois alelos do suposto pai
+naquela região.  Para inferir se há ou não o vínculo genético deve ser levado em conta
+a frequência que cada alelo possui em uma dada população, frequência esta chamada de
+frequência alélica. Logo, para que seja possível provar a existência de vínculo genético,
+além de realizar as comparaç ões entre as regi ões das amostras, deve-se tomar como base
+as frequências alélicas, que são adotadas como conhecimento a priori para o estudo. Além
+disso, considera-se ainda as configuraç ões possíveis para os alelos (heterozig ótico ou ho-
+mozig ótico). Todo este processo requer confiabilidade e precisão para ser a base de um
+sistema crítico desta natureza.
+Existem diversas abordagens estocásticas para o tratamento dessas situações in-
+certas.  Uma delas, trabalha por meio de cálculos algébricos.  Ela  é eficiente, porém,
+tediosa, uma vez que é necessário aplicar uma f órmula específica para cada configuração
+possível dos alelos (heterozig ótico ou homozig ótico) de todos os indivíduos envolvidos
+no teste (para mais detalhes sobre a referida abordagem ver [Butler 2005]).
+Em [Dawid et al. 2002] é apresentada uma abordagem alternativa que utiliza redes
+Bayesianas para o tratamento de incerteza na resolução de casos de parentesco.  Uma
+grande vantagem é que, uma vez montada a rede, basta apenas identificar quais os alelos
+encontrados nos indivíduos durante a análise e, a pr ópria rede, por fim, fornece o resultado
+(chamado de Índice de Paternidade - IP) para cada região analisada do DNA.
+De fato, o uso de métodos formais durante o estudo de paternidade garante a sua
+confiabilidade.  Algumas vezes, o resultado final  é levado como prova para tribunais.
+Qualquer eventual equívoco pode implicar a tomada de decis ões drásticas por parte da
+corte, uma vez que trata-se de julgamento de pessoas que podem ser condenadas ou ino-
+centadas erroneamente.
+O presente trabalho apresenta a modelagem de um sistema de informação para
+auxílio na resolução de teste de paternidade considerando-se o caso padrão, onde somente
+tem-se os materiais genéticos do suposto pai, mãe e criança, dando ênfase na utilização
+das redes Bayesianas como método estocástico para o tratamento de incerteza. O sistema
+aqui proposto vem sendo testado com  êxito, utilizando dados reais do Laborat ório de
+DNA Forense da UFAL.
+Logo a seguir, na seção 2, será dada uma breve explanação acerca do formalismo
+de redes Bayesianas. A metodologia envolvida nos testes de paternidade é abordada na
+seção 3, bem como os cálculos necessários para resolver os testes. Na seção 4, a mode-
+lagem do sistema é apresentada, assim como as ferramentas utilizadas no seu desenvolvi-
+mento. Por fim, na seção 5, alguns comentários sobre o trabalho serão feitos.
+2                                                                                               Redes Bayesianas
+Uma rede bayesiana pode ser vista como um grafo direcionado acíclico, cujos n ós são
+229
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+identificados como variáveis aleat órias com distribuições caracterizadas por tabelas de
+probabilidade ou leis condicionais. A estrutura do grafo descreve a dependência entre as
+variáveis. Esse tipo de rede pode ser especificado como segue:
+1.  Os n ós da rede representam variáveis aleat órias (booleanas, discretas, contínuas,
+mistas ou singulares) que estão inseridas dentro de um domínio de interesse.
+2.  Os n ós são conectados por meio de setas. Se houver uma seta do n ó P até o n ó
+F , P será denominado pai de F (seu filho). E, caso P não tenha pais, P  é dito ser
+uma raiz.
+3.  Um n ó raiz possui uma tabela contendo probabilidades incondicionais (ou proba-
+bilidades a priori) denotadas por P r(A).
+4.  Cada n ó Xi, 1 ≤ i ≤ número de nós, tem uma probabilidade condicional, dada
+por P r(Xi|P ais(Xi)), que quantifica o efeito dos pais sobre o n ó filho.
+5.  A distribuição da variável aleat ória Xi, dados todos os n ós que a precedem, s ó
+depende dos seus pais.
+A relação entre pais e filhos é de causalidade, diferentemente de outros modelos
+estatísticos como, por exemplo, o de regressão [Fenton et al. 2002], cuja utilização não é
+interessante em domínios com rica estrutura causal. A Figura 1 mostra uma rede bayesi-
+ana com apenas três n ós, onde as variáveis E1  e E2  são causas de um problema e C , um
+efeito dessas causas.
+E1                                                                                           E2
+C
+Figura 1. P ais(C ) = {E1 , E2 }
+Para obter conclus ões acerca de uma variável pertencente  à rede,  é necessário
+que sejam consideradas evidências.  As evidências são observaç ões relativas a algum
+evento dentro do domínio de interesse.   Diante disso, para um conjunto de eventos
+A  =  (A1 , . . . , An),  é possível calcular o comportamento de qualquer variável em A
+através do teorema de Bayes:
+P r(Ak |B) =  ∑ nP r(B|Ak ) × P r(Ak )
+i=1 [P r(B|Ai) × P r(Ai)] , para 1 ≤ k ≤ n
+onde:
+• Ak  representa  a variável de interesse que deseja-se saber sua probabilidade,
+considerando-se algum estado.
+• B é um conjunto de evidências observadas no domínio em estudo.
+No contexto das redes Bayesianas, para o mesmo conjunto A também é possível
+calcular a probabilidade de ocorrência m útua de uma série de eventos através da regra da
+cadeia [Taroni et al. 2004]:
+∏
+P r(A1, . . . , An) =                                                                        P r(Ai|P ais(Ai))
+i
+230
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Para a construção de uma rede bayesiana, é importante lembrar que ela não re-
+presenta fluxo de informação, mas serve como uma representação direta de parte de um
+mundo real [Jensen 2001].
+3                                                                                            Teste de Paternidade
+Em um teste de paternidade, o DNA de cada indivíduo envolvido é analisado por meio
+de métodos e ferramentas da biologia molecular.   A grosso modo, a tarefa envolve
+comparaç ões entre os materiais genéticos dos indivíduos.                                    E razoável pensar que a
+longa cadeia de DNA  é analisada inteiramente.  Porém, este método não  é utilizado
+por laborat órios, pois não provê vantagens em relação ao tempo (mais que 3,2 bilh ões
+comparaç ões devem ser realizadas [Goodwin et al. 2007]). Por outro lado, há um método
+alternativo em que apenas algumas regi ões da cadeia (denominadas l ócus) são seleciona-
+das e analisadas para simplificar o trabalho.
+Em cada l ócu analisado, são encontrados dois alelos sendo um proveniente do pai
+e o outro, da mãe (embora não seja possível identificar a origem de cada um). Se os alelos
+encontrados em um l ócu são diferentes, então o indivíduo é dito ser heterozig ótico para
+esse l ócu. Caso contrário, então ele é homozig ótico. Nem todo o DNA é composto por
+regi ões que contêm pares de alelos.  Para que seja possível trabalhar com essas regi ões
+alélicas, os laborat órios de genética forense utilizam marcadores genéticos. Os marcado-
+res são enzimas que têm a capacidade de identificar l ócus específicos na cadeia de DNA.
+A Figura 2 mostra um possível configuração alélica para um marcador X, onde a criança
+herda do pai o alelo 11 e da mãe, o alelo 12.
+Pai                                                                                          Mãe
+11,14                                                                                        8,12
+11,12
+Criança
+oes de alelos em um l ´ocu comum para um marcador X
+Grande parte dos laborat órios de genética forense utiliza  17  marcadores nas
+análises, a fim de se obter, justamente, 17 pares de alelos de cada indivíduo envolvido
+no teste (na realidade, este n úmero pode variar entre cada laborat ório). Um fato impor-
+tante é que quanto mais marcadores são usados, mais preciso fica o resultado.
+Cada alelo possui um n úmero de ocorrências dentro de uma população de in-
+divíduos, considerando-se um conjunto de marcadores genéticos. Esta frequência, deno-
+minada frequência alélica, é  única para cada população e é a base de informaç ões para
+os cálculos estatísticos feitos no estudo de vínculo genético.  A Tabela 1 exibe parte da
+frequência alélica da população do estado de Alagoas.
+3.1                                                                                          Modelagem de redes bayesianas no estudo de paternidade
+Na modelagem bayesiana do estudo de paternidade é necessário considerar o pai e a mãe
+231
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Marcador   Alelo   Frequência
+                                                                                              7    0.015
+D5S818                                                                                        8    0.015
+                                                                                              9    0.026
+TH01                                                                                          5    0.001
+                                                                                              6    0.223
+Tabela 1. Frequ ência al élica de uma populac¸ ão de indivíduos
+como indivíduos que não possuem vínculo genético entre si. Além disso, também deve-
+se levar em conta os eventos P B  = sim, correspondente à hip ótese do alegado pai ser
+o pai biol ógico da criança, e P B  = não, significando que existe um outro homem na
+população que é o pai biol ógico da criança. Os dois eventos têm probabilidades a priori
+de 0.5, ou seja, P r(P B  = sim)  = P r(P B  = não)  =  0.5.  O objetivo do estudo é
+determinar a probabilidade a posteriori de P B = sim e P B = não, dados os gen ótipos
+do trio de indivíduos.
+Sejam os seguintes eventos correspondentes aos alelos de cada indivíduo:
+• pppg: alelo paterno do suposto pai;
+• ppmg: alelo materno do suposto pai;
+• mpg: alelo paterno da mãe;
+• mmg: alelo materno da mãe;
+• cpg: alelo paterno da criança;
+• cmg: alelo materno da criança.
+Os eventos pppg, ppmg, mpg e mmg são independentes, pois se referem aos alelos dos
+progenitores. Uma vez que o pai deve ser condiderado como um indivíduo selecionado
+ao acaso, a probabilidade a priori desses eventos é igual à frequência de ocorrência do
+alelo na população.  Por exemplo, na frequência alélica da Tabela 1, para o marcador
+TH01, P r(pppg = 5) = 0.001 e P r(ppmg = 6) = 0.223.
+O gen ótipo da criança é condicionado pelos gen ótipos dos seus pais e por PB, por-
+tanto, deve-se fazer uma análise mais detalhada e ver a probabilidade de transmissão do
+alelo para a criança. As condiç ões de transmissão são as mesmas para as variáveis cpg e
+cmg, exceto pelo fato da primeira ser condicionada por PB. Se o progenitor é homozigoto
+(A1,A1 ), a probabilidade de transmissão do alelo (A1) é 1, já que não há outra possibili-
+dade. Se o progenitor é heterozigoto (A1 ,A2 ), a probabilidade de transmissão (A1  ou A2 )
+é 0.5. Quando assume-se PB = não em cpg, a probabilidade de transmissão do alelo é
+igual à sua frequência na população. Para os alelos A1  e A2 , com frequências, respectiva-
+mente, F1  e F2, obtém-se a tabela de probabilidades condicionais da variável cpg:
+pppg                                                                                               A1                                                                  A2
+ppmg                                                                                          A1           A2                                                    A1         A2
+                                                                                                                 PB     sim  não  sim  não  sim  não  sim  não
+A1                                                                                            1    F1      0.5   F1                                              0.5   F1   0    F1
+A2                                                                                            0    F2      0.5   F2                                              0.5   F2   1    F2
+Tabela 2. Tabela de probabilidades da vari ável cpg
+232
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+A estrutura da tabela de probabilidades da variável cmg difere um pouco da tabela de cpg,
+pois mpg não é condicionada por PB.
+Com base nas informaç ões expostas sobre as probabilidades de transmissão de
+alelos, já é possível montar a rede bayesiana que modela o problema do estudo do caso
+padrão de paternidade. A rede é apresentada a seguir:
+pppg                                                                                           ppmg
+pgen                                                                                           mpg    mmg
+cpg                                                                                            cmg    mgen
+PB
+cgen
+Figura 3. Rede bayesiana para o estudo de paternidade padr ão
+No grafo apresentado acima, o n ó cgen tem o prop ósito de manter a rede conexa.
+Bem como os n ós pgen e mgen, os seus estados são apenas a concatenação dos dois alelos
+contidos nos n ós pais. Para os alelos A1  e A2 , tem-se a seguinte tabela de probabilidades
+condicionais para a variável cgen:
+cpg                                                                                                   A1     A2
+cmg                                                                                            A1     A2     A1   A2
+A1  − A1                                                                                       1      0      0    0
+A1  − A2                                                                                       0      1      0    0
+A2  − A1                                                                                       0      0      1    0
+A2  − A2                                                                                       0      0      0    1
+Tabela 3. Tabela de probabilidades da vari ável cgen
+Com a rede montada e os gen ótipos dos três indivíduos conhecidos, o pr óximo
+passo limita-se em calcular as probabilidades a posteriori da variável PB para cada l ócu.
+Na abordagem adotada há a necessidade de descobrir qual o alelo paterno obrigat ório
+do filho e, através do par de alelos da mãe, isso torna-se possível [Lee et al. 2001]. Por
+exemplo, se o gen ótipo do suposto pai é A1 − A2 , da mãe é A1 − A3  e do filho é A1 − A3 ,
+então o alelo paterno A1  do filho é obrigat ório, por que a mãe transmitiu certamente A3 .
+Portanto, os alelos maternos não estão relacionados nesse cálculo.
+A probabilidade de P B dados o gen ótipo do suposto pai [A1, A2] e o alelo paterno
+A1  da criança (ou a probabilidade a posteriori de P B) é dada por:
+P r(P B|pppg = A1, ppmg = A2, cpg = A1) =
+233
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+=   ∑   P r(pppg=A1,ppmg=A2,cpg=A1,P B)                                                   (1)
+pb P r(pppg=A1,ppmg=A2 ,cpg=A1,P B=pb) , para pb = sim, não
+Na divisão acima, o numerador e o denominador são um conjunção de eventos,
+portanto, é possível calculá-los através da regra da cadeia (seção 2):
+P r(pppg=A1,ppmg=A2 ,cpg=A1,P B)
+∑
+pb P r(pppg=A1,ppmg=A2 ,cpg=A1,P B=pb)  =
+=   ∑ P r(pppg=A1)×P r(ppmg=A2 )×P r(cpg=A1|pppg=A1,ppmg=A2,P B)×P r(P B)                 (2)
+pb [P r(pppg=A1)×P r(ppmg=A2 )×P r(cpg=A1 |pppg=A1,ppmg=A2 ,P B)×P r(P B)]
+O fator que mensura se o suposto pai é o pai biol ógico da criança para um mar-
+cador específico é o Índice de Paternidade (IP ). Para cada marcador usado, há um IP
+específico associado. Este índice é dado pelo quociente:
+IP = P r(P B = sim|pppg = A1 , ppmg = A2 , cpg = A1)
+P r(P B = não|pppg = A1 , ppmg = A2 , cpg = A1)
+A informação definitiva na determinação do resultado da análise, o IP C (Índice
+de Paternidade Combinado),  é o produto dos IP ’s calculados para cada marcador.  O
+padrão mínimo aceito para o IP C  é  igual ou superior  à  100  [Evett and Weir 1998].
+Quando IP C  = 100, significa que o suposto pai tem chance de 99 para 1 de ser o pai
+biol ógico da criança.
+Como exemplo, sejam as probabilidades 0.206 e 0.222 para os alelos A1  e A2 ,
+respectivamente, para um determinado marcador. Utilizando a equação 2:
+P r(P B = sim|pppg = A1 , ppmg = A2 , cpg = A1) =
+0.206×0.222×0.5×0.5                                                                       0.011433
+=                                                                                         0.708215297
+(0.206×0.222×0.5×0.5)+(0.206×0.222×0.206×0.5)  =                                          0.016143396  =
+Para obter o valor de P B = não, basta apenas fazer:
+P r(P B = não|pppg = A1 , ppmg = A2 , cpg = A1) =
+=   1 − P r(P B = sim|pppg = A1 , ppmg = A2 , cpg = A1) = 0.291784703
+Uma vez que tem-se as probabilidades a posteriori de P B, pode-se calcular o IP
+para o mesmo marcador escolhido:
+IP = 0.708215297
+0.291784703 = 2.427184461
+Para obter o resultado definitivo (IP C ), basta apenas calcular e multiplicar todos
+os outros IP ’s para os respectivos marcadores escolhidos na análise.
+4                                                                                         Modelo do sistema
+Um sistema de informação pode ser definido tecnicamente como um conjunto de com-
+ponentes inter-relacionados que coleta  (ou recupera),  processa,  armazena e distribui
+informaç ões destinadas a apoiar a tomada de decis ões, a coordenação e o controle de
+uma organização [Laudon and Laudon 2004].
+234
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+Sistemas de informação que tratam quest ões judiciais requerem alto grau de
+confiança.   A utilização de métodos formais e automatização da entrada dos dados
+genéticos dos indivíduos são tarefas cruciais para a conclusão do teste.  O modelo do
+sistema aqui apresentado foi baseado na análise dos requisitos fundamentados nos pro-
+cessos realizados no Laborat ório de Genética Forense da UFAL.
+Na Figura 4, observa-se o modelo do sistema de informação com características
+voltadas para o problema de gerenciamento dos dados inerentes aos perfis genéticos de
+DNA. A entrada envolve a captação das amostras de DNA para o estudo de paternidade.
+Essas amostras são processadas com técnicas biotecnol ógicas, nos quais são gerados per-
+fis genéticos, que são analisados através de modelos estatísticos. A saída envolve a trans-
+ferência dos resultados comparativos dos perfis genéticos para seus respectivos interessa-
+dos.
+Figura 4. Vis ão do ambiente organizacional de um sistema de informac¸ ão voltado
+ao estudo de paternidade padr ão
+Os dados de entrada referentes ao perfis genéticos dos indivíduos são gerados por
+uma máquina de PCR (Polimerase Chain Reaction).  O método de PCR permite criar
+milhares de c ópias de amostras de DNA. Ap ós a aplicação desse método, a máquina de
+PCR armazena os perfis genéticos dos indivíduos envolvidos em um arquivo (em formato
+csv). Na Tabela 4, é exibida uma saída da máquina de PCR para a análise dos DNAs da
+mãe (M), suposto pai (SP) e criança (C) para o marcador CSF1PO.
+4.1                                                                                           Tecnologias usadas
+O principal objetivo do presente trabalho é a modelagem e implementação de um ambi-
+ente para estudo do DNA em práticas forenses.  A maior tarefa se restringe ao entendi-
+mento de como é realizado os estudos sobre vínculo genético e como esse estudo poderia
+235
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+                                                                                            Sample Name    Marker    Allele 1        Allele 2
+224-A-M                                                                                     CSF1PO                              10   11
+224-A-SP                                                                                    CSF1PO                              10   12
+224-A-C                                                                                     CSF1PO                              11   12
+Tabela 4. Saída gerada pela m áquina de PCR
+ser automatizado. Para tanto, a escolha das seguintes tecnologias foi extremamente crite-
+riosa.
+Padr ões de projetos:  Os padr ões de projeto (Design Patterns) fornecem uma metodo-
+logia para reutilização de softwares. Estes padr ões tornam mais fácil o reuso de
+projetos e arquiteturas bem sucedidas. Os seguintes padr ões foram utilizados no
+ambiente: Façade, Singleton e Data Acess Objects - DAOFactory.
+Linguagem de programaç ão: A linguagem de programação selecionada para o projeto
+foi a J2SDK (Java 2 Software Development Kit) que é uma linguagem que dá su-
+porte à orientação a objetos e independe de plataforma. A programação orientada
+a objetos (OOP - Object Oriented Programming) é uma metodologia de desenvol-
+vimento de software em que um programa é percebido como um grupo de objetos
+que trabalham juntos [Deitel and Deitel 2005].
+PostgreSQL: O que deve ser levado em consideração na determinação de qual SGBD
+(Sistema de Gerenciamento de Banco de Dados) usar é: eficiência na execução
+de consultas a tabelas grandes, e na atualização de tabelas, granulação de locks
+para controle de transaç ões concorrentes, recursos para backup e recuperação de
+dados restore e eficiência do driver de comunicação da aplicação com o SGBD
+[Guimarães 2003].  Duas ferramentas foram testadas, MySQL  (ver http://
+www.mysql.com) e PostgreSQL  (ver http://www.postgresql.org).
+Concluiu-se que o MySQL tem como foco principal a agilidade e o PostgreSQL
+busca oferecer recursos avançados a banco de dados de grande porte. Portanto, a
+escolha do PostgreSQL se fez necessária devido às operaç ões futuras que o sis-
+tema poderá realizar.
+Hibernate: Um framework é uma aplicação reusável e “semi-completa” que pode ser
+especializada para produzir aplicaç ões personalizadas.  O framework Hibernate
+(http://www.hibernate.org) é implementado na linguagem Java e per-
+mite mapear objetos da camada de domínio da aplicação para SGBD’s específicos
+de forma muito simples.
+UnBBayes: UnBBayes (http://unbbayes.sourceforge.net) é um software
+para modelagem, aprendizado e raciocínio utilizando o formalismo de redes baye-
+sianas. Sua API (Application Programming Interface) permite que os cálculos de
+probabilidades sejam feitos. Este framework também foi escrito na liguagem Java.
+4.2                                                                                         Casos de uso
+O sistema é composto por três grupos de usuários (atores) - secretário, perito e perito
+máster - que irão interagir diretamente com ele, sendo essa interação limitada às per-
+miss ões concedidas a cada tipo de ator.
+O secretário tem as seguintes permiss ões:
+236
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+• cadastrar um novo processo de estudo de paternidade, sendo necessário infor-
+mar o tipo de estudo e a localização das pessoas vinculadas ao processo.  Es-
+sas informaç ões são de fundamental importância para as atividades subsequentes,
+uma vez que os algoritmos utilizados para o cálculo, assim como as interfaces
+utilizadas para a inserção dos dados, estão vinculados ao tipo de estudo de pater-
+nidade. Além disso, as frequências que são usadas nos cálculos estão vinculadas à
+localização das pessoas envolvidas no processo como, por exemplo, as frequências
+utilizadas no cálculo de paternidade de pessoas do Estado de Alagoas devem ser
+as frequências alélicas do Estado de Alagoas que são diferentes das frequências
+de outro Estado qualquer;
+• inserir os dados pessoais das pessoas vinculadas ao processo;
+• excluir um  processo de  estudo de  paternidade,  sendo necessário  informar  o
+n úmero do processo.
+O perito tem as seguintes permiss ões:
+• inserir os perfis genéticos das pessoas vinculadas ao processo;
+• excluir os perfis genéticos das pessoas vinculadas ao processo.
+O perito máster, além das permiss ões dos outros dois atores, pode:
+• efetuar o cálculo do estudo de paternidade;
+• verificar o resultado do cálculo do estudo de paternidade;
+• excluir o resultado do cálculo do estudo de paternidade;
+• inserir/excluir marcador, alelo, localização, frequência alélica, classificação de
+pessoa e tipo de estudo de paternidade.
+Como se p ôde observar, há uma hierarquia entre os atores, imposta pelas restriç ões de
+integridade do pr óprio banco de dados, como por exemplo, a exclusão de um processo
+(atividade realizada pelo secretário) s ó é possível se não houver perfis associados às pes-
+soas do processo (sendo a manipulação dos perfis atividade do perito), assim como, a
+exclusão dos perfis (atividade realizada pelo perito) s ó  é possível se não houver cálculo
+associado ao processo (sendo a manipulação do cálculo atividade do perito máster). Nessa
+hierarquia, o perito máster está no topo, tendo acesso irrestrito a todo o sistema, vindo
+logo abaixo o perito, cujas atividades de excluir e inserir perfis estão limitadas às aç ões
+do perito máster e do secretário respectivamente, e na base encontra-se o secretário, cuja
+atividade de excluir processos está limitada às aç ões do perito e do perito máster.
+4.3                                                                                            Arquitetura do sistema
+O sistema é composto por cinco camadas:
+View Contém todas as interfaces do sistema por meio das quais os usuários irão interagir
+com o software.
+Controller Como o pr óprio nome sugere,  é o responsável por coordenar (controlar) a
+interação entre a camada de apresentação (View) e as demais camadas (Model,
+Persistence e Util).
+                                                                                               Model  ´E a camada de neg ócio do sistema (domínio do sistema).
+Persistence                                                                                    E a camada de persistência que contém os objetos necessários à manipulação
+dos dados do sistema.
+Util                                                                                           E a camada de utilitários, onde se encontram as classes que irão efetuar os cálculos
+                                                                                               de paternidade e o carregamento dinâmico de tabelas de frequências (em formato
+csv).
+237
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+A arquitetura do sistema foi modelada dessa forma com o intuito de diminuir o
+acoplamento, a fim de que os m ódulos pudessem ser desenvolvidos de maneira indepen-
+dente. A Figura 5 corresponde à arquitetura do sistema.
+Figura 5. Arquitetura do sistema
+5                                                                                            Conclus ão
+Neste trabalho foi desenvolvido um ambiente para análise forense de DNA no que tange
+ao estudo de paternidade, atividade esta comum em laborat órios de genética forense, tais
+como o Laborat ório de DNA Forense da UFAL, no qual o software foi validado através
+de dados reais do mesmo.
+Modelar um sistema com essas características, requer um conhecimento multi-
+disciplinar, envolvendo conceitos de genética forense e computação.  Por ser um sis-
+tema crítico, uma vez que lida com identificação humana, exige um entendimento pro-
+fundo do processo de análise de DNA para fins forenses, o que o diferencia dos sistemas
+de softwares encontrados no mercado, evidenciando assim a importância em se utilizar
+boas práticas de Engenharia de Software no seu projeto.  Dentre os sistemas existentes
+atualmente que realizam estudos forenses envolvendo DNA, tem-se o CODIS do FBI
+que realiza estudos criminais e o FAMILIAS (http://www.math.chalmers.se/
+˜mostad/familias/.
+Como já mencionado, o desenvolvimento deste sistema foi guiado pelos requisi-
+tos dos bi ólogos do Laborat ório de Genética Forense da UFAL. Um requisito de grande
+importância em sistemas de análise forense de DNA é a inserção automática dos dados
+de saída contendo os perfis genéticos dos indivíduos gerados pela máquina de PCR. Em
+grande parte dos software disponíveis no mercado, esses dados devem ser inseridos manu-
+almente, causando suscetibilidade a erros e exigindo muito trabalho por parte do bi ólogo.
+No ambiente aqui apresentado, este problema é solucionado através da interpretação au-
+tomática (parsing) do arquivo (em formato csv) gerado pela máquina de PCR.
+Os trabalhos futuros estão direcionados para o tratamento de casos de disputa de
+paternidade mais complexos. Por exemplo, deseja-se saber se um homem falecido é o pai
+238
+
+
+
+
+V Simpósio Brasileiro de Sistemas de Informação
+de um criança e não se disp õe de seu perfil genético, porém este mesmo homem possui
+irmãos. As redes bayesianas proporcionam a resolução destes tipos de casos complexos
+devido ao seu poder de tratamento de situações de incerteza.
+Referências
+Butler, J. M. (2005). Forensic DNA Typing. Elsevier Academic Press.
+Dawid, A. P., Mortera, J., Pascali, V. L., and Boxel, D. V. (2002).  Probabilistic Expert
+Systems for Forensic Inference from Genetic Markers.  Scandinavian Journal of Sta-
+tistics, 29:577-595.
+Deitel, H. M. and Deitel, P. J. (2005).  Java:  como programar.  Prentice-Hall, Porto
+Alegre.
+Evett, I. W. and Weir, B. S. (1998). Interpreting DNA Evidence: Statistical Genetics for
+Forensic Scientists. Sinauer Associates.
+Fenton, N., Krause, P., and Neil, M. (2002).  Software Measurement: Uncertainty and
+Causal Modelling. IEEE Software, 19(4):116-122.
+Goodwin, W., Linacre, A., and Hadi, S. (2007).  An Introduction to Forensic Genetics.
+Wiley.
+Guimarães, C. C. (2003). Fundamentos de bancos de dados: modelagem, projeto e lin-
+guagem SQL. UNICAMP, Campinas, SP.
+Jensen, F. V. (2001). Bayesian Networks and Decision Graphs. Springer.
+Laudon, K. C. and Laudon, J. P. (2004). Sistemas de Informações Gerenciais. Pretince-
+Hall.
+Lee, J. W., Lee, H.-S., Park, M., and Hwang, J.-J.  (2001).   Paternity determination
+when the alleged father’s genotypes are unavailable.  Forensic Science International,
+123:202-210.
+Morling, N., Alen, R. W., Carracedo, A., Geada, H., Guidet, F., Hallenberg, C., Martin,
+W., Mayr, W. R., Olaisen, B., Pascali, V. L., and Schneider, P. M. (2002).  Paternity
+Testing Comission of the International Society of Forensic Genetics: recomendations
+on genetic investigations in paternity cases. Forensic Science International, 129:148-
+157.
+Taroni, F., Biedermann, A., Garbolino, P., and Aitken, C. G. C. (2004). A general appro-
+ach to Bayesian networks for the interpretation of evidence. Forensic Science Interna-
+tional, 139:5-16.
+239
+
+
+
+
+
