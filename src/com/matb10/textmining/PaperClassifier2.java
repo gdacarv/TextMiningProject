@@ -4,17 +4,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.ufba.matb10.stemmer.Stemmer;
 
 import com.aliasi.util.Files;
+import com.datumbox.opensource.classifiers.NaiveBayes;
 
-public class PaperClassifier {
+public class PaperClassifier2 {
 	
 	public static void main(String[] args) throws NumberFormatException, FileNotFoundException {
 		try {
-			PaperClassifier classifier = new PaperClassifier("/Users/Gustavo/UFBA/TextMining/Artigos/sbsi_manually_classified");
+			PaperClassifier2 classifier = new PaperClassifier2("/Users/Gustavo/UFBA/TextMining/Artigos/sbsi_manually_classified");
 			classifier.classifyFolder("/Users/Gustavo/UFBA/TextMining/Artigos/sbsi", null);
 			System.out.println("Done.");
 		} catch (IOException e) {
@@ -22,21 +25,22 @@ public class PaperClassifier {
 		}
 	}
 	
-	private Classifier<String, String> mClassifier;
+	private NaiveBayes mClassifier;
 	private List<String> mClasses;
 	
 	private Stemmer mStemmer;
 
-	public PaperClassifier(String folderTraining) throws IOException {
+	public PaperClassifier2(String folderTraining) throws IOException {
 		mStemmer = Stemmer.StemmerFactory();
 		mStemmer.enableCaching(1000);
 		
-		mClassifier = new BayesClassifier<String, String>();
-		mClassifier.setMemoryCapacity(100000);
+		mClassifier = new NaiveBayes();
+		mClassifier.setChisquareCriticalValue(6.63);
 		File folder = new File(folderTraining);
 		if(!folder.isDirectory())
 			throw new FileNotFoundException("The path " + folderTraining + " is not a directory.");
 		mClasses = new ArrayList<String>();
+		Map<String, String[]> trainingExamples = new HashMap<>();
 		for(File file : folder.listFiles())
 			if(file.isDirectory()){
 				String cls = file.getName();
@@ -44,9 +48,11 @@ public class PaperClassifier {
 				for(File doc : file.listFiles())
 					if(!doc.getName().startsWith(".")) {
 						List<String> preprocess = preprocess(doc);
-						mClassifier.learn(cls, preprocess);
+						trainingExamples.put(cls, preprocess.toArray(new String[preprocess.size()]));
 					}
 			}
+		mClassifier.train(trainingExamples);
+		mClassifier = new NaiveBayes(mClassifier.getKnowledgeBase());
 	}
 	
 	public void classifyFolder(String folderName, String saveFolder) throws IOException{
@@ -77,11 +83,11 @@ public class PaperClassifier {
 	}
 	
 	public String classify(String file) throws IOException{
-		return mClassifier.classify(preprocess(file)).getCategory();
+		return mClassifier.predict(KeywordsRetriver.concatStringsWSep(preprocess(file), " "));
 	}
 	
 	public String classify(File file) throws IOException{
-		return mClassifier.classify(preprocess(file)).getCategory();
+		return mClassifier.predict(KeywordsRetriver.concatStringsWSep(preprocess(file), " "));
 	}
 
 	public List<String> preprocess(String file) throws IOException {
