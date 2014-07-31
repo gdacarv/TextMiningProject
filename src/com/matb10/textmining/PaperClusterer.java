@@ -24,7 +24,7 @@ public class PaperClusterer {
 	
 	public static void main(String[] args) throws NumberFormatException, FileNotFoundException {
 		PaperClusterer clusterer = new PaperClusterer("/Users/Gustavo/Google Drive/UFBA/Tópicos em BD/Text Mining/Artigos 2/sbsi/", 
-				7, 1000, true, 0.0001d);
+				7, 1000, 0.0001d);
 		Set<Set<CharSequence>> clusters = clusterer.clusterAndSave();
 		System.out.println("Clusters = " + clusters.size() + " Total documents: " + clusterer.getDataSetSize());
 	}
@@ -34,7 +34,7 @@ public class PaperClusterer {
 	private Map<CharSequence, File> mFiles = new HashMap<CharSequence, File>();
 	private File mFolder;
 
-	public PaperClusterer(String folder, int k, int maxEpochs, boolean kMeansPlusPlus, double minImprovement) throws FileNotFoundException {
+	public PaperClusterer(String folder, int k, int maxEpochs, double minImprovement) throws FileNotFoundException {
 		mFolder = new File(folder);
 		if(!mFolder.isDirectory())
 			throw new FileNotFoundException("The path " + folder + " is not a directory.");
@@ -42,7 +42,7 @@ public class PaperClusterer {
 		
 		mClusterer = new KMeansClusterer<>(
 				new TokenFeatureExtractor(new PorterStemmerTokenizerFactory(new LowerCaseTokenizerFactory(new RegExTokenizerFactory("[a-zA-Z]+|[0-9]+"), Locale.US))), 
-				k, maxEpochs, kMeansPlusPlus, minImprovement);
+				k, maxEpochs, true, minImprovement);
 	}
 	
 	public Set<Set<CharSequence>> cluster(){

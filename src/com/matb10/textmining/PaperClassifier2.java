@@ -18,7 +18,7 @@ public class PaperClassifier2 {
 	public static void main(String[] args) throws NumberFormatException, FileNotFoundException {
 		try {
 			PaperClassifier2 classifier = new PaperClassifier2("/Users/Gustavo/UFBA/TextMining/Artigos/sbsi_manually_classified");
-			classifier.classifyFolder("/Users/Gustavo/UFBA/TextMining/Artigos/sbsi", null);
+			classifier.classifyFolder("/Users/Gustavo/UFBA/TextMining/Artigos/sbsi");
 			System.out.println("Done.");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -55,7 +55,11 @@ public class PaperClassifier2 {
 		mClassifier = new NaiveBayes(mClassifier.getKnowledgeBase());
 	}
 	
-	public void classifyFolder(String folderName, String saveFolder) throws IOException{
+	public void classifyFolder(String folderName) throws IOException{
+		classifyFolder(folderName, null);
+	}
+	
+	private void classifyFolder(String folderName, String saveFolder) throws IOException{
 		File folder = new File(folderName);
 		if(!folder.isDirectory())
 			throw new FileNotFoundException("The path " + folderName + " is not a directory.");

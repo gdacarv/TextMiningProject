@@ -13,7 +13,7 @@ import java.util.Map.Entry;
 public class KeywordsRetriver {
 	
 	public static void main(String[] args) throws NumberFormatException, FileNotFoundException {
-		KeywordsRetriver keywordsRetriver = new KeywordsRetriver("/Users/Gustavo/UFBA/TextMining/Artigos/sbie_clustered/cluster3");
+		KeywordsRetriver keywordsRetriver = new KeywordsRetriver("/Users/Gustavo/UFBA/TextMining/Artigos/sbsi_classified/egov");
 		System.out.println("Keywords = " + keywordsRetriver.getKeywords(40));
 	}
 
